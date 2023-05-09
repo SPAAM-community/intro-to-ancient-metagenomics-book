@@ -1,3 +1,150 @@
 ---
 title: Introduction to Git(Hub)
+author: Megan Michel
 ---
+
+## Introduction
+
+As the size and complexity of metagenomic analyses continues to expand, effectively organizing and tracking changes to scripts, code, and even data, continues to be a critical part of ancient metagenomic analyses. Furthermore, this complexity is leading to ever more collaborative projects, with input from multiple researchers.
+
+In this chapter, we will introduce 'Git', an extremely popular version control system used in bioinformatics and software development to store, track changes, and collaborate on scripts and code. We will also introduce, GitHub, a cloud-based service for Git repositories for sharing data and code, and where many bioinformatic tools are stored. We will learn how to access and navigate course materials stored on GitHub through the web interface as well as the command line, and we will create our own repositories to store and share the output of upcoming sessions.
+
+## SSH setup
+
+To begin, you will set up an SSH key to facilitate easier authentication when transferring data between local and remote repositories. In other words, follow this section of the tutorial so that you never have to type in your github password again!
+Begin by activating the conda environment for this section (see **Preparation** above).
+
+```bash
+conda activate git-eager
+```
+
+Next, generate your own ssh key, replacing the email below with your own address.
+
+```bash
+ssh-keygen -t ed25519 -C "your_email@example.com"
+```
+
+I recommend saving the file to the default location and skipping passphrase setup. To do this, simply press enter without typing anything.
+
+You should now (hopefully!) have generated an ssh key. To check that it worked, run the following commands to list the files containing your public and private keys and check that the ssh program is running.
+
+```bash
+cd ~/.ssh/
+ls id*
+eval "$(ssh-agent -s)"
+```
+
+Now you need to give ssh your key to record:
+
+```bash
+ssh-add ~/.ssh/id_ed15519
+```
+
+Next, open your webbrowser and navigate to your github account. Go to settings -> SSH & GPG Keys -> New SSH Key. Give you key a title and paste the public key that you just generated on your local machine.
+
+```bash
+cat ~/.ssh/id_ed15519
+```
+
+Finally, press Add SSH key. To check that it worked, run the following command on your local machine. You should see a message telling you that you've successfully authenticated.
+
+```bash
+ssh -T git@github.com
+```
+
+For more information about setting up the SSH key, including instructions for different operating systems, check out github's documentation: [https://docs.github.com/es/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent](https://docs.github.com/es/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
+
+## The only 6 commands you really need to know
+
+Now that you have set up your own SSH key, we can begin working on some version controlled data! Navigate to your github homepage and create a new repository. You can choose any name for your new repo (including the default). Add a README file, then select Create Repository.
+
+![Example GitHub Interface for creating a new repository, showing owner, empty respoitory name box, radio boxes indicating whether the repository should be Public or Private](assets/images/chapters/introduction-to-git/create_repo.png)
+<!-- TODO -->
+<!-- alt text/captions for all images-->
+
+:::  {.callout-note}
+For the remainder of the session, replace the name of my repository (vigilant-octo-journey) with your own repo name.
+:::
+<!-- TODO -->
+<!-- replace all 'notes' with call outs -->
+
+Change into the directory where you would like to work, and let's get started!
+First, we will learn to **clone** a remote repository onto your local machine. Navigate to your new repo, select the _Code_ dropdown menu, select SSH, and copy the address as shown below.
+
+![](assets/images/chapters/introduction-to-git/git_clone.png)
+
+Back at your command line, clone the repo as follows:
+
+```bash
+git clone git@github.com:meganemichel/vigilant-octo-journey.git
+```
+
+Next, let's **add** a new or modified file to our 'staging area' on our local machine.
+
+```bash
+cd vigilant-octo-journey
+echo "test_file" > file_A.txt
+echo "Just an example repo" >> README.md
+git add file_A.txt
+```
+
+Now we can check what files have been locally changed, staged, etc. with **status**.
+
+```bash
+git status
+```
+
+You should see that `file_A.txt` is staged to be committed, but `README.md` is NOT. Try adding `README.md` and check the status again.
+
+Now we need to package or save the changes into a **commit** with a message describing the changes we've made. Each commit comes with a unique hash ID and will be stored forever in git history.
+
+```bash
+git commit -m "Add example file"
+```
+
+Finally, let's **push** our local commit back to our remote repository.
+
+```bash
+git push
+```
+
+What if we want to download new commits from our remote to our local repository?
+
+```bash
+git pull
+```
+
+You should see that your repository is already up-to-date, since we have not made new changes to the remote repo. Let's try making a change to the remote repository's README file (as below). Then, back on the command line, pull the repository again.
+
+![](assets/images/chapters/introduction-to-git/git_pull.png)
+
+## Working collaboratively
+
+Github facilitates simultaneous work by small teams through branching, which generates a copy of the main repository within the repository. This can be edited without breaking the 'master' version.
+First, back on github, make a new branch of your repository.
+
+![](assets/images/chapters/introduction-to-git/git_switch.png)
+
+From the command line, you can create a new branch as follows:
+
+```bash
+git switch -c new_branch
+```
+
+To switch back to the main branch, use
+
+```bash
+git switch main
+```
+
+Note that you **must commit changes** for them to be saved to the desired branch!
+
+## Pull requests
+
+A **Pull request** (aka PR) is used to propose changes to a branch from another branch. Others can comment and make suggestinos before your changes are merged into the main branch.
+For more information on creating a pull request, see github's documentation: [https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
+
+## Questions to think about
+
+1. Why is using a version control software for tracking data and code important?
+2. How can using Git(Hub) help me to collaborate on group projects?

@@ -4,35 +4,65 @@ project:
 
 book:
   title: "Introduction to Ancient Metagenomics"
-  author: "James Fellows Yates"
+  editor: "James Fellows Yates"
   date: "07/05/2023"
+  license: "CC-BY 4.0"
+  page-footer: "© 2022 SPAAM Community & Instructors. Available under [CC-BY 4.0](http://creativecommons.org/licenses/by-sa/4.0/)."
+  page-navigation: true
+  downloads: [pdf, epub]
+  site-url: https://spaam-community.github.io/intro-to-ancient-metagenomics-book
+  reader-mode: true
   chapters:
     - index.qmd
-    - intro.qmd
-    - part: Theory
+    - authors.qmd
+    - acknowledgements.qmd
+    - part: theory.qmd
       chapters:
         - introduction-to-ngs-sequencing.qmd
         - introduction-to-ancient-dna.qmd
         - introduction-to-metagenomics.qmd
         - introduction-to-microbial-genomics.qmd
         - introduction-to-evolutionary-biology.qmd
-    - part: Useful Skills
+    - part: useful-skills.qmd
       chapters:
         - bare-bones-bash.qmd
         - introduction-to-r.qmd
         - introduction-to-python.qmd
         - introduction-to-git.qmd
+    - part: ancient-metagenomic-resources.qmd
+      chapters:
+        - accessing-ancientmetagenomic-data.qmd
+        - ancient-metagenomic-pipelines.qmd
     - summary.qmd
-    - references.qmd
-    - acknowledgements.qmd
+    - part: appendices.qmd
+      chapters:
+        - resources.qmd
+        - references.qmd
+        - tools.qmd
 
 bibliography: references.bib
 
 format:
   html:
-    theme: cosmo
+    theme:
+      light: cosmo
+      dark: cyborg
   pdf:
-    documentclass: scrreprt
+    documentclass: book
+    include-in-header: 
+      text: |
+        \usepackage{makeidx}
+        \makeindex
+    include-after-body: 
+      text: |
+        \printindex
+    toc: true
+    toc-depth: 2
+    number-depth: 3
+    highlight-style: github
+    number-sections: true
+    colorlinks: true
+      
 
 editor: visual
 
