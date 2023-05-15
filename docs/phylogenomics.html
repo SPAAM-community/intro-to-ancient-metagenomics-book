@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.340">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Aida Andrades Valtueña, Arthur Kocher">
+
+<title>Introduction to Ancient Metagenomics - 16&nbsp; Introduction to Phylogenomics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./ancient-metagenomic-resources.html" rel="next">
+<link href="./genome-mapping.html" rel="prev">
+<script src="site_libs/cookie-consent/cookie-consent.js"></script>
+<link href="site_libs/cookie-consent/cookie-consent.css" rel="stylesheet">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+<script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({
+  "notice_banner_type":"simple",
+  "consent_type":"express",
+  "palette":"light",
+  "language":"en",
+  "page_load_consent_levels":["strictly-necessary"],
+  "notice_banner_reject_button_hide":false,
+  "preferences_center_close_button_hide":false,
+  "website_name":""
+  });
+});
+</script> 
+  
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ancient-genomics.html">Ancient Genomics</a></li><li class="breadcrumb-item"><a href="./phylogenomics.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduction to Phylogenomics</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Ancient Metagenomics</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <div class="dropdown">
+      <a href="" title="Download" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download"><i class="bi bi-download"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./Introduction-to-Ancient-Metagenomics.pdf">
+              <i class="bi bi-bi-file-pdf pe-1"></i>
+            Download PDF
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./Introduction-to-Ancient-Metagenomics.epub">
+              <i class="bi bi-bi-journal pe-1"></i>
+            Download ePub
+            </a>
+          </li>
+      </ul>
+    </div>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./authors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Authors</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acknowledgements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Acknowledgements</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Theory</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction-to-ngs-sequencing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Introduction to NGS Sequencing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction-to-ancient-dna.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Introduction to Ancient DNA</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction-to-metagenomics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Introduction to Metagenomics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction-to-microbial-genomics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Introduction to Microbial Genomics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction-to-evolutionary-biology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Introduction to Evolutionary Biology</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./useful-skills.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Useful Skills</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bare-bones-bash.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Bare Bones Bash</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction-to-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introduction to R and the Tidyverse</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction-to-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Introduction to Python and Pandas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction-to-git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Introduction to Git(Hub)</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./ancient-metagenomics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ancient Metagenomics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./taxonomic-profiling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Taxonomic Profiling, OTU Tables and Visualisation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./denovo-assembly.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Introduction to <em>de novo</em> Genome Assembly</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./functional-profiling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">functional-profiling.html</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./ancient-genomics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ancient Genomics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./genome-mapping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Introduction to Genome Mapping</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./phylogenomics.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduction to Phylogenomics</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./ancient-metagenomic-resources.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ancient Metagenomic Resources</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./accessing-ancientmetagenomic-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Introduction to AncientMetagenomeDir</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ancient-metagenomic-pipelines.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Ancient Metagenomic Pipelines</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./appendices.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Appendicies</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./resources.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Resources</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tools.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Tools</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#abstract" id="toc-abstract" class="nav-link active" data-scroll-target="#abstract"><span class="header-section-number">16.1</span> Abstract</a></li>
+  <li><a href="#lecture" id="toc-lecture" class="nav-link" data-scroll-target="#lecture"><span class="header-section-number">16.2</span> Lecture</a></li>
+  <li><a href="#preparation" id="toc-preparation" class="nav-link" data-scroll-target="#preparation"><span class="header-section-number">16.3</span> Preparation</a></li>
+  <li><a href="#basic-concepts-in-phylogenomics" id="toc-basic-concepts-in-phylogenomics" class="nav-link" data-scroll-target="#basic-concepts-in-phylogenomics"><span class="header-section-number">16.4</span> Basic concepts in phylogenomics</a>
+  <ul class="collapse">
+  <li><a href="#what-is-a-phylogenetic-tree" id="toc-what-is-a-phylogenetic-tree" class="nav-link" data-scroll-target="#what-is-a-phylogenetic-tree"><span class="header-section-number">16.4.1</span> What is a phylogenetic tree</a></li>
+  <li><a href="#parts-of-a-phylogenetic-tree-nodes-and-branches" id="toc-parts-of-a-phylogenetic-tree-nodes-and-branches" class="nav-link" data-scroll-target="#parts-of-a-phylogenetic-tree-nodes-and-branches"><span class="header-section-number">16.4.2</span> Parts of a phylogenetic tree: Nodes and Branches</a></li>
+  <li><a href="#types-of-trees-ultrametric-vs.-non-ultrametric" id="toc-types-of-trees-ultrametric-vs.-non-ultrametric" class="nav-link" data-scroll-target="#types-of-trees-ultrametric-vs.-non-ultrametric"><span class="header-section-number">16.4.3</span> Types of trees: Ultrametric vs.&nbsp;non-ultrametric</a></li>
+  </ul></li>
+  <li><a href="#the-start-dna-sequence-alignment" id="toc-the-start-dna-sequence-alignment" class="nav-link" data-scroll-target="#the-start-dna-sequence-alignment"><span class="header-section-number">16.5</span> The start: DNA sequence alignment</a>
+  <ul class="collapse">
+  <li><a href="#dna-sequence-aligment" id="toc-dna-sequence-aligment" class="nav-link" data-scroll-target="#dna-sequence-aligment"><span class="header-section-number">16.5.1</span> DNA sequence aligment</a></li>
+  <li><a href="#dna-sequence-alignment" id="toc-dna-sequence-alignment" class="nav-link" data-scroll-target="#dna-sequence-alignment"><span class="header-section-number">16.5.2</span> DNA sequence alignment</a></li>
+  </ul></li>
+  <li><a href="#distance-based-phylogenetic-methods" id="toc-distance-based-phylogenetic-methods" class="nav-link" data-scroll-target="#distance-based-phylogenetic-methods"><span class="header-section-number">16.6</span> Distance-based phylogenetic methods</a>
+  <ul class="collapse">
+  <li><a href="#calculate-a-pairwise-distance-matrix" id="toc-calculate-a-pairwise-distance-matrix" class="nav-link" data-scroll-target="#calculate-a-pairwise-distance-matrix"><span class="header-section-number">16.6.1</span> Calculate a pairwise distance matrix</a></li>
+  <li><a href="#calculating-a-neighbour-joining-tree" id="toc-calculating-a-neighbour-joining-tree" class="nav-link" data-scroll-target="#calculating-a-neighbour-joining-tree"><span class="header-section-number">16.6.2</span> Calculating a Neighbour-Joining tree</a></li>
+  <li><a href="#lets-make-our-own-nj-tree" id="toc-lets-make-our-own-nj-tree" class="nav-link" data-scroll-target="#lets-make-our-own-nj-tree"><span class="header-section-number">16.6.3</span> Let’s make our own NJ tree</a></li>
+  <li><a href="#type-of-trees-rooted-vs-unrooted-trees" id="toc-type-of-trees-rooted-vs-unrooted-trees" class="nav-link" data-scroll-target="#type-of-trees-rooted-vs-unrooted-trees"><span class="header-section-number">16.6.4</span> Type of trees: Rooted vs Unrooted trees</a></li>
+  <li><a href="#types-of-clades" id="toc-types-of-clades" class="nav-link" data-scroll-target="#types-of-clades"><span class="header-section-number">16.6.5</span> Types of Clades</a></li>
+  <li><a href="#lets-make-our-own-nj-tree-1" id="toc-lets-make-our-own-nj-tree-1" class="nav-link" data-scroll-target="#lets-make-our-own-nj-tree-1"><span class="header-section-number">16.6.6</span> Lets make our own NJ tree</a></li>
+  </ul></li>
+  <li><a href="#character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" id="toc-character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" class="nav-link" data-scroll-target="#character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches"><span class="header-section-number">16.7</span> Character-based phylogenetic methods: maximum parsimony and probabilistic approaches</a>
+  <ul class="collapse">
+  <li><a href="#maximum-likelihood-estimation-and-bootstrapping" id="toc-maximum-likelihood-estimation-and-bootstrapping" class="nav-link" data-scroll-target="#maximum-likelihood-estimation-and-bootstrapping"><span class="header-section-number">16.7.1</span> Maximum likelihood estimation and bootstrapping</a></li>
+  <li><a href="#estimating-a-time-tree-using-bayesian-phylogenetics" id="toc-estimating-a-time-tree-using-bayesian-phylogenetics" class="nav-link" data-scroll-target="#estimating-a-time-tree-using-bayesian-phylogenetics"><span class="header-section-number">16.7.2</span> Estimating a time-tree using Bayesian phylogenetics</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduction to Phylogenomics</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Aida Andrades Valtueña, Arthur Kocher </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="abstract" class="level2" data-number="16.1">
+<h2 data-number="16.1" class="anchored" data-anchor-id="abstract"><span class="header-section-number">16.1</span> Abstract</h2>
+<p>Phylogenetic trees are central tools for studying the evolution of microorganisms, as they provide essential information about their relationships and timing of divergence between microbial strains.</p>
+<p>In this session, we will introduce basic phylogenetic concepts and definitions, and provide guidance on how to interpret phylogenetic trees. We will then learn how to reconstruct phylogenetic trees from DNA sequences using various methods ranging from distance-based methods to probabilistic approaches, including maximum likelihood and Bayesian phylogenetics. In particular, we will learn how to use ancient genomic data to reconstruct time-calibrated trees with BEAST2.</p>
+</section>
+<section id="lecture" class="level2" data-number="16.2">
+<h2 data-number="16.2" class="anchored" data-anchor-id="lecture"><span class="header-section-number">16.2</span> Lecture</h2>
+<iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSexn0hc-7Qt2o5jarBzZ3WMLZ4jcjj0fd_QgLYpm5y0tNC_KLnMT00pA6uvpOomQ/embed?start=false&amp;loop=true&amp;delayms=10000" frameborder="0" width="100%" height="400px" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
+</iframe>
+<p>PDF version of these slides can be downloaded from <a href="assets/images/chapters/phylogenomics/SPAAM Summer School 2022 - 5B - Phylogenomics.pdf">here</a>.</p>
+<iframe width="100%" height="400px" src="https://www.youtube.com/embed/eg-0S5S7EpM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
+</iframe>
+</section>
+<section id="preparation" class="level2" data-number="16.3">
+<h2 data-number="16.3" class="anchored" data-anchor-id="preparation"><span class="header-section-number">16.3</span> Preparation</h2>
+<p>The data and conda environment <code>.yaml</code> file for this practical session can be downloaded from here: <a href="https://doi.org/10.5281/zenodo.6983184">https://doi.org/10.5281/zenodo.6983184</a>. See instructions on page.</p>
+<p>Change into the session directory</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/5b-phylogenomics/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The data in this folder should contain an alignment (snpAlignment_session5.fasta) and a txt file with the ages of the samples that we are going to be working with in this session (<code>samples.ages.txt</code>)</p>
+<p>Load the conda environment.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate phylogenomics-functional</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="basic-concepts-in-phylogenomics" class="level2" data-number="16.4">
+<h2 data-number="16.4" class="anchored" data-anchor-id="basic-concepts-in-phylogenomics"><span class="header-section-number">16.4</span> Basic concepts in phylogenomics</h2>
+<p>Before we start building trees, we are going to recap a few basic concepts in phylogenomics.</p>
+<section id="what-is-a-phylogenetic-tree" class="level3" data-number="16.4.1">
+<h3 data-number="16.4.1" class="anchored" data-anchor-id="what-is-a-phylogenetic-tree"><span class="header-section-number">16.4.1</span> What is a phylogenetic tree</h3>
+<p>The Oxford Dictionary defines phylogenetics as “the branch of biology that deals with phylogeny, especially with the deduction of the historical relationships between groups of organisms”.</p>
+<p>When we are building/computing a phylogeny we are inferring the relationship between organisms based on a set of homologous characters, which are characters that have been inherited from a common ancestor. Those characters can be morphological, which is common in paleontological studies, or molecular characters, which in our case they will be DNA sequences.</p>
+<p>To display the relationships between the organism we use phylogenetic trees, which are composed of different elements.</p>
+</section>
+<section id="parts-of-a-phylogenetic-tree-nodes-and-branches" class="level3" data-number="16.4.2">
+<h3 data-number="16.4.2" class="anchored" data-anchor-id="parts-of-a-phylogenetic-tree-nodes-and-branches"><span class="header-section-number">16.4.2</span> Parts of a phylogenetic tree: Nodes and Branches</h3>
+<p>A phylogenetic tree has different parts:</p>
+<ul>
+<li>The <strong>tips</strong>, which can also be called <strong>leaves</strong>, represent the sampled “individuals”. Each of the sequences that you used to reconstruct a tree will be displayed in your tree as tips. In the example, we used sequences A,B,C,D and E, and those appear at the tips of the tree.</li>
+<li>A <strong>node</strong> in the tree represents an ancestor (or ancestral sequences) shared by one or more tips. In the tree we see different nodes displayed, the most rightwards ones represent the ancestors between A and B; and C and D, and if we move toward the left we will see a node representing the ancestor of A,B,C and D, and the most leftwards node represent the common ancestor of all the sequences in our tree.</li>
+<li><strong>Branches</strong> are the part of the tree that connects each node to other nodes or to the leaves. These represent evolutionary paths between nodes/leaves. The length of these branches is called <strong>branch length</strong> and it can represent different measures depending on the algorithm that you use to infer the phylogenetic tree, such as the number of changes (in the case of for example Maximum Parsimony tree, see Character-based phylogenetic methods), genetic/evolutionary distance (for Neighbour-Joining, see distance-based phylogenetic methods, or for Maximum Likelihood method, see Character-based phylogenetic methods), or the time between two taxa or nodes (for example, trees inferred by BEAST, see Bayesian phylogenetic inference using <em>BEAST2</em>).</li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/1.png" class="img-fluid"></p>
+</section>
+<section id="types-of-trees-ultrametric-vs.-non-ultrametric" class="level3" data-number="16.4.3">
+<h3 data-number="16.4.3" class="anchored" data-anchor-id="types-of-trees-ultrametric-vs.-non-ultrametric"><span class="header-section-number">16.4.3</span> Types of trees: Ultrametric vs.&nbsp;non-ultrametric</h3>
+<p>We can have different types of trees depending on how the distance to the root (represents the ancestor shared by all the taxa in the tree):</p>
+<ul>
+<li>In <strong>ultrametric trees</strong> the distance from the root to any of the tips in the tree is the <strong>same</strong>. One typical example of ultrametric tree will be a tree where the branch length represents time and all of our tips were samples in the present.</li>
+<li>In <strong>non-ultrametric trees</strong> the distance from the root to the tips differ from tip to tip. We will find this type of tree when we use algorithms where the branch lengths are calculated based on genetic distance/number of changes.</li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/2.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="the-start-dna-sequence-alignment" class="level2" data-number="16.5">
+<h2 data-number="16.5" class="anchored" data-anchor-id="the-start-dna-sequence-alignment"><span class="header-section-number">16.5</span> The start: DNA sequence alignment</h2>
+<section id="dna-sequence-aligment" class="level3" data-number="16.5.1">
+<h3 data-number="16.5.1" class="anchored" data-anchor-id="dna-sequence-aligment"><span class="header-section-number">16.5.1</span> DNA sequence aligment</h3>
+<p>For this course, our start would be a DNA sequence alignment, however phylogenies can be built using any other source of information that contain homologous characters, such as phenotypic characters inherited from the same ancestor, protein sequences, etc.</p>
+<p>We start by collecting the DNA sequences of our organisms/individuals of interest, and now we need to make sure that the positions are homologous, which means that they were inherited from the same ancestor, to ensure that they share the same evolutionary history. A way to ensure that our positions are homologous is by <strong>aligning</strong> our DNA sequences.</p>
+<p>There are different ways to produce an alignment from our sequences, and this will depend on the type of data that you have:</p>
+<ul>
+<li>Multiple Sequence Alignment (MSA) can be computed from complete genomes. This can be achieved with <em>MAFFT</em> or <em>Clustal Omega</em>. However, this will be computationally expensive to perform on large genomes.</li>
+<li>Reference based alignment: this consists of aligning your reads to a reference genome, and it was covered during the <em>Practical 4B: Genome mapping</em>.</li>
+</ul>
+<blockquote class="blockquote">
+<p><em>Note</em>: for large genomic datasets, we often use Single Nucleotide Polymorphims (SNPs) alignments, i.e.&nbsp;alignments that contain only variable genomic positions. This is to reduce the computational time since the variable positions are the most informative for reconstructing phylogenetic trees.</p>
+</blockquote>
+</section>
+<section id="dna-sequence-alignment" class="level3" data-number="16.5.2">
+<h3 data-number="16.5.2" class="anchored" data-anchor-id="dna-sequence-alignment"><span class="header-section-number">16.5.2</span> DNA sequence alignment</h3>
+<p>In this practical session, we will be working with an alignment produced as you learned in the <em>Practical 4B:Genome mapping</em>.</p>
+<p>We are going to start by exploring the alignment in <em>MEGA</em>. So open the <em>MEGA</em> desktop application and load the alignment by clicking on File -&gt; Open A File/Session -&gt; Select the <em>snpAligment_session5.fasta</em>.</p>
+<p><img src="assets/images/chapters/phylogenomics/3.png" class="img-fluid"></p>
+<p>It will you ask what you want to do with the alignment. In <em>MEGA</em> you can also produce an alignment, however, since our sequences are already aligned we will press on <em>Analyze</em>.</p>
+<p>Then we will select <em>Nucleotide Sequences</em> since we are working with a DNA alignment. Note that <em>MEGA</em> can also work with Protein Sequences as well as Pairwise Distance Matrix (which we will cover shortly). In the same window, we will change the character for <em>Missing Data</em> to <strong>N</strong> and click in <em>OK</em>.</p>
+<p><img src="assets/images/chapters/phylogenomics/4.png" class="img-fluid"></p>
+<p>A window would open up asking if our alignment contains protein encoding sequences, and we will select <em>No</em>.</p>
+<blockquote class="blockquote">
+<p>🛈: If you had protein encoding sequences, you would have selected Yes. This will allow you to treat different positions with different evolutionary modes depending on their codon position. One can do this to take in account that the third codon position can change to different nucleotides without resulting in a different amino acid, while position one and two of the codon are more restricted.</p>
+</blockquote>
+<p>To explore the alignment, you will then click on the box with <em>TA</em></p>
+<p><img src="assets/images/chapters/phylogenomics/5.png" class="img-fluid"></p>
+<p>You will see an alignment containing sequences from the bacterial pathogen <em>Yersinia pestis</em>. Within the alignment, we have our sequences of interest (VLI092, CHC004, KZL002) that date between 5000-2000 years Before Present (BP), and we want to know how they relate to the rest of the <em>Yersinia pestis</em> genomes in the alignment.</p>
+<p><img src="assets/images/chapters/phylogenomics/6.png" class="img-fluid"></p>
+<p>What do you think the dots represent?</p>
+<ul>
+<li>They represent positions that are same as the reference</li>
+</ul>
+<p>What are the Ns in the sequences?</p>
+<ul>
+<li>They represent positions where we have missing data. We told <em>MEGA</em> to encode missing positions as <em>N</em></li>
+</ul>
+<p>How many sequences are we analysing?</p>
+<ul>
+<li>We are analysing 33 sequences.</li>
+</ul>
+</section>
+</section>
+<section id="distance-based-phylogenetic-methods" class="level2" data-number="16.6">
+<h2 data-number="16.6" class="anchored" data-anchor-id="distance-based-phylogenetic-methods"><span class="header-section-number">16.6</span> Distance-based phylogenetic methods</h2>
+<p>Distance-based methods calculate the tree from a pairwise distance matrix. The distances in the pairwise distance matrix can represent either:</p>
+<ul>
+<li>Number of differences between to sequences</li>
+<li>p-distance that is calculated as number of differences / total number of sites</li>
+</ul>
+<p>For any of the phylogenetic methods, we can also take into account that different sites may evolve differently depending on their nucleotide composition. To take this into account, you will need to use <strong>substitution models</strong>. By applying different evolutionary models, one can take into account multiple consecutive mutations as well as different probabilities to observe a specific mutation given the specific character in this position. There are tools that allow you to choose the substitution model that it is more fitting to you specific alignment, such as jModelTest, ModelGenerator, etc.</p>
+<p><img src="assets/images/chapters/phylogenomics/7.png" class="img-fluid"></p>
+<section id="calculate-a-pairwise-distance-matrix" class="level3" data-number="16.6.1">
+<h3 data-number="16.6.1" class="anchored" data-anchor-id="calculate-a-pairwise-distance-matrix"><span class="header-section-number">16.6.1</span> Calculate a pairwise distance matrix</h3>
+<p>To calculate a pairwise distance matrix, one will have to check the number of differences between all the possible pair combination between the sequences in the alignment, and in the case of a p-distance normalise the number of differences by the total number of sites. All this differences will be then stored in a matrix.</p>
+<p><em>MEGA</em> also provides a function to calculate Pairwise Distances, for that you will have to click into the Distance symbol, and select <em>Compute Pairwise Distances</em>, the output will be a matrix with all the pairwise distances. This will be the first step you will do if you wanted to compute a distance-based phylogeny with methods such as UPGMA or Neighbour-Joining. We will be covering the second method.</p>
+<p><img src="assets/images/chapters/phylogenomics/8.png" class="img-fluid"></p>
+</section>
+<section id="calculating-a-neighbour-joining-tree" class="level3" data-number="16.6.2">
+<h3 data-number="16.6.2" class="anchored" data-anchor-id="calculating-a-neighbour-joining-tree"><span class="header-section-number">16.6.2</span> Calculating a Neighbour-Joining tree</h3>
+<p>In the slide you have an example on how a small Neighbour-Joining (NJ), with 6 taxa is calculated.</p>
+<p>In essence, this method will be grouping taxa that have the shortest distance together first, and will be doing this iteratively until all the taxa/sequences included in your alignment have been placed in a tree. Luckily, you won’t have to do this by hand since <em>MEGA</em> allows you to build a NJ tree.</p>
+</section>
+<section id="lets-make-our-own-nj-tree" class="level3" data-number="16.6.3">
+<h3 data-number="16.6.3" class="anchored" data-anchor-id="lets-make-our-own-nj-tree"><span class="header-section-number">16.6.3</span> Let’s make our own NJ tree</h3>
+<p>For that go back to <em>MEGA</em> and click on the <em>Phylogeny</em> symbol and then select <em>Construct Neighbour Joining Tree</em>. In the window that would pop up, you will then chance the <em>Model/Method</em> to <em>p-distance</em> since we want to normalise by the total number of sites shared by sequences. Then press <em>OK</em> and a window with the calculated phylogenetic tree will pop up.</p>
+<p><img src="assets/images/chapters/phylogenomics/9.png" class="img-fluid"></p>
+<p>Since the tree is not easily visualised in <em>MEGA</em>, we will export it in newick format (an “standarised” format to write a tree in a computer-readable form) and explore our tree in <em>FigTree</em>. This tool has a better interface for visually manipulating trees and allows us to interact with the phylogenetic tree.</p>
+<p><img src="assets/images/chapters/phylogenomics/10.png" class="img-fluid"></p>
+<p>To do that you will click on <em>File</em>, then <em>Export current tree (Newick)</em> and click on <em>Branch Lengths</em> to include those in the newick annotation. When you press <em>OK</em>, a new window with the tree in newick format will pop up and you will then press <em>File</em> -&gt; <em>Save</em> and saved it as <em>NJ_tree.nwk</em> (If you are doing this for your own project, please give your files informative names).</p>
+<p>As said above, we will explore own NJ tree in <em>FigTree</em>. Open the software and then open the NJ tree by clicking on <em>File</em> -&gt; <em>Open</em> and selecting the file with the NJ tree <em>NJ_tree.nwk</em></p>
+<p><img src="assets/images/chapters/phylogenomics/11.png" class="img-fluid"></p>
+<p>So, which type of tree is this? Before you answer this question, let me introduce you to another type of trees</p>
+</section>
+<section id="type-of-trees-rooted-vs-unrooted-trees" class="level3" data-number="16.6.4">
+<h3 data-number="16.6.4" class="anchored" data-anchor-id="type-of-trees-rooted-vs-unrooted-trees"><span class="header-section-number">16.6.4</span> Type of trees: Rooted vs Unrooted trees</h3>
+<ul>
+<li>An <em>unrooted</em> tree does not contain a root. It displays the relationships between our sequences but not the direction in time. In the example, we can not tell if human or chimpanzee or gorilla are more ancestral to each other.</li>
+<li>A <em>rooted</em> tree does contain a root. This root can be calculated based on the inclusion of an outgroup, a known sequenced to be older than any of the taxa in our tree, or by computational methods that can place the root by various methods, being one of such methods the Mid Point Rooting. A rooted tree represents the relationships and the direction in time. By rooting our example tree with the outgroup, we now can tell that gorilla is ancestral to both human and chimpanzees.</li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/12.png" class="img-fluid"> ##### Let’s make our own NJ tree</p>
+<p>So if we go back to our question, which type of tree is this?</p>
+<p><img src="assets/images/chapters/phylogenomics/13.png" class="img-fluid"></p>
+<p>Even though a root is displayed by default, this is actually an unrooted tree. We know that <em>Yersinia pseudotuberculosis</em> (labelled here as <em>Y. pseudotuberculosis</em>) is an outgroup to <em>Yersinia pestis</em>. You can reroot the tree by selecting <em>Y.pseudotuberculosis</em> and pressing <em>Reroot</em>.</p>
+<p><img src="assets/images/chapters/phylogenomics/14.png" class="img-fluid"></p>
+<p>Now we have the correct tree.</p>
+<p>How many leaves/tips has our tree?</p>
+<ul>
+<li>That’s right, it is 33, the same number of sequences that was in our original SNP alignment.</li>
+</ul>
+<p>Is it an ultrametric tree?</p>
+<ul>
+<li>No, we can see that root to tip distance is different between taxa. The branch lengths in the NJ tree will represent genetic distance between the different taxa.</li>
+</ul>
+<p>Where are our taxa of interest? (KZL002, GZL002, CHC004 and VLI092)</p>
+<ul>
+<li>They all fall ancestral to the rest of <em>Yersinia pestis</em> in this tree.</li>
+</ul>
+<p>Do they form a clade?</p>
+<ul>
+<li>All the genomes have a common ancestor and form a single branch, meaning that they form a clade.</li>
+</ul>
+<p>Which type of clade?</p>
+<ul>
+<li>To answer this question, let’s look at what types of clades we can have in a phylogenetic tree</li>
+</ul>
+</section>
+<section id="types-of-clades" class="level3" data-number="16.6.5">
+<h3 data-number="16.6.5" class="anchored" data-anchor-id="types-of-clades"><span class="header-section-number">16.6.5</span> Types of Clades</h3>
+<ul>
+<li>A <strong>Monophyletic clade</strong> is a group of taxa that contain all the taxa that share a common ancestor.</li>
+<li>A <strong>Paraphyletic clade</strong> is a group of taxa including all the taxa with a common recent ancestor except one or more taxa. In the example, since A is missing from the clade selected, it won’t be anymore a paraphyletic clade rather than a monophyletic. Another common example of paraphyletic clade would be selecting all the reptiles but excluding birds.</li>
+<li>A <strong>Polyphyletic clade</strong> is a group of taxa from different monophyletic clades.</li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/15.png" class="img-fluid"></p>
+</section>
+<section id="lets-make-our-own-nj-tree-1" class="level3" data-number="16.6.6">
+<h3 data-number="16.6.6" class="anchored" data-anchor-id="lets-make-our-own-nj-tree-1"><span class="header-section-number">16.6.6</span> Lets make our own NJ tree</h3>
+<p>Now regarding our question, which type of clade form KZL002, GZL002, CHC004 and VLI092?</p>
+<p>Since they all share a common ancestor,they form a monophyletic clade.</p>
+<p>Until now we have learned how to explore a SNP alignment, the different part of the a phylogenetic tree and how to make a NJ tree. The NJ tree is based on pairwise distances, which is one of the simplest algorithms to build a tree and now you will see more complex algorithms for phylogenetic tree building.</p>
+<p><img src="assets/images/chapters/phylogenomics/16.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" class="level2" data-number="16.7">
+<h2 data-number="16.7" class="anchored" data-anchor-id="character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches"><span class="header-section-number">16.7</span> Character-based phylogenetic methods: maximum parsimony and probabilistic approaches</h2>
+<p>Character-based methods are not based on pairwise distances but rather model the complete evolution of each character (e.g.&nbsp;DNA nucleotides at each position) along the phylogenetic tree.</p>
+<p>One of these methods is maximum parsimony and it consists in choosing the tree that underlies an evolutionary history with the least number of character changes.</p>
+<p><img src="assets/images/chapters/phylogenomics/17.png" class="img-fluid"></p>
+<p><img src="assets/images/chapters/phylogenomics/18.png" class="img-fluid"></p>
+<p>Other types of character-based methods which are more commonly used today are probabilistic methods. In general, these are statistical techniques that are based on probabilistic models under which the data that we observe is generated following a probability distribution depending on a set of parameters which we want to estimate.</p>
+<p>In a phylogenetic probabilistic model, the data is the sequence alignment and the parameters, are the substitution matrix and the phylogenetic tree. The probability of the data given the model parameters is called the likelihood.</p>
+<p><img src="assets/images/chapters/phylogenomics/19.png" class="img-fluid"><br>
+<img src="assets/images/chapters/phylogenomics/20.png" class="img-fluid"></p>
+<section id="maximum-likelihood-estimation-and-bootstrapping" class="level3" data-number="16.7.1">
+<h3 data-number="16.7.1" class="anchored" data-anchor-id="maximum-likelihood-estimation-and-bootstrapping"><span class="header-section-number">16.7.1</span> Maximum likelihood estimation and bootstrapping</h3>
+<p>One way we can make inferences from a probabilistic model is by finding the combination of parameters which maximises the likelihood. These parameter values are called maximum likelihood (ML) estimates. We are usually not able to compute the likelihood value for all possible combinations of parameters and have to rely on heuristic algorithms to find the maximum likelihood estimates.</p>
+<p><img src="assets/images/chapters/phylogenomics/21.png" class="img-fluid"></p>
+<p>The Maximum likelihood estimates are point estimates, i.e.&nbsp;single parameter values (for example, a tree), which does not allow to measure uncertainty. A classic method to measure the uncertainty of ML tree estimates is bootstrapping, which consists in repeatedly disturbing the alignment by masking sites from it and estimating a tree from each of these bootstrap alignments.</p>
+<p><img src="assets/images/chapters/phylogenomics/22.png" class="img-fluid"></p>
+<p>For each clade in the ML tree, a bootstrap support value is computed which corresponds to the proportion of bootstrap trees containing the clade. This gives an indication of how robustly the clade is supported by the data (i.e.&nbsp;whether it holds even after disturbing the dataset). Bootstrapping can be used to measure the topology uncertainty of trees estimated with any inference method.</p>
+<p>Here is a command to estimate an ML phylogenetic tree using <em>RAxML</em> (you may find the list of parameters in the <em>RAxML</em> manual):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">raxmlHPC-PTHREADS</span> <span class="at">-m</span> GTRGAMMA <span class="at">-T</span> 3 <span class="at">-f</span> a <span class="at">-x</span> 12345 <span class="at">-p</span> 12345 <span class="at">-N</span> autoMRE <span class="at">-s</span> snpAlignment_session5.fasta <span class="at">-n</span> full_dataset.tre</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Once the analysis has been completed, you can open the tree using <em>Figtree</em> (RAxML_bipartitions… file, change “label” to “bootstrap support” at the prompt).</p>
+<p>The tree estimated using this model is a substitution tree (branch lengths represent genetic distances in subst./site), and it is not oriented in time: this is an unrooted tree (displayed with a random root in Figtree). You can reroot the tree in <em>Figtree</em> using <em>Y. pseudotuberculosis</em> as an outgroup (click on the branch leading to Y. pseudo and then “Reroot”).</p>
+<p>Where do our genomes of interest from the LNBA period fall (VLI092, GZL002, CHC004, KZL002), compared to the rest of Yersinia pestis diversity? Is that placement well-supported? (look at the bootstrap support value: click on the “Node Labels” box and open the drop-down menu, change “Node ages” to “bootstrap support”)</p>
+<p>You can notice that the phylogeny is difficult to visualize due to the long branch leading to <em>Y. pseudotuberculosis</em>. Having a very distant outgroup can also have deleterious effects on the estimated phylogeny (due to long branch attraction). We can construct a new phylogeny after removing the outgroup (go back to the alignment in mega, unclick <em>Y.pseudotuberculosis</em>, and export in fasta format), and then reroot the tree based on our previous knowledge: place the root on the branch leading to the LNBA genomes.</p>
+<p>Then, export the rooted tree: file &gt; export trees &gt; “save as currently displayed”.</p>
+</section>
+<section id="estimating-a-time-tree-using-bayesian-phylogenetics" class="level3" data-number="16.7.2">
+<h3 data-number="16.7.2" class="anchored" data-anchor-id="estimating-a-time-tree-using-bayesian-phylogenetics"><span class="header-section-number">16.7.2</span> Estimating a time-tree using Bayesian phylogenetics</h3>
+<p>Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of mutations but instead represent the time of evolution. To do so, we will use the sample ages (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.</p>
+<section id="temporal-signal-testing" class="level4" data-number="16.7.2.1">
+<h4 data-number="16.7.2.1" class="anchored" data-anchor-id="temporal-signal-testing"><span class="header-section-number">16.7.2.1</span> Temporal signal testing</h4>
+<p>It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree. A classic test to do this is called root-to-tip regression, which consists in verifying that the oldest a sequence is, the closer it should be to the root because there was less time for mutations to accumulate before this sequence was sampled. The correlation between sample age and distance to the root (root-to-tip regression) can be assessed using a rooted substitution tree and the program <em>tempest</em>:</p>
+<ul>
+<li>open tempest and load the re-rooted ML tree that we produced previously</li>
+<li>click on “import dates” in the “sample dates” tab, select the sample_age.txt file, and then change to “dates specified as years before the present”</li>
+<li>look at the root-to-tip regression: is there a positive correlation?</li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/Tempest.png" class="img-fluid"></p>
+</section>
+<section id="bayesian-phylogenetic-inference-using-beast2" class="level4" data-number="16.7.2.2">
+<h4 data-number="16.7.2.2" class="anchored" data-anchor-id="bayesian-phylogenetic-inference-using-beast2"><span class="header-section-number">16.7.2.2</span> Bayesian phylogenetic inference using <em>BEAST2</em></h4>
+<p>We will estimate a time tree from our alignment using Bayesian inference instead of maximum likelihood.</p>
+<p>Bayesian inference is a type of inference which is based on a probability distribution that is different from the likelihood: the posterior probability. The posterior probability is the probability of the parameters given the data. The posterior distribution is easier to interpret than the likelihood because it contains all the information about the parameters: point estimates such as the median or the mean can be directly estimated from it, but also percentile intervals which can be used to measure uncertainty.</p>
+<p><img src="assets/images/chapters/phylogenomics/23.png" class="img-fluid"></p>
+<p>The Bayes theorem tells us that is proportional to the product of the likelihood and the “prior” probability of the data:</p>
+<p><img src="assets/images/chapters/phylogenomics/equation.png" class="img-fluid"></p>
+<p>Therefore, for Bayesian inference, we need to complement our probabilistic model with prior distributions for all the parameters. Because we want to estimate a time tree, we also add another parameter: the molecular clock (average substitution rate in time units).</p>
+<p><img src="assets/images/chapters/phylogenomics/24.png" class="img-fluid"></p>
+<p>To characterize the full posterior distribution of each parameter, we would need in theory to compute the posterior probability for each possible combination of parameters. This is impossible, and we will instead use an algorithm called Markov chain Monte Carlo (MCMC) to approximate the posterior distribution. The MCMC is an algorithm which iteratively samples values of the parameters from the posterior distribution. Therefore, if the MCMC has run long enough, the (marginal) posterior distribution of the parameters can be approximated by a histogram of the sampled values.</p>
+<p><img src="assets/images/chapters/phylogenomics/25.png" class="img-fluid"></p>
+<p>The different components of the <em>BEAST2</em> analysis can be set up in the program <em>BEAUti</em>:</p>
+<p><img src="assets/images/chapters/phylogenomics/26.png" class="img-fluid"></p>
+<ul>
+<li>load the alignment in the “Partitions” tab</li>
+<li>set the sampling dates in the “Tip dates” tab</li>
+<li>choose the substitution model in the “Site model” tab</li>
+<li>choose the molecular clock model in the “Clock model” tab</li>
+<li>choose the prior distribution of parameters in the “Priors” tab</li>
+<li>set up the MCMC in the “MCMC” tab</li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/27.png" class="img-fluid"> <img src="assets/images/chapters/phylogenomics/28.png" class="img-fluid"> <img src="assets/images/chapters/phylogenomics/29.png" class="img-fluid"> <img src="assets/images/chapters/phylogenomics/30.png" class="img-fluid"> <img src="assets/images/chapters/phylogenomics/31.png" class="img-fluid"></p>
+<p>The <a href="https://taming-the-beast.org/tutorials/">“taming the beast” website</a> has great tutorials to learn setting a <em>BEAST2</em> analysis. In particular, the “Introduction to BEAST2”, “Prior selection” and “Time-stamped data” are good starts.</p>
+<p>Try running an analysis on the alignment without outgroup using the following:</p>
+<ul>
+<li>don’t forget to specify the sample ages correctly</li>
+<li>use a GTR substitution matrix with a Gamma site model and 4 Gamma categories</li>
+<li>use a relaxed clock lognormal model with an initial value of 1E-4</li>
+<li>use a Bayesian Skyline Coalescent tree prior</li>
+<li>change the mean clock prior to a uniform distribution between 1E-6 and 1E-3 subst/site/year</li>
+<li>use 300M iterations for the MCMC chain, and log the parameters and trees each 10,000th iteration</li>
+</ul>
+<p>Once the analysis is completed, assess the posterior distribution sampling and parameter estimates by loading the obtained log file into <em>Tracer</em></p>
+<p>First, look at the trace of the posterior to check if the MCMC has passed the burn-in phase, and if you have remove all burn-in iterations</p>
+<p><img src="assets/images/chapters/phylogenomics/32.png" class="img-fluid"></p>
+<p>If so you can look at the trace and effective sample size (ESS) value of all parameters, to check that the MCMC has run long enough. The traces should look (more or less) like a “hairy caterpillar”, and a rule of thumb is that all ESS values should be above 200. If this is not the case, you should run the MCMC longer (BEAST2 has a -resume option that you can use to extend the MCMC sampling without starting everything from the beginning).</p>
+<p><img src="assets/images/chapters/phylogenomics/33.png" class="img-fluid"></p>
+<p>You can then look at the estimates of your parameter in the top-right panel (mean, median, 95% HPD interval, …). Note that these are marginal estimates, i.e.&nbsp;integrated over all other parameters.</p>
+<p><img src="assets/images/chapters/phylogenomics/34.png" class="img-fluid"></p>
+<p>What is your estimate of the substitution (mean clock) rate?</p>
+<p>You can then generate a maximum clade credibility (MCC) tree using <em>treeAnnotator</em>.</p>
+<p><img src="assets/images/chapters/phylogenomics/MCC.png" class="img-fluid"></p>
+<p>What is your mean estimate for the age of the common ancestor of all <em>Yersinia pestis</em> strains? To which parameter (displayed in beauti) does this corresponds?</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./genome-mapping.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Introduction to Genome Mapping</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./ancient-metagenomic-resources.html" class="pagination-link">
+        <span class="nav-page-text">Ancient Metagenomic Resources</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">© 2022 SPAAM Community &amp; Authors. Available under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY 4.0</a>.<div class="cookie-consent-footer"><a href="#" id="open_preferences_center">Cookie Preferences</a></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>
