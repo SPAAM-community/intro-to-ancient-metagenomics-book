@@ -14,6 +14,7 @@ If adding a new section chapter:
 2. Make a new branch e.g. `git switch -c new-chapter`
 3. Make a new `.qmd` file in the root directory
 4. Images for the chapter should go into `assets/images/chapters/`
+   - Do not place in `docs/assets/images/chapters/`!
 5. Add the `.qmd` file to the `_quarto.yml` config file in the `chapters:` scope
 6. Render the book the extensions' `Quarto: Render Book` command, or run the following
 
@@ -22,3 +23,8 @@ If adding a new section chapter:
     ```
 
 7. Commit, push to GitHub, and open a PR against the `master` branch
+
+General tips:
+
+- Use the native markdown syntax for images (`![](assets/images/chapters/<your_image>.png)`)
+- For note blocks see the [Quarto docs](https://quarto.org/docs/authoring/callouts.html#callout-types)
