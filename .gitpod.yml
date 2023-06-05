@@ -1,0 +1,18 @@
+image:
+  file: .gitpod.Dockerfile
+tasks:
+  - command: Rscript --version
+  - name: quarto install
+    init: |
+      wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.3.361/quarto-1.3.361-linux-amd64.tar.gz
+      mkdir ~/opt
+      tar -C ~/opt -xvzf quarto-1.3.361-linux-amd64.tar.gz
+      mkdir ~/bin
+      ln -s ~/opt/quarto-1.3.361/bin/quarto ~/bin/quarto
+      ( echo ""; echo 'export PATH=$PATH:~/bin\n' ; echo "" ) >> ~/.basrc
+      source ~/.profile
+      quarto check
+vscode:
+  extensions:
+    - Ikuyadeu.r@1.2.1:z5vr1v1bfS++U/aHLSXQ6Q==
+
