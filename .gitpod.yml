@@ -4,8 +4,9 @@ image:
   # List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
 tasks:
   - name: quarto
-    # init: echo 'init script' # runs during prebuild
-    command: quarto preview
+    init: |
+      quarto install tinytex
+    command: quarto preview /workspace/intro-to-ancient-metagenomics-book --render all --no-browser --no-watch-inputs
 
 # List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
 ports:
@@ -14,9 +15,6 @@ ports:
 
 vscode:
   extensions:
-    - Ikuyadeu.r@1.2.1:z5vr1v1bfS++U/aHLSXQ6Q==
     - quarto.quarto
- 
-# init/before start steps?   
-#      quarto check
-#      quarto install tinytex
+    - REditorSupport.r
+
