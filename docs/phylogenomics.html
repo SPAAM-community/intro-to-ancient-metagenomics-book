@@ -169,6 +169,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./citing-this-book.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Citing this book</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./authors.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Authors</span></a>
   </div>
@@ -345,7 +351,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./appendices.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Appendicies</span></a>
+ <span class="menu-text">Appendices</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -437,6 +443,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For this chapter’s exercises, if not already performed, you will need to create the <a href="./before-you-start.html#creating-a-conda-environment">conda environment</a> from the <code>yml</code> file in the following <a href="https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/phylogenomics.yml">link</a> (right click and save as to download), and once created, activate the environment with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate phylogenomics</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
 <section id="lecture" class="level2" data-number="14.1">
 <h2 data-number="14.1" class="anchored" data-anchor-id="lecture"><span class="header-section-number">14.1</span> Lecture</h2>
 <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSexn0hc-7Qt2o5jarBzZ3WMLZ4jcjj0fd_QgLYpm5y0tNC_KLnMT00pA6uvpOomQ/embed?start=false&amp;loop=true&amp;delayms=10000" frameborder="0" width="100%" height="400px" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
@@ -449,10 +469,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="14.2" class="anchored" data-anchor-id="preparation"><span class="header-section-number">14.2</span> Preparation</h2>
 <p>The data and conda environment <code>.yaml</code> file for this practical session can be downloaded from here: <a href="https://doi.org/10.5281/zenodo.6983184">https://doi.org/10.5281/zenodo.6983184</a>. See instructions on page.</p>
 <p>Change into the session directory</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/5b-phylogenomics/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/5b-phylogenomics/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The data in this folder should contain an alignment (snpAlignment_session5.fasta) and a txt file with the ages of the samples that we are going to be working with in this session (<code>samples.ages.txt</code>)</p>
 <p>Load the conda environment.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate phylogenomics-functional</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate phylogenomics-functional</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="basic-concepts-in-phylogenomics" class="level2" data-number="14.3">
 <h2 data-number="14.3" class="anchored" data-anchor-id="basic-concepts-in-phylogenomics"><span class="header-section-number">14.3</span> Basic concepts in phylogenomics</h2>
@@ -647,7 +667,7 @@ Tip
 <p><img src="assets/images/chapters/phylogenomics/22.png" class="img-fluid"></p>
 <p>For each clade in the ML tree, a bootstrap support value is computed which corresponds to the proportion of bootstrap trees containing the clade. This gives an indication of how robustly the clade is supported by the data (i.e.&nbsp;whether it holds even after disturbing the dataset). Bootstrapping can be used to measure the topology uncertainty of trees estimated with any inference method.</p>
 <p>Here is a command to estimate an ML phylogenetic tree using <em>RAxML</em> (you may find the list of parameters in the <em>RAxML</em> manual):</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">raxmlHPC-PTHREADS</span> <span class="at">-m</span> GTRGAMMA <span class="at">-T</span> 3 <span class="at">-f</span> a <span class="at">-x</span> 12345 <span class="at">-p</span> 12345 <span class="at">-N</span> autoMRE <span class="at">-s</span> snpAlignment_session5.fasta <span class="at">-n</span> full_dataset.tre</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">raxmlHPC-PTHREADS</span> <span class="at">-m</span> GTRGAMMA <span class="at">-T</span> 3 <span class="at">-f</span> a <span class="at">-x</span> 12345 <span class="at">-p</span> 12345 <span class="at">-N</span> autoMRE <span class="at">-s</span> snpAlignment_session5.fasta <span class="at">-n</span> full_dataset.tre</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once the analysis has been completed, you can open the tree using <em>Figtree</em> (RAxML_bipartitions… file, change “label” to “bootstrap support” at the prompt).</p>
 <p>The tree estimated using this model is a substitution tree (branch lengths represent genetic distances in subst./site), and it is not oriented in time: this is an unrooted tree (displayed with a random root in Figtree). You can reroot the tree in <em>Figtree</em> using <em>Y. pseudotuberculosis</em> as an outgroup (click on the branch leading to Y. pseudo and then “Reroot”).</p>
 <p>Where do our genomes of interest from the LNBA period fall (VLI092, GZL002, CHC004, KZL002), compared to the rest of Yersinia pestis diversity? Is that placement well-supported? (look at the bootstrap support value: click on the “Node Labels” box and open the drop-down menu, change “Node ages” to “bootstrap support”)</p>
