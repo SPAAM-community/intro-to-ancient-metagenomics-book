@@ -1,6 +1,6 @@
 ---
 title: Introduction to Phylogenomics
-author: Aida Andrades Valtueña, Arthur Kocher
+author: Arthur Kocher
 ---
 
 ::: {.callout-tip}
@@ -20,14 +20,16 @@ PDF version of these slides can be downloaded from [here](assets/images/chapters
 
 <iframe width="100%" height="400px" src="https://www.youtube.com/embed/eg-0S5S7EpM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-## Preparation
+## Practical
+
+### Preparation
 
 The data and conda environment `.yaml` file for this practical session can be downloaded from here: [https://doi.org/10.5281/zenodo.6983184](https://doi.org/10.5281/zenodo.6983184). See instructions on page.
 
 Change into the session directory
 
 ```bash
-cd /<path>/<to>/5b-phylogenomics/
+cd phylogenomics/
 ```
 
 The data in this folder should contain an alignment (snpAlignment_session5.fasta) and a txt file with the ages of the samples that we are going to be working with in this session (`samples.ages.txt`)
@@ -35,62 +37,20 @@ The data in this folder should contain an alignment (snpAlignment_session5.fasta
 Load the conda environment.
 
 ```bash
-conda activate phylogenomics-functional
+conda activate phylogenomics
 ```
 
-## Basic concepts in phylogenomics
+### Visualize the sequence alignment
 
-Before we start building trees, we are going to recap a few basic concepts in phylogenomics.
+In this practical session, we will be working with an alignment produced as you learned in the practical _Genome mapping_.
 
-### What is a phylogenetic tree
-
-The Oxford Dictionary defines phylogenetics as "the branch of biology that deals with phylogeny, especially with the deduction of the historical relationships between groups of organisms".
-
-When we are building/computing a phylogeny we are inferring the relationship between organisms based on a set of homologous characters, which are characters that have been inherited from a common ancestor. Those characters can be morphological, which is common in paleontological studies, or molecular characters, which in our case they will be DNA sequences.
-
-To display the relationships between the organism we use phylogenetic trees, which are composed of different elements.
-
-### Parts of a phylogenetic tree: Nodes and Branches
-
-A phylogenetic tree has different parts:
-
-- The **tips**, which can also be called **leaves**, represent the sampled "individuals". Each of the sequences that you used to reconstruct a tree will be displayed in your tree as tips. In the example, we used sequences A,B,C,D and E, and those appear at the tips of the tree.
-- A **node** in the tree represents an ancestor (or ancestral sequences) shared by one or more tips. In the tree we see different nodes displayed, the most rightwards ones represent the ancestors between A and B; and C and D, and if we move toward the left we will see a node representing the ancestor of A,B,C and D, and the most leftwards node represent the common ancestor of all the sequences in our tree.
-- **Branches** are the part of the tree that connects each node to other nodes or to the leaves. These represent evolutionary paths between nodes/leaves. The length of these branches is called **branch length** and it can represent different measures depending on the algorithm that you use to infer the phylogenetic tree, such as the number of changes (in the case of for example Maximum Parsimony tree, see Character-based phylogenetic methods), genetic/evolutionary distance (for Neighbour-Joining, see distance-based phylogenetic methods, or for Maximum Likelihood method, see Character-based phylogenetic methods), or the time between two taxa or nodes (for example, trees inferred by BEAST, see Bayesian phylogenetic inference using _BEAST2_).
-
-![](assets/images/chapters/phylogenomics/1.png)
-
-### Types of trees: Ultrametric vs. non-ultrametric
-
-We can have different types of trees depending on how the distance to the root (represents the ancestor shared by all the taxa in the tree):
-
-- In **ultrametric trees** the distance from the root to any of the tips in the tree is the **same**. One typical example of ultrametric tree will be a tree where the branch length represents time and all of our tips were samples in the present.
-- In **non-ultrametric trees** the distance from the root to the tips differ from tip to tip. We will find this type of tree when we use algorithms where the branch lengths are calculated based on genetic distance/number of changes.
-
-![](assets/images/chapters/phylogenomics/2.png)
-
-## The start: DNA sequence alignment
-
-### DNA sequence aligment
-
-For this course, our start would be a DNA sequence alignment, however phylogenies can be built using any other source of information that contain homologous characters, such as phenotypic characters inherited from the same ancestor, protein sequences, etc.
-
-We start by collecting the DNA sequences of our organisms/individuals of interest, and now we need to make sure that the positions are homologous, which means that they were inherited from the same ancestor, to ensure that they share the same evolutionary history. A way to ensure that our positions are homologous is by **aligning** our DNA sequences.
-
-There are different ways to produce an alignment from our sequences, and this will depend on the type of data that you have:
-
-- Multiple Sequence Alignment (MSA) can be computed from complete genomes. This can be achieved with _MAFFT_ or _Clustal Omega_. However, this will be computationally expensive to perform on large genomes.
-- Reference based alignment: this consists of aligning your reads to a reference genome, and it was covered during the _Practical 4B: Genome mapping_.
-
-:::{.callout-note}
-For large genomic datasets, we often use Single Nucleotide Polymorphims (SNPs) alignments, i.e. alignments that contain only variable genomic positions. This is to reduce the computational time since the variable positions are the most informative for reconstructing phylogenetic trees.
+::: {.callout-note title="What is in the data?"}
+- the alignment is a SNP alignment (it contains only the variable genomic positions, not the full genomes)
+- it contains 32 _Yersinia pestis_ sequences and 1 _Yersinia pseudotuberculosis_ sequence which can be used as an outgroup
+- in this practical, we will investigate the phylogenetic position of four prehistorical _Y. pestis_ strains that we have recently discovered: KZL002, GZL002, CHC004 and VLI092
 :::
 
-### DNA sequence alignment
-
-In this practical session, we will be working with an alignment produced as you learned in the _Practical 4B:Genome mapping_.
-
-We are going to start by exploring the alignment in _MEGA_. So open the _MEGA_ desktop application and load the alignment by clicking on File -> Open A File/Session -> Select the _snpAligment_session5.fasta_.
+We start by exploring the alignment in _MEGA_. Open the _MEGA_ desktop application and load the alignment by clicking on File -> Open A File/Session -> Select the _snpAligment_session5.fasta_.
 
 ![](assets/images/chapters/phylogenomics/3.png)
 
@@ -110,23 +70,41 @@ To explore the alignment, you will then click on the box with _TA_
 
 ![](assets/images/chapters/phylogenomics/5.png)
 
-You will see an alignment containing sequences from the bacterial pathogen _Yersinia pestis_. Within the alignment, we have our sequences of interest (VLI092, CHC004, KZL002) that date between 5000-2000 years Before Present (BP), and we want to know how they relate to the rest of the _Yersinia pestis_ genomes in the alignment.
+You will see an alignment containing sequences from the bacterial pathogen _Yersinia pestis_. Within the alignment, we have four sequences of interest (KZL002, GZL002, CHC004 and VLI092) that date between 5000-2000 years Before Present (BP), and we want to know how they relate to the rest of the _Yersinia pestis_ genomes in the alignment.
 
 ![](assets/images/chapters/phylogenomics/6.png)
 
-What do you think the dots represent?
-
-- They represent positions that are same as the reference
-
-What are the Ns in the sequences?
-
-- They represent positions where we have missing data. We told _MEGA_ to encode missing positions as _N_
+**Questions:**
 
 How many sequences are we analysing?
 
-- We are analysing 33 sequences.
+::: {.callout-note title="Answer" collapse="true"}
+We are analysing 33 sequences.
+:::
 
-## Distance-based phylogenetic methods
+What are the Ns in the sequences?
+
+::: {.callout-note title="Answer" collapse="true"}
+They represent positions where we have missing data. We told _MEGA_ to encode missing positions as _N_
+:::
+
+What do you think the dots represent?
+
+::: {.callout-tip}
+The first line is a **consensus** sequence: it indicates the nucleotide supported by the majority of the sequences in the alignment (90% of the sequences should agree, otherwise an N is displayed)
+:::
+
+::: {.callout-note title="Answer" collapse="true"}
+They represent positions that are same as the consensus
+:::
+
+Once you know this, can you already tell by looking at the alignment which sequence is the most singular (scroll down)
+
+::: {.callout-note title="Answer" collapse="true"}
+We can easily see that the last sequence in the alignment (Y. pseudotuberculosis) contains more disagreements to the consensus. This is normal since this is the only genome not belonging to the _Y. pestis_ species: we will use it as an outgroup
+:::
+
+### Distance-based phylogeny
 
 Distance-based methods calculate the tree from a pairwise distance matrix. The distances in the pairwise distance matrix can represent either:
 
