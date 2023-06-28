@@ -118,9 +118,7 @@ Luckily, you won't have to do this by hand since _MEGA_ allows you to build a NJ
 A NJ tree can be built from any type of distances. This includes:
 
 - p-distances (also called raw distances): these are simply the proportion of differences between sequences
-
 - corrected distances: these are based on an underlying substitution model (JC69, K80, GTR...) and account for multiple mutations at the same sites (which would result in only one visible difference)
-
 - p-distances and corrected distances should be similar when the number of mutations is low compared to the genome length
 :::
 
@@ -179,40 +177,84 @@ One of these methods is maximum parsimony and it consists in choosing the tree t
 
 ![](assets/images/chapters/phylogenomics/18.png)
 
-Other types of character-based methods which are more commonly used today are probabilistic methods. In general, these are statistical techniques that are based on probabilistic models under which the data that we observe is generated following a probability distribution depending on a set of parameters which we want to estimate.
+Other types of character-based methods which are more commonly used today are probabilistic methods. In general, these are statistical techniques that are based on probabilistic models under which the data that we observe is generated following a probability distribution depending on a set of parameters which we want to estimate. The probability of the data given the model parameters is called the likelihood.
 
-In a phylogenetic probabilistic model, the data is the sequence alignment and the parameters, are the substitution matrix and the phylogenetic tree. The probability of the data given the model parameters is called the likelihood.
+![](assets/images/chapters/phylogenomics/19.png)
 
-![](assets/images/chapters/phylogenomics/19.png)            
+**Question:**
+
+In a phylogenetic probabilistic model, what are the data and what are the parameters?
+
+::: {.callout-note title="Answer" collapse="true"}
+In a phylogenetic probabilistic model, the data is the sequence alignment and the parameters, are:
+
+- the parameters of the chosen substitution model (substitution rates and base frequencies)
+- the phylogenetic tree
+
 ![](assets/images/chapters/phylogenomics/20.png)
+:::
 
-### Maximum likelihood estimation and bootstrapping
+#### Maximum likelihood estimation and bootstrapping
 
 One way we can make inferences from a probabilistic model is by finding the combination of parameters which maximises the likelihood. These parameter values are called maximum likelihood (ML) estimates. We are usually not able to compute the likelihood value for all possible combinations of parameters and have to rely on heuristic algorithms to find the maximum likelihood estimates.
 
 ![](assets/images/chapters/phylogenomics/21.png)
 
-The Maximum likelihood estimates are point estimates, i.e. single parameter values (for example, a tree), which does not allow to measure uncertainty. A classic method to measure the uncertainty of ML tree estimates is bootstrapping, which consists in repeatedly disturbing the alignment by masking sites from it and estimating a tree from each of these bootstrap alignments.
+The Maximum likelihood estimates are point estimates, i.e. single parameter values (for example, a tree), which does not allow to measure uncertainty. A classic method to measure the uncertainty in ML trees is bootstrapping, which consists in repeatedly "disturbing" the alignment by masking sites randomly and estimating a tree from each of these bootstrap alignments.
 
 ![](assets/images/chapters/phylogenomics/22.png)
 
 For each clade in the ML tree, a bootstrap support value is computed which corresponds to the proportion of bootstrap trees containing the clade. This gives an indication of how robustly the clade is supported by the data (i.e. whether it holds even after disturbing the dataset). Bootstrapping can be used to measure the topology uncertainty of trees estimated with any inference method.
 
-Here is a command to estimate an ML phylogenetic tree using _RAxML_ (you may find the list of parameters in the _RAxML_ manual):
+::: {.callout-note}
+Bootstrapping can be used to measure incertainty with any type of inference method, including distance methods
+:::
+
+**Let's make our own ML tree!**
+
+Here is a command to estimate an ML phylogenetic tree together with bootstraps using _RAxML_ (you may find the list of parameters in the _RAxML_ manual):
 
 ```bash
 raxmlHPC-PTHREADS -m GTRGAMMA -T 3 -f a -x 12345 -p 12345 -N autoMRE -s snpAlignment_session5.fasta -n full_dataset.tre
 ```
 
+Here is the meaning of the chosen parameters:
+
+![](assets/images/chapters/phylogenomics/raxml_cmdline.png)
+
 Once the analysis has been completed, you can open the tree using _Figtree_ (RAxML_bipartitions… file, change “label” to “bootstrap support” at the prompt).
 
-The tree estimated using this model is a substitution tree (branch lengths represent genetic distances in subst./site), and it is not oriented in time: this is an unrooted tree (displayed with a random root in Figtree). You can reroot the tree in _Figtree_ using _Y. pseudotuberculosis_ as an outgroup (click on the branch leading to Y. pseudo and then “Reroot”).
+![](assets/images/chapters/phylogenomics/figtree_prompt.png)
 
-Where do our genomes of interest from the LNBA period fall (VLI092, GZL002, CHC004, KZL002), compared to the rest of Yersinia pestis diversity? Is that placement well-supported? (look at the bootstrap support value: click on the “Node Labels” box and open the drop-down menu, change “Node ages” to “bootstrap support”)
+The tree estimated using this model is a substitution tree (branch lengths represent genetic distances in subst./site). As for the NJ tree,it is not oriented in time: this is an unrooted tree (displayed with a random root in Figtree). You can reroot the tree in _Figtree_ using _Y. pseudotuberculosis_ as an outgroup, as previously.
 
-You can notice that the phylogeny is difficult to visualize due to the long branch leading to _Y. pseudotuberculosis_. Having a very distant outgroup can also have deleterious effects on the estimated phylogeny (due to long branch attraction). We can construct a new phylogeny after removing the outgroup (go back to the alignment in mega, unclick _Y.pseudotuberculosis_, and export in fasta format), and then reroot the tree based on our previous knowledge: place the root on the branch leading to the LNBA genomes.
+**Questions:**
 
-Then, export the rooted tree: file > export trees > "save as currently displayed".
+Can you confirm the position of our genomes of interest (KZL002, GZL002, CHC004 and VLI092)?
+
+::: {.callout-note title="Answer" collapse="true"}
+Yes. Just as in the NJ tree, they form a clade which is basal to the rest of the _Y. pestis_ diversity.
+:::
+
+Is that placement well-supported? (look at the bootstrap support value: click on the “Node Labels” box and open the drop-down menu, change “Node ages” to “bootstrap support”)
+
+::: {.callout-note title="Answer" collapse="true"}
+The placement is strongly supported as indicated by a bootstrap support of 100% for this clade (it is not very easy to see, you probably need to zoom in a bit)
+
+![](assets/images/chapters/phylogenomics/bootstrap_support.png)
+:::
+
+You can notice that the phylogeny is difficult to visualize due to the long branch leading to _Y. pseudotuberculosis_. Having a very distant outgroup can also have deleterious effects on the estimated phylogeny (due to the so-called "long branch attraction" effect). We can construct a new phylogeny after removing the outgroup:
+
+- go back to the alignment in mega, unclick _Y.pseudotuberculosis_, and export in fasta format ("Data" -> "Export Data" -> change "Format" to "Fasta" and click "Ok"; you can save it as: "snpAlignment_without_Ypseudo.fas")
+- run raxml on this new alignment (change input to "snpAlignment_without_Ypseudo.fas" and output prefix to "without_Ypseudo" in the commandline)
+- open the bipartition... file in figtree and reroot the tree based on the knowledge we have gained previously: place the root on the branch leading to the prehistoric Y. pestis strains (KZL002, GZL002, CHC004 and VLI092).
+
+![](assets/images/chapters/phylogenomics/raxml_tree_woOutgroup.png)
+
+Lastly, we will export the rooted tree from figtree: File -> Export trees -> select the "save as currently displayed" box and save as "ML_tree_rooted.tre"
+
+![](assets/images/chapters/phylogenomics/export_tree.png)
 
 ### Estimating a time-tree using Bayesian phylogenetics
 

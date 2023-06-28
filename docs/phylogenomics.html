@@ -397,8 +397,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" id="toc-character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" class="nav-link" data-scroll-target="#character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches"><span class="header-section-number">14.3</span> Character-based phylogenetic methods: maximum parsimony and probabilistic approaches</a>
   <ul class="collapse">
-  <li><a href="#maximum-likelihood-estimation-and-bootstrapping" id="toc-maximum-likelihood-estimation-and-bootstrapping" class="nav-link" data-scroll-target="#maximum-likelihood-estimation-and-bootstrapping"><span class="header-section-number">14.3.1</span> Maximum likelihood estimation and bootstrapping</a></li>
-  <li><a href="#estimating-a-time-tree-using-bayesian-phylogenetics" id="toc-estimating-a-time-tree-using-bayesian-phylogenetics" class="nav-link" data-scroll-target="#estimating-a-time-tree-using-bayesian-phylogenetics"><span class="header-section-number">14.3.2</span> Estimating a time-tree using Bayesian phylogenetics</a></li>
+  <li><a href="#estimating-a-time-tree-using-bayesian-phylogenetics" id="toc-estimating-a-time-tree-using-bayesian-phylogenetics" class="nav-link" data-scroll-target="#estimating-a-time-tree-using-bayesian-phylogenetics"><span class="header-section-number">14.3.1</span> Estimating a time-tree using Bayesian phylogenetics</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -593,7 +592,7 @@ Answer
 <p>The Neighbour Joining (NJ) method is an agglomerative algorithm which can be used to derive a phylogenetic tree from a pairwise distance matrix. In essence, this method will be grouping taxa that have the shortest distance together first, and will be doing this iteratively until all the taxa/sequences included in your alignment have been placed in a tree.</p>
 <p>Here are the details of the calculations for a small NJ tree example with 6 taxa:</p>
 <p><img src="assets/images/chapters/phylogenomics/NJ_algorithm.png" class="img-fluid"></p>
-<p>Luckily, you won’t have to do this by hand since <em>MEGA</em> allows you to build a NJ tree. For that go back to <em>MEGA</em> and click on the <em>Phylogeny</em> symbol and then select <em>Construct Neighbour Joining Tree</em>. In the window that would pop up, you will then chance the <em>Model/Method</em> to <em>p-distance</em> since we want to normalise by the total number of sites shared by sequences. Then press <em>OK</em> and a window with the calculated phylogenetic tree will pop up.</p>
+<p>Luckily, you won’t have to do this by hand since <em>MEGA</em> allows you to build a NJ tree. For that go back to <em>MEGA</em> and click on the <em>Phylogeny</em> symbol and then select <em>Construct Neighbour Joining Tree</em>. In the window that would pop up, you will then chance the <em>Model/Method</em> to <em>p-distance</em>. Then press <em>OK</em> and a window with the calculated phylogenetic tree will pop up.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="p-distances?">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -606,9 +605,9 @@ p-distances?
 <div class="callout-body-container callout-body">
 <p>A NJ tree can be built from any type of distances. This includes:</p>
 <ul>
-<li><p>p-distances (also called raw distances): these are simply the proportion of differences between sequences</p></li>
-<li><p>corrected distances: these are based on an underlying substitution model (JC69, K80, GTR…) and account for multiple mutations at the same sites (which would result in only one visible difference)</p></li>
-<li><p>p-distances and corrected distances should be similar when the number of mutations is low compared to the genome length</p></li>
+<li>p-distances (also called raw distances): these are simply the proportion of differences between sequences</li>
+<li>corrected distances: these are based on an underlying substitution model (JC69, K80, GTR…) and account for multiple mutations at the same sites (which would result in only one visible difference)</li>
+<li>p-distances and corrected distances should be similar when the number of mutations is low compared to the genome length</li>
 </ul>
 </div>
 </div>
@@ -698,30 +697,110 @@ Answer
 <p>One of these methods is maximum parsimony and it consists in choosing the tree that underlies an evolutionary history with the least number of character changes.</p>
 <p><img src="assets/images/chapters/phylogenomics/17.png" class="img-fluid"></p>
 <p><img src="assets/images/chapters/phylogenomics/18.png" class="img-fluid"></p>
-<p>Other types of character-based methods which are more commonly used today are probabilistic methods. In general, these are statistical techniques that are based on probabilistic models under which the data that we observe is generated following a probability distribution depending on a set of parameters which we want to estimate.</p>
-<p>In a phylogenetic probabilistic model, the data is the sequence alignment and the parameters, are the substitution matrix and the phylogenetic tree. The probability of the data given the model parameters is called the likelihood.</p>
-<p><img src="assets/images/chapters/phylogenomics/19.png" class="img-fluid"><br>
-<img src="assets/images/chapters/phylogenomics/20.png" class="img-fluid"></p>
-<section id="maximum-likelihood-estimation-and-bootstrapping" class="level3" data-number="14.3.1">
-<h3 data-number="14.3.1" class="anchored" data-anchor-id="maximum-likelihood-estimation-and-bootstrapping"><span class="header-section-number">14.3.1</span> Maximum likelihood estimation and bootstrapping</h3>
+<p>Other types of character-based methods which are more commonly used today are probabilistic methods. In general, these are statistical techniques that are based on probabilistic models under which the data that we observe is generated following a probability distribution depending on a set of parameters which we want to estimate. The probability of the data given the model parameters is called the likelihood.</p>
+<p><img src="assets/images/chapters/phylogenomics/19.png" class="img-fluid"></p>
+<p><strong>Question:</strong></p>
+<p>In a phylogenetic probabilistic model, what are the data and what are the parameters?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>In a phylogenetic probabilistic model, the data is the sequence alignment and the parameters, are:</p>
+<ul>
+<li>the parameters of the chosen substitution model (substitution rates and base frequencies)</li>
+<li>the phylogenetic tree</li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/20.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<section id="maximum-likelihood-estimation-and-bootstrapping" class="level4" data-number="14.3.0.1">
+<h4 data-number="14.3.0.1" class="anchored" data-anchor-id="maximum-likelihood-estimation-and-bootstrapping"><span class="header-section-number">14.3.0.1</span> Maximum likelihood estimation and bootstrapping</h4>
 <p>One way we can make inferences from a probabilistic model is by finding the combination of parameters which maximises the likelihood. These parameter values are called maximum likelihood (ML) estimates. We are usually not able to compute the likelihood value for all possible combinations of parameters and have to rely on heuristic algorithms to find the maximum likelihood estimates.</p>
 <p><img src="assets/images/chapters/phylogenomics/21.png" class="img-fluid"></p>
-<p>The Maximum likelihood estimates are point estimates, i.e.&nbsp;single parameter values (for example, a tree), which does not allow to measure uncertainty. A classic method to measure the uncertainty of ML tree estimates is bootstrapping, which consists in repeatedly disturbing the alignment by masking sites from it and estimating a tree from each of these bootstrap alignments.</p>
+<p>The Maximum likelihood estimates are point estimates, i.e.&nbsp;single parameter values (for example, a tree), which does not allow to measure uncertainty. A classic method to measure the uncertainty in ML trees is bootstrapping, which consists in repeatedly “disturbing” the alignment by masking sites randomly and estimating a tree from each of these bootstrap alignments.</p>
 <p><img src="assets/images/chapters/phylogenomics/22.png" class="img-fluid"></p>
 <p>For each clade in the ML tree, a bootstrap support value is computed which corresponds to the proportion of bootstrap trees containing the clade. This gives an indication of how robustly the clade is supported by the data (i.e.&nbsp;whether it holds even after disturbing the dataset). Bootstrapping can be used to measure the topology uncertainty of trees estimated with any inference method.</p>
-<p>Here is a command to estimate an ML phylogenetic tree using <em>RAxML</em> (you may find the list of parameters in the <em>RAxML</em> manual):</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Bootstrapping can be used to measure incertainty with any type of inference method, including distance methods</p>
+</div>
+</div>
+<p><strong>Let’s make our own ML tree!</strong></p>
+<p>Here is a command to estimate an ML phylogenetic tree together with bootstraps using <em>RAxML</em> (you may find the list of parameters in the <em>RAxML</em> manual):</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">raxmlHPC-PTHREADS</span> <span class="at">-m</span> GTRGAMMA <span class="at">-T</span> 3 <span class="at">-f</span> a <span class="at">-x</span> 12345 <span class="at">-p</span> 12345 <span class="at">-N</span> autoMRE <span class="at">-s</span> snpAlignment_session5.fasta <span class="at">-n</span> full_dataset.tre</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here is the meaning of the chosen parameters:</p>
+<p><img src="assets/images/chapters/phylogenomics/raxml_cmdline.png" class="img-fluid"></p>
 <p>Once the analysis has been completed, you can open the tree using <em>Figtree</em> (RAxML_bipartitions… file, change “label” to “bootstrap support” at the prompt).</p>
-<p>The tree estimated using this model is a substitution tree (branch lengths represent genetic distances in subst./site), and it is not oriented in time: this is an unrooted tree (displayed with a random root in Figtree). You can reroot the tree in <em>Figtree</em> using <em>Y. pseudotuberculosis</em> as an outgroup (click on the branch leading to Y. pseudo and then “Reroot”).</p>
-<p>Where do our genomes of interest from the LNBA period fall (VLI092, GZL002, CHC004, KZL002), compared to the rest of Yersinia pestis diversity? Is that placement well-supported? (look at the bootstrap support value: click on the “Node Labels” box and open the drop-down menu, change “Node ages” to “bootstrap support”)</p>
-<p>You can notice that the phylogeny is difficult to visualize due to the long branch leading to <em>Y. pseudotuberculosis</em>. Having a very distant outgroup can also have deleterious effects on the estimated phylogeny (due to long branch attraction). We can construct a new phylogeny after removing the outgroup (go back to the alignment in mega, unclick <em>Y.pseudotuberculosis</em>, and export in fasta format), and then reroot the tree based on our previous knowledge: place the root on the branch leading to the LNBA genomes.</p>
-<p>Then, export the rooted tree: file &gt; export trees &gt; “save as currently displayed”.</p>
+<p><img src="assets/images/chapters/phylogenomics/figtree_prompt.png" class="img-fluid"></p>
+<p>The tree estimated using this model is a substitution tree (branch lengths represent genetic distances in subst./site). As for the NJ tree,it is not oriented in time: this is an unrooted tree (displayed with a random root in Figtree). You can reroot the tree in <em>Figtree</em> using <em>Y. pseudotuberculosis</em> as an outgroup, as previously.</p>
+<p><strong>Questions:</strong></p>
+<p>Can you confirm the position of our genomes of interest (KZL002, GZL002, CHC004 and VLI092)?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Yes. Just as in the NJ tree, they form a clade which is basal to the rest of the <em>Y. pestis</em> diversity.</p>
+</div>
+</div>
+</div>
+<p>Is that placement well-supported? (look at the bootstrap support value: click on the “Node Labels” box and open the drop-down menu, change “Node ages” to “bootstrap support”)</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The placement is strongly supported as indicated by a bootstrap support of 100% for this clade (it is not very easy to see, you probably need to zoom in a bit)</p>
+<p><img src="assets/images/chapters/phylogenomics/bootstrap_support.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>You can notice that the phylogeny is difficult to visualize due to the long branch leading to <em>Y. pseudotuberculosis</em>. Having a very distant outgroup can also have deleterious effects on the estimated phylogeny (due to the so-called “long branch attraction” effect). We can construct a new phylogeny after removing the outgroup:</p>
+<ul>
+<li>go back to the alignment in mega, unclick <em>Y.pseudotuberculosis</em>, and export in fasta format (“Data” -&gt; “Export Data” -&gt; change “Format” to “Fasta” and click “Ok”; you can save it as: “snpAlignment_without_Ypseudo.fas”)</li>
+<li>run raxml on this new alignment (change input to “snpAlignment_without_Ypseudo.fas” and output prefix to “without_Ypseudo” in the commandline)</li>
+<li>open the bipartition… file in figtree and reroot the tree based on the knowledge we have gained previously: place the root on the branch leading to the prehistoric Y. pestis strains (KZL002, GZL002, CHC004 and VLI092).</li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/raxml_tree_woOutgroup.png" class="img-fluid"></p>
+<p>Lastly, we will export the rooted tree from figtree: File -&gt; Export trees -&gt; select the “save as currently displayed” box and save as “ML_tree_rooted.tre”</p>
+<p><img src="assets/images/chapters/phylogenomics/export_tree.png" class="img-fluid"></p>
 </section>
-<section id="estimating-a-time-tree-using-bayesian-phylogenetics" class="level3" data-number="14.3.2">
-<h3 data-number="14.3.2" class="anchored" data-anchor-id="estimating-a-time-tree-using-bayesian-phylogenetics"><span class="header-section-number">14.3.2</span> Estimating a time-tree using Bayesian phylogenetics</h3>
+<section id="estimating-a-time-tree-using-bayesian-phylogenetics" class="level3" data-number="14.3.1">
+<h3 data-number="14.3.1" class="anchored" data-anchor-id="estimating-a-time-tree-using-bayesian-phylogenetics"><span class="header-section-number">14.3.1</span> Estimating a time-tree using Bayesian phylogenetics</h3>
 <p>Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of mutations but instead represent the time of evolution. To do so, we will use the sample ages (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.</p>
-<section id="temporal-signal-testing" class="level4" data-number="14.3.2.1">
-<h4 data-number="14.3.2.1" class="anchored" data-anchor-id="temporal-signal-testing"><span class="header-section-number">14.3.2.1</span> Temporal signal testing</h4>
+<section id="temporal-signal-testing" class="level4" data-number="14.3.1.1">
+<h4 data-number="14.3.1.1" class="anchored" data-anchor-id="temporal-signal-testing"><span class="header-section-number">14.3.1.1</span> Temporal signal testing</h4>
 <p>It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree. A classic test to do this is called root-to-tip regression, which consists in verifying that the oldest a sequence is, the closer it should be to the root because there was less time for mutations to accumulate before this sequence was sampled. The correlation between sample age and distance to the root (root-to-tip regression) can be assessed using a rooted substitution tree and the program <em>tempest</em>:</p>
 <ul>
 <li>open tempest and load the re-rooted ML tree that we produced previously</li>
@@ -730,8 +809,8 @@ Answer
 </ul>
 <p><img src="assets/images/chapters/phylogenomics/Tempest.png" class="img-fluid"></p>
 </section>
-<section id="bayesian-phylogenetic-inference-using-beast2" class="level4" data-number="14.3.2.2">
-<h4 data-number="14.3.2.2" class="anchored" data-anchor-id="bayesian-phylogenetic-inference-using-beast2"><span class="header-section-number">14.3.2.2</span> Bayesian phylogenetic inference using <em>BEAST2</em></h4>
+<section id="bayesian-phylogenetic-inference-using-beast2" class="level4" data-number="14.3.1.2">
+<h4 data-number="14.3.1.2" class="anchored" data-anchor-id="bayesian-phylogenetic-inference-using-beast2"><span class="header-section-number">14.3.1.2</span> Bayesian phylogenetic inference using <em>BEAST2</em></h4>
 <p>We will estimate a time tree from our alignment using Bayesian inference instead of maximum likelihood.</p>
 <p>Bayesian inference is a type of inference which is based on a probability distribution that is different from the likelihood: the posterior probability. The posterior probability is the probability of the parameters given the data. The posterior distribution is easier to interpret than the likelihood because it contains all the information about the parameters: point estimates such as the median or the mean can be directly estimated from it, but also percentile intervals which can be used to measure uncertainty.</p>
 <p><img src="assets/images/chapters/phylogenomics/23.png" class="img-fluid"></p>
