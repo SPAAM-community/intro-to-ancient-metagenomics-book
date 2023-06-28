@@ -104,35 +104,25 @@ Once you know this, can you already tell by looking at the alignment which seque
 We can easily see that the last sequence in the alignment (Y. pseudotuberculosis) contains more disagreements to the consensus. This is normal since this is the only genome not belonging to the _Y. pestis_ species: we will use it as an outgroup
 :::
 
-### Distance-based phylogeny
+### Distance-based phylogeny: Neighbour Joining
 
-Distance-based methods calculate the tree from a pairwise distance matrix. The distances in the pairwise distance matrix can represent either:
+The Neighbour Joining (NJ) method is an agglomerative algorithm which can be used to derive a phylogenetic tree from a pairwise distance matrix. In essence, this method will be grouping taxa that have the shortest distance together first, and will be doing this iteratively until all the taxa/sequences included in your alignment have been placed in a tree.
 
-- Number of differences between to sequences
-- p-distance that is calculated as number of differences / total number of sites
+Here are the details of the calculations for a small NJ tree example with 6 taxa:
 
-For any of the phylogenetic methods, we can also take into account that different sites may evolve differently depending on their nucleotide composition. To take this into account, you will need to use **substitution models**. By applying different evolutionary models, one can take into account multiple consecutive mutations as well as different probabilities to observe a specific mutation given the specific character in this position. There are tools that allow you to choose the substitution model that it is more fitting to you specific alignment, such as jModelTest, ModelGenerator, etc.
+![](assets/images/chapters/phylogenomics/NJ_algorithm.png)
 
-![](assets/images/chapters/phylogenomics/7.png)
+Luckily, you won't have to do this by hand since _MEGA_ allows you to build a NJ tree. For that go back to _MEGA_ and click on the _Phylogeny_ symbol and then select _Construct Neighbour Joining Tree_. In the window that would pop up, you will then chance the _Model/Method_ to _p-distance_. Then press _OK_ and a window with the calculated phylogenetic tree will pop up.
 
-### Calculate a pairwise distance matrix
+::: {.callout-note title="p-distances?"}
+A NJ tree can be built from any type of distances. This includes:
 
-To calculate a pairwise distance matrix, one will have to check the number of differences between all the possible pair combination between the sequences in the alignment, and in the case of a p-distance normalise the number of differences by the total number of sites. All this differences will be then stored in a matrix.
+- p-distances (also called raw distances): these are simply the proportion of differences between sequences
 
-_MEGA_ also provides a function to calculate Pairwise Distances, for that you will have to click into the Distance symbol, and select _Compute Pairwise Distances_, the output will be a matrix with all the pairwise distances. This will be the first step you will do if you wanted to compute a distance-based phylogeny with methods such as UPGMA or Neighbour-Joining. We will be covering the second method.
+- corrected distances: these are based on an underlying substitution model (JC69, K80, GTR...) and account for multiple mutations at the same sites (which would result in only one visible difference)
 
-![](assets/images/chapters/phylogenomics/8.png)
-
-### Calculating a Neighbour-Joining tree
-
-In the slide you have an example on how a small Neighbour-Joining (NJ), with 6 taxa is calculated.
-
-In essence, this method will be grouping taxa that have the shortest distance together first, and will be doing this iteratively until all the taxa/sequences included in your alignment have been placed in a tree.
-Luckily, you won't have to do this by hand since _MEGA_ allows you to build a NJ tree.
-
-### Let's make our own NJ tree
-
-For that go back to _MEGA_ and click on the _Phylogeny_ symbol and then select _Construct Neighbour Joining Tree_. In the window that would pop up, you will then chance the _Model/Method_ to _p-distance_ since we want to normalise by the total number of sites shared by sequences. Then press _OK_ and a window with the calculated phylogenetic tree will pop up.
+- p-distances and corrected distances should be similar when the number of mutations is low compared to the genome length
+:::
 
 ![](assets/images/chapters/phylogenomics/9.png)
 
@@ -146,65 +136,38 @@ As said above, we will explore own NJ tree in _FigTree_. Open the software and t
 
 ![](assets/images/chapters/phylogenomics/11.png)
 
-So, which type of tree is this?
-Before you answer this question, let me introduce you to another type of trees
 
-### Type of trees: Rooted vs Unrooted trees
-
-- An _unrooted_ tree does not contain a root. It displays the relationships between our sequences but not the direction in time. In the example, we can not tell if human or chimpanzee or gorilla are more ancestral to each other.
-- A _rooted_ tree does contain a root. This root can be calculated based on the inclusion of an outgroup, a known sequenced to be older than any of the taxa in our tree, or by computational methods that can place the root by various methods, being one of such methods the Mid Point Rooting. A rooted tree represents the relationships and the direction in time. By rooting our example tree with the outgroup, we now can tell that gorilla is ancestral to both human and chimpanzees.
-
-![](assets/images/chapters/phylogenomics/12.png)
-##### Let's make our own NJ tree
-
-So if we go back to our question, which type of tree is this?
-
-![](assets/images/chapters/phylogenomics/13.png)
-
-Even though a root is displayed by default, this is actually an unrooted tree.
-We know that _Yersinia pseudotuberculosis_ (labelled here as _Y. pseudotuberculosis_) is an outgroup to _Yersinia pestis_. You can reroot the tree by selecting _Y.pseudotuberculosis_ and pressing _Reroot_.
+Note that even though a root is displayed by default in _FigTree_, NJ trees are actually **unrooted**. We know that _Yersinia pseudotuberculosis_ (labelled here as _Y. pseudotuberculosis_) is an outgroup to _Yersinia pestis_. You can reroot the tree by selecting _Y.pseudotuberculosis_ and pressing _Reroot_.
 
 ![](assets/images/chapters/phylogenomics/14.png)
 
-Now we have the correct tree.
+Now we have a rooted tree.
+
+**Questions:**
+
+How much time did the NJ-tree calculation take?
+
+::: {.callout-note title="Answer" collapse="true"}
+~1 second
+:::
 
 How many leaves/tips has our tree?
 
-- That's right, it is 33, the same number of sequences that was in our original SNP alignment.
-
-Is it an ultrametric tree?
-
-- No, we can see that root to tip distance is different between taxa. The branch lengths in the NJ tree will represent genetic distance between the different taxa.
+::: {.callout-note title="Answer" collapse="true"}
+33, i.e. the number of sequences in our SNP alignment.
+:::
 
 Where are our taxa of interest? (KZL002, GZL002, CHC004 and VLI092)
 
-- They all fall ancestral to the rest of _Yersinia pestis_ in this tree.
+::: {.callout-note title="Answer" collapse="true"}
+They all fall ancestral to the rest of _Yersinia pestis_ in this tree.
+:::
 
-Do they form a clade?
+Do they form a monophyletic group (a clade)?
 
-- All the genomes have a common ancestor and form a single branch, meaning that they form a clade.
-
-Which type of clade?
-
-- To answer this question, let's look at what types of clades we can have in a phylogenetic tree
-
-### Types of Clades
-
-- A **Monophyletic clade** is a group of taxa that contain all the taxa that share a common ancestor.
-- A **Paraphyletic clade** is a group of taxa including all the taxa with a common recent ancestor except one or more taxa. In the example, since A is missing from the clade selected, it won't be anymore a paraphyletic clade rather than a monophyletic. Another common example of paraphyletic clade would be selecting all the reptiles but excluding birds.
-- A **Polyphyletic clade** is a group of taxa from different monophyletic clades.
-
-![](assets/images/chapters/phylogenomics/15.png)
-
-### Lets make our own NJ tree
-
-Now regarding our question, which type of clade form KZL002, GZL002, CHC004 and VLI092?
-
-Since they all share a common ancestor,they form a monophyletic clade.
-
-Until now we have learned how to explore a SNP alignment, the different part of the a phylogenetic tree and how to make a NJ tree. The NJ tree is based on pairwise distances, which is one of the simplest algorithms to build a tree and now you will see more complex algorithms for phylogenetic tree building.
-
-![](assets/images/chapters/phylogenomics/16.png)
+::: {.callout-note title="Answer" collapse="true"}
+Yes, they form a monophyletic group. We can also say that this group of prehistoric strains form their own lineage.
+:::
 
 ## Character-based phylogenetic methods: maximum parsimony and probabilistic approaches
 

@@ -393,20 +393,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#preparation" id="toc-preparation" class="nav-link" data-scroll-target="#preparation"><span class="header-section-number">14.2.1</span> Preparation</a></li>
   <li><a href="#visualize-the-sequence-alignment" id="toc-visualize-the-sequence-alignment" class="nav-link" data-scroll-target="#visualize-the-sequence-alignment"><span class="header-section-number">14.2.2</span> Visualize the sequence alignment</a></li>
+  <li><a href="#distance-based-phylogeny-neighbour-joining" id="toc-distance-based-phylogeny-neighbour-joining" class="nav-link" data-scroll-target="#distance-based-phylogeny-neighbour-joining"><span class="header-section-number">14.2.3</span> Distance-based phylogeny: Neighbour Joining</a></li>
   </ul></li>
-  <li><a href="#distance-based-phylogenetic-methods" id="toc-distance-based-phylogenetic-methods" class="nav-link" data-scroll-target="#distance-based-phylogenetic-methods"><span class="header-section-number">14.3</span> Distance-based phylogenetic methods</a>
+  <li><a href="#character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" id="toc-character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" class="nav-link" data-scroll-target="#character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches"><span class="header-section-number">14.3</span> Character-based phylogenetic methods: maximum parsimony and probabilistic approaches</a>
   <ul class="collapse">
-  <li><a href="#calculate-a-pairwise-distance-matrix" id="toc-calculate-a-pairwise-distance-matrix" class="nav-link" data-scroll-target="#calculate-a-pairwise-distance-matrix"><span class="header-section-number">14.3.1</span> Calculate a pairwise distance matrix</a></li>
-  <li><a href="#calculating-a-neighbour-joining-tree" id="toc-calculating-a-neighbour-joining-tree" class="nav-link" data-scroll-target="#calculating-a-neighbour-joining-tree"><span class="header-section-number">14.3.2</span> Calculating a Neighbour-Joining tree</a></li>
-  <li><a href="#lets-make-our-own-nj-tree" id="toc-lets-make-our-own-nj-tree" class="nav-link" data-scroll-target="#lets-make-our-own-nj-tree"><span class="header-section-number">14.3.3</span> Let’s make our own NJ tree</a></li>
-  <li><a href="#type-of-trees-rooted-vs-unrooted-trees" id="toc-type-of-trees-rooted-vs-unrooted-trees" class="nav-link" data-scroll-target="#type-of-trees-rooted-vs-unrooted-trees"><span class="header-section-number">14.3.4</span> Type of trees: Rooted vs Unrooted trees</a></li>
-  <li><a href="#types-of-clades" id="toc-types-of-clades" class="nav-link" data-scroll-target="#types-of-clades"><span class="header-section-number">14.3.5</span> Types of Clades</a></li>
-  <li><a href="#lets-make-our-own-nj-tree-1" id="toc-lets-make-our-own-nj-tree-1" class="nav-link" data-scroll-target="#lets-make-our-own-nj-tree-1"><span class="header-section-number">14.3.6</span> Lets make our own NJ tree</a></li>
-  </ul></li>
-  <li><a href="#character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" id="toc-character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" class="nav-link" data-scroll-target="#character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches"><span class="header-section-number">14.4</span> Character-based phylogenetic methods: maximum parsimony and probabilistic approaches</a>
-  <ul class="collapse">
-  <li><a href="#maximum-likelihood-estimation-and-bootstrapping" id="toc-maximum-likelihood-estimation-and-bootstrapping" class="nav-link" data-scroll-target="#maximum-likelihood-estimation-and-bootstrapping"><span class="header-section-number">14.4.1</span> Maximum likelihood estimation and bootstrapping</a></li>
-  <li><a href="#estimating-a-time-tree-using-bayesian-phylogenetics" id="toc-estimating-a-time-tree-using-bayesian-phylogenetics" class="nav-link" data-scroll-target="#estimating-a-time-tree-using-bayesian-phylogenetics"><span class="header-section-number">14.4.2</span> Estimating a time-tree using Bayesian phylogenetics</a></li>
+  <li><a href="#maximum-likelihood-estimation-and-bootstrapping" id="toc-maximum-likelihood-estimation-and-bootstrapping" class="nav-link" data-scroll-target="#maximum-likelihood-estimation-and-bootstrapping"><span class="header-section-number">14.3.1</span> Maximum likelihood estimation and bootstrapping</a></li>
+  <li><a href="#estimating-a-time-tree-using-bayesian-phylogenetics" id="toc-estimating-a-time-tree-using-bayesian-phylogenetics" class="nav-link" data-scroll-target="#estimating-a-time-tree-using-bayesian-phylogenetics"><span class="header-section-number">14.3.2</span> Estimating a time-tree using Bayesian phylogenetics</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -548,6 +540,7 @@ Answer
 </div>
 </div>
 </div>
+<p>What do you think the dots represent?</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -561,7 +554,6 @@ Tip
 <p>The first line is a <strong>consensus</strong> sequence: it indicates the nucleotide supported by the majority of the sequences in the alignment (90% of the sequences should agree, otherwise an N is displayed)</p>
 </div>
 </div>
-<p>What do you think the dots represent?</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -596,90 +588,112 @@ Answer
 </div>
 </div>
 </section>
-</section>
-<section id="distance-based-phylogenetic-methods" class="level2" data-number="14.3">
-<h2 data-number="14.3" class="anchored" data-anchor-id="distance-based-phylogenetic-methods"><span class="header-section-number">14.3</span> Distance-based phylogenetic methods</h2>
-<p>Distance-based methods calculate the tree from a pairwise distance matrix. The distances in the pairwise distance matrix can represent either:</p>
+<section id="distance-based-phylogeny-neighbour-joining" class="level3" data-number="14.2.3">
+<h3 data-number="14.2.3" class="anchored" data-anchor-id="distance-based-phylogeny-neighbour-joining"><span class="header-section-number">14.2.3</span> Distance-based phylogeny: Neighbour Joining</h3>
+<p>The Neighbour Joining (NJ) method is an agglomerative algorithm which can be used to derive a phylogenetic tree from a pairwise distance matrix. In essence, this method will be grouping taxa that have the shortest distance together first, and will be doing this iteratively until all the taxa/sequences included in your alignment have been placed in a tree.</p>
+<p>Here are the details of the calculations for a small NJ tree example with 6 taxa:</p>
+<p><img src="assets/images/chapters/phylogenomics/NJ_algorithm.png" class="img-fluid"></p>
+<p>Luckily, you won’t have to do this by hand since <em>MEGA</em> allows you to build a NJ tree. For that go back to <em>MEGA</em> and click on the <em>Phylogeny</em> symbol and then select <em>Construct Neighbour Joining Tree</em>. In the window that would pop up, you will then chance the <em>Model/Method</em> to <em>p-distance</em> since we want to normalise by the total number of sites shared by sequences. Then press <em>OK</em> and a window with the calculated phylogenetic tree will pop up.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="p-distances?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+p-distances?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A NJ tree can be built from any type of distances. This includes:</p>
 <ul>
-<li>Number of differences between to sequences</li>
-<li>p-distance that is calculated as number of differences / total number of sites</li>
+<li><p>p-distances (also called raw distances): these are simply the proportion of differences between sequences</p></li>
+<li><p>corrected distances: these are based on an underlying substitution model (JC69, K80, GTR…) and account for multiple mutations at the same sites (which would result in only one visible difference)</p></li>
+<li><p>p-distances and corrected distances should be similar when the number of mutations is low compared to the genome length</p></li>
 </ul>
-<p>For any of the phylogenetic methods, we can also take into account that different sites may evolve differently depending on their nucleotide composition. To take this into account, you will need to use <strong>substitution models</strong>. By applying different evolutionary models, one can take into account multiple consecutive mutations as well as different probabilities to observe a specific mutation given the specific character in this position. There are tools that allow you to choose the substitution model that it is more fitting to you specific alignment, such as jModelTest, ModelGenerator, etc.</p>
-<p><img src="assets/images/chapters/phylogenomics/7.png" class="img-fluid"></p>
-<section id="calculate-a-pairwise-distance-matrix" class="level3" data-number="14.3.1">
-<h3 data-number="14.3.1" class="anchored" data-anchor-id="calculate-a-pairwise-distance-matrix"><span class="header-section-number">14.3.1</span> Calculate a pairwise distance matrix</h3>
-<p>To calculate a pairwise distance matrix, one will have to check the number of differences between all the possible pair combination between the sequences in the alignment, and in the case of a p-distance normalise the number of differences by the total number of sites. All this differences will be then stored in a matrix.</p>
-<p><em>MEGA</em> also provides a function to calculate Pairwise Distances, for that you will have to click into the Distance symbol, and select <em>Compute Pairwise Distances</em>, the output will be a matrix with all the pairwise distances. This will be the first step you will do if you wanted to compute a distance-based phylogeny with methods such as UPGMA or Neighbour-Joining. We will be covering the second method.</p>
-<p><img src="assets/images/chapters/phylogenomics/8.png" class="img-fluid"></p>
-</section>
-<section id="calculating-a-neighbour-joining-tree" class="level3" data-number="14.3.2">
-<h3 data-number="14.3.2" class="anchored" data-anchor-id="calculating-a-neighbour-joining-tree"><span class="header-section-number">14.3.2</span> Calculating a Neighbour-Joining tree</h3>
-<p>In the slide you have an example on how a small Neighbour-Joining (NJ), with 6 taxa is calculated.</p>
-<p>In essence, this method will be grouping taxa that have the shortest distance together first, and will be doing this iteratively until all the taxa/sequences included in your alignment have been placed in a tree. Luckily, you won’t have to do this by hand since <em>MEGA</em> allows you to build a NJ tree.</p>
-</section>
-<section id="lets-make-our-own-nj-tree" class="level3" data-number="14.3.3">
-<h3 data-number="14.3.3" class="anchored" data-anchor-id="lets-make-our-own-nj-tree"><span class="header-section-number">14.3.3</span> Let’s make our own NJ tree</h3>
-<p>For that go back to <em>MEGA</em> and click on the <em>Phylogeny</em> symbol and then select <em>Construct Neighbour Joining Tree</em>. In the window that would pop up, you will then chance the <em>Model/Method</em> to <em>p-distance</em> since we want to normalise by the total number of sites shared by sequences. Then press <em>OK</em> and a window with the calculated phylogenetic tree will pop up.</p>
+</div>
+</div>
 <p><img src="assets/images/chapters/phylogenomics/9.png" class="img-fluid"></p>
 <p>Since the tree is not easily visualised in <em>MEGA</em>, we will export it in newick format (an “standarised” format to write a tree in a computer-readable form) and explore our tree in <em>FigTree</em>. This tool has a better interface for visually manipulating trees and allows us to interact with the phylogenetic tree.</p>
 <p><img src="assets/images/chapters/phylogenomics/10.png" class="img-fluid"></p>
 <p>To do that you will click on <em>File</em>, then <em>Export current tree (Newick)</em> and click on <em>Branch Lengths</em> to include those in the newick annotation. When you press <em>OK</em>, a new window with the tree in newick format will pop up and you will then press <em>File</em> -&gt; <em>Save</em> and saved it as <em>NJ_tree.nwk</em> (If you are doing this for your own project, please give your files informative names).</p>
 <p>As said above, we will explore own NJ tree in <em>FigTree</em>. Open the software and then open the NJ tree by clicking on <em>File</em> -&gt; <em>Open</em> and selecting the file with the NJ tree <em>NJ_tree.nwk</em></p>
 <p><img src="assets/images/chapters/phylogenomics/11.png" class="img-fluid"></p>
-<p>So, which type of tree is this? Before you answer this question, let me introduce you to another type of trees</p>
-</section>
-<section id="type-of-trees-rooted-vs-unrooted-trees" class="level3" data-number="14.3.4">
-<h3 data-number="14.3.4" class="anchored" data-anchor-id="type-of-trees-rooted-vs-unrooted-trees"><span class="header-section-number">14.3.4</span> Type of trees: Rooted vs Unrooted trees</h3>
-<ul>
-<li>An <em>unrooted</em> tree does not contain a root. It displays the relationships between our sequences but not the direction in time. In the example, we can not tell if human or chimpanzee or gorilla are more ancestral to each other.</li>
-<li>A <em>rooted</em> tree does contain a root. This root can be calculated based on the inclusion of an outgroup, a known sequenced to be older than any of the taxa in our tree, or by computational methods that can place the root by various methods, being one of such methods the Mid Point Rooting. A rooted tree represents the relationships and the direction in time. By rooting our example tree with the outgroup, we now can tell that gorilla is ancestral to both human and chimpanzees.</li>
-</ul>
-<p><img src="assets/images/chapters/phylogenomics/12.png" class="img-fluid"> ##### Let’s make our own NJ tree</p>
-<p>So if we go back to our question, which type of tree is this?</p>
-<p><img src="assets/images/chapters/phylogenomics/13.png" class="img-fluid"></p>
-<p>Even though a root is displayed by default, this is actually an unrooted tree. We know that <em>Yersinia pseudotuberculosis</em> (labelled here as <em>Y. pseudotuberculosis</em>) is an outgroup to <em>Yersinia pestis</em>. You can reroot the tree by selecting <em>Y.pseudotuberculosis</em> and pressing <em>Reroot</em>.</p>
+<p>Note that even though a root is displayed by default in <em>FigTree</em>, NJ trees are actually <strong>unrooted</strong>. We know that <em>Yersinia pseudotuberculosis</em> (labelled here as <em>Y. pseudotuberculosis</em>) is an outgroup to <em>Yersinia pestis</em>. You can reroot the tree by selecting <em>Y.pseudotuberculosis</em> and pressing <em>Reroot</em>.</p>
 <p><img src="assets/images/chapters/phylogenomics/14.png" class="img-fluid"></p>
-<p>Now we have the correct tree.</p>
+<p>Now we have a rooted tree.</p>
+<p><strong>Questions:</strong></p>
+<p>How much time did the NJ-tree calculation take?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>~1 second</p>
+</div>
+</div>
+</div>
 <p>How many leaves/tips has our tree?</p>
-<ul>
-<li>That’s right, it is 33, the same number of sequences that was in our original SNP alignment.</li>
-</ul>
-<p>Is it an ultrametric tree?</p>
-<ul>
-<li>No, we can see that root to tip distance is different between taxa. The branch lengths in the NJ tree will represent genetic distance between the different taxa.</li>
-</ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>33, i.e.&nbsp;the number of sequences in our SNP alignment.</p>
+</div>
+</div>
+</div>
 <p>Where are our taxa of interest? (KZL002, GZL002, CHC004 and VLI092)</p>
-<ul>
-<li>They all fall ancestral to the rest of <em>Yersinia pestis</em> in this tree.</li>
-</ul>
-<p>Do they form a clade?</p>
-<ul>
-<li>All the genomes have a common ancestor and form a single branch, meaning that they form a clade.</li>
-</ul>
-<p>Which type of clade?</p>
-<ul>
-<li>To answer this question, let’s look at what types of clades we can have in a phylogenetic tree</li>
-</ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>They all fall ancestral to the rest of <em>Yersinia pestis</em> in this tree.</p>
+</div>
+</div>
+</div>
+<p>Do they form a monophyletic group (a clade)?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Yes, they form a monophyletic group. We can also say that this group of prehistoric strains form their own lineage.</p>
+</div>
+</div>
+</div>
 </section>
-<section id="types-of-clades" class="level3" data-number="14.3.5">
-<h3 data-number="14.3.5" class="anchored" data-anchor-id="types-of-clades"><span class="header-section-number">14.3.5</span> Types of Clades</h3>
-<ul>
-<li>A <strong>Monophyletic clade</strong> is a group of taxa that contain all the taxa that share a common ancestor.</li>
-<li>A <strong>Paraphyletic clade</strong> is a group of taxa including all the taxa with a common recent ancestor except one or more taxa. In the example, since A is missing from the clade selected, it won’t be anymore a paraphyletic clade rather than a monophyletic. Another common example of paraphyletic clade would be selecting all the reptiles but excluding birds.</li>
-<li>A <strong>Polyphyletic clade</strong> is a group of taxa from different monophyletic clades.</li>
-</ul>
-<p><img src="assets/images/chapters/phylogenomics/15.png" class="img-fluid"></p>
 </section>
-<section id="lets-make-our-own-nj-tree-1" class="level3" data-number="14.3.6">
-<h3 data-number="14.3.6" class="anchored" data-anchor-id="lets-make-our-own-nj-tree-1"><span class="header-section-number">14.3.6</span> Lets make our own NJ tree</h3>
-<p>Now regarding our question, which type of clade form KZL002, GZL002, CHC004 and VLI092?</p>
-<p>Since they all share a common ancestor,they form a monophyletic clade.</p>
-<p>Until now we have learned how to explore a SNP alignment, the different part of the a phylogenetic tree and how to make a NJ tree. The NJ tree is based on pairwise distances, which is one of the simplest algorithms to build a tree and now you will see more complex algorithms for phylogenetic tree building.</p>
-<p><img src="assets/images/chapters/phylogenomics/16.png" class="img-fluid"></p>
-</section>
-</section>
-<section id="character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" class="level2" data-number="14.4">
-<h2 data-number="14.4" class="anchored" data-anchor-id="character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches"><span class="header-section-number">14.4</span> Character-based phylogenetic methods: maximum parsimony and probabilistic approaches</h2>
+<section id="character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches"><span class="header-section-number">14.3</span> Character-based phylogenetic methods: maximum parsimony and probabilistic approaches</h2>
 <p>Character-based methods are not based on pairwise distances but rather model the complete evolution of each character (e.g.&nbsp;DNA nucleotides at each position) along the phylogenetic tree.</p>
 <p>One of these methods is maximum parsimony and it consists in choosing the tree that underlies an evolutionary history with the least number of character changes.</p>
 <p><img src="assets/images/chapters/phylogenomics/17.png" class="img-fluid"></p>
@@ -688,8 +702,8 @@ Answer
 <p>In a phylogenetic probabilistic model, the data is the sequence alignment and the parameters, are the substitution matrix and the phylogenetic tree. The probability of the data given the model parameters is called the likelihood.</p>
 <p><img src="assets/images/chapters/phylogenomics/19.png" class="img-fluid"><br>
 <img src="assets/images/chapters/phylogenomics/20.png" class="img-fluid"></p>
-<section id="maximum-likelihood-estimation-and-bootstrapping" class="level3" data-number="14.4.1">
-<h3 data-number="14.4.1" class="anchored" data-anchor-id="maximum-likelihood-estimation-and-bootstrapping"><span class="header-section-number">14.4.1</span> Maximum likelihood estimation and bootstrapping</h3>
+<section id="maximum-likelihood-estimation-and-bootstrapping" class="level3" data-number="14.3.1">
+<h3 data-number="14.3.1" class="anchored" data-anchor-id="maximum-likelihood-estimation-and-bootstrapping"><span class="header-section-number">14.3.1</span> Maximum likelihood estimation and bootstrapping</h3>
 <p>One way we can make inferences from a probabilistic model is by finding the combination of parameters which maximises the likelihood. These parameter values are called maximum likelihood (ML) estimates. We are usually not able to compute the likelihood value for all possible combinations of parameters and have to rely on heuristic algorithms to find the maximum likelihood estimates.</p>
 <p><img src="assets/images/chapters/phylogenomics/21.png" class="img-fluid"></p>
 <p>The Maximum likelihood estimates are point estimates, i.e.&nbsp;single parameter values (for example, a tree), which does not allow to measure uncertainty. A classic method to measure the uncertainty of ML tree estimates is bootstrapping, which consists in repeatedly disturbing the alignment by masking sites from it and estimating a tree from each of these bootstrap alignments.</p>
@@ -703,11 +717,11 @@ Answer
 <p>You can notice that the phylogeny is difficult to visualize due to the long branch leading to <em>Y. pseudotuberculosis</em>. Having a very distant outgroup can also have deleterious effects on the estimated phylogeny (due to long branch attraction). We can construct a new phylogeny after removing the outgroup (go back to the alignment in mega, unclick <em>Y.pseudotuberculosis</em>, and export in fasta format), and then reroot the tree based on our previous knowledge: place the root on the branch leading to the LNBA genomes.</p>
 <p>Then, export the rooted tree: file &gt; export trees &gt; “save as currently displayed”.</p>
 </section>
-<section id="estimating-a-time-tree-using-bayesian-phylogenetics" class="level3" data-number="14.4.2">
-<h3 data-number="14.4.2" class="anchored" data-anchor-id="estimating-a-time-tree-using-bayesian-phylogenetics"><span class="header-section-number">14.4.2</span> Estimating a time-tree using Bayesian phylogenetics</h3>
+<section id="estimating-a-time-tree-using-bayesian-phylogenetics" class="level3" data-number="14.3.2">
+<h3 data-number="14.3.2" class="anchored" data-anchor-id="estimating-a-time-tree-using-bayesian-phylogenetics"><span class="header-section-number">14.3.2</span> Estimating a time-tree using Bayesian phylogenetics</h3>
 <p>Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of mutations but instead represent the time of evolution. To do so, we will use the sample ages (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.</p>
-<section id="temporal-signal-testing" class="level4" data-number="14.4.2.1">
-<h4 data-number="14.4.2.1" class="anchored" data-anchor-id="temporal-signal-testing"><span class="header-section-number">14.4.2.1</span> Temporal signal testing</h4>
+<section id="temporal-signal-testing" class="level4" data-number="14.3.2.1">
+<h4 data-number="14.3.2.1" class="anchored" data-anchor-id="temporal-signal-testing"><span class="header-section-number">14.3.2.1</span> Temporal signal testing</h4>
 <p>It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree. A classic test to do this is called root-to-tip regression, which consists in verifying that the oldest a sequence is, the closer it should be to the root because there was less time for mutations to accumulate before this sequence was sampled. The correlation between sample age and distance to the root (root-to-tip regression) can be assessed using a rooted substitution tree and the program <em>tempest</em>:</p>
 <ul>
 <li>open tempest and load the re-rooted ML tree that we produced previously</li>
@@ -716,8 +730,8 @@ Answer
 </ul>
 <p><img src="assets/images/chapters/phylogenomics/Tempest.png" class="img-fluid"></p>
 </section>
-<section id="bayesian-phylogenetic-inference-using-beast2" class="level4" data-number="14.4.2.2">
-<h4 data-number="14.4.2.2" class="anchored" data-anchor-id="bayesian-phylogenetic-inference-using-beast2"><span class="header-section-number">14.4.2.2</span> Bayesian phylogenetic inference using <em>BEAST2</em></h4>
+<section id="bayesian-phylogenetic-inference-using-beast2" class="level4" data-number="14.3.2.2">
+<h4 data-number="14.3.2.2" class="anchored" data-anchor-id="bayesian-phylogenetic-inference-using-beast2"><span class="header-section-number">14.3.2.2</span> Bayesian phylogenetic inference using <em>BEAST2</em></h4>
 <p>We will estimate a time tree from our alignment using Bayesian inference instead of maximum likelihood.</p>
 <p>Bayesian inference is a type of inference which is based on a probability distribution that is different from the likelihood: the posterior probability. The posterior probability is the probability of the parameters given the data. The posterior distribution is easier to interpret than the likelihood because it contains all the information about the parameters: point estimates such as the median or the mean can be directly estimated from it, but also percentile intervals which can be used to measure uncertainty.</p>
 <p><img src="assets/images/chapters/phylogenomics/23.png" class="img-fluid"></p>
