@@ -125,7 +125,7 @@ prompt `<username>` will be replaced by `lamnidis`, as that is his username.
 
 ### Basic commands
 
-- **List** directory contents:
+- **l**i**s**t directory contents:
 ```bash
 ls
 ```
@@ -139,32 +139,32 @@ Documents  M11CC_Out    Music       Public      Videos       thinclient_drives
 We will use this format to show you commands and their corresponding output in the terminal (if any) for the rest of this chapter.
 :::
 
-- **Make** a directory:
+- **m**a**k**e a **dir**ectory:
 ```bash
 mkdir barebonesbash
 ```
 
-- **Move** (or rename) files and directories
+- **m**o**v**e (or rename) files and directories
 ```bash
 mv barebonesbash BareBonesBash
 ```
 
-- **Change** directories
+- **c**hange **d**irectories
 ```bash
 cd BareBonesBash
 ```
 
-- **Download** a remote file to your computer
+- Download (**w**ww **get**) a remote file to your computer
 ```bash
 wget git.io/Boosted-BBB-meta
 ```
 
-- **Copy** a file or directory to a new location
+- **c**o**p**y a file or directory to a new location
 ```bash
 cp Boosted-BBB-meta Boosted-BBB-meta.tsv
 ```
 
-- **Remove** (delete) files
+- **r**e**m**ove (delete) files
 ```bash
 rm Boosted-BBB-meta
 ```
@@ -179,13 +179,17 @@ cat Boosted-BBB-meta.tsv
 head -n 10 Boosted-BBB-meta.tsv
 tail -n 10 Boosted-BBB-meta.tsv
 ```
+::: {.callout-note}
+This is because the start of a cat is its head and the end of the cat is its tail (The great humor of computer scientists)
+:::
 
-- Look at the contents of a file **interactively** (quit with `q`)
+
+- Look at the contents of a file interactively (**less** than the complete file, press `q` to quit)
 ```bash
 less Boosted-BBB-meta.tsv
 ```
 
-- __Count__ the number of __l__ines in a file
+- **w**ord **c**ount the number of **l**ines (-l) in a file
 ```bash
 $ wc -l Boosted-BBB-meta.tsv
 ```
@@ -213,6 +217,73 @@ $ man cat
 ```
 
 ### Variables
+
+A variable is a named container whose contents you can expand at will or change.
+
+You can assign variables (tell the computer what do you want it to contain) with `=` and pull their contents with `$`
+
+The easiest way to see the contents of a varable is using `echo`!
+```bash
+echo "This is my home directory: $HOME"
+```
+```
+This is my home directory: /home/ubuntu
+```
+
+`$HOME` is a varible of the type called **environment variables**, which are set the moment you open your terminal or log into a server, they ensure the system works as intended and should not be change unless you are **very** sure of why. 
+
+But as mentioned, you can store in a variable anything you want, so let's see a few examples:
+
+First let's try to store a number:
+
+```bash
+GreekFood=4            #Here, 'GreekFood' is a number.
+echo "Greek food is $GreekFood people who want to know what heaven tastes like."
+```
+```
+Greek food is 4 people who want to know what heaven tastes like.
+```
+::: {.callout-note}
+The `#` is used to add comments to your code. Comments are annotations that you write in your code to understand what it is doing but that the computer does not run. Very useful for when your future self or another person looks at your code
+:::
+
+
+Now let's store a word ('string'):
+
+```bash
+GreekFood=delicious   #We overwrite that number with a word (i.e. a 'string').
+echo "Everyone says that Greek food is $GreekFood."
+```
+
+```
+Everyone says that Greek food is delicious.
+```
+
+You can also store more than a single words:
+
+```bash
+$ GreekFood="Greek wine" #We can overwrite 'GreekFood' again, 
+## but when there is a space in our string, we need quotations.
+$ echo "The only thing better than Greek food is $GreekFood!"
+```
+
+```
+The only thing better than Greek food is Greek wine!
+```
+
+Since can be reset variables to whatever you want, you can also store a number again:
+
+```bash
+$ GreekFood=7 #And, of course, we can overwrite with a number again too.
+$ echo "I have been to Greece $GreekFood times already this year, for the food and wine!"
+```
+
+```
+I have been to Greece 7 times already this year, for the food and wine!
+```
+
+In this examples you have seen how the same variable has been overwritten, this means that you can only access the last content that you stored in the variable. All the previous contents that a variable may have had are innaccessible as soon as the same variable is given a new value.
+
 
 ### Quotes matter!
 
