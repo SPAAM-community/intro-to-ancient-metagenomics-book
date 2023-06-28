@@ -1,5 +1,5 @@
 ---
-title: Authentication and Decontamination analysis
+title: Authentication and Decontamination
 author: Nikolay Oskolkov
 ---
 
@@ -7,7 +7,7 @@ author: Nikolay Oskolkov
 For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [archive](https://doi.org/10.5281/zenodo.6983178), and activate the environment:
 
 ```bash
-conda activate decontamination-authentication
+conda activate authentication-decontamination
 ```
 :::
 
@@ -22,7 +22,7 @@ In ancient metagenomics we typically try to answer two questions: "Who is there?
 
 The first two are reference-based, i.e. they assume a similarity of a query ancient DNA fragment to a modern reference genome in a database. This is a strong assumption, which might not be true for very old or very diverged ancient organisms. This is the case when the reference-free *de-novo* assembly approach becomes prowerful. However, *de-novo* assembly has its own computational challenges for low-coverage ancient metagenomic samples that typically contain very short DNA fragments.
 
-![](assets/images/chapters/decontamination-authentication/metagenomic_approaches.png)
+![](assets/images/chapters/authentication-decontamination/metagenomic_approaches.png)
 
 While all the three types of metagenomic analysis are suitable for exploring composition of metagenomic samples, they do not directly validate the findings or provide information about ancient or endogenous status of the detected organims. It can happen that the detected organism
 
@@ -62,7 +62,7 @@ The chapter has the following outline:
 
 In this chapter, we will use 10 simulated with [gargammel](https://academic.oup.com/bioinformatics/article/33/4/577/2608651) ancient metagenomic samples from Pochon et al. 2023. The simulated data can be accessed via [https://doi.org/10.17044/scilifelab.21261405](https://doi.org/10.17044/scilifelab.21261405).
 
-![](assets/images/chapters/decontamination-authentication/aMeta.png)
+![](assets/images/chapters/authentication-decontamination/aMeta.png)
 
 To download the simulated ancient metagenomic data please use the following command lines:
 
@@ -97,11 +97,11 @@ The modern validation methods aim at confirming organism presence regradless of 
 
 Concluding organism presence by relying solely on the numbers of assigned sequenced reads (aka depth of coverage metric) turns out to be not optimal and too permissive, which may result in a large amount of false-positive discoveries. For example, when using alignment to a reference genome, the mapped reads may demonstrate non-uniform coverage as visualized in the [Integrative Genomics Viewer (IGV)](https://software.broadinstitute.org/software/igv/) below.
 
-![](assets/images/chapters/decontamination-authentication/IGV_uneven_coverage_Y.pestis.png)
+![](assets/images/chapters/authentication-decontamination/IGV_uneven_coverage_Y.pestis.png)
 
 In this case, DNA reads originating from another microbe were (mis-)aligned to *Yersina pestis* reference genome. It can be observed that a large numer the reads align only to a few conserved genomic loci. Therefore, even if many thousands of DNA reads are capable of aligning to the reference genome, the overall uneven alignment pattern suggests no presence of *Yersina pestis* in the metagenomic sample. Thus, not only the number of assigned reads (proportinal to depth of coverage metric) but also the **breadth and evenness of coverage** metrics become of particular importance for veryfication of metagenomic findings, i.e. hits with DNA reads uniformly aligned across the reference genome are more likely to be true-positive detections.
 
-![](assets/images/chapters/decontamination-authentication/depth_vs_breadth_of_coverage.png)
+![](assets/images/chapters/authentication-decontamination/depth_vs_breadth_of_coverage.png)
 
 In the next sections, we will show how to practically compute the breadth and evenness of coverage via KrakenUniq and Samtools.
 
@@ -131,7 +131,7 @@ done
 
 KrakenUniq by default delivers a proxy metric for breadth of coverage called the **number of unique kmers** (in the 4th column of its output table) assigned to a taxon. KrakenUniq output can be easily filtered with respect to both depth and breadth of coverage, which substantially reduces the number of false-positive hits.
  
-![](assets/images/chapters/decontamination-authentication/krakenuniq_filter.png)
+![](assets/images/chapters/authentication-decontamination/krakenuniq_filter.png)
 
 We can filter the KrakenUniq output with respect to both depth (*taxReads*) and breadth (*kmers*) of coverage with the following custom Python script, which selects only species with at east 200 assigned reads and 1000 unique k-mers. After the filtering, we can see a *Yersinia pestis* hit in the *sample 10* that passess the filtering thresholds with respect to both depth and breadth of coverage.
 
@@ -142,7 +142,7 @@ $SCRIPTS_DIR/filter_krakenuniq.py $i 1000 200 $SCRIPTS_DIR/pathogenomesFound.tab
 done
 ```
 
-![](assets/images/chapters/decontamination-authentication/filtered_krakenuniq_output.png)
+![](assets/images/chapters/authentication-decontamination/filtered_krakenuniq_output.png)
 
 
 We can also easily produce a KrakenUniq taxonomic abundance table *krakenuniq_abundance_matrix.txt* using the custom R script below, which takes as argument the folder *KRAKENUNIQ* containing the KrakenUniq output files. From the *krakenuniq_abundance_matrix.txt* table, it becomes clear that *Yersinia pestis* seems to be present in a few other samples in addition to sample 10.
@@ -152,7 +152,7 @@ Rscript ${SCRIPTS_DIR}/krakenuniq_abundance_matrix.R KRAKENUNIQ \
 KRAKENUNIQ_ABUNDANCE_MATRIX 1000 200
 ```
 
-![](assets/images/chapters/decontamination-authentication/krakenuniq_abundance_matrix.png)
+![](assets/images/chapters/authentication-decontamination/krakenuniq_abundance_matrix.png)
 
 While KrakenUniq delivers information about breadth of coverage by default, one has to use a special flag *--report-minimizer-data* when running Kraken2 in order to get the breadth of coverage proxy which is called the **number of distrinct minimizers** for the case of Kraken2. Below, we provide an example Kraken2 command line containing the distinct minimizer flag:
 
@@ -219,7 +219,7 @@ mtext(paste0(round((sum(df$N_reads > 0) / length(df$N_reads)) * 100, 2),
 "% of genome covered"), cex = 0.8)
 ```
 
-![](assets/images/chapters/decontamination-authentication/Evenness_of_coverage.png)
+![](assets/images/chapters/authentication-decontamination/Evenness_of_coverage.png)
 
 In the R script above, we simply split the reference genome into *N_tiles* tiles and compute the breadth of coverage (number of reference nucleotides covered by at least one read normalized by the total length) locally in each tile. By visualizing how the local breadth of coverage changes from tile to tile, we can monitor the distribution of the reads across the reference genome. In the evenness of coverage figure above, the reads seem to cover all parts of the reference genome uniformly, which is a good evidence of true-positive detection, even though the total mean breadth of coverage is low due to the low total number of reads.
 
@@ -240,11 +240,11 @@ Then the 5th column of the filtered BAM-alignment can be visualized via a simple
 hist(as.numeric(readLines("mapq.txt")), col = “darkred”, breaks = 100)
 ```
 
-![](assets/images/chapters/decontamination-authentication/MAPQ.png)
+![](assets/images/chapters/authentication-decontamination/MAPQ.png)
 
 Note that MAPQ scores are computed slightly differently for Bowtie and BWA, so they are not directly comparable, however, for both MAPQ ~ 10-30, as in the histograms below, indicates good affinity of the DNA reads to the reference genome. here we provide some examples of how typical MAPQ histograms for Bowtie2 and BWA alignments can look like:
 
-![](assets/images/chapters/decontamination-authentication/mapq.png)
+![](assets/images/chapters/authentication-decontamination/mapq.png)
 
 
 Edit distance can be extracted by gathering information in the NM-tag inside BAM-alignemnts, which reports the number of mismatches for each aligned read. This can be done either in bash / awk, or using handy functions from *Rsamtools* R package:
@@ -256,7 +256,7 @@ bam <- scanBam("Y.pestis_sample10.sorted.bam", param = param)
 barplot(table(bam[[1]]$tag$NM), ylab="Number of reads", xlab="Number of mismatches")
 ```
 
-![](assets/images/chapters/decontamination-authentication/edit_distance.png)
+![](assets/images/chapters/authentication-decontamination/edit_distance.png)
 
 
 In the barplot above we can see that the majority of reads align either without or with very few mismatches, which is an evidence of high affinity of the aligned reads with respect to the reference genome. For a true-positive finding, the edit distance barplot typically has a decreasing profile. However, for a very degraded DNA, it can have a mode around 1 or 2, which can also be reasonable. A fasle-positive hit would have a mode of the edit distance barplot shifted toward higher numbers of mismatches.
@@ -266,7 +266,7 @@ In the barplot above we can see that the majority of reads align either without 
 
 Very related to edit distance is another alignment validation metric which is called **percent identity**. It represents a barplot demonstrating the numbers of reads that are 100% identical to the reference genome (i.e. map without a single mismatch), 99% identical, 98% identical etc. Misaligned reads originating from another related organism have typically most reads with percent identity of 93-96%. In the figure below, the panels (c–e) demonstrate different percent identity distributions. In panel c, most reads show a high similarity to the reference, which indicates a correct assignment of the reads to the reference. In panel d, most reads are highly dissimilar to the reference, which suggests that they originate from different related species. In some cases, as in panel e, a mixture of correctly assigned and misassigned reads can be observed. 
 
-![](assets/images/chapters/decontamination-authentication/multialleleicSNPs.png)
+![](assets/images/chapters/authentication-decontamination/multialleleicSNPs.png)
 
 Another important way to detect reads that cross-map between related species is **haploidy** or checking the amount of **multi-allelic SNPs**. Because bacteria are haploid organisms, only one allele is expected for each genomic position. Only a small number of multiallelic sites are expected, which can result from a few misassigned or incorrectly aligned reads. In the figure above, panels (f–i) demonstrate histograms of SNP allele frequency distributions. Panel f demonstrates the situation when we have only a few multiallelic sites originating from a misaligned reads. This is a preferrable case scenario corresponding to correct assignment of the reads to the reference. Please also check the corresponding "Good alignments" IGV visualization to the right in the figure above.
 
@@ -290,11 +290,11 @@ mapDamage -i Y.pestis_sample10.sorted.bam -r NC_017168.1.fasta \
 -d MAPDAMAGE --merge-reference-sequences --no-stats
 ```
 
-![](assets/images/chapters/decontamination-authentication/deamination.png)
+![](assets/images/chapters/authentication-decontamination/deamination.png)
 
 maDamage delivers a bunch of useful statistics, among other read length distribution can be checked. A typical mode of DNA reads should be within a range 30-70 base-pairs in order to be a good evidence of DNA fragmentation. Reads longer tha 100 base-pairs are more likely to originate from modern contamination.
 
-![](assets/images/chapters/decontamination-authentication/read_length.png)
+![](assets/images/chapters/authentication-decontamination/read_length.png)
 
 Another useful tool that can be applied to assess how DNA is damaged is [PMDtools](https://github.com/pontussk/PMDtools) which is a maximum-likelihood probabilistic model that calculates an ancient score, **PMD score**, for each read. The ability of PMDtools to infer ancient status with a single read resolution is quite unique and different from mapDamage that can only assess deamination based on a number of reads. PMD scores can be computed using the following command line, please note that Python2 is needed for this purpose.
 
@@ -310,7 +310,7 @@ pmd_scores <- read.delim("PMDscores.txt", header = FALSE, sep = "\t")
 hist(pmd_scores$V4, breaks = 1000, xlab = "PMDscores")
 ```
 
-![](assets/images/chapters/decontamination-authentication/pmd_scores.png)
+![](assets/images/chapters/authentication-decontamination/pmd_scores.png)
 
 Typcally, reads with PMD scores greater than 3 are considered to be reliably ancient, i.e. damaged, and can be extracted for taking a closer look. Therefore PMDtools is great for separating ancient reads from modern contaminant reads.
 
@@ -323,11 +323,11 @@ samtools view Y.pestis_sample10.bam | python2 ${SCRIPTS_DIR}/pmdtools.0.60.py \
 R CMD BATCH plotPMD.v2.R
 ```
 
-![](assets/images/chapters/decontamination-authentication/PMD_Skoglund_et_al_2015_Current_Biology.png)
+![](assets/images/chapters/authentication-decontamination/PMD_Skoglund_et_al_2015_Current_Biology.png)
 
 When performing ancient status analysis on **de-novo** assembled contigs, it can be computationally challenging and time consuming to run mapDamage or PMDtools on all of them as there can be hundreds of thousands contigs. In addition, the outputs from mapDamage and PMDtools lacking a clear numeric quantitiy or a statistical test that could provide an "ancient vs. non-ancient" desicion for each **de-novo** assembled contig. To address these limitations, [pyDamage](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8323603/pdf/peerj-09-11845.pdf) tool was recently developed. PyDamage evaluates the amount of aDNA damage and tests the hypothesis whether a model assuming presence of aDNA damage better explains the data than a null model.
 
-![](assets/images/chapters/decontamination-authentication/pyDamage.png)
+![](assets/images/chapters/authentication-decontamination/pyDamage.png)
 
 pyDamage can be run on a sorted BAM-alignments of the microbial reads to the **de-novo** assembled contigs using the following command line:
 
@@ -343,11 +343,11 @@ Modern contamination can severely bias ancient metagenomic analysis. Also, ancie
 
 Modern contamination is one of the major problems in ancient metagenomics analysis. Large fractions of modern bacterial, animal or human DNA in metagenomic samples can lead to false biological and historical conclusions. A lot of [scientific literature](https://onlinelibrary.wiley.com/doi/10.1002/bies.202000081) is dedicated to this topic, and comprehensive tables and sources of potential contamination (e.g. animal and bacterial DNA present in PCR reagensts) are available.
 
-![](assets/images/chapters/decontamination-authentication/contaminants_literature.png)
+![](assets/images/chapters/authentication-decontamination/contaminants_literature.png)
 
 A good practice to discriminate between endogenous and contaminant organisms is to sequence negative controls, so-called **blanks**. Organisms detected on blanks, like the microbial genera reported in the table below, can substantially facilitate making more informed decision about true metagenomic profile of a sample. Nevertheless, the table below may seem rather conservative since in addition to well-known environmental contaminants as *Burkholderia* and *Pseudomonas* it includes also human oral genera as *Streptococcus*, which are probably less likely to be of environmental origin.
 
-![](assets/images/chapters/decontamination-authentication/contaminants_list.png)
+![](assets/images/chapters/authentication-decontamination/contaminants_list.png)
 
 It is typically assumed that an organism found on a blank has a lower confidence to be endogenous to the studied metagenomic sample, and sometimes it is even expluded from the downstream analysis as an unreliable hit. Despite there are attempts to automate filtering out modern contaminants (we will discuss them below), decontamination process still remains to be a tidious manual work where each candidate should be carefully investigated from different contexts in order to prove its ancient and endogenous origin.
 
@@ -383,20 +383,20 @@ labels = rownames(true_sample)[(log10(rowMeans(true_sample)+1) > 1) &
 (log10(rowMeans(negative_control)+1) > 1)], pos = 4)
 ```
 
-![](assets/images/chapters/decontamination-authentication/blank_decontam.png)
+![](assets/images/chapters/authentication-decontamination/blank_decontam.png)
 
 In the figure above, one point indicates an organism detected in a group of metagenomic samples. The points highlighted by red have high abundance in negative control samples, and therefore they are likely contamiannts.
 
 In addition to PCR reagents and lab contaminants, reference databses can also be contaminanted by various, often microbial, organisms. A typical example that when screening environmental or sedimentary ancient DNA samples, a fish *Cyprinos carpio* can pop up if adapter trimming procedure was not successful for some reason.
 
-![](assets/images/chapters/decontamination-authentication/carpio.png)
+![](assets/images/chapters/authentication-decontamination/carpio.png)
 
 It was noticed that the *Cyprinos carpio* reference genome available at NCBI contains large fraction of Illumina sequncing adapters. Therefore, appearence of this organism in your analysis may falsely lead your conclusion toward potential lake or river present in the excavation site.
 
 
 Let us now discuss a few available computational approaches to decontaminate metagenomic samples. One of them is [decontam](https://microbiomejournal.biomedcentral.com/articles/10.1186/s40168-018-0605-2) R package that offers a simple statistical test for whether a detected organism is likely contaminant. This approach is useful when DNA quantitation data recording the concentration of DNA in each sample (e.g. PicoGreen fluorescent intensity measures) is available. The idea of the *decontam* is that contaminant DNA is expected to be present in approximately equal and low concentrations across samples, while sample DNA concentrations can vary widely. As a result, the expected frequency of contaminant DNA varies inversely with total sample DNA concentration (red line in the figure below), while the expected frequency of non-contaminant DNA does not (blue line).
 
-![](assets/images/chapters/decontamination-authentication/decontam.png)
+![](assets/images/chapters/authentication-decontamination/decontam.png)
 
 Another popular tool for detecting contaminating microorganisms is [Recentrifuge](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006967). It works as a classifier that is trained to recognize contaminant microbial organisms. In case of Recentrifuge, one has to use blanks or other negative controls and provide microbial names and abundances on the blanks in order to train Recentrifuge to recognize endogenous vs. contaminant sources.
 
@@ -420,7 +420,7 @@ filter_result <- simple_filter(curves, percent_threshold = 50) %>% print()
 plot_cuperdec(curves, metadata = metadata, filter_result)
 ```
 
-![](assets/images/chapters/decontamination-authentication/cuperdec2.png)
+![](assets/images/chapters/authentication-decontamination/cuperdec2.png)
 
 In the figure above, one curve represents one sample, and the red curves have a very high amount of contamination and very low amount of endogenous DNA. These samples might be considered to be dropped from the downstream analysis.
 
@@ -430,7 +430,7 @@ For the case of ancient microbiome profiling, in addition to traditional inspect
 
 The most popular and widely used tool is called [**SourceTracker**](https://www.nature.com/articles/nmeth.1650#citeas). SourceTracker is a Bayesian version of the Gaussian Mixture Model (GMM) clustering algorithm that is trained on a user-supplied reference data called **Sources**, i.e. different classes such as Soil or Human Oral or Human Gut microbial communities etc., and then it can estimate proportion / contribution of each of these sources the users actual samples called **Sinks**.
 
-![](assets/images/chapters/decontamination-authentication/SourceTracker.png)
+![](assets/images/chapters/authentication-decontamination/SourceTracker.png)
 
 Originally, SourceTracker was developed for 16S data, i.e. using only 16S ribosomal RNA genes, but it can be easily trained using also shotgun metagenomics data, which was demonstrated in its metagenomic extension called [mSourceTracker](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7100590/) and its faster and more scalable version [FEAST](https://www.nature.com/articles/s41592-019-0431-x). The input data for SourceTracker are metadata, i.e. each sample has to have "source" or "sink" annotation as well as environmental label (e.g. Oral, Gut, Soil etc.), and microbial abundances (OTU abundances) quantified in some way, for example through [QIIME](https://qiime2.org/) pipeline, MetaPhlan or Kraken. The SourceTracker R script can be downloaded from [https://github.com/danknights/sourcetracker](https://github.com/danknights/sourcetracker).
  
@@ -487,13 +487,13 @@ theme(axis.text.x = element_text(angle = 90, size=5, hjust=1, vjust=0.5)) +
 xlab("Sample") + ylab("Fraction")
 ```
 
-![](assets/images/chapters/decontamination-authentication/source_tracker1.png)
+![](assets/images/chapters/authentication-decontamination/source_tracker1.png)
 
 In the figure above the SourceTracker was trained on Human Microbiome Project (HMP) data, and was capable of predicting the fractions of oral, gut, skin or other microbial composition on the query sink samples. In a similar way, environmental soil or marine microbes can be used as Sources. In this way, environmental percentage of contamination can be detected per sample.
 
 A drawback of SourceTracker, mSourceTracker and FEAST is that they require a microbial abundance table after a taxonomic classification with e.g. QIIME or Kraken has been performed. Such taxonomic classification can be biased since it is computed against a reference database with known taxonomic annotation. In contrast, a novel microbial source tracking tool [decOM](https://www.biorxiv.org/content/10.1101/2023.01.26.525439v1.full) aims at moving away from database-dependent methods and using unsupervised approaches exploiting read-level sequence composition.
 
-![](assets/images/chapters/decontamination-authentication/deCOM.png)
+![](assets/images/chapters/authentication-decontamination/deCOM.png)
 
 *decOM* uses [kmtricks](https://academic.oup.com/bioinformaticsadvances/article/2/1/vbac029/6576015) to compute a matrix of k-mer counts on raw reads (FASTQ files) from source samples, and then uses the source k-mer abundance matrix for looking up k-mer composition of sink samples. This allows *decOM* to calculate microbial contributions / fractions from the sources. For example, for estimating contributions from ancient Oral (aOral), modern Oral (mOral), Skin and Sediment / Soil environments one can use an already computed source matrix from here [https://github.com/CamilaDuitama/decOM/](https://github.com/CamilaDuitama/decOM/) and provide it as a *-p_sources* parameter. Then *decOM* can be run using the following command line:
 
@@ -547,7 +547,7 @@ ggplot(data, aes(fill=condition, y=value, x=reorder(name,seq(1:length(name))))) 
   xlab("Sample") + ylab("Fraction")
 ```
 
-![](assets/images/chapters/decontamination-authentication/decOM1.png)
+![](assets/images/chapters/authentication-decontamination/decOM1.png)
 
 *decOM* has certain advantages compared to *SourceTracker* as its is a taxonomic classification / database free approach. However, it also appears to be very sensitive to the particular training / source data set. In the example above it can be seen that the microbial source tracking of sink samples is very much dominated by the Oral community, which was the training / source data set.
 
