@@ -167,7 +167,7 @@ Do they form a monophyletic group (a clade)?
 Yes, they form a monophyletic group. We can also say that this group of prehistoric strains form their own lineage.
 :::
 
-## Character-based phylogenetic methods: maximum parsimony and probabilistic approaches
+### Character-based phylogenetic methods: maximum parsimony and probabilistic approaches
 
 Character-based methods are not based on pairwise distances but rather model the complete evolution of each character (e.g. DNA nucleotides at each position) along the phylogenetic tree.
 
@@ -256,25 +256,15 @@ Lastly, we will export the rooted tree from figtree: File -> Export trees -> sel
 
 ![](assets/images/chapters/phylogenomics/export_tree.png)
 
-### Estimating a time-tree using Bayesian phylogenetics
+#### Estimating a time-tree using Bayesian phylogenetics (_BEAST2_)
 
-Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of mutations but instead represent the time of evolution. To do so, we will use the sample ages (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.
+Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of mutations but instead represent the time of evolution. To do so, we will use the ages of ancient genomes (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.
 
-#### Temporal signal testing
+::: {.callout-note}
+A great advantage of ancient pathogen genomes is that they provide key calibration points to estimate molecular clocks and dated phylogenies. This is much more difficult to do with modern data alone.
+:::
 
-It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree. A classic test to do this is called root-to-tip regression, which consists in verifying that the oldest a sequence is, the closer it should be to the root because there was less time for mutations to accumulate before this sequence was sampled. The correlation between sample age and distance to the root (root-to-tip regression) can be assessed using a rooted substitution tree and the program _tempest_:
-
-- open tempest and load the re-rooted ML tree that we produced previously
-- click on "import dates" in the "sample dates" tab, select the sample_age.txt file, and then change to "dates specified as years before the present"
-- look at the root-to-tip regression: is there a positive correlation?
-
-![](assets/images/chapters/phylogenomics/Tempest.png)
-
-#### Bayesian phylogenetic inference using _BEAST2_
-
-We will estimate a time tree from our alignment using Bayesian inference instead of maximum likelihood.
-
-Bayesian inference is a type of inference which is based on a probability distribution that is different from the likelihood: the posterior probability. The posterior probability is the probability of the parameters given the data. The posterior distribution is easier to interpret than the likelihood because it contains all the information about the parameters: point estimates such as the median or the mean can be directly estimated from it, but also percentile intervals which can be used to measure uncertainty.
+We will estimate a time tree from our alignment using Bayesian inference as implemented in the _BEAST2_ software. Bayesian inference is based on a probability distribution that is different from the likelihood: the posterior probability. The posterior probability is the probability of the parameters given the data. It is easier to interpret than the likelihood because it directly contains all the information about the parameters: point estimates such as the median or the mean can be directly estimated from it, but also percentile intervals which can be used to measure uncertainty.
 
 ![](assets/images/chapters/phylogenomics/23.png)
 
@@ -290,24 +280,34 @@ To characterize the full posterior distribution of each parameter, we would need
 
 ![](assets/images/chapters/phylogenomics/25.png)
 
+**Let's estimate a time tree using _BEAST2_**:
+
+::: {.callout-tip}
+The ["taming the beast" website](https://taming-the-beast.org/tutorials/) has great tutorials to learn setting a _BEAST2_ analysis. In particular, the "Introduction to BEAST2", "Prior selection" and "Time-stamped data" are good starts.
+:::
+
 The different components of the _BEAST2_ analysis can be set up in the program _BEAUti_:
 
 ![](assets/images/chapters/phylogenomics/26.png)
 
+Open BEAUTi and set up an analysis as followed:
+
 - load the alignment in the "Partitions" tab
+
+![](assets/images/chapters/phylogenomics/27.png)
+
 - set the sampling dates in the "Tip dates" tab
 - choose the substitution model in the "Site model" tab
 - choose the molecular clock model in the "Clock model" tab
 - choose the prior distribution of parameters in the "Priors" tab
 - set up the MCMC in the "MCMC" tab
 
-![](assets/images/chapters/phylogenomics/27.png)
+
 ![](assets/images/chapters/phylogenomics/28.png)
 ![](assets/images/chapters/phylogenomics/29.png)
 ![](assets/images/chapters/phylogenomics/30.png)
 ![](assets/images/chapters/phylogenomics/31.png)
 
-The ["taming the beast" website](https://taming-the-beast.org/tutorials/) has great tutorials to learn setting a _BEAST2_ analysis. In particular, the "Introduction to BEAST2", "Prior selection" and "Time-stamped data" are good starts.
 
 Try running an analysis on the alignment without outgroup using the following:
 
@@ -339,3 +339,13 @@ You can then generate a maximum clade credibility (MCC) tree using _treeAnnotato
 ![](assets/images/chapters/phylogenomics/MCC.png)
 
 What is your mean estimate for the age of the common ancestor of all _Yersinia pestis_ strains? To which parameter (displayed in beauti) does this corresponds?
+
+#### Bonus: Temporal signal testing
+
+It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree. A classic test to do this is called root-to-tip regression, which consists in verifying that the oldest a sequence is, the closer it should be to the root because there was less time for mutations to accumulate before this sequence was sampled. The correlation between sample age and distance to the root (root-to-tip regression) can be assessed using a rooted substitution tree and the program _tempest_:
+
+- open tempest and load the re-rooted ML tree that we produced previously
+- click on "import dates" in the "sample dates" tab, select the sample_age.txt file, and then change to "dates specified as years before the present"
+- look at the root-to-tip regression: is there a positive correlation?
+
+![](assets/images/chapters/phylogenomics/Tempest.png)
