@@ -361,10 +361,44 @@ $ echo "I have been to Greece $GreekFood times already this year, for the food a
 I have been to Greece 7 times already this year, for the food and wine!
 ```
 
+::: {.callout-warning}
 In this examples you have seen how the same variable has been overwritten, this means that you can only access the last content that you stored in the variable. All the previous contents that a variable may have had are innaccessible as soon as the same variable is given a new value.
-
+:::
 
 ### Quotes matter!
+In bash, there is a big difference between a single quote `'` and a double quote `"`!
+
+ - The contents of single quotes, are passed on as they are.
+ - Inside double quotes, contents are _interpreted_!
+
+In some cases the difference doesn't matter:
+
+```bash
+echo "I like Greek Food"
+echo 'I like Greek Food'
+```
+```
+I like Greek Food
+I like Greek Food
+```
+
+In other cases it makes all the difference:
+
+```bash
+Arr=Banana
+echo 'Pirates say $Arr'
+echo "Minions say $Arr"
+```
+```
+Pirates say $Arr
+Minions say Banana
+```
+
+**Why does it make a difference in the second example?** 
+
+This is because in the second example we are using a variable. We have assigned `Banana` to the variable `$Arr`. As mentioned above, when single (`'`) quotes are used the computer just prints what it receives without caring that `$Arr` is a varible.
+
+ In the `echo` with the double (`"`) quotes we are telling the computer to extract the value from the variable `$Arr` and that is why we see the store value (`Banana`) in the printed output in the terminal.
 
 ### Find
 
