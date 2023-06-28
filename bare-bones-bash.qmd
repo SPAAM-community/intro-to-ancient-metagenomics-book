@@ -111,6 +111,10 @@ symbol. Like so:
 <username>@<device_name>:~$
 ```
 
+The commmand prompt is **never** involved in any command, it is just there
+to ensure you know who and where you are. When copying a 
+command you should **NOT** copy the command prompt.
+
 Often times, when looking for commands online, the commands ran will pe prefaced
 with a `$`. This is a stand-in for the command prompt. When adding multi-line
 commands, it is also common to preface the additional lines with a `>`. When
@@ -121,7 +125,82 @@ Finally, in this tutorial, the symbols`<>` are used to show things that
 will/should be replaced by another value. For example, in Thiseas' command
 prompt `<username>` will be replaced by `lamnidis`, as that is his username.
 
+Now back to your prompt: It tells you that you are in the directory `~`.
+The directory `~`, stands for your **home** directory. Note that this shorthand 
+will point to a different place, depending on the machine and the user.
+
+If you want to know what the shorthand means, (here comes your first command!)
+you can type in `pwd`, which stands for "**p**rint **w**orking **d**irectory". 
+Your "working directory" is whichever directory you are currently in. 
+
+```bash
+pwd
+```
+<!--TODO Fix path-->
+```
+/some/path/to/users/home
+```
+
+This prints the entire "filepath" of the directory i.e. the route from the
+"root" (the deepest directory of the machine), through every subdirectory,
+leading to your particular working directory. 
+
 ### Absolute vs Relavtive paths
+
+There are two types of filepaths: 
+* An **absolute** path will start with the deepest directory in the machine
+  shown as a `/`. Paths starting with `~` are also absolute paths, since `~` 
+  translates to an absolute path of your specific home directory. That is the 
+  directory path you see in the output of the `pwd` command you just ran.
+* Alternatively a **relative** path always begins from your working directory
+  (i.e.   your current directory). Often this type of path will begin with one
+  (`./`) or two (`../`) dots followed by a forward slash, **but not always**. In
+  the syntax of relative pathways `.` means "the current directory" and `..` 
+  means "the parent directory" (or the 'one above'). 
+
+#### A real like analogy for paths
+
+You have just arrived to Leipzig for a summer school that is taking place at
+MPI-EVA. After some questionable navigation, you find yourself at the Bayerische
+Bahnhof. Tired and disheartened, you decide to ask a local.
+
+You see a friendly-looking metalhead, and decide to ask them for directions!
+
+<!-- TODO add the friendly-looking metalhead -->
+
+> Happy to help, but I only give directions in **absolute paths!**  
+From Leipzig Hbf, you should take Querstraße southward.  
+Continue straight and take Nürnberger Str. southward until you reach Str. des
+18 Oktober.  
+Finally take Str. des 18 Oktober. moving southeast until you reach EVA!
+
+:::{.callout-tip}
+## Absolute paths
+The directions above are equivalent to an absolute path, because they will
+ALWAYS take you to EVA, but you can only apply these directions **if** you
+start from Leipzig Hbf!
+
+Examples of absolute paths:  
+`/home/ubuntu`  
+`/Hbf/Querstraße/Nürnberger_Str/Str_18_Oktober/Deutscher_Platz/EVA`  
+:::
+
+Not sure how to get back to Leipzig Hbf to apply those directions, you decide to
+ask someone else for directions...
+
+Lucky for you, a friendly looking local is passing by!
+
+<!-- TODO add friendly looking local -->
+
+> You're currently on Str. des 18 Oktober. Walk straight that way, past the tram tracks, and you will find Deutscher Platz. You will see EVA to your right!
+
+:::{.callout-tip}
+These directions are equivalent to a relative path! They are easy to follow, but only work when you happen to start at the position you were in when you first got the directions!
+
+Examples of relative paths:  
+`../my_directory/my_file.txt`  
+`./Str_18_Oktober/Deutscher_Platz/EVA`
+:::
 
 ### Basic commands
 
