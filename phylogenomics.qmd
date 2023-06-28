@@ -292,31 +292,49 @@ The different components of the _BEAST2_ analysis can be set up in the program _
 
 Open BEAUTi and set up an analysis as followed:
 
-- load the alignment in the "Partitions" tab
+- load the alignment without Y. pseudotuberculosis in the "Partitions" tab ("File" -> "Import alignment"; select "nucleotide")
 
-![](assets/images/chapters/phylogenomics/27.png)
+![](assets/images/chapters/phylogenomics/beauti_import_data.png)
 
-- set the sampling dates in the "Tip dates" tab
-- choose the substitution model in the "Site model" tab
-- choose the molecular clock model in the "Clock model" tab
-- choose the prior distribution of parameters in the "Priors" tab
-- set up the MCMC in the "MCMC" tab
+- set the sampling dates in the "Tip dates" tab:
+    - select "Use tip dates"
+    - click on "Auto-configure" -> "read from file" and select the sample_dates.txt file
+    - change "Since some time in the past" to "Before present"
 
+![](assets/images/chapters/phylogenomics/beauti_tip_dates.png)
 
-![](assets/images/chapters/phylogenomics/28.png)
-![](assets/images/chapters/phylogenomics/29.png)
-![](assets/images/chapters/phylogenomics/30.png)
-![](assets/images/chapters/phylogenomics/31.png)
+- select the substitution model in the "Site model" tab:
+    - chose a GTR model
+    - use 4 Gamma categories for the Gamma site model: this is to account for variations of the substitution rate accross sites (site=nucleotide position)
 
+![](assets/images/chapters/phylogenomics/beauti_substitution_model.png)
 
-Try running an analysis on the alignment without outgroup using the following:
+- choose the molecular clock model in the "Clock model" tab:
+    - use a relaxed clock lognormal model (this is to allow for some variation of the clock rate accross branches)
+    - change the initial value of the clock rate to 10<sup>-4</sup> substitution/site/year (**10<sup>-4</sup> can be written 1E-4**)
 
-- don't forget to specify the sample ages correctly
-- use a GTR substitution matrix with a Gamma site model and 4 Gamma categories
-- use a relaxed clock lognormal model with an initial value of 1E-4
-- use a Bayesian Skyline Coalescent tree prior
-- change the mean clock prior to a uniform distribution between 1E-6 and 1E-3 subst/site/year
-- use 300M iterations for the MCMC chain, and log the parameters and trees each 10,000th iteration
+![](assets/images/chapters/phylogenomics/beauti_clock_model.png)
+
+- choose the prior distribution of parameters in the "Priors" tab:
+    - use a Bayesian Skyline Coalescent tree prior
+    - change the mean clock prior to a uniform distribution between 1E-6 and 1E-3 subst/site/year
+    - leave everything else to default
+
+![](assets/images/chapters/phylogenomics/beauti_priors.png)
+
+- set up the MCMC in the "MCMC" tab:
+    - use a chain length of 300M
+    - sample the monodimensional parameters and trees every 10,000 iterations ("tracelog/treelog" -> "log every") 
+
+![](assets/images/chapters/phylogenomics/beauti_MCMC.png)
+
+- save the analysis setup as an xml file: "File" -> "Save as"; you can name the file "beast_analysis_Y_pestis.xml"
+
+Now that the analysis is setup, we can run it using BEAST:
+
+```bash
+beast beast_analysis_Y_pestis.xml
+```
 
 Once the analysis is completed, assess the posterior distribution sampling and parameter estimates by loading the obtained log file into _Tracer_
 

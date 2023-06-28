@@ -394,10 +394,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#preparation" id="toc-preparation" class="nav-link" data-scroll-target="#preparation"><span class="header-section-number">14.2.1</span> Preparation</a></li>
   <li><a href="#visualize-the-sequence-alignment" id="toc-visualize-the-sequence-alignment" class="nav-link" data-scroll-target="#visualize-the-sequence-alignment"><span class="header-section-number">14.2.2</span> Visualize the sequence alignment</a></li>
   <li><a href="#distance-based-phylogeny-neighbour-joining" id="toc-distance-based-phylogeny-neighbour-joining" class="nav-link" data-scroll-target="#distance-based-phylogeny-neighbour-joining"><span class="header-section-number">14.2.3</span> Distance-based phylogeny: Neighbour Joining</a></li>
-  </ul></li>
-  <li><a href="#character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" id="toc-character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" class="nav-link" data-scroll-target="#character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches"><span class="header-section-number">14.3</span> Character-based phylogenetic methods: maximum parsimony and probabilistic approaches</a>
-  <ul class="collapse">
-  <li><a href="#estimating-a-time-tree-using-bayesian-phylogenetics" id="toc-estimating-a-time-tree-using-bayesian-phylogenetics" class="nav-link" data-scroll-target="#estimating-a-time-tree-using-bayesian-phylogenetics"><span class="header-section-number">14.3.1</span> Estimating a time-tree using Bayesian phylogenetics</a></li>
+  <li><a href="#character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" id="toc-character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" class="nav-link" data-scroll-target="#character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches"><span class="header-section-number">14.2.4</span> Character-based phylogenetic methods: maximum parsimony and probabilistic approaches</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -690,9 +687,8 @@ Answer
 </div>
 </div>
 </section>
-</section>
-<section id="character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" class="level2" data-number="14.3">
-<h2 data-number="14.3" class="anchored" data-anchor-id="character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches"><span class="header-section-number">14.3</span> Character-based phylogenetic methods: maximum parsimony and probabilistic approaches</h2>
+<section id="character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" class="level3" data-number="14.2.4">
+<h3 data-number="14.2.4" class="anchored" data-anchor-id="character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches"><span class="header-section-number">14.2.4</span> Character-based phylogenetic methods: maximum parsimony and probabilistic approaches</h3>
 <p>Character-based methods are not based on pairwise distances but rather model the complete evolution of each character (e.g.&nbsp;DNA nucleotides at each position) along the phylogenetic tree.</p>
 <p>One of these methods is maximum parsimony and it consists in choosing the tree that underlies an evolutionary history with the least number of character changes.</p>
 <p><img src="assets/images/chapters/phylogenomics/17.png" class="img-fluid"></p>
@@ -722,8 +718,8 @@ Answer
 </div>
 </div>
 </div>
-<section id="maximum-likelihood-estimation-and-bootstrapping" class="level4" data-number="14.3.0.1">
-<h4 data-number="14.3.0.1" class="anchored" data-anchor-id="maximum-likelihood-estimation-and-bootstrapping"><span class="header-section-number">14.3.0.1</span> Maximum likelihood estimation and bootstrapping</h4>
+<section id="maximum-likelihood-estimation-and-bootstrapping" class="level4" data-number="14.2.4.1">
+<h4 data-number="14.2.4.1" class="anchored" data-anchor-id="maximum-likelihood-estimation-and-bootstrapping"><span class="header-section-number">14.2.4.1</span> Maximum likelihood estimation and bootstrapping</h4>
 <p>One way we can make inferences from a probabilistic model is by finding the combination of parameters which maximises the likelihood. These parameter values are called maximum likelihood (ML) estimates. We are usually not able to compute the likelihood value for all possible combinations of parameters and have to rely on heuristic algorithms to find the maximum likelihood estimates.</p>
 <p><img src="assets/images/chapters/phylogenomics/21.png" class="img-fluid"></p>
 <p>The Maximum likelihood estimates are point estimates, i.e.&nbsp;single parameter values (for example, a tree), which does not allow to measure uncertainty. A classic method to measure the uncertainty in ML trees is bootstrapping, which consists in repeatedly “disturbing” the alignment by masking sites randomly and estimating a tree from each of these bootstrap alignments.</p>
@@ -796,23 +792,23 @@ Answer
 <p>Lastly, we will export the rooted tree from figtree: File -&gt; Export trees -&gt; select the “save as currently displayed” box and save as “ML_tree_rooted.tre”</p>
 <p><img src="assets/images/chapters/phylogenomics/export_tree.png" class="img-fluid"></p>
 </section>
-<section id="estimating-a-time-tree-using-bayesian-phylogenetics" class="level3" data-number="14.3.1">
-<h3 data-number="14.3.1" class="anchored" data-anchor-id="estimating-a-time-tree-using-bayesian-phylogenetics"><span class="header-section-number">14.3.1</span> Estimating a time-tree using Bayesian phylogenetics</h3>
-<p>Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of mutations but instead represent the time of evolution. To do so, we will use the sample ages (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.</p>
-<section id="temporal-signal-testing" class="level4" data-number="14.3.1.1">
-<h4 data-number="14.3.1.1" class="anchored" data-anchor-id="temporal-signal-testing"><span class="header-section-number">14.3.1.1</span> Temporal signal testing</h4>
-<p>It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree. A classic test to do this is called root-to-tip regression, which consists in verifying that the oldest a sequence is, the closer it should be to the root because there was less time for mutations to accumulate before this sequence was sampled. The correlation between sample age and distance to the root (root-to-tip regression) can be assessed using a rooted substitution tree and the program <em>tempest</em>:</p>
-<ul>
-<li>open tempest and load the re-rooted ML tree that we produced previously</li>
-<li>click on “import dates” in the “sample dates” tab, select the sample_age.txt file, and then change to “dates specified as years before the present”</li>
-<li>look at the root-to-tip regression: is there a positive correlation?</li>
-</ul>
-<p><img src="assets/images/chapters/phylogenomics/Tempest.png" class="img-fluid"></p>
-</section>
-<section id="bayesian-phylogenetic-inference-using-beast2" class="level4" data-number="14.3.1.2">
-<h4 data-number="14.3.1.2" class="anchored" data-anchor-id="bayesian-phylogenetic-inference-using-beast2"><span class="header-section-number">14.3.1.2</span> Bayesian phylogenetic inference using <em>BEAST2</em></h4>
-<p>We will estimate a time tree from our alignment using Bayesian inference instead of maximum likelihood.</p>
-<p>Bayesian inference is a type of inference which is based on a probability distribution that is different from the likelihood: the posterior probability. The posterior probability is the probability of the parameters given the data. The posterior distribution is easier to interpret than the likelihood because it contains all the information about the parameters: point estimates such as the median or the mean can be directly estimated from it, but also percentile intervals which can be used to measure uncertainty.</p>
+<section id="estimating-a-time-tree-using-bayesian-phylogenetics-beast2" class="level4" data-number="14.2.4.2">
+<h4 data-number="14.2.4.2" class="anchored" data-anchor-id="estimating-a-time-tree-using-bayesian-phylogenetics-beast2"><span class="header-section-number">14.2.4.2</span> Estimating a time-tree using Bayesian phylogenetics (<em>BEAST2</em>)</h4>
+<p>Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of mutations but instead represent the time of evolution. To do so, we will use the ages of ancient genomes (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A great advantage of ancient pathogen genomes is that they provide key calibration points to estimate molecular clocks and dated phylogenies. This is much more difficult to do with modern data alone.</p>
+</div>
+</div>
+<p>We will estimate a time tree from our alignment using Bayesian inference as implemented in the <em>BEAST2</em> software. Bayesian inference is based on a probability distribution that is different from the likelihood: the posterior probability. The posterior probability is the probability of the parameters given the data. It is easier to interpret than the likelihood because it directly contains all the information about the parameters: point estimates such as the median or the mean can be directly estimated from it, but also percentile intervals which can be used to measure uncertainty.</p>
 <p><img src="assets/images/chapters/phylogenomics/23.png" class="img-fluid"></p>
 <p>The Bayes theorem tells us that is proportional to the product of the likelihood and the “prior” probability of the data:</p>
 <p><img src="assets/images/chapters/phylogenomics/equation.png" class="img-fluid"></p>
@@ -820,18 +816,35 @@ Answer
 <p><img src="assets/images/chapters/phylogenomics/24.png" class="img-fluid"></p>
 <p>To characterize the full posterior distribution of each parameter, we would need in theory to compute the posterior probability for each possible combination of parameters. This is impossible, and we will instead use an algorithm called Markov chain Monte Carlo (MCMC) to approximate the posterior distribution. The MCMC is an algorithm which iteratively samples values of the parameters from the posterior distribution. Therefore, if the MCMC has run long enough, the (marginal) posterior distribution of the parameters can be approximated by a histogram of the sampled values.</p>
 <p><img src="assets/images/chapters/phylogenomics/25.png" class="img-fluid"></p>
+<p><strong>Let’s estimate a time tree using <em>BEAST2</em></strong>:</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <a href="https://taming-the-beast.org/tutorials/">“taming the beast” website</a> has great tutorials to learn setting a <em>BEAST2</em> analysis. In particular, the “Introduction to BEAST2”, “Prior selection” and “Time-stamped data” are good starts.</p>
+</div>
+</div>
 <p>The different components of the <em>BEAST2</em> analysis can be set up in the program <em>BEAUti</em>:</p>
 <p><img src="assets/images/chapters/phylogenomics/26.png" class="img-fluid"></p>
+<p>Open BEAUTi and set up an analysis as followed:</p>
 <ul>
 <li>load the alignment in the “Partitions” tab</li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/27.png" class="img-fluid"></p>
+<ul>
 <li>set the sampling dates in the “Tip dates” tab</li>
 <li>choose the substitution model in the “Site model” tab</li>
 <li>choose the molecular clock model in the “Clock model” tab</li>
 <li>choose the prior distribution of parameters in the “Priors” tab</li>
 <li>set up the MCMC in the “MCMC” tab</li>
 </ul>
-<p><img src="assets/images/chapters/phylogenomics/27.png" class="img-fluid"> <img src="assets/images/chapters/phylogenomics/28.png" class="img-fluid"> <img src="assets/images/chapters/phylogenomics/29.png" class="img-fluid"> <img src="assets/images/chapters/phylogenomics/30.png" class="img-fluid"> <img src="assets/images/chapters/phylogenomics/31.png" class="img-fluid"></p>
-<p>The <a href="https://taming-the-beast.org/tutorials/">“taming the beast” website</a> has great tutorials to learn setting a <em>BEAST2</em> analysis. In particular, the “Introduction to BEAST2”, “Prior selection” and “Time-stamped data” are good starts.</p>
+<p><img src="assets/images/chapters/phylogenomics/28.png" class="img-fluid"> <img src="assets/images/chapters/phylogenomics/29.png" class="img-fluid"> <img src="assets/images/chapters/phylogenomics/30.png" class="img-fluid"> <img src="assets/images/chapters/phylogenomics/31.png" class="img-fluid"></p>
 <p>Try running an analysis on the alignment without outgroup using the following:</p>
 <ul>
 <li>don’t forget to specify the sample ages correctly</li>
@@ -852,6 +865,16 @@ Answer
 <p>You can then generate a maximum clade credibility (MCC) tree using <em>treeAnnotator</em>.</p>
 <p><img src="assets/images/chapters/phylogenomics/MCC.png" class="img-fluid"></p>
 <p>What is your mean estimate for the age of the common ancestor of all <em>Yersinia pestis</em> strains? To which parameter (displayed in beauti) does this corresponds?</p>
+</section>
+<section id="bonus-temporal-signal-testing" class="level4" data-number="14.2.4.3">
+<h4 data-number="14.2.4.3" class="anchored" data-anchor-id="bonus-temporal-signal-testing"><span class="header-section-number">14.2.4.3</span> Bonus: Temporal signal testing</h4>
+<p>It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree. A classic test to do this is called root-to-tip regression, which consists in verifying that the oldest a sequence is, the closer it should be to the root because there was less time for mutations to accumulate before this sequence was sampled. The correlation between sample age and distance to the root (root-to-tip regression) can be assessed using a rooted substitution tree and the program <em>tempest</em>:</p>
+<ul>
+<li>open tempest and load the re-rooted ML tree that we produced previously</li>
+<li>click on “import dates” in the “sample dates” tab, select the sample_age.txt file, and then change to “dates specified as years before the present”</li>
+<li>look at the root-to-tip regression: is there a positive correlation?</li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/Tempest.png" class="img-fluid"></p>
 
 
 </section>
