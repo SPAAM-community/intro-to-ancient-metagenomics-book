@@ -83,7 +83,7 @@ The Bare Bones Bash philosophy of learning to code follows five simple commandme
 | **5)** Don't be afraid of you freedom!           | Explore! Try out things!                                       |
 
 ::: {.callout-tip}
-## Pro tip
+## Pro Tip
 Remember: Noone writes code that works first time, or without looking at StackOverflow sooner or later.
 :::
 
@@ -195,6 +195,7 @@ Lucky for you, a friendly looking local is passing by!
 > You're currently on Str. des 18 Oktober. Walk straight that way, past the tram tracks, and you will find Deutscher Platz. You will see EVA to your right!
 
 :::{.callout-tip}
+## Relative paths
 These directions are equivalent to a relative path! They are easy to follow, but only work when you happen to start at the position you were in when you first got the directions!
 
 Examples of relative paths:  
@@ -275,7 +276,95 @@ $ wc -l Boosted-BBB-meta.tsv
 
 ### Datastreams, piping, and redirects
 
+#### Datastreams
+
+Computer programs can take in and spit out data from different _streams_. By
+default there are 3 such data streams.
+
+- `stdin` : the **st**an**d**ard **in**put
+- `stdout`: the **st**an**d**ard **out**put
+- `stderr`: the **st**an**d**ard **err**or
+
+<!-- TODO Add Datastreams image here -->
+
+:::{.callout-tip}
+## Pro Tip
+Each programme also has an 'exit code', which can tell you if execution
+completed with/without errors. You will rarely see these in the wild.
+:::
+
+Typically, the `stdin` is where the input data comes in.  
+The `stdout` is the actual output of the command. In some cases this gets
+printed to the screen, but most often this is the information that needs to be
+saved in an output file.  
+The `stderr` is the datastream where errors and warnings go. This gets printed
+to your terminal. to let you know when something is not going according to plan!
+
+<!-- TODO maybe add a picture of a command that prints both output and error? -->
+
+#### Piping
+
+A "pipe" (`|`) is a really useful feature of `bash` that lets you chain together
+multiple commands! When two commands are chained together with a pipe, the
+`stdout` of the first command becomes the `stdin` of the second!
+The `stderr` is still printed on your screen, so you can always know when things
+fail.
+
+<!-- TODO add piping diagram figure here -->
+
+Example:
+```bash
+head -n 10 Boosted-BBB-meta.tsv | tail -n1
+```
+
+```
+netsukeJapan    C       Artwork
+```
+
+The above command will only show the 10th line of `Boosted-BBB-meta.tsv`.
+The way it works is that `head` will take the first 10 lines of the file. These
+lines are then passed on to `tail` which will keep only the last of those lines.
+
+#### Redirects
+
+Much like streams of water in the real world, datastreams can be redirected.
+
+This way you can save the stdout of a program (or even the stderr) into a file
+to save for later!
+
+
+- `stdin` can be redirected with `<`.
+    - An arrow pointing TO your program name!
+- `stdout` can be redirected with `>`.
+    - An arrow pointing AWAY your program name!
+- `stderr` can be redirected with `2>`.
+    - Because it is the secondary output stream.
+
+:::{.callout-tip}
+## Pro Tip
+It is also possible to combine streams, but we won't get into that here.
+:::
+
+Example:
+```bash
+head -n 10 Boosted-BBB-meta.tsv | tail -n1 > line10.txt
+```
+
+This will create a new file called `line10.txt` within your work directory.
+Using `cat` on this file will BLOW YOUR MIND - (GONE WRONG)!
+
+```bash
+cat line10.txt
+```
+
+```
+netsukeJapan    C       Artwork
+```
+
+_Don't forget to like and subscribe!_
+
 ### Helptext
+
 You don't always have to google for documentation! Many programs come with in-built helptext,
 or access to online manuals right from your terminal!
 
@@ -421,7 +510,7 @@ rm -r ~/BareBonesBash
 ```
 
 :::{.callout-tip}
-## Pro tip
+## Pro Tip
 Always be VERY careful when using `rm -r`. Check 3x that the path you are
 specifying is exactly what you want to delete and nothing more before pressing
 ENTER!
