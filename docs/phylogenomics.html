@@ -743,7 +743,7 @@ Note
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">raxmlHPC-PTHREADS</span> <span class="at">-m</span> GTRGAMMA <span class="at">-T</span> 3 <span class="at">-f</span> a <span class="at">-x</span> 12345 <span class="at">-p</span> 12345 <span class="at">-N</span> autoMRE <span class="at">-s</span> snpAlignment_session5.fasta <span class="at">-n</span> full_dataset.tre</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Here is the meaning of the chosen parameters:</p>
 <p><img src="assets/images/chapters/phylogenomics/raxml_cmdline.png" class="img-fluid"></p>
-<p>Once the analysis has been completed, you can open the tree using <em>Figtree</em> (RAxML_bipartitions… file, change “label” to “bootstrap support” at the prompt).</p>
+<p>Once the analysis has been completed, you can open the tree using <em>Figtree</em> (RAxML_bipartitions.full_dataset.tre file, change “label” to “bootstrap support” at the prompt).</p>
 <p><img src="assets/images/chapters/phylogenomics/figtree_prompt.png" class="img-fluid"></p>
 <p>The tree estimated using this model is a substitution tree (branch lengths represent genetic distances in subst./site). As for the NJ tree,it is not oriented in time: this is an unrooted tree (displayed with a random root in Figtree). You can reroot the tree in <em>Figtree</em> using <em>Y. pseudotuberculosis</em> as an outgroup, as previously.</p>
 <p><strong>Questions:</strong></p>
@@ -816,7 +816,8 @@ Note
 <p><img src="assets/images/chapters/phylogenomics/24.png" class="img-fluid"></p>
 <p>To characterize the full posterior distribution of each parameter, we would need in theory to compute the posterior probability for each possible combination of parameters. This is impossible, and we will instead use an algorithm called Markov chain Monte Carlo (MCMC) to approximate the posterior distribution. The MCMC is an algorithm which iteratively samples values of the parameters from the posterior distribution. Therefore, if the MCMC has run long enough, the (marginal) posterior distribution of the parameters can be approximated by a histogram of the sampled values.</p>
 <p><img src="assets/images/chapters/phylogenomics/25.png" class="img-fluid"></p>
-<p><strong>Let’s estimate a time tree using <em>BEAST2</em></strong>:</p>
+<section id="set-up-a-beast2-analysis" class="level5" data-number="14.2.4.2.1">
+<h5 data-number="14.2.4.2.1" class="anchored" data-anchor-id="set-up-a-beast2-analysis"><span class="header-section-number">14.2.4.2.1</span> Set up a <em>BEAST2</em> analysis</h5>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -884,17 +885,77 @@ Tip
 </ul>
 <p>Now that the analysis is setup, we can run it using BEAST:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">beast</span> beast_analysis_Y_pestis.xml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Once the analysis is completed, assess the posterior distribution sampling and parameter estimates by loading the obtained log file into <em>Tracer</em></p>
-<p>First, look at the trace of the posterior to check if the MCMC has passed the burn-in phase, and if you have remove all burn-in iterations</p>
+<p>While the analysis is running, you can start reading the next section</p>
+</section>
+<section id="assessing-beast2-results" class="level5" data-number="14.2.4.2.2">
+<h5 data-number="14.2.4.2.2" class="anchored" data-anchor-id="assessing-beast2-results"><span class="header-section-number">14.2.4.2.2</span> Assessing <em>BEAST2</em> results</h5>
+<div class="callout callout-style-default callout-note callout-titled" title="Reminder">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reminder
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We are using an MCMC algorithm to sample the posterior distribution of parameters. If the MCMC has run long enough, we can use the sampled parameters to approximate the posterior distribution itself. Therefore, we have to check first that the MCMC chain has run long enough.</p>
+</div>
+</div>
+<p>We can assess the MCMC sampling using the program <em>Tracer</em>. <em>Tracer</em> can read BEAST log files an generate statistics and plots for each of the sampled parameters (as well as other values that are a logged along the MCMC such as the posterior probability and the likelihood). Most importantly, <em>Tracer</em> provides:</p>
+<ul>
+<li><strong>trace plots</strong>: show the sampled parameter values along the MCMC run. Trace plots are a very useful MCMC diagnostic tool.</li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/tracer_traceplot.png" class="img-fluid"></p>
+<p>The first thing that one needs to assess is wether the MCMC has passed the so called “burn-in” phase. The MCMC starts with a random set of parameters and will take some time to reach a zone of high posterior probability density. The parameter values that are sampled during this initial phase are usually considered as noise and discarded (by default, tracer discards the first 10% of samples). The burn-in phase can be visualize on trace plots as an initial phase during which the posterior probability of sampled parameters is constantly increasing before reaching a plateau:</p>
 <p><img src="assets/images/chapters/phylogenomics/32.png" class="img-fluid"></p>
-<p>If so you can look at the trace and effective sample size (ESS) value of all parameters, to check that the MCMC has run long enough. The traces should look (more or less) like a “hairy caterpillar”, and a rule of thumb is that all ESS values should be above 200. If this is not the case, you should run the MCMC longer (BEAST2 has a -resume option that you can use to extend the MCMC sampling without starting everything from the beginning).</p>
+<p>Once the burn-in phase is passed, one can look at the trace plots to assess if the parameters are sampled correctly and long enough. In most cases, when this is the case, the trace should be quite dense and oscillating around a central value (nice trace plots should look like “hairy caterpillars”). In the figure below, the trace on the left doesn’t look good, the one on the right does:</p>
 <p><img src="assets/images/chapters/phylogenomics/33.png" class="img-fluid"></p>
+<p>– <strong>ESS values</strong>: tracer also calculates effective sample sizes (ESS) for each of the sampled parameters. ESSs are estimates of the number of sampled parameter values after correcting for auto-correlation along the MCMC. As a rule of thumb, one usually considers that an MCMC as run long enough if all parameter’s ESS are &gt; 200. Note that if the trace looks like a hairy caterpillar, the corresponding ESS value should be high.</p>
+<p><img src="assets/images/chapters/phylogenomics/tracer_ESS.png" class="img-fluid"></p>
+<p>– <strong>Parameter estimates</strong>: <em>Tracer</em> also provides statistics and plots to explore the posterior distribution of the parameters. These should be considered only if the trace plot and ESS values look fine. In the “Estimates” tab, after selecting the chosen parameter in the left panel, the upper-right panel shows point estimates (mean, median) and measures of uncertainty (95% HPD interval), and the bottom-right panel shows a histogram of the sampled value:</p>
+<p><img src="assets/images/chapters/phylogenomics/tracer_estimates.png" class="img-fluid"></p>
+<p>Let’s now load the “beast_analysis_Y_pestis.log” file into trace (you can slide the file into the top-left panel).</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>One can load a <em>BEAST2</em> log file into tracer even if the analysis is still running. This allows to assess if the MCMC is running correctly or has run long enough before it’s completed.</p>
+</div>
+</div>
+<p><strong>Question:</strong></p>
+<p>Has the MCMC run long enough?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You have probably let you analysis run for 10-20 mins before looking at the log file, and this is definitely not sufficient: the burnin phase has recently been passed, the trace plots do not look very dense and ESS values are low. It would probably take a few hours for the analysis to complete. Luckily we have run the analysis in advance and saved the log files for you.</p>
+</div>
+</div>
+</div>
+<p>You can now load the “beast_analysis_Y_pestis_complete.log” file into <em>Tracer</em>.</p>
+<p>If so you can look at the trace and effective sample size (ESS) value of all parameters, to check that the MCMC has run long enough. The traces should look (more or less) like a “hairy caterpillar”, and a rule of thumb is that all ESS values should be above 200. If this is not the case, you should run the MCMC longer (BEAST2 has a -resume option that you can use to extend the MCMC sampling without starting everything from the beginning).</p>
 <p>You can then look at the estimates of your parameter in the top-right panel (mean, median, 95% HPD interval, …). Note that these are marginal estimates, i.e.&nbsp;integrated over all other parameters.</p>
 <p><img src="assets/images/chapters/phylogenomics/34.png" class="img-fluid"></p>
 <p>What is your estimate of the substitution (mean clock) rate?</p>
 <p>You can then generate a maximum clade credibility (MCC) tree using <em>treeAnnotator</em>.</p>
 <p><img src="assets/images/chapters/phylogenomics/MCC.png" class="img-fluid"></p>
 <p>What is your mean estimate for the age of the common ancestor of all <em>Yersinia pestis</em> strains? To which parameter (displayed in beauti) does this corresponds?</p>
+</section>
 </section>
 <section id="bonus-temporal-signal-testing" class="level4" data-number="14.2.4.3">
 <h4 data-number="14.2.4.3" class="anchored" data-anchor-id="bonus-temporal-signal-testing"><span class="header-section-number">14.2.4.3</span> Bonus: Temporal signal testing</h4>

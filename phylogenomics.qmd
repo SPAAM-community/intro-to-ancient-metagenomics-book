@@ -336,6 +336,10 @@ Now that the analysis is setup, we can run it using BEAST:
 beast beast_analysis_Y_pestis.xml
 ```
 
+Once the analysis is running two files should have been created and are continuously updated:
+ - the "snpAlignment_without_Ypseudo.log" file which contains the values sampled by the MCMC for various monodimensional parameters such as the clock rate, as well as other values that are a logged along the MCMC such as the posterior probability and the likelihood.
+ - the "snpAlignment_without_Ypseudo.trees" file which contains the MCMC trees sampled by the MCMC
+
 While the analysis is running, you can start reading the next section
 
 ##### Assessing _BEAST2_ results
@@ -344,7 +348,7 @@ While the analysis is running, you can start reading the next section
 We are using an MCMC algorithm to sample the posterior distribution of parameters. If the MCMC has run long enough, we can use the sampled parameters to approximate the posterior distribution itself. Therefore, we have to check first that the MCMC chain has run long enough.
 :::
 
-We can assess the MCMC sampling using the program _Tracer_. _Tracer_ can read BEAST log files an generate statistics and plots for each of the sampled parameters (as well as other values that are a logged along the MCMC such as the posterior probability and the likelihood). Most importantly, _Tracer_ provides:
+We can assess the MCMC sampling using the program _Tracer_. _Tracer_ can read BEAST log files an generate statistics and plots for each of the sampled parameters. Most importantly, _Tracer_ provides:
 
 - **trace plots**: show the sampled parameter values along the MCMC run. Trace plots are a very useful MCMC diagnostic tool.
 
@@ -366,37 +370,69 @@ Once the burn-in phase is passed, one can look at the trace plots to assess if t
 
 ![](assets/images/chapters/phylogenomics/tracer_estimates.png)
 
-Let's now load the "beast_analysis_Y_pestis.log" file into trace (you can slide the file into the top-left panel).
-
-::: {.callout-tip}
-One can load a _BEAST2_ log file into tracer even if the analysis is still running. This allows to assess if the MCMC is running correctly or has run long enough before it's completed.
-:::
+Let's now load the "snpAlignment_without_Ypseudo.log" file into trace (you can slide the file into the top-left panel). Note that one can load a _BEAST2_ log file into tracer even if the analysis is still running. This allows to assess if the MCMC is running correctly or has run long enough before it's completed.
 
 **Question:**
 
 Has the MCMC run long enough?
 
 ::: {.callout-note title="Answer" collapse="true"}
-You have probably let you analysis run for 10-20 mins before looking at the log file, and this is definitely not sufficient: the burnin phase has recently been passed, the trace plots do not look very dense and ESS values are low. It would probably take a few hours for the analysis to complete. Luckily we have run the analysis in advance and saved the log files for you.
+You have probably let you analysis run for 10-20 mins before looking at the log file, and this is definitely not sufficient: the burnin phase has recently been passed, the trace plots do not look very dense and ESS values are low. It would probably take a few hours for the analysis to complete. Luckily we have run the analysis in advance and saved the log files for you "beast_analysis_Y_pestis_complete.log" and "beast_analysis_Y_pestis_complete.trees"
 :::
 
 You can now load the "beast_analysis_Y_pestis_complete.log" file into _Tracer_.
 
-If so you can look at the trace and effective sample size (ESS) value of all parameters, to check that the MCMC has run long enough. The traces should look (more or less) like a "hairy caterpillar", and a rule of thumb is that all ESS values should be above 200. If this is not the case, you should run the MCMC longer (BEAST2 has a -resume option that you can use to extend the MCMC sampling without starting everything from the beginning).
+**Questions:**
 
+Has the MCMC run long enough?
 
+::: {.callout-note title="Answer" collapse="true"}
+Yes! The trace plots look good and all ESSs are > 200
+:::
 
-You can then look at the estimates of your parameter in the top-right panel (mean, median, 95% HPD interval, ...). Note that these are marginal estimates, i.e. integrated over all other parameters.
+What is your mean estimate of the clock rate (ucld mean)?
 
-![](assets/images/chapters/phylogenomics/34.png)
+::: {.callout-note title="Answer" collapse="true"}
 
-What is your estimate of the substitution (mean clock) rate?
+:::
 
-You can then generate a maximum clade credibility (MCC) tree using _treeAnnotator_.
+##### MCC tree
 
-![](assets/images/chapters/phylogenomics/MCC.png)
+Since we are working in a Bayesian framework, we do not obtain a single phylogenetic tree as with Maximum likelihood, but a large set of trees which should be representative of the posterior distribution. In contrast with monodimensional parameters, a tree distribution cannot be easily summarized with mean or median estimates. Instead, we need to use specific tree-summarizing techniques. One of the most popular is the maximum clade credibility (MCC) tree, which works as follow:
 
-What is your mean estimate for the age of the common ancestor of all _Yersinia pestis_ strains? To which parameter (displayed in beauti) does this corresponds?
+- 1. For any node in any of the sampled trees, compute a **posterior support**: the proportion of trees in the sample which contain the node
+- 2. Select the MCC tree: this is the tree which the product of node posterior supports is the highest
+- 3. Calculate node/branch statistics on the MCC tree: typically, the mean/median estimates and HPD interval of node ages are calculated from the full tree sample and annotated on the MCC tree
+
+![](assets/images/chapters/phylogenomics/MCC_tree_concept.png)
+
+Let's generate an MCC tree from our tree sample. We can do this using the _TreeAnnotator_ software, which has both a commnadline and graphical interface. Let's use the commandline here and run the following (using a burn-in of 10%):
+
+```bash
+ treeannotator -burnin 10 beast_analysis_Y_pestis_complete.trees beast_analysis_Y_pestis_complete.MCC.tre
+```
+
+Once this is completed, we can open the MCC tree with figtree. Let's then add a few elements to the plot:
+
+- 1. Tick the "Scale Axis" box, unfold the corresponding menu, and select "Reverse axis" (now the timescale is in years BP)
+- 2. Tick the "Node Labels" box, unfold the corresponding menu, and select "Display: posterior". The posterior support of each node is now displayed. Note that the support value is a proportion (1=100%)
+- 3. Tick the "Node Bars" box, unfold the corresponding menu, and select "Display: height_95%_HPD". The 95% HPD intervals of node ages are now displayed.
+
+![](assets/images/chapters/phylogenomics/MCC_tree_figtree.png)
+
+**Questions:**
+
+Is the root of the tree consistent with what we found previously?
+
+::: {.callout-note title="Answer" collapse="true"}
+Yes! The root is placed between our prehistoric strains and the rest of Y. pestis strains. Note that this time we didn't have to use an outgroup because we estimated a time-tree: the root is identified as the oldest node in the tree.
+:::
+
+What is your estimate for the age of the most recent common ancestor of all Y. pestis strains?
+
+::: {.callout-note title="Answer" collapse="true"}
+~5500 years BP (HPD 95%: ~7500-4500 years BP)
+:::
 
 #### Bonus: Temporal signal testing
 
