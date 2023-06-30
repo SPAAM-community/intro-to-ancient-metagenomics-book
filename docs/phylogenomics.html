@@ -834,26 +834,56 @@ Tip
 <p><img src="assets/images/chapters/phylogenomics/26.png" class="img-fluid"></p>
 <p>Open BEAUTi and set up an analysis as followed:</p>
 <ul>
-<li>load the alignment in the “Partitions” tab</li>
+<li>load the alignment without Y. pseudotuberculosis in the “Partitions” tab (“File” -&gt; “Import alignment”; select “nucleotide”)</li>
 </ul>
-<p><img src="assets/images/chapters/phylogenomics/27.png" class="img-fluid"></p>
+<p><img src="assets/images/chapters/phylogenomics/beauti_import_data.png" class="img-fluid"></p>
 <ul>
-<li>set the sampling dates in the “Tip dates” tab</li>
-<li>choose the substitution model in the “Site model” tab</li>
-<li>choose the molecular clock model in the “Clock model” tab</li>
-<li>choose the prior distribution of parameters in the “Priors” tab</li>
-<li>set up the MCMC in the “MCMC” tab</li>
+<li>set the sampling dates in the “Tip dates” tab:
+<ul>
+<li>select “Use tip dates”</li>
+<li>click on “Auto-configure” -&gt; “read from file” and select the sample_dates.txt file</li>
+<li>change “Since some time in the past” to “Before present”</li>
+</ul></li>
 </ul>
-<p><img src="assets/images/chapters/phylogenomics/28.png" class="img-fluid"> <img src="assets/images/chapters/phylogenomics/29.png" class="img-fluid"> <img src="assets/images/chapters/phylogenomics/30.png" class="img-fluid"> <img src="assets/images/chapters/phylogenomics/31.png" class="img-fluid"></p>
-<p>Try running an analysis on the alignment without outgroup using the following:</p>
+<p><img src="assets/images/chapters/phylogenomics/beauti_tip_dates.png" class="img-fluid"></p>
 <ul>
-<li>don’t forget to specify the sample ages correctly</li>
-<li>use a GTR substitution matrix with a Gamma site model and 4 Gamma categories</li>
-<li>use a relaxed clock lognormal model with an initial value of 1E-4</li>
+<li>select the substitution model in the “Site model” tab:
+<ul>
+<li>chose a GTR model</li>
+<li>use 4 Gamma categories for the Gamma site model: this is to account for variations of the substitution rate accross sites (site=nucleotide position)</li>
+</ul></li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/beauti_substitution_model.png" class="img-fluid"></p>
+<ul>
+<li>choose the molecular clock model in the “Clock model” tab:
+<ul>
+<li>use a relaxed clock lognormal model (this is to allow for some variation of the clock rate accross branches)</li>
+<li>change the initial value of the clock rate to 10<sup>-4</sup> substitution/site/year (<strong>10<sup>-4</sup> can be written 1E-4</strong>)</li>
+</ul></li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/beauti_clock_model.png" class="img-fluid"></p>
+<ul>
+<li>choose the prior distribution of parameters in the “Priors” tab:
+<ul>
 <li>use a Bayesian Skyline Coalescent tree prior</li>
 <li>change the mean clock prior to a uniform distribution between 1E-6 and 1E-3 subst/site/year</li>
-<li>use 300M iterations for the MCMC chain, and log the parameters and trees each 10,000th iteration</li>
+<li>leave everything else to default</li>
+</ul></li>
 </ul>
+<p><img src="assets/images/chapters/phylogenomics/beauti_priors.png" class="img-fluid"></p>
+<ul>
+<li>set up the MCMC in the “MCMC” tab:
+<ul>
+<li>use a chain length of 300M</li>
+<li>sample the monodimensional parameters and trees every 10,000 iterations (“tracelog/treelog” -&gt; “log every”)</li>
+</ul></li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/beauti_MCMC.png" class="img-fluid"></p>
+<ul>
+<li>save the analysis setup as an xml file: “File” -&gt; “Save as”; you can name the file “beast_analysis_Y_pestis.xml”</li>
+</ul>
+<p>Now that the analysis is setup, we can run it using BEAST:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">beast</span> beast_analysis_Y_pestis.xml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once the analysis is completed, assess the posterior distribution sampling and parameter estimates by loading the obtained log file into <em>Tracer</em></p>
 <p>First, look at the trace of the posterior to check if the MCMC has passed the burn-in phase, and if you have remove all burn-in iterations</p>
 <p><img src="assets/images/chapters/phylogenomics/32.png" class="img-fluid"></p>

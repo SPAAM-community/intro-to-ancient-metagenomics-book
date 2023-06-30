@@ -222,7 +222,7 @@ Here is the meaning of the chosen parameters:
 
 ![](assets/images/chapters/phylogenomics/raxml_cmdline.png)
 
-Once the analysis has been completed, you can open the tree using _Figtree_ (RAxML_bipartitions… file, change “label” to “bootstrap support” at the prompt).
+Once the analysis has been completed, you can open the tree using _Figtree_ (RAxML_bipartitions.full_dataset.tre file, change “label” to “bootstrap support” at the prompt).
 
 ![](assets/images/chapters/phylogenomics/figtree_prompt.png)
 
@@ -280,7 +280,7 @@ To characterize the full posterior distribution of each parameter, we would need
 
 ![](assets/images/chapters/phylogenomics/25.png)
 
-**Let's estimate a time tree using _BEAST2_**:
+##### Set up a _BEAST2_ analysis
 
 ::: {.callout-tip}
 The ["taming the beast" website](https://taming-the-beast.org/tutorials/) has great tutorials to learn setting a _BEAST2_ analysis. In particular, the "Introduction to BEAST2", "Prior selection" and "Time-stamped data" are good starts.
@@ -336,15 +336,55 @@ Now that the analysis is setup, we can run it using BEAST:
 beast beast_analysis_Y_pestis.xml
 ```
 
-Once the analysis is completed, assess the posterior distribution sampling and parameter estimates by loading the obtained log file into _Tracer_
+While the analysis is running, you can start reading the next section
 
-First, look at the trace of the posterior to check if the MCMC has passed the burn-in phase, and if you have remove all burn-in iterations
+##### Assessing _BEAST2_ results
+
+::: {.callout-note title="Reminder"}
+We are using an MCMC algorithm to sample the posterior distribution of parameters. If the MCMC has run long enough, we can use the sampled parameters to approximate the posterior distribution itself. Therefore, we have to check first that the MCMC chain has run long enough.
+:::
+
+We can assess the MCMC sampling using the program _Tracer_. _Tracer_ can read BEAST log files an generate statistics and plots for each of the sampled parameters (as well as other values that are a logged along the MCMC such as the posterior probability and the likelihood). Most importantly, _Tracer_ provides:
+
+- **trace plots**: show the sampled parameter values along the MCMC run. Trace plots are a very useful MCMC diagnostic tool.
+
+![](assets/images/chapters/phylogenomics/tracer_traceplot.png)
+
+The first thing that one needs to assess is wether the MCMC has passed the so called "burn-in" phase. The MCMC starts with a random set of parameters and will take some time to reach a zone of high posterior probability density. The parameter values that are sampled during this initial phase are usually considered as noise and discarded (by default, tracer discards the first 10% of samples). The burn-in phase can be visualize on trace plots as an initial phase during which the posterior probability of sampled parameters is constantly increasing before reaching a plateau:
 
 ![](assets/images/chapters/phylogenomics/32.png)
 
-If so you can look at the trace and effective sample size (ESS) value of all parameters, to check that the MCMC has run long enough. The traces should look (more or less) like a "hairy caterpillar", and a rule of thumb is that all ESS values should be above 200. If this is not the case, you should run the MCMC longer (BEAST2 has a -resume option that you can use to extend the MCMC sampling without starting everything from the beginning).
+Once the burn-in phase is passed, one can look at the trace plots to assess if the parameters are sampled correctly and long enough. In most cases, when this is the case, the trace should be quite dense and oscillating around a central value (nice trace plots should look like "hairy caterpillars"). In the figure below, the trace on the left doesn't look good, the one on the right does:
 
 ![](assets/images/chapters/phylogenomics/33.png)
+
+-- **ESS values**: tracer also calculates effective sample sizes (ESS) for each of the sampled parameters. ESSs are estimates of the number of sampled parameter values after correcting for auto-correlation along the MCMC. As a rule of thumb, one usually considers that an MCMC as run long enough if all parameter's ESS are > 200. Note that if the trace looks like a hairy caterpillar, the corresponding ESS value should be high.
+
+![](assets/images/chapters/phylogenomics/tracer_ESS.png)
+
+-- **Parameter estimates**: _Tracer_ also provides statistics and plots to explore the posterior distribution of the parameters. These should be considered only if the trace plot and ESS values look fine. In the "Estimates" tab, after selecting the chosen parameter in the left panel, the upper-right panel shows point estimates (mean, median) and measures of uncertainty (95% HPD interval), and the bottom-right panel shows a histogram of the sampled value:
+
+![](assets/images/chapters/phylogenomics/tracer_estimates.png)
+
+Let's now load the "beast_analysis_Y_pestis.log" file into trace (you can slide the file into the top-left panel).
+
+::: {.callout-tip}
+One can load a _BEAST2_ log file into tracer even if the analysis is still running. This allows to assess if the MCMC is running correctly or has run long enough before it's completed.
+:::
+
+**Question:**
+
+Has the MCMC run long enough?
+
+::: {.callout-note title="Answer" collapse="true"}
+You have probably let you analysis run for 10-20 mins before looking at the log file, and this is definitely not sufficient: the burnin phase has recently been passed, the trace plots do not look very dense and ESS values are low. It would probably take a few hours for the analysis to complete. Luckily we have run the analysis in advance and saved the log files for you.
+:::
+
+You can now load the "beast_analysis_Y_pestis_complete.log" file into _Tracer_.
+
+If so you can look at the trace and effective sample size (ESS) value of all parameters, to check that the MCMC has run long enough. The traces should look (more or less) like a "hairy caterpillar", and a rule of thumb is that all ESS values should be above 200. If this is not the case, you should run the MCMC longer (BEAST2 has a -resume option that you can use to extend the MCMC sampling without starting everything from the beginning).
+
+
 
 You can then look at the estimates of your parameter in the top-right panel (mean, median, 95% HPD interval, ...). Note that these are marginal estimates, i.e. integrated over all other parameters.
 
