@@ -885,6 +885,7 @@ Tip
 </ul>
 <p>Now that the analysis is setup, we can run it using BEAST:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">beast</span> beast_analysis_Y_pestis.xml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Once the analysis is running two files should have been created and are continuously updated: - the “snpAlignment_without_Ypseudo.log” file which contains the values sampled by the MCMC for various monodimensional parameters such as the clock rate, as well as other values that are a logged along the MCMC such as the posterior probability and the likelihood. - the “snpAlignment_without_Ypseudo.trees” file which contains the MCMC trees sampled by the MCMC</p>
 <p>While the analysis is running, you can start reading the next section</p>
 </section>
 <section id="assessing-beast2-results" class="level5" data-number="14.2.4.2.2">
@@ -902,7 +903,7 @@ Reminder
 <p>We are using an MCMC algorithm to sample the posterior distribution of parameters. If the MCMC has run long enough, we can use the sampled parameters to approximate the posterior distribution itself. Therefore, we have to check first that the MCMC chain has run long enough.</p>
 </div>
 </div>
-<p>We can assess the MCMC sampling using the program <em>Tracer</em>. <em>Tracer</em> can read BEAST log files an generate statistics and plots for each of the sampled parameters (as well as other values that are a logged along the MCMC such as the posterior probability and the likelihood). Most importantly, <em>Tracer</em> provides:</p>
+<p>We can assess the MCMC sampling using the program <em>Tracer</em>. <em>Tracer</em> can read BEAST log files an generate statistics and plots for each of the sampled parameters. Most importantly, <em>Tracer</em> provides:</p>
 <ul>
 <li><strong>trace plots</strong>: show the sampled parameter values along the MCMC run. Trace plots are a very useful MCMC diagnostic tool.</li>
 </ul>
@@ -915,21 +916,27 @@ Reminder
 <p><img src="assets/images/chapters/phylogenomics/tracer_ESS.png" class="img-fluid"></p>
 <p>– <strong>Parameter estimates</strong>: <em>Tracer</em> also provides statistics and plots to explore the posterior distribution of the parameters. These should be considered only if the trace plot and ESS values look fine. In the “Estimates” tab, after selecting the chosen parameter in the left panel, the upper-right panel shows point estimates (mean, median) and measures of uncertainty (95% HPD interval), and the bottom-right panel shows a histogram of the sampled value:</p>
 <p><img src="assets/images/chapters/phylogenomics/tracer_estimates.png" class="img-fluid"></p>
-<p>Let’s now load the “beast_analysis_Y_pestis.log” file into trace (you can slide the file into the top-left panel).</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
+<p>Let’s now load the “snpAlignment_without_Ypseudo.log” file into trace (you can slide the file into the top-left panel). Note that one can load a <em>BEAST2</em> log file into tracer even if the analysis is still running. This allows to assess if the MCMC is running correctly or has run long enough before it’s completed.</p>
+<p><strong>Question:</strong></p>
+<p>Has the MCMC run long enough?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tip
+Answer
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>One can load a <em>BEAST2</em> log file into tracer even if the analysis is still running. This allows to assess if the MCMC is running correctly or has run long enough before it’s completed.</p>
+<p>You have probably let you analysis run for 10-20 mins before looking at the log file, and this is definitely not sufficient: the burnin phase has recently been passed, the trace plots do not look very dense and ESS values are low. It would probably take a few hours for the analysis to complete. Luckily we have run the analysis in advance and saved the log files for you “beast_analysis_Y_pestis_complete.log” and “beast_analysis_Y_pestis_complete.trees”</p>
 </div>
 </div>
-<p><strong>Question:</strong></p>
+</div>
+<p>You can now load the “beast_analysis_Y_pestis_complete.log” file into <em>Tracer</em>.</p>
+<p><strong>Questions:</strong></p>
 <p>Has the MCMC run long enough?</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
@@ -943,18 +950,93 @@ Answer
 </div>
 <div id="callout-22" class="callout-22-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You have probably let you analysis run for 10-20 mins before looking at the log file, and this is definitely not sufficient: the burnin phase has recently been passed, the trace plots do not look very dense and ESS values are low. It would probably take a few hours for the analysis to complete. Luckily we have run the analysis in advance and saved the log files for you.</p>
+<p>Yes! The trace plots look good and all ESSs are &gt; 200</p>
 </div>
 </div>
 </div>
-<p>You can now load the “beast_analysis_Y_pestis_complete.log” file into <em>Tracer</em>.</p>
-<p>If so you can look at the trace and effective sample size (ESS) value of all parameters, to check that the MCMC has run long enough. The traces should look (more or less) like a “hairy caterpillar”, and a rule of thumb is that all ESS values should be above 200. If this is not the case, you should run the MCMC longer (BEAST2 has a -resume option that you can use to extend the MCMC sampling without starting everything from the beginning).</p>
-<p>You can then look at the estimates of your parameter in the top-right panel (mean, median, 95% HPD interval, …). Note that these are marginal estimates, i.e.&nbsp;integrated over all other parameters.</p>
-<p><img src="assets/images/chapters/phylogenomics/34.png" class="img-fluid"></p>
-<p>What is your estimate of the substitution (mean clock) rate?</p>
-<p>You can then generate a maximum clade credibility (MCC) tree using <em>treeAnnotator</em>.</p>
-<p><img src="assets/images/chapters/phylogenomics/MCC.png" class="img-fluid"></p>
-<p>What is your mean estimate for the age of the common ancestor of all <em>Yersinia pestis</em> strains? To which parameter (displayed in beauti) does this corresponds?</p>
+<p>What is your mean estimate of the clock rate (ucld mean)?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-23" class="callout-23-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+</div>
+</section>
+<section id="mcc-tree" class="level5" data-number="14.2.4.2.3">
+<h5 data-number="14.2.4.2.3" class="anchored" data-anchor-id="mcc-tree"><span class="header-section-number">14.2.4.2.3</span> MCC tree</h5>
+<p>Since we are working in a Bayesian framework, we do not obtain a single phylogenetic tree as with Maximum likelihood, but a large set of trees which should be representative of the posterior distribution. In contrast with monodimensional parameters, a tree distribution cannot be easily summarized with mean or median estimates. Instead, we need to use specific tree-summarizing techniques. One of the most popular is the maximum clade credibility (MCC) tree, which works as follow:</p>
+<ul>
+<li><ol type="1">
+<li>For any node in any of the sampled trees, compute a <strong>posterior support</strong>: the proportion of trees in the sample which contain the node</li>
+</ol></li>
+<li><ol start="2" type="1">
+<li>Select the MCC tree: this is the tree which the product of node posterior supports is the highest</li>
+</ol></li>
+<li><ol start="3" type="1">
+<li>Calculate node/branch statistics on the MCC tree: typically, the mean/median estimates and HPD interval of node ages are calculated from the full tree sample and annotated on the MCC tree</li>
+</ol></li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/MCC_tree_concept.png" class="img-fluid"></p>
+<p>Let’s generate an MCC tree from our tree sample. We can do this using the <em>TreeAnnotator</em> software, which has both a commnadline and graphical interface. Let’s use the commandline here and run the following (using a burn-in of 10%):</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a> <span class="ex">treeannotator</span> <span class="at">-burnin</span> 10 beast_analysis_Y_pestis_complete.trees beast_analysis_Y_pestis_complete.MCC.tre</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Once this is completed, we can open the MCC tree with figtree. Let’s then add a few elements to the plot:</p>
+<ul>
+<li><ol type="1">
+<li>Tick the “Scale Axis” box, unfold the corresponding menu, and select “Reverse axis” (now the timescale is in years BP)</li>
+</ol></li>
+<li><ol start="2" type="1">
+<li>Tick the “Node Labels” box, unfold the corresponding menu, and select “Display: posterior”. The posterior support of each node is now displayed. Note that the support value is a proportion (1=100%)</li>
+</ol></li>
+<li><ol start="3" type="1">
+<li>Tick the “Node Bars” box, unfold the corresponding menu, and select “Display: height_95%_HPD”. The 95% HPD intervals of node ages are now displayed.</li>
+</ol></li>
+</ul>
+<p><img src="assets/images/chapters/phylogenomics/MCC_tree_figtree.png" class="img-fluid"></p>
+<p><strong>Questions:</strong></p>
+<p>Is the root of the tree consistent with what we found previously?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-24" class="callout-24-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Yes! The root is placed between our prehistoric strains and the rest of Y. pestis strains. Note that this time we didn’t have to use an outgroup because we estimated a time-tree: the root is identified as the oldest node in the tree.</p>
+</div>
+</div>
+</div>
+<p>What is your estimate for the age of the most recent common ancestor of all Y. pestis strains?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>~5500 years BP (HPD 95%: ~7500-4500 years BP)</p>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="bonus-temporal-signal-testing" class="level4" data-number="14.2.4.3">
