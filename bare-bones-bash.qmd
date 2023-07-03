@@ -101,7 +101,7 @@ The Bare Bones Bash philosophy of learning to code follows five simple commandme
 
 ::: {.callout-tip}
 ## Pro Tip
-Remember: Noone writes code that works first time, or without looking at StackOverflow sooner or later.
+Remember: No one writes code that works first time, or without looking at StackOverflow sooner or later.
 :::
 
 ### What is a terminal?
@@ -165,6 +165,7 @@ leading to your particular working directory.
 ### Absolute vs Relavtive paths
 
 There are two types of filepaths: 
+
 * An **absolute** path will start with the deepest directory in the machine
   shown as a `/`. Paths starting with `~` are also absolute paths, since `~` 
   translates to an absolute path of your specific home directory. That is the 
@@ -175,7 +176,7 @@ There are two types of filepaths:
   the syntax of relative pathways `.` means "the current directory" and `..` 
   means "the parent directory" (or the 'one above'). 
 
-#### A real like analogy for paths
+#### A real life analogy for paths
 
 You have just arrived to Leipzig for a summer school that is taking place at
 MPI-EVA. After some questionable navigation, you find yourself at the Bayerische
@@ -221,6 +222,7 @@ Examples of relative paths:
 :::
 
 ### Basic commands
+We will now explore some basic commands that you will use to explore folders and interact with files:
 
 - **l**i**s**t directory contents:
 ```bash
@@ -288,7 +290,7 @@ less Boosted-BBB-meta.tsv
 
 - **w**ord **c**ount the number of **l**ines (-l) in a file
 ```bash
-$ wc -l Boosted-BBB-meta.tsv
+wc -l Boosted-BBB-meta.tsv
 ```
 
 ### Datastreams, piping, and redirects
@@ -315,7 +317,7 @@ The `stdout` is the actual output of the command. In some cases this gets
 printed to the screen, but most often this is the information that needs to be
 saved in an output file.  
 The `stderr` is the datastream where errors and warnings go. This gets printed
-to your terminal. to let you know when something is not going according to plan!
+to your terminal to let you know when something is not going according to plan!
 
 <!-- TODO maybe add a picture of a command that prints both output and error? -->
 
@@ -346,8 +348,7 @@ lines are then passed on to `tail` which will keep only the last of those lines.
 
 Much like streams of water in the real world, datastreams can be redirected.
 
-This way you can save the stdout of a program (or even the stderr) into a file
-to save for later!
+This way you can save the stdout of a program (or even the stderr) into a file for later!
 
 
 - `stdin` can be redirected with `<`.
@@ -388,7 +389,7 @@ or access to online manuals right from your terminal!
 - You can get a __one sentence summary__ of what a tool does with `whatis`
 
 ```bash
-$ whatis cat
+whatis cat
 ```
 
 ```
@@ -398,7 +399,7 @@ cat(1)  - concatenate files and print on the standard
 
 - While `man` gives you __access to online manuals__ for each tool (exit with `q`)
 ```bash
-$ man cat
+man cat
 ```
 
 ### Variables
@@ -444,12 +445,12 @@ echo "Everyone says that Greek food is $GreekFood."
 Everyone says that Greek food is delicious.
 ```
 
-You can also store more than a single words:
+You can also store more than a single word:
 
 ```bash
-$ GreekFood="Greek wine" #We can overwrite 'GreekFood' again, 
+GreekFood="Greek wine" #We can overwrite 'GreekFood' again, 
 ## but when there is a space in our string, we need quotations.
-$ echo "The only thing better than Greek food is $GreekFood!"
+echo "The only thing better than Greek food is $GreekFood!"
 ```
 
 ```
@@ -459,8 +460,8 @@ The only thing better than Greek food is Greek wine!
 Since can be reset variables to whatever you want, you can also store a number again:
 
 ```bash
-$ GreekFood=7 #And, of course, we can overwrite with a number again too.
-$ echo "I have been to Greece $GreekFood times already this year, for the food and wine!"
+GreekFood=7 #And, of course, we can overwrite with a number again too.
+echo "I have been to Greece $GreekFood times already this year, for the food and wine!"
 ```
 
 ```
@@ -508,7 +509,7 @@ This is because in the second example we are using a variable. We have assigned 
 
 ### Find
 
-You can also ask your computer where you put your files, in case you forget. To do this you can use **find**! 
+You can also ask your computer where you have put your files, in case you forgot. To do this you can use **find**! 
 The **find** command has the following syntax:
 
 ```bash
@@ -532,7 +533,7 @@ find /your/folder/ -type f -name 'your_file.txt'
   - Use wildcards (`*`) for maximum laziness!
 
 
-Now let's put into practise what you have learn about `find`. 
+Now let's put into practise what you have learnt about `find`. 
 
 For that you will download a messy folder from a collaborator, remember to check you are in the BareBonesBash folder!:
 
@@ -557,7 +558,7 @@ Dancing		Feel		Having		Night		Watch		You
 ```
 
 Wow, what a mess! How would you retrieve all the files?
-Thanks to your wonderful teachers you have learned how to use find and can simply run:
+Thanks to your wonderful teachers you have learnt how to use find and can simply run:
 
 ```bash
 find Boosted-BBB -type f -name '*JPG*' 
@@ -580,7 +581,7 @@ Boosted-BBB/Night/is/young/and/the/musics/high/bydgoszczForest.JPG.MP3.TXT
 Boosted-BBB/Ooh/see/that/girl/pompeii.JPG.MP3.TXT
 ```
 
-After `-name` we have written `'*JPG*'`, this tells to `find` to seach for any file that contains `JPG` in any part of its name, indicated by the `*`. The `*` are what are known as wildcards (To learn more on how to use them, please refer to the more complete material for this [tutorial](https://barebonesbash.github.io/#/)).  
+After `-name` we have written `'*JPG*'`, this tells to `find` to search for any file that contains `JPG` in any part of its name, indicated by the `*`. The `*` are what are known as wildcards (To learn more on how to use them, please refer to the more complete material for this [tutorial](https://barebonesbash.github.io/#/)).  
 
 Now you have all the paths of the files that you will need!
 
@@ -590,13 +591,13 @@ Until now we have seen how to run single commands on a file. But, what about whe
 
 To repeat an action (command) for a set of things (list, e.g. files) one needs to employ the concept of a loop. One of the most commonly used loops, is the **for** loop.
 
-A **for** loops allow us to go through a list of things and perform some actions. Let's see an example:
+A **for** loop allows us to go through a list of things and perform some actions. Let's see an example:
 
 ```bash
-$ Variable=Yes
-$ for i in Greece Spain Britain; do
->  echo "Does $i have lovely food? $Variable"
-> done
+Variable=Yes
+for i in Greece Spain Britain; do
+  echo "Does $i have lovely food? $Variable"
+done
 ```
 
 ```
@@ -608,10 +609,10 @@ Does Britain have lovely food? Yes
 The for loop went through the list `Greece Spain Britain` and printed a statement with each item in the list. What happens if we change the order of the list to `Britain Greece Spain`?
 
 ```bash
-$ Variable=Yes
-$ for i in Britain Greece Spain; do
->  echo "Does $i have lovely food? $Variable"
-> done
+Variable=Yes
+for i in Britain Greece Spain; do
+  echo "Does $i have lovely food? $Variable"
+Thank done
 ```
 
 ```
@@ -619,9 +620,9 @@ Does Britain have lovely food? Yes
 Does Greece have lovely food? Yes
 Does Spain have lovely food? Yes
 ```
-We see that changing the order of the list will affect the output, this is because the for loop will go through the list in a sequencial manner. 
+We see that changing the order of the list will affect the output, this is because the **for** loop will go through the list in a sequencial manner. 
 
-We can also add more elements to the list, and the for loop will continue until it reaches the end of the list.
+We can also add more elements to the list, and the **for** loop will continue until it reaches the end of the list.
 
 ### How to Google like a pro
 
@@ -673,12 +674,13 @@ ENTER!
 ### Conclusion
 
 You should now know the basics of working on the command line, like:
-- What a command prompt is
-- How to navigate around the filesystem via the command line
-- How to view the contents of a file
-- How to remove files and directories
-- What a datastream is, and how they can be redirected
-- how to chain commands together
+
+* What a command prompt is
+* How to navigate around the filesystem via the command line
+* How to view the contents of a file
+* How to remove files and directories
+* What a datastream is, and how they can be redirected
+* How to chain commands together
 
 If you would like to know more about the magic of bash, you can fin more commands
 as well as and more advanced bash concepts in the [BareBonesBash website](https://barebonesbash.github.io/#/).
