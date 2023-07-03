@@ -95,7 +95,7 @@ The first line is a **consensus** sequence: it indicates the nucleotide supporte
 :::
 
 ::: {.callout-note title="Answer" collapse="true"}
-They represent positions that are same as the consensus
+They represent positions that are the same as the consensus
 :::
 
 Once you know this, can you already tell by looking at the alignment which sequence is the most singular (scroll down)
@@ -118,8 +118,10 @@ Luckily, you won't have to do this by hand since _MEGA_ allows you to build a NJ
 A NJ tree can be built from any type of distances. This includes:
 
 - p-distances (also called raw distances): these are simply the proportion of differences between sequences
-- corrected distances: these are based on an underlying substitution model (JC69, K80, GTR...) and account for multiple mutations at the same sites (which would result in only one visible difference)
-- p-distances and corrected distances should be similar when the number of mutations is low compared to the genome length
+- corrected distances: these are based on an underlying substitution model (JC69, K80, GTR...) and account for multiple substitutions at the same sites (which would result in only one visible difference)
+- p-distances and corrected distances should be similar when the number of substitutions is low compared to the genome length
+
+**note:** a "substitution" is a type of mutation in which a nucleotide is replaced by another.
 :::
 
 ![](assets/images/chapters/phylogenomics/9.png)
@@ -167,17 +169,9 @@ Do they form a monophyletic group (a clade)?
 Yes, they form a monophyletic group. We can also say that this group of prehistoric strains form their own lineage.
 :::
 
-### Character-based phylogenetic methods: maximum parsimony and probabilistic approaches
+### Probabilistic methods: Maximum Likelihood and Bayesian inference
 
-Character-based methods are not based on pairwise distances but rather model the complete evolution of each character (e.g. DNA nucleotides at each position) along the phylogenetic tree.
-
-One of these methods is maximum parsimony and it consists in choosing the tree that underlies an evolutionary history with the least number of character changes.
-
-![](assets/images/chapters/phylogenomics/17.png)
-
-![](assets/images/chapters/phylogenomics/18.png)
-
-Other types of character-based methods which are more commonly used today are probabilistic methods. In general, these are statistical techniques that are based on probabilistic models under which the data that we observe is generated following a probability distribution depending on a set of parameters which we want to estimate. The probability of the data given the model parameters is called the likelihood.
+These are the most commonly used approach today. In general, probabilistic methods are statistical techniques that are based on models under which the observed data is generated through a stochastic process depending on a set of parameters which we want to estimate. The probability of the data given the model parameters is called the likelihood.
 
 ![](assets/images/chapters/phylogenomics/19.png)
 
@@ -258,7 +252,7 @@ Lastly, we will export the rooted tree from figtree: File -> Export trees -> sel
 
 #### Estimating a time-tree using Bayesian phylogenetics (_BEAST2_)
 
-Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of mutations but instead represent the time of evolution. To do so, we will use the ages of ancient genomes (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.
+Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of substitutions but instead represent the time of evolution. To do so, we will use the ages of ancient genomes (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.
 
 ::: {.callout-note}
 A great advantage of ancient pathogen genomes is that they provide key calibration points to estimate molecular clocks and dated phylogenies. This is much more difficult to do with modern data alone.
@@ -388,12 +382,15 @@ Has the MCMC run long enough?
 
 ::: {.callout-note title="Answer" collapse="true"}
 Yes! The trace plots look good and all ESSs are > 200
+![](assets/images/chapters/phylogenomics/beast_results_trace.png)
 :::
 
 What is your mean estimate of the clock rate (ucld mean)?
 
 ::: {.callout-note title="Answer" collapse="true"}
+~7.10<sup>-6</sup> substitution/site/year. Note however that this is largely biased since we used a SNP alignment containing only variable positions. In order to get an unbiased estimate of the substitution rate, we should have used the full alignment or account for the number of constant sites by using a "filtered" alignment (see [here](https://www.beast2.org/2019/07/18/ascertainment-correction.html)). In general, this is good practice since not accounting for conserved positions in the alignment can sometimes affect the tree as well (although this should usually be minor, which is why we didn't bother to do this here).
 
+![](assets/images/chapters/phylogenomics/beast_results_ucldMean.png)
 :::
 
 ##### MCC tree
@@ -418,7 +415,7 @@ Once this is completed, we can open the MCC tree with figtree. Let's then add a 
 - 2. Tick the "Node Labels" box, unfold the corresponding menu, and select "Display: posterior". The posterior support of each node is now displayed. Note that the support value is a proportion (1=100%)
 - 3. Tick the "Node Bars" box, unfold the corresponding menu, and select "Display: height_95%_HPD". The 95% HPD intervals of node ages are now displayed.
 
-![](assets/images/chapters/phylogenomics/MCC_tree_figtree.png)
+![](assets/images/chapters/phylogenomics/beast_results_MCC_tree.png.png)
 
 **Questions:**
 

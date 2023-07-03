@@ -394,7 +394,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#preparation" id="toc-preparation" class="nav-link" data-scroll-target="#preparation"><span class="header-section-number">14.2.1</span> Preparation</a></li>
   <li><a href="#visualize-the-sequence-alignment" id="toc-visualize-the-sequence-alignment" class="nav-link" data-scroll-target="#visualize-the-sequence-alignment"><span class="header-section-number">14.2.2</span> Visualize the sequence alignment</a></li>
   <li><a href="#distance-based-phylogeny-neighbour-joining" id="toc-distance-based-phylogeny-neighbour-joining" class="nav-link" data-scroll-target="#distance-based-phylogeny-neighbour-joining"><span class="header-section-number">14.2.3</span> Distance-based phylogeny: Neighbour Joining</a></li>
-  <li><a href="#character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" id="toc-character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" class="nav-link" data-scroll-target="#character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches"><span class="header-section-number">14.2.4</span> Character-based phylogenetic methods: maximum parsimony and probabilistic approaches</a></li>
+  <li><a href="#probabilistic-methods-maximum-likelihood-and-bayesian-inference" id="toc-probabilistic-methods-maximum-likelihood-and-bayesian-inference" class="nav-link" data-scroll-target="#probabilistic-methods-maximum-likelihood-and-bayesian-inference"><span class="header-section-number">14.2.4</span> Probabilistic methods: Maximum Likelihood and Bayesian inference</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -562,7 +562,7 @@ Answer
 </div>
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>They represent positions that are same as the consensus</p>
+<p>They represent positions that are the same as the consensus</p>
 </div>
 </div>
 </div>
@@ -603,9 +603,10 @@ p-distances?
 <p>A NJ tree can be built from any type of distances. This includes:</p>
 <ul>
 <li>p-distances (also called raw distances): these are simply the proportion of differences between sequences</li>
-<li>corrected distances: these are based on an underlying substitution model (JC69, K80, GTR…) and account for multiple mutations at the same sites (which would result in only one visible difference)</li>
-<li>p-distances and corrected distances should be similar when the number of mutations is low compared to the genome length</li>
+<li>corrected distances: these are based on an underlying substitution model (JC69, K80, GTR…) and account for multiple substitutions at the same sites (which would result in only one visible difference)</li>
+<li>p-distances and corrected distances should be similar when the number of substitutions is low compared to the genome length</li>
 </ul>
+<p><strong>note:</strong> a “substitution” is a type of mutation in which a nucleotide is replaced by another.</p>
 </div>
 </div>
 <p><img src="assets/images/chapters/phylogenomics/9.png" class="img-fluid"></p>
@@ -687,13 +688,9 @@ Answer
 </div>
 </div>
 </section>
-<section id="character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches" class="level3" data-number="14.2.4">
-<h3 data-number="14.2.4" class="anchored" data-anchor-id="character-based-phylogenetic-methods-maximum-parsimony-and-probabilistic-approaches"><span class="header-section-number">14.2.4</span> Character-based phylogenetic methods: maximum parsimony and probabilistic approaches</h3>
-<p>Character-based methods are not based on pairwise distances but rather model the complete evolution of each character (e.g.&nbsp;DNA nucleotides at each position) along the phylogenetic tree.</p>
-<p>One of these methods is maximum parsimony and it consists in choosing the tree that underlies an evolutionary history with the least number of character changes.</p>
-<p><img src="assets/images/chapters/phylogenomics/17.png" class="img-fluid"></p>
-<p><img src="assets/images/chapters/phylogenomics/18.png" class="img-fluid"></p>
-<p>Other types of character-based methods which are more commonly used today are probabilistic methods. In general, these are statistical techniques that are based on probabilistic models under which the data that we observe is generated following a probability distribution depending on a set of parameters which we want to estimate. The probability of the data given the model parameters is called the likelihood.</p>
+<section id="probabilistic-methods-maximum-likelihood-and-bayesian-inference" class="level3" data-number="14.2.4">
+<h3 data-number="14.2.4" class="anchored" data-anchor-id="probabilistic-methods-maximum-likelihood-and-bayesian-inference"><span class="header-section-number">14.2.4</span> Probabilistic methods: Maximum Likelihood and Bayesian inference</h3>
+<p>These are the most commonly used approach today. In general, probabilistic methods are statistical techniques that are based on models under which the observed data is generated through a stochastic process depending on a set of parameters which we want to estimate. The probability of the data given the model parameters is called the likelihood.</p>
 <p><img src="assets/images/chapters/phylogenomics/19.png" class="img-fluid"></p>
 <p><strong>Question:</strong></p>
 <p>In a phylogenetic probabilistic model, what are the data and what are the parameters?</p>
@@ -789,12 +786,12 @@ Answer
 <li>open the bipartition… file in figtree and reroot the tree based on the knowledge we have gained previously: place the root on the branch leading to the prehistoric Y. pestis strains (KZL002, GZL002, CHC004 and VLI092).</li>
 </ul>
 <p><img src="assets/images/chapters/phylogenomics/raxml_tree_woOutgroup.png" class="img-fluid"></p>
-<p>Lastly, we will export the rooted tree from figtree: File -&gt; Export trees -&gt; select the “save as currently displayed” box and save as “ML_tree_rooted.tre”</p>
+<p>Lastly, we will export the rooted tree from figtree: File -&gt; Export trees -&gt; select the “save as currently displayed” box and save as “ML_tree_rooted.tre” (this will be useful for the section “Temporal signal assessment” at the end of this tutorial)</p>
 <p><img src="assets/images/chapters/phylogenomics/export_tree.png" class="img-fluid"></p>
 </section>
 <section id="estimating-a-time-tree-using-bayesian-phylogenetics-beast2" class="level4" data-number="14.2.4.2">
 <h4 data-number="14.2.4.2" class="anchored" data-anchor-id="estimating-a-time-tree-using-bayesian-phylogenetics-beast2"><span class="header-section-number">14.2.4.2</span> Estimating a time-tree using Bayesian phylogenetics (<em>BEAST2</em>)</h4>
-<p>Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of mutations but instead represent the time of evolution. To do so, we will use the ages of ancient genomes (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.</p>
+<p>Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of substitutions but instead represent the time of evolution. To do so, we will use the ages of ancient genomes (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -950,7 +947,7 @@ Answer
 </div>
 <div id="callout-22" class="callout-22-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Yes! The trace plots look good and all ESSs are &gt; 200</p>
+<p>Yes! The trace plots look good and all ESSs are &gt; 200 <img src="assets/images/chapters/phylogenomics/beast_results_trace.png" class="img-fluid"></p>
 </div>
 </div>
 </div>
@@ -967,7 +964,8 @@ Answer
 </div>
 <div id="callout-23" class="callout-23-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-
+<p>~7.10<sup>-6</sup> substitution/site/year. Note however that this is largely biased since we used a SNP alignment containing only variable positions. In order to get an unbiased estimate of the substitution rate, we should have used the full alignment or account for the number of constant sites by using a “filtered” alignment (see <a href="https://www.beast2.org/2019/07/18/ascertainment-correction.html">here</a>). In general, this is good practice since not accounting for conserved positions in the alignment can sometimes affect the tree as well (although this should usually be minor, which is why we didn’t bother to do this here).</p>
+<p><img src="assets/images/chapters/phylogenomics/beast_results_ucldMean.png" class="img-fluid"></p>
 </div>
 </div>
 </div>
@@ -1001,7 +999,7 @@ Answer
 <li>Tick the “Node Bars” box, unfold the corresponding menu, and select “Display: height_95%_HPD”. The 95% HPD intervals of node ages are now displayed.</li>
 </ol></li>
 </ul>
-<p><img src="assets/images/chapters/phylogenomics/MCC_tree_figtree.png" class="img-fluid"></p>
+<p><img src="assets/images/chapters/phylogenomics/beast_results_MCC_tree.png.png" class="img-fluid"></p>
 <p><strong>Questions:</strong></p>
 <p>Is the root of the tree consistent with what we found previously?</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
@@ -1039,14 +1037,15 @@ Answer
 </div>
 </section>
 </section>
-<section id="bonus-temporal-signal-testing" class="level4" data-number="14.2.4.3">
-<h4 data-number="14.2.4.3" class="anchored" data-anchor-id="bonus-temporal-signal-testing"><span class="header-section-number">14.2.4.3</span> Bonus: Temporal signal testing</h4>
-<p>It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree. A classic test to do this is called root-to-tip regression, which consists in verifying that the oldest a sequence is, the closer it should be to the root because there was less time for mutations to accumulate before this sequence was sampled. The correlation between sample age and distance to the root (root-to-tip regression) can be assessed using a rooted substitution tree and the program <em>tempest</em>:</p>
-<ul>
-<li>open tempest and load the re-rooted ML tree that we produced previously</li>
-<li>click on “import dates” in the “sample dates” tab, select the sample_age.txt file, and then change to “dates specified as years before the present”</li>
-<li>look at the root-to-tip regression: is there a positive correlation?</li>
-</ul>
+<section id="bonus-temporal-signal-assessment" class="level4" data-number="14.2.4.3">
+<h4 data-number="14.2.4.3" class="anchored" data-anchor-id="bonus-temporal-signal-assessment"><span class="header-section-number">14.2.4.3</span> Bonus: Temporal signal assessment</h4>
+<p>It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree (i.e.&nbsp;we should have done this before the actual <em>BEAST2</em> analysis). A classic way to assess the temporal signal of a dataset is the root-to-tip regression. The rationale of the root-to-tip regression is to verify that the oldest a sequence is, the closer it should be to the root in a (rooted) substitution tree because there was less time for substitution to accumulate. In other words, their should be a correlation between sample age and distance to the root, which we can assess using a linear regression (root-to-tip regression). This can be done using the program <em>TempEst</em>:</p>
+<ol type="1">
+<li>open tempest and load the rooted ML tree that we produced previously (you should have saved it as “ML_tree_rooted.tre”)</li>
+<li>click on “Import Dates” in the “Sample Dates” tab, select the sample_age.txt file and click “OK”</li>
+<li>still in the “Sample Dates” tab, change “Since some time in the past” to “Before present” (one might need to extand the TempEst window to see the pull down menu)</li>
+<li>look at the “Root-to-tip tab”: is there a positive correlation between time and root-to-tip divergence as expected under the molecular clock hypothesis?</li>
+</ol>
 <p><img src="assets/images/chapters/phylogenomics/Tempest.png" class="img-fluid"></p>
 
 
