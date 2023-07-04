@@ -441,7 +441,7 @@ Tip
 </div>
 <section id="lecture" class="level2" data-number="14.1">
 <h2 data-number="14.1" class="anchored" data-anchor-id="lecture"><span class="header-section-number">14.1</span> Lecture</h2>
-<iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSexn0hc-7Qt2o5jarBzZ3WMLZ4jcjj0fd_QgLYpm5y0tNC_KLnMT00pA6uvpOomQ/embed?start=false&amp;loop=true&amp;delayms=10000" frameborder="0" width="100%" height="400px" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
+<iframe src="https://docs.google.com/presentation/d/1HAZ7beTxM-lW-X1ltrtoJonCvlx4VkRXvvw713gFrDc/embed?start=false&amp;loop=true&amp;delayms=10000" frameborder="0" width="100%" height="400px" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
 </iframe>
 <p>PDF version of these slides can be downloaded from <a href="assets/images/chapters/phylogenomics/SPAAM Summer School 2022 - 5B - Phylogenomics.pdf">here</a>.</p>
 <iframe width="100%" height="400px" src="https://www.youtube.com/embed/eg-0S5S7EpM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
@@ -795,8 +795,8 @@ Answer
 </div>
 <p>You can notice that the phylogeny is difficult to visualize due to the long branch leading to <em>Y. pseudotuberculosis</em>. Having a very distant outgroup can also have deleterious effects on the estimated phylogeny (due to the so-called “long branch attraction” effect). We can construct a new phylogeny after removing the outgroup:</p>
 <ul>
-<li>go back to the alignment in mega, unclick <em>Y.pseudotuberculosis</em>, and export in fasta format (“Data” -&gt; “Export Data” -&gt; change “Format” to “Fasta” and click “Ok”; you can save it as: “snpAlignment_without_Ypseudo.fas”)</li>
-<li>run raxml on this new alignment (change input to “snpAlignment_without_Ypseudo.fas” and output prefix to “without_Ypseudo” in the commandline)</li>
+<li>go back to the alignment in mega, unclick <em>Y.pseudotuberculosis</em>, and export in fasta format (“Data” -&gt; “Export Data” -&gt; change “Format” to “Fasta” and click “Ok”; you can save it as: “snpAlignment_without_outgroup.fas”)</li>
+<li>run raxml on this new alignment (change input to “snpAlignment_without_outgroup.fas” and output prefix to “without_outgroup” in the commandline)</li>
 <li>open the bipartition… file in figtree and reroot the tree based on the knowledge we have gained previously: place the root on the branch leading to the prehistoric Y. pestis strains (KZL002, GZL002, CHC004 and VLI092).</li>
 </ul>
 <p><img src="assets/images/chapters/phylogenomics/raxml_tree_woOutgroup.png" class="img-fluid"></p>
@@ -846,7 +846,7 @@ Tip
 <p><img src="assets/images/chapters/phylogenomics/26.png" class="img-fluid"></p>
 <p>Open BEAUTi by typing <code>beauti &amp;</code> in the terminal, and set up an analysis as followed:</p>
 <ul>
-<li>load the alignment without Y. pseudotuberculosis in the “Partitions” tab (“File” -&gt; “Import alignment”; select “nucleotide”)</li>
+<li>load the alignment without outgroup in the “Partitions” tab (“File” -&gt; “Import alignment”; select “nucleotide”)</li>
 </ul>
 <p><img src="assets/images/chapters/phylogenomics/beauti_import_data.png" class="img-fluid"></p>
 <ul>
@@ -898,8 +898,8 @@ Tip
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">beast</span> beast_analysis_Y_pestis.xml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once the analysis is running two files should have been created and are continuously updated:</p>
 <ul>
-<li>the “snpAlignment_without_Ypseudo.log” file which contains the values sampled by the MCMC for various monodimensional parameters such as the clock rate, as well as other values that are a logged along the MCMC such as the posterior probability and the likelihood.</li>
-<li>the “snpAlignment_without_Ypseudo.trees” file which contains the MCMC trees sampled by the MCMC</li>
+<li>the “snpAlignment_without_outgroup.log” file which contains the values sampled by the MCMC for various monodimensional parameters such as the clock rate, as well as other values that are a logged along the MCMC such as the posterior probability and the likelihood.</li>
+<li>the “snpAlignment_without_outgroup.trees” file which contains the MCMC trees sampled by the MCMC</li>
 </ul>
 <p>While the analysis is running, you can start reading the next section</p>
 </section>
@@ -925,13 +925,13 @@ Reminder
 <p><img src="assets/images/chapters/phylogenomics/tracer_traceplot.png" class="img-fluid"></p>
 <p>The first thing that one needs to assess is wether the MCMC has passed the so called “burn-in” phase. The MCMC starts with a random set of parameters and will take some time to reach a zone of high posterior probability density. The parameter values that are sampled during this initial phase are usually considered as noise and discarded (by default, tracer discards the first 10% of samples). The burn-in phase can be visualize on trace plots as an initial phase during which the posterior probability of sampled parameters is constantly increasing before reaching a plateau:</p>
 <p><img src="assets/images/chapters/phylogenomics/32.png" class="img-fluid"></p>
-<p>Once the burn-in phase is passed, one can look at the trace plots to assess if the parameters are sampled correctly and long enough. In most cases, when this is the case, the trace should be quite dense and oscillating around a central value (nice trace plots should look like “hairy caterpillars”). In the figure below, the trace on the left doesn’t look good, the one on the right does:</p>
+<p>Once the burn-in phase is passed, one can look at the trace plots to assess if the parameters have been sampled correctly and long enough. Usually, when this is the case, the trace should be quite dense and oscillating around a central value (nice trace plots should look like “hairy caterpillars”). In the figure below, the trace on the left doesn’t look good, the one on the right does:</p>
 <p><img src="assets/images/chapters/phylogenomics/33.png" class="img-fluid"></p>
 <p>– <strong>ESS values</strong>: tracer also calculates effective sample sizes (ESS) for each of the sampled parameters. ESSs are estimates of the number of sampled parameter values after correcting for auto-correlation along the MCMC. As a rule of thumb, one usually considers that an MCMC as run long enough if all parameter’s ESS are &gt; 200. Note that if the trace looks like a hairy caterpillar, the corresponding ESS value should be high.</p>
 <p><img src="assets/images/chapters/phylogenomics/tracer_ESS.png" class="img-fluid"></p>
 <p>– <strong>Parameter estimates</strong>: <em>Tracer</em> also provides statistics and plots to explore the posterior distribution of the parameters. These should be considered only if the trace plot and ESS values look fine. In the “Estimates” tab, after selecting the chosen parameter in the left panel, the upper-right panel shows point estimates (mean, median) and measures of uncertainty (95% HPD interval), and the bottom-right panel shows a histogram of the sampled value:</p>
 <p><img src="assets/images/chapters/phylogenomics/tracer_estimates.png" class="img-fluid"></p>
-<p>Let’s now load the “snpAlignment_without_Ypseudo.log” file into trace (you can slide the file into the top-left panel). Note that one can load a <em>BEAST2</em> log file into tracer even if the analysis is still running. This allows to assess if the MCMC is running correctly or has run long enough before it’s completed.</p>
+<p>Let’s now load the “snpAlignment_without_outgroup.log” file into <em>Tracer</em>. Open a new terminal tab, activate the conda environemnt with <code>conda activate phylogenomics</code>, open tracer with <code>tracer &amp;</code>, and then “File” -&gt; “Import trace file” -&gt; select “snpAlignment_without_outgroup.log”. Note that one can load a <em>BEAST2</em> log file into tracer even if the analysis is still running. This allows to assess if the MCMC is running correctly or has run long enough before it’s completed.</p>
 <p><strong>Question:</strong></p>
 <p>Has the MCMC run long enough?</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
@@ -946,11 +946,12 @@ Answer
 </div>
 <div id="callout-22" class="callout-22-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You have probably let you analysis run for 10-20 mins before looking at the log file, and this is definitely not sufficient: the burnin phase has recently been passed, the trace plots do not look very dense and ESS values are low. It would probably take a few hours for the analysis to complete. Luckily we have run the analysis in advance and saved the log files for you “beast_analysis_Y_pestis_complete.log” and “beast_analysis_Y_pestis_complete.trees”</p>
+<p>You have probably let you analysis run for 10-20 mins before looking at the log file, and this is definitely not sufficient: the burnin phase has recently been passed, the trace plots do not look very dense and ESS values are low. It would probably take a few hours for the analysis to complete. Luckily we have run the analysis in advance and saved the log files for you in the “intermediateFiles” folder: “snpAlignment_without_outgroup.log” and “snpAlignment_without_outgroup.trees”</p>
+<p><img src="assets/images/chapters/phylogenomics/tracer_unsufficient_sampling.png" class="img-fluid"></p>
 </div>
 </div>
 </div>
-<p>You can now load the “beast_analysis_Y_pestis_complete.log” file into <em>Tracer</em>.</p>
+<p>You can now load the “intermediateFiles/snpAlignment_without_outgroup.log” file into <em>Tracer</em>.</p>
 <p><strong>Questions:</strong></p>
 <p>Has the MCMC run long enough?</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
@@ -982,7 +983,7 @@ Answer
 </div>
 <div id="callout-24" class="callout-24-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>~7.10<sup>-6</sup> substitution/site/year. Note however that this is largely biased since we used a SNP alignment containing only variable positions. In order to get an unbiased estimate of the substitution rate, we should have used the full alignment or account for the number of constant sites by using a “filtered” alignment (see <a href="https://www.beast2.org/2019/07/18/ascertainment-correction.html">here</a>). In general, this is good practice since not accounting for conserved positions in the alignment can sometimes affect the tree as well (although this should usually be minor, which is why we didn’t bother to do this here).</p>
+<p>~7.10<sup>-6</sup> substitution/site/year. Note, however, that this estimate is largely biased since we used a SNP alignment containing only variable positions. In order to get an unbiased estimate of the substitution rate, we should have used the full alignment or account for the number of constant sites by using a “filtered” alignment (see <a href="https://www.beast2.org/2019/07/18/ascertainment-correction.html">here</a>). In general, this is good practice since not accounting for conserved positions in the alignment can sometimes affect the tree as well (although this should usually be minor, which is why we didn’t bother to do this here).</p>
 <p><img src="assets/images/chapters/phylogenomics/beast_results_ucldMean.png" class="img-fluid"></p>
 </div>
 </div>
@@ -996,7 +997,7 @@ Answer
 <li>For any node in any of the sampled trees, compute a <strong>posterior support</strong>: the proportion of trees in the sample which contain the node</li>
 </ol></li>
 <li><ol start="2" type="1">
-<li>Select the MCC tree: this is the tree which the product of node posterior supports is the highest</li>
+<li>Select the MCC tree: this is the tree in which the product of node posterior supports is the highest</li>
 </ol></li>
 <li><ol start="3" type="1">
 <li>Calculate node/branch statistics on the MCC tree: typically, the mean/median estimates and HPD interval of node ages are calculated from the full tree sample and annotated on the MCC tree</li>
@@ -1004,7 +1005,7 @@ Answer
 </ul>
 <p><img src="assets/images/chapters/phylogenomics/MCC_tree_concept.png" class="img-fluid"></p>
 <p>Let’s generate an MCC tree from our tree sample. We can do this using the <em>TreeAnnotator</em> software, which has both a commnadline and graphical interface. Let’s use the commandline here and run the following (using a burn-in of 10%):</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a> <span class="ex">treeannotator</span> <span class="at">-burnin</span> 10 beast_analysis_Y_pestis_complete.trees beast_analysis_Y_pestis_complete.MCC.tre</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a> <span class="ex">treeannotator</span> <span class="at">-burnin</span> 10 intermediateFiles/snpAlignment_without_outgroup.trees snpAlignment_without_outgroup.MCC.tree</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once this is completed, we can open the MCC tree with figtree. Let’s then add a few elements to the plot:</p>
 <ul>
 <li><ol type="1">
@@ -1049,7 +1050,7 @@ Answer
 </div>
 <div id="callout-26" class="callout-26-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>~5500 years BP (HPD 95%: ~7500-4500 years BP)</p>
+<p>~5800 years BP (HPD 95%: ~8000-4500 years BP)</p>
 </div>
 </div>
 </div>
@@ -1059,9 +1060,9 @@ Answer
 <h4 data-number="14.2.4.3" class="anchored" data-anchor-id="bonus-temporal-signal-assessment"><span class="header-section-number">14.2.4.3</span> Bonus: Temporal signal assessment</h4>
 <p>It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree (i.e.&nbsp;we should have done this before the actual <em>BEAST2</em> analysis). A classic way to assess the temporal signal of a dataset is the root-to-tip regression. The rationale of the root-to-tip regression is to verify that the oldest a sequence is, the closer it should be to the root in a (rooted) substitution tree because there was less time for substitution to accumulate. In other words, their should be a correlation between sample age and distance to the root, which we can assess using a linear regression (root-to-tip regression). This can be done using the program <em>TempEst</em>:</p>
 <ol type="1">
-<li>open tempest and load the rooted ML tree that we produced previously (you should have saved it as “ML_tree_rooted.tre”)</li>
+<li>open <em>TempEst</em> by typing <code>tempest &amp;</code> and load the rooted ML tree that we produced previously (you should have saved it as “ML_tree_rooted.tre”)</li>
 <li>click on “Import Dates” in the “Sample Dates” tab, select the sample_age.txt file and click “OK”</li>
-<li>still in the “Sample Dates” tab, change “Since some time in the past” to “Before present” (one might need to extand the TempEst window to see the pull down menu)</li>
+<li>still in the “Sample Dates” tab, change “Since some time in the past” to “Before present” (one might need to extand the <em>TempEst</em> window to see the pull down menu)</li>
 <li>look at the “Root-to-tip tab”: is there a positive correlation between time and root-to-tip divergence as expected under the molecular clock hypothesis?</li>
 </ol>
 <p><img src="assets/images/chapters/phylogenomics/Tempest.png" class="img-fluid"></p>
