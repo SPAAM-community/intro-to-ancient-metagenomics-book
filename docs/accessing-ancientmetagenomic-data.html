@@ -419,10 +419,12 @@ div.csl-indent {
   <li><a href="#amdirt" id="toc-amdirt" class="nav-link" data-scroll-target="#amdirt"><span class="header-section-number">16.5</span> AMDirT</a>
   <ul class="collapse">
   <li><a href="#running-amdirt-viewer" id="toc-running-amdirt-viewer" class="nav-link" data-scroll-target="#running-amdirt-viewer"><span class="header-section-number">16.5.1</span> Running AMDirT viewer</a></li>
+  <li><a href="#inspecting-amdirt-viewer-output" id="toc-inspecting-amdirt-viewer-output" class="nav-link" data-scroll-target="#inspecting-amdirt-viewer-output"><span class="header-section-number">16.5.2</span> Inspecting AMDirT viewer Output</a></li>
+  <li><a href="#amdirt-convert" id="toc-amdirt-convert" class="nav-link" data-scroll-target="#amdirt-convert"><span class="header-section-number">16.5.3</span> AMDirT convert</a></li>
   </ul></li>
-  <li><a href="#inspecting-amdirt-viewer-output" id="toc-inspecting-amdirt-viewer-output" class="nav-link" data-scroll-target="#inspecting-amdirt-viewer-output"><span class="header-section-number">16.6</span> Inspecting AMDirT viewer Output</a></li>
-  <li><a href="#git-practise" id="toc-git-practise" class="nav-link" data-scroll-target="#git-practise"><span class="header-section-number">16.7</span> Git Practise</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">16.8</span> Summary</a></li>
+  <li><a href="#git-practise" id="toc-git-practise" class="nav-link" data-scroll-target="#git-practise"><span class="header-section-number">16.6</span> Git Practise</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">16.7</span> Summary</a></li>
+  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources"><span class="header-section-number">16.8</span> Resources</a></li>
   </ul>
 </nav>
     </div>
@@ -605,9 +607,8 @@ Warning
 <p>It’s important to note you are not necessarily restricted to <a href="https://curl.se/">Curl</a> for downloading the data. AMDirT aims to add support for whatever tools or pipelines requested by the community. For example, an already supported downloading tool alternative is the <a href="https://nf-co.re/fetchngs">nf-core/fetchNGS</a> pipeline. You can select these using the drop-down menus on the left hand-side.</p>
 <p>Press the AncientMetagenomeDir library, curl download, and nf-core/eager buttons to download two <code>.tsv</code> files, one <code>*.sh</code> file and one ’*bib’ file. Once this is done, you can close the tab of the web browser, and in the terminal you can press <kbd>ctrl</kbd> + <kbd>c</kbd> to shutdown the tool.</p>
 </section>
-</section>
-<section id="inspecting-amdirt-viewer-output" class="level2" data-number="16.6">
-<h2 data-number="16.6" class="anchored" data-anchor-id="inspecting-amdirt-viewer-output"><span class="header-section-number">16.6</span> Inspecting AMDirT viewer Output</h2>
+<section id="inspecting-amdirt-viewer-output" class="level3" data-number="16.5.2">
+<h3 data-number="16.5.2" class="anchored" data-anchor-id="inspecting-amdirt-viewer-output"><span class="header-section-number">16.5.2</span> Inspecting AMDirT viewer Output</h3>
 <p>Lets look at the files that AMDirT has generated for you.</p>
 <p>First you should <code>cd</code> into the directory that your web browser downloaded the files into (e.g.&nbsp;<code>cd ~/Downloads/</code>), then look inside the directory. You should see the following three files</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ls</span>
@@ -668,8 +669,24 @@ Warning
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This file can be easily loaded into most reference managers and then have all the citations quickly added to your manuscripts.</p>
 </section>
-<section id="git-practise" class="level2" data-number="16.7">
-<h2 data-number="16.7" class="anchored" data-anchor-id="git-practise"><span class="header-section-number">16.7</span> Git Practise</h2>
+<section id="amdirt-convert" class="level3" data-number="16.5.3">
+<h3 data-number="16.5.3" class="anchored" data-anchor-id="amdirt-convert"><span class="header-section-number">16.5.3</span> AMDirT convert</h3>
+<p>If you’re less of a GUI person and consider yourself a command-line wizard, you can also use the <code>AMDirT convert</code> command instead of the GUI version.</p>
+<p>In this case you must supply your own filtered AncientMetagenomeDir samples table, and use command line options to specify which files to generate.</p>
+<p>For example, lets say you used R to make the following <a href="assets/data/data-accessing-ancientmetagenomic-data/ancientsinglegenome-hostassociated_samples_Kocher2021_UnitedKingdom.tsv">filtered file</a> (basically the same Kocher et al.&nbsp;2021 samples from the UK, as filtered in the GUI part of this tutorial), you would supply this to <code>AMDirT convert</code> like so:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> AMDirT convert <span class="at">-o</span> . <span class="at">--bibliography</span> <span class="at">--librarymetadata</span> <span class="at">--curl</span> <span class="at">--eager</span> ancientsinglegenome-hostassociated_samples_Kocher2021_UnitedKingdom.tsv ancientsinglegenome-hostassociated</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>When running <code>ls</code> you should see the same resulting files as before with the GUI!</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ls</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_bibliography.bib</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_curl_download_script.sh</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_filtered_libraries.tsv</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_nf_core_eager_input_table.tsv</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ancientsinglegenome-hostassociated_samples_Kocher2021_UnitedKingdom.tsv</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this case you say where to save the output files, then use different flags to specify which scripts, bib, and configuration files you want, and finally your filtered AncientMetagenomeDir TSV file and which table it’s derived from.</p>
+</section>
+</section>
+<section id="git-practise" class="level2" data-number="16.6">
+<h2 data-number="16.6" class="anchored" data-anchor-id="git-practise"><span class="header-section-number">16.6</span> Git Practise</h2>
 <p>A critical factor of AncientMetagenomeDir is that it is community-based. The community curates all new submissions to the repository, and this all occurs with Git and GitHub.</p>
 <p>The data is hosted and maintained on GitHub - new publications are evaluated on issues, submissions created on branches, made by pull requests, and PRs reviewed by other members of the community.</p>
 <p>You can see the workflow in the image below from the AncientMetagenomeDir <a href="https://doi.org/10.1038/s41597-021-00816-y">publication</a>, and read more about the workflow on the AncientMetagenomeDir <a href="https://github.com/SPAAM-community/AncientMetagenomeDir/wiki">wiki</a></p>
@@ -725,8 +742,8 @@ Click me to reveal the correct terminology
 </div>
 </div>
 </section>
-<section id="summary" class="level2" data-number="16.8">
-<h2 data-number="16.8" class="anchored" data-anchor-id="summary"><span class="header-section-number">16.8</span> Summary</h2>
+<section id="summary" class="level2" data-number="16.7">
+<h2 data-number="16.7" class="anchored" data-anchor-id="summary"><span class="header-section-number">16.7</span> Summary</h2>
 <ul>
 <li>Reporting of metadata messy! Consider when publishing your own work!
 <ul>
@@ -737,6 +754,16 @@ Click me to reveal the correct terminology
 <ul>
 <li>Community curated!</li>
 </ul></li>
+</ul>
+</section>
+<section id="resources" class="level2" data-number="16.8">
+<h2 data-number="16.8" class="anchored" data-anchor-id="resources"><span class="header-section-number">16.8</span> Resources</h2>
+<ul>
+<li><a href="https://doi.org/10.1038/s41597-021-00816-y">AncientMetagenomeDir paper</a></li>
+<li><a href="https://github.com/SPAAM-community/AncientMetagenomeDir">AncientMetagenomeDir repository</a></li>
+<li><a href="https://www.spaam-community.org/AMDirT/">AMDirT web server</a></li>
+<li><a href="https://amdirt.readthedocs.io/">AMDirT documentation</a></li>
+<li><a href="https://github.com/SPAAM-community/AMDirT">AMDirT repository</a></li>
 </ul>
 
 
