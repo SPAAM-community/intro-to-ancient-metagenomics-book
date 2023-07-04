@@ -29,7 +29,7 @@ The data and conda environment `.yaml` file for this practical session can be do
 Change into the session directory
 
 ```bash
-cd phylogenomics/
+cd /vol/volume/phylogenomics/
 ```
 
 The data in this folder should contain an alignment (snpAlignment_session5.fasta) and a txt file with the ages of the samples that we are going to be working with in this session (`samples.ages.txt`)
@@ -50,7 +50,13 @@ In this practical session, we will be working with an alignment produced as you 
 - in this practical, we will investigate the phylogenetic position of four prehistorical _Y. pestis_ strains that we have recently discovered: KZL002, GZL002, CHC004 and VLI092
 :::
 
-We start by exploring the alignment in _MEGA_. Open the _MEGA_ desktop application and load the alignment by clicking on File -> Open A File/Session -> Select the _snpAligment_session5.fasta_.
+We start by exploring the alignment in _MEGA_. Open the _MEGA_ desktop application by typing ```mega &``` in the terminal.
+
+::: {.callout-tip}
+Adding "&" at the end of a commandline allows to run a program in the background while letting the terminal accessible. This particularly useful when starting a graphical interface from the terminal.
+:::
+
+Then, load the alignment by clicking on File -> Open A File/Session -> Select the _snpAligment_session5.fasta_ (in the working directory of the session).
 
 ![](assets/images/chapters/phylogenomics/3.png)
 
@@ -98,7 +104,7 @@ The first line is a **consensus** sequence: it indicates the nucleotide supporte
 They represent positions that are the same as the consensus
 :::
 
-Once you know this, can you already tell by looking at the alignment which sequence is the most singular (scroll down)
+Once you know this, can you already tell by looking at the alignment which sequence is the most divergent (scroll down)
 
 ::: {.callout-note title="Answer" collapse="true"}
 We can easily see that the last sequence in the alignment (Y. pseudotuberculosis) contains more disagreements to the consensus. This is normal since this is the only genome not belonging to the _Y. pestis_ species: we will use it as an outgroup
@@ -112,7 +118,9 @@ Here are the details of the calculations for a small NJ tree example with 6 taxa
 
 ![](assets/images/chapters/phylogenomics/NJ_algorithm.png)
 
-Luckily, you won't have to do this by hand since _MEGA_ allows you to build a NJ tree. For that go back to _MEGA_ and click on the _Phylogeny_ symbol and then select _Construct Neighbour Joining Tree_. In the window that would pop up, you will then chance the _Model/Method_ to _p-distance_. Then press _OK_ and a window with the calculated phylogenetic tree will pop up.
+Luckily, you won't have to do this by hand since _MEGA_ allows you to build a NJ tree. For that go back to _MEGA_ and click on the _Phylogeny_ symbol (toolbar of the main menu window) and then select _Construct Neighbour Joining Tree_. Type "Yes" when you are asked if you want to use the currenctly active date. In the window that pop up, you will then chance the _Model/Method_ to _p-distance_. Then press _OK_ and a window with the calculated phylogenetic tree will pop up.
+
+![](assets/images/chapters/phylogenomics/9.png)
 
 ::: {.callout-note title="p-distances?"}
 A NJ tree can be built from any type of distances. This includes:
@@ -124,15 +132,13 @@ A NJ tree can be built from any type of distances. This includes:
 **note:** a "substitution" is a type of mutation in which a nucleotide is replaced by another.
 :::
 
-![](assets/images/chapters/phylogenomics/9.png)
+Since the tree is not easily visualised in _MEGA_, we will export it in newick format (a standard text format for trees) and explore our tree in _FigTree_. This tool has a better interface for visually manipulating trees and allows us to interact with the phylogenetic tree.
 
-Since the tree is not easily visualised in _MEGA_, we will export it in newick format (an "standarised" format to write a tree in a computer-readable form) and explore our tree in _FigTree_. This tool has a better interface for visually manipulating trees and allows us to interact with the phylogenetic tree.
+To do that you will click on _File_, then _Export current tree (Newick)_ and click on _Branch Lengths_ to include those in the newick annotation. When you press _OK_, a new window with the tree in newick format will pop up and you will then press _File_ -> _Save_ and saved it as _NJ_tree.nwk_. You can then close the text editor and tree explorer windows (no need to save the session).
 
 ![](assets/images/chapters/phylogenomics/10.png)
 
-To do that you will click on _File_, then _Export current tree (Newick)_ and click on _Branch Lengths_ to include those in the newick annotation. When you press _OK_, a new window with the tree in newick format will pop up and you will then press _File_ -> _Save_ and saved it as _NJ_tree.nwk_ (If you are doing this for your own project, please give your files informative names).
-
-As said above, we will explore own NJ tree in _FigTree_. Open the software and then open the NJ tree by clicking on _File_ -> _Open_ and selecting the file with the NJ tree _NJ_tree.nwk_
+As said above, we will explore own NJ tree in _FigTree_. Open the software by typing ```figtree &``` in the terminal (if you use the same terminal window as the one in which you ran mega, you might have to press ```enter``` first). Then, open the NJ tree by clicking on _File_ -> _Open_ and selecting the file with the NJ tree _NJ_tree.nwk_
 
 ![](assets/images/chapters/phylogenomics/11.png)
 
@@ -194,7 +200,7 @@ One way we can make inferences from a probabilistic model is by finding the comb
 
 ![](assets/images/chapters/phylogenomics/21.png)
 
-The Maximum likelihood estimates are point estimates, i.e. single parameter values (for example, a tree), which does not allow to measure uncertainty. A classic method to measure the uncertainty in ML trees is bootstrapping, which consists in repeatedly "disturbing" the alignment by masking sites randomly and estimating a tree from each of these bootstrap alignments.
+The Maximum likelihood estimates are point estimates, i.e. single parameter values (for example, a tree), which does not allow to measure the associated uncertainty. A classic method to measure the uncertainty in ML trees is bootstrapping, which consists in repeatedly "disturbing" the alignment by masking sites randomly and estimating a tree from each of these bootstrap alignments.
 
 ![](assets/images/chapters/phylogenomics/22.png)
 
@@ -220,7 +226,7 @@ Once the analysis has been completed, you can open the tree using _Figtree_ (RAx
 
 ![](assets/images/chapters/phylogenomics/figtree_prompt.png)
 
-The tree estimated using this model is a substitution tree (branch lengths represent genetic distances in subst./site). As for the NJ tree,it is not oriented in time: this is an unrooted tree (displayed with a random root in Figtree). You can reroot the tree in _Figtree_ using _Y. pseudotuberculosis_ as an outgroup, as previously.
+The tree estimated using this model is a substitution tree (branch lengths represent genetic distances in substitutions/site). As for the NJ tree,it is not oriented in time: this is an unrooted tree (displayed with a random root in Figtree). You can reroot the tree in _Figtree_ using _Y. pseudotuberculosis_ as an outgroup, as previously.
 
 **Questions:**
 
@@ -240,8 +246,8 @@ The placement is strongly supported as indicated by a bootstrap support of 100% 
 
 You can notice that the phylogeny is difficult to visualize due to the long branch leading to _Y. pseudotuberculosis_. Having a very distant outgroup can also have deleterious effects on the estimated phylogeny (due to the so-called "long branch attraction" effect). We can construct a new phylogeny after removing the outgroup:
 
-- go back to the alignment in mega, unclick _Y.pseudotuberculosis_, and export in fasta format ("Data" -> "Export Data" -> change "Format" to "Fasta" and click "Ok"; you can save it as: "snpAlignment_without_Ypseudo.fas")
-- run raxml on this new alignment (change input to "snpAlignment_without_Ypseudo.fas" and output prefix to "without_Ypseudo" in the commandline)
+- go back to the alignment in mega, unclick _Y.pseudotuberculosis_, and export in fasta format ("Data" -> "Export Data" -> change "Format" to "Fasta" and click "Ok"; you can save it as: "snpAlignment_without_outgroup.fas")
+- run raxml on this new alignment (change input to "snpAlignment_without_outgroup.fas" and output prefix to "without_outgroup" in the commandline)
 - open the bipartition... file in figtree and reroot the tree based on the knowledge we have gained previously: place the root on the branch leading to the prehistoric Y. pestis strains (KZL002, GZL002, CHC004 and VLI092).
 
 ![](assets/images/chapters/phylogenomics/raxml_tree_woOutgroup.png)
@@ -252,19 +258,19 @@ Lastly, we will export the rooted tree from figtree: File -> Export trees -> sel
 
 #### Estimating a time-tree using Bayesian phylogenetics (_BEAST2_)
 
-Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of substitutions but instead represent the time of evolution. To do so, we will use the ages of ancient genomes (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.
+Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of substitutions but instead represent the time of evolution. To do so, we will use the dates of ancient genomes (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.
 
 ::: {.callout-note}
-A great advantage of ancient pathogen genomes is that they provide key calibration points to estimate molecular clocks and dated phylogenies. This is much more difficult to do with modern data alone.
+A great advantage of ancient pathogen genomes is that they provide key calibration points to estimate molecular clocks and dated phylogenies. This is more difficult to do with modern data alone.
 :::
 
-We will estimate a time tree from our alignment using Bayesian inference as implemented in the _BEAST2_ software. Bayesian inference is based on a probability distribution that is different from the likelihood: the posterior probability. The posterior probability is the probability of the parameters given the data. It is easier to interpret than the likelihood because it directly contains all the information about the parameters: point estimates such as the median or the mean can be directly estimated from it, but also percentile intervals which can be used to measure uncertainty.
+We will estimate a time-tree from our alignment using Bayesian inference as implemented in the _BEAST2_ software. Bayesian inference is based on a probability distribution that is different from the likelihood: the posterior probability. The posterior probability is the probability of the parameters given the data. It is easier to interpret than the likelihood because it directly contains all the information about the parameters: point estimates such as the median or the mean can be directly estimated from it, but also percentile intervals which can be used to measure uncertainty.
 
 ![](assets/images/chapters/phylogenomics/23.png)
 
-The Bayes theorem tells us that is proportional to the product of the likelihood and the "prior" probability of the data:
+The Bayes theorem tells us that the posterior probability is proportional to the product of the likelihood and the "prior" probability of the parameters:
 
-![](assets/images/chapters/phylogenomics/equation.png)
+![](assets/images/chapters/phylogenomics/bayes_theorem.png)
 
 Therefore, for Bayesian inference, we need to complement our probabilistic model with prior distributions for all the parameters. Because we want to estimate a time tree, we also add another parameter: the molecular clock (average substitution rate in time units).
 
@@ -284,9 +290,9 @@ The different components of the _BEAST2_ analysis can be set up in the program _
 
 ![](assets/images/chapters/phylogenomics/26.png)
 
-Open BEAUTi and set up an analysis as followed:
+Open BEAUTi by typing ```beauti &``` in the terminal, and set up an analysis as followed:
 
-- load the alignment without Y. pseudotuberculosis in the "Partitions" tab ("File" -> "Import alignment"; select "nucleotide")
+- load the alignment without outgroup in the "Partitions" tab ("File" -> "Import alignment"; select "nucleotide")
 
 ![](assets/images/chapters/phylogenomics/beauti_import_data.png)
 
@@ -310,7 +316,7 @@ Open BEAUTi and set up an analysis as followed:
 ![](assets/images/chapters/phylogenomics/beauti_clock_model.png)
 
 - choose the prior distribution of parameters in the "Priors" tab:
-    - use a Bayesian Skyline Coalescent tree prior
+    - use a Coalescent Bayesian Skyline tree prior
     - change the mean clock prior to a uniform distribution between 1E-6 and 1E-3 subst/site/year
     - leave everything else to default
 
@@ -318,7 +324,7 @@ Open BEAUTi and set up an analysis as followed:
 
 - set up the MCMC in the "MCMC" tab:
     - use a chain length of 300M
-    - sample the monodimensional parameters and trees every 10,000 iterations ("tracelog/treelog" -> "log every") 
+    - sample the monodimensional parameters and trees every 10,000 iterations (unfold "tracelog" and "treelog" menus and change "log every" to 10,000) 
 
 ![](assets/images/chapters/phylogenomics/beauti_MCMC.png)
 
@@ -331,8 +337,9 @@ beast beast_analysis_Y_pestis.xml
 ```
 
 Once the analysis is running two files should have been created and are continuously updated:
- - the "snpAlignment_without_Ypseudo.log" file which contains the values sampled by the MCMC for various monodimensional parameters such as the clock rate, as well as other values that are a logged along the MCMC such as the posterior probability and the likelihood.
- - the "snpAlignment_without_Ypseudo.trees" file which contains the MCMC trees sampled by the MCMC
+
+ - the "snpAlignment_without_outgroup.log" file which contains the values sampled by the MCMC for various monodimensional parameters such as the clock rate, as well as other values that are a logged along the MCMC such as the posterior probability and the likelihood.
+ - the "snpAlignment_without_outgroup.trees" file which contains the MCMC trees sampled by the MCMC
 
 While the analysis is running, you can start reading the next section
 
@@ -352,7 +359,7 @@ The first thing that one needs to assess is wether the MCMC has passed the so ca
 
 ![](assets/images/chapters/phylogenomics/32.png)
 
-Once the burn-in phase is passed, one can look at the trace plots to assess if the parameters are sampled correctly and long enough. In most cases, when this is the case, the trace should be quite dense and oscillating around a central value (nice trace plots should look like "hairy caterpillars"). In the figure below, the trace on the left doesn't look good, the one on the right does:
+Once the burn-in phase is passed, one can look at the trace plots to assess if the parameters have been sampled correctly and long enough. Usually, when this is the case, the trace should be quite dense and oscillating around a central value (nice trace plots should look like "hairy caterpillars"). In the figure below, the trace on the left doesn't look good, the one on the right does:
 
 ![](assets/images/chapters/phylogenomics/33.png)
 
@@ -364,17 +371,19 @@ Once the burn-in phase is passed, one can look at the trace plots to assess if t
 
 ![](assets/images/chapters/phylogenomics/tracer_estimates.png)
 
-Let's now load the "snpAlignment_without_Ypseudo.log" file into trace (you can slide the file into the top-left panel). Note that one can load a _BEAST2_ log file into tracer even if the analysis is still running. This allows to assess if the MCMC is running correctly or has run long enough before it's completed.
+Let's now load the "snpAlignment_without_outgroup.log" file into _Tracer_. Open a new terminal tab, activate the conda environemnt with ```conda activate phylogenomics```, open tracer with ```tracer &```, and then "File" -> "Import trace file" -> select "snpAlignment_without_outgroup.log". Note that one can load a _BEAST2_ log file into tracer even if the analysis is still running. This allows to assess if the MCMC is running correctly or has run long enough before it's completed.
 
 **Question:**
 
 Has the MCMC run long enough?
 
 ::: {.callout-note title="Answer" collapse="true"}
-You have probably let you analysis run for 10-20 mins before looking at the log file, and this is definitely not sufficient: the burnin phase has recently been passed, the trace plots do not look very dense and ESS values are low. It would probably take a few hours for the analysis to complete. Luckily we have run the analysis in advance and saved the log files for you "beast_analysis_Y_pestis_complete.log" and "beast_analysis_Y_pestis_complete.trees"
+You have probably let you analysis run for 10-20 mins before looking at the log file, and this is definitely not sufficient: the burnin phase has recently been passed, the trace plots do not look very dense and ESS values are low. It would probably take a few hours for the analysis to complete. Luckily we have run the analysis in advance and saved the log files for you in the "intermediateFiles" folder: "snpAlignment_without_outgroup.log" and "snpAlignment_without_outgroup.trees"
+
+![](assets/images/chapters/phylogenomics/tracer_unsufficient_sampling.png)
 :::
 
-You can now load the "beast_analysis_Y_pestis_complete.log" file into _Tracer_.
+You can now load the "intermediateFiles/snpAlignment_without_outgroup.log" file into _Tracer_.
 
 **Questions:**
 
@@ -388,7 +397,7 @@ Yes! The trace plots look good and all ESSs are > 200
 What is your mean estimate of the clock rate (ucld mean)?
 
 ::: {.callout-note title="Answer" collapse="true"}
-~7.10<sup>-6</sup> substitution/site/year. Note however that this is largely biased since we used a SNP alignment containing only variable positions. In order to get an unbiased estimate of the substitution rate, we should have used the full alignment or account for the number of constant sites by using a "filtered" alignment (see [here](https://www.beast2.org/2019/07/18/ascertainment-correction.html)). In general, this is good practice since not accounting for conserved positions in the alignment can sometimes affect the tree as well (although this should usually be minor, which is why we didn't bother to do this here).
+~7.10<sup>-6</sup> substitution/site/year. Note, however, that this estimate is largely biased since we used a SNP alignment containing only variable positions. In order to get an unbiased estimate of the substitution rate, we should have used the full alignment or account for the number of constant sites by using a "filtered" alignment (see [here](https://www.beast2.org/2019/07/18/ascertainment-correction.html)). In general, this is good practice since not accounting for conserved positions in the alignment can sometimes affect the tree as well (although this should usually be minor, which is why we didn't bother to do this here).
 
 ![](assets/images/chapters/phylogenomics/beast_results_ucldMean.png)
 :::
@@ -398,7 +407,7 @@ What is your mean estimate of the clock rate (ucld mean)?
 Since we are working in a Bayesian framework, we do not obtain a single phylogenetic tree as with Maximum likelihood, but a large set of trees which should be representative of the posterior distribution. In contrast with monodimensional parameters, a tree distribution cannot be easily summarized with mean or median estimates. Instead, we need to use specific tree-summarizing techniques. One of the most popular is the maximum clade credibility (MCC) tree, which works as follow:
 
 - 1. For any node in any of the sampled trees, compute a **posterior support**: the proportion of trees in the sample which contain the node
-- 2. Select the MCC tree: this is the tree which the product of node posterior supports is the highest
+- 2. Select the MCC tree: this is the tree in which the product of node posterior supports is the highest
 - 3. Calculate node/branch statistics on the MCC tree: typically, the mean/median estimates and HPD interval of node ages are calculated from the full tree sample and annotated on the MCC tree
 
 ![](assets/images/chapters/phylogenomics/MCC_tree_concept.png)
@@ -406,7 +415,7 @@ Since we are working in a Bayesian framework, we do not obtain a single phylogen
 Let's generate an MCC tree from our tree sample. We can do this using the _TreeAnnotator_ software, which has both a commnadline and graphical interface. Let's use the commandline here and run the following (using a burn-in of 10%):
 
 ```bash
- treeannotator -burnin 10 beast_analysis_Y_pestis_complete.trees beast_analysis_Y_pestis_complete.MCC.tre
+ treeannotator -burnin 10 intermediateFiles/snpAlignment_without_outgroup.trees snpAlignment_without_outgroup.MCC.tree
 ```
 
 Once this is completed, we can open the MCC tree with figtree. Let's then add a few elements to the plot:
@@ -415,7 +424,7 @@ Once this is completed, we can open the MCC tree with figtree. Let's then add a 
 - 2. Tick the "Node Labels" box, unfold the corresponding menu, and select "Display: posterior". The posterior support of each node is now displayed. Note that the support value is a proportion (1=100%)
 - 3. Tick the "Node Bars" box, unfold the corresponding menu, and select "Display: height_95%_HPD". The 95% HPD intervals of node ages are now displayed.
 
-![](assets/images/chapters/phylogenomics/beast_results_MCC_tree.png.png)
+![](assets/images/chapters/phylogenomics/beast_results_MCC_tree.png)
 
 **Questions:**
 
@@ -428,16 +437,16 @@ Yes! The root is placed between our prehistoric strains and the rest of Y. pesti
 What is your estimate for the age of the most recent common ancestor of all Y. pestis strains?
 
 ::: {.callout-note title="Answer" collapse="true"}
-~5500 years BP (HPD 95%: ~7500-4500 years BP)
+~5800 years BP (HPD 95%: ~8000-4500 years BP)
 :::
 
 #### Bonus: Temporal signal assessment
 
 It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree (i.e. we should have done this before the actual _BEAST2_ analysis). A classic way to assess the temporal signal of a dataset is the root-to-tip regression. The rationale of the root-to-tip regression is to verify that the oldest a sequence is, the closer it should be to the root in a (rooted) substitution tree because there was less time for substitution to accumulate. In other words, their should be a correlation between sample age and distance to the root, which we can assess using a linear regression (root-to-tip regression). This can be done using the program _TempEst_:
 
-1. open tempest and load the rooted ML tree that we produced previously (you should have saved it as "ML_tree_rooted.tre")
+1. open _TempEst_ by typing ```tempest &``` and load the rooted ML tree that we produced previously (you should have saved it as "ML_tree_rooted.tre")
 2. click on "Import Dates" in the "Sample Dates" tab, select the sample_age.txt file and click "OK"
-3. still in the "Sample Dates" tab, change "Since some time in the past" to "Before present" (one might need to extand the TempEst window to see the pull down menu)
+3. still in the "Sample Dates" tab, change "Since some time in the past" to "Before present" (one might need to extand the _TempEst_ window to see the pull down menu)
 4. look at the "Root-to-tip tab": is there a positive correlation between time and root-to-tip divergence as expected under the molecular clock hypothesis?
 
 ![](assets/images/chapters/phylogenomics/Tempest.png)
