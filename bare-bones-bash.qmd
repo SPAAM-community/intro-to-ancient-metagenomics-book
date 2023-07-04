@@ -1,6 +1,7 @@
 ---
 title: Introduction to the Command Line
 author: Thiseas C. Lamnidis, Aida Andrades Valtueña
+# monofont: Consolas ## Can be used to change font in code blocks
 ---
 
 <!-- TODO --> 
@@ -16,32 +17,707 @@ conda activate bare-bones-bash
 
 ## Lecture
 
-### Session 1
+This is the Brief version of a more Broad two-part session that we gave in 2022,
+which can be found [here](https://spaam-community.github.io/wss-summer-school/#/2022/day-1?id=practical-1b-bare-bones-bash-1).
+The teaching material for the Boundless Bare Bones Bash (Basic + Boosted) can be
+found in the [Bare Bones Bash website](https://barebonesbash.github.io/#/).
 
-For a full screen version on the presentation and press <kbd class="keybd">f</kbd> on your keyboard.
+![](assets/images/chapters/bare-bones-bash/BareBonesBash_Icon.png){width=15% fig-align="center"}
 
-[Intro to Bash](https://spaam-community.github.io/wss-summer-school/assets/slides/2022/1bc-barebonesbash/bbb1/session1.html ":include :type=iframe width=100% height=600px")
+The original Bare Bones Bash material was created by Aida Andrades Valtueña,
+James Fellows Yates, and Thiseas C. Lamnidis.
 
-PDF version of these slides can be downloaded from [here](https://raw.githubusercontent.com/SPAAM-community/wss-summer-school/main/docs/assets/slides/2022/1bc-barebonesbash/SPAAM%20Summer%20School%202022%20-%201B%20-%20BareBonesBash%201.pdf).
+<!-- Needed the HTML code to align all three images centrally on the same line for some reason -->
+<p align="center"> ![Aida](assets/images/chapters/bare-bones-bash/bbb_aida.png){width=15%}  ![James](assets/images/chapters/bare-bones-bash/bbb_james.png){width=15%}  ![Thiseas](assets/images/chapters/bare-bones-bash/bbb_thiseas.png){width=15%}</p>
 
-The teaching material for the FULL BareBonesBash course can be found on the [BareBonesBash
-website](https://barebonesbash.github.io/)
+The author portraits were designed by Zandra Fagernäs.
 
-<iframe width="100%" height="400px" src="https://www.youtube.com/embed/G-5mFVLHyno" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+![](https://i.creativecommons.org/l/by-sa/4.0/88x31.png){fig-align="center"}
 
-### Session 2
+All material is provided under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/).
 
-For a full screen version click on the presentation and press <kbd class="keybd">f</kbd> on your keyboard.
-
-[Intro to Bash](https://spaam-community.github.io/wss-summer-school/assets/slides/2022/1bc-barebonesbash/bbb2/session2.html ":include :type=iframe width=100% height=600px")
-
-PDF version of these slides can be downloaded from [here](https://raw.githubusercontent.com/SPAAM-community/wss-summer-school/main/docs/assets/slides/2022/1bc-barebonesbash/SPAAM%20Summer%20School%202022%20-%201C%20-%20BareBonesBash%202.pdf).
-
-The teaching material for the FULL BareBonesBash course can be found on the [BareBonesBash
-website](https://barebonesbash.github.io/)
-
-<iframe width="100%" height="400px" src="https://www.youtube.com/embed/tskW3Ydu4X4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+### tl;dr
+<details>
+Below is a quick reference guide to the commands discussed in this tutorial.
+To understand actually what each command does, carry on reading below!
+For a complete run of all these commands AND MORE(!!),
+consider following the full Bare Bones Bash walkthroughs [here](https://barebonesbash.github.io/#/).
 
 
-<!-- TODO --> 
-<!-- Port over condensed walkthrough from BBB website -->
+| command           | description                                                               | example                                                                                       | common flags or arguments                                                                     |
+|-------------------|---------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| pwd               | print working directory                                                   | pwd                                                                                           |                                                                                               |
+| ls                | list contents of directory                                                | ls                                                                                            | -l (long info)                                                                                |
+| mkdir             | make directory                                                            | mkdir pen                                                                                     |                                                                                               |
+| cd                | change directory                                                          | cd ~/pen                                                                                      | ~ (home dir), - (previous dir)                                                                |
+| ssh               | log into a remote server                                                  | ssh <pen>@<apple>.com                                                                         | -Y (allows graphical windows)                                                                 |
+| mv                | move something to a new location (& rename if needed)                     | mv pen pineapple                                                                              |                                                                                               |
+| rmdir             | remove a directory                                                        | rmdir pineapple                                                                               |                                                                                               |
+| wget              | download something from an URL                                            | wget [www.pineapple.com/pen.txt](https://media.giphy.com/media/10fVn57KfQ8Wkw/giphy.gif)      | -i (use input file)                                                                           |
+| cat               | print contents of a file to screen                                        | cat pen.txt                                                                                   |                                                                                               |
+| gzip              | a tool for dealing with gzip files                                        | gzip pen.txt                                                                                  | -l (show info)                                                                                |
+| zcat              | print contents of a gzipped file to screen                                | zcat pen.txt.gz                                                                               |                                                                                               |
+| whatis            | get a short description of a program                                      | whatis zcat                                                                                   |                                                                                               |
+| man               | print the man(ual) page of a command                                      | man zcat                                                                                      |                                                                                               |
+| head              | print first X number of lines of a file to screen                         | head -n 20 pineapple.txt                                                                      | -n (number of lines to show)                                                                  |
+| &#124;            | pipe, a way to pass output of one command to another                      | cat pineapple.txt &#124; head                                                                 |                                                                                               |
+| tail              | print last X number of lines of a file to screen                          | tail -n 20 pineapple.txt                                                                      | -n (number of lines to show)                                                                  |
+| less              | print file to screen, but allow scrolling                                 | less pineapple.txt                                                                            |                                                                                               |
+| wc                | tool to count words, lines or bytes of a files                            | wc -l pineapple.txt                                                                           | -l (number of lines not words)                                                                |
+| grep              | print to screen lines in a file matching a pattern                        | grep pineapple.txt &#124; grep pen                                                            |                                                                                               |
+| ln                | make a (sym)link between a file and a new location                        | ln -s pineapple.txt pineapple_pen.txt                                                         | -s (make _symbolic_ link)                                                                     |
+| nano              | user-friendly terminal-based text editor                                  | nano pineapple_pen.txt                                                                        |                                                                                               |
+| rm                | more general 'remove' command, including files                            | rm pineapple_pen.txt                                                                          | -r (to remove directories)                                                                    |
+| \$VAR              | Dollar sign + text indicates the name of a variable                       | \$PPAP                                                                                       |                                                                                               |
+| echo              | prints string to screen                                                   | echo "\$PPAP"                                                                                 |                                                                                               |
+| for               | begins 'for' loop, requires 'in', 'do' and 'done'                         | for p in apple pineapple; do <br> echo "\$p\$PPAP"; done <br> <i>applePen pineapplePen</i>    |                                                                                               |
+| find              | search for files or directories                                           | find -name 'pen'                                                                              | -type f (search only for files)<br> -name '*JPG' (search for file names matching the pattern) |
+| "\$var"            | use double quotes to use contents of variable                             | pen=apple && echo "\$pen"                                                                    |                                                                                               |
+|<<br>><br>2>       | redirects the standard input/output/error stream respectively into a file | cat <file.txt >file_copy.txt 2>cat_file.err                                                   |                                                                                               |
+</details>
+### Introduction
+
+The aim of this tutorial is to make you familiar with using bash everyday... 
+for the rest of your life! More specifically, we want 
+to do this in the context of bioinformatics. We will start with how to navigate 
+around a filesystem in the terminal, download sequencing files, and then to
+manipulate these. Within these sections we will also show you simple tips and
+tricks to make your life generally easier.
+
+This tutorial is designed so you follow along on any machine with a UNIX
+terminal (no warranty provided).
+
+### The 5 commandments of Bare Bones Bash
+
+The Bare Bones Bash philosophy of learning to code follows five simple commandments:
+
+|                                                  |                                                                |
+|--------------------------------------------------|----------------------------------------------------------------|
+| **1)** Be lazy!                                  | Desire for shortcuts motivates you to explore more!            |
+| **2)** ~~Google~~ The Hive-Mind knows everything!| 99% of the time, someone else has already had the same issue.  |
+| **3)** Document everything you do!               | Make future you happy!                                         |
+| **4)** There will ALWAYS be a typo!              | Don't get disheartened, even best programmers make mistakes!   |
+| **5)** Don't be afraid of you freedom!           | Explore! Try out things!                                       |
+
+::: {.callout-tip}
+## Pro Tip
+Remember: No one writes code that works first time, or without looking at StackOverflow sooner or later.
+:::
+
+### What is a terminal?
+
+A terminal is simply a fancy window that allows you to access the command-line
+interface of a computer or server.
+
+The command-line itself is how you can work on the computer with just text.
+
+`bash` (**b**ourne **a**gain **sh**ell) is one of the most popular languages
+used in the
+terminal.
+
+### Understanding the command prompt
+
+![An example command prompt](assets/images/chapters/bare-bones-bash/Command_line_screenshot.png){width=100%}
+
+After opening the terminal what you will normally see is a blank screen with a
+'command prompt', like the one shown above. This typically consists of your
+username, the device name, a colon, a directory path and ends with a dollar
+symbol. Like so:
+
+```bash
+<username>@<device_name>:~$
+```
+
+The commmand prompt is **never** involved in any command, it is just there
+to ensure you know who and where you are. When copying a 
+command you should **NOT** copy the command prompt.
+
+Often times, when looking for commands online, the commands ran will pe prefaced
+with a `$`. This is a stand-in for the command prompt. When adding multi-line
+commands, it is also common to preface the additional lines with a `>`. When
+copying such commands it is therefore important to remove these characters from
+the start of each line (if present).
+
+Finally, in this tutorial, the symbols`<>` are used to show things that
+will/should be replaced by another value. For example, in Thiseas' command
+prompt `<username>` will be replaced by `lamnidis`, as that is his username.
+
+Now back to your prompt: It tells you that you are in the directory `~`.
+The directory `~`, stands for your **home** directory. Note that this shorthand 
+will point to a different place, depending on the machine and the user.
+
+If you want to know what the shorthand means, (here comes your first command!)
+you can type in `pwd`, which stands for "**p**rint **w**orking **d**irectory". 
+Your "working directory" is whichever directory you are currently in. 
+
+```bash
+pwd
+```
+
+```
+/home/ubuntu
+```
+
+This prints the entire "filepath" of the directory i.e. the route from the
+"root" (the deepest directory of the machine), through every subdirectory,
+leading to your particular working directory. 
+
+### Absolute vs Relavtive paths
+
+Filepaths (a.k.a. "paths"), come in two flavours. Let's talk a bit about them!
+
+* An **absolute** path will start with the deepest directory in the machine
+  shown as a `/`. Paths starting with `~` are also absolute paths, since `~` 
+  translates to an absolute path of your specific home directory. That is the 
+  directory path you see in the output of the `pwd` command you just ran.
+* Alternatively a **relative** path always begins from your working directory
+  (i.e.   your current directory). Often this type of path will begin with one
+  (`./`) or two (`../`) dots followed by a forward slash, **but not always**. In
+  the syntax of relative pathways `.` means "the current directory" and `..` 
+  means "the parent directory" (or the 'one above'). 
+
+#### A real life analogy for paths
+
+You have just arrived to Leipzig for a summer school that is taking place at
+MPI-EVA. After some questionable navigation, you find yourself at the Bayerische
+Bahnhof. Tired and disheartened, you decide to ask for help.
+
+You see a friendly-looking metalhead, and decide to ask them for directions!
+
+![A friendly-looking metalhead.](assets/images/chapters/bare-bones-bash/bbb_james.png){width=20% fig-align="center"}
+
+> Happy to help, but I only give directions in **absolute paths!**  
+From Leipzig Main Station, you should take Querstraße southward.  
+Continue straight and take Nürnberger Str. southward until you reach Str. des
+18 Oktober.  
+Finally take Str. des 18 Oktober. moving southeast until you reach MPI-EVA!
+
+:::{.callout-tip}
+## Absolute paths
+The directions above are equivalent to an absolute path, because they will
+ALWAYS take you to MPI-EVA, but you can only apply these directions **if** you
+start from Leipzig Main Station!
+
+Examples of absolute paths:  
+`/home/ubuntu`  
+`/Leipzig_Main_Station/Querstraße/Nürnberger_Str/Str_18_Oktober/Deutscher_Platz/MPI-EVA`  
+:::
+
+Not sure how to get back to Leipzig Main Station to apply those directions, you decide to
+ask someone else for directions...
+
+Lucky for you, a friendly looking local is passing by!
+
+![A friendly-looking local.](assets/images/chapters/bare-bones-bash/bbb_aida.png){width=20% fig-align="center"}
+
+> You're currently on Str. des 18 Oktober. Walk straight that way, past the tram tracks, and you will find Deutscher Platz. You will see MPI-EVA to your right!
+
+:::{.callout-tip}
+## Relative paths
+These directions are equivalent to a relative path! They are easy to follow, but only work when you happen to start at the position you were in when you first got the directions!
+
+Examples of relative paths:  
+`./my_directory/my_file.txt`  
+`../Str_18_Oktober/Deutscher_Platz/MPI-EVA`
+:::
+
+### Basic commands
+We will now explore some basic commands that you will use to explore folders and interact with files:
+
+- **l**i**s**t directory contents:
+```bash
+ls
+```
+Output should look like:
+```
+Desktop    Downloads  Pictures  Templates  bin    snap
+Documents  Music      Public    Videos     cache  thinclient_drives
+```
+
+::: {.callout-note}
+We will use this format to show you commands and their corresponding output in the terminal (if any) for the rest of this chapter.
+:::
+
+- **m**a**k**e a **dir**ectory:
+```bash
+mkdir barebonesbash
+```
+
+- **m**o**v**e (or rename) files and directories
+```bash
+mv barebonesbash BareBonesBash
+```
+
+- **c**hange **d**irectories
+```bash
+cd BareBonesBash
+```
+
+- Download (**w**ww **get**) a remote file to your computer
+```bash
+wget git.io/Boosted-BBB-meta
+```
+
+- **c**o**p**y a file or directory to a new location
+```bash
+cp Boosted-BBB-meta Boosted-BBB-meta.tsv
+```
+
+- **r**e**m**ove (delete) files
+```bash
+rm Boosted-BBB-meta
+```
+
+- Con**cat**enate file contents to screen
+```bash
+cat Boosted-BBB-meta.tsv
+```
+
+- See only the **first**/**last** 10 lines of a file
+```bash
+head -n 10 Boosted-BBB-meta.tsv
+```
+```bash
+tail -n 10 Boosted-BBB-meta.tsv
+```
+::: {.callout-note}
+This is because the start of a cat is its head and the end of the cat is its tail (The great humor of computer scientists)
+:::
+
+
+- Look at the contents of a file interactively (**less** than the complete file, press `q` to quit)
+```bash
+less Boosted-BBB-meta.tsv
+```
+
+- **w**ord **c**ount the number of **l**ines (-l) in a file
+```bash
+wc -l Boosted-BBB-meta.tsv
+```
+```
+15 Boosted-BBB-meta.tsv
+```
+
+### Datastreams, piping, and redirects
+
+Each of the commands you learned above is a small program with a very
+specialised functionality. Programs come in many forms and can be written
+in various programming languages, but most of them share some features.
+Specifically, most programs take some data in and spit some data out!
+Here's how that works, conceptually:
+
+#### Datastreams
+
+Computer programs can take in and spit out data from different _streams_. By
+default there are 3 such data streams.
+
+- `stdin` : the **st**an**d**ard **in**put
+- `stdout`: the **st**an**d**ard **out**put
+- `stderr`: the **st**an**d**ard **err**or
+
+![](assets/images/chapters/bare-bones-bash/Datastreams.png){width=80% fig-align="center"}
+
+:::{.callout-tip}
+## Pro Tip
+Each programme also has an 'exit code', which can tell you if execution
+completed with/without errors. You will rarely see these in the wild.
+:::
+
+Typically, the `stdin` is where the input data comes in.  
+The `stdout` is the actual output of the command. In some cases this gets
+printed to the screen, but most often this is the information that needs to be
+saved in an output file.  
+The `stderr` is the datastream where errors and warnings go. This gets printed
+to your terminal to let you know when something is not going according to plan!
+
+![This program takes no input, and prints one line to the stdout and one line to the stderr.](assets/images/chapters/bare-bones-bash/Datastream_showcase.png){width=100%}
+
+#### Piping
+
+A "pipe" (`|`) is a really useful feature of `bash` that lets you chain together
+multiple commands! When two commands are chained together with a pipe, the
+`stdout` of the first command becomes the `stdin` of the second!
+The `stderr` is still printed on your screen, so you can always know when things
+fail.
+
+![](assets/images/chapters/bare-bones-bash/Piping.png){width=80% fig-align="center"}
+
+Example:
+```bash
+head -n 10 Boosted-BBB-meta.tsv | tail -n1
+```
+
+```
+netsukeJapan    C       Artwork
+```
+
+The above command will only show the 10th line of `Boosted-BBB-meta.tsv`.
+The way it works is that `head` will take the first 10 lines of the file. These
+lines are then passed on to `tail` which will keep only the last of those lines.
+
+#### Redirects
+
+Much like streams of water in the real world, datastreams can be redirected.
+
+This way you can save the stdout of a program (or even the stderr) into a file for later!
+
+
+- `stdin` can be redirected with `<`.
+    - An arrow pointing TO your program name!
+- `stdout` can be redirected with `>`.
+    - An arrow pointing AWAY your program name!
+- `stderr` can be redirected with `2>`.
+    - Because it is the secondary output stream.
+
+:::{.callout-tip}
+## Pro Tip
+It is also possible to combine streams, but we won't get into that here.
+:::
+
+Example:
+```bash
+head -n 10 Boosted-BBB-meta.tsv | tail -n1 > line10.txt
+```
+
+This will create a new file called `line10.txt` within your work directory.
+Using `cat` on this file will BLOW YOUR MIND - (GONE WRONG)!
+
+> (Don't forget to like and subscribe!)
+
+```bash
+cat line10.txt
+```
+
+```
+netsukeJapan    C       Artwork
+```
+
+![Here you can see an example of redirecting the output of the `datastreams_demo.sh` program from before. Redirecting the stdout with `>` only prints the stderr to the screen, and saves the stdout into `output.txt`. Additionally, we can redirect the stderr with `2>` into `runtime.log`, and then nothing is printed onto the screen.](assets/images/chapters/bare-bones-bash/Redirects_showcase.png){width=100%}
+
+### Helptext
+
+You don't always have to google for documentation! Many programs come with in-built helptext,
+or access to online manuals right from your terminal!
+
+- You can get a __one sentence summary__ of what a tool does with `whatis`
+
+```bash
+whatis cat
+```
+
+```
+cat(1)  - concatenate files and print on the standard 
+          output
+```
+
+- While `man` gives you __access to online manuals__ for each tool (exit with `q`)
+```bash
+man cat
+```
+
+### Variables
+
+Variables are a central concept of all programming. In short, a variable
+is a named container whose contents you can expand at will or change.
+
+You can assign variables (tell the computer what do you want it to contain)
+with `=` and pull their contents with `$`
+
+The easiest way to see the contents of a varable is using `echo`!
+```bash
+echo "This is my home directory: $HOME"
+```
+```
+This is my home directory: /home/ubuntu
+```
+
+`$HOME` is a varible of the type called **environment variables**, which are set the moment you open your terminal or log into a server, they ensure the system works as intended and should not be change unless you are **very** sure of why. 
+
+:::{.callout-warning}
+# Environment Variables
+Environment variables in bash are typically named in all capital letters. It is a good
+idea to avoid using only capital letters for your variable names, so you avoid
+accidentally overwriting any environment variables.
+:::
+
+But as mentioned, you can store in a variable anything you want, so let's see a few examples:
+
+First let's try to store a number:
+
+```bash
+GreekFood=4            #Here, 'GreekFood' is a number.
+echo "Greek food is $GreekFood people who want to know what heaven tastes like."
+```
+```
+Greek food is 4 people who want to know what heaven tastes like.
+```
+::: {.callout-note}
+The `#` is used to add comments to your code. Comments are annotations that you write in your code to understand what it is doing but that the computer does not run. Very useful for when your future self or another person looks at your code
+:::
+
+
+Now let's store a word ("string"):
+
+```bash
+GreekFood=delicious   #We overwrite that number with a word (i.e. a 'string').
+echo "Everyone says that Greek food is $GreekFood."
+```
+
+```
+Everyone says that Greek food is delicious.
+```
+
+You can also store more than a single word (that is still a "string"):
+
+```bash
+GreekFood="Greek wine" #We can overwrite 'GreekFood' again, 
+## but when there is a space in our string, we need quotations.
+echo "The only thing better than Greek food is $GreekFood!"
+```
+
+```
+The only thing better than Greek food is Greek wine!
+```
+
+Since variables can be reset to whatever you want, you can also store a number again:
+
+```bash
+GreekFood=7 #And, of course, we can overwrite with a number again too.
+echo "I have been to Greece $GreekFood times already this year, for the food and wine!"
+```
+
+```
+I have been to Greece 7 times already this year, for the food and wine!
+```
+
+::: {.callout-warning}
+# Overwriting variables
+In this examples you have seen how the same variable has been overwritten, this means that you can only access the last content that you stored in the variable. All the previous contents that a variable may have had are innaccessible as soon as the same variable is given a new value.
+:::
+
+### Quotes matter!
+In bash, there is a big difference between a single quote `'` and a double quote `"`!
+
+ - The contents of single quotes, are passed on as they are.
+ - Inside double quotes, contents are _interpreted_!
+
+In some cases the difference doesn't matter:
+
+```bash
+echo "I like Greek Food"
+echo 'I like Greek Food'
+```
+```
+I like Greek Food
+I like Greek Food
+```
+
+In other cases it makes all the difference:
+
+```bash
+Arr="Banana"
+echo 'Pirates say $Arr'
+echo "Minions say $Arr"
+```
+```
+Pirates say $Arr
+Minions say Banana
+```
+
+**Why does it make a difference in the second example?** 
+
+This is because in the second example we are using a variable. We have assigned `Banana` to the variable `$Arr`. As mentioned above, when single (`'`) quotes are used the computer just prints what it receives without caring that `$Arr` is a variable.
+
+ In the `echo` with the double (`"`) quotes we are telling the computer to extract the value from the variable `$Arr` and that is why we see the store value (`Banana`) in the printed output in the terminal.
+
+### Find
+
+You can also ask your computer where you have put your files, in case you forgot. To do this you can use `find`! 
+The `find` command has the following syntax:
+
+<!-- This is formatted differently since it is not a runnable command, and hence users don't need to copy paste it -->
+`find /your/folder/ -type f -name 'your_file.txt'`
+
+- **First** part of the `find` command: *the place to look from*
+  - e.g. `.` to indicate 'here'
+  - Could also use `~/`
+  - Could use absolute path e.g. `/home/james/`
+
+- **Second** part of the `find` command: *what type of things to look for?*
+  - Use `-type` to define the filetype:
+     - **f**ile
+     - **d**irectory
+
+- **Third** part of the `find` command: *what to look in?*
+  - Use `-name` to say 'look in **names** of things'
+
+- **Finally** after `-name` we give the the 'strings' to search for
+  - Use wildcards (`*`) for maximum laziness!
+
+
+Now let's put into practise what you have learnt about `find`. 
+
+For that you will download a messy folder from a collaborator, remember to check you are in the BareBonesBash folder!:
+
+```bash
+wget git.io/Boosted-BBB-images -O Boosted-BBB.zip
+```
+
+We realise that this is a compressed file, and more precisely is a zip file (extension `.zip`). In order to access to its content we will need to "unzip" it first. For that we can use the command **unzip**: 
+
+```bash
+unzip Boosted-BBB.zip
+```
+We know that our collaborator has shared with us some pictures from animals that we need to use for our research, and according to your collaborator they are marked with `JPG`. We first try to check the contents of the directory to find them quickly.
+
+```bash
+ls Boosted-BBB
+```
+```
+And        Digging       Friday     Leave      Only     Where    Young
+Anybody    Everything    Getting    Looking    Ooh      With     Youre
+Dancing    Feel          Having     Night      Watch    You
+```
+
+Wow, what a mess! How would you retrieve all the files?
+Thanks to your wonderful teachers you have learnt how to use find and can simply run:
+
+```bash
+find Boosted-BBB -type f -name '*JPG*' 
+```
+```
+Boosted-BBB/Having/the/time/of/your/life/bubobubo.JPG.MP3.TXT
+Boosted-BBB/With/a/bit/of/rock/music/exhibitRoyal.JPG.MP3.TXT
+Boosted-BBB/Friday/night/and/the/lights/are/low/fanta.JPG.MP3.TXT
+Boosted-BBB/Everything/is/fine/nomnom.JPG.MP3.TXT
+Boosted-BBB/Getting/in/the/swing/giacomo.JPG.MP3.TXT
+Boosted-BBB/Youre/in/the/mood/for/a/dance/snore.JPG.MP3.TXT
+Boosted-BBB/Digging/the/dancing/queen/excited.JPG.MP3.TXT
+Boosted-BBB/Anybody/could/be/that/guy/alopochenaegyptiacaArnhem.JPG.MP3.TXT
+Boosted-BBB/And/when/you/get/the/chance/stretch.JPG.MP3.TXT
+Boosted-BBB/Looking/out/for/angry.JPG.MP3.TXT
+Boosted-BBB/Feel/the/beat/from/the/tambourine/oh/yeah/netsukeJapan.JPG.MP3.TXT
+Boosted-BBB/Watch/that/scene/licorne.JPG.MP3.TXT
+Boosted-BBB/You/can/weimanarer.JPG.MP3.TXT
+Boosted-BBB/Night/is/young/and/the/musics/high/bydgoszczForest.JPG.MP3.TXT
+Boosted-BBB/Ooh/see/that/girl/pompeii.JPG.MP3.TXT
+```
+
+After `-name` we have written `'*JPG*'`, this tells to `find` to search for any file that contains `JPG` in any part of its name, indicated by the `*`. The `*` are what are known as __wildcards__. To learn more on how to use them, please refer to the more complete material for this [tutorial](https://barebonesbash.github.io/#/).  
+
+Now you have all the paths of the files that you will need!
+
+### For loops
+
+Until now we have seen how to run single commands on a file. But, what about when
+you need to **repeat** a command multiple times on a list of things, for example
+a list of files? 
+
+To repeat an action (command) for a set of things (list, e.g. files) one needs to
+employ the concept of a loop. One of the most commonly used loops, is the **for**
+loop.
+
+A **for** loop allows us to go through a list of things and perform some actions.
+Let's see an example:
+
+```bash
+Variable=Yes
+for i in Greece Spain Britain; do
+  echo "Does $i have lovely food? $Variable"
+done
+```
+
+```
+Does Greece have lovely food? Yes
+Does Spain have lovely food? Yes
+Does Britain have lovely food? Yes
+```
+
+The for loop went through the list `Greece Spain Britain` and printed a statement with each item in the list. What happens if we change the order of the list to `Britain Greece Spain`?
+
+```bash
+Variable=Yes
+for i in Britain Greece Spain; do
+  echo "Does $i have lovely food? $Variable"
+done
+```
+
+```
+Does Britain have lovely food? Yes
+Does Greece have lovely food? Yes
+Does Spain have lovely food? Yes
+```
+We see that changing the order of the list will affect the output, this is because the **for** loop will go through the list in a sequencial manner. 
+
+We can also add more elements to the list, and the **for** loop will continue until it reaches the end of the list.
+
+### How to Google like a pro
+
+One of the most important skills you develop when coding and/or using the
+command line is __how to phrase your questions__ so you can get relevant
+answers out of your search engine. 
+
+As Deep Thought put it in the Hitchhiker's Guide to the Galaxy:
+
+> Only when you know the question will you know what the answer means.
+
+Here are some quick tips to get you started:
+
+- ALWAYS include the name of the language in your query.
+  - **BAD:**  "How to cat"
+  - **GOOD:** "How to cat bash"
+
+- BROADEN your question!
+  - **BAD:** "How to set **X** to **4** in bash?"
+  - **GOOD:** "How to set a **variable** to an **integer** in bash?"
+<br>
+- When you are more familiar, use fancy programmer lingo to make google think
+you know what you are talking about.
+
+:::{.callout}
+## __All the cool hackers say:__  
+ - `string` and not `text`.  
+ - `float` and not `decimal`.
+
+**Note:** some of these terms can be language specific.
+:::
+
+<p align="center"> ![](assets/images/chapters/bare-bones-bash/How_to_cat.png){width=45%} ![](assets/images/chapters/bare-bones-bash/How_to_cat_bash.png){width=45%}</p>
+
+### (optional) Cleanup
+
+It is extremely important to ALWAYS keep your directories clean from random
+clutter. This lowers the chances you will get lost in your  directories, but
+also ensures you can stay lazy, since TAB completion will not keep finding
+similarly named files. So let's clean up your home directory by removing all
+the clutter we downloaded and worked with today. The command below will remove
+the `~/BareBonesBash` directory **as well as all of its contents**. 
+
+```bash
+cd ~     ## We shouldn't delete a directory while we are still in it. (It is possible though).
+rm -r ~/BareBonesBash
+```
+
+:::{.callout-tip}
+## Pro Tip
+Always be VERY careful when using `rm -r`. Check 3x that the path you are
+specifying is exactly what you want to delete and nothing more before pressing
+ENTER!
+:::
+
+### Conclusion
+
+You should now know the basics of working on the command line, like:
+
+* What a command prompt is
+* How to navigate around the filesystem via the command line
+* How to view the contents of a file
+* How to remove files and directories
+* What a datastream is, and how they can be redirected
+* How to chain commands together
+* What a variable is, how to assign them and how to unpack them
+* How to construct a simple for loop
+* How to google more efficiently!
+
+If you would like to know more about the magic of bash, you can fin more commands
+as well as and more advanced bash concepts in the [BareBonesBash website](https://barebonesbash.github.io/#/).
