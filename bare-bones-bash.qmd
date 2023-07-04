@@ -1,10 +1,7 @@
 ---
 title: Introduction to the Command Line
 author: Thiseas C. Lamnidis, Aida Andrades Valtueña
-# monofont: Consolas ## Can be used to change font in code blocks
 ---
-
-<!-- TODO --> 
 
 ::: {.callout-tip}
 For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [link](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/bare-bones-bash.yml) (right click and save as to download), and once created, activate the environment with:
@@ -13,7 +10,6 @@ For this chapter's exercises, if not already performed, you will need to create 
 conda activate bare-bones-bash
 ```
 :::
-
 
 ## Lecture
 
@@ -36,8 +32,8 @@ The author portraits were designed by Zandra Fagernäs.
 
 All material is provided under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/).
 
-### tl;dr
-<details>
+::: {.callout-tip collapse="true" title="TL;DR: uncollapse me!"}
+
 Below is a quick reference guide to the commands discussed in this tutorial.
 To understand actually what each command does, carry on reading below!
 For a complete run of all these commands AND MORE(!!),
@@ -74,7 +70,9 @@ consider following the full Bare Bones Bash walkthroughs [here](https://barebone
 | find              | search for files or directories                                           | find -name 'pen'                                                                              | -type f (search only for files)<br> -name '*JPG' (search for file names matching the pattern) |
 | "\$var"            | use double quotes to use contents of variable                             | pen=apple && echo "\$pen"                                                                    |                                                                                               |
 |<<br>><br>2>       | redirects the standard input/output/error stream respectively into a file | cat <file.txt >file_copy.txt 2>cat_file.err                                                   |                                                                                               |
-</details>
+
+:::
+
 ### Introduction
 
 The aim of this tutorial is to make you familiar with using bash everyday... 
@@ -107,7 +105,7 @@ Remember: No one writes code that works first time, or without looking at StackO
 ### What is a terminal?
 
 A terminal is simply a fancy window that allows you to access the command-line
-interface of a computer or server.
+interface of a computer or server (@fig-Command_line_screenshot).
 
 The command-line itself is how you can work on the computer with just text.
 
@@ -117,7 +115,7 @@ terminal.
 
 ### Understanding the command prompt
 
-![An example command prompt](assets/images/chapters/bare-bones-bash/Command_line_screenshot.png){width=100%}
+![An example command prompt](assets/images/chapters/bare-bones-bash/Command_line_screenshot.png){#fig-Command_line_screenshot width=100%}
 
 After opening the terminal what you will normally see is a blank screen with a
 'command prompt', like the one shown above. This typically consists of your
@@ -128,7 +126,7 @@ symbol. Like so:
 <username>@<device_name>:~$
 ```
 
-The commmand prompt is **never** involved in any command, it is just there
+The command prompt is **never** involved in any command, it is just there
 to ensure you know who and where you are. When copying a 
 command you should **NOT** copy the command prompt.
 
@@ -162,7 +160,7 @@ This prints the entire "filepath" of the directory i.e. the route from the
 "root" (the deepest directory of the machine), through every subdirectory,
 leading to your particular working directory. 
 
-### Absolute vs Relavtive paths
+### Absolute vs Relative paths
 
 Filepaths (a.k.a. "paths"), come in two flavours. Let's talk a bit about them!
 
@@ -182,11 +180,11 @@ You have just arrived to Leipzig for a summer school that is taking place at
 MPI-EVA. After some questionable navigation, you find yourself at the Bayerische
 Bahnhof. Tired and disheartened, you decide to ask for help.
 
-You see a friendly-looking metalhead, and decide to ask them for directions!
+You see a friendly-looking metalhead (@fig-bbb_james), and decide to ask them for directions!
 
-![A friendly-looking metalhead.](assets/images/chapters/bare-bones-bash/bbb_james.png){width=20% fig-align="center"}
+![A friendly-looking metalhead.](assets/images/chapters/bare-bones-bash/bbb_james.png){#fig-bbb_james width=20% fig-align="center"}
 
-> Happy to help, but I only give directions in **absolute paths!**  
+> I'm Happy to help, but I only give directions in **absolute paths!**  
 From Leipzig Main Station, you should take Querstraße southward.  
 Continue straight and take Nürnberger Str. southward until you reach Str. des
 18 Oktober.  
@@ -206,9 +204,9 @@ Examples of absolute paths:
 Not sure how to get back to Leipzig Main Station to apply those directions, you decide to
 ask someone else for directions...
 
-Lucky for you, a friendly looking local is passing by!
+Lucky for you, a friendly looking local is passing by (@fig-bbb_aida)!
 
-![A friendly-looking local.](assets/images/chapters/bare-bones-bash/bbb_aida.png){width=20% fig-align="center"}
+![A friendly-looking local.](assets/images/chapters/bare-bones-bash/bbb_aida.png){#fig-bbb_aida width=20% fig-align="center"}
 
 > You're currently on Str. des 18 Oktober. Walk straight that way, past the tram tracks, and you will find Deutscher Platz. You will see MPI-EVA to your right!
 
@@ -225,10 +223,13 @@ Examples of relative paths:
 We will now explore some basic commands that you will use to explore folders and interact with files:
 
 - **l**i**s**t directory contents:
+
 ```bash
 ls
 ```
+
 Output should look like:
+
 ```
 Desktop    Downloads  Pictures  Templates  bin    snap
 Documents  Music      Public    Videos     cache  thinclient_drives
@@ -281,7 +282,7 @@ head -n 10 Boosted-BBB-meta.tsv
 tail -n 10 Boosted-BBB-meta.tsv
 ```
 ::: {.callout-note}
-This is because the start of a cat is its head and the end of the cat is its tail (The great humor of computer scientists)
+This is because the start of a cat is its head and the end of the cat is its tail (The great humour of computer scientists)
 :::
 
 
@@ -308,14 +309,14 @@ Here's how that works, conceptually:
 
 #### Datastreams
 
-Computer programs can take in and spit out data from different _streams_. By
+Computer programs can take in and spit out data from different _streams_ (@fig-Datastreams). By
 default there are 3 such data streams.
 
 - `stdin` : the **st**an**d**ard **in**put
 - `stdout`: the **st**an**d**ard **out**put
 - `stderr`: the **st**an**d**ard **err**or
 
-![](assets/images/chapters/bare-bones-bash/Datastreams.png){width=80% fig-align="center"}
+![Diagram showing stdin going into the program, and two output streams from the program: stderr and stdout](assets/images/chapters/bare-bones-bash/Datastreams.png){#fig-Datastreams width=80% fig-align="center"}
 
 :::{.callout-tip}
 ## Pro Tip
@@ -328,19 +329,19 @@ The `stdout` is the actual output of the command. In some cases this gets
 printed to the screen, but most often this is the information that needs to be
 saved in an output file.  
 The `stderr` is the datastream where errors and warnings go. This gets printed
-to your terminal to let you know when something is not going according to plan!
+to your terminal to let you know when something is not going according to plan (@fig-Datastream_showcase)!
 
-![This program takes no input, and prints one line to the stdout and one line to the stderr.](assets/images/chapters/bare-bones-bash/Datastream_showcase.png){width=100%}
+![This program in the form of a bash script executed in the terminal takes no input, and prints one line to the stdout and one line to the stderr.](assets/images/chapters/bare-bones-bash/Datastream_showcase.png){#fig-Datastream_showcase width=100%}
 
 #### Piping
 
 A "pipe" (`|`) is a really useful feature of `bash` that lets you chain together
 multiple commands! When two commands are chained together with a pipe, the
-`stdout` of the first command becomes the `stdin` of the second!
+`stdout` of the first command becomes the `stdin` of the second (@fig-Piping)!
 The `stderr` is still printed on your screen, so you can always know when things
 fail.
 
-![](assets/images/chapters/bare-bones-bash/Piping.png){width=80% fig-align="center"}
+![Diagram showing stdin going into the program, and two output streams from the program: stderr and stdout, with the stdout being attached to the stdin of a second program](assets/images/chapters/bare-bones-bash/Piping.png){#fig-Piping width=80% fig-align="center"}
 
 Example:
 ```bash
@@ -392,28 +393,29 @@ cat line10.txt
 netsukeJapan    C       Artwork
 ```
 
-![Here you can see an example of redirecting the output of the `datastreams_demo.sh` program from before. Redirecting the stdout with `>` only prints the stderr to the screen, and saves the stdout into `output.txt`. Additionally, we can redirect the stderr with `2>` into `runtime.log`, and then nothing is printed onto the screen.](assets/images/chapters/bare-bones-bash/Redirects_showcase.png){width=100%}
+![Here you can see an example of redirecting the output of the `datastreams_demo.sh` program from before. Redirecting the stdout with `>` only prints the stderr to the screen, and saves the stdout into `output.txt`. Additionally, we can redirect the stderr with `2>` into `runtime.log`, and then nothing is printed onto the screen.](assets/images/chapters/bare-bones-bash/Redirects_showcase.png){#fig-Redirects_showcase width=100%}
 
-### Helptext
+### Help text
 
-You don't always have to google for documentation! Many programs come with in-built helptext,
+You don't always have to google for documentation! Many programs come with in-built help text,
 or access to online manuals right from your terminal!
 
 - You can get a __one sentence summary__ of what a tool does with `whatis`
 
-```bash
-whatis cat
-```
+    ```bash
+    whatis cat
+    ```
 
-```
-cat(1)  - concatenate files and print on the standard 
-          output
-```
+    ```
+    cat(1)  - concatenate files and print on the standard 
+            output
+    ```
 
 - While `man` gives you __access to online manuals__ for each tool (exit with `q`)
-```bash
-man cat
-```
+
+    ```bash
+    man cat
+    ```
 
 ### Variables
 
@@ -423,7 +425,7 @@ is a named container whose contents you can expand at will or change.
 You can assign variables (tell the computer what do you want it to contain)
 with `=` and pull their contents with `$`
 
-The easiest way to see the contents of a varable is using `echo`!
+The easiest way to see the contents of a variable is using `echo`!
 ```bash
 echo "This is my home directory: $HOME"
 ```
@@ -431,7 +433,7 @@ echo "This is my home directory: $HOME"
 This is my home directory: /home/ubuntu
 ```
 
-`$HOME` is a varible of the type called **environment variables**, which are set the moment you open your terminal or log into a server, they ensure the system works as intended and should not be change unless you are **very** sure of why. 
+`$HOME` is a variable of the type called **environment variables**, which are set the moment you open your terminal or log into a server, they ensure the system works as intended and should not be change unless you are **very** sure of why. 
 
 :::{.callout-warning}
 # Environment Variables
@@ -492,14 +494,15 @@ I have been to Greece 7 times already this year, for the food and wine!
 
 ::: {.callout-warning}
 # Overwriting variables
-In this examples you have seen how the same variable has been overwritten, this means that you can only access the last content that you stored in the variable. All the previous contents that a variable may have had are innaccessible as soon as the same variable is given a new value.
+In these examples you have seen how the same variable has been overwritten, this means that you can only access the last content that you stored in the variable. All the previous contents that a variable may have had are inaccessible as soon as the same variable is given a new value.
 :::
 
 ### Quotes matter!
+
 In bash, there is a big difference between a single quote `'` and a double quote `"`!
 
- - The contents of single quotes, are passed on as they are.
- - Inside double quotes, contents are _interpreted_!
+- The contents of single quotes, are passed on as they are.
+- Inside double quotes, contents are _interpreted_!
 
 In some cases the difference doesn't matter:
 
@@ -535,8 +538,10 @@ This is because in the second example we are using a variable. We have assigned 
 You can also ask your computer where you have put your files, in case you forgot. To do this you can use `find`! 
 The `find` command has the following syntax:
 
-<!-- This is formatted differently since it is not a runnable command, and hence users don't need to copy paste it -->
-`find /your/folder/ -type f -name 'your_file.txt'`
+```bash
+## Don't run! Fake example
+find /your/folder/ -type f -name 'your_file.txt'
+```
 
 - **First** part of the `find` command: *the place to look from*
   - e.g. `.` to indicate 'here'
@@ -647,7 +652,7 @@ Does Britain have lovely food? Yes
 Does Greece have lovely food? Yes
 Does Spain have lovely food? Yes
 ```
-We see that changing the order of the list will affect the output, this is because the **for** loop will go through the list in a sequencial manner. 
+We see that changing the order of the list will affect the output, this is because the **for** loop will go through the list in a sequential manner. 
 
 We can also add more elements to the list, and the **for** loop will continue until it reaches the end of the list.
 
@@ -664,17 +669,23 @@ As Deep Thought put it in the Hitchhiker's Guide to the Galaxy:
 Here are some quick tips to get you started:
 
 - ALWAYS include the name of the language in your query.
-  - **BAD:**  "How to cat"
-  - **GOOD:** "How to cat bash"
+  - **BAD:**  "How to cat" (@fig-how-to-cat)
+  - **GOOD:** "How to cat bash" (@fig-how-to-cat-bash)
 
 - BROADEN your question!
   - **BAD:** "How to set **X** to **4** in bash?"
   - **GOOD:** "How to set a **variable** to an **integer** in bash?"
-<br>
 - When you are more familiar, use fancy programmer lingo to make google think
 you know what you are talking about.
 
-:::{.callout}
+::: {layout-ncol=2}
+
+![How to cat the wrong way (i.e., don't include the language in your Google search and get loads of cat pictures)](assets/images/chapters/bare-bones-bash/How_to_cat.png){#fig-how-to-cat width=45%}
+
+![How to cat the BASH way (i.e., include the the language in your Google search and you get lots of terminal pictures! Much better, right? ...right?)](assets/images/chapters/bare-bones-bash/How_to_cat_bash.png){#fig-how-to-cat-bash width=45%}
+:::
+
+:::{.callout-note}
 ## __All the cool hackers say:__  
  - `string` and not `text`.  
  - `float` and not `decimal`.
@@ -682,13 +693,11 @@ you know what you are talking about.
 **Note:** some of these terms can be language specific.
 :::
 
-<p align="center"> ![](assets/images/chapters/bare-bones-bash/How_to_cat.png){width=45%} ![](assets/images/chapters/bare-bones-bash/How_to_cat_bash.png){width=45%}</p>
-
-### (optional) Cleanup
+### (optional) Clean-up
 
 It is extremely important to ALWAYS keep your directories clean from random
 clutter. This lowers the chances you will get lost in your  directories, but
-also ensures you can stay lazy, since TAB completion will not keep finding
+also ensures you can stay lazy, since <kbd>tab</kbd> completion will not keep finding
 similarly named files. So let's clean up your home directory by removing all
 the clutter we downloaded and worked with today. The command below will remove
 the `~/BareBonesBash` directory **as well as all of its contents**. 
@@ -719,5 +728,5 @@ You should now know the basics of working on the command line, like:
 * How to construct a simple for loop
 * How to google more efficiently!
 
-If you would like to know more about the magic of bash, you can fin more commands
+If you would like to know more about the magic of bash, you can find more commands
 as well as and more advanced bash concepts in the [BareBonesBash website](https://barebonesbash.github.io/#/).
