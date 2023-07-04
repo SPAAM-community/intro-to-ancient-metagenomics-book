@@ -1,6 +1,9 @@
 ---
 title: Accessing Ancient Metagenomic Data
 author: James A. Fellows Yates
+number-sections: true
+crossref:
+  chapters: true
 ---
 
 ::: {.callout-tip}
@@ -14,6 +17,8 @@ conda activate accessing-ancientmetagenomic-data
 
 ## Lecture
 
+Lecture slides and video from the [2022 edition of the summer school](https://www.spaam-community.org/wss-summer-school/#/2022/README).
+
 <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSkO7KH9YEmHCjMlCRhoxtZrDxZ0cKnsPazEAS3PspBGuhAtA9qhQ0wnPXg64cZrAJZQECngZFfjTRL/embed?start=false&loop=true&delayms=10000" frameborder="0" width="100%" height="400px" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
 PDF version of these slides can be downloaded from [here](https://github.com/SPAAM-community/https://github.com/SPAAM-community/wss-summer-school/raw/main/docs/raw/main/docs/assets/slides/2022/2c-intro-to-ancientmetagenomedir/SPAAM%20Summer%20School%202022%20-%202C%20-%20AncientMetagenomeDir.pdf).
@@ -26,7 +31,7 @@ In most bioinformatic projects, we need to include publicly available comparativ
 
 Including public data can benefit ancient metagenomic studies in a variety of ways. It can help increase our sample sizes (a common problem when dealing with rare archaeological samples) - thus providing stronger statistical power. Comparison with a range of previously published data of different preservational levels can allow an estimate on the quality of the new samples. When considering solely (re)using public data, we can consider that this can also spawn new ideas, projects, and meta analyses to allow further deeper exploration of ancient metagenomic data (e.g., looking for correlations between various environmental factors and preservation).
 
-Fortunately for us, genomicists and [particularly palaeogenomicists](http://dx.doi.org/10.1371/journal.pone.0121409) have been very good at uploading raw sequencing data to well-established databases.
+Fortunately for us, geneticists and particularly palaeogenomicists have been very good at uploading raw sequencing data to well-established databases [@Anagnostou2015-mz].
 
 In the vast majority of cases you will be able to find publically available sequencing data on the [INSDC](https://www.insdc.org/) association of databases, namely the [EBI's European Nucleotide Archive](https://www.ebi.ac.uk/ena/) (ENA), and [NCBI](https://www.ncbi.nlm.nih.gov/sra) or [DDBJ's](https://www.ddbj.nig.ac.jp/dra/index-e.html) Sequence Read Archives (SRA). However, you may in some cases find ancient metagenomic data on institutional FTP servers, domain specific databases (e.g. [OAGR](https://oagr.org)), [Zenodo](https://zenodo.org), [Figshare](https://figshare.com), or [GitHub](https://github.com).
 
@@ -41,7 +46,7 @@ But while the data is publicly available, we need to ask whether it is 'FAIR'.
 - Interoperable
 - Reproducible
 
-And when we consider ancient metagenomic data, we are pretty close to this. Sequencing data is in most cases accessible (via the public databases like ENA, SRA), interoperable and reproducible because we use field standard formats such as FASTQ or BAM files. However _Findable_ remains an issue.
+When we consider ancient (meta)genomic data, we are pretty close to this. Sequencing data is in most cases accessible (via the public databases like ENA, SRA), interoperable and reproducible because we use field standard formats such as FASTQ or BAM files. However _findable_ remains an issue.
 
 This is because the _metadata_ about each data file is dispersed over many places, and very often not with the data files themselves.
 
@@ -49,25 +54,25 @@ In this case I am referring to metadata such as: What is the sample's name? How 
 
 To find this information about a given data file, you have to search many places (main text, supplementary information, the database itself), for different types of metadata (as authors report different things), and also in different formats (text, tables, figures.
 
-This very heterogenous landscape makes it difficult for machines to index all this information (if at all), and thus means you cannot search for the data you want to use for your own reserch in online search engines.
+This very heterogenous landscape makes it difficult for machines to index all this information (if at all), and thus means you cannot search for the data you want to use for your own research in online search engines.
 
 ## AncientMetagenomeDir
 
-This is where the SPAAM community project [AncientMetagenomeDir](https://github.com/spaam-community/AncientMetagenomeDir) comes in. AncientMetagenomeDir is a resource of lists of metadata of all publishing and publically available ancient metagenomes and microbial genome-level enriched samples.
+This is where the SPAAM community project '[AncientMetagenomeDir](https://github.com/spaam-community/AncientMetagenomeDir)' comes in [@Fellows_Yates2021-rp]. AncientMetagenomeDir is a resource of lists of metadata of all publishing and publicly available ancient metagenomes and microbial genome-level enriched samples and their associated libraries.
 
-By aggregating and standardising metadata and accession codes of ancient metagenomic samples, the project aims to make it easier for people to find comparative data for their own projects, as well as help track the field over time and facilitate meta analyses.
+By aggregating and standardising metadata and accession codes of ancient metagenomic samples and libraries, the project aims to make it easier for people to find comparative data for their own projects, appropriately re-analyse libraries, as well as help track the field over time and facilitate meta analyses.
 
 Currently the project is split over three main tables: host-associated metagenomes (e.g. ancient microbiomes), host-associated single-genomes (e.g. ancient pathogens), and environmental metagenomes (e.g. lakebed cores or cave sediment sequences).
 
-The repository already contains more than a thousand samples and span the entire globe and as far back as hundreds of thousands of years.
+The repository already contains more than 2000 samples and 5000 libraries, spanning the entire globe and as far back as hundreds of thousands of years.
 
-To make the lists of samples and their metadata as accessible and interoperable as possible, we utilise simple text (TSV - tab separate value) files - files that can be opened by pretty much all spreadsheet tools (e.g., Microsoft Office excel, LibreOffice Calc) and languages (R, Python etc.).
+To make the lists of samples and their metadata as accessible and interoperable as possible, we utilise simple text (TSV - tab separate value) files - files that can be opened by pretty much all spreadsheet tools (e.g., Microsoft Office excel, LibreOffice Calc) and languages (R, Python etc.) (@fig-accessingdata-exampledirtable).
 
-![](assets/images/chapters/introduction-to-ancientmetagenomedir/ancientmetagenomedir-example.png)
+![Example few columns and rows of an AncientMetagenomeDir table, including project name, publication year, site name, latitude, longitude, country and sample name.](assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-exampledirtable.png){#fig-accessingdata-exampledirtable}
 
-Criticially, by standardising the recorded all metadata across all publications this makes it much easier for researchers to filter for particular time periods, geographical regions, or sample types of their interest - and then use the also recorded accession numbers to efficiently download the data.
+Critically, by standardising the recorded all metadata across all publications this makes it much easier for researchers to filter for particular time periods, geographical regions, or sample types of their interest - and then use the also recorded accession numbers to efficiently download the data.
 
-At their core all different AncientMetagenomeDir tables must have at 6 minimum metadata sets:
+At their core all different AncientMetagenomeDir tables must have at 6 minimum metadata sets at the sample level:
 
 - Publication information (doi)
 - Sample name(s)
@@ -76,57 +81,41 @@ At their core all different AncientMetagenomeDir tables must have at 6 minimum m
 - Sample type (e.g. bone, sediment, etc.)
 - Data Archive and accessions
 
-Each table then has additional columns depending on the context (e.g. what time of microbiome is expected for host-associated metagenoes, or species name of the genome that was reconstructed).
+Each table then has additional columns depending on the context (e.g. what time of microbiome is expected for host-associated metagenomes, or species name of the genome that was reconstructed).
 
-The AncientMetagenomeDir project already has 3 releases, and will continued to be regularly updated as the community continues to submit new metadata of samples of new publications as they come out.
+The AncientMetagenomeDir project already has 9 major releases, and will continued to be regularly updated as the community continues to submit new metadata of samples of new publications as they come out.
 
-## Further Improving Metadata Reporting in Ancient Metagenomics
+## AMDirT
 
-However, for researchers, sample-level metadata likely will not include all the information that is needed to include and process public data in their own projects.
+But how does one explore such a large dataset of tables with thousands of rows? You could upload this into a spreadsheet tool or in a programming language like R, but you would still have to do a lot of manual filtering and parsing of the dataset to make it useful for downstream analyses.
 
-The SPAAM community have been busy over the last few months extending the types of metadata included in the AncientMetagenomeDir project, to include library level metadata.
+In response to this The SPAAM Community have also developed a companion tool 'AMDirT' to facilitate this. Amongst other functionality, AMDirT allows you to load different releases of AncientMetagenomeDir, filter and explore to specific samples or libraries of interest, and then generate download scripts, configuration files for pipelines, and reference BibTeX files for you, both via a command-line (CLI) or graphical user interface (GUI)!
 
-This metadata includes things such as whether a given set of data files contain sequencing data sequenced on which platform, whether the libraries have undergone damage treatment in the lab, or whether the uploaded data contains all or only mapped reads.
+### Running AMDirT viewer
 
-We have also started a new project - a MIxS checklist currently entitled 'MINAS' - which we aim to make _the_ standard metadata reporting sheet for all ancient metagenomics and even for any ancient DNA sample. Such a checklist would be interegrated into services such as the ENA or SRA, and therefore would standardise metadata _alongside_ the raw data, and make ancient metagenomic data much more _findable_ with search engines.
+We will now demonstrate how to use the AMDirT graphical user interface to load a dataset, filter to samples of interest, and download some configuration input files for downstream ancient DNA pipelines.
 
-Finally, to make it easier for researchers who are not familiar with sequencing database infrastucture, we are in the process of building a new tool (something already in a usable state) called [AMDirT](https://github.com/SPAAM-community/AMDirT). This allows a web browser-based GUI to filter and select data, and produce scripts for you to download all the selected data (without having to go to the databases themselves).
+![AMDirT logo: a cog with the SPAAM icon in the middle with the word AMDirT to the side](assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-amdirtlogo.png){#fig-accessingdata-amdirtlogo fig-align="center"}
 
-This is something we are going to try out now!
-
-## Running AMDirT
-
-![](assets/images/chapters/introduction-to-ancientmetagenomedir/amdirt-title.png)
+::: {.callout-warning}
+This tutorial will require a web-browser! Make sure to run on your local laptop/PC or, if on on a server, with X11 forwarding activated.
+:::
 
 First, we will need to activate a conda environment, and then install the latest development version of the tool for you.
 
-::: {.callout-warning}
-This tutorial will require a web-browser! Make sure to run on your local laptop/PC or on a server with X11 forwarding
-:::
-
-
-Open your terminal, and run the following two commands:
+While in the `accessing-ancientmetagenomic-data` conda environment, run the following command to load the GUI into your web-browser. If the browser doesn't automatically load, copy the IP address and paste it in your browser's URL bar.
 
 ```bash
-conda activate git-eager
-pip install --upgrade --force-reinstall git+https://github.com/SPAAM-community/AMDirT.git@dev
-```
-
-Once that (hopefully) installs correctly, we can load the tool by running
-
-```bash
-AMDirT filter
+AMDirT viewer
 ```
 
 Your web browser should now load, and you should see a two panel page.
 
-![](assets/images/chapters/introduction-to-ancientmetagenomedir/amdirt-firstpage.png)
-
 Under **Select a table** use the dropdown menu to select 'ancientsinglegenome-hostassociated'.
 
-You should then see a table, pretty similar what you are familiar with with spreadsheet tools such as Microsoft Excel or LibreOffice calc.
+You should then see a table (@fig-accessingdata-firstpage), pretty similar what you are familiar with with spreadsheet tools such as Microsoft Excel or LibreOffice calc.
 
-![](assets/images/chapters/introduction-to-ancientmetagenomedir/amdirt-projectfilter.png)
+![Main AMDirT Viewer page on load. A toolbar on the left displays the AMDirT version, and dropdown menus for the AncientMetagenomeDir release, table, and downloading tool to use. The rest of the page shows a tabular window containing rows and columns corresponding to sample metadata and rows of samples with metadata such as project name, publication year and site name.](assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-firstpage.png){#fig-accessingdata-firstpage fig-align="center"}
 
 To navigate, you can scroll down to see more rows, and press <kbd>shift</kbd> and scroll to see more columns, or use click on a cell and use your arrow keys (<kbd>⬆</kbd>,<kbd>⬇</kbd>,<kbd>⬅</kbd>,<kbd>➡</kbd>) to move around the table.
 
@@ -134,37 +123,38 @@ You can reorder columns by clicking on the column name, and also filter by press
 
 As an exercise, we will try filtering to a particular set of samples, then generate some download scripts, and download the files.
 
-First, filter the **project_name** column to 'Kocher2021'.
+First, filter the **project_name** column to 'Kocher2021' from [@Kocher2021-vg, @fig-accessingdata-projectfilter].
 
-![](assets/images/chapters/introduction-to-ancientmetagenomedir/amdirt-projectfilter2.png)
+![The AMDirT viewer with a filter menu coming out of the project name column, with just the Kocher 2021 in the search bar.](assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-projectfilter.png){#fig-accessingdata-projectfilter fig-align="center"}
 
-Then scroll to the right, and filter the **geo_loc_name** to 'United Kingdom'.
+Then scroll to the right, and filter the **geo_loc_name** to 'United Kingdom'  (@fig-accessingdata-geofilter).
 
-![](assets/images/chapters/introduction-to-ancientmetagenomedir/amdirt-geofilter.png)
+![The AMDirT viewer with a filter menu coming out of the geo location column, with just the United Kingdom written in the search bar and the entry ticked in the results.](assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-geofilter.png){#fig-accessingdata-geofilter fig-align="center"}
 
 You should be left with 4 rows.
 
-Finally, scroll back to the first column and tick the boxes of these four samples.
+Finally, scroll back to the first column and tick the boxes of these four samples (@fig-accessingdata-tickbox).
 
-![](assets/images/chapters/introduction-to-ancientmetagenomedir/amdirt-tickbox.png)
+![The AMDirT viewer with just four rows with samples from Kocher2021 that are located in the United Kingdom being displayed, and the tickboxes next to each one selected](assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-tickbox.png){#fig-accessingdata-tickbox fig-align="center"}
 
-Once you've selected the samples you want, you can press **Validate selection**. You should then see a series loading-spinner, and new buttons should appear!
+Once you've selected the samples you want, you can press **Validate selection**. You should then see a series loading-spinner, and new a lot of buttons should appear (@fig-accessingdata-validated)!
 
-![](assets/images/chapters/introduction-to-ancientmetagenomedir/amdirt-validated.png)
+![The AMDirT viewer after pressing the 'validate selection' button. A range of buttons are displayed at the bottom including a warning message, with the buttons offering download of a range of files such as download scripts, AncientMetagenomeDir library tables and input configuration sheets for a range of ancient DNA bioinformatics pipelines](assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-validated.png){#fig-accessingdata-validated fig-align="center"}
 
-You should have three main buttons:
+You should have four categories of buttons:
 
+- **Download AncientMetagenomeDir Library Table**
 - **Download Curl sample download script**
-- **Download nf-core/eager input TSV**
+- **Download \<tool/pipeline name\> input TSV**
 - **Download Citations as BibText**
 
-The first button is for generating a download script that will allow you to immediately download all sequencing data of the samples you selected. The second button is a pre-configured input file for use in the nf-core/eager ancient DNA pipeline, and finally, the third button generates a text file with (in most cases) all the citations of the data you downloaded, in a format accepted by most reference/citation managers.
+The first button is to download a table containing all the AncientMetagenomeDir metadata of the selected amples. The second is for generating a download script that will allow you to immediately download all sequencing data of the samples you selected. The third set of buttons generate (partially!) pre-configured input files for use in dedicated ancient DNA pipeline such as nf-core/eager [@Fellows_Yates2021-jl], PALAEOMIX [@Schubert2014-ps], and/or and aMeta [@Pochon2022-hj]. Finally, the fourth button generates a text file with (in most cases) all the citations of the data you downloaded, in a format accepted by most reference/citation managers. In this case the reference metadata for that particular publictcation isn't publicly available so there is a warning.
 
-It's important to note you are not necessarily restricted to [Curl](https://curl.se/) for downloading the data, or [nf-core/eager](https://nf-co.re/eager) for running the files. AMDirT aims to add support for whatever tools or pipelines requested by the community. For example, an already supported download alternative is with the [nf-core/fetchNGS](https://nf-co.re/fetchngs) pipeline. You can select these using the drop-down menus on the left hand-side.
+It's important to note you are not necessarily restricted to [Curl](https://curl.se/) for downloading the data. AMDirT aims to add support for whatever tools or pipelines requested by the community. For example, an already supported downloading tool alternative is the [nf-core/fetchNGS](https://nf-co.re/fetchngs) pipeline. You can select these using the drop-down menus on the left hand-side.
 
-Press the three buttons to make sure you download the files. And once this is done, you can close the tab of the web browser, and in the terminal you can press <kbd>ctrl</kbd> + <kbd>c</kbd> to shutdown the tool.
+Press the AncientMetagenomeDir library, curl download, and nf-core/eager buttons to download two `.tsv` files, one `*.sh` file and one '*bib' file. Once this is done, you can close the tab of the web browser, and in the terminal you can press <kbd>ctrl</kbd> + <kbd>c</kbd> to shutdown the tool.
 
-## Inspecting AMDirT Output
+### Inspecting AMDirT viewer Output
 
 Lets look at the files that AMDirT has generated for you.
 
@@ -172,15 +162,16 @@ First you should `cd` into the directory that your web browser downloaded the fi
 
 ```bash
 $ ls
-ancientMetagenomeDir_curl_download_script.sh
-ancientMetagenomeDir_citations.bib
-ancientMetagenomeDir_eager_input.csv
+AncientMetagenomeDir_bibliography.bib
+AncientMetagenomeDir_curl_download_script.sh
+AncientMetagenomeDir_filtered_libraries.csv
+AncientMetagenomeDir_nf_core_eager_input_table.tsv
 ```
 
 We can simple run `cat` on each file to look inside. If you run `cat` on the curl download script, you should see a series of `curl` commands with the correct ENA links for you for each of the samples you wish to download.
 
 ```bash
-$ cat ancientMetagenomeDir_curl_download_script.sh
+$ cat AncientMetagenomeDir_curl_download_script.sh
 #!/usr/bin/env bash
 curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/009/ERR6053619/ERR6053619.fastq.gz -o ERR6053619.fastq.gz
 curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/008/ERR6053618/ERR6053618.fastq.gz -o ERR6053618.fastq.gz
@@ -191,7 +182,7 @@ curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/006/ERR6053686/ERR6053686.fast
 By providing this script for you, AMDirT facilitates fast download of files of interest by replacing the one-by-one download commands for each sample with a _single_ command!
 
 ```bash
-$ bash ancientMetagenomeDir_curl_download_script.sh
+$ bash AncientMetagenomeDir_curl_download_script.sh
 curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/009/ERR6053619/ERR6053619.fastq.gz -o ERR6053619.fastq.gz
 curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/008/ERR6053618/ERR6053618.fastq.gz -o ERR6053618.fastq.gz
 curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/005/ERR6053675/ERR6053675.fastq.gz -o ERR6053675.fastq.gz
@@ -203,7 +194,7 @@ Running this command should result in progress logs of the downloading of the da
 Once the four samples are downloaded, AMDirT then facilitates fast processing of the data, as the _eager_ script can be given directly to nf-core/eager as input. Importantly by including the library metadata (mentioned above), researchers can leverage the complex automated processing that nf-core/eager can perform when given such relevant metadata.
 
 ```bash
-$ cat ancientMetagenomeDir_eager_input.csv
+$ cat AncientMetagenomeDir_nf_core_eager_input_table.tsv
 Sample_Name	Library_ID	Lane	Colour_Chemistry	SeqType	Organism	Strandedness	UDG_Treatment	R1	R2	BAM
 I0157	ERR6053618	0	4	SE	Homo sapiens	double	unknown	ERX5692504_ERR6053618.fastq.gz	NA	NA
 I0161	ERR6053619	0	4	SE	Homo sapiens	double	unknown	ERX5692505_ERR6053619.fastq.gz	NA	NA
@@ -211,15 +202,14 @@ OAI017	ERR6053675	0	4	SE	Homo sapiens	double	half	ERX5692561_ERR6053675.fastq.gz
 SED009	ERR6053686	0	4	SE	Homo sapiens	double	half	ERX5692572_ERR6053686.fastq.gz	NA	NA
 ```
 
-Finally, we can look into the `citations file` which will provide you with the citation information of all the downloaded data and AncientMetagenomeDir itself.
+Finally, we can look into the BibTeX citations file (`*bib`) which will provide you with the citation information of all the downloaded data and AncientMetagenomeDir itself.
 
 ::: {.callout-warning}
-The contents of this file is reliant on indexing of publications on CrossRef. In some cases not all citations will be present, so this should be double checked!
+The contents of this file is reliant on indexing of publications on CrossRef. In some cases not all citations will be present (as per the warning), so this should be double checked!
 :::
 
 ```bash
-$ cat ancientMetagenomeDir_citations.bib
-
+$ cat AncientMetagenomeDir_bibliography.bib
 @article{Fellows_Yates_2021,
 	doi = {10.1038/s41597-021-00816-y},
 	url = {https://doi.org/10.1038%2Fs41597-021-00816-y},
@@ -239,44 +229,56 @@ $ cat ancientMetagenomeDir_citations.bib
 
 This file can be easily loaded into most reference managers and then have all the citations quickly added to your manuscripts.
 
+### AMDirT convert
+
+
+
 ## Git Practise
 
-A critical factor of AncientMetagenomeDir is that it is community-based. The community curates all new submissions to the repository, and this all occurs with Git.
+A critical factor of AncientMetagenomeDir is that it is community-based. The community curates all new submissions to the repository, and this all occurs with Git and GitHub.
 
 The data is hosted and maintained on GitHub - new publications are evaluated on issues, submissions created on branches, made by pull requests, and PRs reviewed by other members of the community.
 
-You can see the workflow in the image below from the AncientMetageomeDir [publication](https://doi.org/10.1038/s41597-021-00816-y), and read more about the workflow on the AncientMetagenomeDir [wiki](https://github.com/SPAAM-community/AncientMetagenomeDir/wiki)
+You can see the workflow in the image below from the AncientMetagenomeDir [publication](https://doi.org/10.1038/s41597-021-00816-y), and read more about the workflow on the AncientMetagenomeDir [wiki](https://github.com/SPAAM-community/AncientMetagenomeDir/wiki)
 
-<!-- INSERT IMAGE  HERE-->
+![Overview of the AncientMetagenomeDir contribution workflow. Potential publications are added as a GitHub issue where they undergo relevance evaluation. Once approved, a contributor makes a branch on the AncientMetagenomeDir GitHub repository, adds the new lines of metadata for the relevant samples and libraries, and once ready opens a pull request against the main repository. The pull request undergoes an automated consistent check against a schema and then undergoes a human-based peer review for accuracy against AncientMetagenomeDir guidelines. Once approved, the pull request is merged, and periodically the dataset is released on GitHub and automatically archived on Zenodo.](assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-thedirworkflow.png){#fig-accessingdata-thedirworkflow fig-align="center" width="75%"}
 
-This means we can also use this repository to practise git!
+As AncientMetagenomeDir is on GitHub, the means we can also use this repository to try out our Git skills we learnt in the chapter [Introduction to Git(Hub)](git-github.qmd)!
 
-Your task (with `git` terms removed):
+Your task is to complete the following steps however with `git` terms removed (indicated by quotes). You should be able to complete the steps and also note down what the _correct_ Git terminology:
 
 1. Make a 'copy' the [jfy133/AncientMetagenomeDir](https://github.com/jfy133/AncientMetagenomeDir) repository to your account
-2. 'Download' the copied repo to your local machine
+	- We are forking a personal fork of the main repository to ensure you don't accidentally edit the main dataset!
+2. 'Download' the 'copied' repo to your local machine
 3. 'Change' to the `dev` branch
-4. Modify ‘ancientsinglegenome-hostassociated_samples.tsv’
-   - Click [here](https://github.com/SPAAM-community/https://github.com/SPAAM-community/wss-summer-school/raw/main/docs/raw/main/docs/assets/data/2022/ancientmetagenomedir_example.tsv) to get some example data to copy in to the end of the TSV file
+4. Modify the file `ancientsinglegenome-hostassociated_samples.tsv`
+    - Click [here](assets/data/data-accessing-ancientmetagenomic-data/ancientmetagenomedir_example.tsv) to get some example data to copy in to the end of the TSV file
 5. 'Send' back to Git(Hub)
-6. Open a 'request' adding changes to the original repo
-   - Make sure to put 'Summer school' in the title of the 'Request'
+6. Open a 'request' adding the changes to the original `jfy133/AncientMetagenomeDir` repo
+    - Make sure to put 'Summer school' in the title of the 'Request'
 
 ::: {.callout-tip collapse="true" title="Click me to reveal the correct terminology"}
 1. **Fork** the [jfy133/AncientMetagenomeDir](https://github.com/jfy133/AncientMetagenomeDir) repository to your account
 2. **Clone** the copied repo to your local machine
 3. **Switch** to the `dev` branch
-4. Modify ‘ancientsinglegenome-hostassociated_samples.tsv’
-   - Click [here](https://github.com/SPAAM-community/https://github.com/SPAAM-community/wss-summer-school/raw/main/docs/raw/main/docs/assets/data/2022/ancientmetagenomedir_example.tsv) to get some example data to copy in to the end of the TSV file
+4. Modify `ancientsinglegenome-hostassociated_samples.tsv`
 5. **Commit** and **Push** back to your **Fork** on Git(Hub)
 6. Open a **Pull Request** adding changes to the original jfy133/AncientMetagenomeDir repo
-   - Make sure to put 'Summer school' in the title of the pull request
+    - Make sure to put 'Summer school' in the title of the pull request
 :::
 
 ## Summary
 
 - Reporting of metadata messy! Consider when publishing your own work!
-  - Use AncientMetagenomeDir as a template
+    - Use AncientMetagenomeDir as a template
 - Use AncientMetagenomeDir and AMDirT (beta) to rapidly find public ancient metagenomic data
 - Contribute to AncientMetagenomeDir with git
-  - Community curated!
+    - Community curated!
+
+## Resources
+
+- [AncientMetagenomeDir paper](https://doi.org/10.1038/s41597-021-00816-y)
+- [AncientMetagenomeDir repository](https://github.com/SPAAM-community/AncientMetagenomeDir)
+- [AMDirT webserver](https://www.spaam-community.org/AMDirT/)
+- [AMDirT documentation](https://amdirt.readthedocs.io/)
+- [AMDirT repository](https://github.com/SPAAM-community/AMDirT)
