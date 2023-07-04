@@ -231,7 +231,27 @@ This file can be easily loaded into most reference managers and then have all th
 
 ### AMDirT convert
 
+If you're less of a GUI person and consider yourself a command-line wizard, you can also use the `AMDirT convert` command instead of the GUI version.
 
+In this case you must supply your own filtered AncientMetagenomeDir samples table, and use command line options to specify which files to generate.
+
+For example, lets say you used R to make the following [filtered file](assets/data/data-accessing-ancientmetagenomic-data/ancientsinglegenome-hostassociated_samples_Kocher2021_UnitedKingdom.tsv) (basically the same Kocher et al. 2021 samples from the UK, as filtered in the GUI part of this tutorial), you would supply this to `AMDirT convert` like so:
+
+```bash
+$ AMDirT convert -o . --bibliography --librarymetadata --curl --eager ancientsinglegenome-hostassociated_samples_Kocher2021_UnitedKingdom.tsv ancientsinglegenome-hostassociated
+```
+
+When running `ls` you should see the same resulting files as before with the GUI!
+
+```bash
+$ ls
+AncientMetagenomeDir_bibliography.bib
+AncientMetagenomeDir_curl_download_script.sh
+AncientMetagenomeDir_filtered_libraries.tsv
+AncientMetagenomeDir_nf_core_eager_input_table.tsv
+ancientsinglegenome-hostassociated_samples_Kocher2021_UnitedKingdom.tsv
+```
+In this case you say where to save the output files, then use different flags to specify which scripts, bib, and configuration files you want, and finally your filtered AncientMetagenomeDir TSV file and which table it's derived from.
 
 ## Git Practise
 
@@ -279,6 +299,6 @@ Your task is to complete the following steps however with `git` terms removed (i
 
 - [AncientMetagenomeDir paper](https://doi.org/10.1038/s41597-021-00816-y)
 - [AncientMetagenomeDir repository](https://github.com/SPAAM-community/AncientMetagenomeDir)
-- [AMDirT webserver](https://www.spaam-community.org/AMDirT/)
+- [AMDirT web server](https://www.spaam-community.org/AMDirT/)
 - [AMDirT documentation](https://amdirt.readthedocs.io/)
 - [AMDirT repository](https://github.com/SPAAM-community/AMDirT)
