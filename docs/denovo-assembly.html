@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.340">
+<meta name="generator" content="quarto-1.3.361">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -55,7 +55,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -94,7 +113,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
@@ -114,7 +134,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./section-ancient-metagenomics.html">Ancient Metagenomics</a></li><li class="breadcrumb-item"><a href="./denovo-assembly.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Introduction to _de novo_ Genome Assembly</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -424,6 +444,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>✔ ggplot2 3.3.5     ✔ purrr   0.3.4
+✔ tibble  3.1.6     ✔ dplyr   1.0.8
+✔ tidyr   1.2.0     ✔ stringr 1.4.0
+✔ readr   2.1.2     ✔ forcats 0.5.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()</code></pre>
+</div>
+</div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -435,7 +471,7 @@ Tip
 </div>
 <div class="callout-body-container callout-body">
 <p>For this chapter’s exercises, if not already performed, you will need to create the <a href="./before-you-start.html#creating-a-conda-environment">conda environment</a> from the <code>yml</code> file in the following <a href="https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/denovo-assembly.yml">link</a> (right click and save as to download), and once created, activate the environment with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate denovo-assembly</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate denovo-assembly</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <section id="lecture" class="level3" data-number="12.0.1">
@@ -449,10 +485,67 @@ Tip
 </section>
 <section id="introduction" class="level2" data-number="12.1">
 <h2 data-number="12.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">12.1</span> Introduction</h2>
-<!-- TODO -->
-<p><em>TBC</em></p>
+<p>First of all, what is a <strong>metagenomic</strong> sample? Metagenomic sample is a sample that consists of DNA from more than one source. The number and the type of sources might vary widely between different samples. Typical sources for ancient remains are e.g.&nbsp;the host organism and the microbial species. The important part is that we generally do not know the origin of a DNA molecule prior to analysing the sequencing data generated from the DNA library of this sample. In the example presented in <strong>Figure 1</strong>, our metagenomic sample has DNA from three different sources, here coloured in blue, red, and yellow.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/images/chapters/denovo-assembly/metagenome_assembly_scheme.png" class="img-fluid figure-img" style="width:80.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Figure 1</strong>: <strong>Overview of the ways how to analyse metagenomic sequencing data.</strong></p>
+<p>How can we determine the sources of the DNA that we have in our metagenomic sample? There are three main options whose <em>pros</em> and <em>cons</em> are summarised in <strong>Table 1</strong>.</p>
+<p><strong>Table 1</strong>: <strong>Pros and cons of the major methods for determining the sources of the DNA.</strong></p>
+<table class="table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 34%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">method</th>
+<th style="text-align: center;">pros</th>
+<th style="text-align: center;">cons</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">reference-based alignment</td>
+<td style="text-align: center;">highly sensitive, applicable to aDNA samples</td>
+<td style="text-align: center;">requires all sources to be represented in database</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">single-genome assembly</td>
+<td style="text-align: center;">high-quality genomes from cultivated bacteria</td>
+<td style="text-align: center;">not available for ancient DNA samples</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">metagenome assembly</td>
+<td style="text-align: center;">able to recover unknown diversity present in sample</td>
+<td style="text-align: center;">highly dependent on preservation of ancient DNA</td>
+</tr>
+</tbody>
+</table>
+<p>Unitl recently, the only option for ancient DNA samples was to take the short-read sequencing data and align them against some known reference genomes. However, this approach is heavily relying on the whether all sources of our samples are represented in the available reference genomes. If a source is missing in the reference database - in our toy example, this is the case for the yellow source (<strong>Figure 1</strong>) -, then we won’t be able to detect it using this reference database.</p>
+<p>While there is a potential workaround for modern metagenomic samples, <em>single-genome assembly</em> it relies on being able to cultivate a microbial species to obtain an isolate. This is unfeasible for ancient metagenomic samples because there are no more viable microbial cells available that could be cultivated.</p>
+<p>Around 2015, a technical revolution started when the first programs, such as MEGAHIT <span class="citation" data-cites="LiMegahit2015">(<a href="references.html#ref-LiMegahit2015" role="doc-biblioref">Li et al. 2015</a>)</span> and metaSPAdes <span class="citation" data-cites="Nurk2017">(<a href="references.html#ref-Nurk2017" role="doc-biblioref">Nurk et al. 2017</a>)</span>, were published that could successfully perform <em>de novo</em> assembly from metagenomic data. Since then, tens of thousands metagenomic samples have been assembled and it was revealed that even well studied environments, such as the human gut microbiome, have a lot of additional microbial diversity that could not be discovered via culturing and isolation <span class="citation" data-cites="Almeida2021">(<a href="references.html#ref-Almeida2021" role="doc-biblioref">Almeida et al. 2021</a>)</span>.</p>
+<p>The technical advancement of now being able to perform <em>de novo</em> assembly on metagenomic samples led to an explosion of studies that analysed samples that were considered almost impossible to study beforehand. For researchers that are exposed to ancient DNA, the imminent question arises: can we apply the same methods to ancient DNA data? In this practical, we will walk through all required steps that are necessary to successfully perform <em>de novo</em> assembly from ancient DNA metagenomic sequencing data and show you what you can do once you have obtained the data.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Almeida2021" class="csl-entry" role="listitem">
+Almeida, Alexandre, Stephen Nayfach, Miguel Boland, Francesco Strozzi, Martin Beracochea, Zhou Jason Shi, Katherine S. Pollard, et al. 2021. <span>“A Unified Catalog of 204,938 Reference Genomes from the Human Gut Microbiome.”</span> <em>Nature Biotechnology</em> 39 (1): 105–14. <a href="https://doi.org/10.1038/s41587-020-0603-3">https://doi.org/10.1038/s41587-020-0603-3</a>.
+</div>
+<div id="ref-LiMegahit2015" class="csl-entry" role="listitem">
+Li, Dinghua, Chi-Man Liu, Ruibang Luo, Kunihiko Sadakane, and Tak-Wah Lam. 2015. <span>“<span>MEGAHIT</span>: An Ultra-Fast Single-Node Solution for Large and Complex Metagenomics Assembly via Succinct de <span>Bruijn</span> Graph.”</span> <em>Bioinformatics</em> 31 (10): 1674–76. <a href="https://doi.org/10.1093/bioinformatics/btv033">https://doi.org/10.1093/bioinformatics/btv033</a>.
+</div>
+<div id="ref-Nurk2017" class="csl-entry" role="listitem">
+Nurk, Sergey, Dmitry Meleshko, Anton Korobeynikov, and Pavel A. Pevzner. 2017. <span>“<span class="nocase">metaSPAdes</span>: A New Versatile Metagenomic Assembler.”</span> <em>Genome Research</em> 27 (5): 824–34. <a href="https://doi.org/10.1101/gr.213959.116">https://doi.org/10.1101/gr.213959.116</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
