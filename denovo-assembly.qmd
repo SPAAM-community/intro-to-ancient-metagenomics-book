@@ -92,13 +92,66 @@ wget https://share.eva.mpg.de/index.php/s/mc5JrpDWdL4rC24/download/2612_R2.fastq
 
 **How many sequences are in each FastQ file?**
 
-Hint: You can run `seqtk size <FastQ file>` to find this out.
+Hint: You can run either `seqtk size <FastQ file>` or `bioawk -c fastx 'END{print NR}' <FastQ file>` to find this out.
 
 :::
 
 ::: {.callout-note collapse="true" title="Answer"}
-There are about 32.5 million paired-end sequences in these files.
+There are about 3.25 million paired-end sequences in these files.
 :::
+
+### Preparing the sequencing data for _de novo_ assembly
+
+Before running the actual assembly, we need to pre-process our sequencing data. Typical pre-processing steps include the trimming of adapter sequences and barcodes from the sequencing data and the removal of host or contaminant sequences, such as the bacteriophage PhiX, which is commonly used sequenced as a quality control.
+
+Many assembly pipelines, such as [nf-core/mag](https://nf-co.re/mag), have these steps automatically included, however, these steps can be performed prior to it, too. For this practical, I have performed these steps for us and we could directly continue with the _de novo_ assembly.
+
+::: {.callout-important}
+The characteristic of ancient DNA samples that pre-determines the success of the _de novo_ assembly is the **distribution of the DNA molecule length**. Determine this distribution prior to running the _de novo_ assembly to be able to predict the results of the _de novo_ assembly.
+:::
+
+However, since the average length of the insert size of sequencing data (**Figure 3**) is highly
+correlated with the success of the assembly, we want to first evaluate it. For this we can run make
+use of the program `fastp` [@Chen2018].
+
+```{r out.width = "60%", echo = F, fig.align = "center"}
+knitr::include_graphics("assets/images/chapters/denovo-assembly/insert_size_scheme.png")
+```
+
+**Figure 3**: **Scheme of a read pair of Illumina sequencing data.**
+
+Fastp will try to overlap the two mates of a read pair and, if this is possible, return the length of the merged sequence, which is identical to insert size or the DNA molecule length. If the two mates cannot be overlapped, we will not be able to know the exact DNA molecule length but only know that it is longer than 290 bp (each read has a length of 150 bp and FastP requires a 11 bp overlap between the reads).
+
+The final histogram of the insert sizes that is returned by FastP can tell us how well preserved the DNA of an ancient sample is (**Figure 4**). The more the distribution is skewed to the right, i.e. the longer the DNA molecules are, the more likely we are to obtain long contiguous DNA sequences from the _de novo_ assembly. A distribution that is skewed to the left means that the DNA molecules are more degraded and this lowers our chances for obtaining long continuous sequences.
+
+```{r out.width = "70%", echo = F, fig.align = "center"}
+knitr::include_graphics("assets/images/chapters/denovo-assembly/Orlando2013_FigS4.5.png")
+```
+
+**Figure 4**: **Example of a DNA molecule length distribution of a well-preserved ancient DNA
+sample.** This histogram belongs to a 700,000-year-old horse that was preserved in permafrost
+(@Orlando2013 Fig. S4).
+
+To infer the distribution of the DNA molecules, we can run the command
+
+```{bash, eval = F}
+fastp --in1 2612_R1.fastq.gz \
+      --in2 2612_R2.fastq.gz \
+      --stdout --merge -A -G -Q -L --json /dev/null --html overlaps.html \
+> /dev/null
+```
+
+::: {.callout-tip title="Question" appearence="simple"}
+
+**Infer the distribution of the DNA molecule length of the sequencing data. Is this sample well-preserved?**
+
+Hint: You can easily inspect the distribution by opening the HTML report `overlaps.html`.
+
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+:::
+
 
 
 ### _De novo_ assembly

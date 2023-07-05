@@ -418,7 +418,8 @@ div.csl-indent {
   <li><a href="#practical" id="toc-practical" class="nav-link" data-scroll-target="#practical"><span class="header-section-number">12.2</span> Practical</a>
   <ul class="collapse">
   <li><a href="#sample-overview" id="toc-sample-overview" class="nav-link" data-scroll-target="#sample-overview"><span class="header-section-number">12.2.1</span> Sample overview</a></li>
-  <li><a href="#de-novo-assembly" id="toc-de-novo-assembly" class="nav-link" data-scroll-target="#de-novo-assembly"><span class="header-section-number">12.2.2</span> <em>De novo</em> assembly</a></li>
+  <li><a href="#preparing-the-sequencing-data-for-de-novo-assembly" id="toc-preparing-the-sequencing-data-for-de-novo-assembly" class="nav-link" data-scroll-target="#preparing-the-sequencing-data-for-de-novo-assembly"><span class="header-section-number">12.2.2</span> Preparing the sequencing data for <em>de novo</em> assembly</a></li>
+  <li><a href="#de-novo-assembly" id="toc-de-novo-assembly" class="nav-link" data-scroll-target="#de-novo-assembly"><span class="header-section-number">12.2.3</span> <em>De novo</em> assembly</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -557,7 +558,7 @@ Question
 </div>
 <div class="callout-body-container callout-body">
 <p><strong>How many sequences are in each FastQ file?</strong></p>
-<p>Hint: You can run <code>seqtk size &lt;FastQ file&gt;</code> to find this out.</p>
+<p>Hint: You can run either <code>seqtk size &lt;FastQ file&gt;</code> or <code>bioawk -c fastx 'END{print NR}' &lt;FastQ file&gt;</code> to find this out.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
@@ -572,18 +573,99 @@ Answer
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>There are about 32.5 million paired-end sequences in these files.</p>
+<p>There are about 3.25 million paired-end sequences in these files.</p>
 </div>
 </div>
 </div>
 </section>
-<section id="de-novo-assembly" class="level3" data-number="12.2.2">
-<h3 data-number="12.2.2" class="anchored" data-anchor-id="de-novo-assembly"><span class="header-section-number">12.2.2</span> <em>De novo</em> assembly</h3>
+<section id="preparing-the-sequencing-data-for-de-novo-assembly" class="level3" data-number="12.2.2">
+<h3 data-number="12.2.2" class="anchored" data-anchor-id="preparing-the-sequencing-data-for-de-novo-assembly"><span class="header-section-number">12.2.2</span> Preparing the sequencing data for <em>de novo</em> assembly</h3>
+<p>Before running the actual assembly, we need to pre-process our sequencing data. Typical pre-processing steps include the trimming of adapter sequences and barcodes from the sequencing data and the removal of host or contaminant sequences, such as the bacteriophage PhiX, which is commonly used sequenced as a quality control.</p>
+<p>Many assembly pipelines, such as <a href="https://nf-co.re/mag">nf-core/mag</a>, have these steps automatically included, however, these steps can be performed prior to it, too. For this practical, I have performed these steps for us and we could directly continue with the <em>de novo</em> assembly.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The characteristic of ancient DNA samples that pre-determines the success of the <em>de novo</em> assembly is the <strong>distribution of the DNA molecule length</strong>. Determine this distribution prior to running the <em>de novo</em> assembly to be able to predict the results of the <em>de novo</em> assembly.</p>
+</div>
+</div>
+<p>However, since the average length of the insert size of sequencing data (<strong>Figure 3</strong>) is highly correlated with the success of the assembly, we want to first evaluate it. For this we can run make use of the program <code>fastp</code> <span class="citation" data-cites="Chen2018">(<a href="references.html#ref-Chen2018" role="doc-biblioref">Chen et al. 2018</a>)</span>.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/images/chapters/denovo-assembly/insert_size_scheme.png" class="img-fluid figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Figure 3</strong>: <strong>Scheme of a read pair of Illumina sequencing data.</strong></p>
+<p>Fastp will try to overlap the two mates of a read pair and, if this is possible, return the length of the merged sequence, which is identical to insert size or the DNA molecule length. If the two mates cannot be overlapped, we will not be able to know the exact DNA molecule length but only know that it is longer than 290 bp (each read has a length of 150 bp and FastP requires a 11 bp overlap between the reads).</p>
+<p>The final histogram of the insert sizes that is returned by FastP can tell us how well preserved the DNA of an ancient sample is (<strong>Figure 4</strong>). The more the distribution is skewed to the right, i.e.&nbsp;the longer the DNA molecules are, the more likely we are to obtain long contiguous DNA sequences from the <em>de novo</em> assembly. A distribution that is skewed to the left means that the DNA molecules are more degraded and this lowers our chances for obtaining long continuous sequences.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/images/chapters/denovo-assembly/Orlando2013_FigS4.5.png" class="img-fluid figure-img" style="width:70.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Figure 4</strong>: <strong>Example of a DNA molecule length distribution of a well-preserved ancient DNA sample.</strong> This histogram belongs to a 700,000-year-old horse that was preserved in permafrost (<span class="citation" data-cites="Orlando2013">Orlando et al. (<a href="references.html#ref-Orlando2013" role="doc-biblioref">2013</a>)</span> Fig. S4).</p>
+<p>To infer the distribution of the DNA molecules, we can run the command</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fastp</span> <span class="at">--in1</span> 2612_R1.fastq.gz <span class="dt">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>      <span class="at">--in2</span> 2612_R2.fastq.gz <span class="dt">\</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">--stdout</span> <span class="at">--merge</span> <span class="at">-A</span> <span class="at">-G</span> <span class="at">-Q</span> <span class="at">-L</span> <span class="at">--json</span> /dev/null <span class="at">--html</span> overlaps.html <span class="dt">\</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> /dev/null</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Question" data-appearence="simple">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Infer the distribution of the DNA molecule length of the sequencing data. Is this sample well-preserved?</strong></p>
+<p>Hint: You can easily inspect the distribution by opening the HTML report <code>overlaps.html</code>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+</div>
+</section>
+<section id="de-novo-assembly" class="level3" data-number="12.2.3">
+<h3 data-number="12.2.3" class="anchored" data-anchor-id="de-novo-assembly"><span class="header-section-number">12.2.3</span> <em>De novo</em> assembly</h3>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Almeida2021" class="csl-entry" role="listitem">
 Almeida, Alexandre, Stephen Nayfach, Miguel Boland, Francesco Strozzi, Martin Beracochea, Zhou Jason Shi, Katherine S. Pollard, et al. 2021. <span>“A Unified Catalog of 204,938 Reference Genomes from the Human Gut Microbiome.”</span> <em>Nature Biotechnology</em> 39 (1): 105–14. <a href="https://doi.org/10.1038/s41587-020-0603-3">https://doi.org/10.1038/s41587-020-0603-3</a>.
+</div>
+<div id="ref-Chen2018" class="csl-entry" role="listitem">
+Chen, Shifu, Yanqing Zhou, Yaru Chen, and Jia Gu. 2018. <span>“Fastp: An Ultra-Fast All-in-One <span>FASTQ</span> Preprocessor.”</span> <em>Bioinformatics</em> 34 (17): i884–90. <a href="https://doi.org/10.1093/bioinformatics/bty560">https://doi.org/10.1093/bioinformatics/bty560</a>.
 </div>
 <div id="ref-LiMegahit2015" class="csl-entry" role="listitem">
 Li, Dinghua, Chi-Man Liu, Ruibang Luo, Kunihiko Sadakane, and Tak-Wah Lam. 2015. <span>“<span>MEGAHIT</span>: An Ultra-Fast Single-Node Solution for Large and Complex Metagenomics Assembly via Succinct de <span>Bruijn</span> Graph.”</span> <em>Bioinformatics</em> 31 (10): 1674–76. <a href="https://doi.org/10.1093/bioinformatics/btv033">https://doi.org/10.1093/bioinformatics/btv033</a>.
@@ -593,6 +675,9 @@ Maixner, Frank, Mohamed S. Sarhan, Kun D. Huang, Adrian Tett, Alexander Schoenaf
 </div>
 <div id="ref-Nurk2017" class="csl-entry" role="listitem">
 Nurk, Sergey, Dmitry Meleshko, Anton Korobeynikov, and Pavel A. Pevzner. 2017. <span>“<span class="nocase">metaSPAdes</span>: A New Versatile Metagenomic Assembler.”</span> <em>Genome Research</em> 27 (5): 824–34. <a href="https://doi.org/10.1101/gr.213959.116">https://doi.org/10.1101/gr.213959.116</a>.
+</div>
+<div id="ref-Orlando2013" class="csl-entry" role="listitem">
+Orlando, Ludovic, Aurélien Ginolhac, Guojie Zhang, Duane Froese, Anders Albrechtsen, Mathias Stiller, Mikkel Schubert, et al. 2013. <span>“Recalibrating <span>Equus</span> Evolution Using the Genome Sequence of an Early <span>Middle Pleistocene</span> Horse.”</span> <em>Nature</em> 499 (7456): 74–78. <a href="https://doi.org/10.1038/nature12323">https://doi.org/10.1038/nature12323</a>.
 </div>
 </div>
 </section>
