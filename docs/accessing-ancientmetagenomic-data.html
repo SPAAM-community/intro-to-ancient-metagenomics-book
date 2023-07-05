@@ -8,7 +8,7 @@
 
 <meta name="author" content="James A. Fellows Yates">
 
-<title>Introduction to Ancient Metagenomics - 16&nbsp; Introduction to AncientMetagenomeDir</title>
+<title>Introduction to Ancient Metagenomics - 16&nbsp; Accessing Ancient Metagenomic Data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -55,7 +55,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -112,7 +131,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./section-ancient-metagenomic-resources.html">Ancient Metagenomic Resources</a></li><li class="breadcrumb-item"><a href="./accessing-ancientmetagenomic-data.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduction to AncientMetagenomeDir</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./section-ancient-metagenomic-resources.html">Ancient Metagenomic Resources</a></li><li class="breadcrumb-item"><a href="./accessing-ancientmetagenomic-data.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Accessing Ancient Metagenomic Data</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -338,7 +357,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./accessing-ancientmetagenomic-data.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduction to AncientMetagenomeDir</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Accessing Ancient Metagenomic Data</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -398,11 +417,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">16.2</span> Introduction</a></li>
   <li><a href="#finding-ancient-metagenomic-data" id="toc-finding-ancient-metagenomic-data" class="nav-link" data-scroll-target="#finding-ancient-metagenomic-data"><span class="header-section-number">16.3</span> Finding Ancient Metagenomic Data</a></li>
   <li><a href="#ancientmetagenomedir" id="toc-ancientmetagenomedir" class="nav-link" data-scroll-target="#ancientmetagenomedir"><span class="header-section-number">16.4</span> AncientMetagenomeDir</a></li>
-  <li><a href="#further-improving-metadata-reporting-in-ancient-metagenomics" id="toc-further-improving-metadata-reporting-in-ancient-metagenomics" class="nav-link" data-scroll-target="#further-improving-metadata-reporting-in-ancient-metagenomics"><span class="header-section-number">16.5</span> Further Improving Metadata Reporting in Ancient Metagenomics</a></li>
-  <li><a href="#running-amdirt" id="toc-running-amdirt" class="nav-link" data-scroll-target="#running-amdirt"><span class="header-section-number">16.6</span> Running AMDirT</a></li>
-  <li><a href="#inspecting-amdirt-output" id="toc-inspecting-amdirt-output" class="nav-link" data-scroll-target="#inspecting-amdirt-output"><span class="header-section-number">16.7</span> Inspecting AMDirT Output</a></li>
-  <li><a href="#git-practise" id="toc-git-practise" class="nav-link" data-scroll-target="#git-practise"><span class="header-section-number">16.8</span> Git Practise</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">16.9</span> Summary</a></li>
+  <li><a href="#amdirt" id="toc-amdirt" class="nav-link" data-scroll-target="#amdirt"><span class="header-section-number">16.5</span> AMDirT</a>
+  <ul class="collapse">
+  <li><a href="#running-amdirt-viewer" id="toc-running-amdirt-viewer" class="nav-link" data-scroll-target="#running-amdirt-viewer"><span class="header-section-number">16.5.1</span> Running AMDirT viewer</a></li>
+  <li><a href="#inspecting-amdirt-viewer-output" id="toc-inspecting-amdirt-viewer-output" class="nav-link" data-scroll-target="#inspecting-amdirt-viewer-output"><span class="header-section-number">16.5.2</span> Inspecting AMDirT viewer Output</a></li>
+  <li><a href="#amdirt-convert" id="toc-amdirt-convert" class="nav-link" data-scroll-target="#amdirt-convert"><span class="header-section-number">16.5.3</span> AMDirT convert</a></li>
+  </ul></li>
+  <li><a href="#git-practise" id="toc-git-practise" class="nav-link" data-scroll-target="#git-practise"><span class="header-section-number">16.6</span> Git Practise</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">16.7</span> Summary</a></li>
+  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources"><span class="header-section-number">16.8</span> Resources</a></li>
   </ul>
 </nav>
     </div>
@@ -411,7 +434,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduction to AncientMetagenomeDir</span></h1>
+<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Accessing Ancient Metagenomic Data</span></h1>
 </div>
 
 
@@ -448,6 +471,7 @@ Tip
 </div>
 <section id="lecture" class="level2" data-number="16.1">
 <h2 data-number="16.1" class="anchored" data-anchor-id="lecture"><span class="header-section-number">16.1</span> Lecture</h2>
+<p>Lecture slides and video from the <a href="https://www.spaam-community.org/wss-summer-school/#/2022/README">2022 edition of the summer school</a>.</p>
 <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSkO7KH9YEmHCjMlCRhoxtZrDxZ0cKnsPazEAS3PspBGuhAtA9qhQ0wnPXg64cZrAJZQECngZFfjTRL/embed?start=false&amp;loop=true&amp;delayms=10000" frameborder="0" width="100%" height="400px" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
 </iframe>
 <p>PDF version of these slides can be downloaded from <a href="https://github.com/SPAAM-community/https://github.com/SPAAM-community/wss-summer-school/raw/main/docs/raw/main/docs/assets/slides/2022/2c-intro-to-ancientmetagenomedir/SPAAM%20Summer%20School%202022%20-%202C%20-%20AncientMetagenomeDir.pdf">here</a>.</p>
@@ -458,7 +482,7 @@ Tip
 <h2 data-number="16.2" class="anchored" data-anchor-id="introduction"><span class="header-section-number">16.2</span> Introduction</h2>
 <p>In most bioinformatic projects, we need to include publicly available comparative data to expand or compare our newly generated data with.</p>
 <p>Including public data can benefit ancient metagenomic studies in a variety of ways. It can help increase our sample sizes (a common problem when dealing with rare archaeological samples) - thus providing stronger statistical power. Comparison with a range of previously published data of different preservational levels can allow an estimate on the quality of the new samples. When considering solely (re)using public data, we can consider that this can also spawn new ideas, projects, and meta analyses to allow further deeper exploration of ancient metagenomic data (e.g., looking for correlations between various environmental factors and preservation).</p>
-<p>Fortunately for us, genomicists and <a href="http://dx.doi.org/10.1371/journal.pone.0121409">particularly palaeogenomicists</a> have been very good at uploading raw sequencing data to well-established databases.</p>
+<p>Fortunately for us, geneticists and particularly palaeogenomicists have been very good at uploading raw sequencing data to well-established databases <span class="citation" data-cites="Anagnostou2015-mz">(<a href="references.html#ref-Anagnostou2015-mz" role="doc-biblioref">Anagnostou et al. 2015</a>)</span>.</p>
 <p>In the vast majority of cases you will be able to find publically available sequencing data on the <a href="https://www.insdc.org/">INSDC</a> association of databases, namely the <a href="https://www.ebi.ac.uk/ena/">EBI’s European Nucleotide Archive</a> (ENA), and <a href="https://www.ncbi.nlm.nih.gov/sra">NCBI</a> or <a href="https://www.ddbj.nig.ac.jp/dra/index-e.html">DDBJ’s</a> Sequence Read Archives (SRA). However, you may in some cases find ancient metagenomic data on institutional FTP servers, domain specific databases (e.g.&nbsp;<a href="https://oagr.org">OAGR</a>), <a href="https://zenodo.org">Zenodo</a>, <a href="https://figshare.com">Figshare</a>, or <a href="https://github.com">GitHub</a>.</p>
 <p>But while the data is publicly available, we need to ask whether it is ‘FAIR’.</p>
 </section>
@@ -471,22 +495,27 @@ Tip
 <li>Interoperable</li>
 <li>Reproducible</li>
 </ul>
-<p>And when we consider ancient metagenomic data, we are pretty close to this. Sequencing data is in most cases accessible (via the public databases like ENA, SRA), interoperable and reproducible because we use field standard formats such as FASTQ or BAM files. However <em>Findable</em> remains an issue.</p>
+<p>When we consider ancient (meta)genomic data, we are pretty close to this. Sequencing data is in most cases accessible (via the public databases like ENA, SRA), interoperable and reproducible because we use field standard formats such as FASTQ or BAM files. However <em>findable</em> remains an issue.</p>
 <p>This is because the <em>metadata</em> about each data file is dispersed over many places, and very often not with the data files themselves.</p>
 <p>In this case I am referring to metadata such as: What is the sample’s name? How old is it? Where is it from? Which enzymes were used for library construction? What sequencing machine was this library sequenced on?</p>
 <p>To find this information about a given data file, you have to search many places (main text, supplementary information, the database itself), for different types of metadata (as authors report different things), and also in different formats (text, tables, figures.</p>
-<p>This very heterogenous landscape makes it difficult for machines to index all this information (if at all), and thus means you cannot search for the data you want to use for your own reserch in online search engines.</p>
+<p>This very heterogenous landscape makes it difficult for machines to index all this information (if at all), and thus means you cannot search for the data you want to use for your own research in online search engines.</p>
 </section>
 <section id="ancientmetagenomedir" class="level2" data-number="16.4">
 <h2 data-number="16.4" class="anchored" data-anchor-id="ancientmetagenomedir"><span class="header-section-number">16.4</span> AncientMetagenomeDir</h2>
-<p>This is where the SPAAM community project <a href="https://github.com/spaam-community/AncientMetagenomeDir">AncientMetagenomeDir</a> comes in. AncientMetagenomeDir is a resource of lists of metadata of all publishing and publically available ancient metagenomes and microbial genome-level enriched samples.</p>
-<p>By aggregating and standardising metadata and accession codes of ancient metagenomic samples, the project aims to make it easier for people to find comparative data for their own projects, as well as help track the field over time and facilitate meta analyses.</p>
+<p>This is where the SPAAM community project ‘<a href="https://github.com/spaam-community/AncientMetagenomeDir">AncientMetagenomeDir</a>’ comes in <span class="citation" data-cites="Fellows_Yates2021-rp">(<a href="references.html#ref-Fellows_Yates2021-rp" role="doc-biblioref">Fellows Yates, Andrades Valtueña, et al. 2021</a>)</span>. AncientMetagenomeDir is a resource of lists of metadata of all publishing and publicly available ancient metagenomes and microbial genome-level enriched samples and their associated libraries.</p>
+<p>By aggregating and standardising metadata and accession codes of ancient metagenomic samples and libraries, the project aims to make it easier for people to find comparative data for their own projects, appropriately re-analyse libraries, as well as help track the field over time and facilitate meta analyses.</p>
 <p>Currently the project is split over three main tables: host-associated metagenomes (e.g.&nbsp;ancient microbiomes), host-associated single-genomes (e.g.&nbsp;ancient pathogens), and environmental metagenomes (e.g.&nbsp;lakebed cores or cave sediment sequences).</p>
-<p>The repository already contains more than a thousand samples and span the entire globe and as far back as hundreds of thousands of years.</p>
-<p>To make the lists of samples and their metadata as accessible and interoperable as possible, we utilise simple text (TSV - tab separate value) files - files that can be opened by pretty much all spreadsheet tools (e.g., Microsoft Office excel, LibreOffice Calc) and languages (R, Python etc.).</p>
-<p><img src="assets/images/chapters/introduction-to-ancientmetagenomedir/ancientmetagenomedir-example.png" class="img-fluid"></p>
-<p>Criticially, by standardising the recorded all metadata across all publications this makes it much easier for researchers to filter for particular time periods, geographical regions, or sample types of their interest - and then use the also recorded accession numbers to efficiently download the data.</p>
-<p>At their core all different AncientMetagenomeDir tables must have at 6 minimum metadata sets:</p>
+<p>The repository already contains more than 2000 samples and 5000 libraries, spanning the entire globe and as far back as hundreds of thousands of years.</p>
+<p>To make the lists of samples and their metadata as accessible and interoperable as possible, we utilise simple text (TSV - tab separate value) files - files that can be opened by pretty much all spreadsheet tools (e.g., Microsoft Office excel, LibreOffice Calc) and languages (R, Python etc.) (<a href="#fig-accessingdata-exampledirtable">Figure&nbsp;<span>16.1</span></a>).</p>
+<div id="fig-accessingdata-exampledirtable" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-exampledirtable.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.1: Example few columns and rows of an AncientMetagenomeDir table, including project name, publication year, site name, latitude, longitude, country and sample name.</figcaption>
+</figure>
+</div>
+<p>Critically, by standardising the recorded all metadata across all publications this makes it much easier for researchers to filter for particular time periods, geographical regions, or sample types of their interest - and then use the also recorded accession numbers to efficiently download the data.</p>
+<p>At their core all different AncientMetagenomeDir tables must have at 6 minimum metadata sets at the sample level:</p>
 <ul>
 <li>Publication information (doi)</li>
 <li>Sample name(s)</li>
@@ -495,22 +524,22 @@ Tip
 <li>Sample type (e.g.&nbsp;bone, sediment, etc.)</li>
 <li>Data Archive and accessions</li>
 </ul>
-<p>Each table then has additional columns depending on the context (e.g.&nbsp;what time of microbiome is expected for host-associated metagenoes, or species name of the genome that was reconstructed).</p>
-<p>The AncientMetagenomeDir project already has 3 releases, and will continued to be regularly updated as the community continues to submit new metadata of samples of new publications as they come out.</p>
+<p>Each table then has additional columns depending on the context (e.g.&nbsp;what time of microbiome is expected for host-associated metagenomes, or species name of the genome that was reconstructed).</p>
+<p>The AncientMetagenomeDir project already has 9 major releases, and will continued to be regularly updated as the community continues to submit new metadata of samples of new publications as they come out.</p>
 </section>
-<section id="further-improving-metadata-reporting-in-ancient-metagenomics" class="level2" data-number="16.5">
-<h2 data-number="16.5" class="anchored" data-anchor-id="further-improving-metadata-reporting-in-ancient-metagenomics"><span class="header-section-number">16.5</span> Further Improving Metadata Reporting in Ancient Metagenomics</h2>
-<p>However, for researchers, sample-level metadata likely will not include all the information that is needed to include and process public data in their own projects.</p>
-<p>The SPAAM community have been busy over the last few months extending the types of metadata included in the AncientMetagenomeDir project, to include library level metadata.</p>
-<p>This metadata includes things such as whether a given set of data files contain sequencing data sequenced on which platform, whether the libraries have undergone damage treatment in the lab, or whether the uploaded data contains all or only mapped reads.</p>
-<p>We have also started a new project - a MIxS checklist currently entitled ‘MINAS’ - which we aim to make <em>the</em> standard metadata reporting sheet for all ancient metagenomics and even for any ancient DNA sample. Such a checklist would be interegrated into services such as the ENA or SRA, and therefore would standardise metadata <em>alongside</em> the raw data, and make ancient metagenomic data much more <em>findable</em> with search engines.</p>
-<p>Finally, to make it easier for researchers who are not familiar with sequencing database infrastucture, we are in the process of building a new tool (something already in a usable state) called <a href="https://github.com/SPAAM-community/AMDirT">AMDirT</a>. This allows a web browser-based GUI to filter and select data, and produce scripts for you to download all the selected data (without having to go to the databases themselves).</p>
-<p>This is something we are going to try out now!</p>
-</section>
-<section id="running-amdirt" class="level2" data-number="16.6">
-<h2 data-number="16.6" class="anchored" data-anchor-id="running-amdirt"><span class="header-section-number">16.6</span> Running AMDirT</h2>
-<p><img src="assets/images/chapters/introduction-to-ancientmetagenomedir/amdirt-title.png" class="img-fluid"></p>
-<p>First, we will need to activate a conda environment, and then install the latest development version of the tool for you.</p>
+<section id="amdirt" class="level2" data-number="16.5">
+<h2 data-number="16.5" class="anchored" data-anchor-id="amdirt"><span class="header-section-number">16.5</span> AMDirT</h2>
+<p>But how does one explore such a large dataset of tables with thousands of rows? You could upload this into a spreadsheet tool or in a programming language like R, but you would still have to do a lot of manual filtering and parsing of the dataset to make it useful for downstream analyses.</p>
+<p>In response to this The SPAAM Community have also developed a companion tool ‘AMDirT’ to facilitate this. Amongst other functionality, AMDirT allows you to load different releases of AncientMetagenomeDir, filter and explore to specific samples or libraries of interest, and then generate download scripts, configuration files for pipelines, and reference BibTeX files for you, both via a command-line (CLI) or graphical user interface (GUI)!</p>
+<section id="running-amdirt-viewer" class="level3" data-number="16.5.1">
+<h3 data-number="16.5.1" class="anchored" data-anchor-id="running-amdirt-viewer"><span class="header-section-number">16.5.1</span> Running AMDirT viewer</h3>
+<p>We will now demonstrate how to use the AMDirT graphical user interface to load a dataset, filter to samples of interest, and download some configuration input files for downstream ancient DNA pipelines.</p>
+<div id="fig-accessingdata-amdirtlogo" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-amdirtlogo.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.2: AMDirT logo: a cog with the SPAAM icon in the middle with the word AMDirT to the side</figcaption>
+</figure>
+</div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -521,71 +550,95 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This tutorial will require a web-browser! Make sure to run on your local laptop/PC or on a server with X11 forwarding</p>
+<p>This tutorial will require a web-browser! Make sure to run on your local laptop/PC or, if on on a server, with X11 forwarding activated.</p>
 </div>
 </div>
-<p>Open your terminal, and run the following two commands:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate git-eager</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">--upgrade</span> <span class="at">--force-reinstall</span> git+https://github.com/SPAAM-community/AMDirT.git@dev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Once that (hopefully) installs correctly, we can load the tool by running</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">AMDirT</span> filter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>First, we will need to activate a conda environment, and then install the latest development version of the tool for you.</p>
+<p>While in the <code>accessing-ancientmetagenomic-data</code> conda environment, run the following command to load the GUI into your web-browser. If the browser doesn’t automatically load, copy the IP address and paste it in your browser’s URL bar.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">AMDirT</span> viewer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Your web browser should now load, and you should see a two panel page.</p>
-<p><img src="assets/images/chapters/introduction-to-ancientmetagenomedir/amdirt-firstpage.png" class="img-fluid"></p>
 <p>Under <strong>Select a table</strong> use the dropdown menu to select ‘ancientsinglegenome-hostassociated’.</p>
-<p>You should then see a table, pretty similar what you are familiar with with spreadsheet tools such as Microsoft Excel or LibreOffice calc.</p>
-<p><img src="assets/images/chapters/introduction-to-ancientmetagenomedir/amdirt-projectfilter.png" class="img-fluid"></p>
+<p>You should then see a table (<a href="#fig-accessingdata-firstpage">Figure&nbsp;<span>16.3</span></a>), pretty similar what you are familiar with with spreadsheet tools such as Microsoft Excel or LibreOffice calc.</p>
+<div id="fig-accessingdata-firstpage" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-firstpage.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.3: Main AMDirT Viewer page on load. A toolbar on the left displays the AMDirT version, and dropdown menus for the AncientMetagenomeDir release, table, and downloading tool to use. The rest of the page shows a tabular window containing rows and columns corresponding to sample metadata and rows of samples with metadata such as project name, publication year and site name.</figcaption>
+</figure>
+</div>
 <p>To navigate, you can scroll down to see more rows, and press <kbd>shift</kbd> and scroll to see more columns, or use click on a cell and use your arrow keys (<kbd>⬆</kbd>,<kbd>⬇</kbd>,<kbd>⬅</kbd>,<kbd>➡</kbd>) to move around the table.</p>
 <p>You can reorder columns by clicking on the column name, and also filter by pressing the little ‘burger’ icon that appears on the column header when you hover over a given column.</p>
 <p>As an exercise, we will try filtering to a particular set of samples, then generate some download scripts, and download the files.</p>
-<p>First, filter the <strong>project_name</strong> column to ‘Kocher2021’.</p>
-<p><img src="assets/images/chapters/introduction-to-ancientmetagenomedir/amdirt-projectfilter2.png" class="img-fluid"></p>
-<p>Then scroll to the right, and filter the <strong>geo_loc_name</strong> to ‘United Kingdom’.</p>
-<p><img src="assets/images/chapters/introduction-to-ancientmetagenomedir/amdirt-geofilter.png" class="img-fluid"></p>
+<p>First, filter the <strong>project_name</strong> column to ‘Kocher2021’ from <span class="citation" data-cites="Kocher2021-vg">(<a href="references.html#ref-Kocher2021-vg" role="doc-biblioref">Kocher et al. 2021</a>, <a href="references.html#fig-accessingdata-projectfilter" role="doc-biblioref">Figure&nbsp;<span>16.4</span></a>)</span>.</p>
+<div id="fig-accessingdata-projectfilter" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-projectfilter.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.4: The AMDirT viewer with a filter menu coming out of the project name column, with just the Kocher 2021 in the search bar.</figcaption>
+</figure>
+</div>
+<p>Then scroll to the right, and filter the <strong>geo_loc_name</strong> to ‘United Kingdom’ (<a href="#fig-accessingdata-geofilter">Figure&nbsp;<span>16.5</span></a>).</p>
+<div id="fig-accessingdata-geofilter" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-geofilter.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.5: The AMDirT viewer with a filter menu coming out of the geo location column, with just the United Kingdom written in the search bar and the entry ticked in the results.</figcaption>
+</figure>
+</div>
 <p>You should be left with 4 rows.</p>
-<p>Finally, scroll back to the first column and tick the boxes of these four samples.</p>
-<p><img src="assets/images/chapters/introduction-to-ancientmetagenomedir/amdirt-tickbox.png" class="img-fluid"></p>
-<p>Once you’ve selected the samples you want, you can press <strong>Validate selection</strong>. You should then see a series loading-spinner, and new buttons should appear!</p>
-<p><img src="assets/images/chapters/introduction-to-ancientmetagenomedir/amdirt-validated.png" class="img-fluid"></p>
-<p>You should have three main buttons:</p>
+<p>Finally, scroll back to the first column and tick the boxes of these four samples (<a href="#fig-accessingdata-tickbox">Figure&nbsp;<span>16.6</span></a>).</p>
+<div id="fig-accessingdata-tickbox" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-tickbox.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.6: The AMDirT viewer with just four rows with samples from Kocher2021 that are located in the United Kingdom being displayed, and the tickboxes next to each one selected</figcaption>
+</figure>
+</div>
+<p>Once you’ve selected the samples you want, you can press <strong>Validate selection</strong>. You should then see a series loading-spinner, and new a lot of buttons should appear (<a href="#fig-accessingdata-validated">Figure&nbsp;<span>16.7</span></a>)!</p>
+<div id="fig-accessingdata-validated" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-validated.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.7: The AMDirT viewer after pressing the ‘validate selection’ button. A range of buttons are displayed at the bottom including a warning message, with the buttons offering download of a range of files such as download scripts, AncientMetagenomeDir library tables and input configuration sheets for a range of ancient DNA bioinformatics pipelines</figcaption>
+</figure>
+</div>
+<p>You should have four categories of buttons:</p>
 <ul>
+<li><strong>Download AncientMetagenomeDir Library Table</strong></li>
 <li><strong>Download Curl sample download script</strong></li>
-<li><strong>Download nf-core/eager input TSV</strong></li>
+<li><strong>Download &lt;tool/pipeline name&gt; input TSV</strong></li>
 <li><strong>Download Citations as BibText</strong></li>
 </ul>
-<p>The first button is for generating a download script that will allow you to immediately download all sequencing data of the samples you selected. The second button is a pre-configured input file for use in the nf-core/eager ancient DNA pipeline, and finally, the third button generates a text file with (in most cases) all the citations of the data you downloaded, in a format accepted by most reference/citation managers.</p>
-<p>It’s important to note you are not necessarily restricted to <a href="https://curl.se/">Curl</a> for downloading the data, or <a href="https://nf-co.re/eager">nf-core/eager</a> for running the files. AMDirT aims to add support for whatever tools or pipelines requested by the community. For example, an already supported download alternative is with the <a href="https://nf-co.re/fetchngs">nf-core/fetchNGS</a> pipeline. You can select these using the drop-down menus on the left hand-side.</p>
-<p>Press the three buttons to make sure you download the files. And once this is done, you can close the tab of the web browser, and in the terminal you can press <kbd>ctrl</kbd> + <kbd>c</kbd> to shutdown the tool.</p>
+<p>The first button is to download a table containing all the AncientMetagenomeDir metadata of the selected amples. The second is for generating a download script that will allow you to immediately download all sequencing data of the samples you selected. The third set of buttons generate (partially!) pre-configured input files for use in dedicated ancient DNA pipeline such as nf-core/eager <span class="citation" data-cites="Fellows_Yates2021-jl">(<a href="references.html#ref-Fellows_Yates2021-jl" role="doc-biblioref">Fellows Yates, Lamnidis, et al. 2021</a>)</span>, PALAEOMIX <span class="citation" data-cites="Schubert2014-ps">(<a href="references.html#ref-Schubert2014-ps" role="doc-biblioref">Schubert et al. 2014</a>)</span>, and/or and aMeta <span class="citation" data-cites="Pochon2022-hj">(<a href="references.html#ref-Pochon2022-hj" role="doc-biblioref">Pochon et al. 2022</a>)</span>. Finally, the fourth button generates a text file with (in most cases) all the citations of the data you downloaded, in a format accepted by most reference/citation managers. In this case the reference metadata for that particular publictcation isn’t publicly available so there is a warning.</p>
+<p>It’s important to note you are not necessarily restricted to <a href="https://curl.se/">Curl</a> for downloading the data. AMDirT aims to add support for whatever tools or pipelines requested by the community. For example, an already supported downloading tool alternative is the <a href="https://nf-co.re/fetchngs">nf-core/fetchNGS</a> pipeline. You can select these using the drop-down menus on the left hand-side.</p>
+<p>Press the AncientMetagenomeDir library, curl download, and nf-core/eager buttons to download two <code>.tsv</code> files, one <code>*.sh</code> file and one ’*bib’ file. Once this is done, you can close the tab of the web browser, and in the terminal you can press <kbd>ctrl</kbd> + <kbd>c</kbd> to shutdown the tool.</p>
 </section>
-<section id="inspecting-amdirt-output" class="level2" data-number="16.7">
-<h2 data-number="16.7" class="anchored" data-anchor-id="inspecting-amdirt-output"><span class="header-section-number">16.7</span> Inspecting AMDirT Output</h2>
+<section id="inspecting-amdirt-viewer-output" class="level3" data-number="16.5.2">
+<h3 data-number="16.5.2" class="anchored" data-anchor-id="inspecting-amdirt-viewer-output"><span class="header-section-number">16.5.2</span> Inspecting AMDirT viewer Output</h3>
 <p>Lets look at the files that AMDirT has generated for you.</p>
 <p>First you should <code>cd</code> into the directory that your web browser downloaded the files into (e.g.&nbsp;<code>cd ~/Downloads/</code>), then look inside the directory. You should see the following three files</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ls</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ancientMetagenomeDir_curl_download_script.sh</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ancientMetagenomeDir_citations.bib</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ancientMetagenomeDir_eager_input.csv</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ls</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_bibliography.bib</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_curl_download_script.sh</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_filtered_libraries.csv</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_nf_core_eager_input_table.tsv</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>We can simple run <code>cat</code> on each file to look inside. If you run <code>cat</code> on the curl download script, you should see a series of <code>curl</code> commands with the correct ENA links for you for each of the samples you wish to download.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat ancientMetagenomeDir_curl_download_script.sh</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/009/ERR6053619/ERR6053619.fastq.gz <span class="at">-o</span> ERR6053619.fastq.gz</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/008/ERR6053618/ERR6053618.fastq.gz <span class="at">-o</span> ERR6053618.fastq.gz</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/005/ERR6053675/ERR6053675.fastq.gz <span class="at">-o</span> ERR6053675.fastq.gz</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/006/ERR6053686/ERR6053686.fastq.gz <span class="at">-o</span> ERR6053686.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat AncientMetagenomeDir_curl_download_script.sh</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/009/ERR6053619/ERR6053619.fastq.gz <span class="at">-o</span> ERR6053619.fastq.gz</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/008/ERR6053618/ERR6053618.fastq.gz <span class="at">-o</span> ERR6053618.fastq.gz</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/005/ERR6053675/ERR6053675.fastq.gz <span class="at">-o</span> ERR6053675.fastq.gz</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/006/ERR6053686/ERR6053686.fastq.gz <span class="at">-o</span> ERR6053686.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>By providing this script for you, AMDirT facilitates fast download of files of interest by replacing the one-by-one download commands for each sample with a <em>single</em> command!</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> bash ancientMetagenomeDir_curl_download_script.sh</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/009/ERR6053619/ERR6053619.fastq.gz <span class="at">-o</span> ERR6053619.fastq.gz</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/008/ERR6053618/ERR6053618.fastq.gz <span class="at">-o</span> ERR6053618.fastq.gz</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/005/ERR6053675/ERR6053675.fastq.gz <span class="at">-o</span> ERR6053675.fastq.gz</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/006/ERR6053686/ERR6053686.fastq.gz <span class="at">-o</span> ERR6053686.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> bash AncientMetagenomeDir_curl_download_script.sh</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/009/ERR6053619/ERR6053619.fastq.gz <span class="at">-o</span> ERR6053619.fastq.gz</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/008/ERR6053618/ERR6053618.fastq.gz <span class="at">-o</span> ERR6053618.fastq.gz</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/005/ERR6053675/ERR6053675.fastq.gz <span class="at">-o</span> ERR6053675.fastq.gz</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/006/ERR6053686/ERR6053686.fastq.gz <span class="at">-o</span> ERR6053686.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Running this command should result in progress logs of the downloading of the data of the four selected samples!</p>
 <p>Once the four samples are downloaded, AMDirT then facilitates fast processing of the data, as the <em>eager</em> script can be given directly to nf-core/eager as input. Importantly by including the library metadata (mentioned above), researchers can leverage the complex automated processing that nf-core/eager can perform when given such relevant metadata.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat ancientMetagenomeDir_eager_input.csv</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Sample_Name</span> Library_ID  Lane    Colour_Chemistry    SeqType Organism    Strandedness    UDG_Treatment   R1  R2  BAM</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">I0157</span>   ERR6053618  0   4   SE  Homo sapiens    double  unknown ERX5692504_ERR6053618.fastq.gz  NA  NA</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">I0161</span>   ERR6053619  0   4   SE  Homo sapiens    double  unknown ERX5692505_ERR6053619.fastq.gz  NA  NA</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">OAI017</span>  ERR6053675  0   4   SE  Homo sapiens    double  half    ERX5692561_ERR6053675.fastq.gz  NA  NA</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">SED009</span>  ERR6053686  0   4   SE  Homo sapiens    double  half    ERX5692572_ERR6053686.fastq.gz  NA  NA</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Finally, we can look into the <code>citations file</code> which will provide you with the citation information of all the downloaded data and AncientMetagenomeDir itself.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat AncientMetagenomeDir_nf_core_eager_input_table.tsv</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Sample_Name</span> Library_ID  Lane    Colour_Chemistry    SeqType Organism    Strandedness    UDG_Treatment   R1  R2  BAM</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">I0157</span>   ERR6053618  0   4   SE  Homo sapiens    double  unknown ERX5692504_ERR6053618.fastq.gz  NA  NA</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">I0161</span>   ERR6053619  0   4   SE  Homo sapiens    double  unknown ERX5692505_ERR6053619.fastq.gz  NA  NA</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">OAI017</span>  ERR6053675  0   4   SE  Homo sapiens    double  half    ERX5692561_ERR6053675.fastq.gz  NA  NA</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">SED009</span>  ERR6053686  0   4   SE  Homo sapiens    double  half    ERX5692572_ERR6053686.fastq.gz  NA  NA</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Finally, we can look into the BibTeX citations file (<code>*bib</code>) which will provide you with the citation information of all the downloaded data and AncientMetagenomeDir itself.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -596,46 +649,69 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The contents of this file is reliant on indexing of publications on CrossRef. In some cases not all citations will be present, so this should be double checked!</p>
+<p>The contents of this file is reliant on indexing of publications on CrossRef. In some cases not all citations will be present (as per the warning), so this should be double checked!</p>
 </div>
 </div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat ancientMetagenomeDir_citations.bib</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">@article{Fellows_Yates_2021,</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">doi</span> = {10.1038/s41597-021-00816-y},</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">url</span> = {https://doi.org/10.1038%2Fs41597-021-00816-y},</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">year</span> = 2021,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">month</span> = {jan},</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">publisher</span> = {Springer Science and Business Media {LLC}},</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">volume</span> = {8},</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">number</span> = {1},</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">author</span> = {James A. Fellows Yates and Aida Andrades Valtue{<span class="dt">\~</span>{n}}a and {<span class="dt">\A</span>A}shild J. V{<span class="dt">\a</span>a}gene and</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Becky</span> Cribdon and Irina M. Velsko and Maxime Borry and Miriam J. Bravo-Lopez and Antonio Fernandez-Guerra</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">and</span> Eleanor J. Green and Shreya L. Ramachandran and Peter D. Heintzman and Maria A. Spyrou and Alexander</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Hübner</span> and Abigail S. Gancz and Jessica Hider and Aurora F. Allshouse and Valentina Zaro and Christina Warinner},</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="ex">title</span> = {Community-curated and standardised metadata of published ancient metagenomic samples with {AncientMetagenomeDir}},</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="ex">journal</span> = {Scientific Data}</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat AncientMetagenomeDir_bibliography.bib</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">@article{Fellows_Yates_2021,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">doi</span> = {10.1038/s41597-021-00816-y},</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">url</span> = {https://doi.org/10.1038%2Fs41597-021-00816-y},</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">year</span> = 2021,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">month</span> = {jan},</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">publisher</span> = {Springer Science and Business Media {LLC}},</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">volume</span> = {8},</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">number</span> = {1},</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">author</span> = {James A. Fellows Yates and Aida Andrades Valtue{<span class="dt">\~</span>{n}}a and {<span class="dt">\A</span>A}shild J. V{<span class="dt">\a</span>a}gene and</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Becky</span> Cribdon and Irina M. Velsko and Maxime Borry and Miriam J. Bravo-Lopez and Antonio Fernandez-Guerra</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">and</span> Eleanor J. Green and Shreya L. Ramachandran and Peter D. Heintzman and Maria A. Spyrou and Alexander</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Hübner</span> and Abigail S. Gancz and Jessica Hider and Aurora F. Allshouse and Valentina Zaro and Christina Warinner},</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="ex">title</span> = {Community-curated and standardised metadata of published ancient metagenomic samples with {AncientMetagenomeDir}},</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="ex">journal</span> = {Scientific Data}</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This file can be easily loaded into most reference managers and then have all the citations quickly added to your manuscripts.</p>
 </section>
-<section id="git-practise" class="level2" data-number="16.8">
-<h2 data-number="16.8" class="anchored" data-anchor-id="git-practise"><span class="header-section-number">16.8</span> Git Practise</h2>
-<p>A critical factor of AncientMetagenomeDir is that it is community-based. The community curates all new submissions to the repository, and this all occurs with Git.</p>
+<section id="amdirt-convert" class="level3" data-number="16.5.3">
+<h3 data-number="16.5.3" class="anchored" data-anchor-id="amdirt-convert"><span class="header-section-number">16.5.3</span> AMDirT convert</h3>
+<p>If you’re less of a GUI person and consider yourself a command-line wizard, you can also use the <code>AMDirT convert</code> command instead of the GUI version.</p>
+<p>In this case you must supply your own filtered AncientMetagenomeDir samples table, and use command line options to specify which files to generate.</p>
+<p>For example, lets say you used R to make the following <a href="assets/data/data-accessing-ancientmetagenomic-data/ancientsinglegenome-hostassociated_samples_Kocher2021_UnitedKingdom.tsv">filtered file</a> (basically the same Kocher et al.&nbsp;2021 samples from the UK, as filtered in the GUI part of this tutorial), you would supply this to <code>AMDirT convert</code> like so:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> AMDirT convert <span class="at">-o</span> . <span class="at">--bibliography</span> <span class="at">--librarymetadata</span> <span class="at">--curl</span> <span class="at">--eager</span> ancientsinglegenome-hostassociated_samples_Kocher2021_UnitedKingdom.tsv ancientsinglegenome-hostassociated</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>When running <code>ls</code> you should see the same resulting files as before with the GUI!</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ls</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_bibliography.bib</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_curl_download_script.sh</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_filtered_libraries.tsv</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_nf_core_eager_input_table.tsv</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ancientsinglegenome-hostassociated_samples_Kocher2021_UnitedKingdom.tsv</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this case you say where to save the output files, then use different flags to specify which scripts, bib, and configuration files you want, and finally your filtered AncientMetagenomeDir TSV file and which table it’s derived from.</p>
+</section>
+</section>
+<section id="git-practise" class="level2" data-number="16.6">
+<h2 data-number="16.6" class="anchored" data-anchor-id="git-practise"><span class="header-section-number">16.6</span> Git Practise</h2>
+<p>A critical factor of AncientMetagenomeDir is that it is community-based. The community curates all new submissions to the repository, and this all occurs with Git and GitHub.</p>
 <p>The data is hosted and maintained on GitHub - new publications are evaluated on issues, submissions created on branches, made by pull requests, and PRs reviewed by other members of the community.</p>
-<p>You can see the workflow in the image below from the AncientMetageomeDir <a href="https://doi.org/10.1038/s41597-021-00816-y">publication</a>, and read more about the workflow on the AncientMetagenomeDir <a href="https://github.com/SPAAM-community/AncientMetagenomeDir/wiki">wiki</a></p>
-<!-- INSERT IMAGE  HERE-->
-<p>This means we can also use this repository to practise git!</p>
-<p>Your task (with <code>git</code> terms removed):</p>
+<p>You can see the workflow in the image below from the AncientMetagenomeDir <a href="https://doi.org/10.1038/s41597-021-00816-y">publication</a>, and read more about the workflow on the AncientMetagenomeDir <a href="https://github.com/SPAAM-community/AncientMetagenomeDir/wiki">wiki</a></p>
+<div id="fig-accessingdata-thedirworkflow" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-thedirworkflow.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.8: Overview of the AncientMetagenomeDir contribution workflow. Potential publications are added as a GitHub issue where they undergo relevance evaluation. Once approved, a contributor makes a branch on the AncientMetagenomeDir GitHub repository, adds the new lines of metadata for the relevant samples and libraries, and once ready opens a pull request against the main repository. The pull request undergoes an automated consistent check against a schema and then undergoes a human-based peer review for accuracy against AncientMetagenomeDir guidelines. Once approved, the pull request is merged, and periodically the dataset is released on GitHub and automatically archived on Zenodo.</figcaption>
+</figure>
+</div>
+<p>As AncientMetagenomeDir is on GitHub, the means we can also use this repository to try out our Git skills we learnt in the chapter <a href="./git-github.html">Introduction to Git(Hub)</a>!</p>
+<p>Your task is to complete the following steps however with <code>git</code> terms removed (indicated by quotes). You should be able to complete the steps and also note down what the <em>correct</em> Git terminology:</p>
 <ol type="1">
-<li>Make a ‘copy’ the <a href="https://github.com/jfy133/AncientMetagenomeDir">jfy133/AncientMetagenomeDir</a> repository to your account</li>
-<li>‘Download’ the copied repo to your local machine</li>
-<li>‘Change’ to the <code>dev</code> branch</li>
-<li>Modify ‘ancientsinglegenome-hostassociated_samples.tsv’
+<li>Make a ‘copy’ the <a href="https://github.com/jfy133/AncientMetagenomeDir">jfy133/AncientMetagenomeDir</a> repository to your account
 <ul>
-<li>Click <a href="https://github.com/SPAAM-community/https://github.com/SPAAM-community/wss-summer-school/raw/main/docs/raw/main/docs/assets/data/2022/ancientmetagenomedir_example.tsv">here</a> to get some example data to copy in to the end of the TSV file</li>
+<li>We are forking a personal fork of the main repository to ensure you don’t accidentally edit the main dataset!</li>
+</ul></li>
+<li>‘Download’ the ‘copied’ repo to your local machine</li>
+<li>‘Change’ to the <code>dev</code> branch</li>
+<li>Modify the file <code>ancientsinglegenome-hostassociated_samples.tsv</code>
+<ul>
+<li>Click <a href="assets/data/data-accessing-ancientmetagenomic-data/ancientmetagenomedir_example.tsv">here</a> to get some example data to copy in to the end of the TSV file</li>
 </ul></li>
 <li>‘Send’ back to Git(Hub)</li>
-<li>Open a ‘request’ adding changes to the original repo
+<li>Open a ‘request’ adding the changes to the original <code>jfy133/AncientMetagenomeDir</code> repo
 <ul>
 <li>Make sure to put ‘Summer school’ in the title of the ‘Request’</li>
 </ul></li>
@@ -656,10 +732,7 @@ Click me to reveal the correct terminology
 <li><strong>Fork</strong> the <a href="https://github.com/jfy133/AncientMetagenomeDir">jfy133/AncientMetagenomeDir</a> repository to your account</li>
 <li><strong>Clone</strong> the copied repo to your local machine</li>
 <li><strong>Switch</strong> to the <code>dev</code> branch</li>
-<li>Modify ‘ancientsinglegenome-hostassociated_samples.tsv’
-<ul>
-<li>Click <a href="https://github.com/SPAAM-community/https://github.com/SPAAM-community/wss-summer-school/raw/main/docs/raw/main/docs/assets/data/2022/ancientmetagenomedir_example.tsv">here</a> to get some example data to copy in to the end of the TSV file</li>
-</ul></li>
+<li>Modify <code>ancientsinglegenome-hostassociated_samples.tsv</code></li>
 <li><strong>Commit</strong> and <strong>Push</strong> back to your <strong>Fork</strong> on Git(Hub)</li>
 <li>Open a <strong>Pull Request</strong> adding changes to the original jfy133/AncientMetagenomeDir repo
 <ul>
@@ -670,8 +743,8 @@ Click me to reveal the correct terminology
 </div>
 </div>
 </section>
-<section id="summary" class="level2" data-number="16.9">
-<h2 data-number="16.9" class="anchored" data-anchor-id="summary"><span class="header-section-number">16.9</span> Summary</h2>
+<section id="summary" class="level2" data-number="16.7">
+<h2 data-number="16.7" class="anchored" data-anchor-id="summary"><span class="header-section-number">16.7</span> Summary</h2>
 <ul>
 <li>Reporting of metadata messy! Consider when publishing your own work!
 <ul>
@@ -683,8 +756,38 @@ Click me to reveal the correct terminology
 <li>Community curated!</li>
 </ul></li>
 </ul>
+</section>
+<section id="resources" class="level2" data-number="16.8">
+<h2 data-number="16.8" class="anchored" data-anchor-id="resources"><span class="header-section-number">16.8</span> Resources</h2>
+<ul>
+<li><a href="https://doi.org/10.1038/s41597-021-00816-y">AncientMetagenomeDir paper</a></li>
+<li><a href="https://github.com/SPAAM-community/AncientMetagenomeDir">AncientMetagenomeDir repository</a></li>
+<li><a href="https://www.spaam-community.org/AMDirT/">AMDirT web server</a></li>
+<li><a href="https://amdirt.readthedocs.io/">AMDirT documentation</a></li>
+<li><a href="https://github.com/SPAAM-community/AMDirT">AMDirT repository</a></li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Anagnostou2015-mz" class="csl-entry" role="listitem">
+Anagnostou, Paolo, Marco Capocasa, Nicola Milia, Emanuele Sanna, Cinzia Battaggia, Daniela Luzi, and Giovanni Destro Bisol. 2015. <span>“When Data Sharing Gets Close to 100%: What Human Paleogenetics Can Teach the Open Science Movement.”</span> <em>PloS One</em> 10 (3): e0121409. <a href="https://doi.org/10.1371/journal.pone.0121409">https://doi.org/10.1371/journal.pone.0121409</a>.
+</div>
+<div id="ref-Fellows_Yates2021-rp" class="csl-entry" role="listitem">
+Fellows Yates, James A, Aida Andrades Valtueña, Åshild J Vågene, Becky Cribdon, Irina M Velsko, Maxime Borry, Miriam J Bravo-Lopez, et al. 2021. <span>“Community-Curated and Standardised Metadata of Published Ancient Metagenomic Samples with <span>AncientMetagenomeDir</span>.”</span> <em>Scientific Data</em> 8 (1): 31. <a href="https://doi.org/10.1038/s41597-021-00816-y">https://doi.org/10.1038/s41597-021-00816-y</a>.
+</div>
+<div id="ref-Fellows_Yates2021-jl" class="csl-entry" role="listitem">
+Fellows Yates, James A, Thiseas C Lamnidis, Maxime Borry, Aida Andrades Valtueña, Zandra Fagernäs, Stephen Clayton, Maxime U Garcia, Judith Neukamm, and Alexander Peltzer. 2021. <span>“Reproducible, Portable, and Efficient Ancient Genome Reconstruction with Nf-Core/Eager.”</span> <em>PeerJ</em> 9 (March): e10947. <a href="https://doi.org/10.7717/peerj.10947">https://doi.org/10.7717/peerj.10947</a>.
+</div>
+<div id="ref-Kocher2021-vg" class="csl-entry" role="listitem">
+Kocher, Arthur, Luka Papac, Rodrigo Barquera, Felix M Key, Maria A Spyrou, Ron Hübler, Adam B Rohrlach, et al. 2021. <span>“Ten Millennia of Hepatitis <span>B</span> Virus Evolution.”</span> <em>Science</em> 374 (6564): 182–88. <a href="https://doi.org/10.1126/science.abi5658">https://doi.org/10.1126/science.abi5658</a>.
+</div>
+<div id="ref-Pochon2022-hj" class="csl-entry" role="listitem">
+Pochon, Zoé, Nora Bergfeldt, Emrah Kırdök, Mário Vicente, Thijessen Naidoo, Tom van der Valk, N Ezgi Altınışık, et al. 2022. <span>“<span class="nocase">aMeta</span>: An Accurate and Memory-Efficient Ancient Metagenomic Profiling Workflow.”</span> <em>bioRxiv</em>. <a href="https://doi.org/10.1101/2022.10.03.510579">https://doi.org/10.1101/2022.10.03.510579</a>.
+</div>
+<div id="ref-Schubert2014-ps" class="csl-entry" role="listitem">
+Schubert, Mikkel, Luca Ermini, Clio Der Sarkissian, Hákon Jónsson, Aurélien Ginolhac, Robert Schaefer, Michael D Martin, et al. 2014. <span>“Characterization of Ancient and Modern Genomes by <span>SNP</span> Detection and Phylogenomic and Metagenomic Analysis Using <span>PALEOMIX</span>.”</span> <em>Nature Protocols</em> 9 (5): 1056–82. <a href="https://doi.org/10.1038/nprot.2014.063">https://doi.org/10.1038/nprot.2014.063</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
