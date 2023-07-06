@@ -15,51 +15,19 @@ conda activate python-pandas
 ```
 :::
 
+## Introduction to data manipulation in Python with Pandas and visulization
+SPAAM Summer School 2023
 
-## Lecture
+Over the last few years, Python has gained popularity thanks to the numerous libraries (packages with prewritten functions) in the field of machine learning, statistical data analysis, and bioinformatics. While a few years ago, it was often necessary to go to R for performing routine data manipulation and analysis tasks, nowadays Python has a vast ecosystem of libraries. Libraries exist for many different file formats that you might encounter in metagenomics, such as fasta, fastq, sam, bam, etc.
 
-Lecture slides and video from the [2022 edition of the summer school](https://www.spaam-community.org/wss-summer-school/#/2022/README).
+This tutorial/walkthrough will provide a short introduction to the most popular libraries for data analysis [pandas](https://pandas.pydata.org/). This library has functions for reading and manipulating tabular data similar to the data.frame() in R together with some basic data plotting codes.
 
-<iframe src="assets/slides/python-pandas/tutorial.slides.html" frameborder="0" width="100%" height="400px" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+The aim of this walkthrough is to first: get familiar with the Phyton code syntax and use Jupiter Notebook for executing codes and secondly get a kickstart to utilising the endless possibilities of data analysis in Python that can be applied to your data.  
 
-PDF version of these slides can be downloaded from [here](https://github.com/SPAAM-community/wss-summer-school/raw/main/docs/assets/slides/2022/3b2-python-pandas/SPAAM%20Summer%20School%202022%20-%203B2%20-%20Intro%20to%20Python%20and%20Pandas.pdf).
+## Table of content:
 
-This session is run using a Jupyter notebook. This can be found [here](https://github.com/maxibor/intro-to-pandas-plotnine). However, it will already be installed on compute nodes during the summer school.
-
-<iframe width="100%" height="400px" src="https://www.youtube.com/embed/V_EKs_zlO1w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-::: {.callout-warning}
-We highly recommend viewing this walkthrough via the Jupyter notebook above!
-The output of commands on the website for this walkthrough are displayed in their
-own code blocks - be wary of what you copy-paste!
-:::
-
-```python
-from IPython.core.display import SVG
-```
-
-## Introduction to data manipulation in Python with Pandas and visulization with plotnine
-
-Maxime Borry  
-SPAAM Summer School 2022
-
-```python
-SVG(filename='img/whoami.svg')
-```
-
-![svg](assets/images/chapters/python-pandas/tutorial_2_0.svg)
-
-Over the last few years, Python has gained an immense amount of popularity thanks to its numerous libraries in the field of machine learning, statistical data analysis, and bioinformatics. While a few years ago, it was often necessary to go back to R for performing routine data manipulation and analysis tasks, nowadays Python has a vast ecosystem of libraries for doing just that.
-
-Today, we will do a quick introduction of the most popular libraries for data analysis:
-
-- [pandas](https://pandas.pydata.org/), for reading and manipulation tabular data
-- [plotnine](https://plotnine.readthedocs.io/), the Python clone of ggplot2
-
-## Overview:
-
-- 0 - Foreword, working in a jupyter environment
-- 1 - Loading required libraries
+- 8.3 [Working in a jupyter environment]
+- 8.4 [Pandas]
 - 2 - Foreword on Pandas
 - 3 - Reading data with Pandas
 - 4 - Dealing with missing data
@@ -69,86 +37,147 @@ Today, we will do a quick introduction of the most popular libraries for data an
 - 9 - Joining different tables
 - 10 - Visualization with Plotnine
 
-## 0 - Foreword, working in a jupyter environment
+## Working in a jupyter environment
 
-### This is a markdown cell
+This tutorial run-through is using a [Jupyter Notebook](https://jupyter.org) for writing & executing Python code and for annotating.
 
-With some features of the markdown syntax, such as:
+Jupyter notebooks are convenient and have two types of cells: **Markdown** and **Code**. The **markup cell** syntax is very similar to **R markdown**. The markdown cells are used for annotating, which is important for sharing code with collaborators, reproducibility, and documentation.
 
-- **bold** `**bold**`
-- _italic_ `*italic*`
-- `inline code`
+ A few examples are shown below. For a full list of possible syntax [click here](https://www.ibm.com/docs/en/watson-studio-local/1.2.3?topic=notebooks-markdown-jupyter-cheatsheet) for a Jupyter Notebook cheatsheet.  
 
-```
-`inline code`
-```
+list of **markdown cell** examples:
 
-- [links](https://www.google.com/) `[links](https://www.google.com/)`
+::: {.callout-note}
+In many cases, there are multiple possible syntaxes which give the same result. We present only one way in this run-through.
+:::
 
-- Images  
-  ![](assets/images/chapters/python-pandas/avatar_hu4dc3c23d5a8c195732bbca11d7ce61be_114670_270x270_fill_lanczos_center_2.png)  
-  `![](https://maximeborry.com/authors/maxime/avatar_hu4dc3c23d5a8c195732bbca11d7ce61be_114670_270x270_fill_lanczos_center_2.png)`
+Text
 
-- Latex code $ y = ax + b$  
-  `$y = ax + b$`
+- `**bold**` : **bold**
+- `*italics*` : *italics*
+
+Code
+
+- \`inline code\` : `inline code`
+ 
+ LaTeX math
+
+- `$ x = \frac{\pi}{42} $` : $$ x = \frac{\pi}{42} $$
+
+url links
+
+- `[link](https://www.python.org/)`[link](https://www.python.org/)
+
+Images
+
+- `![](https://www.spaam-community.org/assets/media/SPAAM-Logo-Full-Colour_ShortName.svg)` : ![](https://www.spaam-community.org/assets/media/SPAAM-Logo-Full-Colour_ShortName.svg)
+
+\
+The **code cells** can interpret many different coding languages including Python and Bash. The syntax of the code cells is the same as the syntax of the coding languages, in our case python. 
+
+Below are some examples of Python **code cells** with some useful basic python functions:
+
+::: {.callout-tip}
+## Python function
+`print()` is a python fuction for printing lines in the terminal
+`print() == echo ` in bash
+:::
 
 ```python
-print("This is a code cell in Python")
+print("Hello World from Python!")
 ```
+*out -* `Hello World from Python!`
 
-    This is a code cell in Python
+But it can also, for example, run bash commands by adding a *!* at the start of the line.
 
 ```python
-! echo "This is code cell in bash"
+! echo "Hello World from bash!"
+```
+*out -* `Hello World from bash!`
+
+Stings or numbers can be stored as a variable by using the *=* sign
+
+```python
+i = 0
+```
+Ones a variable is set in one **code cell** they are stored and can be accessed in other downstream **code celles**.
+
+```python
+print(i)
 ```
 
-    This is code cell in bash
+You can also print multiple things together in one `print` statement such as a number and a string:
 
-```bash
-%%bash
-
-echo "This a multiline code cell"
-echo "in bash"
+```python
+print("The number is", i, "Wow!")
 ```
+*out -* `The number is 0 Wow!`
 
-    This a multiline code cell
-    in bash
+## Pandas
+### Getting started
+Pandas is a Python library used for data manipulation and analysis.
 
-## 1 - Loading required libraries
+We can import the library like this:
 
 ```python
 import pandas as pd
-import numpy as np
-from plotnine import *
 ```
+
+::: {.callout-note}
+We set "pandas" to the alias "pd" because we are lazy and don't want to write the full word too many times.
+:::
+
+Now, we can print the current version:
 
 ```python
 pd.__version__
 ```
+*out -* `'2.0.1'`
 
-    '1.4.3'
+### Pandas data structures
+The primary data structures in Pandas are `Series` and `DataFrame`.
 
-```python
-np.__version__
-```
+A `DataFrame` is a table with **columns** and **rows**. 
 
-    '1.23.1'
+Each **column** has a *column name* and each **row** has an *index*.
 
-```python
-! conda list | grep plotnine
-```
-
-    plotnine                  0.9.0              pyhd8ed1ab_0    conda-forge
-
-## 2 - Foreword on Pandas
-
-### Pandas terminology
 
 ![](assets/images/chapters/python-pandas/01_table_dataframe.svg)
 
+A single row or column (1 dimensional data) is a `Series`.
+
 ![](assets/images/chapters/python-pandas/01_table_series.svg)
 
-The pandas getting started tutorial: [pandas.pydata.org/docs/getting_started](https://pandas.pydata.org/docs/getting_started/index.html#)
+::: {.callout-note}
+For a more in detail pandas getting started tutorial [click here](https://pandas.pydata.org/docs/getting_started/index.html#)
+:::
+
+### Reading in data
+
+Pandas can read in **csv** (comma separated values) files, which are tables in text format.
+
+It's called **c**sv becase each value is separated from the others via a comma, like this:
+
+```{text}
+A,B
+5,6
+8,4
+```
+another common tabluar seperater are **tsv**, where each value is seperated by a **tab** `\t`
+
+```{text}
+A\tB
+5\t6
+8\t4
+```
+
+\
+\
+\
+\
+\
+\
+
 
 ## 3 - Reading data with Pandas
 
@@ -4191,3 +4220,24 @@ sample_df.assign(archive_accession = sample_df.archive_accession.str.split(","))
 </table>
 <p>1262 rows × 16 columns</p>
 </div>
+
+
+## Lecture from 2022
+
+::: {.callout-note}
+Here are the lecture from the previous course, as well as the links to the material from which the current practical was derived.
+:::
+
+Lecture slides and video from the [2022 edition of the summer school](https://www.spaam-community.org/wss-summer-school/#/2022/README).
+
+PDF version of these slides can be downloaded from [here](https://github.com/SPAAM-community/wss-summer-school/raw/main/docs/assets/slides/2022/3b2-python-pandas/SPAAM%20Summer%20School%202022%20-%203B2%20-%20Intro%20to%20Python%20and%20Pandas.pdf).
+
+This session is run using a Jupyter notebook. This can be found [here](https://github.com/maxibor/intro-to-pandas-plotnine). However, it will already be installed on compute nodes during the summer school.
+
+<iframe width="100%" height="400px" src="https://www.youtube.com/embed/V_EKs_zlO1w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+::: {.callout-warning}
+We highly recommend viewing this walkthrough via the Jupyter notebook above!
+The output of commands on the website for this walkthrough are displayed in their
+own code blocks - be wary of what you copy-paste!
+:::
