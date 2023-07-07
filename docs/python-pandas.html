@@ -403,7 +403,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started"><span class="header-section-number">8.4.1</span> Getting started</a></li>
   <li><a href="#pandas-data-structures" id="toc-pandas-data-structures" class="nav-link" data-scroll-target="#pandas-data-structures"><span class="header-section-number">8.4.2</span> Pandas data structures</a></li>
-  <li><a href="#reading-in-data" id="toc-reading-in-data" class="nav-link" data-scroll-target="#reading-in-data"><span class="header-section-number">8.4.3</span> Reading in data</a></li>
+  <li><a href="#reading-data" id="toc-reading-data" class="nav-link" data-scroll-target="#reading-data"><span class="header-section-number">8.4.3</span> Reading data</a></li>
+  <li><a href="#data-exploration" id="toc-data-exploration" class="nav-link" data-scroll-target="#data-exploration"><span class="header-section-number">8.4.4</span> Data exploration</a></li>
+  <li><a href="#accessing-rows-and-columns" id="toc-accessing-rows-and-columns" class="nav-link" data-scroll-target="#accessing-rows-and-columns"><span class="header-section-number">8.4.5</span> Accessing rows and columns</a></li>
   </ul></li>
   <li><a href="#reading-data-with-pandas" id="toc-reading-data-with-pandas" class="nav-link" data-scroll-target="#reading-data-with-pandas"><span class="header-section-number">8.5</span> 3 - Reading data with Pandas</a>
   <ul class="collapse">
@@ -491,7 +493,7 @@ Tip
 <ul>
 <li>8.3 <a href="#working-in-a-jupyter-environment">Working in a jupyter environment</a></li>
 <li>8.4 <a href="#pandas">Pandas</a></li>
-<li>2 - Foreword on Pandas</li>
+<li>8.5 <a href="#data-exploration">Data exploration</a></li>
 <li>3 - Reading data with Pandas</li>
 <li>4 - Dealing with missing data</li>
 <li>5 - Computing basic statistics</li>
@@ -616,19 +618,3269 @@ Note
 </div>
 </div>
 </section>
-<section id="reading-in-data" class="level3" data-number="8.4.3">
-<h3 data-number="8.4.3" class="anchored" data-anchor-id="reading-in-data"><span class="header-section-number">8.4.3</span> Reading in data</h3>
+<section id="reading-data" class="level3" data-number="8.4.3">
+<h3 data-number="8.4.3" class="anchored" data-anchor-id="reading-data"><span class="header-section-number">8.4.3</span> Reading data</h3>
 <p>Pandas can read in <strong>csv</strong> (comma separated values) files, which are tables in text format.</p>
 <p>It’s called <strong>c</strong>sv becase each value is separated from the others via a comma, like this:</p>
 <pre class="{text}"><code>A,B
 5,6
 8,4</code></pre>
-<p>another common tabluar seperater are <strong>tsv</strong>, where each value is seperated by a <strong>tab</strong> <code>\t</code></p>
+<em>out -</em>
+
+<table class="dataframe table table-sm table-striped small" style="width:10%;margin-left:auto;margin-right:auto;datafrsame">
+<tbody><tr>
+<th>
+</th>
+<th>
+A
+</th>
+<th>
+B
+</th>
+</tr>
+<tr>
+<td>
+1
+</td>
+<td>
+2
+</td>
+<td>
+3
+</td>
+</tr>
+<tr>
+<td>
+2
+</td>
+<td>
+3
+</td>
+<td>
+4
+</td>
+</tr>
+
+</tbody></table>
+<p>Another common tabluar seperater are <strong>tsv</strong>, where each value is seperated by a <strong>tab</strong> <code>\t</code></p>
 <pre class="{text}"><code>A\tB
 5\t6
 8\t4</code></pre>
+<blockquote class="blockquote">
+<p>Our dataset <code>"all_data.tsv"</code> is tab separated, which Pandas can handle using the <code>sep</code> argument.</p>
+</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pandas function
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>pd.read_csv()</code> is the pandas function to read in tabular tables. The <code>sep=</code> can be specified argument, <code>sep=,</code> is the default.</p>
+</div>
+</div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"all_data.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+’
+
+<table class="dataframe table table-sm table-striped small">
+
+<thead>
+
+<tr>
+
+<th>
+</th>
+
+<th>
+ID
+</th>
+
+<th>
+Year_Birth
+</th>
+
+<th>
+Education
+</th>
+
+<th>
+Marital_Status
+</th>
+
+<th>
+Income
+</th>
+
+<th>
+Kidhome
+</th>
+
+<th>
+Teenhome
+</th>
+
+<th>
+MntWines
+</th>
+
+<th>
+MntFruits
+</th>
+
+<th>
+MntMeatProducts
+</th>
+
+<th>
+MntFishProducts
+</th>
+
+<th>
+MntSweetProducts
+</th>
+
+<th>
+MntGoldProds
+</th>
+
+<th>
+NumWebPurchases
+</th>
+
+<th>
+NumCatalogPurchases
+</th>
+
+<th>
+NumStorePurchases
+</th>
+
+<th>
+NumWebVisitsMonth
+</th>
+
+<th>
+Complain
+</th>
+
+<th>
+Z_CostContact
+</th>
+
+<th>
+Z_Revenue
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<th>
+0
+</th>
+
+<td>
+5524
+</td>
+
+<td>
+1957
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Single
+</td>
+
+<td>
+58138.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+635
+</td>
+
+<td>
+88
+</td>
+
+<td>
+546
+</td>
+
+<td>
+172
+</td>
+
+<td>
+88
+</td>
+
+<td>
+88
+</td>
+
+<td>
+8
+</td>
+
+<td>
+10
+</td>
+
+<td>
+4
+</td>
+
+<td>
+7
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+1
+</th>
+
+<td>
+2174
+</td>
+
+<td>
+1954
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Single
+</td>
+
+<td>
+46344.0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+1
+</td>
+
+<td>
+11
+</td>
+
+<td>
+1
+</td>
+
+<td>
+6
+</td>
+
+<td>
+2
+</td>
+
+<td>
+1
+</td>
+
+<td>
+6
+</td>
+
+<td>
+1
+</td>
+
+<td>
+1
+</td>
+
+<td>
+2
+</td>
+
+<td>
+5
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+2
+</th>
+
+<td>
+4141
+</td>
+
+<td>
+1965
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Together
+</td>
+
+<td>
+71613.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+426
+</td>
+
+<td>
+49
+</td>
+
+<td>
+127
+</td>
+
+<td>
+111
+</td>
+
+<td>
+21
+</td>
+
+<td>
+42
+</td>
+
+<td>
+8
+</td>
+
+<td>
+2
+</td>
+
+<td>
+10
+</td>
+
+<td>
+4
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+3
+</th>
+
+<td>
+6182
+</td>
+
+<td>
+1984
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Together
+</td>
+
+<td>
+26646.0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+0
+</td>
+
+<td>
+11
+</td>
+
+<td>
+4
+</td>
+
+<td>
+20
+</td>
+
+<td>
+10
+</td>
+
+<td>
+3
+</td>
+
+<td>
+5
+</td>
+
+<td>
+2
+</td>
+
+<td>
+0
+</td>
+
+<td>
+4
+</td>
+
+<td>
+6
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+4
+</th>
+
+<td>
+7446
+</td>
+
+<td>
+1967
+</td>
+
+<td>
+Master
+</td>
+
+<td>
+Together
+</td>
+
+<td>
+62513.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+520
+</td>
+
+<td>
+42
+</td>
+
+<td>
+98
+</td>
+
+<td>
+0
+</td>
+
+<td>
+42
+</td>
+
+<td>
+14
+</td>
+
+<td>
+6
+</td>
+
+<td>
+4
+</td>
+
+<td>
+10
+</td>
+
+<td>
+6
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+…
+</th>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+1749
+</th>
+
+<td>
+9432
+</td>
+
+<td>
+1977
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Together
+</td>
+
+<td>
+666666.0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+0
+</td>
+
+<td>
+9
+</td>
+
+<td>
+14
+</td>
+
+<td>
+18
+</td>
+
+<td>
+8
+</td>
+
+<td>
+1
+</td>
+
+<td>
+12
+</td>
+
+<td>
+3
+</td>
+
+<td>
+1
+</td>
+
+<td>
+3
+</td>
+
+<td>
+6
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+1750
+</th>
+
+<td>
+8372
+</td>
+
+<td>
+1974
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Married
+</td>
+
+<td>
+34421.0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+3
+</td>
+
+<td>
+7
+</td>
+
+<td>
+6
+</td>
+
+<td>
+2
+</td>
+
+<td>
+9
+</td>
+
+<td>
+1
+</td>
+
+<td>
+0
+</td>
+
+<td>
+2
+</td>
+
+<td>
+7
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+1751
+</th>
+
+<td>
+10870
+</td>
+
+<td>
+1967
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Married
+</td>
+
+<td>
+61223.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+709
+</td>
+
+<td>
+43
+</td>
+
+<td>
+182
+</td>
+
+<td>
+42
+</td>
+
+<td>
+118
+</td>
+
+<td>
+247
+</td>
+
+<td>
+9
+</td>
+
+<td>
+3
+</td>
+
+<td>
+4
+</td>
+
+<td>
+5
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+1752
+</th>
+
+<td>
+7270
+</td>
+
+<td>
+1981
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Divorced
+</td>
+
+<td>
+56981.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+908
+</td>
+
+<td>
+48
+</td>
+
+<td>
+217
+</td>
+
+<td>
+32
+</td>
+
+<td>
+12
+</td>
+
+<td>
+24
+</td>
+
+<td>
+2
+</td>
+
+<td>
+3
+</td>
+
+<td>
+13
+</td>
+
+<td>
+6
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+1753
+</th>
+
+<td>
+8235
+</td>
+
+<td>
+1956
+</td>
+
+<td>
+Master
+</td>
+
+<td>
+Together
+</td>
+
+<td>
+69245.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+428
+</td>
+
+<td>
+30
+</td>
+
+<td>
+214
+</td>
+
+<td>
+80
+</td>
+
+<td>
+30
+</td>
+
+<td>
+61
+</td>
+
+<td>
+6
+</td>
+
+<td>
+5
+</td>
+
+<td>
+10
+</td>
+
+<td>
+3
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+</tbody>
+
+
+</table>
+
+<p>
+1754 rows × 20 columns
+</p>
+<p>’</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When you are unsure what arguments a function can take, it is possilbe to get a <em>help documentation</em> using <code>help(pd.read_csv)</code></p>
+</div>
+</div>
+</section>
+<section id="data-exploration" class="level3" data-number="8.4.4">
+<h3 data-number="8.4.4" class="anchored" data-anchor-id="data-exploration"><span class="header-section-number">8.4.4</span> Data exploration</h3>
+<p>The data is from a customer personality analysis of a company trying to better understand how to modify their product catalogue. Here is the <a href="https://www.kaggle.com/datasets/imakash3011/customer-personality-analysis">link to the original source</a> for more information.</p>
+<section id="columns" class="level4" data-number="8.4.4.1">
+<h4 data-number="8.4.4.1" class="anchored" data-anchor-id="columns"><span class="header-section-number">8.4.4.1</span> Columns</h4>
+<p>The command below prints all the column names.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Index([‘ID’, ‘Year_Birth’, ‘Education’, ‘Marital_Status’, ‘Income’, ‘Kidhome’, ‘Teenhome’, ‘MntWines’, ‘MntFruits’, ‘MntMeatProducts’, ‘MntFishProducts’, ‘MntSweetProducts’, ‘MntGoldProds’, ‘NumWebPurchases’, ‘NumCatalogPurchases’, ‘NumStorePurchases’, ‘NumWebVisitsMonth’, ‘Complain’, ‘Z_CostContact’, ‘Z_Revenue’], dtype=‘object’)</p>
+<p>We can also list their respective data types.</p>
+<ul>
+<li><code>int64</code> are integers</li>
+<li><code>float64</code> are floating point numbers, also called <code>double</code> in other languages</li>
+<li><code>object</code> are Python objects, which are strings in this case</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>ID                       int64
+Year_Birth               int64
+Education               object
+Marital_Status          object
+Income                 float64
+Kidhome                  int64
+Teenhome                 int64
+MntWines                 int64
+MntFruits                int64
+MntMeatProducts          int64
+MntFishProducts          int64
+MntSweetProducts         int64
+MntGoldProds             int64
+NumWebPurchases          int64
+NumCatalogPurchases      int64
+NumStorePurchases        int64
+NumWebVisitsMonth        int64
+Complain                 int64
+Z_CostContact            int64
+Z_Revenue                int64
+dtype: object</code></pre>
+</section>
+<section id="inspecting-the-dataframe" class="level4" data-number="8.4.4.2">
+<h4 data-number="8.4.4.2" class="anchored" data-anchor-id="inspecting-the-dataframe"><span class="header-section-number">8.4.4.2</span> Inspecting the DataFrame</h4>
+<p>What is the size of our <code>DataFrame</code></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>(1754, 20)</p>
+<p>It has <strong>1754</strong> rows and <strong>20</strong> columns.</p>
+<p>Let’s look at the first 5 rows:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+<table class="dataframe table table-sm table-striped small">
+
+<thead>
+
+<tr>
+
+<th>
+</th>
+
+<th>
+ID
+</th>
+
+<th>
+Year_Birth
+</th>
+
+<th>
+Education
+</th>
+
+<th>
+Marital_Status
+</th>
+
+<th>
+Income
+</th>
+
+<th>
+Kidhome
+</th>
+
+<th>
+Teenhome
+</th>
+
+<th>
+MntWines
+</th>
+
+<th>
+MntFruits
+</th>
+
+<th>
+MntMeatProducts
+</th>
+
+<th>
+MntFishProducts
+</th>
+
+<th>
+MntSweetProducts
+</th>
+
+<th>
+MntGoldProds
+</th>
+
+<th>
+NumWebPurchases
+</th>
+
+<th>
+NumCatalogPurchases
+</th>
+
+<th>
+NumStorePurchases
+</th>
+
+<th>
+NumWebVisitsMonth
+</th>
+
+<th>
+Complain
+</th>
+
+<th>
+Z_CostContact
+</th>
+
+<th>
+Z_Revenue
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<th>
+0
+</th>
+
+<td>
+5524
+</td>
+
+<td>
+1957
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Single
+</td>
+
+<td>
+58138.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+635
+</td>
+
+<td>
+88
+</td>
+
+<td>
+546
+</td>
+
+<td>
+172
+</td>
+
+<td>
+88
+</td>
+
+<td>
+88
+</td>
+
+<td>
+8
+</td>
+
+<td>
+10
+</td>
+
+<td>
+4
+</td>
+
+<td>
+7
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+1
+</th>
+
+<td>
+2174
+</td>
+
+<td>
+1954
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Single
+</td>
+
+<td>
+46344.0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+1
+</td>
+
+<td>
+11
+</td>
+
+<td>
+1
+</td>
+
+<td>
+6
+</td>
+
+<td>
+2
+</td>
+
+<td>
+1
+</td>
+
+<td>
+6
+</td>
+
+<td>
+1
+</td>
+
+<td>
+1
+</td>
+
+<td>
+2
+</td>
+
+<td>
+5
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+2
+</th>
+
+<td>
+4141
+</td>
+
+<td>
+1965
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Together
+</td>
+
+<td>
+71613.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+426
+</td>
+
+<td>
+49
+</td>
+
+<td>
+127
+</td>
+
+<td>
+111
+</td>
+
+<td>
+21
+</td>
+
+<td>
+42
+</td>
+
+<td>
+8
+</td>
+
+<td>
+2
+</td>
+
+<td>
+10
+</td>
+
+<td>
+4
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+3
+</th>
+
+<td>
+6182
+</td>
+
+<td>
+1984
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Together
+</td>
+
+<td>
+26646.0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+0
+</td>
+
+<td>
+11
+</td>
+
+<td>
+4
+</td>
+
+<td>
+20
+</td>
+
+<td>
+10
+</td>
+
+<td>
+3
+</td>
+
+<td>
+5
+</td>
+
+<td>
+2
+</td>
+
+<td>
+0
+</td>
+
+<td>
+4
+</td>
+
+<td>
+6
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+4
+</th>
+
+<td>
+7446
+</td>
+
+<td>
+1967
+</td>
+
+<td>
+Master
+</td>
+
+<td>
+Together
+</td>
+
+<td>
+62513.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+520
+</td>
+
+<td>
+42
+</td>
+
+<td>
+98
+</td>
+
+<td>
+0
+</td>
+
+<td>
+42
+</td>
+
+<td>
+14
+</td>
+
+<td>
+6
+</td>
+
+<td>
+4
+</td>
+
+<td>
+10
+</td>
+
+<td>
+6
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+</tbody>
+
+
+</table>
+<p>What we can see it that, unlike <strong>R</strong>, <strong>Python</strong> and in extension <strong>Pandas</strong> is 0-indexed instead of 1-indexed.</p>
+<details>
+<summary>
+Question: Can you show how to do the same using bash?
+</summary>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span> head all_data.tsv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+<table class="dataframe table table-sm table-striped small">
+
+<thead>
+
+<tr>
+
+<th>
+</th>
+
+<th>
+ID
+</th>
+
+<th>
+Year_Birth
+</th>
+
+<th>
+Education
+</th>
+
+<th>
+Marital_Status
+</th>
+
+<th>
+Income
+</th>
+
+<th>
+Kidhome
+</th>
+
+<th>
+Teenhome
+</th>
+
+<th>
+MntWines
+</th>
+
+<th>
+MntFruits
+</th>
+
+<th>
+MntMeatProducts
+</th>
+
+<th>
+MntFishProducts
+</th>
+
+<th>
+MntSweetProducts
+</th>
+
+<th>
+MntGoldProds
+</th>
+
+<th>
+NumWebPurchases
+</th>
+
+<th>
+NumCatalogPurchases
+</th>
+
+<th>
+NumStorePurchases
+</th>
+
+<th>
+NumWebVisitsMonth
+</th>
+
+<th>
+Complain
+</th>
+
+<th>
+Z_CostContact
+</th>
+
+<th>
+Z_Revenue
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<th>
+0
+</th>
+
+<td>
+5524
+</td>
+
+<td>
+1957
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Single
+</td>
+
+<td>
+58138.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+635
+</td>
+
+<td>
+88
+</td>
+
+<td>
+546
+</td>
+
+<td>
+172
+</td>
+
+<td>
+88
+</td>
+
+<td>
+88
+</td>
+
+<td>
+8
+</td>
+
+<td>
+10
+</td>
+
+<td>
+4
+</td>
+
+<td>
+7
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+1
+</th>
+
+<td>
+2174
+</td>
+
+<td>
+1954
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Single
+</td>
+
+<td>
+46344.0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+1
+</td>
+
+<td>
+11
+</td>
+
+<td>
+1
+</td>
+
+<td>
+6
+</td>
+
+<td>
+2
+</td>
+
+<td>
+1
+</td>
+
+<td>
+6
+</td>
+
+<td>
+1
+</td>
+
+<td>
+1
+</td>
+
+<td>
+2
+</td>
+
+<td>
+5
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+2
+</th>
+
+<td>
+4141
+</td>
+
+<td>
+1965
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Together
+</td>
+
+<td>
+71613.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+426
+</td>
+
+<td>
+49
+</td>
+
+<td>
+127
+</td>
+
+<td>
+111
+</td>
+
+<td>
+21
+</td>
+
+<td>
+42
+</td>
+
+<td>
+8
+</td>
+
+<td>
+2
+</td>
+
+<td>
+10
+</td>
+
+<td>
+4
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+3
+</th>
+
+<td>
+6182
+</td>
+
+<td>
+1984
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Together
+</td>
+
+<td>
+26646.0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+0
+</td>
+
+<td>
+11
+</td>
+
+<td>
+4
+</td>
+
+<td>
+20
+</td>
+
+<td>
+10
+</td>
+
+<td>
+3
+</td>
+
+<td>
+5
+</td>
+
+<td>
+2
+</td>
+
+<td>
+0
+</td>
+
+<td>
+4
+</td>
+
+<td>
+6
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+4
+</th>
+
+<td>
+7446
+</td>
+
+<td>
+1967
+</td>
+
+<td>
+Master
+</td>
+
+<td>
+Together
+</td>
+
+<td>
+62513.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+520
+</td>
+
+<td>
+42
+</td>
+
+<td>
+98
+</td>
+
+<td>
+0
+</td>
+
+<td>
+42
+</td>
+
+<td>
+14
+</td>
+
+<td>
+6
+</td>
+
+<td>
+4
+</td>
+
+<td>
+10
+</td>
+
+<td>
+6
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+5
+</th>
+
+<td>
+965
+</td>
+
+<td>
+1971
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Divorced
+</td>
+
+<td>
+55635.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+235
+</td>
+
+<td>
+65
+</td>
+
+<td>
+164
+</td>
+
+<td>
+50
+</td>
+
+<td>
+49
+</td>
+
+<td>
+27
+</td>
+
+<td>
+7
+</td>
+
+<td>
+3
+</td>
+
+<td>
+7
+</td>
+
+<td>
+6
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+6
+</th>
+
+<td>
+1994
+</td>
+
+<td>
+1983
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Married
+</td>
+
+<td>
+NaN
+</td>
+
+<td>
+1
+</td>
+
+<td>
+0
+</td>
+
+<td>
+5
+</td>
+
+<td>
+5
+</td>
+
+<td>
+6
+</td>
+
+<td>
+0
+</td>
+
+<td>
+2
+</td>
+
+<td>
+1
+</td>
+
+<td>
+1
+</td>
+
+<td>
+0
+</td>
+
+<td>
+2
+</td>
+
+<td>
+7
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+7
+</th>
+
+<td>
+387
+</td>
+
+<td>
+1976
+</td>
+
+<td>
+Basic
+</td>
+
+<td>
+Married
+</td>
+
+<td>
+7500.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+6
+</td>
+
+<td>
+16
+</td>
+
+<td>
+11
+</td>
+
+<td>
+11
+</td>
+
+<td>
+1
+</td>
+
+<td>
+16
+</td>
+
+<td>
+2
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+8
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+8
+</th>
+
+<td>
+2125
+</td>
+
+<td>
+1959
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Divorced
+</td>
+
+<td>
+63033.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+194
+</td>
+
+<td>
+61
+</td>
+
+<td>
+480
+</td>
+
+<td>
+225
+</td>
+
+<td>
+112
+</td>
+
+<td>
+30
+</td>
+
+<td>
+3
+</td>
+
+<td>
+4
+</td>
+
+<td>
+8
+</td>
+
+<td>
+2
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+9
+</th>
+
+<td>
+8180
+</td>
+
+<td>
+1952
+</td>
+
+<td>
+Master
+</td>
+
+<td>
+Divorced
+</td>
+
+<td>
+59354.0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+1
+</td>
+
+<td>
+233
+</td>
+
+<td>
+2
+</td>
+
+<td>
+53
+</td>
+
+<td>
+3
+</td>
+
+<td>
+5
+</td>
+
+<td>
+14
+</td>
+
+<td>
+6
+</td>
+
+<td>
+1
+</td>
+
+<td>
+5
+</td>
+
+<td>
+6
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+</tbody>
+
+
+</table>
+</details>
+</section>
+</section>
+<section id="accessing-rows-and-columns" class="level3" data-number="8.4.5">
+<h3 data-number="8.4.5" class="anchored" data-anchor-id="accessing-rows-and-columns"><span class="header-section-number">8.4.5</span> Accessing rows and columns</h3>
+<p>We can access parts of the data in <code>DataFrames</code> in different ways.</p>
+<p>The first method is subsetting the rows using the index.</p>
+<p>This will take only the second row and all columns, producing a <code>Series</code>:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>df.loc[<span class="dv">1</span>, :]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>ID                           2174
+Year_Birth                   1954
+Education              Graduation
+Marital_Status             Single
+Income                    46344.0
+Kidhome                         1
+Teenhome                        1
+MntWines                       11
+MntFruits                       1
+MntMeatProducts                 6
+MntFishProducts                 2
+MntSweetProducts                1
+MntGoldProds                    6
+NumWebPurchases                 1
+NumCatalogPurchases             1
+NumStorePurchases               2
+NumWebVisitsMonth               5
+Complain                        0
+Z_CostContact                   3
+Z_Revenue                      11
+Name: 1, dtype: object</code></pre>
+<p>And this will take the second and third row, producing another <code>DataFrame</code>:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df.loc[<span class="dv">1</span>:<span class="dv">2</span>, :]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+’
+
+<table class="dataframe table table-sm table-striped small">
+
+<thead>
+
+<tr>
+
+<th>
+</th>
+
+<th>
+ID
+</th>
+
+<th>
+Year_Birth
+</th>
+
+<th>
+Education
+</th>
+
+<th>
+Marital_Status
+</th>
+
+<th>
+Income
+</th>
+
+<th>
+Kidhome
+</th>
+
+<th>
+Teenhome
+</th>
+
+<th>
+MntWines
+</th>
+
+<th>
+MntFruits
+</th>
+
+<th>
+MntMeatProducts
+</th>
+
+<th>
+MntFishProducts
+</th>
+
+<th>
+MntSweetProducts
+</th>
+
+<th>
+MntGoldProds
+</th>
+
+<th>
+NumWebPurchases
+</th>
+
+<th>
+NumCatalogPurchases
+</th>
+
+<th>
+NumStorePurchases
+</th>
+
+<th>
+NumWebVisitsMonth
+</th>
+
+<th>
+Complain
+</th>
+
+<th>
+Z_CostContact
+</th>
+
+<th>
+Z_Revenue
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<th>
+1
+</th>
+
+<td>
+2174
+</td>
+
+<td>
+1954
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Single
+</td>
+
+<td>
+46344.0
+</td>
+
+<td>
+1
+</td>
+
+<td>
+1
+</td>
+
+<td>
+11
+</td>
+
+<td>
+1
+</td>
+
+<td>
+6
+</td>
+
+<td>
+2
+</td>
+
+<td>
+1
+</td>
+
+<td>
+6
+</td>
+
+<td>
+1
+</td>
+
+<td>
+1
+</td>
+
+<td>
+2
+</td>
+
+<td>
+5
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+2
+</th>
+
+<td>
+4141
+</td>
+
+<td>
+1965
+</td>
+
+<td>
+Graduation
+</td>
+
+<td>
+Together
+</td>
+
+<td>
+71613.0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+0
+</td>
+
+<td>
+426
+</td>
+
+<td>
+49
+</td>
+
+<td>
+127
+</td>
+
+<td>
+111
+</td>
+
+<td>
+21
+</td>
+
+<td>
+42
+</td>
+
+<td>
+8
+</td>
+
+<td>
+2
+</td>
+
+<td>
+10
+</td>
+
+<td>
+4
+</td>
+
+<td>
+0
+</td>
+
+<td>
+3
+</td>
+
+<td>
+11
+</td>
+
+</tr>
+
+</tbody>
+
+
+</table>
+<p>’</p>
+<p>It’s important to understand that almost all operations on <code>DataFrames</code> are not in-place, meaning that we don’t modify the original object and would have to save the results to the same or a new variable to keep the changes.</p>
+<p>This, for example will create a new <code>DataFrame</code> of only the “Education” and “Marital_Status” columns.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>new_df <span class="op">=</span> df.loc[:, [<span class="st">"Education"</span>, <span class="st">"Marital_Status"</span>]]</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>new_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+’
+
+<table class="dataframe table table-sm table-striped small">
+
+<thead>
+
+<tr>
+
+<th>
+</th>
+
+<th>
+Education
+</th>
+
+<th>
+Marital_Status
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<th>
+0
+</th>
+
+<td>
+Graduation
+</td>
+
+<td>
+Single
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+1
+</th>
+
+<td>
+Graduation
+</td>
+
+<td>
+Single
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+2
+</th>
+
+<td>
+Graduation
+</td>
+
+<td>
+Together
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+3
+</th>
+
+<td>
+Graduation
+</td>
+
+<td>
+Together
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+4
+</th>
+
+<td>
+Master
+</td>
+
+<td>
+Together
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+…
+</th>
+
+<td>
+…
+</td>
+
+<td>
+…
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+1749
+</th>
+
+<td>
+Graduation
+</td>
+
+<td>
+Together
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+1750
+</th>
+
+<td>
+Graduation
+</td>
+
+<td>
+Married
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+1751
+</th>
+
+<td>
+Graduation
+</td>
+
+<td>
+Married
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+1752
+</th>
+
+<td>
+Graduation
+</td>
+
+<td>
+Divorced
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+1753
+</th>
+
+<td>
+Master
+</td>
+
+<td>
+Together
+</td>
+
+</tr>
+
+</tbody>
+
+
+</table>
+
+<p>
+1754 rows × 2 columns
+</p>
+<p>’</p>
+<p>Selecting only one column by name:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"Year_Birth"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>0       1957
+1       1954
+2       1965
+3       1984
+4       1967
+        ... 
+1749    1977
+1750    1974
+1751    1967
+1752    1981
+1753    1956</code></pre>
 <p><br>
-<br>
 <br>
 <br>
 <br>
@@ -638,406 +3890,15 @@ Note
 </section>
 <section id="reading-data-with-pandas" class="level2" data-number="8.5">
 <h2 data-number="8.5" class="anchored" data-anchor-id="reading-data-with-pandas"><span class="header-section-number">8.5</span> 3 - Reading data with Pandas</h2>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sample_table_url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/SPAAM-community/AncientMetagenomeDir/b187df6ebd23dfeb42935fd5020cb615ead3f164/</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="er">ancientmetagenome-hostassociated/samples/ancientmetagenome-hostassociated_samples.tsv"</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>library_table_url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/SPAAM-community/AncientMetagenomeDir/b187df6ebd23dfeb42935fd5020cb615ead3f164/</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="er">ancientmetagenome-hostassociated/libraries/ancientmetagenome-hostassociated_libraries.tsv"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Getting help in Python</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">help</span>(pd.read_csv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre><code>Help on function read_csv in module pandas.io.parsers.readers:
-
-read_csv(filepath_or_buffer: 'FilePath | ReadCsvBuffer[bytes] | ReadCsvBuffer[str]',
-sep=&lt;no_default&gt;, delimiter=None, header='infer', names=&lt;no_default&gt;, index_col=None,
-usecols=None, squeeze=None, prefix=&lt;no_default&gt;, mangle_dupe_cols=True,
-dtype: 'DtypeArg | None' = None, engine: 'CSVEngine | None' = None, converters=None,
-true_values=None, false_values=None, skipinitialspace=False, skiprows=None, skipfooter=0,
-nrows=None, na_values=None, keep_default_na=True, na_filter=True, verbose=False,
-skip_blank_lines=True, parse_dates=None, infer_datetime_format=False, keep_date_col=False,
- date_parser=None, dayfirst=False, cache_dates=True, iterator=False, chunksize=None,
- compression: 'CompressionOptions' = 'infer', thousands=None, decimal: 'str' = '.',
- lineterminator=None, quotechar='"', quoting=0, doublequote=True, escapechar=None,
- comment=None, encoding=None, encoding_errors: 'str | None' = 'strict', dialect=None,
- error_bad_lines=None, warn_bad_lines=None, on_bad_lines=None, delim_whitespace=False,
- low_memory=True, memory_map=False, float_precision=None, storage_options: 'StorageOptions' = None)
-    Read a comma-separated values (csv) file into DataFrame.
-
-    Also supports optionally iterating or breaking of the file
-    into chunks.
-
-    Additional help can be found in the online docs for
-    `IO Tools &lt;https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html&gt;`_.
-
-    Parameters
-    ----------
-    filepath_or_buffer : str, path object or file-like object
-        Any valid string path is acceptable. The string could be a URL. Valid
-        URL schemes include http, ftp, s3, gs, and file. For file URLs, a host is
-        expected. A local file could be: file://localhost/path/to/table.csv.
-
-        If you want to pass in a path object, pandas accepts any ``os.PathLike``.
-
-        By file-like object, we refer to objects with a ``read()`` method, such as
-        a file handle (e.g. via builtin ``open`` function) or ``StringIO``.
-    sep : str, default ','
-        Delimiter to use. If sep is None, the C engine cannot automatically detect
-        the separator, but the Python parsing engine can, meaning the latter will
-        be used and automatically detect the separator by Python's builtin sniffer
-        tool, ``csv.Sniffer``. In addition, separators longer than 1 character and
-        different from ``'\s+'`` will be interpreted as regular expressions and
-        will also force the use of the Python parsing engine. Note that regex
-        delimiters are prone to ignoring quoted data. Regex example: ``'\r\t'``.
-    delimiter : str, default ``None``
-        Alias for sep.
-    header : int, list of int, None, default 'infer'
-        Row number(s) to use as the column names, and the start of the
-        data.  Default behavior is to infer the column names: if no names
-        are passed the behavior is identical to ``header=0`` and column
-        names are inferred from the first line of the file, if column
-        names are passed explicitly then the behavior is identical to
-        ``header=None``. Explicitly pass ``header=0`` to be able to
-        replace existing names. The header can be a list of integers that
-        specify row locations for a multi-index on the columns
-        e.g. [0,1,3]. Intervening rows that are not specified will be
-        skipped (e.g. 2 in this example is skipped). Note that this
-        parameter ignores commented lines and empty lines if
-        ``skip_blank_lines=True``, so ``header=0`` denotes the first line of
-        data rather than the first line of the file.
-    names : array-like, optional
-        List of column names to use. If the file contains a header row,
-        then you should explicitly pass ``header=0`` to override the column names.
-        Duplicates in this list are not allowed.
-    index_col : int, str, sequence of int / str, or False, optional, default ``None``
-      Column(s) to use as the row labels of the ``DataFrame``, either given as
-      string name or column index. If a sequence of int / str is given, a
-      MultiIndex is used.
-
-      Note: ``index_col=False`` can be used to force pandas to *not* use the first
-      column as the index, e.g. when you have a malformed file with delimiters at
-      the end of each line.
-    usecols : list-like or callable, optional
-        Return a subset of the columns. If list-like, all elements must either
-        be positional (i.e. integer indices into the document columns) or strings
-        that correspond to column names provided either by the user in `names` or
-        inferred from the document header row(s). If ``names`` are given, the document
-        header row(s) are not taken into account. For example, a valid list-like
-        `usecols` parameter would be ``[0, 1, 2]`` or ``['foo', 'bar', 'baz']``.
-        Element order is ignored, so ``usecols=[0, 1]`` is the same as ``[1, 0]``.
-        To instantiate a DataFrame from ``data`` with element order preserved use
-        ``pd.read_csv(data, usecols=['foo', 'bar'])[['foo', 'bar']]`` for columns
-        in ``['foo', 'bar']`` order or
-        ``pd.read_csv(data, usecols=['foo', 'bar'])[['bar', 'foo']]``
-        for ``['bar', 'foo']`` order.
-
-        If callable, the callable function will be evaluated against the column
-        names, returning names where the callable function evaluates to True. An
-        example of a valid callable argument would be ``lambda x: x.upper() in
-        ['AAA', 'BBB', 'DDD']``. Using this parameter results in much faster
-        parsing time and lower memory usage.
-    squeeze : bool, default False
-        If the parsed data only contains one column then return a Series.
-
-        .. deprecated:: 1.4.0
-            Append ``.squeeze("columns")`` to the call to ``read_csv`` to squeeze
-            the data.
-    prefix : str, optional
-        Prefix to add to column numbers when no header, e.g. 'X' for X0, X1, ...
-
-        .. deprecated:: 1.4.0
-           Use a list comprehension on the DataFrame's columns after calling ``read_csv``.
-    mangle_dupe_cols : bool, default True
-        Duplicate columns will be specified as 'X', 'X.1', ...'X.N', rather than
-        'X'...'X'. Passing in False will cause data to be overwritten if there
-        are duplicate names in the columns.
-    dtype : Type name or dict of column -&gt; type, optional
-        Data type for data or columns. E.g. {'a': np.float64, 'b': np.int32,
-        'c': 'Int64'}
-        Use `str` or `object` together with suitable `na_values` settings
-        to preserve and not interpret dtype.
-        If converters are specified, they will be applied INSTEAD
-        of dtype conversion.
-    engine : {'c', 'python', 'pyarrow'}, optional
-        Parser engine to use. The C and pyarrow engines are faster, while the python engine
-        is currently more feature-complete. Multithreading is currently only supported by
-        the pyarrow engine.
-
-        .. versionadded:: 1.4.0
-
-            The "pyarrow" engine was added as an *experimental* engine, and some features
-            are unsupported, or may not work correctly, with this engine.
-    converters : dict, optional
-        Dict of functions for converting values in certain columns. Keys can either
-        be integers or column labels.
-    true_values : list, optional
-        Values to consider as True.
-    false_values : list, optional
-        Values to consider as False.
-    skipinitialspace : bool, default False
-        Skip spaces after delimiter.
-    skiprows : list-like, int or callable, optional
-        Line numbers to skip (0-indexed) or number of lines to skip (int)
-        at the start of the file.
-
-        If callable, the callable function will be evaluated against the row
-        indices, returning True if the row should be skipped and False otherwise.
-        An example of a valid callable argument would be ``lambda x: x in [0, 2]``.
-    skipfooter : int, default 0
-        Number of lines at bottom of file to skip (Unsupported with engine='c').
-    nrows : int, optional
-        Number of rows of file to read. Useful for reading pieces of large files.
-    na_values : scalar, str, list-like, or dict, optional
-        Additional strings to recognize as NA/NaN. If dict passed, specific
-        per-column NA values.  By default the following values are interpreted as
-        NaN: '', '#N/A', '#N/A N/A', '#NA', '-1.#IND', '-1.#QNAN', '-NaN', '-nan',
-        '1.#IND', '1.#QNAN', '&lt;NA&gt;', 'N/A', 'NA', 'NULL', 'NaN', 'n/a',
-        'nan', 'null'.
-    keep_default_na : bool, default True
-        Whether or not to include the default NaN values when parsing the data.
-        Depending on whether `na_values` is passed in, the behavior is as follows:
-
-        * If `keep_default_na` is True, and `na_values` are specified, `na_values`
-          is appended to the default NaN values used for parsing.
-        * If `keep_default_na` is True, and `na_values` are not specified, only
-          the default NaN values are used for parsing.
-        * If `keep_default_na` is False, and `na_values` are specified, only
-          the NaN values specified `na_values` are used for parsing.
-        * If `keep_default_na` is False, and `na_values` are not specified, no
-          strings will be parsed as NaN.
-
-        Note that if `na_filter` is passed in as False, the `keep_default_na` and
-        `na_values` parameters will be ignored.
-    na_filter : bool, default True
-        Detect missing value markers (empty strings and the value of na_values). In
-        data without any NAs, passing na_filter=False can improve the performance
-        of reading a large file.
-    verbose : bool, default False
-        Indicate number of NA values placed in non-numeric columns.
-    skip_blank_lines : bool, default True
-        If True, skip over blank lines rather than interpreting as NaN values.
-    parse_dates : bool or list of int or names or list of lists or dict, default False
-        The behavior is as follows:
-
-        * boolean. If True -&gt; try parsing the index.
-        * list of int or names. e.g. If [1, 2, 3] -&gt; try parsing columns 1, 2, 3
-          each as a separate date column.
-        * list of lists. e.g.  If [[1, 3]] -&gt; combine columns 1 and 3 and parse as
-          a single date column.
-        * dict, e.g. {'foo' : [1, 3]} -&gt; parse columns 1, 3 as date and call
-          result 'foo'
-
-        If a column or index cannot be represented as an array of datetimes,
-        say because of an unparsable value or a mixture of timezones, the column
-        or index will be returned unaltered as an object data type. For
-        non-standard datetime parsing, use ``pd.to_datetime`` after
-        ``pd.read_csv``. To parse an index or column with a mixture of timezones,
-        specify ``date_parser`` to be a partially-applied
-        :func:`pandas.to_datetime` with ``utc=True``. See
-        :ref:`io.csv.mixed_timezones` for more.
-
-        Note: A fast-path exists for iso8601-formatted dates.
-    infer_datetime_format : bool, default False
-        If True and `parse_dates` is enabled, pandas will attempt to infer the
-        format of the datetime strings in the columns, and if it can be inferred,
-        switch to a faster method of parsing them. In some cases this can increase
-        the parsing speed by 5-10x.
-    keep_date_col : bool, default False
-        If True and `parse_dates` specifies combining multiple columns then
-        keep the original columns.
-    date_parser : function, optional
-        Function to use for converting a sequence of string columns to an array of
-        datetime instances. The default uses ``dateutil.parser.parser`` to do the
-        conversion. Pandas will try to call `date_parser` in three different ways,
-        advancing to the next if an exception occurs: 1) Pass one or more arrays
-        (as defined by `parse_dates`) as arguments; 2) concatenate (row-wise) the
-        string values from the columns defined by `parse_dates` into a single array
-        and pass that; and 3) call `date_parser` once for each row using one or
-        more strings (corresponding to the columns defined by `parse_dates`) as
-        arguments.
-    dayfirst : bool, default False
-        DD/MM format dates, international and European format.
-    cache_dates : bool, default True
-        If True, use a cache of unique, converted dates to apply the datetime
-        conversion. May produce significant speed-up when parsing duplicate
-        date strings, especially ones with timezone offsets.
-
-        .. versionadded:: 0.25.0
-    iterator : bool, default False
-        Return TextFileReader object for iteration or getting chunks with
-        ``get_chunk()``.
-
-        .. versionchanged:: 1.2
-
-           ``TextFileReader`` is a context manager.
-    chunksize : int, optional
-        Return TextFileReader object for iteration.
-        See the `IO Tools docs
-        &lt;https://pandas.pydata.org/pandas-docs/stable/io.html#io-chunking&gt;`_
-        for more information on ``iterator`` and ``chunksize``.
-
-        .. versionchanged:: 1.2
-
-           ``TextFileReader`` is a context manager.
-    compression : str or dict, default 'infer'
-        For on-the-fly decompression of on-disk data. If 'infer' and '%s' is
-        path-like, then detect compression from the following extensions: '.gz',
-        '.bz2', '.zip', '.xz', or '.zst' (otherwise no compression). If using
-        'zip', the ZIP file must contain only one data file to be read in. Set to
-        ``None`` for no decompression. Can also be a dict with key ``'method'`` set
-        to one of {``'zip'``, ``'gzip'``, ``'bz2'``, ``'zstd'``} and other
-        key-value pairs are forwarded to ``zipfile.ZipFile``, ``gzip.GzipFile``,
-        ``bz2.BZ2File``, or ``zstandard.ZstdDecompressor``, respectively. As an
-        example, the following could be passed for Zstandard decompression using a
-        custom compression dictionary:
-        ``compression={'method': 'zstd', 'dict_data': my_compression_dict}``.
-
-        .. versionchanged:: 1.4.0 Zstandard support.
-
-    thousands : str, optional
-        Thousands separator.
-    decimal : str, default '.'
-        Character to recognize as decimal point (e.g. use ',' for European data).
-    lineterminator : str (length 1), optional
-        Character to break file into lines. Only valid with C parser.
-    quotechar : str (length 1), optional
-        The character used to denote the start and end of a quoted item. Quoted
-        items can include the delimiter and it will be ignored.
-    quoting : int or csv.QUOTE_* instance, default 0
-        Control field quoting behavior per ``csv.QUOTE_*`` constants. Use one of
-        QUOTE_MINIMAL (0), QUOTE_ALL (1), QUOTE_NONNUMERIC (2) or QUOTE_NONE (3).
-    doublequote : bool, default ``True``
-       When quotechar is specified and quoting is not ``QUOTE_NONE``, indicate
-       whether or not to interpret two consecutive quotechar elements INSIDE a
-       field as a single ``quotechar`` element.
-    escapechar : str (length 1), optional
-        One-character string used to escape other characters.
-    comment : str, optional
-        Indicates remainder of line should not be parsed. If found at the beginning
-        of a line, the line will be ignored altogether. This parameter must be a
-        single character. Like empty lines (as long as ``skip_blank_lines=True``),
-        fully commented lines are ignored by the parameter `header` but not by
-        `skiprows`. For example, if ``comment='#'``, parsing
-        ``#empty\na,b,c\n1,2,3`` with ``header=0`` will result in 'a,b,c' being
-        treated as the header.
-    encoding : str, optional
-        Encoding to use for UTF when reading/writing (ex. 'utf-8'). `List of Python
-        standard encodings
-        &lt;https://docs.python.org/3/library/codecs.html#standard-encodings&gt;`_ .
-
-        .. versionchanged:: 1.2
-
-           When ``encoding`` is ``None``, ``errors="replace"`` is passed to
-           ``open()``. Otherwise, ``errors="strict"`` is passed to ``open()``.
-           This behavior was previously only the case for ``engine="python"``.
-
-        .. versionchanged:: 1.3.0
-
-           ``encoding_errors`` is a new argument. ``encoding`` has no longer an
-           influence on how encoding errors are handled.
-
-    encoding_errors : str, optional, default "strict"
-        How encoding errors are treated. `List of possible values
-        &lt;https://docs.python.org/3/library/codecs.html#error-handlers&gt;`_ .
-
-        .. versionadded:: 1.3.0
-
-    dialect : str or csv.Dialect, optional
-        If provided, this parameter will override values (default or not) for the
-        following parameters: `delimiter`, `doublequote`, `escapechar`,
-        `skipinitialspace`, `quotechar`, and `quoting`. If it is necessary to
-        override values, a ParserWarning will be issued. See csv.Dialect
-        documentation for more details.
-    error_bad_lines : bool, optional, default ``None``
-        Lines with too many fields (e.g. a csv line with too many commas) will by
-        default cause an exception to be raised, and no DataFrame will be returned.
-        If False, then these "bad lines" will be dropped from the DataFrame that is
-        returned.
-
-        .. deprecated:: 1.3.0
-           The ``on_bad_lines`` parameter should be used instead to specify behavior upon
-           encountering a bad line instead.
-    warn_bad_lines : bool, optional, default ``None``
-        If error_bad_lines is False, and warn_bad_lines is True, a warning for each
-        "bad line" will be output.
-
-        .. deprecated:: 1.3.0
-           The ``on_bad_lines`` parameter should be used instead to specify behavior upon
-           encountering a bad line instead.
-    on_bad_lines : {'error', 'warn', 'skip'} or callable, default 'error'
-        Specifies what to do upon encountering a bad line (a line with too many fields).
-        Allowed values are :
-
-            - 'error', raise an Exception when a bad line is encountered.
-            - 'warn', raise a warning when a bad line is encountered and skip that line.
-            - 'skip', skip bad lines without raising or warning when they are encountered.
-
-        .. versionadded:: 1.3.0
-
-            - callable, function with signature
-              ``(bad_line: list[str]) -&gt; list[str] | None`` that will process a single
-              bad line. ``bad_line`` is a list of strings split by the ``sep``.
-              If the function returns ``None``, the bad line will be ignored.
-              If the function returns a new list of strings with more elements than
-              expected, a ``ParserWarning`` will be emitted while dropping extra elements.
-              Only supported when ``engine="python"``
-
-        .. versionadded:: 1.4.0
-
-    delim_whitespace : bool, default False
-        Specifies whether or not whitespace (e.g. ``' '`` or ``'    '``) will be
-        used as the sep. Equivalent to setting ``sep='\s+'``. If this option
-        is set to True, nothing should be passed in for the ``delimiter``
-        parameter.
-    low_memory : bool, default True
-        Internally process the file in chunks, resulting in lower memory use
-        while parsing, but possibly mixed type inference.  To ensure no mixed
-        types either set False, or specify the type with the `dtype` parameter.
-        Note that the entire file is read into a single DataFrame regardless,
-        use the `chunksize` or `iterator` parameter to return the data in chunks.
-        (Only valid with C parser).
-    memory_map : bool, default False
-        If a filepath is provided for `filepath_or_buffer`, map the file object
-        directly onto memory and access the data directly from there. Using this
-        option can improve performance because there is no longer any I/O overhead.
-    float_precision : str, optional
-        Specifies which converter the C engine should use for floating-point
-        values. The options are ``None`` or 'high' for the ordinary converter,
-        'legacy' for the original lower precision pandas converter, and
-        'round_trip' for the round-trip converter.
-
-        .. versionchanged:: 1.2
-
-    storage_options : dict, optional
-        Extra options that make sense for a particular storage connection, e.g.
-        host, port, username, password, etc. For HTTP(S) URLs the key-value pairs
-        are forwarded to ``urllib`` as header options. For other URLs (e.g.
-        starting with "s3://", and "gcs://") the key-value pairs are forwarded to
-        ``fsspec``. Please see ``fsspec`` and ``urllib`` for more details.
-
-        .. versionadded:: 1.2
-
-    Returns
-    -------
-    DataFrame or TextParser
-        A comma-separated values (csv) file is returned as two-dimensional
-        data structure with labeled axes.
-
-    See Also
-    --------
-    DataFrame.to_csv : Write DataFrame to a comma-separated values (csv) file.
-    read_csv : Read a comma-separated values (csv) file into DataFrame.
-    read_fwf : Read a table of fixed-width formatted lines into DataFrame.
-
-    Examples
-    --------
-    &gt;&gt;&gt; pd.read_csv('data.csv')  # doctest: +SKIP</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sample_df <span class="op">=</span> pd.read_csv(sample_table_url, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>library_df <span class="op">=</span> pd.read_csv(library_table_url, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sample_df.project_name.nunique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>sample_df <span class="op">=</span> pd.read_csv(sample_table_url, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>library_df <span class="op">=</span> pd.read_csv(library_table_url, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>sample_df.project_name.nunique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>45</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>library_df.project_name.nunique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>library_df.project_name.nunique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>43</code></pre>
 <section id="listing-the-columns-of-the-sample-dataframe" class="level3" data-number="8.5.1">
 <h3 data-number="8.5.1" class="anchored" data-anchor-id="listing-the-columns-of-the-sample-dataframe"><span class="header-section-number">8.5.1</span> Listing the columns of the sample dataframe</h3>
-<div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>sample_df.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>sample_df.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>Index(['project_name', 'publication_year', 'publication_doi', 'site_name',
        'latitude', 'longitude', 'geo_loc_name', 'sample_name', 'sample_host',
        'sample_age', 'sample_age_doi', 'community_type', 'material', 'archive',
@@ -1046,7 +3907,7 @@ skip_blank_lines=True, parse_dates=None, infer_datetime_format=False, keep_date_
 </section>
 <section id="looking-at-the-data-type-of-the-sample-dataframe" class="level3" data-number="8.5.2">
 <h3 data-number="8.5.2" class="anchored" data-anchor-id="looking-at-the-data-type-of-the-sample-dataframe"><span class="header-section-number">8.5.2</span> Looking at the data type of the sample dataframe</h3>
-<div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>sample_df.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>sample_df.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>project_name          object
 publication_year       int64
 publication_doi       object
@@ -1073,11 +3934,11 @@ dtype: object</code></pre>
 <section id="lets-inspect-our-data" class="level3" data-number="8.5.3">
 <h3 data-number="8.5.3" class="anchored" data-anchor-id="lets-inspect-our-data"><span class="header-section-number">8.5.3</span> Let’s inspect our data</h3>
 <p>What is the size of our dataframe ?</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sample_df.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>sample_df.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>(1060, 16)</code></pre>
 <p>This dataframe has <strong>1060</strong> rows, and <strong>16</strong> columns</p>
 <p>Let’s look at the first 5 rows</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>sample_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>sample_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -1408,7 +4269,7 @@ SRS7890496
 </div>
 <p><strong>Unlike R, Python is <code>0</code> based language, meaning the first element is of index <code>0</code>, not like R where it is <code>1</code>.</strong></p>
 <p>Let’s look at the last 5 rows</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sample_df.tail()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>sample_df.tail()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -1738,7 +4599,7 @@ ERS7283102,ERS7283103
 </table>
 </div>
 <p>Let’s randomly inspect 5 rows</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>sample_df.sample(n<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>sample_df.sample(n<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -2071,8 +4932,8 @@ SRS1815407
 <h6 data-number="8.5.3.0.0.1" class="anchored" data-anchor-id="accessing-the-data-by-indexcolumns"><span class="header-section-number">8.5.3.0.0.1</span> Accessing the data by index/columns</h6>
 <p>The are different way of selecting of subset of a dataframe</p>
 <p>Selecting by the row index</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># selecting the 10th row, and all columns</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>sample_df.iloc[<span class="dv">9</span>, :]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># selecting the 10th row, and all columns</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>sample_df.iloc[<span class="dv">9</span>, :]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>project_name                    Weyrich2017
 publication_year                       2017
 publication_doi         10.1038/nature21674
@@ -2090,8 +4951,8 @@ archive                                 SRA
 archive_project                 PRJNA685265
 archive_accession                SRS7890488
 Name: 9, dtype: object</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># selecting the 10th to 12th row, and all columns</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>sample_df.iloc[<span class="dv">9</span>:<span class="dv">12</span>, :]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># selecting the 10th to 12th row, and all columns</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>sample_df.iloc[<span class="dv">9</span>:<span class="dv">12</span>, :]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -2314,8 +5175,8 @@ SRS7890490
 
 </table>
 </div>
-<div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># selecting the 10th to 12th row, and the first to the 4th column</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>sample_df.iloc[<span class="dv">9</span>:<span class="dv">12</span>, <span class="dv">0</span>:<span class="dv">4</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># selecting the 10th to 12th row, and the first to the 4th column</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>sample_df.iloc[<span class="dv">9</span>:<span class="dv">12</span>, <span class="dv">0</span>:<span class="dv">4</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -2394,8 +5255,8 @@ Stuttgart-Mühlhausen I
 
 </table>
 </div>
-<div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># selecting the column site_name</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'site_name'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># selecting the column site_name</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'site_name'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>0                           Dalheim
 1                           Dalheim
 2                       Gola Forest
@@ -2408,8 +5269,8 @@ Stuttgart-Mühlhausen I
 1058               Dom Square, Riga
 1059       St. Peter’s Church, Riga
 Name: site_name, Length: 1060, dtype: object</code></pre>
-<div class="sourceCode" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Also valid, but less preferred</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>sample_df.site_name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Also valid, but less preferred</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>sample_df.site_name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>0                           Dalheim
 1                           Dalheim
 2                       Gola Forest
@@ -2422,8 +5283,8 @@ Name: site_name, Length: 1060, dtype: object</code></pre>
 1058               Dom Square, Riga
 1059       St. Peter’s Church, Riga
 Name: site_name, Length: 1060, dtype: object</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing a row</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>sample_df.drop(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing a row</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>sample_df.drop(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -3073,8 +5934,8 @@ ERS7283102,ERS7283103
 1059 rows × 16 columns
 </p>
 </div>
-<div class="sourceCode" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing a columm</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>sample_df.drop(<span class="st">'project_name'</span>, axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing a columm</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>sample_df.drop(<span class="st">'project_name'</span>, axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -3692,7 +6553,7 @@ ERS7283102,ERS7283103
 <section id="dealing-with-missing-data" class="level5" data-number="8.5.3.0.1">
 <h5 data-number="8.5.3.0.1" class="anchored" data-anchor-id="dealing-with-missing-data"><span class="header-section-number">8.5.3.0.1</span> 4 - Dealing with missing data</h5>
 <p>Checking is some entries if the table have missing data (NA or NaN)</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>sample_df.isna()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>sample_df.isna()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -4342,8 +7203,8 @@ False
 1060 rows × 16 columns
 </p>
 </div>
-<div class="sourceCode" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># making the sum by row - axis=1</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>sample_df.isna().<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># making the sum by row - axis=1</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>sample_df.isna().<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>0       0
 1       0
 2       0
@@ -4357,7 +7218,7 @@ False
 1059    0
 Length: 1060, dtype: int64</code></pre>
 <p>Sorting by decreasing order to check which rows have missing values</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>sample_df.isna().<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>).sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>sample_df.isna().<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>).sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>800     2
 962     2
 992     2
@@ -4370,7 +7231,7 @@ Length: 1060, dtype: int64</code></pre>
 365     0
 1059    0
 Length: 1060, dtype: int64</code></pre>
-<div class="sourceCode" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>sample_df.iloc[<span class="dv">800</span>,:]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>sample_df.iloc[<span class="dv">800</span>,:]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>project_name                         FellowsYates2021
 publication_year                                 2021
 publication_doi               10.1073/pnas.2021655118
@@ -4397,7 +7258,7 @@ Here, we’re just going to ignore them, and deal with it individually if necess
 <section id="computing-basic-statistics" class="level2" data-number="8.6">
 <h2 data-number="8.6" class="anchored" data-anchor-id="computing-basic-statistics"><span class="header-section-number">8.6</span> 5 - Computing basic statistics</h2>
 <p>TLDR: use the <code>describe()</code> function, the equivalent of <code>summarize</code> in R</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>sample_df.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>sample_df.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -4562,7 +7423,7 @@ max
 </table>
 </div>
 <p>Let’s look at various individual summary statistics We can run them on the whole dataframe (for <code>int</code> or <code>float</code> columns), or on a subset of columns</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>sample_df.mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>sample_df.mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>/var/folders/1c/l1qb09f15jddsh65f6xv1n_r0000gp/T/ipykernel_69168/2260452167.py:1:
 FutureWarning: Dropping of nuisance columns in DataFrame reductions (with 'numeric_only=None')
 is deprecated; in a future version this will raise TypeError.  Select only valid columns
@@ -4577,7 +7438,7 @@ latitude              40.600493
 longitude              3.749624
 sample_age          3588.443396
 dtype: float64</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'publication_year'</span>].describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'publication_year'</span>].describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>count    1060.000000
 mean     2019.377358
 std         1.633877
@@ -4587,23 +7448,23 @@ min      2014.000000
 75%      2021.000000
 max      2021.000000
 Name: publication_year, dtype: float64</code></pre>
-<div class="sourceCode" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The average publication year</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'publication_year'</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The average publication year</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'publication_year'</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>2019.377358490566</code></pre>
-<div class="sourceCode" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The median publication year</span></span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'publication_year'</span>].median()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The median publication year</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'publication_year'</span>].median()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>2020.0</code></pre>
-<div class="sourceCode" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The minimum, or oldest publication year</span></span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'publication_year'</span>].<span class="bu">min</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The minimum, or oldest publication year</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'publication_year'</span>].<span class="bu">min</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>2014</code></pre>
-<div class="sourceCode" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The maximum, or most recent publication year</span></span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'publication_year'</span>].<span class="bu">max</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The maximum, or most recent publication year</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'publication_year'</span>].<span class="bu">max</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>2021</code></pre>
-<div class="sourceCode" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The number of sites</span></span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'site_name'</span>].nunique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The number of sites</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'site_name'</span>].nunique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>246</code></pre>
-<div class="sourceCode" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The number of samples from the different hosts</span></span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'sample_host'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The number of samples from the different hosts</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'sample_host'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>Homo sapiens                      741
 Ursus arctos                       85
 Ambrosia artemisiifolia            46
@@ -4628,8 +7489,8 @@ Gorilla beringei                    2
 Papio sp.                           1
 Pan troglodytes                     1
 Name: sample_host, dtype: int64</code></pre>
-<div class="sourceCode" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The quantile of the publication years</span></span>
-<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'publication_year'</span>].quantile(np.arange(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The quantile of the publication years</span></span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'publication_year'</span>].quantile(np.arange(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>0.0    2014.0
 0.1    2017.0
 0.2    2018.0
@@ -4641,8 +7502,8 @@ Name: sample_host, dtype: int64</code></pre>
 0.8    2021.0
 0.9    2021.0
 Name: publication_year, dtype: float64</code></pre>
-<div class="sourceCode" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We can also visualize it with built-in plot functions of pandas</span></span>
-<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'publication_year'</span>].plot.hist()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We can also visualize it with built-in plot functions of pandas</span></span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>sample_df[<span class="st">'publication_year'</span>].plot.hist()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>&lt;AxesSubplot:ylabel='Frequency'&gt;</code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -4659,8 +7520,8 @@ Name: publication_year, dtype: float64</code></pre>
 <li>The <code>query()</code> method</li>
 </ul>
 <p>The classic method</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting all the publications before 2015</span></span>
-<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>sample_df[sample_df[<span class="st">'publication_year'</span>]  <span class="op">&lt;</span> <span class="dv">2015</span> ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting all the publications before 2015</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>sample_df[sample_df[<span class="st">'publication_year'</span>]  <span class="op">&lt;</span> <span class="dv">2015</span> ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -5307,8 +8168,8 @@ SRS510175
 
 </table>
 </div>
-<div class="sourceCode" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting all the publications before 2015, only in the Northern hemisphere</span></span>
-<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>sample_df[(sample_df[<span class="st">'publication_year'</span>]  <span class="op">&lt;</span> <span class="dv">2015</span>) <span class="op">&amp;</span> (sample_df[<span class="st">'longitude'</span>] <span class="op">&gt;</span> <span class="dv">0</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting all the publications before 2015, only in the Northern hemisphere</span></span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>sample_df[(sample_df[<span class="st">'publication_year'</span>]  <span class="op">&lt;</span> <span class="dv">2015</span>) <span class="op">&amp;</span> (sample_df[<span class="st">'longitude'</span>] <span class="op">&gt;</span> <span class="dv">0</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -5532,8 +8393,8 @@ SRS510175
 </table>
 </div>
 <p>This syntax can rapidly become quite cumbersome, which is why we can also use the <code>query()</code> method</p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting all the publications before 2015</span></span>
-<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>sample_df.query(<span class="st">"publication_year &lt; 2015"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting all the publications before 2015</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>sample_df.query(<span class="st">"publication_year &lt; 2015"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -6180,8 +9041,8 @@ SRS510175
 
 </table>
 </div>
-<div class="sourceCode" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting all the publications before 2015, only the Northern hemisphere</span></span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>sample_df.query(<span class="st">"publication_year &lt; 2015 and longitude &gt; 0 "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting all the publications before 2015, only the Northern hemisphere</span></span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>sample_df.query(<span class="st">"publication_year &lt; 2015 and longitude &gt; 0 "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -6409,7 +9270,7 @@ SRS510175
 <h2 data-number="8.8" class="anchored" data-anchor-id="groupby-operations-and-computing-statistics-on-grouped-values"><span class="header-section-number">8.8</span> 7 - GroupBy operations, and computing statistics on grouped values</h2>
 <p>The “groupBy” operation, as the name suggests, allows us to group values by a grouping key, and perform a groupwise operation.<br>
 For example, we can group by the <code>sample_host</code> and get the age of the <strong>youngest</strong> sample in each group</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>sample_df.groupby(<span class="st">"sample_host"</span>)[<span class="st">'sample_age'</span>].<span class="bu">min</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>sample_df.groupby(<span class="st">"sample_host"</span>)[<span class="st">'sample_age'</span>].<span class="bu">min</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>sample_host
 Alouatta palliata                   200
 Ambrosia artemisiifolia             100
@@ -6437,7 +9298,7 @@ Ursus arctos                        100
 Name: sample_age, dtype: int64</code></pre>
 <p>Here <code>min()</code> is a so-called aggregation function</p>
 <p>Notice that <code>.value_counts()</code> is actually a special case of <code>.groupby()</code></p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>sample_df.groupby(<span class="st">"sample_host"</span>)[<span class="st">"sample_host"</span>].count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>sample_df.groupby(<span class="st">"sample_host"</span>)[<span class="st">"sample_host"</span>].count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>sample_host
 Alouatta palliata                   5
 Ambrosia artemisiifolia            46
@@ -6471,15 +9332,15 @@ Name: sample_host, dtype: int64</code></pre>
 <h3 data-number="8.9.1" class="anchored" data-anchor-id="from-wide-to-longtidy"><span class="header-section-number">8.9.1</span> From wide to long/tidy</h3>
 <p>The tidy format, or long format idea is that one column = one kind of data.<br>
 Unfortunately for this tutorial, the AncientMetagenomeDir tables are already in the tidy format (good), so we’ll see an example or the wide format just below</p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>wide_df <span class="op">=</span> pd.DataFrame(</span>
-<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>    [</span>
-<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">150</span>,<span class="dv">155</span>,<span class="dv">157</span>,<span class="dv">160</span>],</span>
-<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">149</span>,<span class="dv">153</span>,<span class="dv">154</span>,<span class="dv">155</span>]</span>
-<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>    ]</span>
-<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a>    , index <span class="op">=</span> [<span class="st">'John'</span>,<span class="st">'Jack'</span>]</span>
-<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a>    , columns <span class="op">=</span> [<span class="dv">1991</span>,<span class="dv">1992</span>,<span class="dv">1993</span>, <span class="dv">1994</span>]</span>
-<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a>).rename_axis(<span class="st">'individual'</span>).reset_index()</span>
-<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a>wide_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>wide_df <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>    [</span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">150</span>,<span class="dv">155</span>,<span class="dv">157</span>,<span class="dv">160</span>],</span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">149</span>,<span class="dv">153</span>,<span class="dv">154</span>,<span class="dv">155</span>]</span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>    , index <span class="op">=</span> [<span class="st">'John'</span>,<span class="st">'Jack'</span>]</span>
+<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a>    , columns <span class="op">=</span> [<span class="dv">1991</span>,<span class="dv">1992</span>,<span class="dv">1993</span>, <span class="dv">1994</span>]</span>
+<span id="cb84-8"><a href="#cb84-8" aria-hidden="true" tabindex="-1"></a>).rename_axis(<span class="st">'individual'</span>).reset_index()</span>
+<span id="cb84-9"><a href="#cb84-9" aria-hidden="true" tabindex="-1"></a>wide_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -6552,8 +9413,8 @@ Jack
 </div>
 <p>In this hypothetic dataframe, we have the years as column, the individual as index, and their height as value.<br>
 We’ll reformat to the tidy/long format using the <code>.melt()</code> function</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>tidy_df <span class="op">=</span> wide_df.melt(id_vars<span class="op">=</span><span class="st">'individual'</span>, var_name<span class="op">=</span><span class="st">'birthyear'</span>, value_name<span class="op">=</span><span class="st">'height'</span>)</span>
-<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>tidy_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>tidy_df <span class="op">=</span> wide_df.melt(id_vars<span class="op">=</span><span class="st">'individual'</span>, var_name<span class="op">=</span><span class="st">'birthyear'</span>, value_name<span class="op">=</span><span class="st">'height'</span>)</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>tidy_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -6693,15 +9554,15 @@ Jack
 <blockquote class="blockquote">
 <p>Bonus: How to deal with a dataframe with the kind of data indicated in the column name, typically like so</p>
 </blockquote>
-<div class="sourceCode" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>wide_df <span class="op">=</span> pd.DataFrame(</span>
-<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>    [</span>
-<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">150</span>,<span class="dv">155</span>,<span class="dv">157</span>,<span class="dv">160</span>],</span>
-<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">149</span>,<span class="dv">153</span>,<span class="dv">154</span>,<span class="dv">155</span>]</span>
-<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a>    ]</span>
-<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a>    , index <span class="op">=</span> [<span class="st">'John'</span>,<span class="st">'Jack'</span>]</span>
-<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a>    , columns <span class="op">=</span> [<span class="st">"year-1991"</span>,<span class="st">"year-1992"</span>,<span class="st">"year-1993"</span>, <span class="st">"year-1994"</span>]</span>
-<span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a>).rename_axis(<span class="st">'individual'</span>).reset_index()</span>
-<span id="cb76-9"><a href="#cb76-9" aria-hidden="true" tabindex="-1"></a>wide_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>wide_df <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>    [</span>
+<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">150</span>,<span class="dv">155</span>,<span class="dv">157</span>,<span class="dv">160</span>],</span>
+<span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">149</span>,<span class="dv">153</span>,<span class="dv">154</span>,<span class="dv">155</span>]</span>
+<span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb86-6"><a href="#cb86-6" aria-hidden="true" tabindex="-1"></a>    , index <span class="op">=</span> [<span class="st">'John'</span>,<span class="st">'Jack'</span>]</span>
+<span id="cb86-7"><a href="#cb86-7" aria-hidden="true" tabindex="-1"></a>    , columns <span class="op">=</span> [<span class="st">"year-1991"</span>,<span class="st">"year-1992"</span>,<span class="st">"year-1993"</span>, <span class="st">"year-1994"</span>]</span>
+<span id="cb86-8"><a href="#cb86-8" aria-hidden="true" tabindex="-1"></a>).rename_axis(<span class="st">'individual'</span>).reset_index()</span>
+<span id="cb86-9"><a href="#cb86-9" aria-hidden="true" tabindex="-1"></a>wide_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -6772,7 +9633,7 @@ Jack
 
 </table>
 </div>
-<div class="sourceCode" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>pd.wide_to_long(wide_df, [<span class="st">'year'</span>], i<span class="op">=</span><span class="st">'individual'</span>, j<span class="op">=</span><span class="st">'birthyear'</span>, sep<span class="op">=</span><span class="st">"-"</span>).rename(columns<span class="op">=</span>{<span class="st">'year'</span>:<span class="st">'height'</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>pd.wide_to_long(wide_df, [<span class="st">'year'</span>], i<span class="op">=</span><span class="st">'individual'</span>, j<span class="op">=</span><span class="st">'birthyear'</span>, sep<span class="op">=</span><span class="st">"-"</span>).rename(columns<span class="op">=</span>{<span class="st">'year'</span>:<span class="st">'height'</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -6894,7 +9755,7 @@ Jack
 </section>
 <section id="from-longtidy-to-wide-format-using-the-.pivot-function." class="level3" data-number="8.9.2">
 <h3 data-number="8.9.2" class="anchored" data-anchor-id="from-longtidy-to-wide-format-using-the-.pivot-function."><span class="header-section-number">8.9.2</span> From long/tidy to wide format using the <code>.pivot()</code> function.</h3>
-<div class="sourceCode" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>tidy_df.pivot(index<span class="op">=</span><span class="st">'individual'</span>, columns<span class="op">=</span><span class="st">'birthyear'</span>, values<span class="op">=</span><span class="st">'height'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>tidy_df.pivot(index<span class="op">=</span><span class="st">'individual'</span>, columns<span class="op">=</span><span class="st">'birthyear'</span>, values<span class="op">=</span><span class="st">'height'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>/Users/maxime/mambaforge/envs/intro-data/lib/python3.10/site-packages/pandas/core/algorithms.py:798: FutureWarning: In a future version, the Index constructor will not infer numeric dtypes when passed object-dtype sequences (matching Series behavior)</code></pre>
 <div>
 
@@ -6980,7 +9841,7 @@ To match these two together, we need to join the tables together.</p>
 <p>To do so, we need a column in common between the two tables, the so-called <strong>joining key</strong> (this key can be the index)</p>
 <p><img src="assets/images/chapters/python-pandas/08_merge_left.svg" class="img-fluid"></p>
 <p>For the samples and libraries dataframe, the joining key is the column <code>sample_name</code></p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>sample_df.merge(library_df, on<span class="op">=</span><span class="st">'sample_name'</span>).columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>sample_df.merge(library_df, on<span class="op">=</span><span class="st">'sample_name'</span>).columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>Index(['project_name_x', 'publication_year_x', 'publication_doi', 'site_name',
        'latitude', 'longitude', 'geo_loc_name', 'sample_name', 'sample_host',
        'sample_age', 'sample_age_doi', 'community_type', 'material',
@@ -6993,8 +9854,8 @@ To match these two together, we need to join the tables together.</p>
        'download_links', 'download_md5s', 'download_sizes'],
       dtype='object')</code></pre>
 <p>We have some duplicate columns that we can get rid of:</p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>merged_df <span class="op">=</span> sample_df.merge(library_df.drop([<span class="st">'project_name'</span>, <span class="st">'publication_year'</span>, <span class="st">'archive_project'</span>, <span class="st">'archive'</span>], axis<span class="op">=</span><span class="dv">1</span>), on<span class="op">=</span><span class="st">'sample_name'</span>)</span>
-<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>merged_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>merged_df <span class="op">=</span> sample_df.merge(library_df.drop([<span class="st">'project_name'</span>, <span class="st">'publication_year'</span>, <span class="st">'archive_project'</span>, <span class="st">'archive'</span>], axis<span class="op">=</span><span class="dv">1</span>), on<span class="op">=</span><span class="st">'sample_name'</span>)</span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>merged_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -7828,7 +10689,7 @@ ftp.sra.ebi.ac.uk/vol1/fastq/ERR576/003/ERR576…
 <section id="visualizing-some-of-the-results-with-plotnine" class="level2" data-number="8.11">
 <h2 data-number="8.11" class="anchored" data-anchor-id="visualizing-some-of-the-results-with-plotnine"><span class="header-section-number">8.11</span> 10 - Visualizing some of the results with Plotnine</h2>
 <p>Plotnine is the Python clone of ggplot2, the syntax is identical, which makes it great if you’re working with data in tidy/long format, and are already familiar with the ggplot2 syntax</p>
-<div class="sourceCode" id="cb83"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>ggplot(merged_df, aes(x<span class="op">=</span><span class="st">'publication_year'</span>)) <span class="op">+</span> geom_histogram() <span class="op">+</span> theme_classic()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>ggplot(merged_df, aes(x<span class="op">=</span><span class="st">'publication_year'</span>)) <span class="op">+</span> geom_histogram() <span class="op">+</span> theme_classic()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>/Users/maxime/mambaforge/envs/intro-data/lib/python3.10/
 site-packages/plotnine/stats/stat_bin.py:95:
 PlotnineWarning: 'stat_bin()' using 'bins = 15'. Pick better value with 'binwidth'.</code></pre>
@@ -7840,9 +10701,9 @@ PlotnineWarning: 'stat_bin()' using 'bins = 15'. Pick better value with 'binwidt
 </div>
 <pre><code>&lt;ggplot: (366051178)&gt;</code></pre>
 <p>We can start to ask some questions, for example, is the sequencing depth increasing with the years ?</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>merged_df[<span class="st">'publication_year'</span>] <span class="op">=</span> merged_df[<span class="st">'publication_year'</span>].astype(<span class="st">'category'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb87"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>ggplot(merged_df, aes(x<span class="op">=</span><span class="st">'publication_year'</span>, y<span class="op">=</span><span class="st">'np.log10(read_count)'</span>, fill<span class="op">=</span><span class="st">'publication_year'</span>)) <span class="op">+</span></span>
-<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>geom_jitter(alpha<span class="op">=</span><span class="fl">0.1</span>) <span class="op">+</span> geom_boxplot(alpha<span class="op">=</span><span class="fl">0.8</span>) <span class="op">+</span> theme_classic()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>merged_df[<span class="st">'publication_year'</span>] <span class="op">=</span> merged_df[<span class="st">'publication_year'</span>].astype(<span class="st">'category'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>ggplot(merged_df, aes(x<span class="op">=</span><span class="st">'publication_year'</span>, y<span class="op">=</span><span class="st">'np.log10(read_count)'</span>, fill<span class="op">=</span><span class="st">'publication_year'</span>)) <span class="op">+</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>geom_jitter(alpha<span class="op">=</span><span class="fl">0.1</span>) <span class="op">+</span> geom_boxplot(alpha<span class="op">=</span><span class="fl">0.8</span>) <span class="op">+</span> theme_classic()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="assets/images/chapters/python-pandas/tutorial_114_0.png" class="img-fluid figure-img"></p>
@@ -7851,8 +10712,8 @@ PlotnineWarning: 'stat_bin()' using 'bins = 15'. Pick better value with 'binwidt
 </div>
 <pre><code>&lt;ggplot: (366112582)&gt;</code></pre>
 <p>We could ask the same question, but first grouping the samples by publication year</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>avg_read_count_by_year <span class="op">=</span> merged_df.groupby(<span class="st">'publication_year'</span>)[<span class="st">'read_count'</span>].mean().to_frame().reset_index()</span>
-<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>avg_read_count_by_year</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>avg_read_count_by_year <span class="op">=</span> merged_df.groupby(<span class="st">'publication_year'</span>)[<span class="st">'read_count'</span>].mean().to_frame().reset_index()</span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>avg_read_count_by_year</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
@@ -7951,7 +10812,7 @@ read_count
 
 </table>
 </div>
-<div class="sourceCode" id="cb90"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>ggplot(avg_read_count_by_year, aes(x<span class="op">=</span><span class="st">'publication_year'</span>, y<span class="op">=</span><span class="st">'np.log10(read_count)'</span>, fill<span class="op">=</span><span class="st">'publication_year'</span>)) <span class="op">+</span> geom_point()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>ggplot(avg_read_count_by_year, aes(x<span class="op">=</span><span class="st">'publication_year'</span>, y<span class="op">=</span><span class="st">'np.log10(read_count)'</span>, fill<span class="op">=</span><span class="st">'publication_year'</span>)) <span class="op">+</span> geom_point()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="assets/images/chapters/python-pandas/tutorial_117_0.png" class="img-fluid figure-img"></p>
@@ -7965,7 +10826,7 @@ read_count
 <h2 data-number="8.12" class="anchored" data-anchor-id="bonus-dealing-with-ill-formatted-columns"><span class="header-section-number">8.12</span> 11 - Bonus, dealing with ill-formatted columns</h2>
 <p>Sometimes, colums can contains entries which could be split in multiple columns, typically values separated by a comma. In AncientMetagenomeDir, this is the case with the archive accession column.</p>
 <p>Here is how we would solve it with pandas</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>sample_df.assign(archive_accession <span class="op">=</span> sample_df.archive_accession.<span class="bu">str</span>.split(<span class="st">","</span>)).explode(<span class="st">'archive_accession'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>sample_df.assign(archive_accession <span class="op">=</span> sample_df.archive_accession.<span class="bu">str</span>.split(<span class="st">","</span>)).explode(<span class="st">'archive_accession'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 
 
