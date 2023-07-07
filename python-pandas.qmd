@@ -362,6 +362,333 @@ df["Year_Birth"]
 1753    1956
 ```
 
+We can also remove columns from the `DataFrame`.
+
+In this case, we want to remove the columns "Z_CostContact" and "Z_Revenue" and keep those changes.
+
+```python
+df = df.drop("Z_CostContact", axis=1)
+df = df.drop("Z_Revenue", axis=1)
+```
+
+### Conditional subsetting
+
+We can more specifically look at subsets of the data we might be interested in.
+
+This subsetting is a bit weird in the syntax at first but hopefully makes more sense when we go through it step by step.
+
+We can, for example, test each string in the column "Education" if it is equal to "PhD":
+
+
+```python
+education_is_grad = (df["Education"] == "Graduation")
+education_is_grad
+```
+```
+0        True
+1        True
+2        True
+3        True
+4       False
+        ...  
+1749     True
+1750     True
+1751     True
+1752     True
+1753    False
+Name: Education, Length: 1754, dtype: bool
+```
+
+We can also check for multiple conditions at once:
+
+```python
+two_at_once = (df["Education"] == "Graduation") & (df["Marital_Status"] == "Single")
+two_at_once
+```
+```
+0        True
+1        True
+2       False
+3       False
+4       False
+        ...  
+1749    False
+1750    False
+1751    False
+1752    False
+1753    False
+Length: 1754, dtype: bool
+```
+
+This will create a `Series` of booleans, which can then be used to subset the data to rows where the condition(s) are **True**:
+
+```python
+df[two_at_once]
+```
+'<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>18</th>\n      <td>7892</td>\n      <td>1969</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>18589.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>6</td>\n      <td>4</td>\n      <td>25</td>\n      <td>15</td>\n      <td>12</td>\n      <td>13</td>\n      <td>2</td>\n      <td>1</td>\n      <td>3</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>20</th>\n      <td>5255</td>\n      <td>1986</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>NaN</td>\n      <td>1</td>\n      <td>0</td>\n      <td>5</td>\n      <td>1</td>\n      <td>3</td>\n      <td>3</td>\n      <td>263</td>\n      <td>362</td>\n      <td>27</td>\n      <td>0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>33</th>\n      <td>1371</td>\n      <td>1976</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>79941.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>123</td>\n      <td>164</td>\n      <td>266</td>\n      <td>227</td>\n      <td>30</td>\n      <td>174</td>\n      <td>2</td>\n      <td>4</td>\n      <td>9</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1720</th>\n      <td>10968</td>\n      <td>1969</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>57731.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>266</td>\n      <td>21</td>\n      <td>300</td>\n      <td>65</td>\n      <td>8</td>\n      <td>44</td>\n      <td>8</td>\n      <td>8</td>\n      <td>6</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1723</th>\n      <td>5959</td>\n      <td>1968</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>35893.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>158</td>\n      <td>0</td>\n      <td>23</td>\n      <td>0</td>\n      <td>0</td>\n      <td>18</td>\n      <td>3</td>\n      <td>1</td>\n      <td>5</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1743</th>\n      <td>4201</td>\n      <td>1962</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>57967.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>229</td>\n      <td>7</td>\n      <td>137</td>\n      <td>4</td>\n      <td>0</td>\n      <td>91</td>\n      <td>4</td>\n      <td>2</td>\n      <td>8</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1746</th>\n      <td>7004</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>11012.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>24</td>\n      <td>3</td>\n      <td>26</td>\n      <td>7</td>\n      <td>1</td>\n      <td>23</td>\n      <td>3</td>\n      <td>1</td>\n      <td>2</td>\n      <td>9</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1748</th>\n      <td>8080</td>\n      <td>1986</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>26816.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>5</td>\n      <td>1</td>\n      <td>6</td>\n      <td>3</td>\n      <td>4</td>\n      <td>3</td>\n      <td>0</td>\n      <td>0</td>\n      <td>3</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>252 rows × 20 columns</p>'
+
+The syntax that seems more complicated and does it in one step without the extra `Series` is this:
+
+```python
+df[(df["Education"] == "Master") & (df["Marital_Status"] == "Single")]
+```
+
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>26</th>\n      <td>10738</td>\n      <td>1951</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>49389.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>40</td>\n      <td>0</td>\n      <td>19</td>\n      <td>2</td>\n      <td>1</td>\n      <td>3</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>46</th>\n      <td>6853</td>\n      <td>1982</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>75777.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>712</td>\n      <td>26</td>\n      <td>538</td>\n      <td>69</td>\n      <td>13</td>\n      <td>80</td>\n      <td>3</td>\n      <td>6</td>\n      <td>11</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>76</th>\n      <td>11178</td>\n      <td>1972</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>42394.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>15</td>\n      <td>2</td>\n      <td>10</td>\n      <td>0</td>\n      <td>1</td>\n      <td>4</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>98</th>\n      <td>6205</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>32557.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>34</td>\n      <td>3</td>\n      <td>29</td>\n      <td>0</td>\n      <td>4</td>\n      <td>10</td>\n      <td>2</td>\n      <td>1</td>\n      <td>3</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>110</th>\n      <td>821</td>\n      <td>1992</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>92859.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>962</td>\n      <td>61</td>\n      <td>921</td>\n      <td>52</td>\n      <td>61</td>\n      <td>20</td>\n      <td>5</td>\n      <td>4</td>\n      <td>12</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1690</th>\n      <td>3520</td>\n      <td>1990</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>91172.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>162</td>\n      <td>28</td>\n      <td>818</td>\n      <td>0</td>\n      <td>28</td>\n      <td>56</td>\n      <td>4</td>\n      <td>3</td>\n      <td>7</td>\n      <td>3</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1709</th>\n      <td>4418</td>\n      <td>1983</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>89616.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>671</td>\n      <td>47</td>\n      <td>655</td>\n      <td>145</td>\n      <td>111</td>\n      <td>15</td>\n      <td>7</td>\n      <td>5</td>\n      <td>12</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1714</th>\n      <td>2980</td>\n      <td>1952</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>8820.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>12</td>\n      <td>0</td>\n      <td>13</td>\n      <td>4</td>\n      <td>2</td>\n      <td>4</td>\n      <td>3</td>\n      <td>0</td>\n      <td>3</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1738</th>\n      <td>7366</td>\n      <td>1982</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>75777.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>712</td>\n      <td>26</td>\n      <td>538</td>\n      <td>69</td>\n      <td>13</td>\n      <td>80</td>\n      <td>3</td>\n      <td>6</td>\n      <td>11</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1747</th>\n      <td>9817</td>\n      <td>1970</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>44802.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>853</td>\n      <td>10</td>\n      <td>143</td>\n      <td>13</td>\n      <td>10</td>\n      <td>20</td>\n      <td>9</td>\n      <td>4</td>\n      <td>12</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>75 rows × 20 columns</p>
+
+
+### Describing a DataFrame
+
+Pandas can easily create overview statistics for all numeric columns:
+
+```python
+df.describe()
+```
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>count</th>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1735.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.0</td>\n      <td>1754.0</td>\n    </tr>\n    <tr>\n      <th>mean</th>\n      <td>5584.696123</td>\n      <td>1969.571266</td>\n      <td>51166.578098</td>\n      <td>0.456100</td>\n      <td>0.480616</td>\n      <td>276.072406</td>\n      <td>28.034778</td>\n      <td>166.492018</td>\n      <td>40.517104</td>\n      <td>28.958381</td>\n      <td>47.266819</td>\n      <td>3.990878</td>\n      <td>2.576967</td>\n      <td>5.714937</td>\n      <td>5.332383</td>\n      <td>0.011403</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>std</th>\n      <td>3254.655979</td>\n      <td>11.876614</td>\n      <td>26200.419179</td>\n      <td>0.537854</td>\n      <td>0.536112</td>\n      <td>314.604735</td>\n      <td>41.348883</td>\n      <td>225.561694</td>\n      <td>57.412986</td>\n      <td>42.830660</td>\n      <td>53.885647</td>\n      <td>2.708278</td>\n      <td>2.848335</td>\n      <td>3.231465</td>\n      <td>2.380183</td>\n      <td>0.106202</td>\n      <td>0.0</td>\n      <td>0.0</td>\n    </tr>\n    <tr>\n      <th>min</th>\n      <td>0.000000</td>\n      <td>1893.000000</td>\n      <td>1730.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>25%</th>\n      <td>2802.500000</td>\n      <td>1960.000000</td>\n      <td>33574.500000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>19.000000</td>\n      <td>2.000000</td>\n      <td>15.000000</td>\n      <td>3.000000</td>\n      <td>2.000000</td>\n      <td>10.000000</td>\n      <td>2.000000</td>\n      <td>0.000000</td>\n      <td>3.000000</td>\n      <td>3.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>50%</th>\n      <td>5468.000000</td>\n      <td>1971.000000</td>\n      <td>49912.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>160.500000</td>\n      <td>9.000000</td>\n      <td>66.000000</td>\n      <td>13.000000</td>\n      <td>9.000000</td>\n      <td>27.000000</td>\n      <td>3.000000</td>\n      <td>1.000000</td>\n      <td>5.000000</td>\n      <td>6.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>75%</th>\n      <td>8441.250000</td>\n      <td>1978.000000</td>\n      <td>68130.000000</td>\n      <td>1.000000</td>\n      <td>1.000000</td>\n      <td>454.000000</td>\n      <td>35.000000</td>\n      <td>232.000000</td>\n      <td>53.500000</td>\n      <td>35.000000</td>\n      <td>63.000000</td>\n      <td>6.000000</td>\n      <td>4.000000</td>\n      <td>8.000000</td>\n      <td>7.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>max</th>\n      <td>11191.000000</td>\n      <td>1996.000000</td>\n      <td>666666.000000</td>\n      <td>2.000000</td>\n      <td>2.000000</td>\n      <td>1492.000000</td>\n      <td>199.000000</td>\n      <td>1725.000000</td>\n      <td>259.000000</td>\n      <td>263.000000</td>\n      <td>362.000000</td>\n      <td>27.000000</td>\n      <td>28.000000</td>\n      <td>13.000000</td>\n      <td>20.000000</td>\n      <td>1.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n  </tbody>\n</table>\n<p>8 rows × 18 columns</p>
+
+You can also directly calculate the relevant statistics on columns you are interested in:
+
+```python
+df["MntWines"].max()
+```
+1492
+
+```python
+df[["Kidhome", "Teenhome"]].mean()
+```
+```
+Kidhome     0.456100
+Teenhome    0.480616
+dtype: float64
+```
+
+For non-numeric columns, you can get the represented values or their counts:
+
+```python
+df["Education"].unique()
+```
+array(['Graduation', 'Master', 'Basic', '2n Cycle'], dtype=object)
+
+
+```python
+df["Marital_Status"].value_counts()
+```
+```
+Marital_Status
+Married     672
+Together    463
+Single      382
+Divorced    180
+Widow        53
+Alone         2
+Absurd        2
+Name: count, dtype: int64
+```
+
+**Task**
+
+Subset the `DataFrame` in two different ways:
+
+::: {.callout-tip}
+Just like with the "PhD" string before, you can subset using integers and $<$, $>$, $<=$ and $>=$.
+:::
+
+
+- One where everybody is born before 1970
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python 
+  df_before = df[df["Year_Birth"] < 1970]
+  ```
+</details>
+- One where everybody is born in or after 1970
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python 
+  df_before = df[df["Year_Birth"] >= 1970]
+  ```
+</details>
+
+- How many people are in the two `DataFrames`? 
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python 
+  print("n(before)   =", df_before.shape[0])
+  print("n(after)   =", df_before.shape[0])
+  ```
+  ```
+  n(before)   = 804
+  n(after)   = 950
+  ```
+</details>
+
+- Do the total number of people sum up to the original `DataFrame` total?
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python
+   df_before.shape[0] + df_after.shape[0] == df.shape[0]
+  ```
+  True
+
+  ```python 
+  print("n(sum)      =", df_before.shape[0] + df_after.shape[0])
+  print("n(expected) =", df.shape[0])
+  ```
+  ```
+  n(sum)      = 1754
+  n(expected) = 1754
+  ```
+
+</details>
+- How does the mean income of the two groups differ?
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python 
+  print("income(before) =", df_before["Income"].mean())
+  print("income(after)  =", df_after["Income"].mean())
+  ```
+ income(before) = 55513.38113207547
+  income(after)  = 47490.29255319149  
+</details>
+
+**Extra task**
+- Can you find something else that differs a lot between the two groups?
+
+### Dealing with missing data
+
+We can check for missing data for each cell like this:
+
+```python
+df.isna()
+```
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1749</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1750</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1751</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1752</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1753</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n  </tbody>\n</table>\n<p>1754 rows × 20 columns</p>
+
+By summing over each row, we see how many missing values are in each column.
+
+`True` is treated as `1` and `False` as `0`.
+
+```python
+df.isna().sum()
+```
+```
+ID                      0
+Year_Birth              0
+Education               0
+Marital_Status          0
+Income                 19
+Kidhome                 0
+Teenhome                0
+MntWines                0
+MntFruits               0
+MntMeatProducts         0
+MntFishProducts         0
+MntSweetProducts        0
+MntGoldProds            0
+NumWebPurchases         0
+NumCatalogPurchases     0
+NumStorePurchases       0
+NumWebVisitsMonth       0
+Complain                0
+dtype: int64
+```
+
+We don't really know what a missing value means so we are just going to keep them in the data.
+
+However, we could remove them using `df.dropna()`
+
+### Grouping data
+
+We can group a `DataFrame` using a categorical column (for example "Education" or "Marital_Status").
+
+This allows us to do perform operations on each group individually.
+
+For example, we could group by "Education" and calculate the mean "Income":
+
+```python
+df.groupby(by="Education")["Income"].mean()
+```
+```
+Education
+2n Cycle      47633.190000
+Basic         20306.259259
+Graduation    52720.373656
+Master        52917.534247
+Name: Income, dtype: float6
+```
+
+###  Combining data
+#### Concatenation
+
+One way to combine multiple datasets is through **concatenation**, which either combines all columns or rows of multiple `DataFrames`.
+
+The command to combine two `DataFrames` by appending all rows is `pd.concat([first_dataframe, second_dataframe])`
+
+**Task**
+
+- Read the **tsv** "phd_data.tsv" as a new `DataFrame` and name the variable `df2`
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python 
+  df2 = pd.read_csv("phd_data.tsv", sep="\t")
+  ```
+</details>
+
+- Concatenate the "old" `DataFrame` `df` and the new `df2` and name the concatenated one `concat_df`
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python 
+  concat_df = pd.concat([df, df2])
+  concat_df
+  ```
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>481</th>\n      <td>11133</td>\n      <td>1973</td>\n      <td>PhD</td>\n      <td>YOLO</td>\n      <td>48432.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>322</td>\n      <td>3</td>\n      <td>50</td>\n      <td>4</td>\n      <td>3</td>\n      <td>42</td>\n      <td>7</td>\n      <td>1</td>\n      <td>6</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>482</th>\n      <td>9589</td>\n      <td>1948</td>\n      <td>PhD</td>\n      <td>Widow</td>\n      <td>82032.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>332</td>\n      <td>194</td>\n      <td>377</td>\n      <td>149</td>\n      <td>125</td>\n      <td>57</td>\n      <td>4</td>\n      <td>6</td>\n      <td>7</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>483</th>\n      <td>4286</td>\n      <td>1970</td>\n      <td>PhD</td>\n      <td>Single</td>\n      <td>57642.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>580</td>\n      <td>6</td>\n      <td>58</td>\n      <td>8</td>\n      <td>0</td>\n      <td>27</td>\n      <td>7</td>\n      <td>6</td>\n      <td>6</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>484</th>\n      <td>4001</td>\n      <td>1946</td>\n      <td>PhD</td>\n      <td>Together</td>\n      <td>64014.0</td>\n      <td>2</td>\n      <td>1</td>\n      <td>406</td>\n      <td>0</td>\n      <td>30</td>\n      <td>0</td>\n      <td>0</td>\n      <td>8</td>\n      <td>8</td>\n      <td>2</td>\n      <td>5</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>485</th>\n      <td>9405</td>\n      <td>1954</td>\n      <td>PhD</td>\n      <td>Married</td>\n      <td>52869.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>84</td>\n      <td>3</td>\n      <td>61</td>\n      <td>2</td>\n      <td>1</td>\n      <td>21</td>\n      <td>3</td>\n      <td>1</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>2240 rows × 20 columns</p>
+
+</details>
+
+- Is there anything weird about the new `DataFrame` and can you fix that?
+<details>
+  <summary markdown="span">Solution</summary>
+  We previously removed the columns "Z_CostContact" and "Z_Revenue" but they are in the new data again.
+
+  We can remove them like before:
+
+  ```python 
+  concat_df = concat_df.drop("Z_CostContact", axis=1)
+  concat_df = concat_df.drop("Z_Revenue", axis=1)
+  concat_df
+  ```
+  <table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>481</th>\n      <td>11133</td>\n      <td>1973</td>\n      <td>PhD</td>\n      <td>YOLO</td>\n      <td>48432.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>322</td>\n      <td>3</td>\n      <td>50</td>\n      <td>4</td>\n      <td>3</td>\n      <td>42</td>\n      <td>7</td>\n      <td>1</td>\n      <td>6</td>\n      <td>8</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>482</th>\n      <td>9589</td>\n      <td>1948</td>\n      <td>PhD</td>\n      <td>Widow</td>\n      <td>82032.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>332</td>\n      <td>194</td>\n      <td>377</td>\n      <td>149</td>\n      <td>125</td>\n      <td>57</td>\n      <td>4</td>\n      <td>6</td>\n      <td>7</td>\n      <td>1</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>483</th>\n      <td>4286</td>\n      <td>1970</td>\n      <td>PhD</td>\n      <td>Single</td>\n      <td>57642.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>580</td>\n      <td>6</td>\n      <td>58</td>\n      <td>8</td>\n      <td>0</td>\n      <td>27</td>\n      <td>7</td>\n      <td>6</td>\n      <td>6</td>\n      <td>4</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>484</th>\n      <td>4001</td>\n      <td>1946</td>\n      <td>PhD</td>\n      <td>Together</td>\n      <td>64014.0</td>\n      <td>2</td>\n      <td>1</td>\n      <td>406</td>\n      <td>0</td>\n      <td>30</td>\n      <td>0</td>\n      <td>0</td>\n      <td>8</td>\n      <td>8</td>\n      <td>2</td>\n      <td>5</td>\n      <td>7</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>485</th>\n      <td>9405</td>\n      <td>1954</td>\n      <td>PhD</td>\n      <td>Married</td>\n      <td>52869.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>84</td>\n      <td>3</td>\n      <td>61</td>\n      <td>2</td>\n      <td>1</td>\n      <td>21</td>\n      <td>3</td>\n      <td>1</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n    </tr>\n  </tbody>\n</table>\n<p>2240 rows × 18 columns</p>
+</details>
+
+- Is there something interesting about the marital status of some people that have a PhD?
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python 
+  concat_df[concat_df["Education"]=="PhD"]["Marital_Status"].value_counts()
+  ```
+  ```
+  Marital_Status
+  Married     192
+  Together    117
+  Single       98
+  Divorced     52
+  Widow        24
+  YOLO          2
+  Alone         1
+  Name: count, dtype: int64
+  ```
+
+  There's two people that have "YOLO" as their Marital Status ...
+
+</details>
+t
+
 \
 \
 \
