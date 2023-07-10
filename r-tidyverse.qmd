@@ -115,10 +115,15 @@ peng <- readr::read_csv(
 
 ### How to look at a `tibble`?
 
-- There are various ways to inspect the content of a `tibble`
+- Typing the name of any object into the R console will print an overview to the console
+
+```{r}
+peng
+```
+
+- But there are various other ways to inspect the content of a `tibble` 
 
 ```{r, eval=FALSE}
-peng          # Typing the name of an object will print it to the console
 str(peng)     # A structural overview of an object
 summary(peng) # A human-readable summary of an object
 View(peng)    # RStudio's interactive data browser
@@ -149,7 +154,7 @@ ggplot(          # Every plot starts with a call to the ggplot() function
 ```
 
 - A `geom_*` combines data (here `peng`), a geometry (here vertical, stacked bars) and a statistical transformation (here counting the number of penguins per island and species)
-- `ggplot2` features many such geoms: A good overview is provided by this cheatsheet: <https://www.rstudio.com/resources/cheatsheets>
+- `ggplot2` features many such geoms: A good overview is provided by this cheatsheet: <https://rstudio.github.io/cheatsheets/html/data-visualization.html>
 - Beyond `geom`s, a ggplot can be further specified with (among others) `scale`s, `facet`s and `theme`s
 
 ### `scale`s control the behaviour of visual elements
@@ -189,7 +194,7 @@ ggplot(peng_out) +
 
 - We will now go back to the normal dataset without the artificial outliers
 
-### Other `scale`s
+### Colour `scale`s
 
 - (Fill) colour is a visual element of a plot and its scaling can be adjusted as well
 
@@ -220,7 +225,7 @@ ggplot(peng) +
   facet_wrap(~sex)
 ```
 
-- The fill colour is therefore free again to show yet another variable: Here the year a given penguin was examined
+- The fill colour is therefore free again to show yet another variable, for example the year a given penguin was examined
 
 ```{r}
 ggplot(peng) +
@@ -230,18 +235,21 @@ ggplot(peng) +
 
 ### Setting purely aesthetic settings with `theme`
 
-- Aesthetic changes like this can be applied as part of the `theme`
+- Aesthetic changes can be applied as part of the `theme`, which allows for very detailed configuration (see `?theme`)
+- Here we rotate the x-axis labels by 45°
 
 ```{r}
 ggplot(peng) +
-  geom_boxplot(aes(x = species, y = body_mass_g)) +
-  facet_wrap(~year) +
+  geom_boxplot(aes(x = species, y = body_mass_g, fill = year)) +
+  facet_wrap(~sex) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
 ```
 
-### Exercise 1
+- This is an important operation when discrete variables with a large set of values are mapped to one of the axes. The axis labels can otherwise overlap
 
-1. Look at the `mtcars` dataset and read up on the meaning of its variables with the help operator `?`. `mtcars` is part of R and can be accessed simply by typing `mtcars` in the console.
+### Exercise
+
+1. Look at the `mtcars` dataset and read up on the meaning of its variables with the help operator `?`. `mtcars` is a test dataset integrated in R and can be accessed by typing `mtcars` in the console.
 
 2. Visualize the relationship between *Gross horsepower* and *1/4 mile time*
 
@@ -249,47 +257,28 @@ ggplot(peng) +
 
 ```
 
-3. Integrate the *Number of cylinders* into your plot
+3. Integrate the *Number of cylinders* into your plot as an additional variable
 
 ```{r}
 
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Possible solutions 1
-
-1. Look at the `mtcars` dataset and read up on the meaning of its variables
+<details>
+<summary>Possible solutions</summary>
 
 ```{r, eval=FALSE}
 ?mtcars
 ```
 
-2. Visualize the relationship between *Gross horsepower (hp)* and *1/4 mile time (qsec)*
-
 ```{r, eval=FALSE}
 ggplot(mtcars) + geom_point(aes(x = hp, y = qsec))
 ```
-
-3. Integrate the *Number of cylinders* into your plot
 
 ```{r, eval=FALSE}
 ggplot(mtcars) + geom_point(aes(x = hp, y = qsec, color = as.factor(cyl)))
 ```
 
-
+</details>
 
 ## Conditional queries on tibbles
 
