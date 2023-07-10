@@ -1,6 +1,12 @@
 ---
 title: Introduction to R and the Tidyverse
 author: Clemens Schmid
+format:
+  html:
+    link-external-icon: true
+    link-external-newwindow: true
+editor_options: 
+  chunk_output_type: console
 ---
 
 ::: callout-note
@@ -35,11 +41,11 @@ PDF version of these slides can be downloaded from [here](https://github.com/nev
 
 ### R, RStudio and the tidyverse
 
-- R is a fully featured programming language, but it excels as an environment for (statistical) data analysis (https://www.r-project.org)
+- R is a fully featured programming language, but it excels as an environment for (statistical) data analysis (<https://www.r-project.org>)
 
-- RStudio is an integrated development environment (IDE) for R (and other languages): (https://www.rstudio.com/products/rstudio)
+- RStudio is an integrated development environment (IDE) for R (and other languages): (<https://www.rstudio.com/products/rstudio>)
 
-- The tidyverse is a collection of R packages with well-designed and consistent interfaces for the main steps of data analysis: loading, transforming and plotting data (https://www.tidyverse.org)
+- The tidyverse is a collection of R packages with well-designed and consistent interfaces for the main steps of data analysis: loading, transforming and plotting data (<https://www.tidyverse.org>)
   - This introduction works with tidyverse ~v1.3.0
   - We will learn about `readr`, `tibble`, `ggplot2`, `dplyr`, `magrittr` and `tidyr`
   - `forcats` will be briefly mentioned
@@ -62,11 +68,10 @@ readr::read_fwf()   # fixed width files
 readr::read_lines() # read linewise to parse yourself 
 ```
 
-- `readr` automatically detects column types -- but you can also define them manually
-
 ### How does the interface of `read_csv` work?
 
-- We can learn more about a function with `?`. To open a help file: `?readr::read_csv`
+- We can learn more about a function with the `?` operator
+- To open a help file for a specific function run `?<function_name>` (e.g. `?readr::read_csv`) in the R console
 - `readr::read_csv` has many options to specify how to read a text file
 
 ```{r eval=FALSE}
@@ -88,14 +93,29 @@ read_csv(
 
 ### What does `readr` produce? The `tibble`!
 
+- To read a .csv file (here `"assets/data/r-tidyverse/penguins.csv"`) into a variable (here `peng_auto`) run
+
 ```{r}
-peng <- readr::read_csv("assets/data/r-tidyverse/penguins.csv")
+peng_auto <- readr::read_csv("assets/data/r-tidyverse/penguins.csv")
 ```
 
-- The `tibble` is a "data frame", a tabular data structure with rows and columns
+- `readr` first prints some information on the number and type of rows and columns it discovered in the file
+- It automatically detects column types -- but you can also define them manually
+
+```{r}
+peng <- readr::read_csv(
+  "assets/data/r-tidyverse/penguins.csv",
+  col_types = "iccddcc" # this string encodes the desired types for each column
+)
+```
+
+- It then returns an in-memory representation of this data, a `tibble`
+- A `tibble` is a "data frame", a tabular data structure with rows and columns
 - Unlike a simple array, each column can have another data type
 
 ### How to look at a `tibble`?
+
+- There are various ways to inspect the content of a `tibble`
 
 ```{r, eval=FALSE}
 peng          # Typing the name of an object will print it to the console
@@ -104,37 +124,37 @@ summary(peng) # A human-readable summary of an object
 View(peng)    # RStudio's interactive data browser
 ```
 
-
-
 ## Plotting data in `tibble`s
 
 ### `ggplot2` and the "grammar of graphics"
 
-- `ggplot2` offers an unusual, but powerful and logical interface
+- To understand and present data, we usually have to visualize it
+- `ggplot2` is an R package that offers an unusual, but powerful and logical interface for this task
 - The following example describes a stacked bar chart
 
 ```{r}
 library(ggplot2) # Loading a library to use its functions without ::
 ```
 
-```{r eval=FALSE}
+```{r}
 ggplot(          # Every plot starts with a call to the ggplot() function
   data = peng    # This function can also take the input tibble
-) +              # The plot consists of functions linked with +
+) +              # The plot consists of individual functions linked with "+"
   geom_bar(        # "geoms" define the plot layers we want to draw
-    mapping = aes( # The aes() function maps variables to visual properties
-      x = island,    # publication_year -> x-axis
-      fill = species # community_type -> fill color
+    mapping = aes(   # The aes() function maps variables to visual properties
+      x = island,      # publication_year -> x-axis
+      fill = species   # community_type -> fill color
     )
   )
 ```
 
-- `geom_*`: data + geometry (bars) + statistical transformation (sum)
-- `ggplot2` features many geoms: A good overview is provided by [this cheatsheet](https://www.rstudio.com/resources/cheatsheets)
+- A `geom_*` combines data (here `peng`), a geometry (here vertical, stacked bars) and a statistical transformation (here counting the number of penguins per island and species)
+- `ggplot2` features many such geoms: A good overview is provided by this cheatsheet: <https://www.rstudio.com/resources/cheatsheets>
+- Beyond `geom`s, a ggplot can be further specified with (among others) `scale`s, `facet`s and `theme`s
 
 ### `scale`s control the behaviour of visual elements
 
-- Another plot: Boxplots of penguin weight through time
+- Here is another plot to demonstrate this: Boxplots of penguin weight per species
 
 ```{r}
 ggplot(peng) +
@@ -142,49 +162,71 @@ ggplot(peng) +
 ```
 
 - Let's assume we had some extreme outliers in this dataset
+- To simulate this, we replace some random weights with extreme values
 
 ```{r}
+set.seed(1234) # We set a seed for reproducible randomness
 peng_out <- peng
 peng_out$body_mass_g[sample(1:nrow(peng_out), 10)] <- 100000 + 100000 * runif(10)
+```
+
+- Now we plot the dataset with these "outliers"
+
+```{r}
 ggplot(peng_out) +
   geom_boxplot(aes(x = species, y = body_mass_g))
 ```
 
-- This is not well readable, because the extreme outliers dictate the scale
+- This is not well readable, because the extreme outliers dictate the scale of the y-axis
 - A 100kg penguin is a scary thought and we would probably remove these outliers, but let's assume they are valid observation we want to include in the plot
-
 - To mitigate this issue we can change the **scale** of different visual elements - e.g. the y-axis
 
 ```{r}
 ggplot(peng_out) +
   geom_boxplot(aes(x = species, y = body_mass_g)) +
-  scale_y_log10()
+  scale_y_log10() # adding the log-scale improves readability
 ```
 
-- The log-scale improves readability
+- We will now go back to the normal dataset without the artificial outliers
 
 ### Other `scale`s
 
-- (Fill) color is a visual element of the plot and its scaling can be adjusted
+- (Fill) colour is a visual element of a plot and its scaling can be adjusted as well
 
 ```{r}
 ggplot(peng) +
   geom_boxplot(aes(x = species, y = body_mass_g, fill = species)) +
-  scale_y_log10() +
   scale_fill_viridis_d(option = "C")
 ```
 
-### Defining plot matrices via `facet`s
+- We use the `scale_*` function to select the visually appealing (and robust to colourblindness) viridis colour palettes (<https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html>)
 
-- Splitting up the plot by categories into **facets** is another way to visualize more variables at once
+### More variables! Defining plot matrices via `facet`s
+
+- In the previous this example we didn't add additional information with the fill colour, as the plot already distinguished by species on the x-axis
+- We can instead use this to encode more information, for example by mapping sex to the fill colour
 
 ```{r}
 ggplot(peng) +
-  geom_boxplot(aes(x = species, y = body_mass_g)) +
-  facet_wrap(~year)
+  geom_boxplot(aes(x = species, y = body_mass_g, fill = sex))
 ```
 
-- Unfortunately the x-axis became unreadable
+- Another way to visualize more variables at once is to split the plot by categories into **facets**, so sub-plots per category
+- Here we split by sex, which is already mapped to the fill colour
+
+```{r}
+ggplot(peng) +
+  geom_boxplot(aes(x = species, y = body_mass_g, fill = sex)) +
+  facet_wrap(~sex)
+```
+
+- The fill colour is therefore free again to show yet another variable: Here the year a given penguin was examined
+
+```{r}
+ggplot(peng) +
+  geom_boxplot(aes(x = species, y = body_mass_g, fill = year)) +
+  facet_wrap(~sex)
+```
 
 ### Setting purely aesthetic settings with `theme`
 
