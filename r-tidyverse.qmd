@@ -276,11 +276,13 @@ ggplot(peng) +
 ```
 
 ```{r, eval=FALSE}
-ggplot(mtcars) + geom_point(aes(x = hp, y = qsec))
+ggplot(mtcars) +
+  geom_point(aes(x = hp, y = qsec))
 ```
 
 ```{r, eval=FALSE}
-ggplot(mtcars) + geom_point(aes(x = hp, y = qsec, color = as.factor(cyl)))
+ggplot(mtcars) +
+  geom_point(aes(x = hp, y = qsec, color = as.factor(cyl)))
 ```
 
 </details>
@@ -290,7 +292,7 @@ ggplot(mtcars) + geom_point(aes(x = hp, y = qsec, color = as.factor(cyl)))
 ### Selecting columns and filtering rows with `select` and `filter`
 
 ```{r, echo=FALSE}
-# adjustments for rendering
+# technical adjustments for rendering
 old_options <- options(
   pillar.print_max = 5,
   pillar.print_min = 5,
@@ -298,45 +300,46 @@ old_options <- options(
 )
 ```
 
-- The `dplyr` package includes powerful functions to subset data in tibbles based on conditions
+- The `dplyr` package includes powerful functions to subset data in tibbles based on conditions.
 - `dplyr::select` allows to select columns
 
 ```{r}
-dplyr::select(peng, id, flipper_length_mm)   # reduce to two columns
+dplyr::select(peng, id, flipper_length_mm) # reduce tibble to two columns
 dplyr::select(peng, -island, -flipper_length_mm) # remove two columns 
 ```
 
 - `dplyr::filter` allows for conditional filtering of rows
 
 ```{r}
-dplyr::filter(peng, year == 2007) # penguins measured in 2007
+dplyr::filter(peng, year == 2007) # penguins examined in 2007
 dplyr::filter(peng, year == 2007 |
-                    year == 2009) # penguins measured in 2007 OR 2009
-dplyr::filter(peng, year %in% c(2007, 2009)) # match operator: %in%
+                    year == 2009) # penguins examined in 2007 OR 2009
+dplyr::filter(peng,                    # an alternative way to express
+              year %in% c(2007, 2009)) # OR with the match operator "%in%"
 dplyr::filter(peng, species == "Adelie" & 
                     body_mass_g >= 4000) # Adelie penguins heavier than 4kg
 ```
 
 ### Chaining functions together with the pipe `%>%`
 
-- The pipe `%>%` in the `magrittr` package is a clever infix operator to chain data and operations
+- A core feature of the tidyverse is the pipe `%>%` in the `magrittr` package
+- This infix operator allows to chain data and operations for concise and clear data analysis syntax
 
 ```{r}
 library(magrittr)
 peng %>% dplyr::filter(year == 2007)
 ```
 
-- It forwards the LHS as the first argument of the function appearing on the RHS
-- That allows for sequences of functions ("tidyverse style")
+- It forwards the LHS (left-hand side) as the first argument of the function appearing on the RHS (right-hand side), which enables sequences of functions ("tidyverse style")
 
 ```{r}
 peng %>%
   dplyr::select(id, species, body_mass_g) %>%
   dplyr::filter(species == "Adelie" & body_mass_g >= 4000) %>%
-  nrow() # count the rows
+  nrow() # count the resulting rows
 ```
 
-- `magrittr` also offers some more operators, among which the extraction `%$%` is particularly useful
+- `magrittr` also offers some more operators, among which the extraction `%$%` is particularly useful to easily extract individual variables
 
 ```{r}
 peng %>%
@@ -345,46 +348,47 @@ peng %>%
   unique()    # get the unique elements of said vector
 ```
 
+- Here we already use the base R summary function `unique`
+
 ### Summary statistics in `base` R
 
-- Summarising and counting data is indispensable and R offers all operations you would expect in its `base` package
+- Summarising and counting data is indispensable and R offers all basic operations you would expect in its `base` package
 
 ```{r}
-chinstraps <- peng %>% dplyr::filter(species == "Chinstrap")
+chinstraps_weights <- peng %>% dplyr::filter(species == "Chinstrap") %$% body_mass_g
 
-nrow(chinstraps)               # number of rows in a tibble
-length(chinstraps$species)     # length/size of a vector
-unique(chinstraps$species)     # unique elements of a vector
+length(chinstraps_weights) # length/size of a vector
+unique(chinstraps_weights) # unique elements of a vector
 
-min(chinstraps$body_mass_g)    # minimum
-max(chinstraps$body_mass_g)    # maximum
+min(chinstraps_weights) # minimum
+max(chinstraps_weights) # maximum
 
-mean(chinstraps$body_mass_g)   # mean
-median(chinstraps$body_mass_g) # median
+mean(chinstraps_weights) # mean
+median(chinstraps_weights) # median
 
-var(chinstraps$body_mass_g)    # variance
-sd(chinstraps$body_mass_g)     # standard deviation
-quantile(chinstraps$body_mass_g, probs = 0.75) # weight quantiles for the given probs
+var(chinstraps_weights) # variance
+sd(chinstraps_weights) # standard deviation
+quantile(chinstraps_weights, probs = 0.75) # quantiles for the given probabilities
 ```
 
-- many of these functions can ignore missing values with an option `na.rm = TRUE`
+- Many of these functions can ignore missing values with an option `na.rm = TRUE`
 
 ### Group-wise summaries with `group_by` and `summarise`
 
 - These summary statistics are particular useful when applied to conditional subsets of a dataset
-- `dplyr` allows such summary operations with a combination of `group_by` and `summarise`
+- `dplyr` allows such summary operations with a combination of the functions `group_by` and `summarise`, where the former tags a `tibble` with categories based on its variables and the latter reduces it to these groups while simultanously creating new columns
 
 ```{r}
 peng %>%
   dplyr::group_by(species) %>% # group the tibble by the material column
   dplyr::summarise(
-    min_weight = min(body_mass_g),       # a new column: min weight for each group
-    median_weight = median(body_mass_g), # a new column: median weight for each group
-    max_weight = max(body_mass_g)        # a new column: max weight for each group
+    min_weight = min(body_mass_g),       # new col: min weight for each group
+    median_weight = median(body_mass_g), # new col: median weight for each group
+    max_weight = max(body_mass_g)        # new col: max weight for each group
   )
 ```
 
-- grouping can be applied across multiple columns
+- Grouping can also be applied across multiple columns at once
 
 ```{r}
 peng %>%
@@ -395,35 +399,38 @@ peng %>%
   )
 ```
 
+- If we group by more than one variable, then `summarise` will not entirely remove the group tagging when generating the result dataset. We can force this with `.groups = "drop"` to avoid undesired behaviour with this dataset later on
+
 ### Sorting and slicing tibbles with `arrange` and `slice`
 
 - `dplyr` allows to `arrange` tibbles by one or multiple columns
 
 ```{r}
-peng %>% dplyr::arrange(sex)              # sort by sex
-peng %>% dplyr::arrange(sex, body_mass_g) # ... and weight
-peng %>% dplyr::arrange(dplyr::desc(body_mass_g)) # sort descendingly on weight
+peng %>% dplyr::arrange(sex) # sort by sex
+peng %>% dplyr::arrange(sex, body_mass_g) # sort by sex and weight
+peng %>% dplyr::arrange(dplyr::desc(body_mass_g)) # sort descending
 ```
 
 - Sorting also works within groups and can be paired with `slice` to extract extreme values per group
+- Here we extract the heaviest individuals per species
 
 ```{r}
 peng %>%
-  dplyr::group_by(species) %>%                 # group by species
+  dplyr::group_by(species) %>% # group by species
   dplyr::arrange(dplyr::desc(body_mass_g)) %>% # sort by weight within (!) groups
-  dplyr::slice_head(n = 3) %>%                 # keep the first three penguins per group
-  dplyr::ungroup()                             # remove the still lingering grouping
+  dplyr::slice_head(n = 3) %>% # keep the first three penguins per group
+  dplyr::ungroup()             # remove the still lingering grouping
 ```
 
-- Slicing is also the relevant operation to take random samples from the observations in a tibble
+- Slicing is also the relevant operation to take random samples from the observations in a `tibble`
 
 ```{r}
 peng %>% dplyr::slice_sample(n = 10)
 ```
 
+### Exercise
 
-
-### Exercise 2
+For this exercise we once more go back to the `mtcars` dataset. See `?mtcars` for more details.
 
 1. Determine the number of cars with four *forward gears* (`gear`) in the `mtcars` dataset
 
@@ -443,42 +450,32 @@ peng %>% dplyr::slice_sample(n = 10)
 
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Possible solutions 2
-
-1. Determine the number of cars with four *forward gears* (`gear`) in the `mtcars` dataset
+<details>
+<summary>Possible solutions</summary>
 
 ```{r, eval=FALSE}
-mtcars %>% dplyr::filter(gear == 4) %>% nrow()
+mtcars %>%
+  dplyr::filter(gear == 4) %>%
+  nrow()
 ```
-
-2. Determine the mean *1/4 mile time* (`qsec`) per *Number of cylinders* (`cyl`) group
 
 ```{r, eval=FALSE}
-mtcars %>% dplyr::group_by(cyl) %>% dplyr::summarise(qsec_mean = mean(qsec))
+mtcars %>% dplyr::group_by(cyl) %>%
+  dplyr::summarise(
+    qsec_mean = mean(qsec)
+  )
 ```
-
-3. Identify the least efficient cars for both *transmission types* (`am`)
 
 ```{r, eval=FALSE}
-#mtcars3 <- tibble::rownames_to_column(mtcars, var = "car") %>% tibble::as_tibble()
-mtcars %>% dplyr::group_by(am) %>% dplyr::arrange(mpg) %>% dplyr::slice_head()
+mtcars2 <- tibble::rownames_to_column(mtcars, var = "car")
+mtcars2 %>%
+  dplyr::group_by(am) %>%
+  dplyr::arrange(mpg) %>%
+  dplyr::slice_head() %$%
+  car
 ```
 
-
+</details>
 
 ## Transforming and manipulating tibbles
 
