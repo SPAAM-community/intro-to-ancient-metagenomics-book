@@ -1,0 +1,21 @@
+name: check_dataset
+# This workflow is triggered on pushes and PRs to the repository.
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Render Book project
+        uses: quarto-dev/quarto-actions/render@v2
+        with:
+          to: html
+      - name: Publish HTML book
+        uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+          render: false
