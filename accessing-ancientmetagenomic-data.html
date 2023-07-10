@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.340">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="James A. Fellows Yates">
+
+<title>Introduction to Ancient Metagenomics - 16&nbsp; Accessing Ancient Metagenomic Data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./ancient-metagenomic-pipelines.html" rel="next">
+<link href="./section-ancient-metagenomic-resources.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./section-ancient-metagenomic-resources.html">Ancient Metagenomic Resources</a></li><li class="breadcrumb-item"><a href="./accessing-ancientmetagenomic-data.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Accessing Ancient Metagenomic Data</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Ancient Metagenomics</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <div class="dropdown">
+      <a href="" title="Download" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download"><i class="bi bi-download"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./Introduction-to-Ancient-Metagenomics.pdf">
+              <i class="bi bi-bi-file-pdf pe-1"></i>
+            Download PDF
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./Introduction-to-Ancient-Metagenomics.epub">
+              <i class="bi bi-bi-journal pe-1"></i>
+            Download ePub
+            </a>
+          </li>
+      </ul>
+    </div>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./citing-this-book.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Citing this book</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./authors.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Authors</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acknowledgements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Acknowledgements</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./before-you-start.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Before you Start</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./section-theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Theory</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction-to-ngs-sequencing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to NGS Sequencing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction-to-ancient-dna.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to Ancient DNA</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction-to-metagenomics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Introduction to Metagenomics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction-to-microbial-genomics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Introduction to Microbial Genomics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction-to-evolutionary-biology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Introduction to Evolutionary Biology</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./section-useful-skills.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Useful Skills</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bare-bones-bash.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Introduction to the Command Line</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./r-tidyverse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Introduction to R and the Tidyverse</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./python-pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Introduction to Python and Pandas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./git-github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introduction to Git(Hub)</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./section-ancient-metagenomics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ancient Metagenomics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./taxonomic-profiling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Taxonomic Profiling, OTU Tables and Visualisation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./functional-profiling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Functional Profiling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./denovo-assembly.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Introduction to <em>de novo</em> Genome Assembly</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./authentication-decontamination.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Authentication and Decontamination</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./section-ancient-genomics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ancient Genomics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./genome-mapping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Genome Mapping</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./phylogenomics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Introduction to Phylogenomics</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./section-ancient-metagenomic-resources.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ancient Metagenomic Resources</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./accessing-ancientmetagenomic-data.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Accessing Ancient Metagenomic Data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ancient-metagenomic-pipelines.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Ancient Metagenomic Pipelines</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Summary</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./appendices.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./resources.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Resources</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tools.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Tools</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#lecture" id="toc-lecture" class="nav-link active" data-scroll-target="#lecture"><span class="header-section-number">16.1</span> Lecture</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">16.2</span> Introduction</a></li>
+  <li><a href="#finding-ancient-metagenomic-data" id="toc-finding-ancient-metagenomic-data" class="nav-link" data-scroll-target="#finding-ancient-metagenomic-data"><span class="header-section-number">16.3</span> Finding Ancient Metagenomic Data</a></li>
+  <li><a href="#ancientmetagenomedir" id="toc-ancientmetagenomedir" class="nav-link" data-scroll-target="#ancientmetagenomedir"><span class="header-section-number">16.4</span> AncientMetagenomeDir</a></li>
+  <li><a href="#amdirt" id="toc-amdirt" class="nav-link" data-scroll-target="#amdirt"><span class="header-section-number">16.5</span> AMDirT</a>
+  <ul class="collapse">
+  <li><a href="#running-amdirt-viewer" id="toc-running-amdirt-viewer" class="nav-link" data-scroll-target="#running-amdirt-viewer"><span class="header-section-number">16.5.1</span> Running AMDirT viewer</a></li>
+  <li><a href="#inspecting-amdirt-viewer-output" id="toc-inspecting-amdirt-viewer-output" class="nav-link" data-scroll-target="#inspecting-amdirt-viewer-output"><span class="header-section-number">16.5.2</span> Inspecting AMDirT viewer Output</a></li>
+  <li><a href="#amdirt-convert" id="toc-amdirt-convert" class="nav-link" data-scroll-target="#amdirt-convert"><span class="header-section-number">16.5.3</span> AMDirT convert</a></li>
+  </ul></li>
+  <li><a href="#git-practise" id="toc-git-practise" class="nav-link" data-scroll-target="#git-practise"><span class="header-section-number">16.6</span> Git Practise</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">16.7</span> Summary</a></li>
+  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources"><span class="header-section-number">16.8</span> Resources</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Accessing Ancient Metagenomic Data</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>James A. Fellows Yates </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For this chapter’s exercises, if not already performed, you will need to create the <a href="./before-you-start.html#creating-a-conda-environment">conda environment</a> from the <code>yml</code> file in the following <a href="https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/accessing-ancientmetagenomic-data.yml">link</a> (right click and save as to download), and once created, activate the environment with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate accessing-ancientmetagenomic-data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<section id="lecture" class="level2" data-number="16.1">
+<h2 data-number="16.1" class="anchored" data-anchor-id="lecture"><span class="header-section-number">16.1</span> Lecture</h2>
+<p>Lecture slides and video from the <a href="https://www.spaam-community.org/wss-summer-school/#/2022/README">2022 edition of the summer school</a>.</p>
+<iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSkO7KH9YEmHCjMlCRhoxtZrDxZ0cKnsPazEAS3PspBGuhAtA9qhQ0wnPXg64cZrAJZQECngZFfjTRL/embed?start=false&amp;loop=true&amp;delayms=10000" frameborder="0" width="100%" height="400px" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">
+</iframe>
+<p>PDF version of these slides can be downloaded from <a href="https://github.com/SPAAM-community/https://github.com/SPAAM-community/wss-summer-school/raw/main/docs/raw/main/docs/assets/slides/2022/2c-intro-to-ancientmetagenomedir/SPAAM%20Summer%20School%202022%20-%202C%20-%20AncientMetagenomeDir.pdf">here</a>.</p>
+<iframe width="100%" height="400px" src="https://www.youtube.com/embed/3cYSJtqkNJg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
+</iframe>
+</section>
+<section id="introduction" class="level2" data-number="16.2">
+<h2 data-number="16.2" class="anchored" data-anchor-id="introduction"><span class="header-section-number">16.2</span> Introduction</h2>
+<p>In most bioinformatic projects, we need to include publicly available comparative data to expand or compare our newly generated data with.</p>
+<p>Including public data can benefit ancient metagenomic studies in a variety of ways. It can help increase our sample sizes (a common problem when dealing with rare archaeological samples) - thus providing stronger statistical power. Comparison with a range of previously published data of different preservational levels can allow an estimate on the quality of the new samples. When considering solely (re)using public data, we can consider that this can also spawn new ideas, projects, and meta analyses to allow further deeper exploration of ancient metagenomic data (e.g., looking for correlations between various environmental factors and preservation).</p>
+<p>Fortunately for us, geneticists and particularly palaeogenomicists have been very good at uploading raw sequencing data to well-established databases <span class="citation" data-cites="Anagnostou2015-mz">(<a href="references.html#ref-Anagnostou2015-mz" role="doc-biblioref">Anagnostou et al. 2015</a>)</span>.</p>
+<p>In the vast majority of cases you will be able to find publically available sequencing data on the <a href="https://www.insdc.org/">INSDC</a> association of databases, namely the <a href="https://www.ebi.ac.uk/ena/">EBI’s European Nucleotide Archive</a> (ENA), and <a href="https://www.ncbi.nlm.nih.gov/sra">NCBI</a> or <a href="https://www.ddbj.nig.ac.jp/dra/index-e.html">DDBJ’s</a> Sequence Read Archives (SRA). However, you may in some cases find ancient metagenomic data on institutional FTP servers, domain specific databases (e.g.&nbsp;<a href="https://oagr.org">OAGR</a>), <a href="https://zenodo.org">Zenodo</a>, <a href="https://figshare.com">Figshare</a>, or <a href="https://github.com">GitHub</a>.</p>
+<p>But while the data is publicly available, we need to ask whether it is ‘FAIR’.</p>
+</section>
+<section id="finding-ancient-metagenomic-data" class="level2" data-number="16.3">
+<h2 data-number="16.3" class="anchored" data-anchor-id="finding-ancient-metagenomic-data"><span class="header-section-number">16.3</span> Finding Ancient Metagenomic Data</h2>
+<p><a href="http://dx.doi.org/10.1038/sdata.2016.18">FAIR principles</a> were defined by researchers, librarians, and industry in 2016 to improve the quality of data uploads - primarily by making data uploads more ‘machine readable’. FAIR standards for:</p>
+<ul>
+<li>Findable</li>
+<li>Accessible</li>
+<li>Interoperable</li>
+<li>Reproducible</li>
+</ul>
+<p>When we consider ancient (meta)genomic data, we are pretty close to this. Sequencing data is in most cases accessible (via the public databases like ENA, SRA), interoperable and reproducible because we use field standard formats such as FASTQ or BAM files. However <em>findable</em> remains an issue.</p>
+<p>This is because the <em>metadata</em> about each data file is dispersed over many places, and very often not with the data files themselves.</p>
+<p>In this case I am referring to metadata such as: What is the sample’s name? How old is it? Where is it from? Which enzymes were used for library construction? What sequencing machine was this library sequenced on?</p>
+<p>To find this information about a given data file, you have to search many places (main text, supplementary information, the database itself), for different types of metadata (as authors report different things), and also in different formats (text, tables, figures.</p>
+<p>This very heterogenous landscape makes it difficult for machines to index all this information (if at all), and thus means you cannot search for the data you want to use for your own research in online search engines.</p>
+</section>
+<section id="ancientmetagenomedir" class="level2" data-number="16.4">
+<h2 data-number="16.4" class="anchored" data-anchor-id="ancientmetagenomedir"><span class="header-section-number">16.4</span> AncientMetagenomeDir</h2>
+<p>This is where the SPAAM community project ‘<a href="https://github.com/spaam-community/AncientMetagenomeDir">AncientMetagenomeDir</a>’ comes in <span class="citation" data-cites="Fellows_Yates2021-rp">(<a href="references.html#ref-Fellows_Yates2021-rp" role="doc-biblioref">Fellows Yates, Andrades Valtueña, et al. 2021</a>)</span>. AncientMetagenomeDir is a resource of lists of metadata of all publishing and publicly available ancient metagenomes and microbial genome-level enriched samples and their associated libraries.</p>
+<p>By aggregating and standardising metadata and accession codes of ancient metagenomic samples and libraries, the project aims to make it easier for people to find comparative data for their own projects, appropriately re-analyse libraries, as well as help track the field over time and facilitate meta analyses.</p>
+<p>Currently the project is split over three main tables: host-associated metagenomes (e.g.&nbsp;ancient microbiomes), host-associated single-genomes (e.g.&nbsp;ancient pathogens), and environmental metagenomes (e.g.&nbsp;lakebed cores or cave sediment sequences).</p>
+<p>The repository already contains more than 2000 samples and 5000 libraries, spanning the entire globe and as far back as hundreds of thousands of years.</p>
+<p>To make the lists of samples and their metadata as accessible and interoperable as possible, we utilise simple text (TSV - tab separate value) files - files that can be opened by pretty much all spreadsheet tools (e.g., Microsoft Office excel, LibreOffice Calc) and languages (R, Python etc.) (<a href="#fig-accessingdata-exampledirtable">Figure&nbsp;<span>16.1</span></a>).</p>
+<div id="fig-accessingdata-exampledirtable" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-exampledirtable.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.1: Example few columns and rows of an AncientMetagenomeDir table, including project name, publication year, site name, latitude, longitude, country and sample name.</figcaption>
+</figure>
+</div>
+<p>Critically, by standardising the recorded all metadata across all publications this makes it much easier for researchers to filter for particular time periods, geographical regions, or sample types of their interest - and then use the also recorded accession numbers to efficiently download the data.</p>
+<p>At their core all different AncientMetagenomeDir tables must have at 6 minimum metadata sets at the sample level:</p>
+<ul>
+<li>Publication information (doi)</li>
+<li>Sample name(s)</li>
+<li>Geographic location (e.g.&nbsp;country, coordinates)</li>
+<li>Age</li>
+<li>Sample type (e.g.&nbsp;bone, sediment, etc.)</li>
+<li>Data Archive and accessions</li>
+</ul>
+<p>Each table then has additional columns depending on the context (e.g.&nbsp;what time of microbiome is expected for host-associated metagenomes, or species name of the genome that was reconstructed).</p>
+<p>The AncientMetagenomeDir project already has 9 major releases, and will continued to be regularly updated as the community continues to submit new metadata of samples of new publications as they come out.</p>
+</section>
+<section id="amdirt" class="level2" data-number="16.5">
+<h2 data-number="16.5" class="anchored" data-anchor-id="amdirt"><span class="header-section-number">16.5</span> AMDirT</h2>
+<p>But how does one explore such a large dataset of tables with thousands of rows? You could upload this into a spreadsheet tool or in a programming language like R, but you would still have to do a lot of manual filtering and parsing of the dataset to make it useful for downstream analyses.</p>
+<p>In response to this The SPAAM Community have also developed a companion tool ‘AMDirT’ to facilitate this. Amongst other functionality, AMDirT allows you to load different releases of AncientMetagenomeDir, filter and explore to specific samples or libraries of interest, and then generate download scripts, configuration files for pipelines, and reference BibTeX files for you, both via a command-line (CLI) or graphical user interface (GUI)!</p>
+<section id="running-amdirt-viewer" class="level3" data-number="16.5.1">
+<h3 data-number="16.5.1" class="anchored" data-anchor-id="running-amdirt-viewer"><span class="header-section-number">16.5.1</span> Running AMDirT viewer</h3>
+<p>We will now demonstrate how to use the AMDirT graphical user interface to load a dataset, filter to samples of interest, and download some configuration input files for downstream ancient DNA pipelines.</p>
+<div id="fig-accessingdata-amdirtlogo" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-amdirtlogo.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.2: AMDirT logo: a cog with the SPAAM icon in the middle with the word AMDirT to the side</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This tutorial will require a web-browser! Make sure to run on your local laptop/PC or, if on on a server, with X11 forwarding activated.</p>
+</div>
+</div>
+<p>First, we will need to activate a conda environment, and then install the latest development version of the tool for you.</p>
+<p>While in the <code>accessing-ancientmetagenomic-data</code> conda environment, run the following command to load the GUI into your web-browser. If the browser doesn’t automatically load, copy the IP address and paste it in your browser’s URL bar.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">AMDirT</span> viewer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Your web browser should now load, and you should see a two panel page.</p>
+<p>Under <strong>Select a table</strong> use the dropdown menu to select ‘ancientsinglegenome-hostassociated’.</p>
+<p>You should then see a table (<a href="#fig-accessingdata-firstpage">Figure&nbsp;<span>16.3</span></a>), pretty similar what you are familiar with with spreadsheet tools such as Microsoft Excel or LibreOffice calc.</p>
+<div id="fig-accessingdata-firstpage" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-firstpage.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.3: Main AMDirT Viewer page on load. A toolbar on the left displays the AMDirT version, and dropdown menus for the AncientMetagenomeDir release, table, and downloading tool to use. The rest of the page shows a tabular window containing rows and columns corresponding to sample metadata and rows of samples with metadata such as project name, publication year and site name.</figcaption>
+</figure>
+</div>
+<p>To navigate, you can scroll down to see more rows, and press <kbd>shift</kbd> and scroll to see more columns, or use click on a cell and use your arrow keys (<kbd>⬆</kbd>,<kbd>⬇</kbd>,<kbd>⬅</kbd>,<kbd>➡</kbd>) to move around the table.</p>
+<p>You can reorder columns by clicking on the column name, and also filter by pressing the little ‘burger’ icon that appears on the column header when you hover over a given column.</p>
+<p>As an exercise, we will try filtering to a particular set of samples, then generate some download scripts, and download the files.</p>
+<p>First, filter the <strong>project_name</strong> column to ‘Kocher2021’ from <span class="citation" data-cites="Kocher2021-vg">(<a href="references.html#ref-Kocher2021-vg" role="doc-biblioref">Kocher et al. 2021</a>, <a href="references.html#fig-accessingdata-projectfilter" role="doc-biblioref">Figure&nbsp;<span>16.4</span></a>)</span>.</p>
+<div id="fig-accessingdata-projectfilter" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-projectfilter.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.4: The AMDirT viewer with a filter menu coming out of the project name column, with just the Kocher 2021 in the search bar.</figcaption>
+</figure>
+</div>
+<p>Then scroll to the right, and filter the <strong>geo_loc_name</strong> to ‘United Kingdom’ (<a href="#fig-accessingdata-geofilter">Figure&nbsp;<span>16.5</span></a>).</p>
+<div id="fig-accessingdata-geofilter" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-geofilter.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.5: The AMDirT viewer with a filter menu coming out of the geo location column, with just the United Kingdom written in the search bar and the entry ticked in the results.</figcaption>
+</figure>
+</div>
+<p>You should be left with 4 rows.</p>
+<p>Finally, scroll back to the first column and tick the boxes of these four samples (<a href="#fig-accessingdata-tickbox">Figure&nbsp;<span>16.6</span></a>).</p>
+<div id="fig-accessingdata-tickbox" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-tickbox.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.6: The AMDirT viewer with just four rows with samples from Kocher2021 that are located in the United Kingdom being displayed, and the tickboxes next to each one selected</figcaption>
+</figure>
+</div>
+<p>Once you’ve selected the samples you want, you can press <strong>Validate selection</strong>. You should then see a series loading-spinner, and new a lot of buttons should appear (<a href="#fig-accessingdata-validated">Figure&nbsp;<span>16.7</span></a>)!</p>
+<div id="fig-accessingdata-validated" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-validated.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.7: The AMDirT viewer after pressing the ‘validate selection’ button. A range of buttons are displayed at the bottom including a warning message, with the buttons offering download of a range of files such as download scripts, AncientMetagenomeDir library tables and input configuration sheets for a range of ancient DNA bioinformatics pipelines</figcaption>
+</figure>
+</div>
+<p>You should have four categories of buttons:</p>
+<ul>
+<li><strong>Download AncientMetagenomeDir Library Table</strong></li>
+<li><strong>Download Curl sample download script</strong></li>
+<li><strong>Download &lt;tool/pipeline name&gt; input TSV</strong></li>
+<li><strong>Download Citations as BibText</strong></li>
+</ul>
+<p>The first button is to download a table containing all the AncientMetagenomeDir metadata of the selected amples. The second is for generating a download script that will allow you to immediately download all sequencing data of the samples you selected. The third set of buttons generate (partially!) pre-configured input files for use in dedicated ancient DNA pipeline such as nf-core/eager <span class="citation" data-cites="Fellows_Yates2021-jl">(<a href="references.html#ref-Fellows_Yates2021-jl" role="doc-biblioref">Fellows Yates, Lamnidis, et al. 2021</a>)</span>, PALAEOMIX <span class="citation" data-cites="Schubert2014-ps">(<a href="references.html#ref-Schubert2014-ps" role="doc-biblioref">Schubert et al. 2014</a>)</span>, and/or and aMeta <span class="citation" data-cites="Pochon2022-hj">(<a href="references.html#ref-Pochon2022-hj" role="doc-biblioref">Pochon et al. 2022</a>)</span>. Finally, the fourth button generates a text file with (in most cases) all the citations of the data you downloaded, in a format accepted by most reference/citation managers. In this case the reference metadata for that particular publictcation isn’t publicly available so there is a warning.</p>
+<p>It’s important to note you are not necessarily restricted to <a href="https://curl.se/">Curl</a> for downloading the data. AMDirT aims to add support for whatever tools or pipelines requested by the community. For example, an already supported downloading tool alternative is the <a href="https://nf-co.re/fetchngs">nf-core/fetchNGS</a> pipeline. You can select these using the drop-down menus on the left hand-side.</p>
+<p>Press the AncientMetagenomeDir library, curl download, and nf-core/eager buttons to download two <code>.tsv</code> files, one <code>*.sh</code> file and one ’*bib’ file. Once this is done, you can close the tab of the web browser, and in the terminal you can press <kbd>ctrl</kbd> + <kbd>c</kbd> to shutdown the tool.</p>
+</section>
+<section id="inspecting-amdirt-viewer-output" class="level3" data-number="16.5.2">
+<h3 data-number="16.5.2" class="anchored" data-anchor-id="inspecting-amdirt-viewer-output"><span class="header-section-number">16.5.2</span> Inspecting AMDirT viewer Output</h3>
+<p>Lets look at the files that AMDirT has generated for you.</p>
+<p>First you should <code>cd</code> into the directory that your web browser downloaded the files into (e.g.&nbsp;<code>cd ~/Downloads/</code>), then look inside the directory. You should see the following three files</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ls</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_bibliography.bib</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_curl_download_script.sh</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_filtered_libraries.csv</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_nf_core_eager_input_table.tsv</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We can simple run <code>cat</code> on each file to look inside. If you run <code>cat</code> on the curl download script, you should see a series of <code>curl</code> commands with the correct ENA links for you for each of the samples you wish to download.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat AncientMetagenomeDir_curl_download_script.sh</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/009/ERR6053619/ERR6053619.fastq.gz <span class="at">-o</span> ERR6053619.fastq.gz</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/008/ERR6053618/ERR6053618.fastq.gz <span class="at">-o</span> ERR6053618.fastq.gz</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/005/ERR6053675/ERR6053675.fastq.gz <span class="at">-o</span> ERR6053675.fastq.gz</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/006/ERR6053686/ERR6053686.fastq.gz <span class="at">-o</span> ERR6053686.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>By providing this script for you, AMDirT facilitates fast download of files of interest by replacing the one-by-one download commands for each sample with a <em>single</em> command!</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> bash AncientMetagenomeDir_curl_download_script.sh</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/009/ERR6053619/ERR6053619.fastq.gz <span class="at">-o</span> ERR6053619.fastq.gz</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/008/ERR6053618/ERR6053618.fastq.gz <span class="at">-o</span> ERR6053618.fastq.gz</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/005/ERR6053675/ERR6053675.fastq.gz <span class="at">-o</span> ERR6053675.fastq.gz</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-L</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR605/006/ERR6053686/ERR6053686.fastq.gz <span class="at">-o</span> ERR6053686.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Running this command should result in progress logs of the downloading of the data of the four selected samples!</p>
+<p>Once the four samples are downloaded, AMDirT then facilitates fast processing of the data, as the <em>eager</em> script can be given directly to nf-core/eager as input. Importantly by including the library metadata (mentioned above), researchers can leverage the complex automated processing that nf-core/eager can perform when given such relevant metadata.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat AncientMetagenomeDir_nf_core_eager_input_table.tsv</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Sample_Name</span> Library_ID  Lane    Colour_Chemistry    SeqType Organism    Strandedness    UDG_Treatment   R1  R2  BAM</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">I0157</span>   ERR6053618  0   4   SE  Homo sapiens    double  unknown ERX5692504_ERR6053618.fastq.gz  NA  NA</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">I0161</span>   ERR6053619  0   4   SE  Homo sapiens    double  unknown ERX5692505_ERR6053619.fastq.gz  NA  NA</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">OAI017</span>  ERR6053675  0   4   SE  Homo sapiens    double  half    ERX5692561_ERR6053675.fastq.gz  NA  NA</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">SED009</span>  ERR6053686  0   4   SE  Homo sapiens    double  half    ERX5692572_ERR6053686.fastq.gz  NA  NA</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Finally, we can look into the BibTeX citations file (<code>*bib</code>) which will provide you with the citation information of all the downloaded data and AncientMetagenomeDir itself.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The contents of this file is reliant on indexing of publications on CrossRef. In some cases not all citations will be present (as per the warning), so this should be double checked!</p>
+</div>
+</div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cat AncientMetagenomeDir_bibliography.bib</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">@article{Fellows_Yates_2021,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">doi</span> = {10.1038/s41597-021-00816-y},</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">url</span> = {https://doi.org/10.1038%2Fs41597-021-00816-y},</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">year</span> = 2021,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">month</span> = {jan},</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">publisher</span> = {Springer Science and Business Media {LLC}},</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">volume</span> = {8},</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">number</span> = {1},</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">author</span> = {James A. Fellows Yates and Aida Andrades Valtue{<span class="dt">\~</span>{n}}a and {<span class="dt">\A</span>A}shild J. V{<span class="dt">\a</span>a}gene and</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Becky</span> Cribdon and Irina M. Velsko and Maxime Borry and Miriam J. Bravo-Lopez and Antonio Fernandez-Guerra</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">and</span> Eleanor J. Green and Shreya L. Ramachandran and Peter D. Heintzman and Maria A. Spyrou and Alexander</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">Hübner</span> and Abigail S. Gancz and Jessica Hider and Aurora F. Allshouse and Valentina Zaro and Christina Warinner},</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="ex">title</span> = {Community-curated and standardised metadata of published ancient metagenomic samples with {AncientMetagenomeDir}},</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="ex">journal</span> = {Scientific Data}</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This file can be easily loaded into most reference managers and then have all the citations quickly added to your manuscripts.</p>
+</section>
+<section id="amdirt-convert" class="level3" data-number="16.5.3">
+<h3 data-number="16.5.3" class="anchored" data-anchor-id="amdirt-convert"><span class="header-section-number">16.5.3</span> AMDirT convert</h3>
+<p>If you’re less of a GUI person and consider yourself a command-line wizard, you can also use the <code>AMDirT convert</code> command instead of the GUI version.</p>
+<p>In this case you must supply your own filtered AncientMetagenomeDir samples table, and use command line options to specify which files to generate.</p>
+<p>For example, lets say you used R to make the following <a href="assets/data/data-accessing-ancientmetagenomic-data/ancientsinglegenome-hostassociated_samples_Kocher2021_UnitedKingdom.tsv">filtered file</a> (basically the same Kocher et al.&nbsp;2021 samples from the UK, as filtered in the GUI part of this tutorial), you would supply this to <code>AMDirT convert</code> like so:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> AMDirT convert <span class="at">-o</span> . <span class="at">--bibliography</span> <span class="at">--librarymetadata</span> <span class="at">--curl</span> <span class="at">--eager</span> ancientsinglegenome-hostassociated_samples_Kocher2021_UnitedKingdom.tsv ancientsinglegenome-hostassociated</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>When running <code>ls</code> you should see the same resulting files as before with the GUI!</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ls</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_bibliography.bib</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_curl_download_script.sh</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_filtered_libraries.tsv</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="ex">AncientMetagenomeDir_nf_core_eager_input_table.tsv</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ancientsinglegenome-hostassociated_samples_Kocher2021_UnitedKingdom.tsv</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this case you say where to save the output files, then use different flags to specify which scripts, bib, and configuration files you want, and finally your filtered AncientMetagenomeDir TSV file and which table it’s derived from.</p>
+</section>
+</section>
+<section id="git-practise" class="level2" data-number="16.6">
+<h2 data-number="16.6" class="anchored" data-anchor-id="git-practise"><span class="header-section-number">16.6</span> Git Practise</h2>
+<p>A critical factor of AncientMetagenomeDir is that it is community-based. The community curates all new submissions to the repository, and this all occurs with Git and GitHub.</p>
+<p>The data is hosted and maintained on GitHub - new publications are evaluated on issues, submissions created on branches, made by pull requests, and PRs reviewed by other members of the community.</p>
+<p>You can see the workflow in the image below from the AncientMetagenomeDir <a href="https://doi.org/10.1038/s41597-021-00816-y">publication</a>, and read more about the workflow on the AncientMetagenomeDir <a href="https://github.com/SPAAM-community/AncientMetagenomeDir/wiki">wiki</a></p>
+<div id="fig-accessingdata-thedirworkflow" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/accessing-ancientmetagenomic-data/fig-accessingdata-thedirworkflow.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption class="figure-caption">Figure&nbsp;16.8: Overview of the AncientMetagenomeDir contribution workflow. Potential publications are added as a GitHub issue where they undergo relevance evaluation. Once approved, a contributor makes a branch on the AncientMetagenomeDir GitHub repository, adds the new lines of metadata for the relevant samples and libraries, and once ready opens a pull request against the main repository. The pull request undergoes an automated consistent check against a schema and then undergoes a human-based peer review for accuracy against AncientMetagenomeDir guidelines. Once approved, the pull request is merged, and periodically the dataset is released on GitHub and automatically archived on Zenodo.</figcaption>
+</figure>
+</div>
+<p>As AncientMetagenomeDir is on GitHub, the means we can also use this repository to try out our Git skills we learnt in the chapter <a href="./git-github.html">Introduction to Git(Hub)</a>!</p>
+<p>Your task is to complete the following steps however with <code>git</code> terms removed (indicated by quotes). You should be able to complete the steps and also note down what the <em>correct</em> Git terminology:</p>
+<ol type="1">
+<li>Make a ‘copy’ the <a href="https://github.com/jfy133/AncientMetagenomeDir">jfy133/AncientMetagenomeDir</a> repository to your account
+<ul>
+<li>We are forking a personal fork of the main repository to ensure you don’t accidentally edit the main dataset!</li>
+</ul></li>
+<li>‘Download’ the ‘copied’ repo to your local machine</li>
+<li>‘Change’ to the <code>dev</code> branch</li>
+<li>Modify the file <code>ancientsinglegenome-hostassociated_samples.tsv</code>
+<ul>
+<li>Click <a href="assets/data/data-accessing-ancientmetagenomic-data/ancientmetagenomedir_example.tsv">here</a> to get some example data to copy in to the end of the TSV file</li>
+</ul></li>
+<li>‘Send’ back to Git(Hub)</li>
+<li>Open a ‘request’ adding the changes to the original <code>jfy133/AncientMetagenomeDir</code> repo
+<ul>
+<li>Make sure to put ‘Summer school’ in the title of the ‘Request’</li>
+</ul></li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Click me to reveal the correct terminology">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Click me to reveal the correct terminology
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><strong>Fork</strong> the <a href="https://github.com/jfy133/AncientMetagenomeDir">jfy133/AncientMetagenomeDir</a> repository to your account</li>
+<li><strong>Clone</strong> the copied repo to your local machine</li>
+<li><strong>Switch</strong> to the <code>dev</code> branch</li>
+<li>Modify <code>ancientsinglegenome-hostassociated_samples.tsv</code></li>
+<li><strong>Commit</strong> and <strong>Push</strong> back to your <strong>Fork</strong> on Git(Hub)</li>
+<li>Open a <strong>Pull Request</strong> adding changes to the original jfy133/AncientMetagenomeDir repo
+<ul>
+<li>Make sure to put ‘Summer school’ in the title of the pull request</li>
+</ul></li>
+</ol>
+</div>
+</div>
+</div>
+</section>
+<section id="summary" class="level2" data-number="16.7">
+<h2 data-number="16.7" class="anchored" data-anchor-id="summary"><span class="header-section-number">16.7</span> Summary</h2>
+<ul>
+<li>Reporting of metadata messy! Consider when publishing your own work!
+<ul>
+<li>Use AncientMetagenomeDir as a template</li>
+</ul></li>
+<li>Use AncientMetagenomeDir and AMDirT (beta) to rapidly find public ancient metagenomic data</li>
+<li>Contribute to AncientMetagenomeDir with git
+<ul>
+<li>Community curated!</li>
+</ul></li>
+</ul>
+</section>
+<section id="resources" class="level2" data-number="16.8">
+<h2 data-number="16.8" class="anchored" data-anchor-id="resources"><span class="header-section-number">16.8</span> Resources</h2>
+<ul>
+<li><a href="https://doi.org/10.1038/s41597-021-00816-y">AncientMetagenomeDir paper</a></li>
+<li><a href="https://github.com/SPAAM-community/AncientMetagenomeDir">AncientMetagenomeDir repository</a></li>
+<li><a href="https://www.spaam-community.org/AMDirT/">AMDirT web server</a></li>
+<li><a href="https://amdirt.readthedocs.io/">AMDirT documentation</a></li>
+<li><a href="https://github.com/SPAAM-community/AMDirT">AMDirT repository</a></li>
+</ul>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Anagnostou2015-mz" class="csl-entry" role="listitem">
+Anagnostou, Paolo, Marco Capocasa, Nicola Milia, Emanuele Sanna, Cinzia Battaggia, Daniela Luzi, and Giovanni Destro Bisol. 2015. <span>“When Data Sharing Gets Close to 100%: What Human Paleogenetics Can Teach the Open Science Movement.”</span> <em>PloS One</em> 10 (3): e0121409. <a href="https://doi.org/10.1371/journal.pone.0121409">https://doi.org/10.1371/journal.pone.0121409</a>.
+</div>
+<div id="ref-Fellows_Yates2021-rp" class="csl-entry" role="listitem">
+Fellows Yates, James A, Aida Andrades Valtueña, Åshild J Vågene, Becky Cribdon, Irina M Velsko, Maxime Borry, Miriam J Bravo-Lopez, et al. 2021. <span>“Community-Curated and Standardised Metadata of Published Ancient Metagenomic Samples with <span>AncientMetagenomeDir</span>.”</span> <em>Scientific Data</em> 8 (1): 31. <a href="https://doi.org/10.1038/s41597-021-00816-y">https://doi.org/10.1038/s41597-021-00816-y</a>.
+</div>
+<div id="ref-Fellows_Yates2021-jl" class="csl-entry" role="listitem">
+Fellows Yates, James A, Thiseas C Lamnidis, Maxime Borry, Aida Andrades Valtueña, Zandra Fagernäs, Stephen Clayton, Maxime U Garcia, Judith Neukamm, and Alexander Peltzer. 2021. <span>“Reproducible, Portable, and Efficient Ancient Genome Reconstruction with Nf-Core/Eager.”</span> <em>PeerJ</em> 9 (March): e10947. <a href="https://doi.org/10.7717/peerj.10947">https://doi.org/10.7717/peerj.10947</a>.
+</div>
+<div id="ref-Kocher2021-vg" class="csl-entry" role="listitem">
+Kocher, Arthur, Luka Papac, Rodrigo Barquera, Felix M Key, Maria A Spyrou, Ron Hübler, Adam B Rohrlach, et al. 2021. <span>“Ten Millennia of Hepatitis <span>B</span> Virus Evolution.”</span> <em>Science</em> 374 (6564): 182–88. <a href="https://doi.org/10.1126/science.abi5658">https://doi.org/10.1126/science.abi5658</a>.
+</div>
+<div id="ref-Pochon2022-hj" class="csl-entry" role="listitem">
+Pochon, Zoé, Nora Bergfeldt, Emrah Kırdök, Mário Vicente, Thijessen Naidoo, Tom van der Valk, N Ezgi Altınışık, et al. 2022. <span>“<span class="nocase">aMeta</span>: An Accurate and Memory-Efficient Ancient Metagenomic Profiling Workflow.”</span> <em>bioRxiv</em>. <a href="https://doi.org/10.1101/2022.10.03.510579">https://doi.org/10.1101/2022.10.03.510579</a>.
+</div>
+<div id="ref-Schubert2014-ps" class="csl-entry" role="listitem">
+Schubert, Mikkel, Luca Ermini, Clio Der Sarkissian, Hákon Jónsson, Aurélien Ginolhac, Robert Schaefer, Michael D Martin, et al. 2014. <span>“Characterization of Ancient and Modern Genomes by <span>SNP</span> Detection and Phylogenomic and Metagenomic Analysis Using <span>PALEOMIX</span>.”</span> <em>Nature Protocols</em> 9 (5): 1056–82. <a href="https://doi.org/10.1038/nprot.2014.063">https://doi.org/10.1038/nprot.2014.063</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./section-ancient-metagenomic-resources.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Ancient Metagenomic Resources</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./ancient-metagenomic-pipelines.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Ancient Metagenomic Pipelines</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">© 2023 SPAAM Community &amp; Authors with ❤️. Available under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY 4.0</a>. Source material <a href="https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book">here</a>.</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>
