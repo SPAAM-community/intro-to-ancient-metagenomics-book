@@ -52,7 +52,10 @@ The output of commands on the website for this walkthrough are displayed in thei
 own code blocks - be wary of what you copy-paste!
 :::
 
-## Download and Subsample
+::: {.callout-note collapse="true"}
+## Preamble: what has been done to generate this toy dataset
+
+### Download and Subsample
 
 ```python
 import subprocess
@@ -66,7 +69,9 @@ For this tutorial, we will be using the ERR5766177 library from the sample 2612 
 
 ![](assets/images/chapters/taxonomic-profiling/1-s2.0-S0960982221012719-gr1.jpg)`
 
-### Subsampling the sequencing files to make the analysis quicker for this tutorial
+#### Subsampling the sequencing files to make the analysis quicker for this tutorial
+
+This Python code defines a function called subsample that takes in a FASTQ file name, an output directory, and a depth value (defaulting to 1000000). The function uses the seqtk command-line tool to subsample the input FASTQ file to the desired depth and saves the output to a new file in the specified output directory. The function prints the constructed command string to the console for debugging purposes.
 
 ```python
 def subsample(filename, outdir, depth=1000000):
@@ -75,6 +80,7 @@ def subsample(filename, outdir, depth=1000000):
     print(cmd)
     subprocess.check_output(cmd, shell=True)
 ```
+This Python code uses a for loop to iterate over all the files in the `../data/raw/` directory that match the pattern `*`, and calls the `subsample` (defined above) function on each file in the directory `../data/subsampled`.
 
 ```python
 for f in glob.glob("../data/raw/*"):
@@ -87,9 +93,12 @@ for f in glob.glob("../data/raw/*"):
     seqtk sample -s42 ../data/raw/ERR5766177_PE.mapped.hostremoved.rev.fq.gz 1000000 >
     ../data/subsampled/ERR5766177_PE.mapped.hostremoved.rev.fq_subsample_1000000.fastq
 
+Finally, we compress all files to gzip format
+
 ```python
 ! gzip -f ../data/subsampled/*.fastq
 ```
+:::
 
 ## Hands on introduction to ancient microbiome analysis
 
@@ -103,32 +112,7 @@ In this tutorial, we're going to go through the steps necessary to:
 - Compare the diversity of our samples vs the diversity of modern human gut samples
 - Compare the composition of our samples vs modern gut samples, and see where they fit in a lower dimensional space
 
-### 0. Quick intro to Jupyter Notebooks
-
-This a markdown cell
-
-```python
-print("This is a python cell")
-```
-
-    This is a python cell
-
-```python
-! echo "This is how to run a single line bash command"
-```
-
-    This is how to run a single line bash command
-
-```bash
-%%bash
-echo "This how to run a multi"
-echo "lines bash command"
-```
-
-    This how to run a multi
-    lines bash command
-
-### 1. Data pre-processing
+### Data pre-processing
 
 Before starting to analyze our data, we will need to pre-process them to remove reads mapping to the host genome, here, _Homo sapiens_
 
@@ -141,7 +125,7 @@ nextflow run nf-core/eager -profile <docker/singularity/podman/conda/institute> 
 --fasta 'human_genome.fasta' --hostremoval_input_fastq
 ```
 
-### 2. Adapter sequence trimming and low-quality bases trimming
+### Adapter sequence trimming and low-quality bases trimming
 
 Sequencing adapters are small DNA sequences adding prior to DNA sequencing to allow the DNA fragments to attach to the
 sequencing flow cells. Because these adapters could interfere with downtstream analyses, we need to remove them before
@@ -150,10 +134,12 @@ of lower sequencing quality to might lead to spurious results in downstream anal
 
 To perform both of these tasks, we'll use the program [fastp](https://github.com/OpenGene/fastp).
 
+The following command gets you the help of fastp
+
 ```bash
 fastp -h
 ```
-
+::: {.callout-tip collapse="true" title='expand to see command output'}
     option needs value: --html
     usage: fastp [options] ...
     options:
@@ -275,6 +261,9 @@ fastp -h
           --cut_by_quality_aggressive      DEPRECATED, use --cut_right instead.
           --discard_unmerged               DEPRECATED, no effect now, see the introduction for merging.
       -?, --help                           print this message
+:::
+
+Here we use fastp to preprocess a pair of FASTQ files. The code specifies the input files, merges the paired-end reads on their overlaps, removes duplicate reads, and generates JSON and HTML reports. The output files are saved in the ../results/fastp/ directory.
 
 ```bash
 fastp \
@@ -287,7 +276,7 @@ fastp \
     --json ../results/fastp/ERR5766177.fastp.json \
     --html ../results/fastp/ERR5766177.fastp.html \
 ```
-
+::: {.callout-tip collapse="true" title='expand to see command output'}
     Read1 before filtering:
     total reads: 1000000
     total bases: 101000000
@@ -333,13 +322,16 @@ fastp \
     --merged_out ../results/fastp/ERR5766177.merged.fastq.gz --include_unmerged --dedup \
     --json ../results/fastp/ERR5766177.fastp.json --html ../results/fastp/ERR5766177.fastp.html
     fastp v0.23.2, time used: 11 seconds
+:::
 
-##### 3. Taxonomic profiling with Metaphlan
+##### Taxonomic profiling with Metaphlan
+
+MetaPhlAn is a computational tool for profiling the composition of microbial communities from metagenomic shotgun sequencing data. The --help option is a common option in command-line tools that displays a list of available options and their descriptions.
 
 ```bash
 ! metaphlan  --help
 ```
-
+::: {.callout-tip collapse="true" title='expand to see command output'}
     usage: metaphlan --input_type {fastq,fasta,bowtie2out,sam} [--force]
                      [--bowtie2db METAPHLAN_BOWTIE2_DB] [-x INDEX]
                      [--bt2_ps BowTie2 presets] [--bowtie2_exe BOWTIE2_EXE]
@@ -581,6 +573,9 @@ fastp \
                             'read_fastx.py' script, default value is 70
       -v, --version         Prints the current MetaPhlAn version and exit
       -h, --help            show this help message and exit
+:::
+
+This command uses MetaPhlAn to profile the taxonomic composition of the ERR5766177 metagenomic sample. The input file is specified as a merged FASTQ file, and the output is saved as a text file containing the taxonomic profile. The --bowtie2out option is used to specify the output file for the Bowtie2 alignment, and the --nproc option is used to specify the number of CPUs to use for the analysis.
 
 ```bash
 metaphlan ../results/fastp/ERR5766177.merged.fastq.gz  \
@@ -598,7 +593,7 @@ It's a tab separated file, with taxons in rows, with their relative abundance in
 ```python
 ! head ../results/metaphlan/ERR5766177.metaphlan_profile.txt
 ```
-
+::: {.callout-tip collapse="true" title='expand to see command output'}
     #mpa_v30_CHOCOPhlAn_201901
     #/home/maxime_borry/.conda/envs/maxime/envs/summer_school_microbiome/bin/metaphlan ../results/fastp/ERR5766177.merged.fastq.gz \
     --input_type fastq --bowtie2out ../results/metaphlan/ERR5766177.bt2.out --nproc 8
@@ -610,16 +605,17 @@ It's a tab separated file, with taxons in rows, with their relative abundance in
     k__Bacteria|p__Bacteroidetes	2|976	28.4209
     k__Bacteria|p__Actinobacteria	2|201174	20.33151
     k__Archaea|p__Euryarchaeota	2157|28890	17.76802
+:::
 
-### 4. Visualizing the taxonomic profile
+### Visualizing the taxonomic profile
 
-#### 4.1 Visualizing metaphlan taxonomic profile with Pavian
+#### Visualizing metaphlan taxonomic profile with Pavian
 
-[Pavian](https://github.com/fbreitwieser/pavian) is an interactive app to explore results of different taxonomic classifiers
+[Pavian](https://github.com/fbreitwieser/pavian) is a web-based tool for interactive visualization and analysis of metagenomics data. It provides a user-friendly interface for exploring taxonomic and functional profiles of microbial communities, and allows users to generate interactive plots and tables that can be customized and shared.
 
 There are different ways to run it:
 
-- If you have [docker](https://www.docker.com/) installed (and are somehow familiar with it)
+- If you have [docker](https://www.docker.com/) installed
 
 ```bash
 docker pull 'florianbw/pavian'
@@ -641,17 +637,22 @@ Then open your browser and visit [localhost:5000](localhost:5000)
 
 - Otherwise, just visit [fbreitwieser.shinyapps.io/pavian](https://fbreitwieser.shinyapps.io/pavian/.).
 
-#### 4.2 Visualizing metaphlan taxonomic profile with [Krona](https://github.com/marbl/Krona/wiki)
+![Pavian interface](assets/images/chapters/taxonomic-profiling/pavian.png)
+
+#### Visualizing metaphlan taxonomic profile with [Krona](https://github.com/marbl/Krona/wiki)
+
+[Krona](https://github.com/marbl/Krona/wiki) is a software tool for interactive visualization of hierarchical data, such as taxonomic profiles generated by metagenomics tools like MetaPhlAn. Krona allows users to explore the taxonomic composition of microbial communities in a hierarchical manner, from the highest taxonomic level down to the species level.
+
+The `metaphlan2krona.py` script is used to convert the MetaPhlAn taxonomic profile output to a format that can be visualized by Krona. The output of the script is a text file that contains the taxonomic profile in a hierarchical format that can be read by Krona. The `ktImportText` command is then used to generate an interactive HTML file that displays the taxonomic profile in a hierarchical manner using Krona.
 
 ```bash
-%%bash
 python ../scripts/metaphlan2krona.py -p ../results/metaphlan/ERR5766177.metaphlan_profile.txt -k ../results/krona/ERR5766177_krona.out
 ktImportText -o ../results/krona/ERR5766177_krona.html ../results/krona/ERR5766177_krona.out
 ```
 
     Writing ../results/krona/ERR5766177_krona.html...
 
-### 5. Getting modern reference data
+## Getting modern reference data
 
 In order to compare our sample with modern reference samples, I used the curatedMetagenomicsData package,
 which provides both curated metadata, and pre-computed metaphlan taxonomic profiles for published modern human samples.
@@ -660,26 +661,34 @@ The full R code to get these data is available in [curatedMetagenomics/get_sourc
 I pre-selected 200 gut microbiome samples from non-westernized (100) and westernized (100) from healthy, non-antibiotic users donors.
 
 ```R
+# Load required packages
 library(curatedMetagenomicData)
 library(tidyverse)
 
+# Filter samples based on specific criteria
 sampleMetadata %>%
-  filter(body_site=='stool' & antibiotics_current_use  == 'no' & disease == 'healthy') %>%
+  filter(body_site == 'stool' & antibiotics_current_use == 'no' & disease == 'healthy') %>%
   group_by(non_westernized) %>%
   sample_n(100) %>%
   ungroup() -> selected_samples
 
+# Extract relative abundance data for selected samples
 selected_samples %>%
   returnSamples("relative_abundance") -> rel_ab
 
+# Split relative abundance data by taxonomic rank and write to CSV files
 data_ranks = splitByRanks(rel_ab)
 
-for (r in names(data_ranks)){
+for (r in names(data_ranks)) {
+  # Print taxonomic rank and output file name
   print(r)
+  output_file = paste0("../../data/curated_metagenomics/modern_sources_", tolower(r), ".csv")
+  print(output_file)
+  
+  # Write relative abundance data to CSV file
   assay_rank = as.data.frame(assay(data_ranks[[r]]))
-  print(paste0("../../data/curated_metagenomics/modern_sources_",tolower(r),".csv"))
-  write.csv(assay_rank, paste0("../../data/curated_metagenomics/modern_sources_",tolower(r),".csv"))
-
+  write.csv(assay_rank, output_file)
+}
 
 ```
 
@@ -690,16 +699,20 @@ for (r in names(data_ranks)){
 
 ![](assets/images/chapters/taxonomic-profiling/800px-Taxonomic_Rank_Graph.svg.png)
 
-### 6. Bringing together ancient and modern data
+## Loading the ancient sample taxonomic profile
 
 This is the moment where we will the [Pandas](https://pandas.pydata.org) [Python](https://www.python.org/) library to perform some data manipulation.  
 We will also use the [Taxopy](https://github.com/apcamargo/taxopy) library to work to taxonomic informations.
+
+First we install the latest version of taxopy using pip
 
 ```python
 ! pip install taxopy
 ```
 
     Requirement already satisfied: taxopy in /Users/maxime/mambaforge/envs/summer_school_microbiome/lib/python3.9/site-packages (0.10.0)
+
+We need to import the necessary libraries
 
 ```python
 import pandas as pd
@@ -708,33 +721,20 @@ import pickle
 import gzip
 ```
 
+And we then create an instance of the taxopy taxonomy database. This will take a few seconds/minutes, as it needs to download the entire NCBI taxonomy before storing in a local database.
 ```python
-with gzip.open("../data/taxopy/taxdb.p.gz", 'rb') as tdb:
-    taxo_db = pickle.load(tdb)
+taxdb = taxopy.TaxDb()
 ```
 
-```python
-! head ../results/metaphlan/ERR5766177.metaphlan_profile.txt
-```
-
-    #mpa_v30_CHOCOPhlAn_201901
-    #/home/maxime_borry/.conda/envs/maxime/envs/summer_school_microbiome/bin/metaphlan ../results/fastp/ERR5766177.merged.fastq.gz
-    --input_type fastq --bowtie2out ../results/metaphlan/ERR5766177.bt2.out --nproc 8
-    #SampleID	Metaphlan_Analysis
-    #clade_name	NCBI_tax_id	relative_abundance	additional_species
-    k__Bacteria	2	82.23198
-    k__Archaea	2157	17.76802
-    k__Bacteria|p__Firmicutes	2|1239	33.47957
-    k__Bacteria|p__Bacteroidetes	2|976	28.4209
-    k__Bacteria|p__Actinobacteria	2|201174	20.33151
-    k__Archaea|p__Euryarchaeota	2157|28890	17.76802
-
+Let's read the metaphlan profile table with pandas. It's a tab separated file, so we need to specify the delimiter as `\t`, and skip the comment lines of the files that start with `#`.
 ```python
 ancient_data = pd.read_csv("../results/metaphlan/ERR5766177.metaphlan_profile.txt",
                             comment="#",
                             delimiter="\t",
                             names=['clade_name','NCBI_tax_id','relative_abundance','additional_species'])
 ```
+
+To look at the head of a dataframe with pandas
 
 ```python
 ancient_data.head()
@@ -909,8 +909,8 @@ ancient_data.sample(10)
 </table>
 </div>
 
-Because for this analysis, we're only going to look at the relative abundance, we'll only this column, an
-the [TAXID](https://www.ncbi.nlm.nih.gov/taxonomy) information
+Because for this analysis, we're only going to look at the relative abundance, we'll only use this column, and
+the [TAXID](https://www.ncbi.nlm.nih.gov/taxonomy) information, so we can `drop` (get rid of) the unnecessary columns.
 
 ```python
 ancient_data = (
@@ -920,6 +920,7 @@ ancient_data = (
 )
 ```
 
+:::{.callout-important}
 Always investigate your data at first !
 
 ```python
@@ -929,7 +930,9 @@ ancient_data.relative_abundance.sum()
     700.00007
 
 **Pause and think**: A relative abundance of 700%, really ?
+:::
 
+::: {.callout-tip collapse="true" title="Unfold to see what's happening"}
 Let's proceed further and try to understand what's happening.
 
 ```python
@@ -1458,8 +1461,13 @@ ancient_data.groupby('rank')['relative_abundance'].sum()
 Seems better, right ?
 
 **Pause and think: why don't we get exactly 100%** ?
+:::
+
+## Bringing together ancient and modern samples
 
 Now let's load our modern reference samples
+
+First at the phylum level
 
 ```python
 modern_phylums = pd.read_csv("../data/curated_metagenomics/modern_sources_phylum.csv", index_col=0)
@@ -1634,10 +1642,12 @@ modern_phylums.head()
 <p>5 rows × 200 columns</p>
 </div>
 
+Then at the species level
 ```python
 modern_species = pd.read_csv("../data/curated_metagenomics/modern_sources_species.csv", index_col=0)
 ```
 
+As usual, we always check if our data has been loaded correctly
 ```python
 modern_species.head()
 ```
@@ -1810,14 +1820,17 @@ modern_species.head()
 <p>5 rows × 200 columns</p>
 </div>
 
-Now, let's merge our ancient sample with the modern data in one single table
+### Time to merge !
+
+Now, let's merge our ancient sample with the modern data in one single table.  
+For that, we'll use the pandas `merge` function which will merge the two tables together, using the index as the merge key.
 
 ```python
 all_species = ancient_species.merge(modern_species, left_index=True, right_index=True, how='outer').fillna(0)
 all_phylums = ancient_phylums.merge(modern_phylums, left_index=True, right_index=True, how='outer').fillna(0)
 ```
 
-Finally, let's load the metadata
+Finally, let's load the metadata, which contains the information about the modern samples.
 
 ```python
 metadata = pd.read_csv("../data/metadata/curated_metagenomics_modern_sources.csv")
@@ -1995,14 +2008,15 @@ metadata.head()
 <p>5 rows × 130 columns</p>
 </div>
 
-### 7. Comparing ancient and modern samples
+## Comparing ancient and modern samples
 
-#### 7.1 Taxonomic composition
+### Taxonomic composition
 
 One common plot in microbiome papers in a stacked barplot, often at the phylum or family level.
 
 First, we'll do some renaming, to make the value of the metadata variables a bit easier to understand
 
+[TODO] Rewrite with pd.concat()
 ```python
 group_info = (
     metadata['non_westernized']
@@ -2431,7 +2445,7 @@ We then add the metadata information
 <p>201 rows × 24 columns</p>
 </div>
 
-Now, we need it in the tidy format
+Now, we need transform in the tidy format, with the `melt` function.
 
 ```python
 tidy_phylums = (
@@ -2442,11 +2456,13 @@ tidy_phylums = (
 )
 ```
 
-Finally, we only want to keep the mean relative abundance for each phylum
+Finally, we only want to keep the mean relative abundance for each phylum. To do so, we will compute the mean relative abundance, for each phylum, for each group (`ancient`, `westernized`, and `non_westernized`).
 
 ```python
 tidy_phylums = tidy_phylums.groupby(['group', 'Phylum']).mean().reset_index()
 ```
+
+We then verify that the sum of the mean relative abundance is still ~100%, as an extra sanity check.
 
 ```python
 tidy_phylums.groupby('group')['relative_abundance'].sum()
@@ -2458,9 +2474,14 @@ tidy_phylums.groupby('group')['relative_abundance'].sum()
     westernized         99.905089
     Name: relative_abundance, dtype: float64
 
+### Let's make some plots 
+
+We first import plotnine
 ```python
 from plotnine import *
 ```
+
+And then run plotnine to a barplot of the mean abundance per group. 
 
 ```python
 ggplot(tidy_phylums, aes(x='group', y='relative_abundance', fill='Phylum')) \
@@ -2474,9 +2495,9 @@ ggplot(tidy_phylums, aes(x='group', y='relative_abundance', fill='Phylum')) \
 
     <ggplot: (406187548)>
 
-#### 7.2 Ecological diversity
+## Ecological diversity
 
-##### 7.2.1 Alpha diversity
+### Alpha diversity
 
 Alpha diversity is the measure of diversity withing each sample. It is used to estimate how many species are present in a sample, and how diverse they are.  
 We'll use the python library [scikit-bio](http://scikit-bio.org/) to compute it, and the [plotnine](https://plotnine.readthedocs.io/) library
@@ -2595,7 +2616,8 @@ alpha_diversity
 <p>201 rows × 3 columns</p>
 </div>
 
-Let's load the group information from the metadata
+Let's load the group information from the metadata. To do so, we merge the alpha diversity dataframe that we compute previously, with the metadata dataframe, using the `sample_id` as a merge key.
+Finally, we do a bit of renaming to re-encode `yes`/`no` as `non_westernized`/`westernized`.
 
 ```python
 alpha_diversity = (
@@ -2726,6 +2748,8 @@ alpha_diversity
 <p>201 rows × 4 columns</p>
 </div>
 
+And as always, we need it in tidy format for plotnine.
+
 ```python
 alpha_diversity = alpha_diversity.melt(id_vars='group', value_name='alpha diversity', var_name='diversity_index', ignore_index=False)
 ```
@@ -2836,6 +2860,8 @@ alpha_diversity
 <p>603 rows × 3 columns</p>
 </div>
 
+We now make a violin plot to compare the alpha diversity for each group, faceted by the type of alpha diversity index.
+
 ```python
 g = ggplot(alpha_diversity, aes(x='group', y='alpha diversity', color='group'))
 g += geom_violin()
@@ -2852,9 +2878,11 @@ g
 
     <ggplot: (407407577)>
 
+:::{.callout-note}
 **Pause and think: Why do we observe a smaller species richness and diversity in our sample ?**
+:::
 
-#### 7.2.2 Beta diversity
+### Beta diversity
 
 The Beta diversity is the measure of diversity between a pair of samples. It is used to compare the diversity between samples and see how they relate.
 
@@ -3281,7 +3309,9 @@ fig.show()
 3D PLOT HERE NOT DISPLAYED DUE TO RENDERING LIMITATIONS - PLEASE SEE JUPYTER NOTEBOOK
 :::
 
+:::{.callout-note}
 **Pause and think: How do you think this embedding represents how our sample relates to modern reference samples ?**
+:::
 
 We can also visualize this distance matrix using a clustered heatmap, where pairs of sample with a small beta diversity are clustered together
 
@@ -3289,6 +3319,8 @@ We can also visualize this distance matrix using a clustered heatmap, where pair
 import seaborn as sns
 import scipy.spatial as sp, scipy.cluster.hierarchy as hc
 ```
+
+We set the color in seaborn to match the color palette we've used so far.
 
 ```python
 pcoa_embed['colour'] = pcoa_embed['group'].map({'ERR5766177':'#DB5F57','westernized':'#5F57DB','non_westernized':'#57DB5E'})
@@ -3308,91 +3340,3 @@ sns.clustermap(
     <seaborn.matrix.ClusterGrid at 0x185b56100>
 
 ![png](assets/images/chapters/taxonomic-profiling/analysis_115_1.png)
-
-### 8. Additional steps
-
-#### 8.1 Source tracking
-
-Sourcetracker is a program that can estimate the proportion of different sources (reference biomes) contained in a sample (a sink).
-However, because of the statistical framework that it uses (MCMC with [Gibbs sampling](https://en.wikipedia.org/wiki/Gibbs_sampling#:~:text=In%20statistics%2C%20Gibbs%20sampling%20or,when%20direct%20sampling%20is%20difficult.)), we recommend to limit the number of source samples to greatly reduce runtime
-
-First, you will need to transform our relative abundance table to counts for SourceTracker
-
-```python
-all_species_counts = all_species.multiply(1000000).astype(int)
-```
-
-```python
-min_count = all_species_counts.sum(axis=0).min()
-min_count
-```
-
-    95327810
-
-Exporting the count table to `tsv`
-
-```python
-all_species_counts.to_csv("../results/sourcetracker2/all_species_counts.tsv", sep="\t", index_label='Taxon')
-```
-
-Converting to [`biom` format](https://biom-format.org/)
-
-```python
-!biom convert -i ../results/sourcetracker2/all_species_counts.tsv \
--o ../results/sourcetracker2/all_species_counts.biom \
---table-type="Taxon table" --to-hdf5
-```
-
-Converting the metadata to Sourtracker format
-
-```python
-st2_metadata = metadata[['sample_id', 'non_westernized']].rename(columns={'non_westernized':'Env', 'sample_id':'#SampleID'})
-st2_metadata['Env'] = st2_metadata['Env'].replace({'yes':'non_westernized','no':'westernized'})
-st2_metadata['SourceSink'] = ['source'] * st2_metadata.shape[0]
-```
-
-We subset it to select only 10 samples from each source
-
-```python
-st2_metadata = st2_metadata.groupby('Env').sample(10).reset_index()
-```
-
-```python
-st2_metadata = st2_metadata.append({'#SampleID':'ERR5766177', 'Env':'-','SourceSink':'sink'},
-                                   ignore_index=True)[['#SampleID','SourceSink','Env']].set_index('#SampleID')
-```
-
-    /var/folders/1c/l1qb09f15jddsh65f6xv1n_r0000gp/T/ipykernel_40830/2882312005.py:1: FutureWarning:
-
-    The frame.append method is deprecated and will be removed from pandas in a future version. Use pandas.concat instead.
-
-```python
-st2_metadata.to_csv("../results/sourcetracker2/labels_st2.tsv", sep="\t", index_label='#SampleID')
-```
-
-```bash
-sourcetracker2 gibbs \
-    -i ../results/sourcetracker2/all_species_counts.biom \
-    -m ../results/sourcetracker2/labels_st2.tsv \
-    -o ../results/sourcetracker2/st2 \
-    --source_rarefaction_depth 95327810 \
-    --sink_rarefaction_depth 95327810 \
-    --jobs 10
-```
-
-**Because SourceTracker is relying on MCMC sampling, it can very slow to run (which is why we won't run it here)**
-
-Among alternative faster solutions for source tracking are (among others):
-
-- FEAST ([article](https://doi.org/10.1038/s41592-019-0431-x), [code](https://github.com/cozygene/FEAST)),
-- Sourcepredict ([article](https://doi.org/10.21105/joss.01540), [code](https://github.com/maxibor/sourcepredict))
-
-#### 8.2 The next steps:
-
-- Damage Analysis ([mapDamage](https://ginolhac.github.io/mapDamage/), [DamageProfiler](https://github.com/Integrative-Transcriptomics/DamageProfiler), [PyDamage](https://github.com/maxibor/pydamage))
-- Assembly ([megahit](https://github.com/voutcn/megahit), [metaSPAdes](https://github.com/ablab/spades)), binning ([metabat2](https://bitbucket.org/berkeleylab/metabat/src/master/), [maxbin2](https://sourceforge.net/projects/maxbin2/), [dastool](https://github.com/cmks/DAS_Tool)), and bin validation ([checkm](https://github.com/Ecogenomics/CheckM), [gunc](https://github.com/grp-bork/gunc))
-- Functional analysis ([Prokka](https://github.com/tseemann/prokka), [Humann](https://github.com/biobakery/humann))
-- Differential abundance ([Maaslin2](https://github.com/biobakery/Maaslin2), [Lefse](https://github.com/biobakery/lefse), [Songbird](https://github.com/biocore/songbird), GLM, Mixed effect models). Nice review by [Wallen 2021](https://doi.org/10.1186/s12859-021-04193-6)
-- genotyping
-- Phylogenies
-- ...
