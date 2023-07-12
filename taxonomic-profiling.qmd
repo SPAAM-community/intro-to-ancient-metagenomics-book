@@ -2016,14 +2016,20 @@ One common plot in microbiome papers in a stacked barplot, often at the phylum o
 
 First, we'll do some renaming, to make the value of the metadata variables a bit easier to understand
 
-[TODO] Rewrite with pd.concat()
 ```python
-group_info = (
-    metadata['non_westernized']
-    .map({'no':'westernized','yes':'non_westernized'}) # for the non_westernized in the modern sample metadata, rename the value levels
-    .to_frame(name='group').set_index(metadata['sample_id']) # rename the column to group
-    .reset_index()
-    .append({'sample_id':'ERR5766177', 'group':'ancient'}, ignore_index=True) # add the ancient sample
+group_info = pd.concat(
+    [
+        (
+        metadata['non_westernized']
+        .map({'no':'westernized','yes':'non_westernized'}) # for the non_westernized in the modern sample metadata, rename the value levels
+        .to_frame(name='group').set_index(metadata['sample_id']) # rename the column to group
+        .reset_index()
+        ),
+        (
+        pd.Series({'sample_id':'ERR5766177', 'group':'ancient'}).to_frame().transpose()
+        )
+    ],
+    axis=0, ignore_index=True
 )
 group_info
 ```
