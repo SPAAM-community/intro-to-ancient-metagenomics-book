@@ -151,25 +151,72 @@ Hint: You can easily inspect the distribution by opening the HTML report `overla
 
 ::: {.callout-note collapse="true" title="Answer"}
 
-Here is the histogram of the insert sizes determined by _fastp_. By default, _fastp_ will only keep
-reads that are longer than 30 bp and requires an overlap between the read mates of 30 bp. The
-maximum read length is 150 bp, therefore, the histogram only spreads from 31 to 271 bp in total.
+Here is the histogram of the insert sizes determined by _fastp_. By default, _fastp_ will only keep reads that are longer than 30 bp and requires an overlap between the read mates of 30 bp. The maximum read length is 150 bp, therefore, the histogram only spreads from 31 to 271 bp in total.
 
 ```{r out.width = "70%", echo = F, fig.align = "center"}
 knitr::include_graphics("assets/images/chapters/denovo-assembly/2612_insertsize_hist.png")
 ```
 
-The sequencing data for the sample **2612** were generated across eight different sequencing runs,
-which differed in their nominal length. Some sequencing runs were 2x 100 bp, while others were 2x
-150 bp. This is the reason why we observe two peaks just short of 100 and 150 bp. The difference to
-the nominal length is caused by the quality trimming of the data.
+The sequencing data for the sample **2612** were generated across eight different sequencing runs, which differed in their nominal length. Some sequencing runs were 2x 100 bp, while others were 2x 150 bp. This is the reason why we observe two peaks just short of 100 and 150 bp. The difference to the nominal length is caused by the quality trimming of the data.
 
-Overall, we have almost no short DNA molecules (< 50 bp) but most DNA molecules are longer than 80
-bp. Additionally, there were > 200,000 read pairs that could not be overlapped. Therefore, we can
-conclude that the sample **2612** is moderately degraded ancient DNA sample and has many long DNA
-molecules.
+Overall, we have almost no short DNA molecules (< 50 bp) but most DNA molecules are longer than 80 bp. Additionally, there were > 200,000 read pairs that could not be overlapped. Therefore, we can conclude that the sample **2612** is moderately degraded ancient DNA sample and has many long DNA molecules.
 :::
-
 
 ### _De novo_ assembly
 
+Now, we will actual perform the _de novo_ assembly on the sequencing data. For this, we will use the program MEGAHIT [@LiMegahit2015], a _de Bruijn_-graph assembler. 
+
+```{r out.width = "70%", echo = F, fig.align = "center"}
+knitr::include_graphics("assets/images/chapters/denovo-assembly/kmer_counting.png")
+```
+
+**Figure 5**: **Overview of inferring _k_-mers from a DNA sequencce.** Credit:
+https://medium.com/swlh/bioinformatics-1-k-mer-counting-8c1283a07e29
+
+_De Bruijn_ graph assemblers are together with overlap assemblers the pre-dominant group of assemblers. They use _k_-mers (see **Figure 5** for an example of _4_-mers) extracted from the short-read sequencing data to build the graph. For this, they connect each _k_-mer to adjacent _k_-mer using a directional edge. By walking along the edges and visiting each _k_-mer or node once, longer continuous sequences are reconstructed. This is very rough explanantion and I would advise you to watch this excerpt of a [lecture](https://www.youtube.com/watch?v=OY9Q_rUCGDw) by Rob Edwards from San Diego State Univeristy and a [Coursera lecture](https://youtu.be/TNYZZKrjCSk?t=112) by Ben Langmead from Johns Hopkins University, if you would like to learn more about it.
+
+All _de Bruijn_ graph assemblers work in a similar way so the question is why do we use MEGAHIT and not other programs, such as metaSPAdes [@Nurk2017]?
+
+::: {.callout-note title="Pros and cons of MEGAHIT"}
+
+  **Pros**:
+
+    - low-memory foot print: can be run on computational infrastructure that does not have a large memory resources 
+    - can assembly both single-end and paired-end sequencing data
+    - assembly algorithm can cope with the presence of high amounts of ancient DNA damage
+
+  **Cons**:
+
+    - lower assembly quality on modern comparative data, particularly a higher rate of mis-assemblies (CAMI II challenge)
+
+:::
+
+In the Warinnner group, we realised after some tests that MEGAHIT has its clear advantage when ancient DNA damage is present at higher quantities. While it produced a higher number of mis-assemblies compared to metaSPAdes when being evaluated on simulated modern metagenomic data (Critical Assessment of Metagenome Interpretation II challenge: @Meyer2022), it produces more long contigs when ancient DNA is present.
+
+To _de novo_ assemble the short-read sequencing data of the sample **2612** using MEGAHIT, we can run the command
+
+```{bash, eval = F}
+megahit -1 2612_R1.fastq.gz \
+        -2 2612_R2.fastq.gz \
+        -t 14 --min-contig-len 500 \
+        --out-dir megahit
+```
+
+This will use the paired-end sequencing data as input and return all contigs that are at least 500 bp long.
+
+::: {.callout-caution}
+While MEGAHIT is able to run on merged sequencing data, it is advised to use the unmerged paired-end data as input. In tests using simulated data I have observed that MEGAHIT performed slightly better when using the unmerged data and it likely has something to do with its internal algorithm to infer insert sizes from the paired-end data.
+:::
+
+While we are waiting for MEGAHIT to finish, here is a question:
+
+::: {.callout-tip title="Question" appearence="simple"}
+
+**Which _k_-mer lengths did MEGAHIT select for the _de novo_ assembly?**
+
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+
+Based on the maximum read length, MEGAHIT decided to use the _k_-mer lengths of 21, 29, 39, 59, 79, 99, 119, and 141.
+:::
