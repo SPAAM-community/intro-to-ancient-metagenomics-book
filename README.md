@@ -26,7 +26,7 @@ If adding a new section chapter:
     quarto preview intro-to-ancient-metagenomics-book --render all --no-browser --no-watch-inputs   
     ```
 
-7. Commit, push to GitHub, and open a PR against the `master` branch [^2]
+7. Commit, push to GitHub, and open a PR against the `main` branch [^2]
 
 General tips:
 
