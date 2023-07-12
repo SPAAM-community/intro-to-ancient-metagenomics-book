@@ -150,8 +150,25 @@ Hint: You can easily inspect the distribution by opening the HTML report `overla
 :::
 
 ::: {.callout-note collapse="true" title="Answer"}
-:::
 
+Here is the histogram of the insert sizes determined by _fastp_. By default, _fastp_ will only keep
+reads that are longer than 30 bp and requires an overlap between the read mates of 30 bp. The
+maximum read length is 150 bp, therefore, the histogram only spreads from 31 to 271 bp in total.
+
+```{r out.width = "70%", echo = F, fig.align = "center"}
+knitr::include_graphics("assets/images/chapters/denovo-assembly/2612_insertsize_hist.png")
+```
+
+The sequencing data for the sample **2612** were generated across eight different sequencing runs,
+which differed in their nominal length. Some sequencing runs were 2x 100 bp, while others were 2x
+150 bp. This is the reason why we observe two peaks just short of 100 and 150 bp. The difference to
+the nominal length is caused by the quality trimming of the data.
+
+Overall, we have almost no short DNA molecules (< 50 bp) but most DNA molecules are longer than 80
+bp. Additionally, there were > 200,000 read pairs that could not be overlapped. Therefore, we can
+conclude that the sample **2612** is moderately degraded ancient DNA sample and has many long DNA
+molecules.
+:::
 
 
 ### _De novo_ assembly
