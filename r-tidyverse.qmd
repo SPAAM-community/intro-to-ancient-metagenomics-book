@@ -271,16 +271,16 @@ ggplot(peng) +
 <details>
 <summary>Possible solutions</summary>
 
-```{r, eval=FALSE}
+```{r}
 ?mtcars
 ```
 
-```{r, eval=FALSE}
+```{r}
 ggplot(mtcars) +
   geom_point(aes(x = hp, y = qsec))
 ```
 
-```{r, eval=FALSE}
+```{r}
 ggplot(mtcars) +
   geom_point(aes(x = hp, y = qsec, color = as.factor(cyl)))
 ```
@@ -453,20 +453,20 @@ For this exercise we once more go back to the `mtcars` dataset. See `?mtcars` fo
 <details>
 <summary>Possible solutions</summary>
 
-```{r, eval=FALSE}
+```{r}
 mtcars %>%
   dplyr::filter(gear == 4) %>%
   nrow()
 ```
 
-```{r, eval=FALSE}
+```{r}
 mtcars %>% dplyr::group_by(cyl) %>%
   dplyr::summarise(
     qsec_mean = mean(qsec)
   )
 ```
 
-```{r, eval=FALSE}
+```{r}
 mtcars2 <- tibble::rownames_to_column(mtcars, var = "car")
 mtcars2 %>%
   dplyr::group_by(am) %>%
@@ -651,12 +651,14 @@ carsales_wide
 <details>
 <summary>Possible solutions</summary>
 
-```{r, eval=FALSE}
+```{r}
 mtcars %>%
-  dplyr::relocate(gear, .before = mpg)
+  dplyr::relocate(gear, .before = mpg) %>%
+  tibble::as_tibble() # transforming the raw dataset to a tibble
+                      # for better printing
 ```
 
-```{r, eval=FALSE}
+```{r}
 mtcars2 <- mtcars %>% dplyr::mutate(
   gear,
   am_v = dplyr::case_match(
@@ -664,10 +666,11 @@ mtcars2 <- mtcars %>% dplyr::mutate(
     0 ~ "automatic",
     1 ~ "manual"
   )
-)
+) %>% tibble::as_tibble()
+mtcars2
 ```
 
-```{r, eval=FALSE}
+```{r}
 mtcars2 %>%
   dplyr::group_by(am_v, gear) %>%
   dplyr::tally() %>% # dplyr::tally() is identical to
