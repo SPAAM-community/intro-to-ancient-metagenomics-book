@@ -479,62 +479,39 @@ mtcars2 %>%
 
 ## Transforming and manipulating tibbles
 
-### Renaming and reordering columns and values with `rename`, `relocate` and `recode`
+### Renaming and reordering columns with `rename` and `relocate`
 
-- Columns in tibbles can be renamed with `dplyr::rename` and reordered with `dplyr::relocate`
+- Columns in tibbles can be renamed with `dplyr::rename`
 
 ```{r}
 peng %>% dplyr::rename(penguin_name = id) # rename a column
-peng %>% dplyr::relocate(year, .before = species) # reorder columns
 ```
 
-- Values in columns can be changed with `dplyr::recode`
+- And with `dplyr::relocate` they can be reordered
 
 ```{r}
-peng$island %>% dplyr::recode(Torgersen = "My favourite Island")
-```
-
-- R supports explicitly ordinal data with `factor`s, which can be reordered as well
-- `factor`s can be handled more easily with the `forcats` package
-
-```{r, fig.show='hide'}
-ggplot(peng) + geom_bar(aes(x = species)) # bars are alphabetically ordered
-peng2 <- peng
-peng2$species_ordered <- forcats::fct_reorder(peng2$species, peng2$species, length)
-# fct_reorder: reorder the input factor by a summary statistic on an other vector
-ggplot(peng2) + geom_bar(aes(x = species_ordered)) # bars are ordered by size
+peng %>% dplyr::relocate(year, .before = species) # reorder columns
 ```
 
 ### Adding columns to tibbles with `mutate` and `transmute`
 
-- A common application of data manipulation is adding derived columns. `dplyr` offers that with `mutate`
-
-```{r}
-peng %>% 
-  dplyr::mutate(                    # add a column that
-    body_mass_kg = body_mass_g/1000 # manipulates an existing column
-  )
-```
-
-- `dplyr::transmute` removes all columns but the newly created ones
-
-```{r}
-peng %>% 
-  dplyr::transmute(
-    id = paste("Penguin Nr.", id), # overwrite this column
-    flipper_length_mm              # select this column
-)
-```
-
-- `dplyr::mutate` can also be combined with `dplyr::group_by` (instead of `dplyr::summarise`)
+- A common application of data manipulation is adding new, derived columns, that combine or modify the information in the already available columns. `dplyr` offers this core feature with `mutate`
 
 ```{r}
 peng %>%
-  dplyr::group_by(species, sex, year) %>%
-  dplyr::mutate( # mutate does not collapse rows, unlike summarise
-    mean_weight = mean(body_mass_g, na.rm = T)
-  ) %>%
-  dplyr::arrange(body_mass_g)
+  dplyr::mutate(          # add a column that
+    kg = body_mass_g/1000 # manipulates an existing column
+  )
+```
+
+- `dplyr::transmute` has the same interface as `dplyr::mutate`, but it removes all columns except for the newly created ones
+
+```{r}
+peng %>%
+  dplyr::transmute(
+    id = paste("Penguin Nr.", id), # overwrite this column
+    flipper_length_mm               # select this column
+)
 ```
 
 - `tibble::add_column` behaves as `dplyr::mutate`, but gives more control over column position
@@ -546,9 +523,24 @@ peng %>% tibble::add_column(
 )
 ```
 
-### Conditional operations with `ifelse` and `case_when`
+- `dplyr::mutate` can also be combined with `dplyr::group_by` (instead of `dplyr::summarise`) to add information on a group level. This is relevant, when a value for an individual entity should be put into context of a group-wise summary statistic
 
-- `ifelse` allows to implement conditional `mutate` operations, that consider information from other columns, but that gets cumbersome easily
+```{r}
+peng %>%
+  dplyr::group_by(species, sex, year) %>%
+  dplyr::mutate(
+    mean_weight = mean(body_mass_g, na.rm = T),
+    relation_to_mean = body_mass_g/mean_weight
+  ) %>%
+  dplyr::ungroup() %>% # ungroup removes lingering grouping
+  dplyr::select(id, species, sex, year, relation_to_mean) %>%
+  # mutate does not remove rows, unlike summarise, so we use select
+  dplyr::arrange(dplyr::desc(relation_to_mean))
+```
+
+### Conditional operations with `ifelse`, `case_when` and `case_match`
+
+- `ifelse` allows to implement conditional `mutate` operations, that consider information from other columns
 
 ```{r}
 peng %>% dplyr::mutate(
@@ -560,7 +552,7 @@ peng %>% dplyr::mutate(
 )
 ```
 
-- `dplyr::case_when` is more readable and scales much better for this application
+- `ifelse` gets cumbersome easily. `dplyr::case_when` is more readable and scales much better for this application
 
 ```{r}
 peng %>% dplyr::mutate(
@@ -572,7 +564,22 @@ peng %>% dplyr::mutate(
 )
 ```
 
-### Long and wide data formats
+- `dplyr::case_match` is similar, but unlike `dplyr::case_when` it does not check logical expressions, but matches by value
+
+```{r}
+peng %>% dplyr::mutate(
+  island_rating = dplyr::case_match(
+    island,
+    "Torgersen" ~ "My favourite island",
+    "Biscoe"    ~ "Overrated tourist trap",
+    "Dream"     ~ "Lost my wallet there. 4/10"
+  )
+) %>%
+  dplyr::group_by(island, island_rating) %>%
+  dplyr::summarise() # here we use group_by+summarise only to show the result
+```
+
+### Switching between long and wide data with `pivot_longer` and `pivot_wider`
 
 - For different applications or to simplify certain analysis or plotting operations data often has to be transformed from a **wide** to a **long** format or vice versa
 
@@ -581,7 +588,9 @@ peng %>% dplyr::mutate(
 - A table in **wide** format has N key columns and N value columns
 - A table in **long** format has N key columns, one descriptor column and one value column
 
-### A wide dataset
+***
+
+- Here is an example of a wide dataset. It features information about the number of cars sold per year per brand at a dealership
 
 ```{r}
 carsales <- tibble::tribble(
@@ -589,12 +598,12 @@ carsales <- tibble::tribble(
   "BMW",  20,      25,      30,      45,
   "VW",   67,      40,     120,      55
 )
+carsales
 ```
 
-- Wide format becomes a problem, when the columns are semantically identical. This dataset is in wide format and we can not easily plot it
-- We generally prefer data in long format, although it is more verbose with more duplication. "Long" format data is more "tidy"
-
-### Making a wide dataset long with `pivot_longer`
+- Wide format data becomes a problem, when the columns are semantically identical. This dataset is in wide format and we can not easily plot it
+- We generally prefer data in long format, although it is more verbose with more duplication
+- To transform this dataset to a long format, we can apply `tidyr::pivot_longer`
 
 ```{r}
 carsales_long <- carsales %>% tidyr::pivot_longer(
@@ -603,9 +612,12 @@ carsales_long <- carsales %>% tidyr::pivot_longer(
   names_transform = as.integer, # a transformation function to apply to the names
   values_to = "sales"           # the name of the value column we want
 )
+carsales_long
 ```
 
-### Making a long dataset wide with `pivot_wider`
+- Wide datasets are not always the wrong choice: The find application for example for adjacency matrices to represent graphs, covariance matrices or other pairwise statistics
+- When data gets big, then wide formats can be significantly more efficient (e.g. for spatial data)
+- So transform data from long to wide, we can use `tidyr::pivot_wider`
 
 ```{r}
 carsales_wide <- carsales_long %>% tidyr::pivot_wider(
@@ -613,14 +625,10 @@ carsales_wide <- carsales_long %>% tidyr::pivot_wider(
   names_from = year,  # the descriptor column with the names of the new columns
   values_from = sales # the value column from which the values should be extracted
 )
+carsales_wide
 ```
 
-- Applications of wide datasets are adjacency matrices to represent graphs, covariance matrices or other pairwise statistics
-- When data gets big, then wide formats can be significantly more efficient (e.g. for spatial data)
-
-
-
-### Exercise 3
+### Exercise
 
 1. Move the column `gear` to the first position of the mtcars dataset
 
@@ -640,44 +648,38 @@ carsales_wide <- carsales_long %>% tidyr::pivot_wider(
 
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Possible solutions 3
-
-1. Move the column `gear` to the first position of the mtcars dataset
+<details>
+<summary>Possible solutions</summary>
 
 ```{r, eval=FALSE}
-mtcars %>% dplyr::relocate(gear, .before = mpg)
+mtcars %>%
+  dplyr::relocate(gear, .before = mpg)
 ```
-
-2. Make a new dataset `mtcars2` with the column `gear` and an additional column `am_v`, which encodes the *transmission type* (`am`) as either `"manual"` or `"automatic"`
 
 ```{r, eval=FALSE}
 mtcars2 <- mtcars %>% dplyr::mutate(
-  gear, am_v = dplyr::case_when(am == 0 ~ "automatic", am == 1 ~ "manual")
+  gear,
+  am_v = dplyr::case_match(
+    am,
+    0 ~ "automatic",
+    1 ~ "manual"
+  )
 )
 ```
 
-3. Count the number of cars in `mtcars2` per *transmission type* (`am_v`) and *number of gears* (`gear`). Then transform the result to a wide format, with one column per *transmission type*.
-
 ```{r, eval=FALSE}
-mtcars2 %>% dplyr::group_by(am_v, gear) %>% dplyr::tally() %>%
-  tidyr::pivot_wider(names_from = am_v, values_from = n)
+mtcars2 %>%
+  dplyr::group_by(am_v, gear) %>%
+  dplyr::tally() %>% # dplyr::tally() is identical to
+                     # dplyr::summarise(n = dplyr::n())
+                     # it counts the number of entities in a group
+  tidyr::pivot_wider(
+    names_from = am_v,
+    values_from = n
+  )
 ```
 
-
+</details>
 
 ## Combining tibbles with join operations
 
