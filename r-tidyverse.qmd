@@ -250,7 +250,35 @@ ggplot(peng) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
 ```
 
-- This is an important operation when discrete variables with a large set of values are mapped to one of the axes. The axis labels can otherwise overlap
+### Ordering elements in a plot with `factors`
+
+- R supports defining ordinal data with `factor`s
+- This can be used to set the order of elements in a plot, e.g. the order of bars in a bar chart
+- We do not cover `factor`s beyond the following example here, although the tidyverse includes a package (`forcats`) specifically for that purpose
+
+***
+
+- Elements based on `character` columns are generally ordered alphabetically
+
+```{r}
+ggplot(peng) + geom_bar(aes(x = species)) # bars are alphabetically ordered
+```
+
+- With `forcats::fct_reorder` we can transform an input vector to a `factor`, ordered by a summary statistic (even based on another vector)
+
+```{r}
+peng2 <- peng
+peng2$species_ordered <- forcats::fct_reorder(
+  peng2$species,
+  peng2$species, length
+)
+```
+
+- With this change, the plot is ordered according to the intrinsic order defined for `species_ordered`
+
+```{r}
+ggplot(peng2) + geom_bar(aes(x = species_ordered)) # bars are ordered by size
+```
 
 ### Exercise
 
