@@ -722,7 +722,7 @@ ancient_data = pd.read_csv("../results/metaphlan/ERR5766177.metaphlan_profile.tx
                             names=['clade_name','NCBI_tax_id','relative_abundance','additional_species'])
 ```
 
-To look at the head of a dataframe with pandas
+To look at the head of a dataframe (@tbl-mp3-raw) with pandas
 
 ```python
 ancient_data.head()
@@ -735,6 +735,10 @@ ancient_data.head()
 | 2 | k__Bacteria\|p__Firmicutes     | 2\|1239     | 33.47957           | NaN                |
 | 3 | k__Bacteria\|p__Bacteroidetes  | 2\|976      | 28.42090           | NaN                |
 | 4 | k__Bacteria\|p__Actinobacteria | 2\|201174   | 20.33151           | NaN                |
+
+: Top few lines of a MetaPhlAn taxonomic profile {#tbl-mp3-raw}
+
+We can also specify more rows by randomly picking 10 rows to display (@tbl-mp3-sampled).
 
 ```python
 ancient_data.sample(10)
@@ -752,6 +756,8 @@ ancient_data.sample(10)
 | 38 | k__Bacteria\|p__Firmicutes\|c__Clostridia\|o__Clo... | 2\|1239\|186801\|186802\|541000\|216851        | 1.24537            | NaN                                                  |
 | 26 | k__Bacteria\|p__Actinobacteria\|c__Actinobacteri...  | 2\|201174\|1760\|85004\|31953                  | 9.39377            | NaN                                                  |
 | 48 | k__Bacteria\|p__Firmicutes\|c__Clostridia\|o__Clo... | 2\|1239\|186801\|186802\|541000\|1263\|40518   | 14.96816           | k__Bacteria\|p__Firmicutes\|c__Clostridia\|o__Clo... |
+
+: Ten randomly selected lines of a MetaPhlAn taxonomic profile {#tbl-mp3-sampled}
 
 Because for this analysis, we're only going to look at the relative abundance, we'll only use this column, and
 the [Taxonomic ID (TAXID)](https://www.ncbi.nlm.nih.gov/taxonomy) information, so we can `drop` (get rid of) the unnecessary columns.
@@ -777,7 +783,7 @@ ancient_data.relative_abundance.sum()
 :::
 
 ::: {.callout-tip collapse="true" title="Unfold to see what's happening"}
-Let's proceed further and try to understand what's happening.
+Let's proceed further and try to understand what's happening (@tbl-taxid-table).
 
 ```python
 ancient_data.head()
@@ -791,8 +797,9 @@ ancient_data.head()
 | 3 | 2\|976    | 28.42090           |
 | 4 | 2\|201174 | 20.33151           |
 
+: A two column table of TAXIDs and the organisms corresponding relative abundance {#tbl-taxid-table}
 
-To make sense of the TAXID, we will use taxopy to get all the taxonomic related informations such as:
+To make sense of the TAXID, we will use taxopy to get all the taxonomic related informations such as (@tbl-taxid-table-with-path):
 
 - name of the taxon
 - rank of the taxon
@@ -835,6 +842,8 @@ ancient_data.head()
 | 3 | 2\|976    | 28.42090           | s__Bacteria;c__FCB group;p__Bacteroidetes         |
 | 4 | 2\|201174 | 20.33151           | s__Bacteria;c__Terrabacteria group;p__Actinoba... |
 
+: A three column table of TAXIDs and the organisms corresponding relative abundance, and the attached taxonomic path associated with the TAXID {#tbl-taxid-table-with-path}
+
 ```python
 ancient_data = ancient_data.assign(
     rank = ancient_data.taxopy.apply(lambda x: x.rank),
@@ -859,9 +868,11 @@ ancient_data
 | 65  | 2\|201174\|1760\|85004\|31953\|1678\|216816      | 0.05447            | s__Bacteria;c__Terrabacteria group;p__Actinoba... | species      | Bifidobacterium longum     | [Bifidobacterium longum, Bifidobacterium, Bifi... |
 | 66  | 2\|1239\|186801\|186802\|541000\|1263\|1262959   | 0.01440            | s__Bacteria;c__Terrabacteria group;p__Firmicut... | species      | Ruminococcus sp. CAG:488   | [Ruminococcus sp. CAG:488, environmental sampl... |
 
+: A five column table of TAXIDs and the organisms corresponding relative abundance, and the attached taxonomic path associated with the TAXID, but also the rank and name of the particular taxonomic ID {#tbl-taxid-table-with-path-sep}
+
 Because our modern data are split by ranks, we'll first split our ancient sample by rank
 
-Which of the entries are at the `species rank` level ?
+Which of the entries are at the `species rank` level?
 
 ```python
 ancient_species = ancient_data.query("rank == 'species'")
@@ -877,6 +888,9 @@ ancient_species.head()
 | 48 | 2\|1239\|186801\|186802\|541000\|1263\|40518  | 14.96816           | s__Bacteria;c__Terrabacteria group;p__Firmicut... | species | Ruminococcus bromii        | [Ruminococcus bromii, Ruminococcus, Oscillospi... |
 | 49 | 2\|1239\|186801\|186802\|186803\|841\|301302  | 13.57908           | s__Bacteria;c__Terrabacteria group;p__Firmicut... | species | Roseburia faecis           | [Roseburia faecis, Roseburia, Lachnospiraceae,... |
 | 50 | 2\|201174\|84998\|84999\|84107\|102106\|74426 | 9.49165            | s__Bacteria;c__Terrabacteria group;p__Actinoba... | species | Collinsella aerofaciens    | [Collinsella aerofaciens, Collinsella, Corioba... |
+
+: A five column table of TAXIDs and the organisms corresponding relative abundance, and the attached taxonomic path associated with the TAXID, but also the rank and name of the particular taxonomic ID, filtered to only species {#tbl-taxid-table-with-path-species}
+
 
 Let's do a bit of renaming to prepare for what's coming next
 
@@ -894,6 +908,9 @@ ancient_species.head()
 | Roseburia faecis           | 13.57908   |
 | Collinsella aerofaciens    | 9.49165    |
 
+: Reconstruction of the first two column taxonomic profile but with species-level organism names rather than TAXIDs {#tbl-taxid-table-with-name}
+
+
 ```python
 ancient_phylums = ancient_data.query("rank == 'phylum'")
 
@@ -908,6 +925,8 @@ ancient_phylums
 | Bacteroidetes  | 28.42090   |
 | Actinobacteria | 20.33151   |
 | Euryarchaeota  | 17.76802   |
+
+: Reconstruction of the first two column taxonomic profile but with phylum-level organism names rather than TAXIDs {#tbl-taxid-table-with-name}
 
 Now, let's go back to the 700% relative abundance issue...
 
@@ -939,7 +958,7 @@ Seems better, right ?
 
 Now let's load our modern reference samples
 
-First at the phylum level
+First at the phylum level (@tbl-modern-taxtable-phylum)
 
 ```python
 modern_phylums = pd.read_csv("../data/curated_metagenomics/modern_sources_phylum.csv", index_col=0)
@@ -954,13 +973,16 @@ modern_phylums.head()
 | Actinobacteria  | 0.25809                              | 10.27631     | 0.45187           | 1.11902  | 2.31075      | 2.92715      | 0.77667      | 0.16403  | 36.55138                         | 1.19951   | ... | 3.01814    | 19.20468 | 0.69913    | 46.99479 | 7.39093  | 14.26365 | 5.47750    | 36.77145 | 1.16426  | 7.40894    |
 | Verrucomicrobia | 0.00000                              | 0.00784      | 0.00000           | 1.99276  | 0.25451      | 0.00000      | 0.00000      | 0.00000  | 0.09940                          | 3.29795   | ... | 0.05011    | 0.00000  | 0.00000    | 0.00000  | 0.00000  | 0.00000  | 0.00000    | 0.00000  | 0.00000  | 0.00000    |
 
+: Taxonomic profiles at phylum level of multiple modern samples {#tbl-modern-taxtable-phylum}
+
+
 Then at the species level
 
 ```python
 modern_species = pd.read_csv("../data/curated_metagenomics/modern_sources_species.csv", index_col=0)
 ```
 
-As usual, we always check if our data has been loaded correctly
+As usual, we always check if our data has been loaded correctly (@tbl-modern-taxtable-species)
 
 ```python
 modern_species.head()
@@ -974,6 +996,8 @@ modern_species.head()
 | Eubacterium sp CAG 38      | 0.0                                  | 0.06712      | 0.81149           | 0.05247 | 0.26027      | 0.00000      | 0.00000      | 2.62415  | 0.46585                          | 0.23372   | ... | 0.78140    | 0.0      | 0.00000    | 0.00499 | 0.00000 | 0.02446 | 0.00000    | 0.00000 | 0.0      | 0.00000    |
 | Parabacteroides distasonis | 0.0                                  | 1.34931      | 2.00672           | 5.85067 | 0.59019      | 7.00027      | 1.28075      | 0.61758  | 0.07383                          | 2.80355   | ... | 0.11423    | 0.0      | 0.01181    | 0.01386 | 0.03111 | 0.07463 | 0.15597    | 0.07541 | 0.0      | 0.01932    |
 
+: Taxonomic profiles at species level of multiple modern samples  {#tbl-modern-taxtable-species}
+
 ### Time to merge !
 
 Now, let's merge our ancient sample with the modern data in one single table.  
@@ -984,7 +1008,7 @@ all_species = ancient_species.merge(modern_species, left_index=True, right_index
 all_phylums = ancient_phylums.merge(modern_phylums, left_index=True, right_index=True, how='outer').fillna(0)
 ```
 
-Finally, let's load the metadata, which contains the information about the modern samples.
+Finally, let's load the metadata, which contains the information about the modern samples (@tbl-sample-metadata).
 
 ```python
 metadata = pd.read_csv("../data/metadata/curated_metagenomics_modern_sources.csv")
@@ -1000,13 +1024,15 @@ metadata.head()
 | 3 | VatanenT_2016 | G80275                               | T014806           | stool     | no                      | control         | healthy | 1.0 | NaN        | child        | ... | NaN       | NaN         | NaN                             | NaN      | NaN            | NaN             | NaN                    | NaN               | NaN | NaN  |
 | 4 | ZeeviD_2015   | PNP_Main_363                         | PNP_Main_363      | stool     | no                      | control         | healthy | NaN | NaN        | adult        | ... | NaN       | NaN         | NaN                             | NaN      | NaN            | NaN             | NaN                    | NaN               | NaN | NaN  |
 
+: Taxonomic profiles at species level of multiple modern samples {#tbl-sample-metadata}
+
 ## Comparing ancient and modern samples
 
 ### Taxonomic composition
 
 One common plot in microbiome papers in a stacked barplot, often at the phylum or family level.
 
-First, we'll do some renaming, to make the value of the metadata variables a bit easier to understand
+First, we'll do some renaming, to make the value of the metadata variables a bit easier to understand (@tbl-sample-groups)
 
 ```python
 group_info = pd.concat(
@@ -1050,6 +1076,8 @@ group_info
 | 199 | A09_01_1FE                           | non_westernized |
 | 200 | ERR5766177                           | ancient         |
 
+: Table of samples and their group {#tbl-sample-groups}
+
 We need transform our data in [tidy](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) format to
 plot with [plotnine](https://plotnine.readthedocs.io/en/stable/), a python clone of [ggplot](https://ggplot2.tidyverse.org/index.html).  
 
@@ -1067,7 +1095,10 @@ plot with [plotnine](https://plotnine.readthedocs.io/en/stable/), a python clone
 | 198 | 1.16426        | 0.0         | 0.0        | 57.14031      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 0.30580        | 0.70467      | 0.0           | 0.0         | 0.00000         | TZ_81781                             | non_westernized |
 | 199 | 7.40894        | 0.0         | 0.0        | 11.61544      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 56.20177       | 0.00000      | 0.0           | 0.0         | 0.00000         | A09_01_1FE                           | non_westernized |
 
-Now, we need transform in the tidy format, with the `melt` function.
+: Table of the raw multi-sample taxonomic table {#tbl-raw-multi-sample-table}
+
+
+Now, we need transform this (@tbl-raw-multi-sample-table) in the tidy format, with the `melt` function.
 
 ```python
 tidy_phylums = (
@@ -1099,6 +1130,7 @@ tidy_phylums.groupby('group')['relative_abundance'].sum()
 ## Let's make some plots 
 
 We first import plotnine
+
 ```python
 from plotnine import *
 ```
@@ -1128,7 +1160,7 @@ import skbio
 ```
 
 Let's compute the [species richness](https://en.wikipedia.org/wiki/Species_richness), the
-[Shannon, and Simpson index of diversity](https://www.biologydiscussion.com/biodiversity/types/2-types-of-diversity-indices-of-biodiversity/8388) index
+[Shannon, and Simpson index of diversity](https://www.biologydiscussion.com/biodiversity/types/2-types-of-diversity-indices-of-biodiversity/8388) index (@tbl-alpha-div)
 
 ```python
 shannon = skbio.diversity.alpha_diversity(metric='shannon', counts=all_species.transpose(), ids=all_species.columns)
@@ -1153,6 +1185,8 @@ alpha_diversity
 | KHG_1                                | 3.733834 | 0.875335 | 108      |
 | TZ_81781                             | 2.881856 | 0.719491 | 44       |
 | A09_01_1FE                           | 2.982322 | 0.719962 | 75       |
+
+: Table of the shannon, simpson, and richness alpha diversity indicies for a subset of samples {#tbl-alpha-div}
 
 Let's load the group information from the metadata. To do so, we merge the alpha diversity dataframe that we compute previously, with the metadata dataframe, using the `sample_id` as a merge key.
 Finally, we do a bit of renaming to re-encode `yes`/`no` as `non_westernized`/`westernized`.
@@ -1184,7 +1218,9 @@ alpha_diversity
 | TZ_81781                             | 2.881856 | 0.719491 | 44       | non_westernized |
 | A09_01_1FE                           | 2.982322 | 0.719962 | 75       | non_westernized |
 
-And as always, we need it in tidy format for plotnine.
+: Table of the shannon, simpson, and richness alpha diversity indicies for a subset of samples but with the group metadata {#tbl-alpha-div-group}
+
+And as always, we need it in tidy format (@tbl-alpha-div-group-long) for plotnine.
 
 ```python
 alpha_diversity = alpha_diversity.melt(id_vars='group', value_name='alpha diversity', var_name='diversity_index', ignore_index=False)
@@ -1206,6 +1242,8 @@ alpha_diversity
 | KHG_1                                | non_westernized | richness        | 108.000000      |
 | TZ_81781                             | non_westernized | richness        | 44.000000       |
 | A09_01_1FE                           | non_westernized | richness        | 75.000000       |
+
+: Table of the shannon, simpson, and richness alpha diversity indicies for a subset of samples but with the group metadata but in long-form tidy format {#tbl-alpha-div-group-long}
 
 We now make a violin plot to compare the alpha diversity for each group, faceted by the type of alpha diversity index (@fig-diversity-violin-plots).
 
@@ -1294,6 +1332,8 @@ pcoa.samples
 | KHG_1                                | -0.100009 | 0.167885  | 0.009915  | 0.076842  | -0.405582 | -0.039111 | -0.006421 | -0.009774 | -0.072252 | 0.150000  | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
 | TZ_81781                             | 0.405716  | -0.139297 | -0.075026 | -0.079716 | -0.053264 | -0.119271 | 0.068261  | -0.018821 | 0.198152  | -0.012792 | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
 | A09_01_1FE                           | 0.089101  | 0.471135  | 0.069629  | -0.125644 | -0.036793 | 0.115151  | 0.060507  | -0.000912 | -0.027239 | -0.138436 | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
+
+: Table principal coordinates (columns) for each of the samples (rows) {#tbl-alpha-div-group-long}
 
 Let's look at the variance explained by the first axes by using a scree plot (@fig-scree-plot).
 
