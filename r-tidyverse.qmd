@@ -716,8 +716,7 @@ mtcars2 %>%
 
 ### Types of joins
 
-Joins combine two datasets x and y based on key columns
-
+- Joins combine two datasets x and y based on key columns
 - Mutating joins add columns from one dataset to the other
   - Left join: Take observations from x and add fitting information from y
   - Right join: Take observations from y and add fitting information from x
@@ -726,18 +725,19 @@ Joins combine two datasets x and y based on key columns
 - Filtering joins remove observations from x based on their presence in y
   - Semi join: Keep every observation in x that is in y
   - Anti join: Keep every observation in x that is not in y
+- The following sections will introduce each join with an example
 
-### A second dataset
+***
 
-- Contains additional variables for a subset of penguins
-- Both datasets feature 300 penguins, but only with a partial overlap of individuals
+- To experiment with joins, we need a second dataset with complementary information
+- This new dataset contains additional variables for a subset of the penguins in our first dataset -- both datasets feature 300 penguins, but only with a partial overlap in individuals
 
 ```{r echo=FALSE}
 bills <- readr::read_csv("assets/data/r-tidyverse/penguin_bills_2009.csv")
-print(bills, n = 5)
+bills
 ```
 
-### Left join
+### Left join with `left_join`
 
 Take observations from x and add fitting information from y
 
@@ -753,7 +753,7 @@ dplyr::left_join(
 
 - Left joins are the most common join operation: Add information from y to the main dataset x
 
-### Right join
+### Right join with `right_join`
 
 Take observations from y and add fitting information from x
 
@@ -764,12 +764,13 @@ dplyr::right_join(
   x = peng,  # 300 observations
   y = bills, # 300 observations
   by = "id"
-) %>% dplyr::arrange(id)
+) %>% dplyr::arrange(id) # we arrange by id to highlight the missing
+                         # observation in the peng dataset
 ```
 
 - Right joins are almost identical to left joins -- only x and y have reversed roles
 
-### Inner join
+### Inner join with `inner_join`
 
 Join the overlapping observations from x and y
 
@@ -785,7 +786,7 @@ dplyr::inner_join(
 
 - Inner joins are a fast and easy way to check, to which degree two dataset overlap
 
-### Full join
+### Full join with `full_join`
 
 Join all observations from x and y, even if information is missing
 
@@ -796,12 +797,12 @@ dplyr::full_join(
   x = peng,  # 300 observations
   y = bills, # 300 observations
   by = "id"
-)
+) %>% dplyr::arrange(id)
 ```
 
 - Full joins allow to preserve every bit of information
 
-### Semi join
+### Semi join with `semi_join`
 
 Keep every observation in x that is in y
 
@@ -815,9 +816,9 @@ dplyr::semi_join(
 )
 ```
 
-- Semi joins are underused operations to filter datasets
+- Semi joins are underused (!) operations to filter datasets
 
-### Anti join
+### Anti join with `anti_join`
 
 Keep every observation in x that is not in y
 
@@ -831,16 +832,17 @@ dplyr::anti_join(
 )
 ```
 
-- Anti joins allow to quickly specify incomplete datasets and missing information
+- Anti joins allow to quickly determine what information is missing in a dataset compared to an other one
 
+### Exercise 
 
-
-### Exercise 4
-
-Consider the following additional dataset:
+Consider the following additional dataset with my opinions on two specific gears (in the shifting system of a car):
 
 ```{r}
-gear_opinions <- tibble::tibble(gear = c(3, 5), opinion = c("boring", "wow"))
+gear_opinions <- tibble::tibble(
+  gear = c(3, 5),
+  opinion = c("boring", "wow")
+)
 ```
 
 1. Add my opinions about gears to the `mtcars` dataset
@@ -849,36 +851,23 @@ gear_opinions <- tibble::tibble(gear = c(3, 5), opinion = c("boring", "wow"))
 
 ```
 
-2. Remove all cars from the dataset for which I don't have an opinion
+2. Remove all cars from the dataset for which I do not have an opinion
 
 ```{r}
 
 ```
 
+<details>
+<summary>Possible solutions</summary>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Possible Solutions 4
-
-1. Add my opinions about gears to the `mtcars` dataset
-
-```{r, eval=FALSE}
-dplyr::left_join(mtcars, gear_opinions, by = "gear")
+```{r}
+dplyr::left_join(mtcars, gear_opinions, by = "gear") %>%
+  tibble::as_tibble()
 ```
 
-2. Remove all cars from the dataset for which I don't have an opinion
-
-```{r, eval=FALSE}
-dplyr::anti_join(mtcars, gear_opinions, by = "gear")
+```{r}
+dplyr::anti_join(mtcars, gear_opinions, by = "gear") %>%
+  tibble::as_tibble()
 ```
+
+</details>
