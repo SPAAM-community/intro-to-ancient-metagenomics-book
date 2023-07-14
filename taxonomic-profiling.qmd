@@ -19,7 +19,7 @@ In this chapter, we're going to look at taxonomic profiling, or in other words, 
 
 Though there are many algorithms, and even more different tools available to perform taxonomic profiling, the general idea remains the same (@fig-overview).
 
-After cleaning up the sequencing data, generally saved as `fastq` files, a **taxonomic profiler** is used to compare the sequenced DNA to a reference database of sequences from known organisms, in order to generate a taxonomic profile of all organisms identified in a sample (@fig-overview)
+After cleaning up the sequencing data, generally saved as FASTQ files, a **taxonomic profiler** is used to compare the sequenced DNA to a reference database of sequences from known organisms, in order to generate a taxonomic profile of all organisms identified in a sample (@fig-overview)
 
 ![General overview of a taxonomic profiling analysis workflow](assets/images/chapters/taxonomic-profiling/how_to_analyze.png){#fig-overview}
 
@@ -31,26 +31,21 @@ Because different organisms can possess the same DNA, especially when looking at
 
 ![Different species can share the same DNA sequence](assets/images/chapters/taxonomic-profiling/ambiguity.png){#fig-ambiguity}
 
-By leveraging an algorithm known a the [Lowest Common Ancestor](https://en.wikipedia.org/wiki/Lowest_common_ancestor) (LCA), and the taxonomic tree of all known species, ambiguities are going to be resolved by assigning a higher, less precise, taxonomic rank to ambiguous matches(@fig-lca).
+By leveraging an algorithm known as the [Lowest Common Ancestor](https://en.wikipedia.org/wiki/Lowest_common_ancestor) (LCA), and the taxonomic tree of all known species, ambiguities are going to be resolved by assigning a higher, less precise, taxonomic rank to ambiguous matches(@fig-lca).
 
-![the LCA algorithm, a way to resolve these ambiguities](assets/images/chapters/taxonomic-profiling/lca.png){#fig-lca}
+![A diagram of the LCA algorithm, a way to resolve these ambiguities](assets/images/chapters/taxonomic-profiling/lca.png){#fig-lca}
 
-## What we're going to cover today
+## Chapter Overview
 
 Today, we're going to use the following tools:
 
-- fastp (@chenFastpUltrafastAllinone2018) for sequencing data cleaning 
-- metaphlan (@segata2012metagenomic), for taxonomic profiling 
-- krona (@ondovInteractiveMetagenomicVisualization2011) and pavian (@breitwieserPavianInteractiveAnalysis2016) for the interactive exploration of the taxonomic profiles
-- curateMetagenomicData (@pasolliAccessibleCuratedMetagenomic2017) for retrieving modern comparison data
-- Python, pandas (@rebackPandasdevPandasPandas2022), [plotnine](https://plotnine.readthedocs.io/en/stable/) , and scikit-bio (@scikit-bioScikitbioBioinformaticsLibrary2022) to perform exploratory data analysis and a bit of microbial ecology.
+- fastp [@chenFastpUltrafastAllinone2018] for sequencing data cleaning 
+- MetaPhlAn [@segata2012metagenomic], for taxonomic profiling 
+- Krona [@ondovInteractiveMetagenomicVisualization2011] and Pavian [@breitwieserPavianInteractiveAnalysis2016] for the interactive exploration of the taxonomic profiles
+- curatedMetagenomicData [@pasolliAccessibleCuratedMetagenomic2017] for retrieving modern comparison data
+- Python, pandas [@rebackPandasdevPandasPandas2022], [plotnine](https://plotnine.readthedocs.io/en/stable/) , and scikit-bio [@scikit-bioScikitbioBioinformaticsLibrary2022] to perform exploratory data analysis and a bit of microbial ecology
 
-
-::: {.callout-warning}
-We highly recommend viewing this walkthrough via the Jupyter notebook above!
-The output of commands on the website for this walkthrough are displayed in their
-own code blocks - be wary of what you copy-paste!
-:::
+to explore a toy dataset that has already been prepared for you.
 
 ::: {.callout-note collapse="true"}
 ## Preamble: what has been done to generate this toy dataset
@@ -88,58 +83,54 @@ for f in glob.glob("../data/raw/*"):
     subsample(f, outdir)
 ```
 
-    seqtk sample -s42 ../data/raw/ERR5766177_PE.mapped.hostremoved.fwd.fq.gz 1000000 >
-    ../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq
-    seqtk sample -s42 ../data/raw/ERR5766177_PE.mapped.hostremoved.rev.fq.gz 1000000 >
-    ../data/subsampled/ERR5766177_PE.mapped.hostremoved.rev.fq_subsample_1000000.fastq
-
-Finally, we compress all files to gzip format
-
-```python
-! gzip -f ../data/subsampled/*.fastq
+::: {.callout-tip collapse="true" title='Expand to see command output'}
+```
+seqtk sample -s42 ../data/raw/ERR5766177_PE.mapped.hostremoved.fwd.fq.gz 1000000 >
+../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq
+seqtk sample -s42 ../data/raw/ERR5766177_PE.mapped.hostremoved.rev.fq.gz 1000000 >
+../data/subsampled/ERR5766177_PE.mapped.hostremoved.rev.fq_subsample_1000000.fastq
 ```
 :::
 
-## Hands on introduction to ancient microbiome analysis
+Finally, we compress all files to gzip format
 
-Author: Maxime Borry  
-Date: 12/08/2021
-
-In this tutorial, we're going to go through the steps necessary to:
-
-- generate a taxonomic profile table with [metaphlan v3.0](https://github.com/biobakery/MetaPhlAn)
-- have a look at metaphlan results with [Pavian](https://github.com/fbreitwieser/pavian) and generate a [Krona plot](https://github.com/marbl/Krona/wiki)
-- Compare the diversity of our samples vs the diversity of modern human gut samples
-- Compare the composition of our samples vs modern gut samples, and see where they fit in a lower dimensional space
-
-### Data pre-processing
-
-Before starting to analyze our data, we will need to pre-process them to remove reads mapping to the host genome, here, _Homo sapiens_
-
-To do so, I've used [nf-core/eager](https://github.com/nf-core/eager)
-
-I've already pre-processed the data, and the resulting cleaned files are available in the [data/eager_cleaned](data/eager_cleaned), but the basic eager command to do so is:
-
+```bash
+gzip -f ../data/subsampled/*.fastq
 ```
-nextflow run nf-core/eager -profile <docker/singularity/podman/conda/institute> --input '*_R{1,2}.fastq.gz' \
---fasta 'human_genome.fasta' --hostremoval_input_fastq
+:::
+
+## Data pre-processing
+
+Before starting to analyze our data, we will need to pre-process them to remove reads mapping to the host genome, here, _Homo sapiens_.
+
+To do so, I've used the first steps of the [nf-core/eager](https://github.com/nf-core/eager) pipeline, more information of which can be found in the [Ancient Metagenomic Pipelines](ancient-metagenomic-pipelines.qmd) chapter.
+
+I've already done some pre-processed the data, and the resulting cleaned files are available in the `data/eager_cleaned/` but the basic eager command to do so is:
+
+```bash
+nextflow run nf-core/eager \
+-r 2.4.7 \
+-profile <docker/singularity/podman/conda/institute> \
+--input '*_R{1,2}.fastq.gz' \
+--fasta 'human_genome.fasta' \
+--hostremoval_input_fastq
 ```
 
-### Adapter sequence trimming and low-quality bases trimming
+## Adapter sequence trimming and low-quality bases trimming
 
 Sequencing adapters are small DNA sequences adding prior to DNA sequencing to allow the DNA fragments to attach to the
-sequencing flow cells. Because these adapters could interfere with downtstream analyses, we need to remove them before
+sequencing flow cells (see [Introduction to NGS Sequencing](introduction-to-ngs-sequencing.qmd)). Because these adapters could interfere with downstream analyses, we need to remove them before
 proceeding any further. Furthermore, because the quality of the sequencing is not always optimal, we need to remove bases
 of lower sequencing quality to might lead to spurious results in downstream analyses.
 
 To perform both of these tasks, we'll use the program [fastp](https://github.com/OpenGene/fastp).
 
-The following command gets you the help of fastp
+The following command gets you the help of fastp (the `--help` option is a common option in command-line tools that displays a list of available options and their descriptions).
 
 ```bash
 fastp -h
 ```
-::: {.callout-tip collapse="true" title='expand to see command output'}
+::: {.callout-tip collapse="true" title='Expand to see command output'}
     option needs value: --html
     usage: fastp [options] ...
     options:
@@ -263,7 +254,7 @@ fastp -h
       -?, --help                           print this message
 :::
 
-Here we use fastp to preprocess a pair of FASTQ files. The code specifies the input files, merges the paired-end reads on their overlaps, removes duplicate reads, and generates JSON and HTML reports. The output files are saved in the ../results/fastp/ directory.
+Here we use fastp to preprocess a pair of FASTQ files. The code specifies the input files, merges the paired-end reads on their overlaps, removes duplicate reads, and generates JSON and HTML reports. The output files are saved in the `../results/fastp/ directory`.
 
 ```bash
 fastp \
@@ -276,7 +267,7 @@ fastp \
     --json ../results/fastp/ERR5766177.fastp.json \
     --html ../results/fastp/ERR5766177.fastp.html \
 ```
-::: {.callout-tip collapse="true" title='expand to see command output'}
+::: {.callout-tip collapse="true" title='Expand to see command output'}
     Read1 before filtering:
     total reads: 1000000
     total bases: 101000000
@@ -324,14 +315,14 @@ fastp \
     fastp v0.23.2, time used: 11 seconds
 :::
 
-##### Taxonomic profiling with Metaphlan
+## Taxonomic profiling with Metaphlan
 
-MetaPhlAn is a computational tool for profiling the composition of microbial communities from metagenomic shotgun sequencing data. The --help option is a common option in command-line tools that displays a list of available options and their descriptions.
+MetaPhlAn is a computational tool for profiling the composition of microbial communities from metagenomic shotgun sequencing data. 
 
 ```bash
-! metaphlan  --help
+metaphlan  --help
 ```
-::: {.callout-tip collapse="true" title='expand to see command output'}
+::: {.callout-tip collapse="true" title='Expand to see command output'}
     usage: metaphlan --input_type {fastq,fasta,bowtie2out,sam} [--force]
                      [--bowtie2db METAPHLAN_BOWTIE2_DB] [-x INDEX]
                      [--bt2_ps BowTie2 presets] [--bowtie2_exe BOWTIE2_EXE]
@@ -575,7 +566,7 @@ MetaPhlAn is a computational tool for profiling the composition of microbial com
       -h, --help            show this help message and exit
 :::
 
-This command uses MetaPhlAn to profile the taxonomic composition of the ERR5766177 metagenomic sample. The input file is specified as a merged FASTQ file, and the output is saved as a text file containing the taxonomic profile. The --bowtie2out option is used to specify the output file for the Bowtie2 alignment, and the --nproc option is used to specify the number of CPUs to use for the analysis.
+The following command uses MetaPhlAn to profile the taxonomic composition of the ERR5766177 metagenomic sample. The input file is specified as a merged FASTQ file, and the output is saved as a text file containing the taxonomic profile. The `--bowtie2out` option is used to specify the output file for the Bowtie2 alignment, and the --nproc option is used to specify the number of CPUs to use for the analysis.
 
 ```bash
 metaphlan ../results/fastp/ERR5766177.merged.fastq.gz  \
@@ -586,14 +577,14 @@ metaphlan ../results/fastp/ERR5766177.merged.fastq.gz  \
 ```
 
 The main results files that we're interested in is located at
-[../results/metaphlan/ERR5766177.metaphlan_profile.txt](../results/metaphlan/ERR5766177.metaphlan_profile.txt)
+`../results/metaphlan/ERR5766177.metaphlan_profile.txt`
 
 It's a tab separated file, with taxons in rows, with their relative abundance in the sample
 
-```python
-! head ../results/metaphlan/ERR5766177.metaphlan_profile.txt
+```bash
+head ../results/metaphlan/ERR5766177.metaphlan_profile.txt
 ```
-::: {.callout-tip collapse="true" title='expand to see command output'}
+::: {.callout-tip collapse="true" title='Expand to see command output'}
     #mpa_v30_CHOCOPhlAn_201901
     #/home/maxime_borry/.conda/envs/maxime/envs/summer_school_microbiome/bin/metaphlan ../results/fastp/ERR5766177.merged.fastq.gz \
     --input_type fastq --bowtie2out ../results/metaphlan/ERR5766177.bt2.out --nproc 8
@@ -607,39 +598,42 @@ It's a tab separated file, with taxons in rows, with their relative abundance in
     k__Archaea|p__Euryarchaeota	2157|28890	17.76802
 :::
 
-### Visualizing the taxonomic profile
+## Visualizing the taxonomic profile
 
-#### Visualizing metaphlan taxonomic profile with Pavian
+### Visualizing metaphlan taxonomic profile with Pavian
 
-[Pavian](https://github.com/fbreitwieser/pavian) is a web-based tool for interactive visualization and analysis of metagenomics data. It provides a user-friendly interface for exploring taxonomic and functional profiles of microbial communities, and allows users to generate interactive plots and tables that can be customized and shared.
+[Pavian](https://github.com/fbreitwieser/pavian) is a web-based tool for interactive visualization and analysis of metagenomics data. It provides a user-friendly interface for exploring taxonomic and functional profiles of microbial communities, and allows users to generate interactive plots and tables that can be customized and shared (@fig-pavian-interface).
+
+You can open Pavian in your browser by visiting [fbreitwieser.shinyapps.io/pavian](https://fbreitwieser.shinyapps.io/pavian/.).
+
+![Screenshot of the pavian metagenomics visualisation interface, with menus on the left, a select sample and filter taxa search bar at the top, and a Sankey visualisation of the example metagenome sample](assets/images/chapters/taxonomic-profiling/pavian.png){#fig-pavian-interface}
+
+::: {.callout-note collapse="true" title='Expand for instructions for running yourself'}
 
 There are different ways to run it:
 
 - If you have [docker](https://www.docker.com/) installed
 
-```bash
-docker pull 'florianbw/pavian'
-docker run --rm -p 5000:80 florianbw/pavian
-```
+  ```bash
+  docker pull 'florianbw/pavian'
+  docker run --rm -p 5000:80 florianbw/pavian
+  ```
 
 Then open your browser and visit [localhost:5000](localhost:5000)
 
 - If you are familiar with [R](https://www.r-project.org/)
 
-```r
-if (!require(remotes)) { install.packages("remotes") }
-remotes::install_github("fbreitwieser/pavian")
+  ```r
+  if (!require(remotes)) { install.packages("remotes") }
+  remotes::install_github("fbreitwieser/pavian")
 
-pavian::runApp(port=5000)
-```
+  pavian::runApp(port=5000)
+  ```
 
 Then open your browser and visit [localhost:5000](localhost:5000)
+:::
 
-- Otherwise, just visit [fbreitwieser.shinyapps.io/pavian](https://fbreitwieser.shinyapps.io/pavian/.).
-
-![Pavian interface](assets/images/chapters/taxonomic-profiling/pavian.png)
-
-#### Visualizing metaphlan taxonomic profile with [Krona](https://github.com/marbl/Krona/wiki)
+### Visualizing metaphlan taxonomic profile with Krona
 
 [Krona](https://github.com/marbl/Krona/wiki) is a software tool for interactive visualization of hierarchical data, such as taxonomic profiles generated by metagenomics tools like MetaPhlAn. Krona allows users to explore the taxonomic composition of microbial communities in a hierarchical manner, from the highest taxonomic level down to the species level.
 
@@ -649,65 +643,65 @@ The `metaphlan2krona.py` script is used to convert the MetaPhlAn taxonomic profi
 python ../scripts/metaphlan2krona.py -p ../results/metaphlan/ERR5766177.metaphlan_profile.txt -k ../results/krona/ERR5766177_krona.out
 ktImportText -o ../results/krona/ERR5766177_krona.html ../results/krona/ERR5766177_krona.out
 ```
-
+::: {.callout-tip collapse="true" title='Expand to see command output'}
     Writing ../results/krona/ERR5766177_krona.html...
+:::
 
-## Getting modern reference data
+## Getting modern comparative reference data
 
 In order to compare our sample with modern reference samples, I used the curatedMetagenomicsData package,
 which provides both curated metadata, and pre-computed metaphlan taxonomic profiles for published modern human samples.
-The full R code to get these data is available in [curatedMetagenomics/get_sources.Rmd](./curatedMetagenomics/get_sources.Rmd)
+
+The full R code to get these data is available in `curatedMetagenomics/get_sources.Rmd`.
 
 I pre-selected 200 gut microbiome samples from non-westernized (100) and westernized (100) from healthy, non-antibiotic users donors.
 
-```R
+```{r}
+#| eval: false
+
 # Load required packages
 library(curatedMetagenomicData)
 library(tidyverse)
 
 # Filter samples based on specific criteria
 sampleMetadata %>%
-  filter(body_site == 'stool' & antibiotics_current_use == 'no' & disease == 'healthy') %>%
-  group_by(non_westernized) %>%
-  sample_n(100) %>%
-  ungroup() -> selected_samples
+    filter(body_site == "stool" & antibiotics_current_use == "no" & disease == "healthy") %>%
+    group_by(non_westernized) %>%
+    sample_n(100) %>%
+    ungroup() -> selected_samples
 
 # Extract relative abundance data for selected samples
 selected_samples %>%
-  returnSamples("relative_abundance") -> rel_ab
+    returnSamples("relative_abundance") -> rel_ab
 
 # Split relative abundance data by taxonomic rank and write to CSV files
-data_ranks = splitByRanks(rel_ab)
+data_ranks <- splitByRanks(rel_ab)
 
 for (r in names(data_ranks)) {
-  # Print taxonomic rank and output file name
-  print(r)
-  output_file = paste0("../../data/curated_metagenomics/modern_sources_", tolower(r), ".csv")
-  print(output_file)
-  
-  # Write relative abundance data to CSV file
-  assay_rank = as.data.frame(assay(data_ranks[[r]]))
-  write.csv(assay_rank, output_file)
+    # Print taxonomic rank and output file name
+    print(r)
+    output_file <- paste0("../../data/curated_metagenomics/modern_sources_", tolower(r), ".csv")
+    print(output_file)
+
+    # Write relative abundance data to CSV file
+    assay_rank <- as.data.frame(assay(data_ranks[[r]]))
+    write.csv(assay_rank, output_file)
 }
 
 ```
 
-- The resulting metaphlan taxonomic profiles (split by taxonomic ranks) are available at
-- [../data/curated_metagenomics](../data/curated_metagenomics)
-- The associated metadata is available at
-- [../data/metadata/curated_metagenomics_modern_sources.csv](../data/metadata/curated_metagenomics_modern_sources.csv)
-
-![](assets/images/chapters/taxonomic-profiling/800px-Taxonomic_Rank_Graph.svg.png)
+- The resulting pre-computed metaphlan taxonomic profiles (split by taxonomic ranks) are available in `data/curated_metagenomics`
+- The associated metadata is available at `data/metadata/curated_metagenomics_modern_sources.csv`
 
 ## Loading the ancient sample taxonomic profile
 
-This is the moment where we will the [Pandas](https://pandas.pydata.org) [Python](https://www.python.org/) library to perform some data manipulation.  
+This is the moment where we will use the [Pandas](https://pandas.pydata.org) library [Python](https://www.python.org/)  to perform some data manipulation.  
 We will also use the [Taxopy](https://github.com/apcamargo/taxopy) library to work to taxonomic informations.
 
 First we install the latest version of taxopy using pip
 
 ```python
-! pip install taxopy
+pip install taxopy
 ```
 
     Requirement already satisfied: taxopy in /Users/maxime/mambaforge/envs/summer_school_microbiome/lib/python3.9/site-packages (0.10.0)
@@ -2480,7 +2474,7 @@ tidy_phylums.groupby('group')['relative_abundance'].sum()
     westernized         99.905089
     Name: relative_abundance, dtype: float64
 
-### Let's make some plots 
+## Let's make some plots 
 
 We first import plotnine
 ```python
@@ -3346,3 +3340,8 @@ sns.clustermap(
     <seaborn.matrix.ClusterGrid at 0x185b56100>
 
 ![png](assets/images/chapters/taxonomic-profiling/analysis_115_1.png)
+
+## References
+
+::: {#refs}
+:::
