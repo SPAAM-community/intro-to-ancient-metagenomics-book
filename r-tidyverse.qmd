@@ -390,7 +390,7 @@ old_options <- options(
 )
 ```
 
-- The `dplyr` package includes powerful functions to subset data in tibbles based on conditions.
+- The `dplyr` package includes powerful functions to subset data in tibbles based on conditions
 - `dplyr::select` allows to select columns
 
 ```{r}
@@ -445,7 +445,9 @@ peng %>%
 - Summarising and counting data is indispensable and R offers all basic operations you would expect in its `base` package
 
 ```{r}
-chinstraps_weights <- peng %>% dplyr::filter(species == "Chinstrap") %$% body_mass_g
+chinstraps_weights <- peng %>%
+  dplyr::filter(species == "Chinstrap") %$%
+  body_mass_g
 
 length(chinstraps_weights) # length/size of a vector
 unique(chinstraps_weights) # unique elements of a vector
@@ -520,7 +522,7 @@ peng %>% dplyr::slice_sample(n = 10)
 
 ### Exercise
 
-For this exercise we once more go back to the `mtcars` dataset. See `?mtcars` for more details.
+For this exercise we once more go back to the `mtcars` dataset. See `?mtcars` for details
 
 1. Determine the number of cars with four *forward gears* (`gear`) in the `mtcars` dataset
 
@@ -585,7 +587,7 @@ peng %>% dplyr::relocate(year, .before = species) # reorder columns
 
 ### Adding columns to tibbles with `mutate` and `transmute`
 
-- A common application of data manipulation is adding new, derived columns, that combine or modify the information in the already available columns. `dplyr` offers this core feature with `mutate`
+- A common application of data manipulation is adding new, derived columns, that combine or modify the information in the already available columns. `dplyr` offers this core feature with the `mutate` function
 
 ```{r}
 peng %>%
@@ -622,7 +624,7 @@ peng %>%
     mean_weight = mean(body_mass_g, na.rm = T),
     relation_to_mean = body_mass_g/mean_weight
   ) %>%
-  dplyr::ungroup() %>% # ungroup removes lingering grouping
+  dplyr::ungroup() %>%
   dplyr::select(id, species, sex, year, relation_to_mean) %>%
   # mutate does not remove rows, unlike summarise, so we use select
   dplyr::arrange(dplyr::desc(relation_to_mean))
@@ -665,13 +667,14 @@ peng %>% dplyr::mutate(
     "Dream"     ~ "Lost my wallet there. 4/10"
   )
 ) %>%
+  # here we use group_by+summarise only to show the result
   dplyr::group_by(island, island_rating) %>%
-  dplyr::summarise() # here we use group_by+summarise only to show the result
+  dplyr::summarise(.groups = "drop")
 ```
 
 ### Switching between long and wide data with `pivot_longer` and `pivot_wider`
 
-- For different applications or to simplify certain analysis or plotting operations data often has to be transformed from a **wide** to a **long** format or vice versa
+- To simplify certain analysis or plotting operations data often has to be transformed from a **wide** to a **long** format or vice versa
 
 ![](assets/images/chapters/r-tidyverse/pivot_longer_wider.png){height=150px}
 
@@ -697,7 +700,9 @@ carsales
 
 ```{r}
 carsales_long <- carsales %>% tidyr::pivot_longer(
-  cols = tidyselect::num_range("", range = 2014:2017), # set of columns to transform
+  cols = tidyselect::num_range(
+    "", range = 2014:2017
+  ),                            # define a set of columns to transform
   names_to = "year",            # the name of the descriptor column we want
   names_transform = as.integer, # a transformation function to apply to the names
   values_to = "sales"           # the name of the value column we want
@@ -705,7 +710,7 @@ carsales_long <- carsales %>% tidyr::pivot_longer(
 carsales_long
 ```
 
-- Wide datasets are not always the wrong choice: The find application for example for adjacency matrices to represent graphs, covariance matrices or other pairwise statistics
+- Wide datasets are not always the wrong choice, for example for adjacency matrices to represent graphs, covariance matrices or other pairwise statistics
 - When data gets big, then wide formats can be significantly more efficient (e.g. for spatial data)
 - So transform data from long to wide, we can use `tidyr::pivot_wider`
 
