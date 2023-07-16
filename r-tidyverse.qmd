@@ -783,7 +783,7 @@ mtcars2 %>%
 
 ### Types of joins
 
-- Joins combine two datasets x and y based on key columns
+- Joins combine two datasets x and y based on overlapping key columns
 - Mutating joins add columns from one dataset to the other
   - Left join: Take observations from x and add fitting information from y
   - Right join: Take observations from y and add fitting information from x
@@ -836,8 +836,8 @@ dplyr::right_join(
   x = peng,  # 300 observations
   y = bills, # 300 observations
   by = "id"
-) %>% dplyr::arrange(id) # we arrange by id to highlight the missing
-                         # observation in the peng dataset
+) %>%                # we arrange by id to highlight the missing
+  dplyr::arrange(id) # observation in the peng dataset
 ```
 
 - Right joins are almost identical to left joins -- only x and y have reversed roles
@@ -908,7 +908,7 @@ dplyr::anti_join(
 
 ### Exercise 
 
-Consider the following additional dataset with my opinions on two specific gears (in the shifting system of a car):
+Consider the following additional dataset with my opinions on cars with a specific number of gears:
 
 ```{r}
 gear_opinions <- tibble::tibble(
