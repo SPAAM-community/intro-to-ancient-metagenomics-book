@@ -23,7 +23,7 @@ conda activate r-tidyverse
 
 ## Lecture
 
-Lecture slides and video from the [2022 edition of the summer school](https://www.spaam-community.org/wss-summer-school/#/2022/README).
+Lecture slides and video from the [2022 edition of the summer school](https://www.spaam-community.org/wss-summer-school/#/2022/README). Note that the 2023 version features a different, more general dataset. The up-to-date, written tutorial below is the recommended version.
 
 <iframe src="https://docs.google.com/viewer?url=https://raw.githubusercontent.com/nevrome/spaam_r_tidyverse_intro_2h/main/presentation.pdf&amp;embedded=true" width="100%" height="400px">
 
@@ -44,24 +44,24 @@ knitr::opts_chunk$set(attr.output = "style='border: 1px; border-style: solid; ma
 
 ## The working environment
 
-### R, RStudio and the tidyverse
+### R, RStudio, the tidyverse and penguins
 
 - R is a fully featured programming language, but it excels as an environment for (statistical) data analysis (<https://www.r-project.org>)
 
 - RStudio is an integrated development environment (IDE) for R (and other languages) (<https://www.rstudio.com/products/rstudio>)
 
 - The tidyverse is a collection of R packages with well-designed and consistent interfaces for the main steps of data analysis: loading, transforming and plotting data (<https://www.tidyverse.org>)
-  - This tutorial works with tidyverse ~v1.3.0
-  - We will learn about `readr`, `tibble`, `ggplot2`, `dplyr`, `magrittr` and `tidyr`
+  - This tutorial works with tidyverse ~v2.0
+  - We will learn about the packages `readr`, `tibble`, `ggplot2`, `dplyr`, `magrittr` and `tidyr`
   - `forcats` will be briefly mentioned
   - `purrr` and `stringr` are left out
 
 - The palmerpenguins package provides a neat example dataset to learn data exploration and visualization in R (<https://allisonhorst.github.io/palmerpenguins>)
 
-### Preparing the setup for this tutorial
+### Preparing the environment for this tutorial
 
 - This tutorial was prepared for the SPAAM Summerschool 2023, where participants work on pre-configured virtual machines and do not have to install any additional software. The instructors will show in the beginning how to create an RStudio project and how to access the training data.
-- If you're reading this later and want to tinker with the example code, then you will need the following steps first:
+- If you're reading this later and want to tinker with the example code, then you will need to perform the following steps first:
   - Install R and RStudio for your operating system according to one of the many instructions online (e.g. [here](https://www.r-bloggers.com/2022/01/how-to-install-and-update-r-and-rstudio))
   - Download the .qmd file underlying this webpage [here](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/blob/main/r-tidyverse.qmd) and copy it to a new directory
   - Open RStudio and create a new project in this directory with `File` -> `New Project...` -> `Existing directory`
@@ -75,7 +75,8 @@ knitr::opts_chunk$set(attr.output = "style='border: 1px; border-style: solid; ma
 # installing necessary R packages
 install.packages(c("tidyverse", "palmerpenguins"))
 
-# preparing data (at the end of this tutorial,
+# preparing data
+# (at the end of this tutorial
 # you will understand this code)
 library(magrittr)
 set.seed(5678)
@@ -104,7 +105,6 @@ peng_prepped %>%
 
 </details>
 
-
 ## Loading data into tibbles
 
 ### Reading data with readr
@@ -115,7 +115,7 @@ peng_prepped %>%
 - It provides functions to read data in almost any (text) format:
 
 ```{r eval=FALSE}
-readr::read_csv()   # .csv files -> see data/penguins.csv
+readr::read_csv()   # .csv files -> see penguins.csv
 readr::read_tsv()   # .tsv files
 readr::read_delim() # tabular files with an arbitrary separator
 readr::read_fwf()   # fixed width files
@@ -124,7 +124,7 @@ readr::read_lines() # read linewise to parse yourself
 
 ### How does the interface of `read_csv` work?
 
-- We can learn more about a function with the `?` operator
+- We can learn more about an R function with the `?` operator
 - To open a help file for a specific function run `?<function_name>` (e.g. `?readr::read_csv`) in the R console
 - `readr::read_csv` has many options to specify how to read a text file
 
@@ -191,9 +191,9 @@ peng
 - But there are various other ways to inspect the content of a `tibble` 
 
 ```{r, eval=FALSE}
-str(peng)     # A structural overview of an object
-summary(peng) # A human-readable summary of an object
-View(peng)    # RStudio's interactive data browser
+str(peng)     # a structural overview of an R object
+summary(peng) # a human-readable summary of an R object
+View(peng)    # open RStudio's interactive data browser
 ```
 
 ## Plotting data in `tibble`s
@@ -215,14 +215,14 @@ ggplot(          # Every plot starts with a call to the ggplot() function
   geom_bar(        # "geoms" define the plot layers we want to draw
     mapping = aes(   # The aes() function maps variables to visual properties
       x = island,      # publication_year -> x-axis
-      fill = species   # community_type -> fill color
+      fill = species   # community_type   -> fill color
     )
   )
 ```
 
 - A `geom_*` combines data (here `peng`), a geometry (here vertical, stacked bars) and a statistical transformation (here counting the number of penguins per island and species)
 - `ggplot2` features many such geoms: A good overview is provided by this cheatsheet: <https://rstudio.github.io/cheatsheets/html/data-visualization.html>
-- Beyond `geom`s, a ggplot can be further specified with (among others) `scale`s, `facet`s and `theme`s
+- Beyond `geom`s, a ggplot plot can be further specified with (among others) `scale`s, `facet`s and `theme`s
 
 ### `scale`s control the behaviour of visual elements
 
@@ -237,9 +237,9 @@ ggplot(peng) +
 - To simulate this, we replace some random weights with extreme values
 
 ```{r}
-set.seed(1234) # We set a seed for reproducible randomness
+set.seed(1234) # we set a seed for reproducible randomness
 peng_out <- peng
-peng_out$body_mass_g[sample(1:nrow(peng_out), 10)] <- 100000 + 100000 * runif(10)
+peng_out$body_mass_g[sample(1:nrow(peng_out), 10)] <- 50000 + 50000 * runif(10)
 ```
 
 - Now we plot the dataset with these "outliers"
@@ -250,7 +250,7 @@ ggplot(peng_out) +
 ```
 
 - This is not well readable, because the extreme outliers dictate the scale of the y-axis
-- A 100kg penguin is a scary thought and we would probably remove these outliers, but let's assume they are valid observation we want to include in the plot
+- A 50+kg penguin is a scary thought and we would probably remove these outliers, but let's assume they are valid observation we want to include in the plot
 - To mitigate this issue we can change the **scale** of different visual elements - e.g. the y-axis
 
 ```{r}
@@ -271,19 +271,19 @@ ggplot(peng) +
   scale_fill_viridis_d(option = "C")
 ```
 
-- We use the `scale_*` function to select the visually appealing (and robust to colourblindness) viridis colour palettes (<https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html>)
+- We use the `scale_*` function to select one of the visually appealing (and robust to colourblindness) viridis colour palettes (<https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html>)
 
 ### More variables! Defining plot matrices via `facet`s
 
-- In the previous this example we didn't add additional information with the fill colour, as the plot already distinguished by species on the x-axis
-- We can instead use this to encode more information, for example by mapping sex to the fill colour
+- In the previous example we didn't add additional information with the fill colour, as the plot already distinguished by species on the x-axis
+- We can instead use colour to encode more information, for example by mapping the variable sex to it
 
 ```{r}
 ggplot(peng) +
   geom_boxplot(aes(x = species, y = body_mass_g, fill = sex))
 ```
 
-- Another way to visualize more variables at once is to split the plot by categories into **facets**, so sub-plots per category
+- Another way to visualize more variables in one plot is to split the plot by categories into **facets**, so sub-plots per category
 - Here we split by sex, which is already mapped to the fill colour
 
 ```{r}
@@ -303,7 +303,7 @@ ggplot(peng) +
 ### Setting purely aesthetic settings with `theme`
 
 - Aesthetic changes can be applied as part of the `theme`, which allows for very detailed configuration (see `?theme`)
-- Here we rotate the x-axis labels by 45°
+- Here we rotate the x-axis labels by 45°, which often helps to resolve overplotting
 
 ```{r}
 ggplot(peng) +
@@ -336,7 +336,7 @@ peng2$species_ordered <- forcats::fct_reorder(
 )
 ```
 
-- With this change, the plot is ordered according to the intrinsic order defined for `species_ordered`
+- With this change, the plot will be ordered according to the intrinsic order defined for `species_ordered`
 
 ```{r}
 ggplot(peng2) + geom_bar(aes(x = species_ordered)) # bars are ordered by size
@@ -344,7 +344,7 @@ ggplot(peng2) + geom_bar(aes(x = species_ordered)) # bars are ordered by size
 
 ### Exercise
 
-1. Look at the `mtcars` dataset and read up on the meaning of its variables with the help operator `?`. `mtcars` is a test dataset integrated in R and can be accessed by typing `mtcars` in the console.
+1. Look at the `mtcars` dataset and read up on the meaning of its variables with the help operator `?`. `mtcars` is a test dataset integrated in R and can be accessed by typing `mtcars` in the console
 
 2. Visualize the relationship between *Gross horsepower* and *1/4 mile time*
 
