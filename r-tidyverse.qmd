@@ -80,10 +80,13 @@ install.packages(c("tidyverse", "palmerpenguins"))
 library(magrittr)
 set.seed(5678)
 
-peng <- palmerpenguins::penguins
-
-peng_prepped <- peng %>%
-  dplyr::filter(!dplyr::if_any(.fns = is.na)) %>%
+peng_prepped <- palmerpenguins::penguins %>%
+  dplyr::filter(
+    !dplyr::if_any(
+      .cols = tidyselect::everything(),
+      .fns = is.na
+    )
+  ) %>%
   tibble::add_column(., id = 1:nrow(.), .before = "species")
 
 peng_prepped %>%
@@ -96,7 +99,7 @@ peng_prepped %>%
   dplyr::slice_sample(n = 300) %>%
   dplyr::arrange(id) %>%
   dplyr::select(id, bill_length_mm, bill_depth_mm) %>%
-  readr::write_csv("penguin_bills_2009.csv")
+  readr::write_csv("penguin_bills.csv")
 ```
 
 </details>
@@ -144,16 +147,29 @@ read_csv(
 
 ### What does `readr` produce? The `tibble`!
 
-- To read a .csv file (here `"assets/data/r-tidyverse/penguins.csv"`) into a variable (here `peng_auto`) run
+- To read a .csv file (here `"penguins.csv"`) into a variable (here `peng_auto`) run
 
-```{r}
+```{r, eval=FALSE}
+peng_auto <- readr::read_csv("penguins.csv")
+```
+
+```{r, echo=FALSE}
+# this version is only for the website!
 peng_auto <- readr::read_csv("assets/data/r-tidyverse/penguins.csv")
 ```
 
 - `readr` first prints some information on the number and type of rows and columns it discovered in the file
 - It automatically detects column types -- but you can also define them manually
 
-```{r}
+```{r, eval=FALSE}
+peng <- readr::read_csv(
+  "penguins.csv",
+  col_types = "iccddcc" # this string encodes the desired types for each column
+)
+```
+
+```{r, echo=FALSE}
+# this version is only for the website!
 peng <- readr::read_csv(
   "assets/data/r-tidyverse/penguins.csv",
   col_types = "iccddcc" # this string encodes the desired types for each column
@@ -778,8 +794,13 @@ mtcars2 %>%
 - To experiment with joins, we need a second dataset with complementary information
 - This new dataset contains additional variables for a subset of the penguins in our first dataset -- both datasets feature 300 penguins, but only with a partial overlap in individuals
 
-```{r echo=FALSE}
-bills <- readr::read_csv("assets/data/r-tidyverse/penguin_bills_2009.csv")
+```{r eval=FALSE}
+bills <- readr::read_csv("penguin_bills.csv")
+```
+
+```{r echo=FALSE,message=FALSE}
+# this version is only for the website!
+bills <- readr::read_csv("assets/data/r-tidyverse/penguin_bills.csv")
 bills
 ```
 
