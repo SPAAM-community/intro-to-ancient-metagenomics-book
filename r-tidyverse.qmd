@@ -48,13 +48,59 @@ knitr::opts_chunk$set(attr.output = "style='border: 1px; border-style: solid; ma
 
 - R is a fully featured programming language, but it excels as an environment for (statistical) data analysis (<https://www.r-project.org>)
 
-- RStudio is an integrated development environment (IDE) for R (and other languages): (<https://www.rstudio.com/products/rstudio>)
+- RStudio is an integrated development environment (IDE) for R (and other languages) (<https://www.rstudio.com/products/rstudio>)
 
 - The tidyverse is a collection of R packages with well-designed and consistent interfaces for the main steps of data analysis: loading, transforming and plotting data (<https://www.tidyverse.org>)
-  - This introduction works with tidyverse ~v1.3.0
+  - This tutorial works with tidyverse ~v1.3.0
   - We will learn about `readr`, `tibble`, `ggplot2`, `dplyr`, `magrittr` and `tidyr`
   - `forcats` will be briefly mentioned
   - `purrr` and `stringr` are left out
+
+- The palmerpenguins package provides a neat example dataset to learn data exploration and visualization in R (<https://allisonhorst.github.io/palmerpenguins>)
+
+### Preparing the setup for this tutorial
+
+- This tutorial was prepared for the SPAAM Summerschool 2023, where participants work on pre-configured virtual machines and do not have to install any additional software. The instructors will show in the beginning how to create an RStudio project and how to access the training data.
+- If you're reading this later and want to tinker with the example code, then you will need the following steps first:
+  - Install R and RStudio for your operating system according to one of the many instructions online (e.g. [here](https://www.r-bloggers.com/2022/01/how-to-install-and-update-r-and-rstudio))
+  - Download the .qmd file underlying this webpage [here](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/blob/main/r-tidyverse.qmd) and copy it to a new directory
+  - Open RStudio and create a new project in this directory with `File` -> `New Project...` -> `Existing directory`
+  - Open this very file from the RStudio project, so that you can easily follow along
+  - Run the `Environment preparation code` code to install necessary R package dependencies and prepare the required data used below
+  
+<details>
+<summary>Environment preparation code</summary>
+
+```{r, eval=FALSE}
+# installing necessary R packages
+install.packages(c("tidyverse", "palmerpenguins"))
+
+# preparing data (at the end of this tutorial,
+# you will understand this code)
+library(magrittr)
+set.seed(5678)
+
+peng <- palmerpenguins::penguins
+
+peng_prepped <- peng %>%
+  dplyr::filter(!dplyr::if_any(.fns = is.na)) %>%
+  tibble::add_column(., id = 1:nrow(.), .before = "species")
+
+peng_prepped %>%
+  dplyr::slice_sample(n = 300) %>%
+  dplyr::arrange(id) %>%
+  dplyr::select(-bill_length_mm, -bill_depth_mm) %>%
+  readr::write_csv("penguins.csv")
+
+peng_prepped %>%
+  dplyr::slice_sample(n = 300) %>%
+  dplyr::arrange(id) %>%
+  dplyr::select(id, bill_length_mm, bill_depth_mm) %>%
+  readr::write_csv("penguin_bills_2009.csv")
+```
+
+</details>
+
 
 ## Loading data into tibbles
 
@@ -299,7 +345,7 @@ ggplot(peng2) + geom_bar(aes(x = species_ordered)) # bars are ordered by size
 <details>
 <summary>Possible solutions</summary>
 
-```{r}
+```{r, eval=FALSE}
 ?mtcars
 ```
 
