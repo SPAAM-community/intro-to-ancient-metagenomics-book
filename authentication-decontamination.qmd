@@ -4,7 +4,7 @@ author: Nikolay Oskolkov
 ---
 
 ::: {.callout-tip}
-For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [archive](https://doi.org/10.5281/zenodo.6983178), and activate the environment:
+For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [link](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/authentication-decontamination.yml) (right click and save as to download), and once created, activate the environment with:
 
 ```bash
 conda activate authentication-decontamination
@@ -64,6 +64,8 @@ In this chapter, we will use 10 simulated with [gargammel](https://academic.oup.
 
 ![](assets/images/chapters/authentication-decontamination/aMeta.png)
 
+
+
 To download the simulated ancient metagenomic data please use the following command lines:
 
 ```bash
@@ -76,8 +78,7 @@ The DNA reads were simulated with damage, sequencing errors and Illumina adapter
 for i in $(ls *.fastq.gz)
 do
 sample_name=$(basename $i .fastq.gz)
-cutadapt -a AGATCGGAAGAG --minimum-length 30 -o ${sample_name}.trimmed.fastq.gz \ 
-${sample_name}.fastq.gz -j 20
+cutadapt -a AGATCGGAAGAG --minimum-length 30 -o ${sample_name}.trimmed.fastq.gz ${sample_name}.fastq.gz -j 4
 done
 ```
 
