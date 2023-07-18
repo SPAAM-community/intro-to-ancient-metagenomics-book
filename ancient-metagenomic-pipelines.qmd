@@ -1,6 +1,7 @@
 ---
 title: Ancient Metagenomic Pipelines
 author: James A. Fellows Yates, Megan Michel, Nikolay Oskolkov
+bibliography: assets/references/chapters/ancient-metagenomic-pipelines/references.bib
 ---
 
 ::: {.callout-tip}
@@ -137,21 +138,35 @@ KZL002	ERR8958769	0	4	PE	Homo sapiens	double	half	ERR8958769_1.fastq.gz	ERR89587
 
 Here we see 10 columns, all pre-filled. The first two columns correspond to sample/library IDs that will be used for data provenance and grouping. When you have sequencing multiple lanes you can speed up preprocessing these independently before merging, so lane can specify this (although not used in this case as we have independent libraries per sample. You can indicate the colour chemistry to indicate whether your data requires additional pre-processing to remove poly-G tails, and then also strandedness and UDG damage treatment status of the libraries if you require further damage manipulation. Finally you provide paths to the FASTQ files or BAM files
 
-Other than the raw FASTQ files, we will need a reference genome and annotation coordinates of genes present on the genome. In this case we have already downloaded the _Yersinia pestis_ (accession: GCF_001293415.1) reference genome (`.fna`) and gene feature file (`.gff`) from [NCBI Genome](https://www.ncbi.nlm.nih.gov/genome) for you so you don't have to do this. This is placed in the `reference/` directory.
+Other than the raw FASTQ files, we will need a reference genome and annotation coordinates of genes present on the genome. In this case you will use a _Yersinia pestis_ (accession: GCF_001293415.1) reference genome (`.fna`) and gene feature file (`.gff`) from [NCBI Genome](https://www.ncbi.nlm.nih.gov/genome). This is placed in the `reference/` directory.
 
-<!-- 
+::: {.callout-note title="Self guided: reference download and preparation"}
 
-Downloaded with:
+To download the 
 
+```bash
+## Download from NCBI
 curl -OJX GET "https://api.ncbi.nlm.nih.gov/datasets/v2alpha/genome/accession/GCF_001293415.1/download?include_annotation_type=GENOME_FASTA,GENOME_GFF,RNA_FASTA,CDS_FASTA,PROT_FASTA,SEQUENCE_REPORT&filename=GCF_001293415.1.zip" -H "Accept: application/zip"
 
-unzipped, took just the fna and gff, then cleaned up the gff with `gffread genomic.gff` saving as the FNA file name with the gff extension
+unzip *.zip
+mv ncbi_dataset/data/GCF_001293415.1/* .
 
--->
+## We have to sort the gff file to make it eager compatible
+gffread genomic.gff GCF_001293415.1_ASM129341v1_genomic.gff
 
-With all of these, we can run the pipeline! 
+```
+:::
 
-A constructed eager command from within the `data/` directory will look like this:
+With all of these, we can run the pipeline!
+
+First lets enter a screen session
+
+```bash
+screen -R eager
+conda activate ancient-metagenomic-pipelines
+```
+
+Now we can construct an eager command from within the `data/` directory so that it looks like this:
 
 ```bash
 nextflow run nf-core/eager -r 2.4.7 \
@@ -169,7 +184,7 @@ nextflow run nf-core/eager -r 2.4.7 \
 We don't normally recommend running analyses in the directory your data is in! It is better to keep data and analysis results in separate directories. Here we are just running eager alongside the data for convenience (i.e., you don't have to modify the downloaded input TSV)
 :::
 
-The command is constructed as follows:
+So what is this command doing? The different parameters do the following:
 
 1. Tell nextflow to run the nf-core/eager pipeline with version 2.4.7
 2. Specify which computing and software environment to use with `-profile`
@@ -235,12 +250,12 @@ cd multiqc/
 ```
 
 ::: {.callout-note}
-If your nf-core/eager run hasn't finished yet, check the you can open a premade file in `ancient-metagenomic-pipelines/multiqc_report.html`
+If you're impatient, and your nf-core/eager run hasn't finished yet, you can cancel the run with <kbd>ctrl</kbd> + <kbd>c</kbd> (possibly a couple of times), then you can open a premade file in `ancient-metagenomic-pipelines/multiqc_report.html`
 :::
 
 In here you should see a bunch of files, but you should open the `multiqc_report.html` file in your browser. You can either do this via the commandline (e.g. for firefox `firefox multiqc_report.html`) or navigate to the file using your file browser and double clicking on the HTML file.
 
-Once opened you will see a table, and below it many table. All of these statistics can help you evaluate the quality of your data, pipeline run, and also possibly some initial results! 
+Once opened you will see a table, and below it many figures and other tables. All of these statistics can help you evaluate the quality of your data, pipeline run, and also possibly some initial results! 
 
 #### MultiQC General Statistics
 
@@ -330,7 +345,7 @@ Rather than the very computationally heavy HOPS pipeline [@Hubler2019-qw], that 
 
 ### Running aMEta
 
-In this tutorial we will try running the simulated data from the aMeta publication against the small test database the tool provides 
+In this tutorial we will try running the small test data that comes with aMeta.
 
 aMeta has been written in Snakemake, which means running the pipeline has to be installed in a slightly different manner to the typical `nextflow pull` command that can be used for nf-core/eager.
 
@@ -477,8 +492,5 @@ corresponding to the numbers and colors of the heatmap, one can find them in res
 
 ## References
 
-- @Wratten2021-es: general introduction to workflow managers
-- @Fellows_Yates2021-jl: nf-core/eager publication
-- @Pochon2022-hj: aMeta publication
-- @Krakau2022-we: nf-core/mag publication
-
+::: {#refs}
+:::
