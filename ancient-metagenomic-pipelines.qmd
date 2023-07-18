@@ -506,6 +506,36 @@ corresponding to the numbers and colors of the heatmap, one can find them in res
 ```bash
 ## re-uses Alex's data, and must have CheckM databse predownloaded unpacked 
 time nextflow run nf-core/mag -r 2.3.2 -profile test,docker --input '*{R1,R2}.fastq.gz' --outdir ./results --skip_spades --skip_spadeshybrid --skip_prodigal --binning_map_mode own --skip_maxbin2 --skip_concoct --binqc_tool checkm --checkm_db db/checkm_data_2015_01_16/ --ancient_dna --gtdb false --centrifuge_db false --kraken2_db false --skip_krona -resume -c custom.config  --busco_reference false
+
+## config
+process {
+  withName: CHECKM_LINEAGEWF{
+    memory = 24.GB
+    cpus   = 8
+    ext.args = "--reduced_tree"
+  }
+
+  withName: BOWTIE2_PHIX_REMOVAL_ALIGN { 
+    cpus = 8
+  }
+
+  withName: BOWTIE2_ASSEMBLY_ALIGN {    
+    cpus = 8
+  }
+
+  withName: PYDAMAGE_ANALYZE {      
+    cpus = 8
+  }
+
+  withName: PROKKA {
+    cpus = 4
+  }
+
+  withName: MEGAHIT {
+    cpus = 8
+  }
+
+
 ```
 
 ## Questions to think about
