@@ -1,6 +1,6 @@
 ---
 title: Ancient Metagenomic Pipelines
-author: James A. Fellows Yates, Megan Michel, Nikolay Oskolkov
+author: "James A. Fellows Yates, Megan Michel, Nikolay Oskolkov"
 bibliography: assets/references/chapters/ancient-metagenomic-pipelines/references.bib
 ---
 
@@ -347,7 +347,7 @@ Rather than the very computationally heavy HOPS pipeline [@Hubler2019-qw], that 
 
 In this tutorial we will try running the small test data that comes with aMeta.
 
-aMeta has been written in Snakemake, which means running the pipeline has to be installed in a slightly different manner to the typical `nextflow pull` command that can be used for nf-core/eager.
+aMeta has been written in Snakemake, which means running the pipeline has to be installed in a slightly different manner to the `nextflow pull` command that can be used for nf-core/eager.
 
 ```bash
 cd ancient-metagenomic-pipelines/aMeta
@@ -357,71 +357,94 @@ cd ancient-metagenomic-pipelines/aMeta
 The code repository, conda environment and database construction has already been performed for you. If you are running this manually you'll need to run the steps in the note block below
 :::
 
-:::{.callout-note collapse="true"}
+:::{.callout-note title="Self guided: setting up aMeta for tutorial" collapse="true"}
 ### Setting up aMeta manually
 ```bash
 git clone https://github.com/NBISweden/aMeta
 cd aMeta
 conda env create -f workflow/envs/environment.yaml
 conda activate aMeta
-snakemake --use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs cache --conda-create-envs-only -s workflow/Snakefile
+
+## Change into ~/.test to set up all the required test resources (Databases etc.)
+cd ~/.test
+
+## Set up conda envs
+snakemake --use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs cache --conda-create-envs-only -s ../workflow/Snakefile --conda-frontend conda
+source $(dirname $(dirname $CONDA_EXE))/etc/profile.d/conda.sh
+
+## Build dummy KrakenUniq database
+env=$(grep krakenuniq .snakemake/conda/*yaml | awk '{print $1}' | sed -e "s/.yaml://g")
+conda activate $env
+krakenuniq-build --db resources/KrakenUniq_DB --kmer-len 21 --minimizer-len 11 --jellyfish-bin $(pwd)/$env/bin/jellyfish
+conda deactivate
+
+## Get Krona taxonomy tax dump
+env=$(grep krona .snakemake/conda/*yaml | awk '{print $1}' | sed -e "s/.yaml://g" | head -1)
+conda activate $env
+cd $env/opt/krona
+./updateTaxonomy.sh taxonomy
+cd -
+conda deactivate
+
+## Adjust malt max memory usage
+env=$(grep hops .snakemake/conda/*yaml | awk '{print $1}' | sed -e "s/.yaml://g" | head -1)
+conda activate $env
+version=$(conda list malt --json | grep version | sed -e "s/\"//g" | awk '{print $2}')
+cd $env/opt/malt-$version
+sed -i -e "s/-Xmx64G/-Xmx3G/" malt-build.vmoptions
+sed -i -e "s/-Xmx64G/-Xmx3G/" malt-run.vmoptions
+cd -
+conda deactivate
+
+touch .initdb
+
+## Run a quick test
+snakemake --use-conda --show-failed-logs --conda-cleanup-pkgs cache -s ../workflow/Snakefile $@ --conda-frontend conda
+
+snakemake -s ../workflow/Snakefile --report --report-stylesheet ../workflow/report/custom.css --conda-frontend conda
+
+## Now we move back into the main repository where we can symlink all the database files back to try running our 'own' test
+
+cd ../
+cd resources/
+ln -s ../.test/resources/* .
+cd ../config
+mv config.yaml config.yaml.bkp
+cd ../
+ln -s .test/data/ .
 ```
 :::
 
-To ensure that aMeta has been correctly installed, we can run a quick test:
-
-<!-- TODO REPLACE EVERYTHING FROM DOWNLOADING DATA TO WHATEVER IS IN RUNTEST -->
-
-```bash
-cd .test
-./runtest.sh -j 20
-```
-
-### Downloading data, databases and indexes
-
-For demonstration purposes we will use 10 simulated with [gargammel](https://academic.oup.com/bioinformatics/article/33/4/577/2608651) ancient metagenomic samples used for benchmarking aMeta. The simulated data can be accessed via [https://doi.org/10.17044/scilifelab.21261405](https://doi.org/10.17044/scilifelab.21261405) and downloaded via terminal using following command lines:
-
-```bash
-cd aMeta
-mkdir data && cd data
-wget https://figshare.scilifelab.se/ndownloader/articles/21261405/versions/1 \
-&& export UNZIP_DISABLE_ZIPBOMB_DETECTION=true && unzip 1 && rm 1
-```
-
-
 ### aMeta configuration
 
-Now we need to configure the workflow. First, we need to create a tab-delimited *samples.tsv* file inside *aMeta/config* and provide the names of the input fastq-files:
+Now we need to configure the workflow. First, we need to create a tab-delimited `samples.tsv` file inside `aMeta/config/` and provide the names of the input fastq-files. In a text editor (e.g. `nano`), write the following names paths in TSV format:
 
 ```bash
 sample  fastq
-sample1 data/sample1.fastq.gz
-sample2 data/sample2.fastq.gz
-sample3 data/sample3.fastq.gz
-sample4 data/sample4.fastq.gz
-sample5 data/sample5.fastq.gz
-sample6 data/sample6.fastq.gz
-sample7 data/sample7.fastq.gz
-sample8 data/sample8.fastq.gz
-sample9 data/sample9.fastq.gz
-sample10 data/sample10.fastq.gz
-
+foo data/bar.fq.gz
+bar data/foo.fq.gz
 ```
 
-Further, we will put details about e.g. databases locations in the *config.yaml* file inside *aMeta/config*. A minimal example *config.yaml* files can look like this:
+:::{.callout-warning}
+Make sure when copy pasting into your test editor, tabs are not replaced with spaces, otherwise the file might not be read!
+:::
+
+Next we need to write a config file. This tells aMeta where to find things such as database files and other settings.
+
+These go inside a `config.yaml` file inside `aMeta/config/`. A minimal example `config.yaml` files can look like this:
 
 ```bash
 samplesheet: "config/samples.tsv"
 
 krakenuniq_db: resources/KrakenUniq_DB
 
-bowtie2_db: resources/Bowtie2_index/library.pathogen.fna
-bowtie2_seqid2taxid_db: resources/Bowtie2_index/seqid2taxid.pathogen.map
-pathogenomesFound: resources/Bowtie2_index/pathogensFound.very_inclusive.tab
+bowtie2_db: resources/ref.fa
+bowtie2_seqid2taxid_db: resources/seqid2taxid.pathogen.map
+pathogenomesFound: resources/pathogenomesFound.tab
 
-malt_nt_fasta: resources/library.fna
-malt_seqid2taxid_db: resources/seqid2taxid.map.orig
-malt_accession2taxid: resources/nucl_gb.accession2taxid
+malt_nt_fasta: resources/ref.fa
+malt_seqid2taxid_db: resources/KrakenUniq_DB/seqid2taxid.map ##??
+malt_accession2taxid: resources/accession2taxid.map
 
 ncbi_db: resources/ncbi
 
@@ -430,37 +453,31 @@ n_tax_reads: 200
 
 ```
 
+:::{.callout-note}
+As this is only a dummy run (due to the large-ish computational resources required for KrakenUniq), we re-use some of the resource files here. This will produce nonsense output, but is used here to demonstrate how you would execute the pipeline. 
+:::
 
 ### Prepare and run aMeta
 
 Next, we need to create conda sub-environments of aMeta, then manually tune a few memory related parameters of tools (Krona and Malt) included in aMeta:
 
-```bash
-snakemake --snakefile workflow/Snakefile --use-conda --conda-create-envs-only -j 20
-
-env=$(grep krona .snakemake/conda/*yaml | awk '{print $1}' | sed -e "s/.yaml://g" \
-| head -1)
-cd $env/opt/krona/
-./updateTaxonomy.sh taxonomy
-cd -
-
-cd aMeta
-env=$(grep hops .snakemake/conda/*yaml | awk '{print $1}' | sed -e "s/.yaml://g" \
-| head -1)
-conda activate $env
-version=$(conda list malt --json | grep version | sed -e "s/\"//g" | awk '{print $2}')
-cd $env/opt/malt-$version
-sed -i -e "s/-Xmx64G/-Xmx1000G/" malt-build.vmoptions
-sed -i -e "s/-Xmx64G/-Xmx1000G/" malt-run.vmoptions
-cd -
-conda deactivate
-```
-
-And, finally, we are ready to run aMeta:
+Make sure you're in the `aMeta` conda environment, and in the main aMeta directory with
 
 ```bash
-snakemake --snakefile workflow/Snakefile --use-conda -j 20
+cd ../aMeta
+conda activate aMeta
 ```
+
+And, finally, we are ready to run aMeta!
+
+```bash 
+snakemake --snakefile workflow/Snakefile --use-conda -j 10 --conda-frontend conda
+```
+
+:::{.callout-note}
+You can modify `-j` to represent the number of available CPUs you have on your machine.
+:::
+
 
 ### aMeta output
 
