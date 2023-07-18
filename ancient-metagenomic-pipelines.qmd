@@ -140,7 +140,7 @@ Here we see 10 columns, all pre-filled. The first two columns correspond to samp
 
 Other than the raw FASTQ files, we will need a reference genome and annotation coordinates of genes present on the genome. In this case you will use a _Yersinia pestis_ (accession: GCF_001293415.1) reference genome (`.fna`) and gene feature file (`.gff`) from [NCBI Genome](https://www.ncbi.nlm.nih.gov/genome). This is placed in the `reference/` directory.
 
-::: {.callout-note title="Self guided: reference download and preparation"}
+::: {.callout-note title="Self guided: reference download and preparation" collapse="true"}
 
 To download the 
 
@@ -503,16 +503,40 @@ corresponding to the numbers and colors of the heatmap, one can find them in res
 
 ## What is nf-core/mag?
 
+::: {.callout-note title="Self guided: reference download and preparation" collapse="true"}
+
 ```bash
 ## re-uses Alex's data, and must have CheckM databse predownloaded unpacked 
-time nextflow run nf-core/mag -r 2.3.2 -profile test,docker --input '*{R1,R2}.fastq.gz' --outdir ./results --skip_spades --skip_spadeshybrid --skip_prodigal --binning_map_mode own --skip_maxbin2 --skip_concoct --binqc_tool checkm --checkm_db db/checkm_data_2015_01_16/ --ancient_dna --gtdb false --centrifuge_db false --kraken2_db false --skip_krona -resume -c custom.config  --busco_reference false --keep_phix
+mkdir mag
+cd mag
+mkdir data
+cd data
 
+wget https://share.eva.mpg.de/index.php/s/CtLq2R9iqEcAFyg/download/2612_R1.fastq.gz
+wget https://share.eva.mpg.de/index.php/s/mc5JrpDWdL4rC24/download/2612_R2.fastq.gz
+wget https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_2015_01_16.tar.gz
+
+mkdir checkm_data_2015_01_16
+tar --directory checkm_data_2015_01_16/ -xzvf checkm_data_2015_01_16.tar.gz
+
+cd ..
+```
+:::
+
+Make a configuration file to optimise resource requirements
+
+
+```groovy
 ## config
 process {
   withName: CHECKM_LINEAGEWF{
     memory = 24.GB
     cpus   = 8
     ext.args = "--reduced_tree"
+  }
+
+  withName: FASTP { 
+    cpus = 8
   }
 
   withName: BOWTIE2_PHIX_REMOVAL_ALIGN { 
@@ -534,8 +558,12 @@ process {
   withName: MEGAHIT {
     cpus = 8
   }
+```
 
+The command
 
+```bash
+time nextflow run nf-core/mag -r 2.3.2 -profile test,docker --input 'data/*{R1,R2}.fastq.gz' --outdir ./results -c custom.config --skip_spades --skip_spadeshybrid --skip_maxbin2 --skip_concoct --binqc_tool checkm --checkm_db data/checkm_data_2015_01_16/ --ancient_dna  --binning_map_mode own --skip_prodigal --gtdb false --centrifuge_db false --kraken2_db false --skip_krona --busco_reference false --keep_phix
 ```
 
 ## Questions to think about
