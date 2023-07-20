@@ -421,8 +421,10 @@ cd /<path>/<to>/authentication-decontamination/krakenuniq
 
 Then in here we can compare between true samples and negative controls
 
+<!-- TODO Missing blank file -->
+
 ```R
-samples<-read.delim("krakenuniq_abundance_matrix.txt",header=TRUE,
+samples<-read.delim("krakenuniq_abundance_matrix/krakenuniq_abundance_matrix.txt",header=TRUE,
 row.names = 1, check.names = FALSE, sep = "\t")
 controls<-read.delim("blank_krakenuniq_abundance_matrix.txt",header=TRUE,
 row.names = 1, check.names = FALSE, sep = "\t")
@@ -480,6 +482,8 @@ cd /<path>/<to>/authentication-decontamination/cuperdec
 
 Then we can load the files, generate the decay curves, set a preservation threshold cut-off, and plot the result.
 
+<!-- TODO Broken input file (missing header first column) -->
+
 ```R
 library("cuperdec"); library("magrittr"); library("dplyr")
 
@@ -523,6 +527,21 @@ In addition to the input files (already prepared for you), you will also need to
 cd /<path>/<to>/authentication-decontamination/sourcetracker/
 git clone https://github.com/danknights/sourcetracker.git
 ```
+
+:::
+
+::: {.callout-warning title="Patching sourcetracker for newer R versions"}
+
+Unfortunately Sourcetracker's original R code was done a very long time ago, and has resulted in some incompatiblities with more recent versions of R.
+
+If using a more recent version of R (such as in this chapter's conda environment), you will need to perform the following 'patching' of the code, to prevent an error.
+
+Run the following command to [comment out the offending lines](https://github.com/danknights/sourcetracker/issues/15) (538, 539), where R's behaviour in later versions of a fundamental validation function has changed.
+
+```bash
+sed -i '538,539s/^/#/' sourcetracker/src/SourceTracker.r
+```
+
 :::
 
 Sourcetracker expects two input data frames: metadata with at least sample name, environment and source / sink labels, and abundance matrix. Note that source and sink metadata and abundances have to be merged together prior to using SourceTracker. Here we are going to use data from the [Human Microbiome Project (HMP)](https://hmpdacc.org/) as sources, and we are going to merge the HMP data with the sink samples into single OTU table and meta-data table.
@@ -563,14 +582,6 @@ otus <- otus[common.sample.ids,]; metadata <- metadata[common.sample.ids,]
 
 Next, training SourceTracker on source samples and running predictions on sink samples can be done using following commands:
 
-<!-- 
-
-TODO: @Nikolay, why not use the standalone command line version (available on biocnda): https://bioconda.github.io/recipes/sourcetracker/README.html?highlight=sourcetracker#package-package%20&#x27;sourcetracker&#x27;
-
-Currently get stuck on the command: st <- sourcetracker(otus[train.ix,], envs[train.ix]
-
--->
-
 ```R
 # Train SourceTracker on sources (HMP) and run predictions on sinks
 source('sourcetracker/src/SourceTracker.r')
@@ -605,9 +616,9 @@ xlab("Sample") + ylab("Fraction")
 quit()
 ```
 
-![](assets/images/chapters/authentication-decontamination/source_tracker1.png)
+![Stacked barchart of each sample (sinks) with the estimated fraction of each source 'sample group' that each sink is made up of. Note that the X-axis sorting of samples may change between each person, thus your plot may not match exactly the same as the one here.](assets/images/chapters/authentication-decontamination/source_tracker1.png){#fig-authenticationdecontamination-sourcetrackeroutput}
 
-In the figure above the SourceTracker was trained on Human Microbiome Project (HMP) data, and was capable of predicting the fractions of oral, gut, skin or other microbial composition on the query sink samples. In a similar way, environmental soil or marine microbes can be used as Sources. In this way, environmental percentage of contamination can be detected per sample.
+In the figure above (@fig-authenticationdecontamination-sourcetrackeroutput) the SourceTracker was trained on Human Microbiome Project (HMP) data, and was capable of predicting the fractions of oral, gut, skin or other microbial composition on the query sink samples. In a similar way, environmental soil or marine microbes can be used as Sources. In this way, environmental percentage of contamination can be detected per sample.
 
 A drawback of SourceTracker, mSourceTracker and FEAST is that they require a microbial abundance table after a taxonomic classification with e.g. QIIME or Kraken has been performed. Such taxonomic classification can be biased since it is computed against a reference database with known taxonomic annotation. In contrast, a novel microbial source tracking tool [decOM](https://www.biorxiv.org/content/10.1101/2023.01.26.525439v1.full) aims at moving away from database-dependent methods and using unsupervised approaches exploiting read-level sequence composition.
 
