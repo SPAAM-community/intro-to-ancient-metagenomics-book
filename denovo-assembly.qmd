@@ -185,13 +185,13 @@ All _de Bruijn_ graph assemblers work in a similar way so the question is why do
     - can assembly both single-end and paired-end sequencing data
     - assembly algorithm can cope with the presence of high amounts of ancient DNA damage
 
-  **Cons**:
+**Cons**:
 
-    - lower assembly quality on modern comparative data, particularly a higher rate of mis-assemblies (CAMI II challenge)
+- lower assembly quality on modern comparative data, particularly a higher rate of mis-assemblies (CAMI II challenge)
 
 :::
 
-In the Warinnner group, we realised after some tests that MEGAHIT has its clear advantage when ancient DNA damage is present at higher quantities. While it produced a higher number of mis-assemblies compared to metaSPAdes when being evaluated on simulated modern metagenomic data (Critical Assessment of Metagenome Interpretation II challenge: @Meyer2022), it produces more long contigs when ancient DNA is present.
+In the Warinnner group, we realised after some tests that MEGAHIT has its clear advantage when ancient DNA damage is present at higher quantities. While it produced a higher number of mis-assemblies compared to metaSPAdes when being evaluated on simulated modern metagenomic data (Critical Assessment of Metagenome Interpretation II challenge: @Meyer2022), it produces more long contigs when ancient DNA damage is present.
 
 To _de novo_ assemble the short-read sequencing data of the sample **2612** using MEGAHIT, we can run the command
 
@@ -219,4 +219,112 @@ While we are waiting for MEGAHIT to finish, here is a question:
 ::: {.callout-note collapse="true" title="Answer"}
 
 Based on the maximum read length, MEGAHIT decided to use the _k_-mer lengths of 21, 29, 39, 59, 79, 99, 119, and 141.
+:::
+
+Now, as MEGAHIT has finished, we want to evaluate the quality of the assembly results. MEGAHIT has written the contiguous sequences (contigs) into a single FastA file stored in the folder `megahit`. We will process this FastA file with a small script, calN50, which will count the number of contigs and give us an overview of their length distribution.
+
+To download the script and run it, we can execute the following commands:
+
+```{bash, eval = F}
+wget https://raw.githubusercontent.com/lh3/calN50/master/calN50.js
+k8 ./calN50.js megahit/final.contigs.fa
+```
+
+::: {.callout-tip title="Question" appearence="simple"}
+
+**How many contigs were assembled? What is the sum of the lengths of all contigs? What is the maximum, the median, and the minimum contig length?**
+
+Hint: The maximum contig length is indicated by the label "N0", the median by the label "N50", and the minimum by the label "N100"?
+
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+
+MEGAHIT assembled 3,606 contigs and their lengths sum up to 11.4 Mb. The maximum contig length was 448 kb, the median length was 15.6 kb, and the minimum length was 500 bp.
+
+:::
+
+There is a final caveat when assembling ancient metagenomic data with MEGAHIT: while it is able to assemble sequencing data with a high percentage of C-to-T substitutions, it tends to introduce these changes into the contig sequences, too.
+
+```{r out.width = "80%", echo = F, fig.align = "center"}
+knitr::include_graphics("assets/images/chapters/denovo-assembly/Leggett2013_Fig1a.png")
+```
+**Figure 6**: **_De Bruijn_ graph with a bubble caused by a second allele.** Adapted from
+[@Leggett2013] Figure 1 A
+
+These C-to-T substitutions are similar to biological single-nucleotide polymorphisms in the sequencing data. Both lead the introduction of bubbles in the _de Bruijn_ graph when two alleles are present in the k-mer sequences (**Figure 6**) and the assembler decides during its pruning steps which allele to keep in the contig sequence. 
+
+While it does not really matter which allele is kept for biological polymorphisms, it does matter
+for technical artefacts that are introduced by the presence of ancient DNA damage. In our group we
+realised that the gene sequences that were annotated on the contigs of MEGAHIT tended to have a
+higher number of nonsense mutations compared to the known variants of the genes. After manual
+inspection, we observed that many of these mutations appeared because MEGAHIT chose the
+damage-derived T allele over the C allele or the damage-derived A allele over a G allele (see
+@Klapper2023 Figure S1).
+
+To overcome this issue, my colleagues Maxime Borry, James Fellows Yates and I developed a strategy to replace these damage-derived alleles in the contig sequences. This approach consists of aligning the short-read data against the contigs, performing genotyping along them, and finally replacing all alleles for which we have strong support for an allele that is different from the one select by MEGAHIT.
+
+We standardised this approach and added it to the Nextflow pipeline nf-core/mag [@Krakau2022]. It can simply be activated by providing the parameter `--ancient_dna`. 
+
+::: {.callout-caution}
+While MEGAHIT is able to assemble ancient metagenomic sequencing data with high amounts of ancient DNA damage, it tends to introduce damage-derived T and A alleles into the contig sequences instead of the true C and G alleles. This can lead to a higher number of nonsense mutations in coding sequences. We strongly advise you to correct such mutations, e.g. by using the ancient DNA workflow of the Nextflow pipeline [nf-core/mag](https://nf-co.re/mag).
+:::
+
+### Aligning the short-read data against the contigs
+
+```{bash, eval = F}
+mkdir alignment
+bowtie2-build -f megahit/final.contigs.fa alignment/2612
+bowtie2 -p 14 –-very-sensitive -N 1 -x alignment/2612 \
+    -1 2612_R1.fastq.gz -2 2612_R2.fastq.gz | \
+samtools view -Sb - | \
+samtools calmd -u /dev/stdin megahit/final.contigs.fa | \
+samtools sort -o alignment/2612.sorted.calmd.bam -
+samtools index alignment/2612.sorted.calmd.bam
+```
+
+```{bash, eval = F}
+mkdir alignment
+ln -s /vol/volume/4c-genome-assembly/2612.sorted.calmd.bam alignment/
+ln -s /vol/volume/4c-genome-assembly/2612.sorted.calmd.bam.bai alignment/
+ln -s /vol/volume/4c-genome-assembly/2612.fa alignment/
+```
+
+```{bash, eval = F}
+mkdir alignment
+wget -O alignment/2612.sorted.calmd.bam \
+    https://share.eva.mpg.de/index.php/s/bDKgFLj9GpRFdPg/download/2612.sorted.calmd.bam
+wget -O alignment/2612.sorted.calmd.bam.bai \
+    https://share.eva.mpg.de/index.php/s/HWqg6fJj6ZEEBAL/download/2612.sorted.calmd.bam.bai
+wget -O alignment/2612.fa \
+    https://share.eva.mpg.de/index.php/s/z6ZAai42RPribX5/download/final.contigs.fa
+```
+
+
+### Reconstructing metagenome-assembled genomes
+
+
+
+### Annotating genomes for function
+
+
+```{bash, eval = F}
+prokka --outdir prokka \
+    --prefix 2612_003 \
+    --compliant --metagenome --cpus 14 \
+    metawrap_50_10_bins/bin.3.fa
+```
+
+::: {.callout-tip title="Question" appearence="simple"}
+
+**Prokka has annotated our MAG. What type of files does Prokka return? How many genes/tRNAs/rRNAs were detected?**
+
+Hint: Check the file `prokka/2612_003.txt` for the number of annotated elements.
+
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+
+Prokka found 1,797 coding sequences, 32 tRNAs, but no rRNAs. Finding no rRNAs is a common issues when trying to assemble MAGs without long-read sequencing data and is not just characteristic for ancient DNA samples.
+
 :::
