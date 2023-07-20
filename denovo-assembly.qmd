@@ -254,13 +254,7 @@ knitr::include_graphics("assets/images/chapters/denovo-assembly/Leggett2013_Fig1
 
 These C-to-T substitutions are similar to biological single-nucleotide polymorphisms in the sequencing data. Both lead the introduction of bubbles in the _de Bruijn_ graph when two alleles are present in the k-mer sequences (**Figure 6**) and the assembler decides during its pruning steps which allele to keep in the contig sequence. 
 
-While it does not really matter which allele is kept for biological polymorphisms, it does matter
-for technical artefacts that are introduced by the presence of ancient DNA damage. In our group we
-realised that the gene sequences that were annotated on the contigs of MEGAHIT tended to have a
-higher number of nonsense mutations compared to the known variants of the genes. After manual
-inspection, we observed that many of these mutations appeared because MEGAHIT chose the
-damage-derived T allele over the C allele or the damage-derived A allele over a G allele (see
-@Klapper2023 Figure S1).
+While it does not really matter which allele is kept for biological polymorphisms, it does matter for technical artefacts that are introduced by the presence of ancient DNA damage. In our group we realised that the gene sequences that were annotated on the contigs of MEGAHIT tended to have a higher number of nonsense mutations compared to the known variants of the genes. After manual inspection, we observed that many of these mutations appeared because MEGAHIT chose the damage-derived T allele over the C allele or the damage-derived A allele over a G allele (see @Klapper2023 Figure S1).
 
 To overcome this issue, my colleagues Maxime Borry, James Fellows Yates and I developed a strategy to replace these damage-derived alleles in the contig sequences. This approach consists of aligning the short-read data against the contigs, performing genotyping along them, and finally replacing all alleles for which we have strong support for an allele that is different from the one select by MEGAHIT.
 
@@ -271,6 +265,24 @@ While MEGAHIT is able to assemble ancient metagenomic sequencing data with high 
 :::
 
 ### Aligning the short-read data against the contigs
+
+After the assembly, the next detremental step that is required for many subsequent analyses is the alignment of the short-read sequencing data back to assembled contigs.
+
+Analyses that require these alignment information are for example:
+
+  - the correction of the contig sequences to remove damage-derived alleles
+  - the non-reference binning of contigs into MAGs for inferring the coverage along the contigs
+  - the quantification of the presence of ancient DNA damage
+
+Aligning the short-read data to the contigs requires multiple steps:
+
+  1. Build an index from the contigs for the alignment program BowTie2
+  2. Align the short-read data against the contigs using this index with BowTie2
+  3. Calculate the mismatches and deletions of the short-read data against the contig sequences
+  4. Sort the aligned reads by the contig name and the coordinate they were aligned to
+  5. Index the resulting alignment file for faster access
+
+To execute the alignment step we can run the following commands:
 
 ```{bash, eval = F}
 mkdir alignment
@@ -283,12 +295,20 @@ samtools sort -o alignment/2612.sorted.calmd.bam -
 samtools index alignment/2612.sorted.calmd.bam
 ```
 
+However, these steps are rather time-consuming, even when we just have so little sequencing data as for our course example. The alignment is rather slow because we allow a single mismatch in the seeds that are used by the aligner BowTie2 to quickly determine the position of a read along the contig sequences (parameter `-N 1`). This is necessary because otherwise we might not be able to align reads with ancient DNA damage present on them. Secondly, the larger the resulting alignment file is the longer it takes to sort it by coordinate.
+
+To save us some time and continue with the more interesting analyses, I prepared the resulting files
+for us. For this, I also corrected damage-derived alleles in the contig sequences. You can access
+these files on the cluster by running the following commands:
+
 ```{bash, eval = F}
 mkdir alignment
 ln -s /vol/volume/4c-genome-assembly/2612.sorted.calmd.bam alignment/
 ln -s /vol/volume/4c-genome-assembly/2612.sorted.calmd.bam.bai alignment/
 ln -s /vol/volume/4c-genome-assembly/2612.fa alignment/
 ```
+
+For everyone, who runs this practical on their own infrastructure, you can download the files:
 
 ```{bash, eval = F}
 mkdir alignment
@@ -299,7 +319,6 @@ wget -O alignment/2612.sorted.calmd.bam.bai \
 wget -O alignment/2612.fa \
     https://share.eva.mpg.de/index.php/s/z6ZAai42RPribX5/download/final.contigs.fa
 ```
-
 
 ### Reconstructing metagenome-assembled genomes
 
