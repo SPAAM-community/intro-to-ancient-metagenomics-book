@@ -266,12 +266,14 @@ plot(df$boc ~ df$Pos, type = "s", xlab = "Genome position", ylab = "Coverage")
 abline(h = 0, col = "red", lty = 2)
 mtext(paste0(round((sum(df$N_reads > 0) / length(df$N_reads)) * 100, 2), 
 "% of genome covered"), cex = 0.8)
-
-## Exit and save image, press 'n' when asked if you want to save your workspace image.
-quit()
 ```
 
-And open the `Rplots.pdf`
+Once finished examining the plot you can quit R
+
+```bash
+## Press 'n' when asked if you want to save your workspace image.
+quit()
+```
 
 ![](assets/images/chapters/authentication-decontamination/Evenness_of_coverage.png)
 
@@ -292,12 +294,14 @@ Then the 5th column of the filtered BAM-alignment can be visualized via a simple
 
 ```R
 hist(as.numeric(readLines("mapq.txt")), col = "darkred", breaks = 100)
-
-## Exit and save image, press 'n' when asked if you want to save your workspace image.
-quit()
 ```
 
-Then look inside the `Rplots.pdf` file for the resulting histogram.
+Once finished examining the plot you can quit R
+
+```bash
+## Press 'n' when asked if you want to save your workspace image.
+quit()
+```
 
 ![](assets/images/chapters/authentication-decontamination/MAPQ.png)
 
@@ -313,12 +317,14 @@ library("Rsamtools")
 param <- ScanBamParam(tag = "NM")
 bam <- scanBam("Y.pestis_sample10.sorted.bam", param = param)
 barplot(table(bam[[1]]$tag$NM), ylab="Number of reads", xlab="Number of mismatches")
-
-## Exit and save image, press 'n' when asked if you want to save your workspace image.
-quit()
 ```
 
-And look inside `Rplots.pdf`.
+Once finished examining the plot you can quit R
+
+```bash
+## Press 'n' when asked if you want to save your workspace image.
+quit()
+```
 
 ![](assets/images/chapters/authentication-decontamination/edit_distance.png)
 
@@ -365,8 +371,12 @@ The distribution of PMD scores can be visualized via a histogram in R as follows
 ```R
 pmd_scores <- read.delim("PMDscores.txt", header = FALSE, sep = "\t")
 hist(pmd_scores$V4, breaks = 1000, xlab = "PMDscores")
+```
 
-## Exit and save image, press 'n' when asked if you want to save your workspace image.
+Once finished examining the plot you can quit R
+
+```bash
+## Press 'n' when asked if you want to save your workspace image.
 quit()
 ```
 
@@ -417,6 +427,7 @@ First move back into the KrakenUniq folder and load R.
 
 ```bash
 cd /<path>/<to>/authentication-decontamination/krakenuniq
+R
 ```
 
 Then in here we can compare between true samples and negative controls
@@ -426,6 +437,7 @@ Then in here we can compare between true samples and negative controls
 ```R
 samples<-read.delim("krakenuniq_abundance_matrix/krakenuniq_abundance_matrix.txt",header=TRUE,
 row.names = 1, check.names = FALSE, sep = "\t")
+## The blanks abundance matrix has already been made for you
 controls<-read.delim("blank_krakenuniq_abundance_matrix.txt",header=TRUE,
 row.names = 1, check.names = FALSE, sep = "\t")
 
@@ -451,8 +463,12 @@ log10(rowMeans(negative_control)+1)[(log10(rowMeans(true_sample)+1) > 1) &
 (log10(rowMeans(negative_control)+1)  >1)],
 labels = rownames(true_sample)[(log10(rowMeans(true_sample)+1) > 1) & 
 (log10(rowMeans(negative_control)+1) > 1)], pos = 4)
+```
 
-## Exit and save image, press 'n' when asked if you want to save your workspace image.
+Once finished examining the plot you can quit R
+
+```bash
+## Press 'n' when asked if you want to save your workspace image.
 quit()
 ```
 
@@ -492,7 +508,8 @@ data(cuperdec_database_ex)
 database <- load_database(cuperdec_database_ex, target = "oral") %>% print()
 
 # Load abundance matrix and metadata
-taxatable <- load_taxa_table("../krakenuniq/krakenuniq_abundance_matrix/krakenuniq_abundance_matrix.txt")  %>% print()
+raw_table <- read.delim("../krakenuniq/krakenuniq_abundance_matrix/krakenuniq_abundance_matrix.txt", row.names=1) %>% as_tibble(rownames='Taxon')
+taxatable <- load_taxa_table(raw_table)  %>% print()
 metadata <- as_tibble(data.frame(Sample = unique(taxatable$Sample), 
 Sample_Source = "Oral"))
 
@@ -500,8 +517,12 @@ Sample_Source = "Oral"))
 curves <- calculate_curve(taxatable, database = database) %>% print()
 filter_result <- simple_filter(curves, percent_threshold = 50) %>% print()
 plot_cuperdec(curves, metadata = metadata, filter_result)
+```
 
-## Exit and save image, press 'n' when asked if you want to save your workspace image.
+Once finished examining the plot you can quit R
+
+```bash
+## Press 'n' when asked if you want to save your workspace image.
 quit()
 ```
 
@@ -611,10 +632,15 @@ ggplot(data, aes(fill=condition, y=value, x = reorder(name, seq(1:length(name)))
 geom_bar(position = "fill", stat = "identity") + 
 theme(axis.text.x = element_text(angle = 90, size=5, hjust=1, vjust=0.5)) + 
 xlab("Sample") + ylab("Fraction")
+```
 
-## Exit and save image, press 'n' when asked if you want to save your workspace image.
+Once finished examining the plot you can quit R
+
+```bash
+## Press 'n' when asked if you want to save your workspace image.
 quit()
 ```
+
 
 ![Stacked barchart of each sample (sinks) with the estimated fraction of each source 'sample group' that each sink is made up of. Note that the X-axis sorting of samples may change between each person, thus your plot may not match exactly the same as the one here.](assets/images/chapters/authentication-decontamination/source_tracker1.png){#fig-authenticationdecontamination-sourcetrackeroutput}
 
@@ -704,12 +730,14 @@ ggplot(data, aes(fill=condition, y=value, x=reorder(name,seq(1:length(name))))) 
   geom_bar(position = "fill", stat = "identity") + 
   theme(axis.text.x = element_text(angle=90, size = 5, hjust = 1, vjust = 0.5)) + 
   xlab("Sample") + ylab("Fraction")
-
-## Exit and save image, press 'n' when asked if you want to save your workspace image.
-quit()
 ```
 
-You can then open the resulting `Rplots.pdf` file to see the output.
+Once finished examining the plot you can quit R
+
+```bash
+## Press 'n' when asked if you want to save your workspace image.
+quit()
+```
 
 ![](assets/images/chapters/authentication-decontamination/decOM1.png)
 
