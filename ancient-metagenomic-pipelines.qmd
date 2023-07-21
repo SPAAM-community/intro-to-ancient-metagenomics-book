@@ -112,7 +112,7 @@ Next we can re-visit AMDirT (see [Accessing Ancient Metagenomic Data](accessing-
     - Close filter menu and select the two rows
 3. Press the Validate Selection button
 4. Press the 'Download Curl sample download script', 'Download nf-core/eager input TSV',  and 'Download Citations as BibTex' buttons
-5. Move the follows into `eager/` of this tutorials directory
+5. Move the follows into `eager/` of this tutorial's directory
 
 ::: {.callout-tip} 
 We won't actually use the BibTex citations file for anything in this tutorial, but it is good habit to _always_ to record and save all citations of any software or data you use!
@@ -142,7 +142,7 @@ Other than the raw FASTQ files, we will need a reference genome and annotation c
 
 ::: {.callout-note title="Self guided: reference download and preparation" collapse="true"}
 
-To download the 
+To download the required reference genome and annotation file run the following command to download from the NCBI Genome database.
 
 ```bash
 ## Download from NCBI
@@ -200,6 +200,10 @@ So what is this command doing? The different parameters do the following:
 For full parameter documentation, click [here](https://nf-co.re/eager/2.4.5/parameters).
 
 And now we wait... <!-- 40m on DENBI Node -->
+
+:::{.callout-tip}
+As a reminder, to detach from the screen session type <kbd>ctrl</kbd> + <kbd>a</kbd> then <kbd>d</kbd>. To reattach `screen -r eager`
+:::
 
 ### Top Tips for nf-core/eager success
 
@@ -324,6 +328,14 @@ As above evaluating these outputs will vary depending on the data and or pipelin
 
 ![Example of cartoon schematic diagram of the output from DamageProfiler in different contexts. The six panels show different types of ancient DNA damage line-plots from having no damage (flat red/blue lines), however with a speech bubble noting that if the library was UDG treated, that the flat lines might be valid, all the way to the 'classic' ancient DNA damage plot with both red and blue lines showing an exponential decay from the ends of reads to the middle, with a motivational speech bubble. Source: Zandra Fagernäs, CC-BY 4.0 via [nf-core/eager documentation](https://nf-co.re/eager/output)](assets/images/chapters/ancient-metagenomic-pipelines/damageprofiler_deaminationpatterns.png){#fig-ancient-metagenomic-pipelines-eageroutputexample}
 
+### Clean up
+
+Before continuing onto the next section of this chapter, you will need to deactivate from the conda environment
+
+```bash
+conda deactivate 
+```
+
 ## What is aMeta?
 
 ::: {.callout-tip}
@@ -443,7 +455,7 @@ bowtie2_seqid2taxid_db: resources/seqid2taxid.pathogen.map
 pathogenomesFound: resources/pathogenomesFound.tab
 
 malt_nt_fasta: resources/ref.fa
-malt_seqid2taxid_db: resources/KrakenUniq_DB/seqid2taxid.map ##??
+malt_seqid2taxid_db: resources/KrakenUniq_DB/seqid2taxid.map
 malt_accession2taxid: resources/accession2taxid.map
 
 ncbi_db: resources/ncbi
@@ -464,8 +476,7 @@ Next, we need to create conda sub-environments of aMeta, then manually tune a fe
 Make sure you're in the `aMeta` conda environment, and in the main aMeta directory with
 
 ```bash
-cd ../aMeta
-conda activate aMeta
+cd /<path/<to>/ancient-metagenomic-pipelines/ameta/aMeta/
 ```
 
 And, finally, we are ready to run aMeta!
@@ -501,20 +512,53 @@ corresponding to the numbers and colors of the heatmap, one can find them in res
 
 ![](assets/images/chapters/ancient-metagenomic-pipelines/aMeta_output.png)
 
+### Clean up
+
+Before continuing onto the next section of this chapter, you will need to deactivate from the conda environment
+
+```bash
+conda deactivate 
+```
+
 ## What is nf-core/mag?
+
+nf-core/mag [@Krakau2022-we] is another Nextflow best-practise pipeline for the _de novo_ assembly, binning, and annotation of metagenomes (@fig-ancientmetagenomicpipelines-magworkflow). While it was originally designed for modern metagenomes (with a focus on optional support co-assembly with Nanopore long reads), it has since been updated to include specific functionality and parameters for ancient metagenomes too. 
+
+![Overview diagram of the main steps and tools of the nf-core/mag pipeline. Taking reads in FASTQ format or a samplesheet as input, reads can go through adapter and/or quality trimming for specific tools for both short and long reads. These reads can optionally go into taxonomic classification and visualisation, at the same time as the prepared reads go into sample-or group wise assemply, evaluation, as well as the ancient DNA valdiation subworkflow. Resulting contigs can be functionally annotated at the same time as optionally going through binning and binning refinement and evaluation (with statistics generation). Bins and refined bins can be taxonomically classified and annotated, with all final reports going into MultiQC.](assets/images/chapters/ancient-metagenomic-pipelines/mag_workflow.png){#fig-ancientmetagenomicpipelines-magworkflow}
+
+nf-core/mag covers the same major steps as you will have run if you followed the chapter on [De Novo assembly](denovo-assembly.qmd). Firstly, as with nf-core/eager, nf-core/mag do some initial sequencing QC and cleanup
+
+<!--
+eAGER
+
+nf-core/eager is a computational pipeline specifically designed for preprocessing and analysis of ancient DNA data. It is a reimplementation of the previously published EAGER (Efficient Ancient Genome Reconstruction) pipeline [@Peltzer2016-ov] written in the workflow manager Nextflow. In addition to reimplementing the original genome mapping and variant calling pipeline, in a more reproducible and portable manner the pipeline also included additional new functionality particularly for researchers interested in microbial sciences, namely a dedicated genotyper and consensus caller designed for low coverage genomes, the ability to get breadth and depth coverage statistics for particular genomic features (e.g. virulence genes), but also automated metagenomic screening and authentication of the off-target reads from mapping (e.g. against the host reference genome).
+
+![](assets/images/chapters/ancient-metagenomic-pipelines/eager2_metromap_complex.png)
+
+A detailed description of steps in the pipeline is available as part of nf-core/eager's extensive documentation. For more information, check out the usage documentation [here](https://nf-co.re/eager/2.4.7/usage).
+
+Briefly, nf-core/eager takes at a minimum standard input file types that are shared across the genomics field, i.e., raw FASTQ files or aligned reads in bam format, and a reference fasta. nf-core/eager performs preprocessing of this raw data, including adapter clipping, read merging, and quality control of adapter-trimmed data. nf-core/eager then carries mapping using a variety of field-standard shot-read alignment tools with default parameters adapted for short and damaged aDNA sequences. The off-target reads from host DNA mapping can then go into metagenomic classification and authentication (in the case of MALT). After genomic mapping, BAM files go through deduplication of PCR duplicates, damage profiling and removal, and finally variant calling. A myriad of additional statistics can be generated depending on the users preference. Finally, nf-core eager uses [MultiQC](https://multiqc.info/) to create an integrated html report that summarizes the output/results from each of the pipeline steps.
+-->
+
+### Running nf-core/mag
+
+Before we start we need to
 
 ::: {.callout-note title="Self guided: reference download and preparation" collapse="true"}
 
 ```bash
 ## re-uses Alex's data, and must have CheckM databse predownloaded unpacked 
-mkdir mag
-cd mag
-mkdir data
-cd data
 
+## IF YOU'VE INTO RUN/DELETE DENOVO ASSEMBLY THEN RUN THIS
+cd /<path>/<to>/denovo-assembly/
 wget https://share.eva.mpg.de/index.php/s/CtLq2R9iqEcAFyg/download/2612_R1.fastq.gz
 wget https://share.eva.mpg.de/index.php/s/mc5JrpDWdL4rC24/download/2612_R2.fastq.gz
 wget https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_2015_01_16.tar.gz
+
+## OTHERWISE YOU MUST DO THIS
+cd /<path>/<to>/ancient-metagenomic-pipelines/
+mkdir -p mag/data
+cd mag/data
 
 mkdir checkm_data_2015_01_16
 tar --directory checkm_data_2015_01_16/ -xzvf checkm_data_2015_01_16.tar.gz
@@ -563,7 +607,7 @@ process {
 The command
 
 ```bash
-time nextflow run nf-core/mag -r 2.3.2 -profile test,docker --input 'data/*{R1,R2}.fastq.gz' --outdir ./results -c custom.config --skip_spades --skip_spadeshybrid --skip_maxbin2 --skip_concoct --binqc_tool checkm --checkm_db data/checkm_data_2015_01_16/ --ancient_dna  --binning_map_mode own --skip_prodigal --gtdb false --centrifuge_db false --kraken2_db false --skip_krona --busco_reference false --keep_phix
+time nextflow run nf-core/mag -r 2.3.2 -profile test,docker --input '../../denovo-assembly/*{R1,R2}.fastq.gz' --outdir ./results -c custom.config --skip_spades --skip_spadeshybrid --skip_maxbin2 --skip_concoct --binqc_tool checkm --checkm_db data/checkm_data_2015_01_16/ --ancient_dna  --binning_map_mode own --skip_prodigal --gtdb false --centrifuge_db false --kraken2_db false --skip_krona --busco_reference false --keep_phix
 ```
 
 ## Questions to think about
