@@ -245,9 +245,18 @@ As a reminder, to detach from the screen session type <kbd>ctrl</kbd> + <kbd>a</
 
     Regular users may be interested in checking out the Nextflow Tower, a tool for monitoring the progress of Nextflow pipelines in real time. Check [here](https://tower.nf) for more information.
 
-### Summary of nf-core/eager output
+### nf-core/eager output
 
-In the `results/` directory of your nf-core/eager run, you will find a range of directories that will contain output files and tool log of all the steps of the pipeline. nf-core/eager tries to only save the 'useful' files. However before you delve into these, it's normally a good idea to do a 'quality check' of the pipeline run. You can do this using the interactive MultiQC report.
+#### Results files
+
+In the `results/` directory of your nf-core/eager run, you will find a range of directories that will contain output files and tool log of all the steps of the pipeline. nf-core/eager tries to only save the 'useful' files. 
+
+Useful files for genomics typically are in folders such as `deduplication/` which may contain f
+
+
+However before you delve into these, it's normally a good idea to do a 'quality check' of the pipeline run. You can do this using the interactive MultiQC report.
+
+#### MultiQC General Statistics
 
 ```bash
 cd multiqc/
@@ -261,7 +270,7 @@ In here you should see a bunch of files, but you should open the `multiqc_report
 
 Once opened you will see a table, and below it many figures and other tables. All of these statistics can help you evaluate the quality of your data, pipeline run, and also possibly some initial results! 
 
-#### MultiQC General Statistics
+
 
 Typically you will look at the General Statistics table to get a rough overview of the pipeline run. If you hover your cursor over the column headers, you can see which tool the column's numbers came from, however generally the columns go in order of left to right, where the left most columns are from earlier in the pipeline run (e.g. removing adapters), to variant calling statistics (e.g. number of variants called). You can also configure which columns to display using the `Configure columns` button. It's important to note that in MultiQC tables, you may have duplicate rows from the same library or sample. This is due to MultiQC trying to squish in as many statistics from as many steps of the pipeline as possible (for example, statistics on each of a pair of FASTQ files, and then statistics on the single merged and mapped BAM file), so you should play around with the column configuration to help you visualise the best way to initially evaluate your data. 
 
@@ -355,7 +364,7 @@ While nf-core/eager is a solid pipeline for microbial genomics, and can also per
 
 Rather than the very computationally heavy HOPS pipeline [@Hubler2019-qw], that requires extremely large computational nodes with large RAM (>1 TB) to load MALT databases into memory, aMeta does this via a two step approach. Firstly it uses KrakenUniq (a k-mer based and thus memory efficient method) to do a screening of sequencing reads against a broad generalised microbial database. Once all the possible taxa have been detected, aMeta will then make a new database of just the genomes of the taxa that were reported from KrakenUniq (i.e. a specific database) but using MALT. MALT on thus much reduced database is then used to perform computationally much heavier alignment against the reference genomes and LCA taxonomic reassignment. The output from MALT is then sent to the MaltExtract program of the HOPS pipeline for ancient DNA authentication statistics.
 
-### Running aMEta
+### Running aMeta
 
 In this tutorial we will try running the small test data that comes with aMeta.
 
@@ -528,36 +537,31 @@ nf-core/mag [@Krakau2022-we] is another Nextflow best-practise pipeline for the 
 
 ![Overview diagram of the main steps and tools of the nf-core/mag pipeline. Taking reads in FASTQ format or a samplesheet as input, reads can go through adapter and/or quality trimming for specific tools for both short and long reads. These reads can optionally go into taxonomic classification and visualisation, at the same time as the prepared reads go into sample-or group wise assemply, evaluation, as well as the ancient DNA valdiation subworkflow. Resulting contigs can be functionally annotated at the same time as optionally going through binning and binning refinement and evaluation (with statistics generation). Bins and refined bins can be taxonomically classified and annotated, with all final reports going into MultiQC.](assets/images/chapters/ancient-metagenomic-pipelines/mag_workflow.png){#fig-ancientmetagenomicpipelines-magworkflow}
 
-nf-core/mag covers the same major steps as you will have run if you followed the chapter on [De Novo assembly](denovo-assembly.qmd). Firstly, as with nf-core/eager, nf-core/mag do some initial sequencing QC and cleanup
+<!-- TODO: CITATIONS -->
 
-<!--
-eAGER
+nf-core/mag covers the same major steps as you will have run if you followed the chapter on [De Novo assembly](denovo-assembly.qmd). Firstly, as with nf-core/eager, nf-core/mag do some initial sequencing QC and cleanup with `fastp` or `AdapterRemoval`, running FastQC before and after this step to make sure that adapters and overly short reads have been removed. It can then optionally do basic taxonomic classification of raw reads with `Kraken2` or `Centrifuge`. The processed reads then ungo assembly with MEGAHIT, SPAdes, or SPAdeshybrid (the latter being for combining short and long reads), with contig annotation with `Prodigal` to get gene prediction and assembly statistics with `QUAST`. A unique feature of nf-core/mag over other _de novo_ assembly pipelines is an aDNA validation and correction step: contigs under go 'reference free' damage profiling using `pyDamage`, and then remaining damage bases that are mistakenly incorporated by assemblies are corrected using `freebayes` and `BCFTools`. Contigs then optionally grouped into genomic 'bins' with a range of metagenomic binners (`MetaBAT2`, `MaxBin2`, and `CONCOCT`), as well as also optional binning refinement with `DAS Tool`. Bins are then re-annotated with Prokka, taxonomically classified with either `CAT` or `GTDB-Tk` Evaluation of the resulting bins is carried out with BUSCO, CheckM, GUNC and/or QUAST to assess the bin completeness. And, as with all nf-core pipelines, all the results are wrapped up into a `MultiQC` report. Detailed documnetation can be see on the nf-core/mag [parameters](https://nf-co.re/mag/2.3.2/parameters) and [output](https://nf-co.re/mag/2.3.2/docs/output) pages.
 
-nf-core/eager is a computational pipeline specifically designed for preprocessing and analysis of ancient DNA data. It is a reimplementation of the previously published EAGER (Efficient Ancient Genome Reconstruction) pipeline [@Peltzer2016-ov] written in the workflow manager Nextflow. In addition to reimplementing the original genome mapping and variant calling pipeline, in a more reproducible and portable manner the pipeline also included additional new functionality particularly for researchers interested in microbial sciences, namely a dedicated genotyper and consensus caller designed for low coverage genomes, the ability to get breadth and depth coverage statistics for particular genomic features (e.g. virulence genes), but also automated metagenomic screening and authentication of the off-target reads from mapping (e.g. against the host reference genome).
-
-![](assets/images/chapters/ancient-metagenomic-pipelines/eager2_metromap_complex.png)
-
-A detailed description of steps in the pipeline is available as part of nf-core/eager's extensive documentation. For more information, check out the usage documentation [here](https://nf-co.re/eager/2.4.7/usage).
-
-Briefly, nf-core/eager takes at a minimum standard input file types that are shared across the genomics field, i.e., raw FASTQ files or aligned reads in bam format, and a reference fasta. nf-core/eager performs preprocessing of this raw data, including adapter clipping, read merging, and quality control of adapter-trimmed data. nf-core/eager then carries mapping using a variety of field-standard shot-read alignment tools with default parameters adapted for short and damaged aDNA sequences. The off-target reads from host DNA mapping can then go into metagenomic classification and authentication (in the case of MALT). After genomic mapping, BAM files go through deduplication of PCR duplicates, damage profiling and removal, and finally variant calling. A myriad of additional statistics can be generated depending on the users preference. Finally, nf-core eager uses [MultiQC](https://multiqc.info/) to create an integrated html report that summarizes the output/results from each of the pipeline steps.
--->
 
 ### Running nf-core/mag
 
-Before we start we need to
+In this tutorial, we will use the same data and aim to replicate the steps taken in the [De Novo assembly](denovo-assembly.qmd) chapter. It is important to note that generally, _de novo_ assembly, is very computational intensive. In many cases it will not be able to run a _de novo_ assembly on a standard laptop, therefore some of the parameters used here have been tweaked to get the pipeline runable on powerful laptop level machines.
 
 ::: {.callout-note title="Self guided: reference download and preparation" collapse="true"}
 
+This tutorial will re-use the data from the _de novo_ assembly chapter. If you have not-run that practical, or deleted the data, you can retrieve these with
+
 ```bash
-## re-uses Alex's data, and must have CheckM databse predownloaded unpacked 
 
 ## IF YOU'VE INTO RUN/DELETE DENOVO ASSEMBLY THEN RUN THIS
 cd /<path>/<to>/denovo-assembly/
 wget https://share.eva.mpg.de/index.php/s/CtLq2R9iqEcAFyg/download/2612_R1.fastq.gz
 wget https://share.eva.mpg.de/index.php/s/mc5JrpDWdL4rC24/download/2612_R2.fastq.gz
 wget https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_2015_01_16.tar.gz
+```
 
-## OTHERWISE YOU MUST DO THIS
+Once you have done this, we will need to download the single copy marker gene reference database for CheckM, which is used to assess completeness of genome bins.
+
+```bash
 cd /<path>/<to>/ancient-metagenomic-pipelines/
 mkdir -p mag/data
 cd mag/data
@@ -569,17 +573,79 @@ cd ..
 ```
 :::
 
-Make a configuration file to optimise resource requirements
+
+
+The manual steps of the previous chapter included: 
+
+1. Read clean up with `fastp`, 
+2. Assembly with `MEGAHIT`, 
+3. Ancient DNA assessment and correction with `freebayes` and `pyDamage`
+4. Binning using `MetaBAT2` and `MaxBin2` (originally using the `MetaWRAP` pipeline), 
+5. Bin assessment with `CheckM`
+6. Contig taxonomic classification with `MMSeqs2` via the `GTDB` database
+7. Genome annotation with `prokka`
+
+So, what command would we use to recreate these?
+
+```bash
+## 🛑 Don't run this yet! 🛑
+nextflow run nf-core/mag -r 2.3.2 \
+-profile test,docker \
+--input '../../denovo-assembly/*{R1,R2}.fastq.gz' --outdir ./results #-c custom.config \
+--ancient_dna  --binning_map_mode own \
+--binqc_tool checkm --checkm_db data/checkm_data_2015_01_16/ \
+--centrifuge_db false --kraken2_db false --skip_krona --skip_spades --skip_spadeshybrid --skip_maxbin2 --skip_concoct --skip_prodigal --gtdb false  --busco_reference false 
+```
+
+In fact, nf-core/mag will do most of the steps for you! In this case, we mostly just need to _deactivate_ most of the additional steps (the last line). Otherwise, as with eager we have done the following:
+
+1. Tell nextflow to run the nf-core/mag pipeline with version 2.3.2
+2. Specify which computing and software environment to use with `-profile`
+    - In this case we are running locally so we don't specify a computing environment (such as a configuration for an institutional HPC) 
+    - We use `docker` as our container engine, which downloads all the software and specific versions needed for nf-core/mag in immutable 'containers', to ensure nothing get broken and is as nf-core/mag expects
+3. Provide the various paths to the input files - the raw FASTQ files and the output directory
+4. Specify we want to run the aDNA mode with mapping of reads back to the original contigs rather than for co-assembly
+
+   :::{.callout-warning title="Binning mapping mode with ancient DNA" collapse="true"}
+   
+   The aDNA mode of nf-core/mag _only_ supports mapping reads back to the original contigs. The other mapping modes are when doing co-assembly, where you assume there are similar organisms across all your metagenomes, and wish to map reads from all samples in a group to a single sample's contig (for example). Doing this on aDNA reads would risk making false positive damage patterns, as the damaged reads may derive from reads from a different sample with damage, that are otherwise not present in the sample used for generating the given contig.
+   
+   :::
+
+1. Specify we want to generate completeness statistics with `CheckM` (rather than `BUSCO`), with the associated pre-downloaded database
+
+   :::{.callout-note title="nf-core pipelines and reference files" collapse="true"}
+   
+   Most nf-core pipelines will actually download reference databases, build reference indices for alignment, and in some cases reference genomes for you if you do not specify them as pipeline input. These download and reference building steps are often very time consuming, so it's recommended that once you've let the database download it once, you should move the files somewhere safe and you can re-use in subsequent pipeline runs. 
+   
+   :::
+
+1. Skip a few steps that are either 'nice to have' (e.g. read taxonomic classification), or require large computational resources (e.g. `metaSPAdes`, `CONCOCT` or `BUSCO`)
+
+   :::{.callout-note title="Information on skipped tests" collapse="true"}
+
+   The steps we are skipping are: host/arefact removal (`Bowtie2` removal of phiX), taxonomic classification of reads (`centrifuge`, `kraken2`, `krona`), the additional assemblers (`metaSPAdes` and `SPAdeshybrid`, as these require very large computational resources), additional binners (`MaxBin2` and `CONCOCT`, while they are used in the _de novo_ assembly chapter, they take a long time to run), ship raw contig annotation (with `Prodigal`, as we do this at the bin level), and contig taxonomic classification (with `GTDB` and `BUSCO` as they require very large databases).
+
+   :::
+
+With this we are almost ready for running the pipeline!
+
+### Configuring Nextflow pipelines
+
+Before we execute the command however, we need to again consider about the resource requirements. As described above, particularly _de novo_ assembly (but also many other bioinformatic analyses) require a lot of computational resources, depending on the type of data and analyses you wish to run. 
+
+For most pipelines you must tweak the resource requirements to ensure a) they will fit on your cluster, and b) will run optimally so you don't under- or over- use your computational resources, where latter will either make yourself (takes too long), or your cluser/server system administrators (blocks other users) unhappy!
+
+While nf-core pipelines all have 'reasonable default' settings for memory, CPU, and time limits, they will not work in all contexts. Here we will give a brief example of how to tweak the parameters of the pipeline steps so that they can run on our compute node or laptop.
+
+For Nextflow, we must make a special 'config' that defines the names of each step of the pipeline you wish to tweak and the corresponding resources.
+
+For this our nf-core/mag run you will need to open your text editor an empty file called `custom.config`, and copy and paste the contents of the next code block.
 
 
 ```groovy
-## config
+
 process {
-  withName: CHECKM_LINEAGEWF{
-    memory = 24.GB
-    cpus   = 8
-    ext.args = "--reduced_tree"
-  }
 
   withName: FASTP { 
     cpus = 8
@@ -604,13 +670,46 @@ process {
   withName: MEGAHIT {
     cpus = 8
   }
+
+  withName: CHECKM_LINEAGEWF{
+    memory = 24.GB
+    cpus   = 8
+    ext.args = "--reduced_tree"
+  }
+
+}
 ```
 
-The command
+Here we set the number of CPUs for most tools to a maximum of `8`, and then we limit the amount of memory for CheckM to 24 GB (down from the [default](https://github.com/nf-core/mag/blob/66cf53aff834d2a254b78b94fc54cd656b8b7b57/conf/base.config#L37-L41) of 36 GB - which exceeds most laptop memory). We also give a specifc `CheckM` flag command to use a smaller database.
+
+We can save this `custom.config` file, and supply this to the Nextflow command with the nextflow parameter (`-c`). And with that, you can run your nf-core/mag pipeline!
 
 ```bash
-time nextflow run nf-core/mag -r 2.3.2 -profile test,docker --input '../../denovo-assembly/*{R1,R2}.fastq.gz' --outdir ./results -c custom.config --skip_spades --skip_spadeshybrid --skip_maxbin2 --skip_concoct --binqc_tool checkm --checkm_db data/checkm_data_2015_01_16/ --ancient_dna  --binning_map_mode own --skip_prodigal --gtdb false --centrifuge_db false --kraken2_db false --skip_krona --busco_reference false --keep_phix
+nextflow run nf-core/mag -r 2.3.2 \
+-profile test,docker \
+--input '../../denovo-assembly/*{R1,R2}.fastq.gz' --outdir ./results
+--ancient_dna  --binning_map_mode own \
+--binqc_tool checkm --checkm_db data/checkm_data_2015_01_16/ \
+--centrifuge_db false --kraken2_db false --skip_krona --skip_spades --skip_spadeshybrid --skip_maxbin2 --skip_concoct --skip_prodigal --gtdb false  --busco_reference false \
+-c custom.config
 ```
+
+The good thing about the config file, is you can re-use across runs on the same machine! So set once, and never think about it again.
+
+The pipeline run above should take around 20 minutes or so to complete.
+
+:::{.callout-tip}
+
+Configuration files don't need be personal nor custom!
+
+You can also generate a HPC / server specific profile which can be used on all nf-core pipelines (and even your own!).
+
+See [nf-co.re/configs](https://nf-co.re/configs) for all existing institutional configs
+:::
+
+## nf-core/mag output
+
+
 
 ## Questions to think about
 
