@@ -298,9 +298,7 @@ samtools index alignment/2612.sorted.calmd.bam
 
 However, these steps are rather time-consuming, even when we just have so little sequencing data as for our course example. The alignment is rather slow because we allow a single mismatch in the seeds that are used by the aligner BowTie2 to quickly determine the position of a read along the contig sequences (parameter `-N 1`). This is necessary because otherwise we might not be able to align reads with ancient DNA damage present on them. Secondly, the larger the resulting alignment file is the longer it takes to sort it by coordinate.
 
-To save us some time and continue with the more interesting analyses, I prepared the resulting files
-for us. For this, I also corrected damage-derived alleles in the contig sequences. You can access
-these files on the cluster by running the following commands:
+To save us some time and continue with the more interesting analyses, I prepared the resulting files for us. For this, I also corrected damage-derived alleles in the contig sequences. You can access these files on the cluster by running the following commands:
 
 ```{bash, eval = F}
 mkdir alignment
@@ -323,7 +321,85 @@ wget -O alignment/2612.fa \
 
 ### Reconstructing metagenome-assembled genomes
 
+There are typical two major approaches on how to study biological diversity of samples using the results obtained from the _de novo_ assembly. The first one is to reconstruct metagenome-assembled genomes (MAGs) and to study the species diversity.
 
+"Metagenome-assembled genome" is a convoluted term that means that we reconstructed a genome from metagenomic data via _de novo_ assembly. While these reconstructed genomes, particularly the high-quality ones, are most likely a good representation of the genomes of the organisms present in the sample, the community refrains from calling them a species or a strain. The reason is that for calling a genome a species or a strain additional analyses would be necessary, of which many would include the cultivation of the organism. For many samples, this is not feasible and therefore the community stuck to the term MAG instead.
+
+The most commonly applied method to obtain MAGs is the so-called "non-reference binning".
+Non-reference binning means that we do not try to identify contigs by aligning them against known
+reference genomes, but only use the characteristics of the contigs themselves to cluster them
+(**Figure 7**). 
+
+```{r out.width = "60%", echo = F, fig.align = "center"}
+knitr::include_graphics("assets/images/chapters/denovo-assembly/mag_binning_scheme.png")
+```
+**Figure 7**: **Scheme of binning _de novo_ assembled contigs into metagenome-assembled genomes.** During the binning contigs are grouped into clusters based on their characteristics, such as tetra-nucleotide frequency and the coverage along the contigs. Clusters of contigs that fulfil a minimum of quality criteria are then considered as metagenome-assembled genomes. However, depending on the sample, a number of contigs will remained unbinned.
+
+The two most commonly used characteristics are:
+
+  - the tetra-nucleotide frequency: the frequency of all 4-mers (e.g. AAAA, AAAC, AAAG etc.) in the contig sequence
+  - the coverage along the contig
+
+The idea here is that two contigs that are derived from the same bacterial genome will likely have a similar nucleotide composition and coverage.
+
+This approach works very well when the contigs are longer and they strongly differ in the nucleotide composition and the coverage from each other. However, if this is not the case, e.g. there is more than one strain of the same species in the sample, these approaches will likely not be able to assign some contigs to clusters: these contigs remain unbinned. In case there is a high number of unbinned contigs, one can also employ the more sensitive reference-based binning strategies but we will not cover this in this practical.
+
+There is a number of different binning tools out there that can be used for this task. Since this number is constantly growing, there have been attempts to standardise the test data sets that these tools are run on so that their performances can be easily compared. The most well-known attempt is the Critical Assessment of Metagenome Interpretation (CAMI; @Meyer2022), which released the latest comparison of commonly used tools for assembly, binning, and bin refinement in 2022. I recommend that you first check the performance of a new tool against the CAMI datasets before testing it to see whether it is worth using.
+
+Three commonly used binners are:
+
+  - metaBAT2 (@Kang2019; more than 1,300 citations)
+  - MaxBin2 (@WuMaxbin2016; more than 1,200 citations)
+  - CONCOCT (@Alneberg2014; more than 1,000 citation)
+
+Each of these three binners employs a slightly different strategy. While metaBAT2 simply uses the two previously mentioned metrics, the tetra-nucleotide frequency and the coverage along the contigs, MaxBin2 additionally uses single-copy marker genes to infer the taxonomic origin of contigs. In contrast, CONCOCT also just uses the two metrics but first performs a Principal Component Analysis (PCA) on these metrics and uses the PCA results for the clustering.
+
+The easiest way to run all these three programs is the program metaWRAP [@Uritskiy2018]. metaWRAP is in fact a pipeline that allows you to assemble your contigs, bin them, and subsequently refine the resulting MAGs. However, the pipeline is not very well written and does not contain any strategies to deal with ancient metagenomic sequencing data. Therefore, I prefer to use different pipelines, such as nf-core/mag for the assembly, and only use metaWRAP for binning and bin refinement.
+
+To skip the first steps of metaWRAP and start straight with the binning, we need to create the folder structure and files that metaWRAP expects:
+
+```{bash, eval = F}
+mkdir -p metawrap/INITIAL_BINNING/2612/work_files
+ln -s $PWD/alignment/2612.sorted.calmd.bam \
+    metawrap/INITIAL_BINNING/2612/work_files/2612.bam
+mkdir -p metawrap/faux_reads
+echo "@" > metawrap/faux_reads/2612_1.fastq
+echo "@" > metawrap/faux_reads/2612_2.fastq
+```
+
+Now, we can start to run the binning. In this practical, we will focus on metaBAT2 and MaxBin2. To bin the contigs with these binners, we execute:
+
+```{bash, eval = F}
+conda activate metawrap-env
+metawrap binning -o metawrap/INITIAL_BINNING/2612 \
+    -t 14 \
+    -a alignment/2612.fa \
+    --metabat2 --maxbin2 --universal \
+    metawrap/faux_reads/2612_1.fastq metawrap/faux_reads/2612_2.fastq
+conda deactivate
+```
+
+::: {.callout-caution}
+MetaWRAP is not a well-written Python software and has not been update for more than three years. It
+still relies on the deprecated Python v2.7. This is in conflict with many other tools and therefore
+it requires its own conda environment, `metawrap-env`. Do not forget to deactivate this environment
+afterwards again!
+:::
+
+MetaWRAP will run metaBAT2 and MaxBin2 for us and store their respective output into sub-folders in
+the folder `metawrap/INITIAL_BINNING/2612`.
+
+::: {.callout-tip title="Question" appearence="simple"}
+
+**How many bins did metaBAT2 and MaxBin2 reconstruct, respectively? Is there a different in the genome sizes of these reconstructed bins?**
+
+Hint: You can use the previously introduced script `k8 .calN50.js` to analyse the genome size of the individual bins.
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+
+
+:::
 
 ### Annotating genomes for function
 
@@ -344,6 +420,16 @@ Hint: Check the file `prokka/2612_003.txt` for the number of annotated elements.
 :::
 
 ::: {.callout-note collapse="true" title="Answer"}
+
+Prokka returns the following files:
+
+  - `.faa`: the amino acid sequences of all identified coding sequences 
+  - `.ffn`: the nucleotide sequences of all identified coding sequences 
+  - `.fna`: all contigs in nucleotide sequence format renamed following Prokka's naming scheme
+  - `.gbk`: all annotations and sequences in GenBank format
+  - `.gff`: all annotations and sequences in GFF format
+  - `.tsv`: the tabular overview of all annotations
+  - `.txt`: the short summary of the annotation results
 
 Prokka found 1,797 coding sequences, 32 tRNAs, but no rRNAs. Finding no rRNAs is a common issues when trying to assemble MAGs without long-read sequencing data and is not just characteristic for ancient DNA samples.
 
