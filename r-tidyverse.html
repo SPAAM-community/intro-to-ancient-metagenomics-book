@@ -675,7 +675,7 @@ dbl (4): id, flipper_length_mm, body_mass_g, year
  8    10 Adelie  Torgersen               198        4400 male   2007 
  9    11 Adelie  Torgersen               185        3700 female 2007 
 10    12 Adelie  Torgersen               195        3450 female 2007 
-# … with 290 more rows</code></pre>
+# ℹ 290 more rows</code></pre>
 </div>
 </div>
 <p>But there are various other ways to inspect the content of a <code>tibble</code></p>
@@ -894,7 +894,7 @@ Possible solutions
 3     4               193
 4     5               190
 5     6               181
-# … with 295 more rows</code></pre>
+# ℹ 295 more rows</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">select</span>(peng, <span class="sc">-</span>island, <span class="sc">-</span>flipper_length_mm) <span class="co"># remove two columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -906,7 +906,7 @@ Possible solutions
 3     4 Adelie         3450 female 2007 
 4     5 Adelie         3650 male   2007 
 5     6 Adelie         3625 female 2007 
-# … with 295 more rows</code></pre>
+# ℹ 295 more rows</code></pre>
 </div>
 </div>
 <p><code>dplyr::filter</code> allows for conditional filtering of rows.</p>
@@ -921,7 +921,7 @@ Possible solutions
 3     4 Adelie  Torgersen               193        3450 female 2007 
 4     5 Adelie  Torgersen               190        3650 male   2007 
 5     6 Adelie  Torgersen               181        3625 female 2007 
-# … with 88 more rows</code></pre>
+# ℹ 88 more rows</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">filter</span>(peng, year <span class="sc">==</span> <span class="dv">2007</span> <span class="sc">|</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    year <span class="sc">==</span> <span class="dv">2009</span>) <span class="co"># penguins examined in 2007 OR 2009</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -934,7 +934,7 @@ Possible solutions
 3     4 Adelie  Torgersen               193        3450 female 2007 
 4     5 Adelie  Torgersen               190        3650 male   2007 
 5     6 Adelie  Torgersen               181        3625 female 2007 
-# … with 193 more rows</code></pre>
+# ℹ 193 more rows</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">filter</span>(</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    peng, <span class="co"># an alternative way to express</span></span>
@@ -949,7 +949,7 @@ Possible solutions
 3     4 Adelie  Torgersen               193        3450 female 2007 
 4     5 Adelie  Torgersen               190        3650 male   2007 
 5     6 Adelie  Torgersen               181        3625 female 2007 
-# … with 193 more rows</code></pre>
+# ℹ 193 more rows</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">filter</span>(peng, species <span class="sc">==</span> <span class="st">"Adelie"</span> <span class="sc">&amp;</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    body_mass_g <span class="sc">&gt;=</span> <span class="dv">4000</span>) <span class="co"># Adelie penguins heavier than 4kg</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -962,7 +962,7 @@ Possible solutions
 3    13 Adelie  Torgersen               197        4500 male  2007 
 4    31 Adelie  Dream                   196        4150 male  2007 
 5    39 Adelie  Dream                   196        4400 male  2007 
-# … with 24 more rows</code></pre>
+# ℹ 24 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -981,7 +981,7 @@ Possible solutions
 3     4 Adelie  Torgersen               193        3450 female 2007 
 4     5 Adelie  Torgersen               190        3650 male   2007 
 5     6 Adelie  Torgersen               181        3625 female 2007 
-# … with 88 more rows</code></pre>
+# ℹ 88 more rows</code></pre>
 </div>
 </div>
 <p>It forwards the LHS (left-hand side) as the first argument of the function appearing on the RHS (right-hand side), which enables sequences of functions (“tidyverse style”).</p>
@@ -1094,7 +1094,7 @@ Possible solutions
 3 Adelie    2009     43
 4 Chinstrap 2007     23
 5 Chinstrap 2008     18
-# … with 4 more rows</code></pre>
+# ℹ 4 more rows</code></pre>
 </div>
 </div>
 <p>If we group by more than one variable, then <code>summarise</code> will not entirely remove the group tagging when generating the result dataset. We can force this with <code>.groups = "drop"</code> to avoid undesired behaviour with this dataset later on.</p>
@@ -1113,7 +1113,7 @@ Possible solutions
 3     6 Adelie  Torgersen               181        3625 female 2007 
 4    11 Adelie  Torgersen               185        3700 female 2007 
 5    12 Adelie  Torgersen               195        3450 female 2007 
-# … with 295 more rows</code></pre>
+# ℹ 295 more rows</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>peng <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">arrange</span>(sex, body_mass_g) <span class="co"># sort by sex and weight</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1125,7 +1125,7 @@ Possible solutions
 3    59 Adelie    Biscoe                  184        2850 female 2008 
 4    49 Adelie    Biscoe                  187        2900 female 2008 
 5   111 Adelie    Torgersen               188        2900 female 2009 
-# … with 295 more rows</code></pre>
+# ℹ 295 more rows</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>peng <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">arrange</span>(dplyr<span class="sc">::</span><span class="fu">desc</span>(body_mass_g)) <span class="co"># sort descending</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1137,7 +1137,7 @@ Possible solutions
 3   260 Gentoo  Biscoe               222        6000 male  2009 
 4   224 Gentoo  Biscoe               223        5950 male  2008 
 5   160 Gentoo  Biscoe               213        5850 male  2007 
-# … with 295 more rows</code></pre>
+# ℹ 295 more rows</code></pre>
 </div>
 </div>
 <p>Sorting also works within groups and can be paired with <code>slice</code> to extract extreme values per group.</p>
@@ -1157,7 +1157,7 @@ Possible solutions
 3    76 Adelie    Torgersen               196        4700 male  2008 
 4   303 Chinstrap Dream                   210        4800 male  2008 
 5   295 Chinstrap Dream                   205        4550 male  2008 
-# … with 4 more rows</code></pre>
+# ℹ 4 more rows</code></pre>
 </div>
 </div>
 <p>Slicing is also the relevant operation to take random samples from the observations in a <code>tibble</code>.</p>
@@ -1172,7 +1172,7 @@ Possible solutions
 3   221 Gentoo  Biscoe               209        4600 female 2008 
 4   104 Adelie  Biscoe               197        4775 male   2009 
 5   138 Adelie  Dream                190        3725 male   2009 
-# … with 5 more rows</code></pre>
+# ℹ 5 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -1255,7 +1255,7 @@ Possible solutions
 3            4 Adelie  Torgersen               193        3450 female 2007 
 4            5 Adelie  Torgersen               190        3650 male   2007 
 5            6 Adelie  Torgersen               181        3625 female 2007 
-# … with 295 more rows</code></pre>
+# ℹ 295 more rows</code></pre>
 </div>
 </div>
 <p>And with <code>dplyr::relocate</code> they can be reordered.</p>
@@ -1270,7 +1270,7 @@ Possible solutions
 3     4 2007  Adelie  Torgersen               193        3450 female
 4     5 2007  Adelie  Torgersen               190        3650 male  
 5     6 2007  Adelie  Torgersen               181        3625 female
-# … with 295 more rows</code></pre>
+# ℹ 295 more rows</code></pre>
 </div>
 </div>
 <p>Adding columns to tibbles with <code>mutate</code> and <code>transmute</code>.</p>
@@ -1289,7 +1289,7 @@ Possible solutions
 3     4 Adelie  Torgersen               193        3450 female 2007   3.45
 4     5 Adelie  Torgersen               190        3650 male   2007   3.65
 5     6 Adelie  Torgersen               181        3625 female 2007   3.62
-# … with 295 more rows</code></pre>
+# ℹ 295 more rows</code></pre>
 </div>
 </div>
 <p><code>dplyr::transmute</code> has the same interface as <code>dplyr::mutate</code>, but it removes all columns except for the newly created ones.</p>
@@ -1308,7 +1308,7 @@ Possible solutions
 3 Penguin Nr. 4               193
 4 Penguin Nr. 5               190
 5 Penguin Nr. 6               181
-# … with 295 more rows</code></pre>
+# ℹ 295 more rows</code></pre>
 </div>
 </div>
 <p><code>tibble::add_column</code> behaves as <code>dplyr::mutate</code>, but gives more control over column position.</p>
@@ -1319,15 +1319,15 @@ Possible solutions
 <span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre style="border: 1px; border-style: solid; margin-left: 10px; margin-right: 10px;"><code># A tibble: 300 × 8
-     id species island    flipper_length_mm flipper_length…¹ body_…² sex   year 
-  &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;                 &lt;dbl&gt;            &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
-1     1 Adelie  Torgersen               181             18.1    3750 male  2007 
-2     2 Adelie  Torgersen               186             18.6    3800 fema… 2007 
-3     4 Adelie  Torgersen               193             19.3    3450 fema… 2007 
-4     5 Adelie  Torgersen               190             19      3650 male  2007 
-5     6 Adelie  Torgersen               181             18.1    3625 fema… 2007 
-# … with 295 more rows, and abbreviated variable names ¹​flipper_length_cm,
-#   ²​body_mass_g</code></pre>
+     id species island    flipper_length_mm flipper_length_cm body_mass_g sex   
+  &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;                 &lt;dbl&gt;             &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt; 
+1     1 Adelie  Torgersen               181              18.1        3750 male  
+2     2 Adelie  Torgersen               186              18.6        3800 female
+3     4 Adelie  Torgersen               193              19.3        3450 female
+4     5 Adelie  Torgersen               190              19          3650 male  
+5     6 Adelie  Torgersen               181              18.1        3625 female
+# ℹ 295 more rows
+# ℹ 1 more variable: year &lt;chr&gt;</code></pre>
 </div>
 </div>
 <p><code>dplyr::mutate</code> can also be combined with <code>dplyr::group_by</code> (instead of <code>dplyr::summarise</code>) to add information on a group level. This is relevant, when a value for an individual entity should be put into context of a group-wise summary statistic.</p>
@@ -1351,7 +1351,7 @@ Possible solutions
 3   274 Chinstrap female 2007              1.17
 4     7 Adelie    male   2007              1.17
 5   303 Chinstrap male   2008              1.16
-# … with 295 more rows</code></pre>
+# ℹ 295 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -1375,7 +1375,7 @@ Possible solutions
 3     4 Adelie  Torgersen               193        3450 female 2007  below mean
 4     5 Adelie  Torgersen               190        3650 male   2007  below mean
 5     6 Adelie  Torgersen               181        3625 female 2007  below mean
-# … with 295 more rows</code></pre>
+# ℹ 295 more rows</code></pre>
 </div>
 </div>
 <p><code>ifelse</code> gets cumbersome easily. <code>dplyr::case_when</code> is more readable and scales much better for this application.</p>
@@ -1396,7 +1396,7 @@ Possible solutions
 3     4 Adelie  Torgersen               193        3450 female 2007  below mean
 4     5 Adelie  Torgersen               190        3650 male   2007  below mean
 5     6 Adelie  Torgersen               181        3625 female 2007  below mean
-# … with 295 more rows</code></pre>
+# ℹ 295 more rows</code></pre>
 </div>
 </div>
 <p><code>dplyr::case_match</code> is similar, but unlike <code>dplyr::case_when</code> it does not check logical expressions, but matches by value.</p>
@@ -1474,7 +1474,7 @@ Possible solutions
 3 BMW    2016    30
 4 BMW    2017    45
 5 VW     2014    67
-# … with 3 more rows</code></pre>
+# ℹ 3 more rows</code></pre>
 </div>
 </div>
 <p>Wide datasets are not always the wrong choice, for example for adjacency matrices to represent graphs, covariance matrices or other pairwise statistics. When data gets big, then wide formats can be significantly more efficient (e.g.&nbsp;for spatial data).</p>
@@ -1531,7 +1531,7 @@ Possible solutions
 3     4  22.8     4   108    93  3.85  2.32  18.6     1     1     1
 4     3  21.4     6   258   110  3.08  3.22  19.4     1     0     1
 5     3  18.7     8   360   175  3.15  3.44  17.0     0     0     2
-# … with 27 more rows</code></pre>
+# ℹ 27 more rows</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1555,7 +1555,7 @@ Possible solutions
 3  22.8     4   108    93  3.85  2.32  18.6     1     1     4     1 manual   
 4  21.4     6   258   110  3.08  3.22  19.4     1     0     3     1 automatic
 5  18.7     8   360   175  3.15  3.44  17.0     0     0     3     2 automatic
-# … with 27 more rows</code></pre>
+# ℹ 27 more rows</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1615,7 +1615,7 @@ Possible solutions
 3     3           40.3          18  
 4     4           36.7          19.3
 5     5           39.3          20.6
-# … with 295 more rows</code></pre>
+# ℹ 295 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -1636,15 +1636,15 @@ Possible solutions
 <span id="cb116-5"><a href="#cb116-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre style="border: 1px; border-style: solid; margin-left: 10px; margin-right: 10px;"><code># A tibble: 300 × 9
-     id species island    flipper_length_mm body_m…¹ sex   year  bill_…² bill_…³
-  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;                 &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-1     1 Adelie  Torgersen               181     3750 male  2007     39.1    18.7
-2     2 Adelie  Torgersen               186     3800 fema… 2007     39.5    17.4
-3     4 Adelie  Torgersen               193     3450 fema… 2007     36.7    19.3
-4     5 Adelie  Torgersen               190     3650 male  2007     39.3    20.6
-5     6 Adelie  Torgersen               181     3625 fema… 2007     38.9    17.8
-# … with 295 more rows, and abbreviated variable names ¹​body_mass_g,
-#   ²​bill_length_mm, ³​bill_depth_mm</code></pre>
+     id species island  flipper_length_mm body_mass_g sex   year  bill_length_mm
+  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;               &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;
+1     1 Adelie  Torger…               181        3750 male  2007            39.1
+2     2 Adelie  Torger…               186        3800 fema… 2007            39.5
+3     4 Adelie  Torger…               193        3450 fema… 2007            36.7
+4     5 Adelie  Torger…               190        3650 male  2007            39.3
+5     6 Adelie  Torger…               181        3625 fema… 2007            38.9
+# ℹ 295 more rows
+# ℹ 1 more variable: bill_depth_mm &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <p>Left joins are the most common join operation: Add information from y to the main dataset x.</p>
@@ -1667,15 +1667,15 @@ Possible solutions
 <span id="cb118-6"><a href="#cb118-6" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">arrange</span>(id) <span class="co"># observation in the peng dataset</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre style="border: 1px; border-style: solid; margin-left: 10px; margin-right: 10px;"><code># A tibble: 300 × 9
-     id species island    flipper_length_mm body_m…¹ sex   year  bill_…² bill_…³
-  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;                 &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-1     1 Adelie  Torgersen               181     3750 male  2007     39.1    18.7
-2     2 Adelie  Torgersen               186     3800 fema… 2007     39.5    17.4
-3     3 &lt;NA&gt;    &lt;NA&gt;                     NA       NA &lt;NA&gt;  &lt;NA&gt;     40.3    18  
-4     4 Adelie  Torgersen               193     3450 fema… 2007     36.7    19.3
-5     5 Adelie  Torgersen               190     3650 male  2007     39.3    20.6
-# … with 295 more rows, and abbreviated variable names ¹​body_mass_g,
-#   ²​bill_length_mm, ³​bill_depth_mm</code></pre>
+     id species island  flipper_length_mm body_mass_g sex   year  bill_length_mm
+  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;               &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;
+1     1 Adelie  Torger…               181        3750 male  2007            39.1
+2     2 Adelie  Torger…               186        3800 fema… 2007            39.5
+3     3 &lt;NA&gt;    &lt;NA&gt;                   NA          NA &lt;NA&gt;  &lt;NA&gt;            40.3
+4     4 Adelie  Torger…               193        3450 fema… 2007            36.7
+5     5 Adelie  Torger…               190        3650 male  2007            39.3
+# ℹ 295 more rows
+# ℹ 1 more variable: bill_depth_mm &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <p>Right joins are almost identical to left joins – only x and y have reversed roles.</p>
@@ -1697,15 +1697,15 @@ Possible solutions
 <span id="cb120-5"><a href="#cb120-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre style="border: 1px; border-style: solid; margin-left: 10px; margin-right: 10px;"><code># A tibble: 275 × 9
-     id species island    flipper_length_mm body_m…¹ sex   year  bill_…² bill_…³
-  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;                 &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-1     1 Adelie  Torgersen               181     3750 male  2007     39.1    18.7
-2     2 Adelie  Torgersen               186     3800 fema… 2007     39.5    17.4
-3     4 Adelie  Torgersen               193     3450 fema… 2007     36.7    19.3
-4     5 Adelie  Torgersen               190     3650 male  2007     39.3    20.6
-5     6 Adelie  Torgersen               181     3625 fema… 2007     38.9    17.8
-# … with 270 more rows, and abbreviated variable names ¹​body_mass_g,
-#   ²​bill_length_mm, ³​bill_depth_mm</code></pre>
+     id species island  flipper_length_mm body_mass_g sex   year  bill_length_mm
+  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;               &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;
+1     1 Adelie  Torger…               181        3750 male  2007            39.1
+2     2 Adelie  Torger…               186        3800 fema… 2007            39.5
+3     4 Adelie  Torger…               193        3450 fema… 2007            36.7
+4     5 Adelie  Torger…               190        3650 male  2007            39.3
+5     6 Adelie  Torger…               181        3625 fema… 2007            38.9
+# ℹ 270 more rows
+# ℹ 1 more variable: bill_depth_mm &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <p>Inner joins are a fast and easy way to check, to which degree two dataset overlap.</p>
@@ -1727,15 +1727,15 @@ Possible solutions
 <span id="cb122-5"><a href="#cb122-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">arrange</span>(id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre style="border: 1px; border-style: solid; margin-left: 10px; margin-right: 10px;"><code># A tibble: 325 × 9
-     id species island    flipper_length_mm body_m…¹ sex   year  bill_…² bill_…³
-  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;                 &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-1     1 Adelie  Torgersen               181     3750 male  2007     39.1    18.7
-2     2 Adelie  Torgersen               186     3800 fema… 2007     39.5    17.4
-3     3 &lt;NA&gt;    &lt;NA&gt;                     NA       NA &lt;NA&gt;  &lt;NA&gt;     40.3    18  
-4     4 Adelie  Torgersen               193     3450 fema… 2007     36.7    19.3
-5     5 Adelie  Torgersen               190     3650 male  2007     39.3    20.6
-# … with 320 more rows, and abbreviated variable names ¹​body_mass_g,
-#   ²​bill_length_mm, ³​bill_depth_mm</code></pre>
+     id species island  flipper_length_mm body_mass_g sex   year  bill_length_mm
+  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;               &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;
+1     1 Adelie  Torger…               181        3750 male  2007            39.1
+2     2 Adelie  Torger…               186        3800 fema… 2007            39.5
+3     3 &lt;NA&gt;    &lt;NA&gt;                   NA          NA &lt;NA&gt;  &lt;NA&gt;            40.3
+4     4 Adelie  Torger…               193        3450 fema… 2007            36.7
+5     5 Adelie  Torger…               190        3650 male  2007            39.3
+# ℹ 320 more rows
+# ℹ 1 more variable: bill_depth_mm &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <p>Full joins allow to preserve every bit of information.</p>
@@ -1764,7 +1764,7 @@ Possible solutions
 3     4 Adelie  Torgersen               193        3450 female 2007 
 4     5 Adelie  Torgersen               190        3650 male   2007 
 5     6 Adelie  Torgersen               181        3625 female 2007 
-# … with 270 more rows</code></pre>
+# ℹ 270 more rows</code></pre>
 </div>
 </div>
 <p>Semi joins are underused (!) operations to filter datasets.</p>
@@ -1793,7 +1793,7 @@ Possible solutions
 3    74 Adelie  Torgersen               195        4000 male   2008 
 4    92 Adelie  Dream                   196        4350 male   2008 
 5    99 Adelie  Biscoe                  193        2925 female 2009 
-# … with 20 more rows</code></pre>
+# ℹ 20 more rows</code></pre>
 </div>
 </div>
 <p>Anti joins allow to quickly determine what information is missing in a dataset compared to an other one.</p>
@@ -1837,7 +1837,7 @@ Possible solutions
 3  22.8     4   108    93  3.85  2.32  18.6     1     1     4     1 &lt;NA&gt;   
 4  21.4     6   258   110  3.08  3.22  19.4     1     0     3     1 boring 
 5  18.7     8   360   175  3.15  3.44  17.0     0     0     3     2 boring 
-# … with 27 more rows</code></pre>
+# ℹ 27 more rows</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1852,7 +1852,7 @@ Possible solutions
 3  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1
 4  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
 5  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
-# … with 7 more rows</code></pre>
+# ℹ 7 more rows</code></pre>
 </div>
 </div>
 </div>
