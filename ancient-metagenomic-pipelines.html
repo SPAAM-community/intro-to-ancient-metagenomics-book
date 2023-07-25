@@ -849,58 +849,60 @@ Self guided: setting up aMeta for tutorial
 <div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <section id="setting-up-ameta-manually" class="level3 callout-body-container callout-body" data-number="17.5.2">
 <h3 data-number="17.5.2" class="anchored" data-anchor-id="setting-up-ameta-manually"><span class="header-section-number">17.5.2</span> Setting up aMeta manually</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/NBISweden/aMeta</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> aMeta</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-f</span> workflow/envs/environment.yaml</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate aMeta</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">## Change into ~/.test to set up all the required test resources (Databases etc.)</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/.test</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">## Set up conda envs</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--use-conda</span> <span class="at">--show-failed-logs</span> <span class="at">-j</span> 2 <span class="at">--conda-cleanup-pkgs</span> cache <span class="at">--conda-create-envs-only</span> <span class="at">-s</span> ../workflow/Snakefile <span class="at">--conda-frontend</span> conda</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> <span class="va">$(</span><span class="fu">dirname</span> <span class="va">$(</span><span class="fu">dirname</span> <span class="va">$CONDA_EXE))</span>/etc/profile.d/conda.sh</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">## Build dummy KrakenUniq database</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> krakenuniq .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span><span class="va">)</span></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="ex">krakenuniq-build</span> <span class="at">--db</span> resources/KrakenUniq_DB <span class="at">--kmer-len</span> 21 <span class="at">--minimizer-len</span> 11 <span class="at">--jellyfish-bin</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>/<span class="va">$env</span>/bin/jellyfish</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="co">## Get Krona taxonomy tax dump</span></span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> krona .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-1</span><span class="va">)</span></span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$env</span>/opt/krona</span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="ex">./updateTaxonomy.sh</span> taxonomy</span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="at">-</span></span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="co">## Adjust malt max memory usage</span></span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> hops .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-1</span><span class="va">)</span></span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="va">version</span><span class="op">=</span><span class="va">$(</span><span class="ex">conda</span> list malt <span class="at">--json</span> <span class="kw">|</span> <span class="fu">grep</span> version <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/</span><span class="dt">\"</span><span class="st">//g"</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $2}'</span><span class="va">)</span></span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$env</span>/opt/malt-<span class="va">$version</span></span>
-<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="at">-e</span> <span class="st">"s/-Xmx64G/-Xmx3G/"</span> malt-build.vmoptions</span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="at">-e</span> <span class="st">"s/-Xmx64G/-Xmx3G/"</span> malt-run.vmoptions</span>
-<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="at">-</span></span>
-<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
-<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> .initdb</span>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>!-- <span class="ex">TODO:</span> replace with link to before-you-start <span class="at">--</span><span class="op">&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/NBISweden/aMeta</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> aMeta</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-f</span> workflow/envs/environment.yaml</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate aMeta</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ancient-metagenomic-pipelines/aMeta</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">## Change into ~/.test to set up all the required test resources (Databases etc.)</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/.test</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">## Set up conda envs</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--use-conda</span> <span class="at">--show-failed-logs</span> <span class="at">-j</span> 2 <span class="at">--conda-cleanup-pkgs</span> cache <span class="at">--conda-create-envs-only</span> <span class="at">-s</span> ../workflow/Snakefile <span class="at">--conda-frontend</span> conda</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> <span class="va">$(</span><span class="fu">dirname</span> <span class="va">$(</span><span class="fu">dirname</span> <span class="va">$CONDA_EXE))</span>/etc/profile.d/conda.sh</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">## Build dummy KrakenUniq database</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> krakenuniq .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span><span class="va">)</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="ex">krakenuniq-build</span> <span class="at">--db</span> resources/KrakenUniq_DB <span class="at">--kmer-len</span> 21 <span class="at">--minimizer-len</span> 11 <span class="at">--jellyfish-bin</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>/<span class="va">$env</span>/bin/jellyfish</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="co">## Get Krona taxonomy tax dump</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> krona .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-1</span><span class="va">)</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$env</span>/opt/krona</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="ex">./updateTaxonomy.sh</span> taxonomy</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="at">-</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="co">## Adjust malt max memory usage</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> hops .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-1</span><span class="va">)</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="va">version</span><span class="op">=</span><span class="va">$(</span><span class="ex">conda</span> list malt <span class="at">--json</span> <span class="kw">|</span> <span class="fu">grep</span> version <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/</span><span class="dt">\"</span><span class="st">//g"</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $2}'</span><span class="va">)</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$env</span>/opt/malt-<span class="va">$version</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="at">-e</span> <span class="st">"s/-Xmx64G/-Xmx3G/"</span> malt-build.vmoptions</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="at">-e</span> <span class="st">"s/-Xmx64G/-Xmx3G/"</span> malt-run.vmoptions</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="at">-</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
 <span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="co">## Run a quick test</span></span>
-<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--use-conda</span> <span class="at">--show-failed-logs</span> <span class="at">--conda-cleanup-pkgs</span> cache <span class="at">-s</span> ../workflow/Snakefile <span class="va">$@</span> <span class="at">--conda-frontend</span> conda</span>
-<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">-s</span> ../workflow/Snakefile <span class="at">--report</span> <span class="at">--report-stylesheet</span> ../workflow/report/custom.css <span class="at">--conda-frontend</span> conda</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> .initdb</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a><span class="co">## Run a quick test</span></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--use-conda</span> <span class="at">--show-failed-logs</span> <span class="at">--conda-cleanup-pkgs</span> cache <span class="at">-s</span> ../workflow/Snakefile <span class="va">$@</span> <span class="at">--conda-frontend</span> conda</span>
 <span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a><span class="co">## Now we move back into the main repository where we can symlink all the database files back to try running our 'own' test</span></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">-s</span> ../workflow/Snakefile <span class="at">--report</span> <span class="at">--report-stylesheet</span> ../workflow/report/custom.css <span class="at">--conda-frontend</span> conda</span>
 <span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../</span>
-<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> resources/</span>
-<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> ../.test/resources/<span class="pp">*</span> .</span>
-<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../config</span>
-<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> config.yaml config.yaml.bkp</span>
-<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../</span>
-<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> .test/data/ .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a><span class="co">## Now we move back into the main repository where we can symlink all the database files back to try running our 'own' test</span></span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> resources/</span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> ../.test/resources/<span class="pp">*</span> .</span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../config</span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> config.yaml config.yaml.bkp</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../</span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> .test/data/ .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </div>
 </div>

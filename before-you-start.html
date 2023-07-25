@@ -479,28 +479,75 @@ Tip
 <h2 class="unnumbered anchored" data-anchor-id="additional-software">Additional Software</h2>
 <p>For some chapters you may need the following software/and or data manually installed, which are not available on <code>bioconda</code>:</p>
 <ul>
-<li><em>De novo</em> assembly
+<li><p>Docker (installation method will vary depending on your OS)</p>
+<ul>
+<li><p><a href="https://docs.docker.com/engine/install/ubuntu/">Standard install</a></p></li>
+<li><p>Linux-nerd install</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> install <span class="at">-m</span> 0755 <span class="at">-d</span> /etc/apt/keyrings</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://download.docker.com/linux/ubuntu/gpg <span class="kw">|</span> <span class="fu">sudo</span> gpg <span class="at">--dearmor</span> <span class="at">-o</span> /etc/apt/keyrings/docker.gpg</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod a+r /etc/apt/keyrings/docker.gpg</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="dt">\</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">"deb [arch="</span><span class="va">$(</span><span class="ex">dpkg</span> <span class="at">--print-architecture</span><span class="va">)</span><span class="st">" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu </span><span class="dt">\</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span><span class="va">$(</span><span class="bu">.</span> /etc/os-release <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">"</span><span class="va">$VERSION_CODENAME</span><span class="st">"</span><span class="va">)</span><span class="st">" stable"</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/apt/sources.list.d/docker.list <span class="op">&gt;</span> /dev/null</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">## May need to do a reboot or something here</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> groupadd docker</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> docker <span class="va">$USER</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="ex">newgrp</span> docker</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> reboot <span class="co">## will kick you out, but it'll be back in a minute or two</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul></li>
+<li><p>rename (if not already installed, e.g.&nbsp;on OSX)</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install rename</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><em>De novo</em> assembly</p>
 <ul>
 <li>MetaWrap</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-n</span> metawrap-env python=2.7</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate metawrap-env</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> install biopython bwa maxbin2 metabat2 samtools=1.9</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/bin/</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/bxlab/metaWRAP.git</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"export PATH=</span><span class="va">$PATH</span><span class="st">:~/bin/metaWRAP/bin"</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li>Functional Profiling
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-n</span> metawrap-env python=2.7</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate metawrap-env</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> install biopython bwa maxbin2=2.2.7 metabat2 samtools=1.9</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/bin/</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/bxlab/metaWRAP.git</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"export PATH=</span><span class="va">$PATH</span><span class="st">:~/bin/metaWRAP/bin"</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Functional Profiling</p>
 <ul>
 <li><p>HUMAnN3 UniRef database (where the functional providing conda environment is already activated - see the Functional Profiling chapter for more details)</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">humann3_databases</span> <span class="at">--download</span> uniref uniref90_ec_filtered_diamond /vol/volume/5c-functional-genomics/humann3_db</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">humann3_databases</span> <span class="at">--download</span> uniref uniref90_ec_filtered_diamond /vol/volume/5c-functional-genomics/humann3_db</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul></li>
-<li>Phylogenomics
+<li><p>Phylogenomics</p>
 <ul>
 <li><p><a href="http://tree.bio.ed.ac.uk/download.html?name=tempest&amp;id=102&amp;num=3">Tempest</a> (v1.5.3)</p></li>
 <li><p>It is also recommended to assign the following <code>bash</code> variable so you can access the tool without the full path</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">tempest</span><span class="op">=</span><span class="st">'bash /home/ubuntu/bin/TempEst_v1.5.3/bin/tempest'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">tempest</span><span class="op">=</span><span class="st">'bash /home/ubuntu/bin/TempEst_v1.5.3/bin/tempest'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p><a href="https://www.megasoftware.net">MEGAX</a> (v11.0.11)</p></li>
 </ul></li>
+<li><p>Authentication and Decontamination <!-- TODO: update to use path method like e.g. metaWrap/tempest --></p>
+<ul>
+<li><p>Sourcetracker</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/authentication-decontamination/sourcetracker/</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/danknights/sourcetracker.git</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">## patch due to R update</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">'538,539s/^/#/'</span> sourcetracker/src/SourceTracker.r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>decOM <!-- TODO: remove with bioconda env once available  --></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/authentication-decontamination/decom</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/CamilaDuitama/decOM.git  </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> decOM  </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-n</span> decOM <span class="at">--file</span> environment.yml  </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate decOM  </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span>/absolute/path/to/decOM:<span class="va">${PATH}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul></li>
+<li><p>Ancient Metagenomic Pipelines <!-- TODO: update to use path method like e.g. metaWrap/tempest --></p>
+<pre><code>  ```bash
+  cd /&lt;path&gt;/&lt;to&gt;/ancient-metagenomic-pipelines/
+  git clone https://github.com/NBISweden/aMeta
+  cd aMeta
+  conda env create -f workflow/envs/environment.yaml
+  conda activate aMeta
+  ```</code></pre></li>
 </ul>
 
 

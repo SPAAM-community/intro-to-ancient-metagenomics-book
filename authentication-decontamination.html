@@ -893,7 +893,7 @@ Self guided: data preparation
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>In addition to the input files (already prepared for you), you will also need to clone the Sourcetracker 1 R code repository (unfortunately it’s not available as a package)</p>
+<p>In addition to the input files (already prepared for you), you will also need to clone the Sourcetracker 1 R code repository (unfortunately it’s not available as a package) <!-- TODO: replace with link to before-you-start --></p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/authentication-decontamination/sourcetracker/</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/danknights/sourcetracker.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -911,7 +911,7 @@ Patching sourcetracker for newer R versions
 <div class="callout-body-container callout-body">
 <p>Unfortunately Sourcetracker’s original R code was done a very long time ago, and has resulted in some incompatiblities with more recent versions of R.</p>
 <p>If using a more recent version of R (such as in this chapter’s conda environment), you will need to perform the following ‘patching’ of the code, to prevent an error.</p>
-<p>Run the following command to <a href="https://github.com/danknights/sourcetracker/issues/15">comment out the offending lines</a> (538, 539), where R’s behaviour in later versions of a fundamental validation function has changed.</p>
+<p>Run the following command to <a href="https://github.com/danknights/sourcetracker/issues/15">comment out the offending lines</a> (538, 539), where R’s behaviour in later versions of a fundamental validation function has changed. <!-- TODO: replace with link to before-you-start --></p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">'538,539s/^/#/'</span> sourcetracker/src/SourceTracker.r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
@@ -993,31 +993,32 @@ Self guided: data preparation
 </div>
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>If doing a self-guided tutorial, you will need to download a rather large pre-built database.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/authentication-decontamination/decom</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/CamilaDuitama/decOM.git  </span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> decOM  </span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-n</span> decOM <span class="at">--file</span> environment.yml  </span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate decOM  </span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span>/absolute/path/to/decOM:<span class="va">${PATH}</span></span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="co">## In the directory </span></span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="co">## Note that decOM does not like dots in names so make symlinks</span></span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> ../rawdata/<span class="pp">*</span>trimmed.fastq.gz<span class="kw">;</span> <span class="cf">do</span> </span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ln</span> <span class="at">-s</span> <span class="st">"</span><span class="va">$i</span><span class="st">"</span> <span class="st">"</span><span class="va">${i</span><span class="op">/</span><span class="ss">.trimmed</span><span class="op">/</span>_trimmed<span class="va">}</span><span class="st">"</span></span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare input fof-files that have a key - value format</span></span>
-<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="dt">{</span><span class="dv">1</span><span class="dt">..</span><span class="dv">10</span><span class="dt">}</span><span class="kw">;</span> <span class="cf">do</span> </span>
-<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"sample</span><span class="va">${i}</span><span class="st">_trimmed : sample</span><span class="va">${i}</span><span class="st">_trimmed.fastq.gz"</span> <span class="op">&gt;</span> sample<span class="va">${i}</span>_trimmed.fof</span>
-<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> sample<span class="va">${i}</span>_trimmed <span class="op">&gt;&gt;</span> FASTQ_NAMES_LIST.txt<span class="kw">;</span> </span>
-<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Download pre-built kmer-matrix of sources (aOral, mOral, Sediment/Soil, Skin)</span></span>
-<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://zenodo.org/record/6513520/files/decOM_sources.tar.gz  </span>
-<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xf</span> decOM_sources.tar.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If doing a self-guided tutorial, you will need to download a rather large pre-built database. <!-- TODO: replace with link to before-you-start --></p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/authentication-decontamination/decom</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/CamilaDuitama/decOM.git  </span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> decOM  </span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-n</span> decOM <span class="at">--file</span> environment.yml  </span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate decOM  </span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span>/absolute/path/to/decOM:<span class="va">${PATH}</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="co">## In the directory </span></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a><span class="co">## Note that decOM does not like dots in names so make symlinks</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> ../rawdata/<span class="pp">*</span>trimmed.fastq.gz<span class="kw">;</span> <span class="cf">do</span> </span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ln</span> <span class="at">-s</span> <span class="st">"</span><span class="va">$i</span><span class="st">"</span> <span class="st">"</span><span class="va">${i</span><span class="op">/</span><span class="ss">.trimmed</span><span class="op">/</span>_trimmed<span class="va">}</span><span class="st">"</span></span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare input fof-files that have a key - value format</span></span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="dt">{</span><span class="dv">1</span><span class="dt">..</span><span class="dv">10</span><span class="dt">}</span><span class="kw">;</span> <span class="cf">do</span> </span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"sample</span><span class="va">${i}</span><span class="st">_trimmed : sample</span><span class="va">${i}</span><span class="st">_trimmed.fastq.gz"</span> <span class="op">&gt;</span> sample<span class="va">${i}</span>_trimmed.fof</span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> sample<span class="va">${i}</span>_trimmed <span class="op">&gt;&gt;</span> FASTQ_NAMES_LIST.txt<span class="kw">;</span> </span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Download pre-built kmer-matrix of sources (aOral, mOral, Sediment/Soil, Skin)</span></span>
+<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://zenodo.org/record/6513520/files/decOM_sources.tar.gz  </span>
+<span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xf</span> decOM_sources.tar.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
