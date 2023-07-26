@@ -1,7 +1,7 @@
 ---
 title: Ancient Metagenomic Pipelines
 author: "James A. Fellows Yates, Megan Michel, Nikolay Oskolkov"
-bibliography: assets/references/chapters/ancient-metagenomic-pipelines/references.bib
+bibliography: assets/references/chapters/ancient-metagenomic-pipelines/references.bibtex
 ---
 
 ::: {.callout-tip}
@@ -50,9 +50,9 @@ This chapter will not cover how to write your _own_ workflow, as this would requ
 
 ## What is nf-core/eager?
 
-nf-core/eager is a computational pipeline specifically designed for preprocessing and analysis of ancient DNA data. It is a reimplementation of the previously published EAGER (Efficient Ancient Genome Reconstruction) pipeline [@Peltzer2016-ov] written in the workflow manager Nextflow. In addition to reimplementing the original genome mapping and variant calling pipeline, in a more reproducible and portable manner the pipeline also included additional new functionality particularly for researchers interested in microbial sciences, namely a dedicated genotyper and consensus caller designed for low coverage genomes, the ability to get breadth and depth coverage statistics for particular genomic features (e.g. virulence genes), but also automated metagenomic screening and authentication of the off-target reads from mapping (e.g. against the host reference genome).
+nf-core/eager is a computational pipeline specifically designed for preprocessing and analysis of ancient DNA data ([@fig-ancientmetagenomicpipelines-eagermetromap]). It is a reimplementation of the previously published EAGER (Efficient Ancient Genome Reconstruction) pipeline [@Peltzer2016-ov] written in the workflow manager Nextflow. In addition to reimplementing the original genome mapping and variant calling pipeline, in a more reproducible and portable manner the pipeline also included additional new functionality particularly for researchers interested in microbial sciences, namely a dedicated genotyper and consensus caller designed for low coverage genomes, the ability to get breadth and depth coverage statistics for particular genomic features (e.g. virulence genes), but also automated metagenomic screening and authentication of the off-target reads from mapping (e.g. against the host reference genome).
 
-![](assets/images/chapters/ancient-metagenomic-pipelines/eager2_metromap_complex.png)
+![nf-core/eager workflow summary in the form of a 'metro map' style diagram. FASTQ or BAM input for red and yellow lines (representing eukaryotic and prokaryotic workflows) goes through FastQC, Adapter Removal, alignment to a reference FASTA input with a range of alignments, before going through BAM filtering, deduplication, _in silico_ damage removal, and variant calling. Multiple statistics steps come out of the deduplication 'station'. The blue line represents the metagenomic workflow, where offtarget reads come out of the BAM filtering 'station', and goes through compexity filtering with BBDuk, MALT or Kraken2, and optionally into MaltExtract for MALT output.](assets/images/chapters/ancient-metagenomic-pipelines/eager2_metromap_complex.png){#fig-ancientmetagenomicpipelines-eagermetromap}
 
 A detailed description of steps in the pipeline is available as part of nf-core/eager's extensive documentation. For more information, check out the usage documentation [here](https://nf-co.re/eager/2.4.7/usage).
 
@@ -85,7 +85,7 @@ conda activate activate ancient-metagenomic-pipelines
 And change into our practical session directory:
 
 ```bash
-cd ancient-metagenomic-pipelines
+cd /<path>/<to>/ancient-metagenomic-pipelines
 ```
 
 ::: {.callout-warning}
@@ -313,7 +313,9 @@ If you're impatient, and your nf-core/eager run hasn't finished yet, you can can
 
 In here you should see a bunch of files, but you should open the `multiqc_report.html` file in your browser. You can either do this via the commandline (e.g. for firefox `firefox multiqc_report.html`) or navigate to the file using your file browser and double clicking on the HTML file.
 
-Once opened you will see a table, and below it many figures and other tables. All of these statistics can help you evaluate the quality of your data, pipeline run, and also possibly some initial results! 
+Once opened you will see a table, and below it many figures and other tables ([@fig-ancientmetagenomicpipelines-multiqcscreenshot]). All of these statistics can help you evaluate the quality of your data, pipeline run, and also possibly some initial results! 
+
+![Screenshot of initial view of a MultiQC report. The left hand sidebar provides links to various sections of the report, most of them containing summary images of the outputs of all the different tools. On the main panel you see the MultiQC and nf-core/eager logos, some descriptive information about how the report was generated, and finally the top of the 'General Statistics' tables, that has columns such as Sample Name, Nr. Input reads, length of input reads, %trimmed, etc. Each numeric column contains a coloured barchart to help readers to quickly evaluate the number of a given sample against all others in the table](assets/images/chapters/ancient-metagenomic-pipelines/multiqc-screenshot.png){#fig-ancientmetagenomicpipelines-multiqcscreenshot}
 
 Typically you will look at the General Statistics table to get a rough overview of the pipeline run. If you hover your cursor over the column headers, you can see which tool the column's numbers came from, however generally the columns go in order of left to right, where the left most columns are from earlier in the pipeline run (e.g. removing adapters), to variant calling statistics (e.g. number of variants called). You can also configure which columns to display using the `Configure columns` button. It's important to note that in MultiQC tables, you may have duplicate rows from the same library or sample. This is due to MultiQC trying to squish in as many statistics from as many steps of the pipeline as possible (for example, statistics on each of a pair of FASTQ files, and then statistics on the single merged and mapped BAM file), so you should play around with the column configuration to help you visualise the best way to initially evaluate your data. 
 
@@ -397,6 +399,13 @@ Before continuing onto the next section of this chapter, you will need to deacti
 conda deactivate 
 ```
 
+You may also need to delete the contents of the eager directory
+
+```bash
+cd /<path>/<to>/ancient-metagenomic-pipelines/eager
+rm -r *
+```
+
 ## What is aMeta?
 
 ::: {.callout-tip}
@@ -407,9 +416,9 @@ conda activate aMeta
 ```
 :::
 
-While nf-core/eager is a solid pipeline for microbial genomics, and can also perform metagenomic screening via the integrated HOPS pipeline or Kraken2, in some cases you may wish to have a more accurate and resource efficient pipeline  In this section, we will demonstrate an example of using aMeta, a snakemake workflow proposed by @Pochon2022-hj that aims to minimise resource usage by combining both low-resource requiring k-mer based taxonomic profiling as well as accurate read-alignment ([@fig-ancient-metagenomic-pipelines-ametadiagram]).
+While nf-core/eager is a solid pipeline for microbial genomics, and can also perform metagenomic screening via the integrated HOPS pipeline or Kraken2, in some cases you may wish to have a more accurate and resource efficient pipeline  In this section, we will demonstrate an example of using aMeta, a snakemake workflow proposed by @Pochon2022-hj that aims to minimise resource usage by combining both low-resource requiring k-mer based taxonomic profiling as well as accurate read-alignment ([@fig-ancientmetagenomicpipelines-ametadiagram]).
 
-![Schematic diagram of the aMeta pipeline. Input samples initially undergo generalised screening using the K-mer based KrakenUniq. For every hit that the reads match inside this database, then sees the genome of that hit then constructed into a MALT database where the reads undergo a mapping step to generate alignments, a lowest-common-ancestor (LCA) algorithm step to refine taxonomic assignments, and ancient DNA authentication statistics generation](assets/images/chapters/ancient-metagenomic-pipelines/ameta-workflow.jpg){#fig-ancient-metagenomic-pipelines-ametadiagram}
+![Schematic diagram of the aMeta pipeline. Input samples initially undergo generalised screening using the K-mer based KrakenUniq. For every hit that the reads match inside this database, then sees the genome of that hit then constructed into a MALT database where the reads undergo a mapping step to generate alignments, a lowest-common-ancestor (LCA) algorithm step to refine taxonomic assignments, and ancient DNA authentication statistics generation](assets/images/chapters/ancient-metagenomic-pipelines/ameta-workflow.jpg){#fig-ancientmetagenomicpipelines-ametadiagram}
 
 Rather than the very computationally heavy HOPS pipeline [@Hubler2019-qw], that requires extremely large computational nodes with large RAM (>1 TB) to load MALT databases into memory, aMeta does this via a two step approach. Firstly it uses KrakenUniq (a k-mer based and thus memory efficient method) to do a screening of sequencing reads against a broad generalised microbial database. Once all the possible taxa have been detected, aMeta will then make a new database of just the genomes of the taxa that were reported from KrakenUniq (i.e. a specific database) but using MALT. MALT on thus much reduced database is then used to perform computationally much heavier alignment against the reference genomes and LCA taxonomic reassignment. The output from MALT is then sent to the MaltExtract program of the HOPS pipeline for ancient DNA authentication statistics.
 
@@ -559,9 +568,9 @@ You can modify `-j` to represent the number of available CPUs you have on your m
 
 All output files of the workflow are located in *aMeta/results* directory. To get a quick overview of ancient microbes present in your samples you should check a heatmap in *results/overview_heatmap_scores.pdf*.
 
-![](assets/images/chapters/ancient-metagenomic-pipelines/overview_heatmap_scores.png)
+![Example microbiome profiling summary heatmap from aMeta. The columns represent different samples, and the rows of different species. The cells of the heatmap are coloured from blue, to yellow, to red, representing aMeta authentication scores from 0 to 10, with the higher the number the more confident of the hit being both the correct taxonomic assignment and that it is ancient. Numbers in the coloured cells also provide the direct score number.](assets/images/chapters/ancient-metagenomic-pipelines/overview_heatmap_scores.png){#fig-ancientmetagenomicpipelines-ametadiagram}
 
-The heatmap demonstrates microbial species (in rows) authenticated for each sample (in columns). The colors and the numbers in the heatmap represent authentications scores, i.e. numeric quantification of seven quality metrics that provide information about microbial presence and ancient status. The authentication scores can vary from 0 to 10, the higher is the score the more likely that a microbe is present in a sample and is ancient. Typically, scores from 8 to 10 (red color in the heatmap) provide good confidence of ancient microbial presence in a sample. Scores from 5 to 7 (yellow and orange colors in the heatmap) can imply that either: a) a microbe is present but not ancient, i.e. modern contaminant, or b) a microbe is ancient (the reads are damaged) but was perhaps aligned to a wrong reference, i.e. it is not the microbe you think about. The former is a more common case scenario. The latter often happens when an ancient microbe is correctly detected on a genus level but we are not confident about the exact species, and might be aligning the damaged reads to a non-optimal reference which leads to a lot of mismatches or poor evennes of coverage. Scores from 0 to 4 (blue color in the heatmap) typically mean that we have very little statistical evedence (very few reads) to claim presence of a microbe in a sample.
+The heatmap demonstrates microbial species (in rows) authenticated for each sample (in columns) ([@fig-ancientmetagenomicpipelines-ametadiagram]). The colors and the numbers in the heatmap represent authentications scores, i.e. numeric quantification of seven quality metrics that provide information about microbial presence and ancient status. The authentication scores can vary from 0 to 10, the higher is the score the more likely that a microbe is present in a sample and is ancient. Typically, scores from 8 to 10 (red color in the heatmap) provide good confidence of ancient microbial presence in a sample. Scores from 5 to 7 (yellow and orange colors in the heatmap) can imply that either: a) a microbe is present but not ancient, i.e. modern contaminant, or b) a microbe is ancient (the reads are damaged) but was perhaps aligned to a wrong reference, i.e. it is not the microbe you think about. The former is a more common case scenario. The latter often happens when an ancient microbe is correctly detected on a genus level but we are not confident about the exact species, and might be aligning the damaged reads to a non-optimal reference which leads to a lot of mismatches or poor evennes of coverage. Scores from 0 to 4 (blue color in the heatmap) typically mean that we have very little statistical evedence (very few reads) to claim presence of a microbe in a sample.
 
 To visually examine the seven quality metrics
 
@@ -573,9 +582,9 @@ To visually examine the seven quality metrics
 - PMD scores distribution,
 - number of assigned reads (depth of coverage),
 
-corresponding to the numbers and colors of the heatmap, one can find them in results/AUTHENTICATION/sampleID/taxID/authentic_Sample_sampleID.trimmed.rma6_TaxID_taxID.pdf for each sample sampleID and each authenticated microbe taxID. An example of such quality metrics is shown below:
+Corresponding to the numbers and colors of the heatmap, one can find them in `results/AUTHENTICATION/sampleID/taxID/authentic_<Sample>_<sampleID>.trimmed.rma6_<TaxID>_<taxID>.pdf` for each sample sampleID and each authenticated microbe taxID. An example of such quality metrics is shown below in @fig-ancientmetagenomicpipelines-persampleplot.
 
-![](assets/images/chapters/ancient-metagenomic-pipelines/aMeta_output.png)
+![Example of sample/hit specific PDF output from aMeta, 9 panels represent different figures that are useful for evaluating the authenticitiy of an ancient metagenomic hit. From Left to Right, Top from bottom, the panels consist of: 1. Edit distance (all reads) bar plot, 2. Edit distance (ancient reads) bar plot, 3. Breadth of coverage line plot, 4. Deamination line plot, 5. Read length distribution bar plot, 6. PMD score histogram, 7. Percent identity bar plot, 8. table of similarity to hits from from closest hit to least closest, and 10. a general statistics table including the name of the taxonomic node, number of reads, duplicates, and mean read length etc.](assets/images/chapters/ancient-metagenomic-pipelines/aMeta_output.png){#fig-ancientmetagenomicpipelines-persampleplot}
 
 ### Clean up
 
@@ -587,7 +596,7 @@ conda deactivate
 
 ## What is nf-core/mag?
 
-nf-core/mag [@Krakau2022-we] is another Nextflow best-practise pipeline for the _de novo_ assembly, binning, and annotation of metagenomes (@fig-ancientmetagenomicpipelines-magworkflow). While it was originally designed for modern metagenomes (with a focus on optional support co-assembly with Nanopore long reads), it has since been updated to include specific functionality and parameters for ancient metagenomes too. 
+nf-core/mag [@Krakau2022-we] is another Nextflow best-practise pipeline for the _de novo_ assembly, binning, and annotation of metagenomes ([@fig-ancientmetagenomicpipelines-magworkflow]). While it was originally designed for modern metagenomes (with a focus on optional support co-assembly with Nanopore long reads), it has since been updated to include specific functionality and parameters for ancient metagenomes too. 
 
 ![Overview diagram of the main steps and tools of the nf-core/mag pipeline. Taking reads in FASTQ format or a samplesheet as input, reads can go through adapter and/or quality trimming for specific tools for both short and long reads. These reads can optionally go into taxonomic classification and visualisation, at the same time as the prepared reads go into sample-or group wise assemply, evaluation, as well as the ancient DNA valdiation subworkflow. Resulting contigs can be functionally annotated at the same time as optionally going through binning and binning refinement and evaluation (with statistics generation). Bins and refined bins can be taxonomically classified and annotated, with all final reports going into MultiQC.](assets/images/chapters/ancient-metagenomic-pipelines/mag_workflow.png){#fig-ancientmetagenomicpipelines-magworkflow}
 
@@ -757,11 +766,13 @@ You can also generate a HPC / server specific profile which can be used on all n
 See [nf-co.re/configs](https://nf-co.re/configs) for all existing institutional configs
 :::
 
-## nf-core/mag output
+### nf-core/mag output
 
-As with nf-core/eager, you will have a results directory containing many folders representing different stages of the pipeline, and a MultiQC report. As of v2.3.* the MultiQC report is unfortunately broken, however this has been fixed for 2.4.
+As with nf-core/eager, you will have a results directory containing many folders representing different stages of the pipeline, and a MultiQC report. 
 
-Relevant directories are as follows:
+#### Results Files
+
+Relevant directories for evaluting your assemblies are as follows:
 
 - `QC_shortreads/`
   - Contains various folders from the sequencing QC and raw read processing (e.g., FastQC, fastp/AdapterRemoval, host-removal results etc)
@@ -782,7 +793,34 @@ Relevant directories are as follows:
 - `Prodigal` / `Prokka`
   - These directories will contain the genome annotation output of the raw contigs (`Prodigal`) or from bins (`Prokka`)
 
+#### Report Table
 
+As of v2.3.* the MultiQC report is unfortunately broken, however this has been fixed for 2.4, and many of the questions asked in the preprocessing section of the [nf-core/eager](#nf-coreeager-output) results interpretation will also apply here.
+
+Other than the QUAST results in the `Assembly/*/QC/` or `GenomeBinning/*/QC/` directories, the main table used for evaluating the output files is the `bin_summary.tsv` table in the `GenomeBinning/` directory.
+
+In this file you woud typically want to assess the following columns:
+
+- `% Complete *` columns - with the higher the number of expected domain-specific genes, normally representing a better quality of the resulting bin.
+-  `# contigs (>=* bp)` columns - which represnts the number of contigs at different lengths, the fewer the shorter reads and the greater the longer reads you have again suggests a better assembly. 
+  -  This can also be evaluated by the N50 or L75 columns (as described in the [_De novo_ assembly chapter](denovo-assembly.qmd)).
+-  `fastani` and `closest_placement_taxonomy` - these can tell you if your particular bin has a genome very similar to existing species in taxonomic databases
+-  `warnings` - for specific comments on each assignment
+
+### Clean up
+
+Before continuing onto the next section of this chapter, you will need to deactivate from the conda environment
+
+```bash
+conda deactivate 
+```
+
+You may also need to delete the contents of the mag directory
+
+```bash
+cd /<path>/<to>/ancient-metagenomic-pipelines/mag
+rm -r *
+```
 
 ## Questions to think about
 
@@ -791,6 +829,3 @@ Relevant directories are as follows:
 3. What metrics do you use to evaluate the success/failure of ancient DNA sequencing experiments? How can these measures be evaluated when using nf-core/eager for data preprocessing and analysis?
 
 ## References
-
-::: {#refs}
-:::
