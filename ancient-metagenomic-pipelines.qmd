@@ -12,7 +12,6 @@ conda activate ancient-metagenomic-pipelines
 ```
 :::
 
-
 ## Lecture
 
 Lecture slides and video from the [2022 edition of the summer school](https://www.spaam-community.org/wss-summer-school/#/2022/README).
@@ -22,7 +21,6 @@ Lecture slides and video from the [2022 edition of the summer school](https://ww
 PDF version of these slides can be downloaded from [here](https://github.com/SPAAM-community/https://github.com/SPAAM-community/wss-summer-school/raw/main/docs/raw/main/docs/assets/slides/2022/2d-intro-to-nfcoreeager/SPAAM%20Summer%20School%202022%20-%202D%20-%20Introduction%20to%20nf-core_eager.pdf).
 
 <iframe width="100%" height="400px" src="https://www.youtube.com/embed/qDjkUfcGmmo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 
 ## Introduction
 
@@ -37,7 +35,6 @@ We will introduce:
 Keep in mind that that there are many other pipelines that exist, and picking which one often they come down to personal preference, such as which functionality they support, which language they are written in, and whether their computational requirements can fit in your available resources.
 
 Other examples of other ancient DNA genomic pipelines include [Paleomix](https://paleomix.readthedocs.io/en/stable) [@Schubert2014-ps], and [Mapache](https://github.com/sneuensc/mapache) [@Neuenschwander2023-aj], and for ancient metagenomics: [metaBit](https://bitbucket.org/Glouvel/metabit/src/master/) [@Louvel2016-jo] and [HAYSTAC](https://github.com/antonisdim/haystac) [@Dimopoulos2022-tp].
-
 
 ## Workflow managers
 
@@ -205,6 +202,35 @@ And now we wait... <!-- 40m on DENBI Node -->
 As a reminder, to detach from the screen session type <kbd>ctrl</kbd> + <kbd>a</kbd> then <kbd>d</kbd>. To reattach `screen -r eager`
 :::
 
+Specifically for ancient (meta)genomic data, the following parameters and options may be useful to consider when running your own data:
+
+- `--mapper circularmapper`:
+  - This aligner is a variant of `bwa aln` that allows even mapping across the end of linear references of circular genomes
+  - Allows reads spanning the start/end of the sequence to be correctly placed, and this provides better coverage estimates across the entire genome
+- `--hostremoval_input_fastq`:
+  - Allows re-generation of input FASTQ files but with any reads aligned to the reference genome removed
+  - Can be useful when dealing with modern or ancient data where there are ethical restrictions on the publication of host DNA
+  - The output can be used as 'raw data' upload to public data repositories
+- `--run_bam_filtering --bam_unmapped_type`:
+  - A pre-requisite for performing the metagenomic analysis steps of nf-core/eager
+  - Generates FASTQ files off the unmapped reads present in the reference mapping BAM file
+- `--run_bedtools_coverage --anno_file /<path>/<to>/<genefeature>.bed`
+  - Turns on calculating depth/breadth of annotations in the provided bed or GFF file, useful for generating e.g. virulence gene presence/absence plots
+- `--run_genotyping --genotyping_tool ug --gatk_ug_out_mode EMIT_ALL_SITES` 
+  - Turns on genotyping with GATK UnifiedGenotyper
+  - A pre-requisite for running MultiVCFAnalyzer for consensus sequencing creation
+  - It's recommend to use either GATK UnifiedGenotyper or freeBayes (non-MultiVCFAnalyzer compatible!) for low-coverage data
+  - GATK HaplotypeCaller is _not_ recommended for low coverage data as it performs local _de novo_ assembly around possible variant sites, and this will fail with low-coverage short-read data
+- `--run_multivcfanalyzer --write_allele_frequencies`
+  - Turns on SNP table and FASTA consensus sequence generation with MultiVCFAnalyzer (see pre-requisites above)
+  - By providing `--write_allele_frequencies`, the SNP table will also provide the percentage of reads at that position supporting the call. This can help you evaluate the level of cross-mapping from related (e.g. contaminating environmental) species and may question the reliablity of any resulting downstream analyses.
+- `--metagenomic_complexity_filtering`
+  - An additional preprocessing step of raw reads before going into metagenomic screening to remove low-complexity reads (e.g. mono- or di-nucleotide repeats)
+  - Removing these will speed up and lower computational requirements during classification, and will not bias profiles as these sequences provide no taxon-specific information (i.e., can be aligned against thousands to millions of genomes)
+- `--run_metagenomic_screening`
+  - Turns on metagenomic screening with either MALT or Kraken2
+  - If running with MALT, can supply `--run_maltextract` to get authentication statistics and plots (damage, read lengths etc.) for evaluation.
+
 ### Top Tips for nf-core/eager success
 
 1. Screen sessions
@@ -251,10 +277,29 @@ As a reminder, to detach from the screen session type <kbd>ctrl</kbd> + <kbd>a</
 
 In the `results/` directory of your nf-core/eager run, you will find a range of directories that will contain output files and tool log of all the steps of the pipeline. nf-core/eager tries to only save the 'useful' files. 
 
-Useful files for genomics typically are in folders such as `deduplication/` which may contain f
+Everyday useful files for ancient (microbial) (meta)genomics typically are in folders such as:
 
+- `deduplication/` or `merged_bams`
+  - These contain the most basic BAM files you would want to use for downstream analyses (and used in the rest of the genomic workflow of the pipeline)
+  - They contain deduplicated BAM files (i.e., with PCR artefacts removed)
+  - `merged_bams/` 
+    - This directory will contain BAMs where multiple libraries of one sample have been merged into one final BAM file, when these have been supplied
+- `damage_rescaling/` or `trimmed bam/`
+  - These contain the output BAM files from _in silico_ damage removal, if you have turned on e.g. BAM trimming or damage rescaling
+  - If you have multiple libraries of one sample, the final BAMs you want will be in `merged_bams/`
+- `genotyping/`
+  - This directory will contain your final VCF files from the genotyping step, e.g. from the GATK or freeBayes tools
+- `MultiVCFAnalyzer/`
+  - This will contain consensus sequences and SNP tables from `MultiVCFAnalyzer`, which also allows generation of 'multi-allelic' SNP position statistics (useful for the evaluation of cross-mapping from contaminants or relatives)
+- `bedtools/`
+  - This directory will contain the depth and breadth statistics of genomic features if a `gff` or `bed` file has been provided to the pipeline
+  - The files can be used to generate gene heatmaps, that can be used to visualise a comparative presence/absence of virulence factor across genomes (e.g. for microbial pathogens)
+- `metagenomic_classification` or `malt_extract`
+  - This directory contains the output RMA6 files from MALT, the profiles and taxon count tables from Kraken2, or the aDNA authentication output statistics from maltExtract. 
 
-However before you delve into these, it's normally a good idea to do a 'quality check' of the pipeline run. You can do this using the interactive MultiQC report.
+Most other folders contain either intermediate files that are only useful for technical evaluation in the case of problems, or statistics files that are otherwise summarised in the run report.
+
+So, before you delve into these folders, it's normally a good idea to do a 'quality check' of the pipeline run. You can do this using the interactive MultiQC pipeline run report.
 
 #### MultiQC General Statistics
 
@@ -270,8 +315,6 @@ In here you should see a bunch of files, but you should open the `multiqc_report
 
 Once opened you will see a table, and below it many figures and other tables. All of these statistics can help you evaluate the quality of your data, pipeline run, and also possibly some initial results! 
 
-
-
 Typically you will look at the General Statistics table to get a rough overview of the pipeline run. If you hover your cursor over the column headers, you can see which tool the column's numbers came from, however generally the columns go in order of left to right, where the left most columns are from earlier in the pipeline run (e.g. removing adapters), to variant calling statistics (e.g. number of variants called). You can also configure which columns to display using the `Configure columns` button. It's important to note that in MultiQC tables, you may have duplicate rows from the same library or sample. This is due to MultiQC trying to squish in as many statistics from as many steps of the pipeline as possible (for example, statistics on each of a pair of FASTQ files, and then statistics on the single merged and mapped BAM file), so you should play around with the column configuration to help you visualise the best way to initially evaluate your data. 
 
 The bulk of the MultiQC report is made up of per-tool summary plots (e.g., barcharts, linecharts etc). Most of these will be interactive, i.e. you can hover over lines and bars to get more specific numbers of each plot. However the visualisations are aimed at helping you identify possible outliers that may represent failed samples or libraries.
@@ -280,7 +323,9 @@ Evaluating how good the data is and how well the run went will vary depending on
 
 Once completed, you can try going through the MultiQC report the command you executed above, and compare against the questions below. Keep in mind you have a sample _N_ of two, so many of the questions in regards to identifying 'outliers' may be difficult.
 
-**General Stats Table**:
+The following questions are by no means comprehensive, but rather represent the 'typical' questions the nf-core/eager developers asked of their own data and reports. However they can act as a good framework for thinking critically about your own results.
+
+##### General Stats Table
 
 - Do I see the expected number of raw sequencing reads (summed across each set of FASTQ files per library) that was requested for sequencing?
 - Does the percentage of trimmed reads look normal for aDNA, and do lengths after trimming look short as expected of aDNA?
@@ -292,42 +337,49 @@ Once completed, you can try going through the MultiQC report the command you exe
 - Does the Median coverage and percent >3x (or whatever you set) show sufficient coverage for reliable SNP calls and that a good proportion of the genome is covered indicating you have the right reference genome?
 - Do you see a high proportion of % Hets, indicating many multi-allelic sites (and possibly presence of cross-mapping from other species, that may lead to false positive or less confident SNP calls)?
 
-**FastQC (pre-AdapterRemoval)**:
+##### FastQC (pre-AdapterRemoval)
 
 - Do I see any very early drop off of sequence quality scores suggesting problematic sequencing run?
 - Do I see outlier GC content distributions?
 - Do I see high sequence duplication levels?
 
-**AdapterRemoval**:
+##### AdapterRemoval
 
 - Do I see high numbers of singletons or discarded read pairs?
 
-**FastQC (post-AdapterRemoval)**:
+##### FastQC (post-AdapterRemoval)
 
 - Do I see improved sequence quality scores along the length of reads?
 - Do I see reduced adapter content levels?
 
-**Samtools Flagstat (pre/post Filter)**:
+##### Samtools Flagstat (pre/post Filter)
 
 - Do I see outliers, e.g. with unusually low levels of mapped reads, (indicative of badly preserved samples) that require downstream closer assessment?
 
-**DeDup/Picard MarkDuplicates**:
+##### DeDup/Picard MarkDuplicates
 
 - Do I see large numbers of duplicates being removed, possibly indicating over-amplified or badly preserved samples?
 
-**PreSeq**:
+##### MALT (metagenomics only)
+
+- Do I have a reasonable level of mappability?
+  - Somewhere between 10-30% can be pretty normal for aDNA, whereas e.g. <1% requires careful manual assessment
+- Do I have a reasonable taxonomic assignment success?
+  - You hope to have a large number of the mapped reads (from the mappability plot) that also have taxonomic assignment.
+
+##### PreSeq (genomics only)
 
 - Do I see a large drop off of a sample's curve away from the theoretical complexity? If so, this may indicate it's not worth performing deeper sequencing as you will get few unique reads (vs. duplicates that are not any more informative than the reads you've already sequenced)
 
-**DamageProfiler**:
+##### DamageProfiler (genomics only)
 
 - Do I see evidence of damage on the microbial DNA (i.e. a % C>T of more than ~5% in the first few nucleotide positions?) ? If not, possibly your mapped reads are deriving from modern contamination.
 
-**QualiMap**:
+##### QualiMap (genomics only)
 
 - Do you see a peak of coverage (X) at a good level, e.g. >= 3x, indicating sufficient coverage for reliable SNP calls?
 
-**MultiVCFAnalyzer**:
+##### MultiVCFAnalyzer (genomics only)
 
 - Do I have a good number of called SNPs that suggest the samples have genomes with sufficient nucleotide diversity to inform phylogenetic analysis?
 - Do you have a large number of discarded SNP calls?
@@ -348,9 +400,6 @@ conda deactivate
 ## What is aMeta?
 
 ::: {.callout-tip}
-<!-- TODO CHECK IS VALID -->
-<!-- TODO MODFIY THIS TUTORIAL TO USE SAMPLES BUT TEST DB --> 
-
 For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the following [`yml` file](https://github.com/NBISweden/aMeta/blob/main/workflow/envs/environment.yaml), and activate the environment:
 
 ```bash
@@ -440,7 +489,7 @@ ln -s .test/data/ .
 
 ### aMeta configuration
 
-Now we need to configure the workflow. First, we need to create a tab-delimited `samples.tsv` file inside `aMeta/config/` and provide the names of the input fastq-files. In a text editor (e.g. `nano`), write the following names paths in TSV format:
+First, we will need to configure the workflow. First, we need to create a tab-delimited `samples.tsv` file inside `aMeta/config/` and provide the names of the input fastq-files. In a text editor (e.g. `nano`), write the following names paths in TSV format:
 
 ```bash
 sample  fastq
@@ -452,7 +501,7 @@ bar data/foo.fq.gz
 Make sure when copy pasting into your test editor, tabs are not replaced with spaces, otherwise the file might not be read!
 :::
 
-Next we need to write a config file. This tells aMeta where to find things such as database files and other settings.
+Then we need to write a config file. This tells aMeta where to find things such as database files and other settings.
 
 These go inside a `config.yaml` file inside `aMeta/config/`. A minimal example `config.yaml` files can look like this:
 
@@ -477,14 +526,20 @@ n_tax_reads: 200
 ```
 
 :::{.callout-note}
-As this is only a dummy run (due to the large-ish computational resources required for KrakenUniq), we re-use some of the resource files here. This will produce nonsense output, but is used here to demonstrate how you would execute the pipeline. 
+As this is only a dummy run (due to the large-ish computational resources required for KrakenUniq), we re-use some of the resource files here. While this will produce nonsense output, it is used here to demonstrate how you would execute the pipeline. 
 :::
 
 ### Prepare and run aMeta
 
-Next, we need to create conda sub-environments of aMeta, then manually tune a few memory related parameters of tools (Krona and Malt) included in aMeta:
+<!-- TODO: still necessary to document? "Next, we need to create conda sub-environments of aMeta, then manually tune a few memory related parameters of tools (Krona and Malt) included in aMeta:"" -->
 
-Make sure you're in the `aMeta` conda environment, and in the main aMeta directory with
+Make sure you're in the `aMeta` conda environment,
+
+```bash
+conda activate aMeta
+```
+
+and in the main aMeta directory with
 
 ```bash
 cd /<path/<to>/ancient-metagenomic-pipelines/ameta/aMeta/
@@ -499,7 +554,6 @@ snakemake --snakefile workflow/Snakefile --use-conda -j 10 --conda-frontend cond
 :::{.callout-note}
 You can modify `-j` to represent the number of available CPUs you have on your machine.
 :::
-
 
 ### aMeta output
 
@@ -541,7 +595,6 @@ nf-core/mag [@Krakau2022-we] is another Nextflow best-practise pipeline for the 
 
 nf-core/mag covers the same major steps as you will have run if you followed the chapter on [De Novo assembly](denovo-assembly.qmd). Firstly, as with nf-core/eager, nf-core/mag do some initial sequencing QC and cleanup with `fastp` or `AdapterRemoval`, running FastQC before and after this step to make sure that adapters and overly short reads have been removed. It can then optionally do basic taxonomic classification of raw reads with `Kraken2` or `Centrifuge`. The processed reads then ungo assembly with MEGAHIT, SPAdes, or SPAdeshybrid (the latter being for combining short and long reads), with contig annotation with `Prodigal` to get gene prediction and assembly statistics with `QUAST`. A unique feature of nf-core/mag over other _de novo_ assembly pipelines is an aDNA validation and correction step: contigs under go 'reference free' damage profiling using `pyDamage`, and then remaining damage bases that are mistakenly incorporated by assemblies are corrected using `freebayes` and `BCFTools`. Contigs then optionally grouped into genomic 'bins' with a range of metagenomic binners (`MetaBAT2`, `MaxBin2`, and `CONCOCT`), as well as also optional binning refinement with `DAS Tool`. Bins are then re-annotated with Prokka, taxonomically classified with either `CAT` or `GTDB-Tk` Evaluation of the resulting bins is carried out with BUSCO, CheckM, GUNC and/or QUAST to assess the bin completeness. And, as with all nf-core pipelines, all the results are wrapped up into a `MultiQC` report. Detailed documnetation can be see on the nf-core/mag [parameters](https://nf-co.re/mag/2.3.2/parameters) and [output](https://nf-co.re/mag/2.3.2/docs/output) pages.
 
-
 ### Running nf-core/mag
 
 In this tutorial, we will use the same data and aim to replicate the steps taken in the [De Novo assembly](denovo-assembly.qmd) chapter. It is important to note that generally, _de novo_ assembly, is very computational intensive. In many cases it will not be able to run a _de novo_ assembly on a standard laptop, therefore some of the parameters used here have been tweaked to get the pipeline runable on powerful laptop level machines.
@@ -572,8 +625,6 @@ tar --directory checkm_data_2015_01_16/ -xzvf checkm_data_2015_01_16.tar.gz
 cd ..
 ```
 :::
-
-
 
 The manual steps of the previous chapter included: 
 
@@ -642,7 +693,6 @@ For Nextflow, we must make a special 'config' that defines the names of each ste
 
 For this our nf-core/mag run you will need to open your text editor an empty file called `custom.config`, and copy and paste the contents of the next code block.
 
-
 ```groovy
 
 process {
@@ -708,6 +758,29 @@ See [nf-co.re/configs](https://nf-co.re/configs) for all existing institutional 
 :::
 
 ## nf-core/mag output
+
+As with nf-core/eager, you will have a results directory containing many folders representing different stages of the pipeline, and a MultiQC report. As of v2.3.* the MultiQC report is unfortunately broken, however this has been fixed for 2.4.
+
+Relevant directories are as follows:
+
+- `QC_shortreads/`
+  - Contains various folders from the sequencing QC and raw read processing (e.g., FastQC, fastp/AdapterRemoval, host-removal results etc)
+- `Taxonomy/`
+  - If you have not already performed taxonomic classification of your reads, the output of the Kraken2 or Centrifuge integrated steps of nf-core/mag will be deposited here, including an optional Krona piechart
+  - If activated, the contig-level taxonomic assignments will be deposited here (e.g. from CAT or GTDB)
+- `Assembly/`
+  - This directory will contain one directory per chosen assembler which will contain per-sample output files for each assembly.
+  - Within each of the assembler sub directories, a QC folder will contain the QUAST output
+- `Ancient_DNA`
+  - This folder will contain the output of pyDamge contig authentication to allow you to select or filter for just putatively ancient contigs
+- `variant_calling`
+  - This directory will contain the 'damage-corrected' contigs that will be used in downstream steps of the pipeline, if the `aDNA` mode is turned on
+- `GenomeBinning/`
+  - This directory will contain all the output from each of any of the selected contig binning tools. As well as the binned FASTAs, you also have read-depth statistics from when input reads are re-mapped back to the contigs
+  - The directory will also contain the output from the `DASTool` binning refinement if turned on
+  - In the `QC` sub-directory of this folder, you will find the QUAST results on the genome _bins_ (rather than raw contigs as above), as well as BUSCO/CheckM/GUNC MAG completeness estimates 
+- `Prodigal` / `Prokka`
+  - These directories will contain the genome annotation output of the raw contigs (`Prodigal`) or from bins (`Prokka`)
 
 
 
