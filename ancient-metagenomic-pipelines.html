@@ -421,12 +421,12 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#running-nf-coreeager" id="toc-running-nf-coreeager" class="nav-link" data-scroll-target="#running-nf-coreeager"><span class="header-section-number">17.4.1</span> Running nf-core/eager</a></li>
   <li><a href="#top-tips-for-nf-coreeager-success" id="toc-top-tips-for-nf-coreeager-success" class="nav-link" data-scroll-target="#top-tips-for-nf-coreeager-success"><span class="header-section-number">17.4.2</span> Top Tips for nf-core/eager success</a></li>
-  <li><a href="#summary-of-nf-coreeager-output" id="toc-summary-of-nf-coreeager-output" class="nav-link" data-scroll-target="#summary-of-nf-coreeager-output"><span class="header-section-number">17.4.3</span> Summary of nf-core/eager output</a></li>
+  <li><a href="#nf-coreeager-output" id="toc-nf-coreeager-output" class="nav-link" data-scroll-target="#nf-coreeager-output"><span class="header-section-number">17.4.3</span> nf-core/eager output</a></li>
   <li><a href="#clean-up" id="toc-clean-up" class="nav-link" data-scroll-target="#clean-up"><span class="header-section-number">17.4.4</span> Clean up</a></li>
   </ul></li>
   <li><a href="#what-is-ameta" id="toc-what-is-ameta" class="nav-link" data-scroll-target="#what-is-ameta"><span class="header-section-number">17.5</span> What is aMeta?</a>
   <ul class="collapse">
-  <li><a href="#running-ameta" id="toc-running-ameta" class="nav-link" data-scroll-target="#running-ameta"><span class="header-section-number">17.5.1</span> Running aMEta</a></li>
+  <li><a href="#running-ameta" id="toc-running-ameta" class="nav-link" data-scroll-target="#running-ameta"><span class="header-section-number">17.5.1</span> Running aMeta</a></li>
   <li><a href="#ameta-configuration" id="toc-ameta-configuration" class="nav-link" data-scroll-target="#ameta-configuration"><span class="header-section-number">17.5.3</span> aMeta configuration</a></li>
   <li><a href="#prepare-and-run-ameta" id="toc-prepare-and-run-ameta" class="nav-link" data-scroll-target="#prepare-and-run-ameta"><span class="header-section-number">17.5.4</span> Prepare and run aMeta</a></li>
   <li><a href="#ameta-output" id="toc-ameta-output" class="nav-link" data-scroll-target="#ameta-output"><span class="header-section-number">17.5.5</span> aMeta output</a></li>
@@ -435,6 +435,9 @@ div.csl-indent {
   <li><a href="#what-is-nf-coremag" id="toc-what-is-nf-coremag" class="nav-link" data-scroll-target="#what-is-nf-coremag"><span class="header-section-number">17.6</span> What is nf-core/mag?</a>
   <ul class="collapse">
   <li><a href="#running-nf-coremag" id="toc-running-nf-coremag" class="nav-link" data-scroll-target="#running-nf-coremag"><span class="header-section-number">17.6.1</span> Running nf-core/mag</a></li>
+  <li><a href="#configuring-nextflow-pipelines" id="toc-configuring-nextflow-pipelines" class="nav-link" data-scroll-target="#configuring-nextflow-pipelines"><span class="header-section-number">17.6.2</span> Configuring Nextflow pipelines</a></li>
+  <li><a href="#nf-coremag-output" id="toc-nf-coremag-output" class="nav-link" data-scroll-target="#nf-coremag-output"><span class="header-section-number">17.6.3</span> nf-core/mag output</a></li>
+  <li><a href="#clean-up-2" id="toc-clean-up-2" class="nav-link" data-scroll-target="#clean-up-2"><span class="header-section-number">17.6.4</span> Clean up</a></li>
   </ul></li>
   <li><a href="#questions-to-think-about" id="toc-questions-to-think-about" class="nav-link" data-scroll-target="#questions-to-think-about"><span class="header-section-number">17.7</span> Questions to think about</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">17.8</span> References</a></li>
@@ -512,8 +515,13 @@ Tip
 </section>
 <section id="what-is-nf-coreeager" class="level2" data-number="17.4">
 <h2 data-number="17.4" class="anchored" data-anchor-id="what-is-nf-coreeager"><span class="header-section-number">17.4</span> What is nf-core/eager?</h2>
-<p>nf-core/eager is a computational pipeline specifically designed for preprocessing and analysis of ancient DNA data. It is a reimplementation of the previously published EAGER (Efficient Ancient Genome Reconstruction) pipeline <span class="citation" data-cites="Peltzer2016-ov">(<a href="introduction-to-ngs-sequencing.html#ref-Peltzer2016-ov" role="doc-biblioref">Peltzer et al. 2016</a>)</span> written in the workflow manager Nextflow. In addition to reimplementing the original genome mapping and variant calling pipeline, in a more reproducible and portable manner the pipeline also included additional new functionality particularly for researchers interested in microbial sciences, namely a dedicated genotyper and consensus caller designed for low coverage genomes, the ability to get breadth and depth coverage statistics for particular genomic features (e.g.&nbsp;virulence genes), but also automated metagenomic screening and authentication of the off-target reads from mapping (e.g.&nbsp;against the host reference genome).</p>
-<p><img src="assets/images/chapters/ancient-metagenomic-pipelines/eager2_metromap_complex.png" class="img-fluid"></p>
+<p>nf-core/eager is a computational pipeline specifically designed for preprocessing and analysis of ancient DNA data (<a href="#fig-ancientmetagenomicpipelines-eagermetromap">Figure&nbsp;<span>17.1</span></a>). It is a reimplementation of the previously published EAGER (Efficient Ancient Genome Reconstruction) pipeline <span class="citation" data-cites="Peltzer2016-ov">(<a href="introduction-to-ngs-sequencing.html#ref-Peltzer2016-ov" role="doc-biblioref">Peltzer et al. 2016</a>)</span> written in the workflow manager Nextflow. In addition to reimplementing the original genome mapping and variant calling pipeline, in a more reproducible and portable manner the pipeline also included additional new functionality particularly for researchers interested in microbial sciences, namely a dedicated genotyper and consensus caller designed for low coverage genomes, the ability to get breadth and depth coverage statistics for particular genomic features (e.g.&nbsp;virulence genes), but also automated metagenomic screening and authentication of the off-target reads from mapping (e.g.&nbsp;against the host reference genome).</p>
+<div id="fig-ancientmetagenomicpipelines-eagermetromap" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/ancient-metagenomic-pipelines/eager2_metromap_complex.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;17.1: nf-core/eager workflow summary in the form of a ‘metro map’ style diagram. FASTQ or BAM input for red and yellow lines (representing eukaryotic and prokaryotic workflows) goes through FastQC, Adapter Removal, alignment to a reference FASTA input with a range of alignments, before going through BAM filtering, deduplication, <em>in silico</em> damage removal, and variant calling. Multiple statistics steps come out of the deduplication ‘station’. The blue line represents the metagenomic workflow, where offtarget reads come out of the BAM filtering ‘station’, and goes through compexity filtering with BBDuk, MALT or Kraken2, and optionally into MaltExtract for MALT output.</figcaption>
+</figure>
+</div>
 <p>A detailed description of steps in the pipeline is available as part of nf-core/eager’s extensive documentation. For more information, check out the usage documentation <a href="https://nf-co.re/eager/2.4.7/usage">here</a>.</p>
 <p>Briefly, nf-core/eager takes at a minimum standard input file types that are shared across the genomics field, i.e., raw FASTQ files or aligned reads in bam format, and a reference fasta. nf-core/eager performs preprocessing of this raw data, including adapter clipping, read merging, and quality control of adapter-trimmed data. nf-core/eager then carries mapping using a variety of field-standard shot-read alignment tools with default parameters adapted for short and damaged aDNA sequences. The off-target reads from host DNA mapping can then go into metagenomic classification and authentication (in the case of MALT). After genomic mapping, BAM files go through deduplication of PCR duplicates, damage profiling and removal, and finally variant calling. A myriad of additional statistics can be generated depending on the users preference. Finally, nf-core eager uses <a href="https://multiqc.info/">MultiQC</a> to create an integrated html report that summarizes the output/results from each of the pipeline steps.</p>
 <section id="running-nf-coreeager" class="level3" data-number="17.4.1">
@@ -534,7 +542,7 @@ Tip
 <p>First, activate the conda environment that we downloaded during setup:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate activate ancient-metagenomic-pipelines</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>And change into our practical session directory:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ancient-metagenomic-pipelines</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/ancient-metagenomic-pipelines</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -675,6 +683,51 @@ Tip
 <p>As a reminder, to detach from the screen session type <kbd>ctrl</kbd> + <kbd>a</kbd> then <kbd>d</kbd>. To reattach <code>screen -r eager</code></p>
 </div>
 </div>
+<p>Specifically for ancient (meta)genomic data, the following parameters and options may be useful to consider when running your own data:</p>
+<ul>
+<li><code>--mapper circularmapper</code>:
+<ul>
+<li>This aligner is a variant of <code>bwa aln</code> that allows even mapping across the end of linear references of circular genomes</li>
+<li>Allows reads spanning the start/end of the sequence to be correctly placed, and this provides better coverage estimates across the entire genome</li>
+</ul></li>
+<li><code>--hostremoval_input_fastq</code>:
+<ul>
+<li>Allows re-generation of input FASTQ files but with any reads aligned to the reference genome removed</li>
+<li>Can be useful when dealing with modern or ancient data where there are ethical restrictions on the publication of host DNA</li>
+<li>The output can be used as ‘raw data’ upload to public data repositories</li>
+</ul></li>
+<li><code>--run_bam_filtering --bam_unmapped_type</code>:
+<ul>
+<li>A pre-requisite for performing the metagenomic analysis steps of nf-core/eager</li>
+<li>Generates FASTQ files off the unmapped reads present in the reference mapping BAM file</li>
+</ul></li>
+<li><code>--run_bedtools_coverage --anno_file /&lt;path&gt;/&lt;to&gt;/&lt;genefeature&gt;.bed</code>
+<ul>
+<li>Turns on calculating depth/breadth of annotations in the provided bed or GFF file, useful for generating e.g.&nbsp;virulence gene presence/absence plots</li>
+</ul></li>
+<li><code>--run_genotyping --genotyping_tool ug --gatk_ug_out_mode EMIT_ALL_SITES</code>
+<ul>
+<li>Turns on genotyping with GATK UnifiedGenotyper</li>
+<li>A pre-requisite for running MultiVCFAnalyzer for consensus sequencing creation</li>
+<li>It’s recommend to use either GATK UnifiedGenotyper or freeBayes (non-MultiVCFAnalyzer compatible!) for low-coverage data</li>
+<li>GATK HaplotypeCaller is <em>not</em> recommended for low coverage data as it performs local <em>de novo</em> assembly around possible variant sites, and this will fail with low-coverage short-read data</li>
+</ul></li>
+<li><code>--run_multivcfanalyzer --write_allele_frequencies</code>
+<ul>
+<li>Turns on SNP table and FASTA consensus sequence generation with MultiVCFAnalyzer (see pre-requisites above)</li>
+<li>By providing <code>--write_allele_frequencies</code>, the SNP table will also provide the percentage of reads at that position supporting the call. This can help you evaluate the level of cross-mapping from related (e.g.&nbsp;contaminating environmental) species and may question the reliablity of any resulting downstream analyses.</li>
+</ul></li>
+<li><code>--metagenomic_complexity_filtering</code>
+<ul>
+<li>An additional preprocessing step of raw reads before going into metagenomic screening to remove low-complexity reads (e.g.&nbsp;mono- or di-nucleotide repeats)</li>
+<li>Removing these will speed up and lower computational requirements during classification, and will not bias profiles as these sequences provide no taxon-specific information (i.e., can be aligned against thousands to millions of genomes)</li>
+</ul></li>
+<li><code>--run_metagenomic_screening</code>
+<ul>
+<li>Turns on metagenomic screening with either MALT or Kraken2</li>
+<li>If running with MALT, can supply <code>--run_maltextract</code> to get authentication statistics and plots (damage, read lengths etc.) for evaluation.</li>
+</ul></li>
+</ul>
 </section>
 <section id="top-tips-for-nf-coreeager-success" class="level3" data-number="17.4.2">
 <h3 data-number="17.4.2" class="anchored" data-anchor-id="top-tips-for-nf-coreeager-success"><span class="header-section-number">17.4.2</span> Top Tips for nf-core/eager success</h3>
@@ -699,9 +752,50 @@ Tip
 <p>Regular users may be interested in checking out the Nextflow Tower, a tool for monitoring the progress of Nextflow pipelines in real time. Check <a href="https://tower.nf">here</a> for more information.</p></li>
 </ol>
 </section>
-<section id="summary-of-nf-coreeager-output" class="level3" data-number="17.4.3">
-<h3 data-number="17.4.3" class="anchored" data-anchor-id="summary-of-nf-coreeager-output"><span class="header-section-number">17.4.3</span> Summary of nf-core/eager output</h3>
-<p>In the <code>results/</code> directory of your nf-core/eager run, you will find a range of directories that will contain output files and tool log of all the steps of the pipeline. nf-core/eager tries to only save the ‘useful’ files. However before you delve into these, it’s normally a good idea to do a ‘quality check’ of the pipeline run. You can do this using the interactive MultiQC report.</p>
+<section id="nf-coreeager-output" class="level3" data-number="17.4.3">
+<h3 data-number="17.4.3" class="anchored" data-anchor-id="nf-coreeager-output"><span class="header-section-number">17.4.3</span> nf-core/eager output</h3>
+<section id="results-files" class="level4" data-number="17.4.3.1">
+<h4 data-number="17.4.3.1" class="anchored" data-anchor-id="results-files"><span class="header-section-number">17.4.3.1</span> Results files</h4>
+<p>In the <code>results/</code> directory of your nf-core/eager run, you will find a range of directories that will contain output files and tool log of all the steps of the pipeline. nf-core/eager tries to only save the ‘useful’ files.</p>
+<p>Everyday useful files for ancient (microbial) (meta)genomics typically are in folders such as:</p>
+<ul>
+<li><code>deduplication/</code> or <code>merged_bams</code>
+<ul>
+<li>These contain the most basic BAM files you would want to use for downstream analyses (and used in the rest of the genomic workflow of the pipeline)</li>
+<li>They contain deduplicated BAM files (i.e., with PCR artefacts removed)</li>
+<li><code>merged_bams/</code>
+<ul>
+<li>This directory will contain BAMs where multiple libraries of one sample have been merged into one final BAM file, when these have been supplied</li>
+</ul></li>
+</ul></li>
+<li><code>damage_rescaling/</code> or <code>trimmed bam/</code>
+<ul>
+<li>These contain the output BAM files from <em>in silico</em> damage removal, if you have turned on e.g.&nbsp;BAM trimming or damage rescaling</li>
+<li>If you have multiple libraries of one sample, the final BAMs you want will be in <code>merged_bams/</code></li>
+</ul></li>
+<li><code>genotyping/</code>
+<ul>
+<li>This directory will contain your final VCF files from the genotyping step, e.g.&nbsp;from the GATK or freeBayes tools</li>
+</ul></li>
+<li><code>MultiVCFAnalyzer/</code>
+<ul>
+<li>This will contain consensus sequences and SNP tables from <code>MultiVCFAnalyzer</code>, which also allows generation of ‘multi-allelic’ SNP position statistics (useful for the evaluation of cross-mapping from contaminants or relatives)</li>
+</ul></li>
+<li><code>bedtools/</code>
+<ul>
+<li>This directory will contain the depth and breadth statistics of genomic features if a <code>gff</code> or <code>bed</code> file has been provided to the pipeline</li>
+<li>The files can be used to generate gene heatmaps, that can be used to visualise a comparative presence/absence of virulence factor across genomes (e.g.&nbsp;for microbial pathogens)</li>
+</ul></li>
+<li><code>metagenomic_classification</code> or <code>malt_extract</code>
+<ul>
+<li>This directory contains the output RMA6 files from MALT, the profiles and taxon count tables from Kraken2, or the aDNA authentication output statistics from maltExtract.</li>
+</ul></li>
+</ul>
+<p>Most other folders contain either intermediate files that are only useful for technical evaluation in the case of problems, or statistics files that are otherwise summarised in the run report.</p>
+<p>So, before you delve into these folders, it’s normally a good idea to do a ‘quality check’ of the pipeline run. You can do this using the interactive MultiQC pipeline run report.</p>
+</section>
+<section id="multiqc-general-statistics" class="level4" data-number="17.4.3.2">
+<h4 data-number="17.4.3.2" class="anchored" data-anchor-id="multiqc-general-statistics"><span class="header-section-number">17.4.3.2</span> MultiQC General Statistics</h4>
 <div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> multiqc/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -717,14 +811,20 @@ Note
 </div>
 </div>
 <p>In here you should see a bunch of files, but you should open the <code>multiqc_report.html</code> file in your browser. You can either do this via the commandline (e.g.&nbsp;for firefox <code>firefox multiqc_report.html</code>) or navigate to the file using your file browser and double clicking on the HTML file.</p>
-<p>Once opened you will see a table, and below it many figures and other tables. All of these statistics can help you evaluate the quality of your data, pipeline run, and also possibly some initial results!</p>
-<section id="multiqc-general-statistics" class="level4" data-number="17.4.3.1">
-<h4 data-number="17.4.3.1" class="anchored" data-anchor-id="multiqc-general-statistics"><span class="header-section-number">17.4.3.1</span> MultiQC General Statistics</h4>
+<p>Once opened you will see a table, and below it many figures and other tables (<a href="#fig-ancientmetagenomicpipelines-multiqcscreenshot">Figure&nbsp;<span>17.2</span></a>). All of these statistics can help you evaluate the quality of your data, pipeline run, and also possibly some initial results!</p>
+<div id="fig-ancientmetagenomicpipelines-multiqcscreenshot" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/ancient-metagenomic-pipelines/multiqc-screenshot.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;17.2: Screenshot of initial view of a MultiQC report. The left hand sidebar provides links to various sections of the report, most of them containing summary images of the outputs of all the different tools. On the main panel you see the MultiQC and nf-core/eager logos, some descriptive information about how the report was generated, and finally the top of the ‘General Statistics’ tables, that has columns such as Sample Name, Nr. Input reads, length of input reads, %trimmed, etc. Each numeric column contains a coloured barchart to help readers to quickly evaluate the number of a given sample against all others in the table</figcaption>
+</figure>
+</div>
 <p>Typically you will look at the General Statistics table to get a rough overview of the pipeline run. If you hover your cursor over the column headers, you can see which tool the column’s numbers came from, however generally the columns go in order of left to right, where the left most columns are from earlier in the pipeline run (e.g.&nbsp;removing adapters), to variant calling statistics (e.g.&nbsp;number of variants called). You can also configure which columns to display using the <code>Configure columns</code> button. It’s important to note that in MultiQC tables, you may have duplicate rows from the same library or sample. This is due to MultiQC trying to squish in as many statistics from as many steps of the pipeline as possible (for example, statistics on each of a pair of FASTQ files, and then statistics on the single merged and mapped BAM file), so you should play around with the column configuration to help you visualise the best way to initially evaluate your data.</p>
 <p>The bulk of the MultiQC report is made up of per-tool summary plots (e.g., barcharts, linecharts etc). Most of these will be interactive, i.e.&nbsp;you can hover over lines and bars to get more specific numbers of each plot. However the visualisations are aimed at helping you identify possible outliers that may represent failed samples or libraries.</p>
 <p>Evaluating how good the data is and how well the run went will vary depending on the dataset and the options selected. However the <a href="https://nf-co.re/eager/usage#tutorial---how-to-set-up-nf-coreeager-for-pathogen-genomics">nf-core/eager tutorials</a> have a good overview of questions you can ask from your MultiQC report to see whether your data is good or not. We shamelessly copy these questions here (as the overlap authors of both the the nf-core/eager documentation and this text book is rather high).</p>
 <p>Once completed, you can try going through the MultiQC report the command you executed above, and compare against the questions below. Keep in mind you have a sample <em>N</em> of two, so many of the questions in regards to identifying ‘outliers’ may be difficult.</p>
-<p><strong>General Stats Table</strong>:</p>
+<p>The following questions are by no means comprehensive, but rather represent the ‘typical’ questions the nf-core/eager developers asked of their own data and reports. However they can act as a good framework for thinking critically about your own results.</p>
+<section id="general-stats-table" class="level5" data-number="17.4.3.2.1">
+<h5 data-number="17.4.3.2.1" class="anchored" data-anchor-id="general-stats-table"><span class="header-section-number">17.4.3.2.1</span> General Stats Table</h5>
 <ul>
 <li>Do I see the expected number of raw sequencing reads (summed across each set of FASTQ files per library) that was requested for sequencing?</li>
 <li>Does the percentage of trimmed reads look normal for aDNA, and do lengths after trimming look short as expected of aDNA?</li>
@@ -736,60 +836,95 @@ Note
 <li>Does the Median coverage and percent &gt;3x (or whatever you set) show sufficient coverage for reliable SNP calls and that a good proportion of the genome is covered indicating you have the right reference genome?</li>
 <li>Do you see a high proportion of % Hets, indicating many multi-allelic sites (and possibly presence of cross-mapping from other species, that may lead to false positive or less confident SNP calls)?</li>
 </ul>
-<p><strong>FastQC (pre-AdapterRemoval)</strong>:</p>
+</section>
+<section id="fastqc-pre-adapterremoval" class="level5" data-number="17.4.3.2.2">
+<h5 data-number="17.4.3.2.2" class="anchored" data-anchor-id="fastqc-pre-adapterremoval"><span class="header-section-number">17.4.3.2.2</span> FastQC (pre-AdapterRemoval)</h5>
 <ul>
 <li>Do I see any very early drop off of sequence quality scores suggesting problematic sequencing run?</li>
 <li>Do I see outlier GC content distributions?</li>
 <li>Do I see high sequence duplication levels?</li>
 </ul>
-<p><strong>AdapterRemoval</strong>:</p>
+</section>
+<section id="adapterremoval" class="level5" data-number="17.4.3.2.3">
+<h5 data-number="17.4.3.2.3" class="anchored" data-anchor-id="adapterremoval"><span class="header-section-number">17.4.3.2.3</span> AdapterRemoval</h5>
 <ul>
 <li>Do I see high numbers of singletons or discarded read pairs?</li>
 </ul>
-<p><strong>FastQC (post-AdapterRemoval)</strong>:</p>
+</section>
+<section id="fastqc-post-adapterremoval" class="level5" data-number="17.4.3.2.4">
+<h5 data-number="17.4.3.2.4" class="anchored" data-anchor-id="fastqc-post-adapterremoval"><span class="header-section-number">17.4.3.2.4</span> FastQC (post-AdapterRemoval)</h5>
 <ul>
 <li>Do I see improved sequence quality scores along the length of reads?</li>
 <li>Do I see reduced adapter content levels?</li>
 </ul>
-<p><strong>Samtools Flagstat (pre/post Filter)</strong>:</p>
+</section>
+<section id="samtools-flagstat-prepost-filter" class="level5" data-number="17.4.3.2.5">
+<h5 data-number="17.4.3.2.5" class="anchored" data-anchor-id="samtools-flagstat-prepost-filter"><span class="header-section-number">17.4.3.2.5</span> Samtools Flagstat (pre/post Filter)</h5>
 <ul>
 <li>Do I see outliers, e.g.&nbsp;with unusually low levels of mapped reads, (indicative of badly preserved samples) that require downstream closer assessment?</li>
 </ul>
-<p><strong>DeDup/Picard MarkDuplicates</strong>:</p>
+</section>
+<section id="deduppicard-markduplicates" class="level5" data-number="17.4.3.2.6">
+<h5 data-number="17.4.3.2.6" class="anchored" data-anchor-id="deduppicard-markduplicates"><span class="header-section-number">17.4.3.2.6</span> DeDup/Picard MarkDuplicates</h5>
 <ul>
 <li>Do I see large numbers of duplicates being removed, possibly indicating over-amplified or badly preserved samples?</li>
 </ul>
-<p><strong>PreSeq</strong>:</p>
+</section>
+<section id="malt-metagenomics-only" class="level5" data-number="17.4.3.2.7">
+<h5 data-number="17.4.3.2.7" class="anchored" data-anchor-id="malt-metagenomics-only"><span class="header-section-number">17.4.3.2.7</span> MALT (metagenomics only)</h5>
+<ul>
+<li>Do I have a reasonable level of mappability?
+<ul>
+<li>Somewhere between 10-30% can be pretty normal for aDNA, whereas e.g.&nbsp;&lt;1% requires careful manual assessment</li>
+</ul></li>
+<li>Do I have a reasonable taxonomic assignment success?
+<ul>
+<li>You hope to have a large number of the mapped reads (from the mappability plot) that also have taxonomic assignment.</li>
+</ul></li>
+</ul>
+</section>
+<section id="preseq-genomics-only" class="level5" data-number="17.4.3.2.8">
+<h5 data-number="17.4.3.2.8" class="anchored" data-anchor-id="preseq-genomics-only"><span class="header-section-number">17.4.3.2.8</span> PreSeq (genomics only)</h5>
 <ul>
 <li>Do I see a large drop off of a sample’s curve away from the theoretical complexity? If so, this may indicate it’s not worth performing deeper sequencing as you will get few unique reads (vs.&nbsp;duplicates that are not any more informative than the reads you’ve already sequenced)</li>
 </ul>
-<p><strong>DamageProfiler</strong>:</p>
+</section>
+<section id="damageprofiler-genomics-only" class="level5" data-number="17.4.3.2.9">
+<h5 data-number="17.4.3.2.9" class="anchored" data-anchor-id="damageprofiler-genomics-only"><span class="header-section-number">17.4.3.2.9</span> DamageProfiler (genomics only)</h5>
 <ul>
 <li>Do I see evidence of damage on the microbial DNA (i.e.&nbsp;a % C&gt;T of more than ~5% in the first few nucleotide positions?) ? If not, possibly your mapped reads are deriving from modern contamination.</li>
 </ul>
-<p><strong>QualiMap</strong>:</p>
+</section>
+<section id="qualimap-genomics-only" class="level5" data-number="17.4.3.2.10">
+<h5 data-number="17.4.3.2.10" class="anchored" data-anchor-id="qualimap-genomics-only"><span class="header-section-number">17.4.3.2.10</span> QualiMap (genomics only)</h5>
 <ul>
 <li>Do you see a peak of coverage (X) at a good level, e.g.&nbsp;&gt;= 3x, indicating sufficient coverage for reliable SNP calls?</li>
 </ul>
-<p><strong>MultiVCFAnalyzer</strong>:</p>
+</section>
+<section id="multivcfanalyzer-genomics-only" class="level5" data-number="17.4.3.2.11">
+<h5 data-number="17.4.3.2.11" class="anchored" data-anchor-id="multivcfanalyzer-genomics-only"><span class="header-section-number">17.4.3.2.11</span> MultiVCFAnalyzer (genomics only)</h5>
 <ul>
 <li>Do I have a good number of called SNPs that suggest the samples have genomes with sufficient nucleotide diversity to inform phylogenetic analysis?</li>
 <li>Do you have a large number of discarded SNP calls?</li>
 <li>Are the % Hets very high indicating possible cross-mapping from off-target organisms that may confounding variant calling?</li>
 </ul>
-<p>As above evaluating these outputs will vary depending on the data and or pipeline settings, and very much. However the extensive <a href="https://nf-co.re/eager/2.4.7/output">output documentation</a> of nf-core/eager can guide you through every single table and plot to assist you in continuing any type of ancient DNA project, assisted by fun little cartoony schematic diagrams (<a href="#fig-ancient-metagenomic-pipelines-eageroutputexample">Figure&nbsp;<span>17.1</span></a>)!</p>
+<p>As above evaluating these outputs will vary depending on the data and or pipeline settings, and very much. However the extensive <a href="https://nf-co.re/eager/2.4.7/output">output documentation</a> of nf-core/eager can guide you through every single table and plot to assist you in continuing any type of ancient DNA project, assisted by fun little cartoony schematic diagrams (<a href="#fig-ancient-metagenomic-pipelines-eageroutputexample">Figure&nbsp;<span>17.3</span></a>)!</p>
 <div id="fig-ancient-metagenomic-pipelines-eageroutputexample" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="assets/images/chapters/ancient-metagenomic-pipelines/damageprofiler_deaminationpatterns.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;17.1: Example of cartoon schematic diagram of the output from DamageProfiler in different contexts. The six panels show different types of ancient DNA damage line-plots from having no damage (flat red/blue lines), however with a speech bubble noting that if the library was UDG treated, that the flat lines might be valid, all the way to the ‘classic’ ancient DNA damage plot with both red and blue lines showing an exponential decay from the ends of reads to the middle, with a motivational speech bubble. Source: Zandra Fagernäs, CC-BY 4.0 via <a href="https://nf-co.re/eager/output">nf-core/eager documentation</a></figcaption>
+<figcaption class="figure-caption">Figure&nbsp;17.3: Example of cartoon schematic diagram of the output from DamageProfiler in different contexts. The six panels show different types of ancient DNA damage line-plots from having no damage (flat red/blue lines), however with a speech bubble noting that if the library was UDG treated, that the flat lines might be valid, all the way to the ‘classic’ ancient DNA damage plot with both red and blue lines showing an exponential decay from the ends of reads to the middle, with a motivational speech bubble. Source: Zandra Fagernäs, CC-BY 4.0 via <a href="https://nf-co.re/eager/output">nf-core/eager documentation</a></figcaption>
 </figure>
 </div>
+</section>
 </section>
 </section>
 <section id="clean-up" class="level3" data-number="17.4.4">
 <h3 data-number="17.4.4" class="anchored" data-anchor-id="clean-up"><span class="header-section-number">17.4.4</span> Clean up</h3>
 <p>Before continuing onto the next section of this chapter, you will need to deactivate from the conda environment</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You may also need to delete the contents of the eager directory</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/ancient-metagenomic-pipelines/eager</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-r</span> <span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="what-is-ameta" class="level2" data-number="17.5">
@@ -804,25 +939,23 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<!-- TODO CHECK IS VALID -->
-<!-- TODO MODFIY THIS TUTORIAL TO USE SAMPLES BUT TEST DB -->
 <p>For this chapter’s exercises, if not already performed, you will need to create the <a href="./before-you-start.html#creating-a-conda-environment">conda environment</a> from the following <a href="https://github.com/NBISweden/aMeta/blob/main/workflow/envs/environment.yaml"><code>yml</code> file</a>, and activate the environment:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate aMeta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate aMeta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<p>While nf-core/eager is a solid pipeline for microbial genomics, and can also perform metagenomic screening via the integrated HOPS pipeline or Kraken2, in some cases you may wish to have a more accurate and resource efficient pipeline In this section, we will demonstrate an example of using aMeta, a snakemake workflow proposed by <span class="citation" data-cites="Pochon2022-hj">Pochon et al. (<a href="introduction-to-ngs-sequencing.html#ref-Pochon2022-hj" role="doc-biblioref">2022</a>)</span> that aims to minimise resource usage by combining both low-resource requiring k-mer based taxonomic profiling as well as accurate read-alignment (<a href="#fig-ancient-metagenomic-pipelines-ametadiagram">Figure&nbsp;<span>17.2</span></a>).</p>
-<div id="fig-ancient-metagenomic-pipelines-ametadiagram" class="quarto-figure quarto-figure-center anchored">
+<p>While nf-core/eager is a solid pipeline for microbial genomics, and can also perform metagenomic screening via the integrated HOPS pipeline or Kraken2, in some cases you may wish to have a more accurate and resource efficient pipeline In this section, we will demonstrate an example of using aMeta, a snakemake workflow proposed by <span class="citation" data-cites="Pochon2022-hj">Pochon et al. (<a href="introduction-to-ngs-sequencing.html#ref-Pochon2022-hj" role="doc-biblioref">2022</a>)</span> that aims to minimise resource usage by combining both low-resource requiring k-mer based taxonomic profiling as well as accurate read-alignment (<a href="#fig-ancientmetagenomicpipelines-ametadiagram">Figure&nbsp;<span>17.5</span></a>).</p>
+<div id="fig-ancientmetagenomicpipelines-ametadiagram" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="assets/images/chapters/ancient-metagenomic-pipelines/ameta-workflow.jpg" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;17.2: Schematic diagram of the aMeta pipeline. Input samples initially undergo generalised screening using the K-mer based KrakenUniq. For every hit that the reads match inside this database, then sees the genome of that hit then constructed into a MALT database where the reads undergo a mapping step to generate alignments, a lowest-common-ancestor (LCA) algorithm step to refine taxonomic assignments, and ancient DNA authentication statistics generation</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;17.4: Schematic diagram of the aMeta pipeline. Input samples initially undergo generalised screening using the K-mer based KrakenUniq. For every hit that the reads match inside this database, then sees the genome of that hit then constructed into a MALT database where the reads undergo a mapping step to generate alignments, a lowest-common-ancestor (LCA) algorithm step to refine taxonomic assignments, and ancient DNA authentication statistics generation</figcaption>
 </figure>
 </div>
 <p>Rather than the very computationally heavy HOPS pipeline <span class="citation" data-cites="Hubler2019-qw">(<a href="introduction-to-ngs-sequencing.html#ref-Hubler2019-qw" role="doc-biblioref">Hübler et al. 2019</a>)</span>, that requires extremely large computational nodes with large RAM (&gt;1 TB) to load MALT databases into memory, aMeta does this via a two step approach. Firstly it uses KrakenUniq (a k-mer based and thus memory efficient method) to do a screening of sequencing reads against a broad generalised microbial database. Once all the possible taxa have been detected, aMeta will then make a new database of just the genomes of the taxa that were reported from KrakenUniq (i.e.&nbsp;a specific database) but using MALT. MALT on thus much reduced database is then used to perform computationally much heavier alignment against the reference genomes and LCA taxonomic reassignment. The output from MALT is then sent to the MaltExtract program of the HOPS pipeline for ancient DNA authentication statistics.</p>
 <section id="running-ameta" class="level3" data-number="17.5.1">
-<h3 data-number="17.5.1" class="anchored" data-anchor-id="running-ameta"><span class="header-section-number">17.5.1</span> Running aMEta</h3>
+<h3 data-number="17.5.1" class="anchored" data-anchor-id="running-ameta"><span class="header-section-number">17.5.1</span> Running aMeta</h3>
 <p>In this tutorial we will try running the small test data that comes with aMeta.</p>
 <p>aMeta has been written in Snakemake, which means running the pipeline has to be installed in a slightly different manner to the <code>nextflow pull</code> command that can be used for nf-core/eager.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ancient-metagenomic-pipelines/aMeta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ancient-metagenomic-pipelines/aMeta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -849,70 +982,70 @@ Self guided: setting up aMeta for tutorial
 <div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <section id="setting-up-ameta-manually" class="level3 callout-body-container callout-body" data-number="17.5.2">
 <h3 data-number="17.5.2" class="anchored" data-anchor-id="setting-up-ameta-manually"><span class="header-section-number">17.5.2</span> Setting up aMeta manually</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>!-- <span class="ex">TODO:</span> replace with link to before-you-start <span class="at">--</span><span class="op">&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/NBISweden/aMeta</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> aMeta</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-f</span> workflow/envs/environment.yaml</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate aMeta</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ancient-metagenomic-pipelines/aMeta</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">## Change into ~/.test to set up all the required test resources (Databases etc.)</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/.test</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">## Set up conda envs</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--use-conda</span> <span class="at">--show-failed-logs</span> <span class="at">-j</span> 2 <span class="at">--conda-cleanup-pkgs</span> cache <span class="at">--conda-create-envs-only</span> <span class="at">-s</span> ../workflow/Snakefile <span class="at">--conda-frontend</span> conda</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> <span class="va">$(</span><span class="fu">dirname</span> <span class="va">$(</span><span class="fu">dirname</span> <span class="va">$CONDA_EXE))</span>/etc/profile.d/conda.sh</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">## Build dummy KrakenUniq database</span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> krakenuniq .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span><span class="va">)</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="ex">krakenuniq-build</span> <span class="at">--db</span> resources/KrakenUniq_DB <span class="at">--kmer-len</span> 21 <span class="at">--minimizer-len</span> 11 <span class="at">--jellyfish-bin</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>/<span class="va">$env</span>/bin/jellyfish</span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="co">## Get Krona taxonomy tax dump</span></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> krona .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-1</span><span class="va">)</span></span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$env</span>/opt/krona</span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="ex">./updateTaxonomy.sh</span> taxonomy</span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="at">-</span></span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="co">## Adjust malt max memory usage</span></span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> hops .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-1</span><span class="va">)</span></span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
-<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="va">version</span><span class="op">=</span><span class="va">$(</span><span class="ex">conda</span> list malt <span class="at">--json</span> <span class="kw">|</span> <span class="fu">grep</span> version <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/</span><span class="dt">\"</span><span class="st">//g"</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $2}'</span><span class="va">)</span></span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$env</span>/opt/malt-<span class="va">$version</span></span>
-<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="at">-e</span> <span class="st">"s/-Xmx64G/-Xmx3G/"</span> malt-build.vmoptions</span>
-<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="at">-e</span> <span class="st">"s/-Xmx64G/-Xmx3G/"</span> malt-run.vmoptions</span>
-<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="at">-</span></span>
-<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
-<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> .initdb</span>
-<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a><span class="co">## Run a quick test</span></span>
-<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--use-conda</span> <span class="at">--show-failed-logs</span> <span class="at">--conda-cleanup-pkgs</span> cache <span class="at">-s</span> ../workflow/Snakefile <span class="va">$@</span> <span class="at">--conda-frontend</span> conda</span>
-<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">-s</span> ../workflow/Snakefile <span class="at">--report</span> <span class="at">--report-stylesheet</span> ../workflow/report/custom.css <span class="at">--conda-frontend</span> conda</span>
-<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a><span class="co">## Now we move back into the main repository where we can symlink all the database files back to try running our 'own' test</span></span>
-<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../</span>
-<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> resources/</span>
-<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> ../.test/resources/<span class="pp">*</span> .</span>
-<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../config</span>
-<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> config.yaml config.yaml.bkp</span>
-<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../</span>
-<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> .test/data/ .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>!-- <span class="ex">TODO:</span> replace with link to before-you-start <span class="at">--</span><span class="op">&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/NBISweden/aMeta</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> aMeta</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-f</span> workflow/envs/environment.yaml</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate aMeta</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ancient-metagenomic-pipelines/aMeta</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">## Change into ~/.test to set up all the required test resources (Databases etc.)</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/.test</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">## Set up conda envs</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--use-conda</span> <span class="at">--show-failed-logs</span> <span class="at">-j</span> 2 <span class="at">--conda-cleanup-pkgs</span> cache <span class="at">--conda-create-envs-only</span> <span class="at">-s</span> ../workflow/Snakefile <span class="at">--conda-frontend</span> conda</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> <span class="va">$(</span><span class="fu">dirname</span> <span class="va">$(</span><span class="fu">dirname</span> <span class="va">$CONDA_EXE))</span>/etc/profile.d/conda.sh</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co">## Build dummy KrakenUniq database</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> krakenuniq .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span><span class="va">)</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="ex">krakenuniq-build</span> <span class="at">--db</span> resources/KrakenUniq_DB <span class="at">--kmer-len</span> 21 <span class="at">--minimizer-len</span> 11 <span class="at">--jellyfish-bin</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>/<span class="va">$env</span>/bin/jellyfish</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="co">## Get Krona taxonomy tax dump</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> krona .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-1</span><span class="va">)</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$env</span>/opt/krona</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="ex">./updateTaxonomy.sh</span> taxonomy</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="at">-</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a><span class="co">## Adjust malt max memory usage</span></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> hops .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-1</span><span class="va">)</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="va">version</span><span class="op">=</span><span class="va">$(</span><span class="ex">conda</span> list malt <span class="at">--json</span> <span class="kw">|</span> <span class="fu">grep</span> version <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/</span><span class="dt">\"</span><span class="st">//g"</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $2}'</span><span class="va">)</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$env</span>/opt/malt-<span class="va">$version</span></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="at">-e</span> <span class="st">"s/-Xmx64G/-Xmx3G/"</span> malt-build.vmoptions</span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="at">-e</span> <span class="st">"s/-Xmx64G/-Xmx3G/"</span> malt-run.vmoptions</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="at">-</span></span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> .initdb</span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a><span class="co">## Run a quick test</span></span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--use-conda</span> <span class="at">--show-failed-logs</span> <span class="at">--conda-cleanup-pkgs</span> cache <span class="at">-s</span> ../workflow/Snakefile <span class="va">$@</span> <span class="at">--conda-frontend</span> conda</span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">-s</span> ../workflow/Snakefile <span class="at">--report</span> <span class="at">--report-stylesheet</span> ../workflow/report/custom.css <span class="at">--conda-frontend</span> conda</span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a><span class="co">## Now we move back into the main repository where we can symlink all the database files back to try running our 'own' test</span></span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../</span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> resources/</span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> ../.test/resources/<span class="pp">*</span> .</span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../config</span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> config.yaml config.yaml.bkp</span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../</span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> .test/data/ .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </div>
 </div>
 </section>
 <section id="ameta-configuration" class="level3" data-number="17.5.3">
 <h3 data-number="17.5.3" class="anchored" data-anchor-id="ameta-configuration"><span class="header-section-number">17.5.3</span> aMeta configuration</h3>
-<p>Now we need to configure the workflow. First, we need to create a tab-delimited <code>samples.tsv</code> file inside <code>aMeta/config/</code> and provide the names of the input fastq-files. In a text editor (e.g.&nbsp;<code>nano</code>), write the following names paths in TSV format:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sample</span>  fastq</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">foo</span> data/bar.fq.gz</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">bar</span> data/foo.fq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>First, we will need to configure the workflow. First, we need to create a tab-delimited <code>samples.tsv</code> file inside <code>aMeta/config/</code> and provide the names of the input fastq-files. In a text editor (e.g.&nbsp;<code>nano</code>), write the following names paths in TSV format:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sample</span>  fastq</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">foo</span> data/bar.fq.gz</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">bar</span> data/foo.fq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -926,24 +1059,24 @@ Warning
 <p>Make sure when copy pasting into your test editor, tabs are not replaced with spaces, otherwise the file might not be read!</p>
 </div>
 </div>
-<p>Next we need to write a config file. This tells aMeta where to find things such as database files and other settings.</p>
+<p>Then we need to write a config file. This tells aMeta where to find things such as database files and other settings.</p>
 <p>These go inside a <code>config.yaml</code> file inside <code>aMeta/config/</code>. A minimal example <code>config.yaml</code> files can look like this:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samplesheet:</span> <span class="st">"config/samples.tsv"</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">krakenuniq_db:</span> resources/KrakenUniq_DB</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="ex">bowtie2_db:</span> resources/ref.fa</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="ex">bowtie2_seqid2taxid_db:</span> resources/seqid2taxid.pathogen.map</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="ex">pathogenomesFound:</span> resources/pathogenomesFound.tab</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="ex">malt_nt_fasta:</span> resources/ref.fa</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="ex">malt_seqid2taxid_db:</span> resources/KrakenUniq_DB/seqid2taxid.map</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="ex">malt_accession2taxid:</span> resources/accession2taxid.map</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="ex">ncbi_db:</span> resources/ncbi</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="ex">n_unique_kmers:</span> 1000</span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="ex">n_tax_reads:</span> 200</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samplesheet:</span> <span class="st">"config/samples.tsv"</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">krakenuniq_db:</span> resources/KrakenUniq_DB</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="ex">bowtie2_db:</span> resources/ref.fa</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="ex">bowtie2_seqid2taxid_db:</span> resources/seqid2taxid.pathogen.map</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="ex">pathogenomesFound:</span> resources/pathogenomesFound.tab</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="ex">malt_nt_fasta:</span> resources/ref.fa</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="ex">malt_seqid2taxid_db:</span> resources/KrakenUniq_DB/seqid2taxid.map</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="ex">malt_accession2taxid:</span> resources/accession2taxid.map</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="ex">ncbi_db:</span> resources/ncbi</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="ex">n_unique_kmers:</span> 1000</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="ex">n_tax_reads:</span> 200</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -954,17 +1087,19 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>As this is only a dummy run (due to the large-ish computational resources required for KrakenUniq), we re-use some of the resource files here. This will produce nonsense output, but is used here to demonstrate how you would execute the pipeline.</p>
+<p>As this is only a dummy run (due to the large-ish computational resources required for KrakenUniq), we re-use some of the resource files here. While this will produce nonsense output, it is used here to demonstrate how you would execute the pipeline.</p>
 </div>
 </div>
 </section>
 <section id="prepare-and-run-ameta" class="level3" data-number="17.5.4">
 <h3 data-number="17.5.4" class="anchored" data-anchor-id="prepare-and-run-ameta"><span class="header-section-number">17.5.4</span> Prepare and run aMeta</h3>
-<p>Next, we need to create conda sub-environments of aMeta, then manually tune a few memory related parameters of tools (Krona and Malt) included in aMeta:</p>
-<p>Make sure you’re in the <code>aMeta</code> conda environment, and in the main aMeta directory with</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path/<span class="op">&lt;</span>to<span class="op">&gt;</span>/ancient-metagenomic-pipelines/ameta/aMeta/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<!-- TODO: still necessary to document? "Next, we need to create conda sub-environments of aMeta, then manually tune a few memory related parameters of tools (Krona and Malt) included in aMeta:"" -->
+<p>Make sure you’re in the <code>aMeta</code> conda environment,</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate aMeta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>and in the main aMeta directory with</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path/<span class="op">&lt;</span>to<span class="op">&gt;</span>/ancient-metagenomic-pipelines/ameta/aMeta/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>And, finally, we are ready to run aMeta!</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--snakefile</span> workflow/Snakefile <span class="at">--use-conda</span> <span class="at">-j</span> 10 <span class="at">--conda-frontend</span> conda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--snakefile</span> workflow/Snakefile <span class="at">--use-conda</span> <span class="at">-j</span> 10 <span class="at">--conda-frontend</span> conda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -982,8 +1117,13 @@ Note
 <section id="ameta-output" class="level3" data-number="17.5.5">
 <h3 data-number="17.5.5" class="anchored" data-anchor-id="ameta-output"><span class="header-section-number">17.5.5</span> aMeta output</h3>
 <p>All output files of the workflow are located in <em>aMeta/results</em> directory. To get a quick overview of ancient microbes present in your samples you should check a heatmap in <em>results/overview_heatmap_scores.pdf</em>.</p>
-<p><img src="assets/images/chapters/ancient-metagenomic-pipelines/overview_heatmap_scores.png" class="img-fluid"></p>
-<p>The heatmap demonstrates microbial species (in rows) authenticated for each sample (in columns). The colors and the numbers in the heatmap represent authentications scores, i.e.&nbsp;numeric quantification of seven quality metrics that provide information about microbial presence and ancient status. The authentication scores can vary from 0 to 10, the higher is the score the more likely that a microbe is present in a sample and is ancient. Typically, scores from 8 to 10 (red color in the heatmap) provide good confidence of ancient microbial presence in a sample. Scores from 5 to 7 (yellow and orange colors in the heatmap) can imply that either: a) a microbe is present but not ancient, i.e.&nbsp;modern contaminant, or b) a microbe is ancient (the reads are damaged) but was perhaps aligned to a wrong reference, i.e.&nbsp;it is not the microbe you think about. The former is a more common case scenario. The latter often happens when an ancient microbe is correctly detected on a genus level but we are not confident about the exact species, and might be aligning the damaged reads to a non-optimal reference which leads to a lot of mismatches or poor evennes of coverage. Scores from 0 to 4 (blue color in the heatmap) typically mean that we have very little statistical evedence (very few reads) to claim presence of a microbe in a sample.</p>
+<div id="fig-ancientmetagenomicpipelines-ametadiagram" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/ancient-metagenomic-pipelines/overview_heatmap_scores.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;17.5: Example microbiome profiling summary heatmap from aMeta. The columns represent different samples, and the rows of different species. The cells of the heatmap are coloured from blue, to yellow, to red, representing aMeta authentication scores from 0 to 10, with the higher the number the more confident of the hit being both the correct taxonomic assignment and that it is ancient. Numbers in the coloured cells also provide the direct score number.</figcaption>
+</figure>
+</div>
+<p>The heatmap demonstrates microbial species (in rows) authenticated for each sample (in columns) (<a href="#fig-ancientmetagenomicpipelines-ametadiagram">Figure&nbsp;<span>17.5</span></a>). The colors and the numbers in the heatmap represent authentications scores, i.e.&nbsp;numeric quantification of seven quality metrics that provide information about microbial presence and ancient status. The authentication scores can vary from 0 to 10, the higher is the score the more likely that a microbe is present in a sample and is ancient. Typically, scores from 8 to 10 (red color in the heatmap) provide good confidence of ancient microbial presence in a sample. Scores from 5 to 7 (yellow and orange colors in the heatmap) can imply that either: a) a microbe is present but not ancient, i.e.&nbsp;modern contaminant, or b) a microbe is ancient (the reads are damaged) but was perhaps aligned to a wrong reference, i.e.&nbsp;it is not the microbe you think about. The former is a more common case scenario. The latter often happens when an ancient microbe is correctly detected on a genus level but we are not confident about the exact species, and might be aligning the damaged reads to a non-optimal reference which leads to a lot of mismatches or poor evennes of coverage. Scores from 0 to 4 (blue color in the heatmap) typically mean that we have very little statistical evedence (very few reads) to claim presence of a microbe in a sample.</p>
 <p>To visually examine the seven quality metrics</p>
 <ul>
 <li>deamination profile,</li>
@@ -994,40 +1134,34 @@ Note
 <li>PMD scores distribution,</li>
 <li>number of assigned reads (depth of coverage),</li>
 </ul>
-<p>corresponding to the numbers and colors of the heatmap, one can find them in results/AUTHENTICATION/sampleID/taxID/authentic_Sample_sampleID.trimmed.rma6_TaxID_taxID.pdf for each sample sampleID and each authenticated microbe taxID. An example of such quality metrics is shown below:</p>
-<p><img src="assets/images/chapters/ancient-metagenomic-pipelines/aMeta_output.png" class="img-fluid"></p>
+<p>Corresponding to the numbers and colors of the heatmap, one can find them in <code>results/AUTHENTICATION/sampleID/taxID/authentic_&lt;Sample&gt;_&lt;sampleID&gt;.trimmed.rma6_&lt;TaxID&gt;_&lt;taxID&gt;.pdf</code> for each sample sampleID and each authenticated microbe taxID. An example of such quality metrics is shown below in <a href="#fig-ancientmetagenomicpipelines-persampleplot">Figure&nbsp;<span>17.6</span></a>.</p>
+<div id="fig-ancientmetagenomicpipelines-persampleplot" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/ancient-metagenomic-pipelines/aMeta_output.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;17.6: Example of sample/hit specific PDF output from aMeta, 9 panels represent different figures that are useful for evaluating the authenticitiy of an ancient metagenomic hit. From Left to Right, Top from bottom, the panels consist of: 1. Edit distance (all reads) bar plot, 2. Edit distance (ancient reads) bar plot, 3. Breadth of coverage line plot, 4. Deamination line plot, 5. Read length distribution bar plot, 6. PMD score histogram, 7. Percent identity bar plot, 8. table of similarity to hits from from closest hit to least closest, and 10. a general statistics table including the name of the taxonomic node, number of reads, duplicates, and mean read length etc.</figcaption>
+</figure>
+</div>
 </section>
 <section id="clean-up-1" class="level3" data-number="17.5.6">
 <h3 data-number="17.5.6" class="anchored" data-anchor-id="clean-up-1"><span class="header-section-number">17.5.6</span> Clean up</h3>
 <p>Before continuing onto the next section of this chapter, you will need to deactivate from the conda environment</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="what-is-nf-coremag" class="level2" data-number="17.6">
 <h2 data-number="17.6" class="anchored" data-anchor-id="what-is-nf-coremag"><span class="header-section-number">17.6</span> What is nf-core/mag?</h2>
-<p>nf-core/mag <span class="citation" data-cites="Krakau2022-we">(<a href="introduction-to-ngs-sequencing.html#ref-Krakau2022-we" role="doc-biblioref">Krakau et al. 2022</a>)</span> is another Nextflow best-practise pipeline for the <em>de novo</em> assembly, binning, and annotation of metagenomes (<a href="#fig-ancientmetagenomicpipelines-magworkflow">Figure&nbsp;<span>17.3</span></a>). While it was originally designed for modern metagenomes (with a focus on optional support co-assembly with Nanopore long reads), it has since been updated to include specific functionality and parameters for ancient metagenomes too.</p>
+<p>nf-core/mag <span class="citation" data-cites="Krakau2022-we">(<a href="introduction-to-ngs-sequencing.html#ref-Krakau2022-we" role="doc-biblioref">Krakau et al. 2022</a>)</span> is another Nextflow best-practise pipeline for the <em>de novo</em> assembly, binning, and annotation of metagenomes (<a href="#fig-ancientmetagenomicpipelines-magworkflow">Figure&nbsp;<span>17.7</span></a>). While it was originally designed for modern metagenomes (with a focus on optional support co-assembly with Nanopore long reads), it has since been updated to include specific functionality and parameters for ancient metagenomes too.</p>
 <div id="fig-ancientmetagenomicpipelines-magworkflow" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="assets/images/chapters/ancient-metagenomic-pipelines/mag_workflow.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;17.3: Overview diagram of the main steps and tools of the nf-core/mag pipeline. Taking reads in FASTQ format or a samplesheet as input, reads can go through adapter and/or quality trimming for specific tools for both short and long reads. These reads can optionally go into taxonomic classification and visualisation, at the same time as the prepared reads go into sample-or group wise assemply, evaluation, as well as the ancient DNA valdiation subworkflow. Resulting contigs can be functionally annotated at the same time as optionally going through binning and binning refinement and evaluation (with statistics generation). Bins and refined bins can be taxonomically classified and annotated, with all final reports going into MultiQC.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;17.7: Overview diagram of the main steps and tools of the nf-core/mag pipeline. Taking reads in FASTQ format or a samplesheet as input, reads can go through adapter and/or quality trimming for specific tools for both short and long reads. These reads can optionally go into taxonomic classification and visualisation, at the same time as the prepared reads go into sample-or group wise assemply, evaluation, as well as the ancient DNA valdiation subworkflow. Resulting contigs can be functionally annotated at the same time as optionally going through binning and binning refinement and evaluation (with statistics generation). Bins and refined bins can be taxonomically classified and annotated, with all final reports going into MultiQC.</figcaption>
 </figure>
 </div>
-<p>nf-core/mag covers the same major steps as you will have run if you followed the chapter on <a href="./denovo-assembly.html">De Novo assembly</a>. Firstly, as with nf-core/eager, nf-core/mag do some initial sequencing QC and cleanup</p>
-
-<!--
-eAGER
-
-nf-core/eager is a computational pipeline specifically designed for preprocessing and analysis of ancient DNA data. It is a reimplementation of the previously published EAGER (Efficient Ancient Genome Reconstruction) pipeline [@Peltzer2016-ov] written in the workflow manager Nextflow. In addition to reimplementing the original genome mapping and variant calling pipeline, in a more reproducible and portable manner the pipeline also included additional new functionality particularly for researchers interested in microbial sciences, namely a dedicated genotyper and consensus caller designed for low coverage genomes, the ability to get breadth and depth coverage statistics for particular genomic features (e.g. virulence genes), but also automated metagenomic screening and authentication of the off-target reads from mapping (e.g. against the host reference genome).
-
-![](assets/images/chapters/ancient-metagenomic-pipelines/eager2_metromap_complex.png)
-
-A detailed description of steps in the pipeline is available as part of nf-core/eager's extensive documentation. For more information, check out the usage documentation [here](https://nf-co.re/eager/2.4.7/usage).
-
-Briefly, nf-core/eager takes at a minimum standard input file types that are shared across the genomics field, i.e., raw FASTQ files or aligned reads in bam format, and a reference fasta. nf-core/eager performs preprocessing of this raw data, including adapter clipping, read merging, and quality control of adapter-trimmed data. nf-core/eager then carries mapping using a variety of field-standard shot-read alignment tools with default parameters adapted for short and damaged aDNA sequences. The off-target reads from host DNA mapping can then go into metagenomic classification and authentication (in the case of MALT). After genomic mapping, BAM files go through deduplication of PCR duplicates, damage profiling and removal, and finally variant calling. A myriad of additional statistics can be generated depending on the users preference. Finally, nf-core eager uses [MultiQC](https://multiqc.info/) to create an integrated html report that summarizes the output/results from each of the pipeline steps.
--->
+<!-- TODO: CITATIONS -->
+<p>nf-core/mag covers the same major steps as you will have run if you followed the chapter on <a href="./denovo-assembly.html">De Novo assembly</a>. Firstly, as with nf-core/eager, nf-core/mag do some initial sequencing QC and cleanup with <code>fastp</code> or <code>AdapterRemoval</code>, running FastQC before and after this step to make sure that adapters and overly short reads have been removed. It can then optionally do basic taxonomic classification of raw reads with <code>Kraken2</code> or <code>Centrifuge</code>. The processed reads then ungo assembly with MEGAHIT, SPAdes, or SPAdeshybrid (the latter being for combining short and long reads), with contig annotation with <code>Prodigal</code> to get gene prediction and assembly statistics with <code>QUAST</code>. A unique feature of nf-core/mag over other <em>de novo</em> assembly pipelines is an aDNA validation and correction step: contigs under go ‘reference free’ damage profiling using <code>pyDamage</code>, and then remaining damage bases that are mistakenly incorporated by assemblies are corrected using <code>freebayes</code> and <code>BCFTools</code>. Contigs then optionally grouped into genomic ‘bins’ with a range of metagenomic binners (<code>MetaBAT2</code>, <code>MaxBin2</code>, and <code>CONCOCT</code>), as well as also optional binning refinement with <code>DAS Tool</code>. Bins are then re-annotated with Prokka, taxonomically classified with either <code>CAT</code> or <code>GTDB-Tk</code> Evaluation of the resulting bins is carried out with BUSCO, CheckM, GUNC and/or QUAST to assess the bin completeness. And, as with all nf-core pipelines, all the results are wrapped up into a <code>MultiQC</code> report. Detailed documnetation can be see on the nf-core/mag <a href="https://nf-co.re/mag/2.3.2/parameters">parameters</a> and <a href="https://nf-co.re/mag/2.3.2/docs/output">output</a> pages.</p>
 <section id="running-nf-coremag" class="level3" data-number="17.6.1">
 <h3 data-number="17.6.1" class="anchored" data-anchor-id="running-nf-coremag"><span class="header-section-number">17.6.1</span> Running nf-core/mag</h3>
-<p>Before we start we need to</p>
+<p>In this tutorial, we will use the same data and aim to replicate the steps taken in the <a href="./denovo-assembly.html">De Novo assembly</a> chapter. It is important to note that generally, <em>de novo</em> assembly, is very computational intensive. In many cases it will not be able to run a <em>de novo</em> assembly on a standard laptop, therefore some of the parameters used here have been tweaked to get the pipeline runable on powerful laptop level machines.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Self guided: reference download and preparation">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -1040,60 +1174,236 @@ Self guided: reference download and preparation
 </div>
 <div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">## re-uses Alex's data, and must have CheckM databse predownloaded unpacked </span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">## IF YOU'VE INTO RUN/DELETE DENOVO ASSEMBLY THEN RUN THIS</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/denovo-assembly/</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://share.eva.mpg.de/index.php/s/CtLq2R9iqEcAFyg/download/2612_R1.fastq.gz</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://share.eva.mpg.de/index.php/s/mc5JrpDWdL4rC24/download/2612_R2.fastq.gz</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_2015_01_16.tar.gz</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co">## OTHERWISE YOU MUST DO THIS</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/ancient-metagenomic-pipelines/</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> mag/data</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> mag/data</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> checkm_data_2015_01_16</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">--directory</span> checkm_data_2015_01_16/ <span class="at">-xzvf</span> checkm_data_2015_01_16.tar.gz</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ..</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This tutorial will re-use the data from the <em>de novo</em> assembly chapter. If you have not-run that practical, or deleted the data, you can retrieve these with</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co">## IF YOU'VE INTO RUN/DELETE DENOVO ASSEMBLY THEN RUN THIS</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/denovo-assembly/</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://share.eva.mpg.de/index.php/s/CtLq2R9iqEcAFyg/download/2612_R1.fastq.gz</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://share.eva.mpg.de/index.php/s/mc5JrpDWdL4rC24/download/2612_R2.fastq.gz</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_2015_01_16.tar.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Once you have done this, we will need to download the single copy marker gene reference database for CheckM, which is used to assess completeness of genome bins.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/ancient-metagenomic-pipelines/</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> mag/data</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> mag/data</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> checkm_data_2015_01_16</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">--directory</span> checkm_data_2015_01_16/ <span class="at">-xzvf</span> checkm_data_2015_01_16.tar.gz</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ..</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
-<p>Make a configuration file to optimise resource requirements</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode groovy code-with-copy"><code class="sourceCode groovy"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>## config</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>process <span class="op">{</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> CHECKM_LINEAGEWF<span class="op">{</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    memory <span class="op">=</span> <span class="fl">24.G</span>B</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    cpus   <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    ext<span class="op">.</span>args <span class="op">=</span> <span class="st">"--reduced_tree"</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> FASTP <span class="op">{</span> </span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> BOWTIE2_PHIX_REMOVAL_ALIGN <span class="op">{</span> </span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> BOWTIE2_ASSEMBLY_ALIGN <span class="op">{</span>    </span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> PYDAMAGE_ANALYZE <span class="op">{</span>      </span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> PROKKA <span class="op">{</span></span>
-<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">4</span></span>
-<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> MEGAHIT <span class="op">{</span></span>
-<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The command</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="bu">time</span> nextflow run nf-core/mag <span class="at">-r</span> 2.3.2 <span class="at">-profile</span> test,docker <span class="at">--input</span> <span class="st">'../../denovo-assembly/*{R1,R2}.fastq.gz'</span> <span class="at">--outdir</span> ./results <span class="at">-c</span> custom.config <span class="at">--skip_spades</span> <span class="at">--skip_spadeshybrid</span> <span class="at">--skip_maxbin2</span> <span class="at">--skip_concoct</span> <span class="at">--binqc_tool</span> checkm <span class="at">--checkm_db</span> data/checkm_data_2015_01_16/ <span class="at">--ancient_dna</span>  <span class="at">--binning_map_mode</span> own <span class="at">--skip_prodigal</span> <span class="at">--gtdb</span> false <span class="at">--centrifuge_db</span> false <span class="at">--kraken2_db</span> false <span class="at">--skip_krona</span> <span class="at">--busco_reference</span> false <span class="at">--keep_phix</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The manual steps of the previous chapter included:</p>
+<ol type="1">
+<li>Read clean up with <code>fastp</code>,</li>
+<li>Assembly with <code>MEGAHIT</code>,</li>
+<li>Ancient DNA assessment and correction with <code>freebayes</code> and <code>pyDamage</code></li>
+<li>Binning using <code>MetaBAT2</code> and <code>MaxBin2</code> (originally using the <code>MetaWRAP</code> pipeline),</li>
+<li>Bin assessment with <code>CheckM</code></li>
+<li>Contig taxonomic classification with <code>MMSeqs2</code> via the <code>GTDB</code> database</li>
+<li>Genome annotation with <code>prokka</code></li>
+</ol>
+<p>So, what command would we use to recreate these?</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">## 🛑 Don't run this yet! 🛑</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run nf-core/mag <span class="at">-r</span> 2.3.2 <span class="dt">\</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>-profile test,docker <span class="dt">\</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>--input <span class="st">'../../denovo-assembly/*{R1,R2}.fastq.gz'</span> <span class="at">--outdir</span> ./results <span class="co">#-c custom.config \</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="ex">--ancient_dna</span>  <span class="at">--binning_map_mode</span> own <span class="dt">\</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>--binqc_tool checkm <span class="at">--checkm_db</span> data/checkm_data_2015_01_16/ <span class="dt">\</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>--centrifuge_db false <span class="at">--kraken2_db</span> false <span class="at">--skip_krona</span> <span class="at">--skip_spades</span> <span class="at">--skip_spadeshybrid</span> <span class="at">--skip_maxbin2</span> <span class="at">--skip_concoct</span> <span class="at">--skip_prodigal</span> <span class="at">--gtdb</span> false  <span class="at">--busco_reference</span> false </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In fact, nf-core/mag will do most of the steps for you! In this case, we mostly just need to <em>deactivate</em> most of the additional steps (the last line). Otherwise, as with eager we have done the following:</p>
+<ol type="1">
+<li><p>Tell nextflow to run the nf-core/mag pipeline with version 2.3.2</p></li>
+<li><p>Specify which computing and software environment to use with <code>-profile</code></p>
+<ul>
+<li>In this case we are running locally so we don’t specify a computing environment (such as a configuration for an institutional HPC)</li>
+<li>We use <code>docker</code> as our container engine, which downloads all the software and specific versions needed for nf-core/mag in immutable ‘containers’, to ensure nothing get broken and is as nf-core/mag expects</li>
+</ul></li>
+<li><p>Provide the various paths to the input files - the raw FASTQ files and the output directory</p></li>
+<li><p>Specify we want to run the aDNA mode with mapping of reads back to the original contigs rather than for co-assembly</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Binning mapping mode with ancient DNA">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Binning mapping mode with ancient DNA
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The aDNA mode of nf-core/mag <em>only</em> supports mapping reads back to the original contigs. The other mapping modes are when doing co-assembly, where you assume there are similar organisms across all your metagenomes, and wish to map reads from all samples in a group to a single sample’s contig (for example). Doing this on aDNA reads would risk making false positive damage patterns, as the damaged reads may derive from reads from a different sample with damage, that are otherwise not present in the sample used for generating the given contig.</p>
+</div>
+</div>
+</div></li>
+<li><p>Specify we want to generate completeness statistics with <code>CheckM</code> (rather than <code>BUSCO</code>), with the associated pre-downloaded database</p>
+<div class="callout callout-style-default callout-note callout-titled" title="nf-core pipelines and reference files">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+nf-core pipelines and reference files
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Most nf-core pipelines will actually download reference databases, build reference indices for alignment, and in some cases reference genomes for you if you do not specify them as pipeline input. These download and reference building steps are often very time consuming, so it’s recommended that once you’ve let the database download it once, you should move the files somewhere safe and you can re-use in subsequent pipeline runs.</p>
+</div>
+</div>
+</div></li>
+<li><p>Skip a few steps that are either ‘nice to have’ (e.g.&nbsp;read taxonomic classification), or require large computational resources (e.g.&nbsp;<code>metaSPAdes</code>, <code>CONCOCT</code> or <code>BUSCO</code>)</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Information on skipped tests">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Information on skipped tests
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The steps we are skipping are: host/arefact removal (<code>Bowtie2</code> removal of phiX), taxonomic classification of reads (<code>centrifuge</code>, <code>kraken2</code>, <code>krona</code>), the additional assemblers (<code>metaSPAdes</code> and <code>SPAdeshybrid</code>, as these require very large computational resources), additional binners (<code>MaxBin2</code> and <code>CONCOCT</code>, while they are used in the <em>de novo</em> assembly chapter, they take a long time to run), ship raw contig annotation (with <code>Prodigal</code>, as we do this at the bin level), and contig taxonomic classification (with <code>GTDB</code> and <code>BUSCO</code> as they require very large databases).</p>
+</div>
+</div>
+</div></li>
+</ol>
+<p>With this we are almost ready for running the pipeline!</p>
+</section>
+<section id="configuring-nextflow-pipelines" class="level3" data-number="17.6.2">
+<h3 data-number="17.6.2" class="anchored" data-anchor-id="configuring-nextflow-pipelines"><span class="header-section-number">17.6.2</span> Configuring Nextflow pipelines</h3>
+<p>Before we execute the command however, we need to again consider about the resource requirements. As described above, particularly <em>de novo</em> assembly (but also many other bioinformatic analyses) require a lot of computational resources, depending on the type of data and analyses you wish to run.</p>
+<p>For most pipelines you must tweak the resource requirements to ensure a) they will fit on your cluster, and b) will run optimally so you don’t under- or over- use your computational resources, where latter will either make yourself (takes too long), or your cluser/server system administrators (blocks other users) unhappy!</p>
+<p>While nf-core pipelines all have ‘reasonable default’ settings for memory, CPU, and time limits, they will not work in all contexts. Here we will give a brief example of how to tweak the parameters of the pipeline steps so that they can run on our compute node or laptop.</p>
+<p>For Nextflow, we must make a special ‘config’ that defines the names of each step of the pipeline you wish to tweak and the corresponding resources.</p>
+<p>For this our nf-core/mag run you will need to open your text editor an empty file called <code>custom.config</code>, and copy and paste the contents of the next code block.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode groovy code-with-copy"><code class="sourceCode groovy"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>process <span class="op">{</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> FASTP <span class="op">{</span> </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> BOWTIE2_PHIX_REMOVAL_ALIGN <span class="op">{</span> </span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> BOWTIE2_ASSEMBLY_ALIGN <span class="op">{</span>    </span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> PYDAMAGE_ANALYZE <span class="op">{</span>      </span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> PROKKA <span class="op">{</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> MEGAHIT <span class="op">{</span></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> CHECKM_LINEAGEWF<span class="op">{</span></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>    memory <span class="op">=</span> <span class="fl">24.G</span>B</span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>    cpus   <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>    ext<span class="op">.</span>args <span class="op">=</span> <span class="st">"--reduced_tree"</span></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here we set the number of CPUs for most tools to a maximum of <code>8</code>, and then we limit the amount of memory for CheckM to 24 GB (down from the <a href="https://github.com/nf-core/mag/blob/66cf53aff834d2a254b78b94fc54cd656b8b7b57/conf/base.config#L37-L41">default</a> of 36 GB - which exceeds most laptop memory). We also give a specifc <code>CheckM</code> flag command to use a smaller database.</p>
+<p>We can save this <code>custom.config</code> file, and supply this to the Nextflow command with the nextflow parameter (<code>-c</code>). And with that, you can run your nf-core/mag pipeline!</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run nf-core/mag <span class="at">-r</span> 2.3.2 <span class="dt">\</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>-profile test,docker <span class="dt">\</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>--input <span class="st">'../../denovo-assembly/*{R1,R2}.fastq.gz'</span> <span class="at">--outdir</span> ./results</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="ex">--ancient_dna</span>  <span class="at">--binning_map_mode</span> own <span class="dt">\</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>--binqc_tool checkm <span class="at">--checkm_db</span> data/checkm_data_2015_01_16/ <span class="dt">\</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>--centrifuge_db false <span class="at">--kraken2_db</span> false <span class="at">--skip_krona</span> <span class="at">--skip_spades</span> <span class="at">--skip_spadeshybrid</span> <span class="at">--skip_maxbin2</span> <span class="at">--skip_concoct</span> <span class="at">--skip_prodigal</span> <span class="at">--gtdb</span> false  <span class="at">--busco_reference</span> false <span class="dt">\</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>-c custom.config</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The good thing about the config file, is you can re-use across runs on the same machine! So set once, and never think about it again.</p>
+<p>The pipeline run above should take around 20 minutes or so to complete.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Configuration files don’t need be personal nor custom!</p>
+<p>You can also generate a HPC / server specific profile which can be used on all nf-core pipelines (and even your own!).</p>
+<p>See <a href="https://nf-co.re/configs">nf-co.re/configs</a> for all existing institutional configs</p>
+</div>
+</div>
+</section>
+<section id="nf-coremag-output" class="level3" data-number="17.6.3">
+<h3 data-number="17.6.3" class="anchored" data-anchor-id="nf-coremag-output"><span class="header-section-number">17.6.3</span> nf-core/mag output</h3>
+<p>As with nf-core/eager, you will have a results directory containing many folders representing different stages of the pipeline, and a MultiQC report.</p>
+<section id="results-files-1" class="level4" data-number="17.6.3.1">
+<h4 data-number="17.6.3.1" class="anchored" data-anchor-id="results-files-1"><span class="header-section-number">17.6.3.1</span> Results Files</h4>
+<p>Relevant directories for evaluting your assemblies are as follows:</p>
+<ul>
+<li><code>QC_shortreads/</code>
+<ul>
+<li>Contains various folders from the sequencing QC and raw read processing (e.g., FastQC, fastp/AdapterRemoval, host-removal results etc)</li>
+</ul></li>
+<li><code>Taxonomy/</code>
+<ul>
+<li>If you have not already performed taxonomic classification of your reads, the output of the Kraken2 or Centrifuge integrated steps of nf-core/mag will be deposited here, including an optional Krona piechart</li>
+<li>If activated, the contig-level taxonomic assignments will be deposited here (e.g.&nbsp;from CAT or GTDB)</li>
+</ul></li>
+<li><code>Assembly/</code>
+<ul>
+<li>This directory will contain one directory per chosen assembler which will contain per-sample output files for each assembly.</li>
+<li>Within each of the assembler sub directories, a QC folder will contain the QUAST output</li>
+</ul></li>
+<li><code>Ancient_DNA</code>
+<ul>
+<li>This folder will contain the output of pyDamge contig authentication to allow you to select or filter for just putatively ancient contigs</li>
+</ul></li>
+<li><code>variant_calling</code>
+<ul>
+<li>This directory will contain the ‘damage-corrected’ contigs that will be used in downstream steps of the pipeline, if the <code>aDNA</code> mode is turned on</li>
+</ul></li>
+<li><code>GenomeBinning/</code>
+<ul>
+<li>This directory will contain all the output from each of any of the selected contig binning tools. As well as the binned FASTAs, you also have read-depth statistics from when input reads are re-mapped back to the contigs</li>
+<li>The directory will also contain the output from the <code>DASTool</code> binning refinement if turned on</li>
+<li>In the <code>QC</code> sub-directory of this folder, you will find the QUAST results on the genome <em>bins</em> (rather than raw contigs as above), as well as BUSCO/CheckM/GUNC MAG completeness estimates</li>
+</ul></li>
+<li><code>Prodigal</code> / <code>Prokka</code>
+<ul>
+<li>These directories will contain the genome annotation output of the raw contigs (<code>Prodigal</code>) or from bins (<code>Prokka</code>)</li>
+</ul></li>
+</ul>
+</section>
+<section id="report-table" class="level4" data-number="17.6.3.2">
+<h4 data-number="17.6.3.2" class="anchored" data-anchor-id="report-table"><span class="header-section-number">17.6.3.2</span> Report Table</h4>
+<p>As of v2.3.* the MultiQC report is unfortunately broken, however this has been fixed for 2.4, and many of the questions asked in the preprocessing section of the <a href="#nf-coreeager-output">nf-core/eager</a> results interpretation will also apply here.</p>
+<p>Other than the QUAST results in the <code>Assembly/*/QC/</code> or <code>GenomeBinning/*/QC/</code> directories, the main table used for evaluating the output files is the <code>bin_summary.tsv</code> table in the <code>GenomeBinning/</code> directory.</p>
+<p>In this file you woud typically want to assess the following columns:</p>
+<ul>
+<li><code>% Complete *</code> columns - with the higher the number of expected domain-specific genes, normally representing a better quality of the resulting bin.</li>
+<li><code># contigs (&gt;=* bp)</code> columns - which represnts the number of contigs at different lengths, the fewer the shorter reads and the greater the longer reads you have again suggests a better assembly.</li>
+<li>This can also be evaluated by the N50 or L75 columns (as described in the <a href="./denovo-assembly.html"><em>De novo</em> assembly chapter</a>).</li>
+<li><code>fastani</code> and <code>closest_placement_taxonomy</code> - these can tell you if your particular bin has a genome very similar to existing species in taxonomic databases</li>
+<li><code>warnings</code> - for specific comments on each assignment</li>
+</ul>
+</section>
+</section>
+<section id="clean-up-2" class="level3" data-number="17.6.4">
+<h3 data-number="17.6.4" class="anchored" data-anchor-id="clean-up-2"><span class="header-section-number">17.6.4</span> Clean up</h3>
+<p>Before continuing onto the next section of this chapter, you will need to deactivate from the conda environment</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You may also need to delete the contents of the mag directory</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/ancient-metagenomic-pipelines/mag</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-r</span> <span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="questions-to-think-about" class="level2" data-number="17.7">
@@ -1106,6 +1416,8 @@ Self guided: reference download and preparation
 </section>
 <section id="references" class="level2" data-number="17.8">
 <h2 data-number="17.8" class="anchored" data-anchor-id="references"><span class="header-section-number">17.8</span> References</h2>
+
+
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-Andrades_Valtuena2022-tq" class="csl-entry" role="listitem">
 Andrades Valtueña, Aida, Gunnar U Neumann, Maria A Spyrou, Lyazzat Musralina, Franziska Aron, Arman Beisenov, Andrey B Belinskiy, et al. 2022. <span>“Stone Age Yersinia Pestis Genomes Shed Light on the Early Evolution, Diversity, and Ecology of Plague.”</span> <em>Proceedings of the National Academy of Sciences of the United States of America</em> 119 (17): e2116722119. <a href="https://doi.org/10.1073/pnas.2116722119">https://doi.org/10.1073/pnas.2116722119</a>.
@@ -1144,8 +1456,6 @@ Wratten, Laura, Andreas Wilm, and Jonathan Göke. 2021. <span>“Reproducible, S
 Yu, He, Maria A Spyrou, Marina Karapetian, Svetlana Shnaider, Rita Radzevičiūtė, Kathrin Nägele, Gunnar U Neumann, et al. 2020. <span>“Paleolithic to Bronze Age Siberians Reveal Connections with First Americans and Across Eurasia.”</span> <em>Cell</em> 181 (6): 1232–1245.e20. <a href="https://doi.org/10.1016/j.cell.2020.04.037">https://doi.org/10.1016/j.cell.2020.04.037</a>.
 </div>
 </div>
-
-
 </section>
 
 </main> <!-- /main -->
