@@ -28,14 +28,15 @@ The aim of this walkthrough is to first: get familiar with the Phyton code synta
 
 - 8.3 [Working in a jupyter environment]
 - 8.4 [Pandas]
-- 8.5 [Data exploration]
-- 3 - Reading data with Pandas
-- 4 - Dealing with missing data
-- 5 - Computing basic statistics
-- 6 - Filtering
-- 8 - GroupBy operations
-- 9 - Joining different tables
-- 10 - Visualization with Plotnine
+- 8.5 [Reading data with Pandas]
+- 8.6 [Data exploration]
+- 8.7 [Describing a DataFrame]
+- 8.8 [Dealing with missing data]
+- 8.9 [Combining data]
+- 8.10 [Data visualization]
+- 8.11 [Plotnine]
+- 8.12 [Lecture from 2022]
+
 
 ## Working in a jupyter environment
 
@@ -152,7 +153,7 @@ A single row or column (1 dimensional data) is a `Series`.
 For a more in detail pandas getting started tutorial [click here](https://pandas.pydata.org/docs/getting_started/index.html#)
 :::
 
-### Reading data
+## Reading data with Pandas
 
 Pandas can read in **csv** (comma separated values) files, which are tables in text format.
 
@@ -210,11 +211,11 @@ df
 When you are unsure what arguments a function can take, it is possilbe to get a *help documentation* using `help(pd.read_csv)`
 :::
 
-### Data exploration
+## Data exploration
 
 The data is from a customer personality analysis of a company trying to better understand how to modify their product catalogue. Here is the [link to the original source](https://www.kaggle.com/datasets/imakash3011/customer-personality-analysis) for more information. 
 
-#### Columns
+### Columns
 
 The command below prints all the column names.
 
@@ -260,7 +261,7 @@ Z_CostContact            int64
 Z_Revenue                int64
 dtype: object
 ```
-#### Inspecting the DataFrame
+### Inspecting the DataFrame
 
 What is the size of our `DataFrame`
 
@@ -436,7 +437,7 @@ df[(df["Education"] == "Master") & (df["Marital_Status"] == "Single")]
 <table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>26</th>\n      <td>10738</td>\n      <td>1951</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>49389.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>40</td>\n      <td>0</td>\n      <td>19</td>\n      <td>2</td>\n      <td>1</td>\n      <td>3</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>46</th>\n      <td>6853</td>\n      <td>1982</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>75777.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>712</td>\n      <td>26</td>\n      <td>538</td>\n      <td>69</td>\n      <td>13</td>\n      <td>80</td>\n      <td>3</td>\n      <td>6</td>\n      <td>11</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>76</th>\n      <td>11178</td>\n      <td>1972</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>42394.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>15</td>\n      <td>2</td>\n      <td>10</td>\n      <td>0</td>\n      <td>1</td>\n      <td>4</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>98</th>\n      <td>6205</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>32557.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>34</td>\n      <td>3</td>\n      <td>29</td>\n      <td>0</td>\n      <td>4</td>\n      <td>10</td>\n      <td>2</td>\n      <td>1</td>\n      <td>3</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>110</th>\n      <td>821</td>\n      <td>1992</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>92859.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>962</td>\n      <td>61</td>\n      <td>921</td>\n      <td>52</td>\n      <td>61</td>\n      <td>20</td>\n      <td>5</td>\n      <td>4</td>\n      <td>12</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1690</th>\n      <td>3520</td>\n      <td>1990</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>91172.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>162</td>\n      <td>28</td>\n      <td>818</td>\n      <td>0</td>\n      <td>28</td>\n      <td>56</td>\n      <td>4</td>\n      <td>3</td>\n      <td>7</td>\n      <td>3</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1709</th>\n      <td>4418</td>\n      <td>1983</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>89616.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>671</td>\n      <td>47</td>\n      <td>655</td>\n      <td>145</td>\n      <td>111</td>\n      <td>15</td>\n      <td>7</td>\n      <td>5</td>\n      <td>12</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1714</th>\n      <td>2980</td>\n      <td>1952</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>8820.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>12</td>\n      <td>0</td>\n      <td>13</td>\n      <td>4</td>\n      <td>2</td>\n      <td>4</td>\n      <td>3</td>\n      <td>0</td>\n      <td>3</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1738</th>\n      <td>7366</td>\n      <td>1982</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>75777.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>712</td>\n      <td>26</td>\n      <td>538</td>\n      <td>69</td>\n      <td>13</td>\n      <td>80</td>\n      <td>3</td>\n      <td>6</td>\n      <td>11</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1747</th>\n      <td>9817</td>\n      <td>1970</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>44802.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>853</td>\n      <td>10</td>\n      <td>143</td>\n      <td>13</td>\n      <td>10</td>\n      <td>20</td>\n      <td>9</td>\n      <td>4</td>\n      <td>12</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>75 rows × 20 columns</p>
 
 
-### Describing a DataFrame
+## Describing a DataFrame
 
 Pandas can easily create overview statistics for all numeric columns:
 
@@ -558,7 +559,7 @@ Just like with the "PhD" string before, you can subset using integers and $<$, $
 **Extra task**
 - Can you find something else that differs a lot between the two groups?
 
-### Dealing with missing data
+## Dealing with missing data
 
 We can check for missing data for each cell like this:
 
@@ -620,7 +621,7 @@ Master        52917.534247
 Name: Income, dtype: float6
 ```
 
-###  Combining data
+##  Combining data
 #### Concatenation
 
 One way to combine multiple datasets is through **concatenation**, which either combines all columns or rows of multiple `DataFrames`.
@@ -738,7 +739,7 @@ merged_df
 <table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Level</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>5</th>\n      <td>965</td>\n      <td>1971</td>\n      <td>Graduation</td>\n      <td>Divorced</td>\n      <td>55635.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>235</td>\n      <td>65</td>\n      <td>164</td>\n      <td>50</td>\n      <td>49</td>\n      <td>27</td>\n      <td>7</td>\n      <td>3</td>\n      <td>7</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>481</th>\n      <td>11133</td>\n      <td>1973</td>\n      <td>PhD</td>\n      <td>YOLO</td>\n      <td>48432.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>322</td>\n      <td>3</td>\n      <td>50</td>\n      <td>4</td>\n      <td>3</td>\n      <td>42</td>\n      <td>7</td>\n      <td>1</td>\n      <td>6</td>\n      <td>8</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>482</th>\n      <td>9589</td>\n      <td>1948</td>\n      <td>PhD</td>\n      <td>Widow</td>\n      <td>82032.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>332</td>\n      <td>194</td>\n      <td>377</td>\n      <td>149</td>\n      <td>125</td>\n      <td>57</td>\n      <td>4</td>\n      <td>6</td>\n      <td>7</td>\n      <td>1</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>483</th>\n      <td>4286</td>\n      <td>1970</td>\n      <td>PhD</td>\n      <td>Single</td>\n      <td>57642.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>580</td>\n      <td>6</td>\n      <td>58</td>\n      <td>8</td>\n      <td>0</td>\n      <td>27</td>\n      <td>7</td>\n      <td>6</td>\n      <td>6</td>\n      <td>4</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>484</th>\n      <td>4001</td>\n      <td>1946</td>\n      <td>PhD</td>\n      <td>Together</td>\n      <td>64014.0</td>\n      <td>2</td>\n      <td>1</td>\n      <td>406</td>\n      <td>0</td>\n      <td>30</td>\n      <td>0</td>\n      <td>0</td>\n      <td>8</td>\n      <td>8</td>\n      <td>2</td>\n      <td>5</td>\n      <td>7</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>485</th>\n      <td>9405</td>\n      <td>1954</td>\n      <td>PhD</td>\n      <td>Married</td>\n      <td>52869.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>84</td>\n      <td>3</td>\n      <td>61</td>\n      <td>2</td>\n      <td>1</td>\n      <td>21</td>\n      <td>3</td>\n      <td>1</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n  </tbody>\n</table>\n<p>2240 rows × 19 columns</p>
 
 
-### Data visualization
+## Data visualization
 
 We can easily create simple graphs using `DataFrame.plot()`.
 
@@ -746,7 +747,7 @@ This uses the package **matplotlib** in the background, which is a very powerful
 
 Using this **Pandas** method is very easy and can be a good way to do some initial exploratory plots and later refine them using either pure **matplobib** or another library.
 
-#### Histogram
+### Histogram
 
 We can plot the data from a `DataFrame` like this:
 
@@ -761,7 +762,7 @@ ax.set_title("Histogram of income")
 ```
 Text(0.5, 1.0, 'Histogram of income')
 
-![png](/mnt/expressions/kevin_nota/102_SPAAM_Summer_Course_2023/histogram.png)
+![png](https://github.com/Kevinnota/teaching_stuff/blob/main/histogram.png?raw=true)
 
 **Task**
 
@@ -789,7 +790,7 @@ ax.set_title("Fixed Histogram of income")
 ```
 Text(0.5, 1.0, 'Fixed Histogram of income')
 
-![png](/mnt/expressions/kevin_nota/102_SPAAM_Summer_Course_2023/fixed_histogram.png)
+![png](https://github.com/Kevinnota/teaching_stuff/blob/main/fixed_histogram.png?raw=true)
 
 </details>
 
@@ -822,7 +823,7 @@ ax.set_title("Mean income for each education level")
 ```
 Text(0.5, 1.0, 'Mean income for each education level')
 
-![png](/mnt/expressions/kevin_nota/102_SPAAM_Summer_Course_2023/bar_plot.png.png)
+![png](https://github.com/Kevinnota/teaching_stuff/blob/main/bar_plot.png?raw=true)
 
 ### Scatter plot
 
@@ -834,7 +835,7 @@ ax.set_title("Wine purchases and Fruit purchases")
 ```
 Text(0.5, 1.0, 'Wine purchases and Fruit purchases')
 
-![png](/mnt/expressions/kevin_nota/102_SPAAM_Summer_Course_2023/scatter_polt_01.png)
+![png](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_01.png?raw=true)
 
 You can also specify whether the axes should be on the log scale or not.
 
@@ -844,10 +845,10 @@ ax.set_title("Wine purchases and Fruit purchases, on log scale")
 ```
 Text(0.5, 1.0, 'Wine purchases and Fruit purchases, on log scale')
 
-![png](/mnt/expressions/kevin_nota/102_SPAAM_Summer_Course_2023/scatter_polt_02.png)
+![png](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_02.png?raw=true)
 
 
-### Plotnine
+## Plotnine
 
 Plotnine is the Python clone of ggplot2, which is very powerful and is great if you are already familiar with the ggplot2 syntax!
 
@@ -858,7 +859,7 @@ from plotnine import *
 (ggplot(merged_df, aes("Education", "MntWines", fill="Education"))
  + geom_boxplot(alpha=0.8))
 ```
-![png](/mnt/expressions/kevin_nota/102_SPAAM_Summer_Course_2023/boxplot.png)
+![png](https://github.com/Kevinnota/teaching_stuff/blob/main/boxplot.png?raw=true)
 
 
 ```python
@@ -867,7 +868,7 @@ from plotnine import *
  + geom_point(alpha=0.5, stroke=0)
  + facet_wrap("Marital_Status"))
 ```
-![png](/mnt/expressions/kevin_nota/102_SPAAM_Summer_Course_2023/facet_scatter.png)
+![png](https://github.com/Kevinnota/teaching_stuff/blob/main/facet_scatter.png?raw=true)
 
 
 **task**
