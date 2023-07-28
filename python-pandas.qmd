@@ -1,6 +1,6 @@
 ---
 title: Introduction to Python and Pandas
-author: Maxime Borry
+author: Robin Warner, Kevin Nota, and Maxime Borry
 ---
 
 :::  {.callout-note} 
@@ -34,4160 +34,872 @@ The output of commands on the website for this walkthrough are displayed in thei
 own code blocks - be wary of what you copy-paste!
 :::
 
+## Introduction to data manipulation in Python with Pandas and visualisation
+
+Over the last few years, Python has gained popularity thanks to the numerous libraries (packages with pre-written functions) in the field of machine learning, statistical data analysis, and bioinformatics. While a few years ago, it was often necessary to go to R for performing routine data manipulation and analysis tasks, nowadays Python has a vast ecosystem of libraries. Libraries exist for many different file formats that you might encounter in metagenomics, such as fasta, fastq, sam, bam, etc.
+
+This tutorial/walkthrough will provide a short introduction to the most popular libraries for data analysis [pandas](https://pandas.pydata.org/). This library has functions for reading and manipulating tabular data similar to the `data.frame()` in R together with some basic data plotting codes.
+
+The aim of this walkthrough is to first: get familiar with the Python code syntax and use Jupiter Notebook for executing codes and secondly get a kickstart to utilising the endless possibilities of data analysis in Python that can be applied to your data.  
+
+## Table of content:
+
+- 8.3 [Working in a jupyter environment]
+- 8.4 [Pandas]
+- 8.5 [Reading data with Pandas]
+- 8.6 [Data exploration]
+- 8.7 [Describing a DataFrame]
+- 8.8 [Dealing with missing data]
+- 8.9 [Combining data]
+- 8.10 [Data visualization]
+- 8.11 [Plotnine]
+- 8.12 [Lecture from 2022]
+
+
+## Working in a jupyter environment
+
+This tutorial run-through is using a [Jupyter Notebook](https://jupyter.org) for writing & executing Python code and for annotating.
+
+Jupyter notebooks are convenient and have two types of cells: **Markdown** and **Code**. The **markup cell** syntax is very similar to **R markdown**. The markdown cells are used for annotating, which is important for sharing code with collaborators, reproducibility, and documentation.
+
+A few examples are shown below. For a full list of possible syntax [click here](https://www.ibm.com/docs/en/watson-studio-local/1.2.3?topic=notebooks-markdown-jupyter-cheatsheet) for a Jupyter Notebook cheat-sheet.  
+
+list of **markdown cell** examples:
+
+::: {.callout-note}
+In many cases, there are multiple possible syntaxes which give the same result. We present only one way in this run-through.
+:::
+
+Text
+
+- `**bold**` : **bold**
+- `*italics*` : *italics*
+
+Code
+
+- \`inline code\` : `inline code`
+ 
+ LaTeX maths
+
+- `$ x = \frac{\pi}{42} $` : $$ x = \frac{\pi}{42} $$
+
+url links
+
+- `[link](https://www.python.org/)`[link](https://www.python.org/)
+
+Images
+
+- `![](https://www.spaam-community.org/assets/media/SPAAM-Logo-Full-Colour_ShortName.svg)` ![](https://www.spaam-community.org/assets/media/SPAAM-Logo-Full-Colour_ShortName.svg)
+
+\
+The **code cells** can interpret many different coding languages including Python and Bash. The syntax of the code cells is the same as the syntax of the coding languages, in our case python. 
+
+Below are some examples of Python **code cells** with some useful basic python functions:
+
+::: {.callout-tip}
+## Python function
+`print()` is a python function for printing lines in the terminal
+`print() == echo ` in bash
+:::
+
 ```python
-from IPython.core.display import SVG
+print("Hello World from Python!")
 ```
+*out -* `Hello World from Python!`
 
-## Introduction to data manipulation in Python with Pandas and visulization with plotnine
-
-Maxime Borry  
-SPAAM Summer School 2022
+But it can also, for example, run bash commands by adding a *!* at the start of the line.
 
 ```python
-SVG(filename='img/whoami.svg')
+! echo "Hello World from bash!"
 ```
+*out -* `Hello World from bash!`
 
-![svg](assets/images/chapters/python-pandas/tutorial_2_0.svg)
-
-Over the last few years, Python has gained an immense amount of popularity thanks to its numerous libraries in the field of machine learning, statistical data analysis, and bioinformatics. While a few years ago, it was often necessary to go back to R for performing routine data manipulation and analysis tasks, nowadays Python has a vast ecosystem of libraries for doing just that.
-
-Today, we will do a quick introduction of the most popular libraries for data analysis:
-
-- [pandas](https://pandas.pydata.org/), for reading and manipulation tabular data
-- [plotnine](https://plotnine.readthedocs.io/), the Python clone of ggplot2
-
-## Overview:
-
-- 0 - Foreword, working in a jupyter environment
-- 1 - Loading required libraries
-- 2 - Foreword on Pandas
-- 3 - Reading data with Pandas
-- 4 - Dealing with missing data
-- 5 - Computing basic statistics
-- 6 - Filtering
-- 8 - GroupBy operations
-- 9 - Joining different tables
-- 10 - Visualization with Plotnine
-
-## 0 - Foreword, working in a jupyter environment
-
-### This is a markdown cell
-
-With some features of the markdown syntax, such as:
-
-- **bold** `**bold**`
-- _italic_ `*italic*`
-- `inline code`
-
-```
-`inline code`
-```
-
-- [links](https://www.google.com/) `[links](https://www.google.com/)`
-
-- Images  
-  ![](assets/images/chapters/python-pandas/avatar_hu4dc3c23d5a8c195732bbca11d7ce61be_114670_270x270_fill_lanczos_center_2.png)  
-  `![](https://maximeborry.com/authors/maxime/avatar_hu4dc3c23d5a8c195732bbca11d7ce61be_114670_270x270_fill_lanczos_center_2.png)`
-
-- Latex code $ y = ax + b$  
-  `$y = ax + b$`
+Stings or numbers can be stored as a variable by using the *=* sign
 
 ```python
-print("This is a code cell in Python")
+i = 0
 ```
-
-    This is a code cell in Python
+Ones a variable is set in one **code cell** they are stored and can be accessed in other downstream **code cells**.
 
 ```python
-! echo "This is code cell in bash"
+print(i)
 ```
 
-    This is code cell in bash
+You can also print multiple things together in one `print` statement such as a number and a string:
 
-```bash
-%%bash
-
-echo "This a multiline code cell"
-echo "in bash"
+```python
+print("The number is", i, "Wow!")
 ```
+*out -* `The number is 0 Wow!`
 
-    This a multiline code cell
-    in bash
+## Pandas
+### Getting started
+Pandas is a Python library used for data manipulation and analysis.
 
-## 1 - Loading required libraries
+We can import the library like this:
 
 ```python
 import pandas as pd
-import numpy as np
-from plotnine import *
 ```
+
+::: {.callout-note}
+We set "pandas" to the alias "pd" because we are lazy and don't want to write the full word too many times.
+:::
+
+Now, we can print the current version:
 
 ```python
 pd.__version__
 ```
+*out -* `'2.0.1'`
 
-    '1.4.3'
+### Pandas data structures
+The primary data structures in Pandas are `Series` and `DataFrame`.
 
-```python
-np.__version__
-```
+A `DataFrame` is a table with **columns** and **rows**. 
 
-    '1.23.1'
+Each **column** has a *column name* and each **row** has an *index*.
 
-```python
-! conda list | grep plotnine
-```
-
-    plotnine                  0.9.0              pyhd8ed1ab_0    conda-forge
-
-## 2 - Foreword on Pandas
-
-### Pandas terminology
 
 ![](assets/images/chapters/python-pandas/01_table_dataframe.svg)
 
+A single row or column (1 dimensional data) is a `Series`.
+
 ![](assets/images/chapters/python-pandas/01_table_series.svg)
 
-The pandas getting started tutorial: [pandas.pydata.org/docs/getting_started](https://pandas.pydata.org/docs/getting_started/index.html#)
+::: {.callout-note}
+For a more in detail pandas getting started tutorial [click here](https://pandas.pydata.org/docs/getting_started/index.html#)
+:::
 
-## 3 - Reading data with Pandas
+## Reading data with Pandas
 
-```python
-sample_table_url = "https://raw.githubusercontent.com/SPAAM-community/AncientMetagenomeDir/b187df6ebd23dfeb42935fd5020cb615ead3f164/
-ancientmetagenome-hostassociated/samples/ancientmetagenome-hostassociated_samples.tsv"
-library_table_url = "https://raw.githubusercontent.com/SPAAM-community/AncientMetagenomeDir/b187df6ebd23dfeb42935fd5020cb615ead3f164/
-ancientmetagenome-hostassociated/libraries/ancientmetagenome-hostassociated_libraries.tsv"
+Pandas can read in **csv** (comma separated values) files, which are tables in text format.
+
+It's called **c**sv because each value is separated from the others via a comma, like this:
+
+```{text}
+A,B
+5,6
+8,4
 ```
 
-Getting help in Python
-
-```python
-help(pd.read_csv)
-```
-
-    Help on function read_csv in module pandas.io.parsers.readers:
-
-    read_csv(filepath_or_buffer: 'FilePath | ReadCsvBuffer[bytes] | ReadCsvBuffer[str]',
-    sep=<no_default>, delimiter=None, header='infer', names=<no_default>, index_col=None,
-    usecols=None, squeeze=None, prefix=<no_default>, mangle_dupe_cols=True,
-    dtype: 'DtypeArg | None' = None, engine: 'CSVEngine | None' = None, converters=None,
-    true_values=None, false_values=None, skipinitialspace=False, skiprows=None, skipfooter=0,
-    nrows=None, na_values=None, keep_default_na=True, na_filter=True, verbose=False,
-    skip_blank_lines=True, parse_dates=None, infer_datetime_format=False, keep_date_col=False,
-     date_parser=None, dayfirst=False, cache_dates=True, iterator=False, chunksize=None,
-     compression: 'CompressionOptions' = 'infer', thousands=None, decimal: 'str' = '.',
-     lineterminator=None, quotechar='"', quoting=0, doublequote=True, escapechar=None,
-     comment=None, encoding=None, encoding_errors: 'str | None' = 'strict', dialect=None,
-     error_bad_lines=None, warn_bad_lines=None, on_bad_lines=None, delim_whitespace=False,
-     low_memory=True, memory_map=False, float_precision=None, storage_options: 'StorageOptions' = None)
-        Read a comma-separated values (csv) file into DataFrame.
-
-        Also supports optionally iterating or breaking of the file
-        into chunks.
-
-        Additional help can be found in the online docs for
-        `IO Tools <https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html>`_.
-
-        Parameters
-        ----------
-        filepath_or_buffer : str, path object or file-like object
-            Any valid string path is acceptable. The string could be a URL. Valid
-            URL schemes include http, ftp, s3, gs, and file. For file URLs, a host is
-            expected. A local file could be: file://localhost/path/to/table.csv.
-
-            If you want to pass in a path object, pandas accepts any ``os.PathLike``.
-
-            By file-like object, we refer to objects with a ``read()`` method, such as
-            a file handle (e.g. via builtin ``open`` function) or ``StringIO``.
-        sep : str, default ','
-            Delimiter to use. If sep is None, the C engine cannot automatically detect
-            the separator, but the Python parsing engine can, meaning the latter will
-            be used and automatically detect the separator by Python's builtin sniffer
-            tool, ``csv.Sniffer``. In addition, separators longer than 1 character and
-            different from ``'\s+'`` will be interpreted as regular expressions and
-            will also force the use of the Python parsing engine. Note that regex
-            delimiters are prone to ignoring quoted data. Regex example: ``'\r\t'``.
-        delimiter : str, default ``None``
-            Alias for sep.
-        header : int, list of int, None, default 'infer'
-            Row number(s) to use as the column names, and the start of the
-            data.  Default behavior is to infer the column names: if no names
-            are passed the behavior is identical to ``header=0`` and column
-            names are inferred from the first line of the file, if column
-            names are passed explicitly then the behavior is identical to
-            ``header=None``. Explicitly pass ``header=0`` to be able to
-            replace existing names. The header can be a list of integers that
-            specify row locations for a multi-index on the columns
-            e.g. [0,1,3]. Intervening rows that are not specified will be
-            skipped (e.g. 2 in this example is skipped). Note that this
-            parameter ignores commented lines and empty lines if
-            ``skip_blank_lines=True``, so ``header=0`` denotes the first line of
-            data rather than the first line of the file.
-        names : array-like, optional
-            List of column names to use. If the file contains a header row,
-            then you should explicitly pass ``header=0`` to override the column names.
-            Duplicates in this list are not allowed.
-        index_col : int, str, sequence of int / str, or False, optional, default ``None``
-          Column(s) to use as the row labels of the ``DataFrame``, either given as
-          string name or column index. If a sequence of int / str is given, a
-          MultiIndex is used.
-
-          Note: ``index_col=False`` can be used to force pandas to *not* use the first
-          column as the index, e.g. when you have a malformed file with delimiters at
-          the end of each line.
-        usecols : list-like or callable, optional
-            Return a subset of the columns. If list-like, all elements must either
-            be positional (i.e. integer indices into the document columns) or strings
-            that correspond to column names provided either by the user in `names` or
-            inferred from the document header row(s). If ``names`` are given, the document
-            header row(s) are not taken into account. For example, a valid list-like
-            `usecols` parameter would be ``[0, 1, 2]`` or ``['foo', 'bar', 'baz']``.
-            Element order is ignored, so ``usecols=[0, 1]`` is the same as ``[1, 0]``.
-            To instantiate a DataFrame from ``data`` with element order preserved use
-            ``pd.read_csv(data, usecols=['foo', 'bar'])[['foo', 'bar']]`` for columns
-            in ``['foo', 'bar']`` order or
-            ``pd.read_csv(data, usecols=['foo', 'bar'])[['bar', 'foo']]``
-            for ``['bar', 'foo']`` order.
-
-            If callable, the callable function will be evaluated against the column
-            names, returning names where the callable function evaluates to True. An
-            example of a valid callable argument would be ``lambda x: x.upper() in
-            ['AAA', 'BBB', 'DDD']``. Using this parameter results in much faster
-            parsing time and lower memory usage.
-        squeeze : bool, default False
-            If the parsed data only contains one column then return a Series.
-
-            .. deprecated:: 1.4.0
-                Append ``.squeeze("columns")`` to the call to ``read_csv`` to squeeze
-                the data.
-        prefix : str, optional
-            Prefix to add to column numbers when no header, e.g. 'X' for X0, X1, ...
-
-            .. deprecated:: 1.4.0
-               Use a list comprehension on the DataFrame's columns after calling ``read_csv``.
-        mangle_dupe_cols : bool, default True
-            Duplicate columns will be specified as 'X', 'X.1', ...'X.N', rather than
-            'X'...'X'. Passing in False will cause data to be overwritten if there
-            are duplicate names in the columns.
-        dtype : Type name or dict of column -> type, optional
-            Data type for data or columns. E.g. {'a': np.float64, 'b': np.int32,
-            'c': 'Int64'}
-            Use `str` or `object` together with suitable `na_values` settings
-            to preserve and not interpret dtype.
-            If converters are specified, they will be applied INSTEAD
-            of dtype conversion.
-        engine : {'c', 'python', 'pyarrow'}, optional
-            Parser engine to use. The C and pyarrow engines are faster, while the python engine
-            is currently more feature-complete. Multithreading is currently only supported by
-            the pyarrow engine.
-
-            .. versionadded:: 1.4.0
-
-                The "pyarrow" engine was added as an *experimental* engine, and some features
-                are unsupported, or may not work correctly, with this engine.
-        converters : dict, optional
-            Dict of functions for converting values in certain columns. Keys can either
-            be integers or column labels.
-        true_values : list, optional
-            Values to consider as True.
-        false_values : list, optional
-            Values to consider as False.
-        skipinitialspace : bool, default False
-            Skip spaces after delimiter.
-        skiprows : list-like, int or callable, optional
-            Line numbers to skip (0-indexed) or number of lines to skip (int)
-            at the start of the file.
-
-            If callable, the callable function will be evaluated against the row
-            indices, returning True if the row should be skipped and False otherwise.
-            An example of a valid callable argument would be ``lambda x: x in [0, 2]``.
-        skipfooter : int, default 0
-            Number of lines at bottom of file to skip (Unsupported with engine='c').
-        nrows : int, optional
-            Number of rows of file to read. Useful for reading pieces of large files.
-        na_values : scalar, str, list-like, or dict, optional
-            Additional strings to recognize as NA/NaN. If dict passed, specific
-            per-column NA values.  By default the following values are interpreted as
-            NaN: '', '#N/A', '#N/A N/A', '#NA', '-1.#IND', '-1.#QNAN', '-NaN', '-nan',
-            '1.#IND', '1.#QNAN', '<NA>', 'N/A', 'NA', 'NULL', 'NaN', 'n/a',
-            'nan', 'null'.
-        keep_default_na : bool, default True
-            Whether or not to include the default NaN values when parsing the data.
-            Depending on whether `na_values` is passed in, the behavior is as follows:
-
-            * If `keep_default_na` is True, and `na_values` are specified, `na_values`
-              is appended to the default NaN values used for parsing.
-            * If `keep_default_na` is True, and `na_values` are not specified, only
-              the default NaN values are used for parsing.
-            * If `keep_default_na` is False, and `na_values` are specified, only
-              the NaN values specified `na_values` are used for parsing.
-            * If `keep_default_na` is False, and `na_values` are not specified, no
-              strings will be parsed as NaN.
-
-            Note that if `na_filter` is passed in as False, the `keep_default_na` and
-            `na_values` parameters will be ignored.
-        na_filter : bool, default True
-            Detect missing value markers (empty strings and the value of na_values). In
-            data without any NAs, passing na_filter=False can improve the performance
-            of reading a large file.
-        verbose : bool, default False
-            Indicate number of NA values placed in non-numeric columns.
-        skip_blank_lines : bool, default True
-            If True, skip over blank lines rather than interpreting as NaN values.
-        parse_dates : bool or list of int or names or list of lists or dict, default False
-            The behavior is as follows:
-
-            * boolean. If True -> try parsing the index.
-            * list of int or names. e.g. If [1, 2, 3] -> try parsing columns 1, 2, 3
-              each as a separate date column.
-            * list of lists. e.g.  If [[1, 3]] -> combine columns 1 and 3 and parse as
-              a single date column.
-            * dict, e.g. {'foo' : [1, 3]} -> parse columns 1, 3 as date and call
-              result 'foo'
-
-            If a column or index cannot be represented as an array of datetimes,
-            say because of an unparsable value or a mixture of timezones, the column
-            or index will be returned unaltered as an object data type. For
-            non-standard datetime parsing, use ``pd.to_datetime`` after
-            ``pd.read_csv``. To parse an index or column with a mixture of timezones,
-            specify ``date_parser`` to be a partially-applied
-            :func:`pandas.to_datetime` with ``utc=True``. See
-            :ref:`io.csv.mixed_timezones` for more.
-
-            Note: A fast-path exists for iso8601-formatted dates.
-        infer_datetime_format : bool, default False
-            If True and `parse_dates` is enabled, pandas will attempt to infer the
-            format of the datetime strings in the columns, and if it can be inferred,
-            switch to a faster method of parsing them. In some cases this can increase
-            the parsing speed by 5-10x.
-        keep_date_col : bool, default False
-            If True and `parse_dates` specifies combining multiple columns then
-            keep the original columns.
-        date_parser : function, optional
-            Function to use for converting a sequence of string columns to an array of
-            datetime instances. The default uses ``dateutil.parser.parser`` to do the
-            conversion. Pandas will try to call `date_parser` in three different ways,
-            advancing to the next if an exception occurs: 1) Pass one or more arrays
-            (as defined by `parse_dates`) as arguments; 2) concatenate (row-wise) the
-            string values from the columns defined by `parse_dates` into a single array
-            and pass that; and 3) call `date_parser` once for each row using one or
-            more strings (corresponding to the columns defined by `parse_dates`) as
-            arguments.
-        dayfirst : bool, default False
-            DD/MM format dates, international and European format.
-        cache_dates : bool, default True
-            If True, use a cache of unique, converted dates to apply the datetime
-            conversion. May produce significant speed-up when parsing duplicate
-            date strings, especially ones with timezone offsets.
-
-            .. versionadded:: 0.25.0
-        iterator : bool, default False
-            Return TextFileReader object for iteration or getting chunks with
-            ``get_chunk()``.
-
-            .. versionchanged:: 1.2
-
-               ``TextFileReader`` is a context manager.
-        chunksize : int, optional
-            Return TextFileReader object for iteration.
-            See the `IO Tools docs
-            <https://pandas.pydata.org/pandas-docs/stable/io.html#io-chunking>`_
-            for more information on ``iterator`` and ``chunksize``.
-
-            .. versionchanged:: 1.2
-
-               ``TextFileReader`` is a context manager.
-        compression : str or dict, default 'infer'
-            For on-the-fly decompression of on-disk data. If 'infer' and '%s' is
-            path-like, then detect compression from the following extensions: '.gz',
-            '.bz2', '.zip', '.xz', or '.zst' (otherwise no compression). If using
-            'zip', the ZIP file must contain only one data file to be read in. Set to
-            ``None`` for no decompression. Can also be a dict with key ``'method'`` set
-            to one of {``'zip'``, ``'gzip'``, ``'bz2'``, ``'zstd'``} and other
-            key-value pairs are forwarded to ``zipfile.ZipFile``, ``gzip.GzipFile``,
-            ``bz2.BZ2File``, or ``zstandard.ZstdDecompressor``, respectively. As an
-            example, the following could be passed for Zstandard decompression using a
-            custom compression dictionary:
-            ``compression={'method': 'zstd', 'dict_data': my_compression_dict}``.
-
-            .. versionchanged:: 1.4.0 Zstandard support.
-
-        thousands : str, optional
-            Thousands separator.
-        decimal : str, default '.'
-            Character to recognize as decimal point (e.g. use ',' for European data).
-        lineterminator : str (length 1), optional
-            Character to break file into lines. Only valid with C parser.
-        quotechar : str (length 1), optional
-            The character used to denote the start and end of a quoted item. Quoted
-            items can include the delimiter and it will be ignored.
-        quoting : int or csv.QUOTE_* instance, default 0
-            Control field quoting behavior per ``csv.QUOTE_*`` constants. Use one of
-            QUOTE_MINIMAL (0), QUOTE_ALL (1), QUOTE_NONNUMERIC (2) or QUOTE_NONE (3).
-        doublequote : bool, default ``True``
-           When quotechar is specified and quoting is not ``QUOTE_NONE``, indicate
-           whether or not to interpret two consecutive quotechar elements INSIDE a
-           field as a single ``quotechar`` element.
-        escapechar : str (length 1), optional
-            One-character string used to escape other characters.
-        comment : str, optional
-            Indicates remainder of line should not be parsed. If found at the beginning
-            of a line, the line will be ignored altogether. This parameter must be a
-            single character. Like empty lines (as long as ``skip_blank_lines=True``),
-            fully commented lines are ignored by the parameter `header` but not by
-            `skiprows`. For example, if ``comment='#'``, parsing
-            ``#empty\na,b,c\n1,2,3`` with ``header=0`` will result in 'a,b,c' being
-            treated as the header.
-        encoding : str, optional
-            Encoding to use for UTF when reading/writing (ex. 'utf-8'). `List of Python
-            standard encodings
-            <https://docs.python.org/3/library/codecs.html#standard-encodings>`_ .
-
-            .. versionchanged:: 1.2
-
-               When ``encoding`` is ``None``, ``errors="replace"`` is passed to
-               ``open()``. Otherwise, ``errors="strict"`` is passed to ``open()``.
-               This behavior was previously only the case for ``engine="python"``.
-
-            .. versionchanged:: 1.3.0
-
-               ``encoding_errors`` is a new argument. ``encoding`` has no longer an
-               influence on how encoding errors are handled.
-
-        encoding_errors : str, optional, default "strict"
-            How encoding errors are treated. `List of possible values
-            <https://docs.python.org/3/library/codecs.html#error-handlers>`_ .
-
-            .. versionadded:: 1.3.0
-
-        dialect : str or csv.Dialect, optional
-            If provided, this parameter will override values (default or not) for the
-            following parameters: `delimiter`, `doublequote`, `escapechar`,
-            `skipinitialspace`, `quotechar`, and `quoting`. If it is necessary to
-            override values, a ParserWarning will be issued. See csv.Dialect
-            documentation for more details.
-        error_bad_lines : bool, optional, default ``None``
-            Lines with too many fields (e.g. a csv line with too many commas) will by
-            default cause an exception to be raised, and no DataFrame will be returned.
-            If False, then these "bad lines" will be dropped from the DataFrame that is
-            returned.
-
-            .. deprecated:: 1.3.0
-               The ``on_bad_lines`` parameter should be used instead to specify behavior upon
-               encountering a bad line instead.
-        warn_bad_lines : bool, optional, default ``None``
-            If error_bad_lines is False, and warn_bad_lines is True, a warning for each
-            "bad line" will be output.
-
-            .. deprecated:: 1.3.0
-               The ``on_bad_lines`` parameter should be used instead to specify behavior upon
-               encountering a bad line instead.
-        on_bad_lines : {'error', 'warn', 'skip'} or callable, default 'error'
-            Specifies what to do upon encountering a bad line (a line with too many fields).
-            Allowed values are :
-
-                - 'error', raise an Exception when a bad line is encountered.
-                - 'warn', raise a warning when a bad line is encountered and skip that line.
-                - 'skip', skip bad lines without raising or warning when they are encountered.
-
-            .. versionadded:: 1.3.0
-
-                - callable, function with signature
-                  ``(bad_line: list[str]) -> list[str] | None`` that will process a single
-                  bad line. ``bad_line`` is a list of strings split by the ``sep``.
-                  If the function returns ``None``, the bad line will be ignored.
-                  If the function returns a new list of strings with more elements than
-                  expected, a ``ParserWarning`` will be emitted while dropping extra elements.
-                  Only supported when ``engine="python"``
-
-            .. versionadded:: 1.4.0
-
-        delim_whitespace : bool, default False
-            Specifies whether or not whitespace (e.g. ``' '`` or ``'    '``) will be
-            used as the sep. Equivalent to setting ``sep='\s+'``. If this option
-            is set to True, nothing should be passed in for the ``delimiter``
-            parameter.
-        low_memory : bool, default True
-            Internally process the file in chunks, resulting in lower memory use
-            while parsing, but possibly mixed type inference.  To ensure no mixed
-            types either set False, or specify the type with the `dtype` parameter.
-            Note that the entire file is read into a single DataFrame regardless,
-            use the `chunksize` or `iterator` parameter to return the data in chunks.
-            (Only valid with C parser).
-        memory_map : bool, default False
-            If a filepath is provided for `filepath_or_buffer`, map the file object
-            directly onto memory and access the data directly from there. Using this
-            option can improve performance because there is no longer any I/O overhead.
-        float_precision : str, optional
-            Specifies which converter the C engine should use for floating-point
-            values. The options are ``None`` or 'high' for the ordinary converter,
-            'legacy' for the original lower precision pandas converter, and
-            'round_trip' for the round-trip converter.
-
-            .. versionchanged:: 1.2
-
-        storage_options : dict, optional
-            Extra options that make sense for a particular storage connection, e.g.
-            host, port, username, password, etc. For HTTP(S) URLs the key-value pairs
-            are forwarded to ``urllib`` as header options. For other URLs (e.g.
-            starting with "s3://", and "gcs://") the key-value pairs are forwarded to
-            ``fsspec``. Please see ``fsspec`` and ``urllib`` for more details.
-
-            .. versionadded:: 1.2
-
-        Returns
-        -------
-        DataFrame or TextParser
-            A comma-separated values (csv) file is returned as two-dimensional
-            data structure with labeled axes.
-
-        See Also
-        --------
-        DataFrame.to_csv : Write DataFrame to a comma-separated values (csv) file.
-        read_csv : Read a comma-separated values (csv) file into DataFrame.
-        read_fwf : Read a table of fixed-width formatted lines into DataFrame.
-
-        Examples
-        --------
-        >>> pd.read_csv('data.csv')  # doctest: +SKIP
-
-```python
-sample_df = pd.read_csv(sample_table_url, sep="\t")
-library_df = pd.read_csv(library_table_url, sep="\t")
-```
-
-```python
-sample_df.project_name.nunique()
-```
-
-    45
-
-```python
-library_df.project_name.nunique()
-```
-
-    43
-
-### Listing the columns of the sample dataframe
-
-```python
-sample_df.columns
-```
-
-    Index(['project_name', 'publication_year', 'publication_doi', 'site_name',
-           'latitude', 'longitude', 'geo_loc_name', 'sample_name', 'sample_host',
-           'sample_age', 'sample_age_doi', 'community_type', 'material', 'archive',
-           'archive_project', 'archive_accession'],
-          dtype='object')
-
-### Looking at the data type of the sample dataframe
-
-```python
-sample_df.dtypes
-```
-
-    project_name          object
-    publication_year       int64
-    publication_doi       object
-    site_name             object
-    latitude             float64
-    longitude            float64
-    geo_loc_name          object
-    sample_name           object
-    sample_host           object
-    sample_age             int64
-    sample_age_doi        object
-    community_type        object
-    material              object
-    archive               object
-    archive_project       object
-    archive_accession     object
-    dtype: object
-
-- `int64` is for integers
-- `floating64` is for floating point precision numbers, also known as double in some other programing languages
-- `object` is a general type in pandas for everything that is not a number, interval, categorical, or date
-
-### Let's inspect our data
-
-What is the size of our dataframe ?
-
-```python
-sample_df.shape
-```
-
-    (1060, 16)
-
-This dataframe has **1060** rows, and **16** columns
-
-Let's look at the first 5 rows
-
-```python
-sample_df.head()
-```
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>project_name</th>
-      <th>publication_year</th>
-      <th>publication_doi</th>
-      <th>site_name</th>
-      <th>latitude</th>
-      <th>longitude</th>
-      <th>geo_loc_name</th>
-      <th>sample_name</th>
-      <th>sample_host</th>
-      <th>sample_age</th>
-      <th>sample_age_doi</th>
-      <th>community_type</th>
-      <th>material</th>
-      <th>archive</th>
-      <th>archive_project</th>
-      <th>archive_accession</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.840</td>
-      <td>Germany</td>
-      <td>B61</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473742,SRS473743,SRS473744,SRS473745</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.840</td>
-      <td>Germany</td>
-      <td>G12</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473747,SRS473746,SRS473748,SRS473749,SRS473750</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Weyrich2017</td>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>Gola Forest</td>
-      <td>7.657</td>
-      <td>-10.841</td>
-      <td>Sierra Leone</td>
-      <td>Chimp</td>
-      <td>Pan troglodytes</td>
-      <td>100</td>
-      <td>10.1038/nature21674</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA685265</td>
-      <td>SRS7890499</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Weyrich2017</td>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>El Sidrón Cave</td>
-      <td>43.386</td>
-      <td>-5.328</td>
-      <td>Spain</td>
-      <td>ElSidron1</td>
-      <td>Homo sapiens neanderthalensis</td>
-      <td>49000</td>
-      <td>10.1038/nature21674</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA685265</td>
-      <td>SRS7890498</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Weyrich2017</td>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>El Sidrón Cave</td>
-      <td>43.386</td>
-      <td>-5.329</td>
-      <td>Spain</td>
-      <td>ElSidron2</td>
-      <td>Homo sapiens neanderthalensis</td>
-      <td>49000</td>
-      <td>10.1038/nature21674</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA685265</td>
-      <td>SRS7890496</td>
-    </tr>
-  </tbody>
+*out -* 
+<table border="1" class="dataframe" style="width:10%;margin-left:auto;margin-right:auto;dataframe">
+  <tr>
+    <th></th>
+    <th>A</th>
+    <th>B</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>3</td>
+    <td>4</td>
+  </tr>
 </table>
-</div>
 
-**Unlike R, Python is `0` based language, meaning the first element is of index `0`, not like R where it is `1`.**
+Another common tabular separator are **tsv**, where each value is separated by a **tab** `\t`
 
-Let's look at the last 5 rows
-
-```python
-sample_df.tail()
+```{text}
+A\tB
+5\t6
+8\t4
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+>Our dataset `"all_data.tsv"` is tab separated, which Pandas can handle using the `sep` argument.
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>project_name</th>
-      <th>publication_year</th>
-      <th>publication_doi</th>
-      <th>site_name</th>
-      <th>latitude</th>
-      <th>longitude</th>
-      <th>geo_loc_name</th>
-      <th>sample_name</th>
-      <th>sample_host</th>
-      <th>sample_age</th>
-      <th>sample_age_doi</th>
-      <th>community_type</th>
-      <th>material</th>
-      <th>archive</th>
-      <th>archive_project</th>
-      <th>archive_accession</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>1055</th>
-      <td>Kazarina2021b</td>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>St. Gertrude’s Church, Riga</td>
-      <td>56.958</td>
-      <td>24.121</td>
-      <td>Latvia</td>
-      <td>T2</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283094,ERS7283095</td>
-    </tr>
-    <tr>
-      <th>1056</th>
-      <td>Kazarina2021b</td>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>St. Gertrude’s Church, Riga</td>
-      <td>56.958</td>
-      <td>24.121</td>
-      <td>Latvia</td>
-      <td>T3</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283096,ERS7283097</td>
-    </tr>
-    <tr>
-      <th>1057</th>
-      <td>Kazarina2021b</td>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>St. Gertrude’s Church, Riga</td>
-      <td>56.958</td>
-      <td>24.121</td>
-      <td>Latvia</td>
-      <td>T9</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283098,ERS7283099</td>
-    </tr>
-    <tr>
-      <th>1058</th>
-      <td>Kazarina2021b</td>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>Dom Square, Riga</td>
-      <td>56.949</td>
-      <td>24.104</td>
-      <td>Latvia</td>
-      <td>TZA3</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283100,ERS7283101</td>
-    </tr>
-    <tr>
-      <th>1059</th>
-      <td>Kazarina2021b</td>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>St. Peter’s Church, Riga</td>
-      <td>56.947</td>
-      <td>24.109</td>
-      <td>Latvia</td>
-      <td>TZA4</td>
-      <td>Homo sapiens</td>
-      <td>500</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283102,ERS7283103</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-Let's randomly inspect 5 rows
+::: {.callout-tip}
+## Pandas function
+`pd.read_csv()` is the pandas function to read in tabular tables. The `sep=` can be specified argument, `sep=,` is the default.
+:::
 
 ```python
-sample_df.sample(n=5)
+df = pd.read_csv("all_data.tsv", sep="\t")
+df
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1749</th>\n      <td>9432</td>\n      <td>1977</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>666666.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>9</td>\n      <td>14</td>\n      <td>18</td>\n      <td>8</td>\n      <td>1</td>\n      <td>12</td>\n      <td>3</td>\n      <td>1</td>\n      <td>3</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1750</th>\n      <td>8372</td>\n      <td>1974</td>\n      <td>Graduation</td>\n      <td>Married</td>\n      <td>34421.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>3</td>\n      <td>7</td>\n      <td>6</td>\n      <td>2</td>\n      <td>9</td>\n      <td>1</td>\n      <td>0</td>\n      <td>2</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1751</th>\n      <td>10870</td>\n      <td>1967</td>\n      <td>Graduation</td>\n      <td>Married</td>\n      <td>61223.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>709</td>\n      <td>43</td>\n      <td>182</td>\n      <td>42</td>\n      <td>118</td>\n      <td>247</td>\n      <td>9</td>\n      <td>3</td>\n      <td>4</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1752</th>\n      <td>7270</td>\n      <td>1981</td>\n      <td>Graduation</td>\n      <td>Divorced</td>\n      <td>56981.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>908</td>\n      <td>48</td>\n      <td>217</td>\n      <td>32</td>\n      <td>12</td>\n      <td>24</td>\n      <td>2</td>\n      <td>3</td>\n      <td>13</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1753</th>\n      <td>8235</td>\n      <td>1956</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>69245.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>428</td>\n      <td>30</td>\n      <td>214</td>\n      <td>80</td>\n      <td>30</td>\n      <td>61</td>\n      <td>6</td>\n      <td>5</td>\n      <td>10</td>\n      <td>3</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>1754 rows × 20 columns</p>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+::: {.callout-tip}
+When you are unsure what arguments a function can take, it is possible to get a *help documentation* using `help(pd.read_csv)`
+:::
 
-    .dataframe thead th {
-        text-align: right;
-    }
+## Data exploration
 
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>project_name</th>
-      <th>publication_year</th>
-      <th>publication_doi</th>
-      <th>site_name</th>
-      <th>latitude</th>
-      <th>longitude</th>
-      <th>geo_loc_name</th>
-      <th>sample_name</th>
-      <th>sample_host</th>
-      <th>sample_age</th>
-      <th>sample_age_doi</th>
-      <th>community_type</th>
-      <th>material</th>
-      <th>archive</th>
-      <th>archive_project</th>
-      <th>archive_accession</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>413</th>
-      <td>Neukamm2020</td>
-      <td>2020</td>
-      <td>10.1186/s12915-020-00839-8</td>
-      <td>Abusir el-Meleq</td>
-      <td>29.240</td>
-      <td>31.100</td>
-      <td>Egypt</td>
-      <td>Abusir1576</td>
-      <td>Homo sapiens</td>
-      <td>2200</td>
-      <td>10.1038/ncomms15694</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>ENA</td>
-      <td>PRJEB33848</td>
-      <td>ERS3635981</td>
-    </tr>
-    <tr>
-      <th>754</th>
-      <td>Rampelli2021</td>
-      <td>2021</td>
-      <td>10.1038/s42003-021-01689-y</td>
-      <td>El Salt</td>
-      <td>38.687</td>
-      <td>-0.508</td>
-      <td>Spain</td>
-      <td>V3</td>
-      <td>Homo sapiens neanderthalensis</td>
-      <td>44700</td>
-      <td>10.1038/s42003-021-01689-y</td>
-      <td>gut</td>
-      <td>sediment</td>
-      <td>ENA</td>
-      <td>PRJEB41665</td>
-      <td>ERS5428042</td>
-    </tr>
-    <tr>
-      <th>436</th>
-      <td>Neukamm2020</td>
-      <td>2020</td>
-      <td>10.1186/s12915-020-00839-8</td>
-      <td>Abusir el-Meleq</td>
-      <td>29.240</td>
-      <td>31.100</td>
-      <td>Egypt</td>
-      <td>Abusir1606</td>
-      <td>Homo sapiens</td>
-      <td>2600</td>
-      <td>10.1186/s12915-020-00839-8</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>ENA</td>
-      <td>PRJEB33848</td>
-      <td>ERS3635928</td>
-    </tr>
-    <tr>
-      <th>474</th>
-      <td>Neukamm2020</td>
-      <td>2020</td>
-      <td>10.1186/s12915-020-00839-8</td>
-      <td>Abusir el-Meleq</td>
-      <td>29.240</td>
-      <td>31.100</td>
-      <td>Egypt</td>
-      <td>Abusir1654</td>
-      <td>Homo sapiens</td>
-      <td>2300</td>
-      <td>10.1038/ncomms15694</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB33848</td>
-      <td>ERS3635960</td>
-    </tr>
-    <tr>
-      <th>573</th>
-      <td>Philips2017</td>
-      <td>2017</td>
-      <td>10.1186/s12864-020-06810-9</td>
-      <td>Kowalewko</td>
-      <td>52.699</td>
-      <td>17.605</td>
-      <td>Poland</td>
-      <td>PCA0040</td>
-      <td>Homo sapiens</td>
-      <td>1900</td>
-      <td>10.1186/s12864-020-06810-9</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>SRA</td>
-      <td>PRJNA354503</td>
-      <td>SRS1815407</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+The data is from a customer personality analysis of a company trying to better understand how to modify their product catalogue. Here is the [link to the original source](https://www.kaggle.com/datasets/imakash3011/customer-personality-analysis) for more information. 
 
-###### Accessing the data by index/columns
+### Columns
 
-The are different way of selecting of subset of a dataframe
-
-Selecting by the row index
+The command below prints all the column names.
 
 ```python
-# selecting the 10th row, and all columns
-sample_df.iloc[9, :]
+df.columns
+```
+```
+Index(['ID', 'Year_Birth', 'Education', 'Marital_Status', 'Income', 'Kidhome',
+       'Teenhome', 'MntWines', 'MntFruits', 'MntMeatProducts',
+       'MntFishProducts', 'MntSweetProducts', 'MntGoldProds',
+       'NumWebPurchases', 'NumCatalogPurchases', 'NumStorePurchases',
+       'NumWebVisitsMonth', 'Complain', 'Z_CostContact', 'Z_Revenue'],
+      dtype='object')
 ```
 
-    project_name                    Weyrich2017
-    publication_year                       2017
-    publication_doi         10.1038/nature21674
-    site_name            Stuttgart-Mühlhausen I
-    latitude                             48.839
-    longitude                             9.227
-    geo_loc_name                        Germany
-    sample_name                        EuroLBK1
-    sample_host                    Homo sapiens
-    sample_age                             7400
-    sample_age_doi          10.1038/nature21674
-    community_type                         oral
-    material                    dental calculus
-    archive                                 SRA
-    archive_project                 PRJNA685265
-    archive_accession                SRS7890488
-    Name: 9, dtype: object
+We can also list their respective data types.
+
+- `int64` are integers
+- `float64` are floating point numbers, also called `double` in other languages
+- `object` are Python objects, which are strings in this case
 
 ```python
-# selecting the 10th to 12th row, and all columns
-sample_df.iloc[9:12, :]
+df.dtypes
+```
+```
+ID                       int64
+Year_Birth               int64
+Education               object
+Marital_Status          object
+Income                 float64
+Kidhome                  int64
+Teenhome                 int64
+MntWines                 int64
+MntFruits                int64
+MntMeatProducts          int64
+MntFishProducts          int64
+MntSweetProducts         int64
+MntGoldProds             int64
+NumWebPurchases          int64
+NumCatalogPurchases      int64
+NumStorePurchases        int64
+NumWebVisitsMonth        int64
+Complain                 int64
+Z_CostContact            int64
+Z_Revenue                int64
+dtype: object
+```
+### Inspecting the DataFrame
+
+What is the size of our `DataFrame`
+
+```python
+df.shape
+```
+```
+(1754, 20)
+```
+It has **1754** rows and **20** columns.
+
+Let's look at the first 5 rows:
+
+```python
+df.head()
+```
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>
+
+What we can see it that, unlike **R**, **Python** and in extension **Pandas** is 0-indexed instead of 1-indexed.
+
+<details>
+  <summary markdown="span">Question: Can you show how to do the same using bash?</summary>
+
+```python
+! head all_data.tsv
+```
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>5</th>\n      <td>965</td>\n      <td>1971</td>\n      <td>Graduation</td>\n      <td>Divorced</td>\n      <td>55635.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>235</td>\n      <td>65</td>\n      <td>164</td>\n      <td>50</td>\n      <td>49</td>\n      <td>27</td>\n      <td>7</td>\n      <td>3</td>\n      <td>7</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>6</th>\n      <td>1994</td>\n      <td>1983</td>\n      <td>Graduation</td>\n      <td>Married</td>\n      <td>NaN</td>\n      <td>1</td>\n      <td>0</td>\n      <td>5</td>\n      <td>5</td>\n      <td>6</td>\n      <td>0</td>\n      <td>2</td>\n      <td>1</td>\n      <td>1</td>\n      <td>0</td>\n      <td>2</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>7</th>\n      <td>387</td>\n      <td>1976</td>\n      <td>Basic</td>\n      <td>Married</td>\n      <td>7500.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>6</td>\n      <td>16</td>\n      <td>11</td>\n      <td>11</td>\n      <td>1</td>\n      <td>16</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>8</th>\n      <td>2125</td>\n      <td>1959</td>\n      <td>Graduation</td>\n      <td>Divorced</td>\n      <td>63033.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>194</td>\n      <td>61</td>\n      <td>480</td>\n      <td>225</td>\n      <td>112</td>\n      <td>30</td>\n      <td>3</td>\n      <td>4</td>\n      <td>8</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>9</th>\n      <td>8180</td>\n      <td>1952</td>\n      <td>Master</td>\n      <td>Divorced</td>\n      <td>59354.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>233</td>\n      <td>2</td>\n      <td>53</td>\n      <td>3</td>\n      <td>5</td>\n      <td>14</td>\n      <td>6</td>\n      <td>1</td>\n      <td>5</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>
+
+</details>
+
+### Accessing rows and columns
+
+We can access parts of the data in `DataFrames` in different ways.
+
+The first method is sub-setting the rows using the index.
+
+This will take only the second row and all columns, producing a `Series`:
+
+```python
+df.loc[1, :]
+```
+```
+ID                           2174
+Year_Birth                   1954
+Education              Graduation
+Marital_Status             Single
+Income                    46344.0
+Kidhome                         1
+Teenhome                        1
+MntWines                       11
+MntFruits                       1
+MntMeatProducts                 6
+MntFishProducts                 2
+MntSweetProducts                1
+MntGoldProds                    6
+NumWebPurchases                 1
+NumCatalogPurchases             1
+NumStorePurchases               2
+NumWebVisitsMonth               5
+Complain                        0
+Z_CostContact                   3
+Z_Revenue                      11
+Name: 1, dtype: object
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>project_name</th>
-      <th>publication_year</th>
-      <th>publication_doi</th>
-      <th>site_name</th>
-      <th>latitude</th>
-      <th>longitude</th>
-      <th>geo_loc_name</th>
-      <th>sample_name</th>
-      <th>sample_host</th>
-      <th>sample_age</th>
-      <th>sample_age_doi</th>
-      <th>community_type</th>
-      <th>material</th>
-      <th>archive</th>
-      <th>archive_project</th>
-      <th>archive_accession</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>9</th>
-      <td>Weyrich2017</td>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>Stuttgart-Mühlhausen I</td>
-      <td>48.839</td>
-      <td>9.227</td>
-      <td>Germany</td>
-      <td>EuroLBK1</td>
-      <td>Homo sapiens</td>
-      <td>7400</td>
-      <td>10.1038/nature21674</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA685265</td>
-      <td>SRS7890488</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>Weyrich2017</td>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>Stuttgart-Mühlhausen I</td>
-      <td>48.839</td>
-      <td>9.227</td>
-      <td>Germany</td>
-      <td>EuroLBK2</td>
-      <td>Homo sapiens</td>
-      <td>7400</td>
-      <td>10.1038/nature21674</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA685265</td>
-      <td>SRS7890485</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>Weyrich2017</td>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>Stuttgart-Mühlhausen I</td>
-      <td>48.839</td>
-      <td>9.227</td>
-      <td>Germany</td>
-      <td>EuroLBK3</td>
-      <td>Homo sapiens</td>
-      <td>7400</td>
-      <td>10.1038/nature21674</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA685265</td>
-      <td>SRS7890490</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+And this will take the second and third row, producing another `DataFrame`:
 
 ```python
-# selecting the 10th to 12th row, and the first to the 4th column
-sample_df.iloc[9:12, 0:4]
+df.loc[1:2, :]
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+It's important to understand that almost all operations on `DataFrames` are not in-place, meaning that we don't modify the original object and would have to save the results to the same or a new variable to keep the changes.
 
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>project_name</th>
-      <th>publication_year</th>
-      <th>publication_doi</th>
-      <th>site_name</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>9</th>
-      <td>Weyrich2017</td>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>Stuttgart-Mühlhausen I</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>Weyrich2017</td>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>Stuttgart-Mühlhausen I</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>Weyrich2017</td>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>Stuttgart-Mühlhausen I</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+This, for example will create a new `DataFrame` of only the "Education" and "Marital_Status" columns.
 
 ```python
-# selecting the column site_name
-sample_df['site_name']
+new_df = df.loc[:, ["Education", "Marital_Status"]]
+new_df
+```
+'<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>Graduation</td>\n      <td>Single</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>Graduation</td>\n      <td>Single</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>Graduation</td>\n      <td>Together</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>Graduation</td>\n      <td>Together</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>Master</td>\n      <td>Together</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1749</th>\n      <td>Graduation</td>\n      <td>Together</td>\n    </tr>\n    <tr>\n      <th>1750</th>\n      <td>Graduation</td>\n      <td>Married</td>\n    </tr>\n    <tr>\n      <th>1751</th>\n      <td>Graduation</td>\n      <td>Married</td>\n    </tr>\n    <tr>\n      <th>1752</th>\n      <td>Graduation</td>\n      <td>Divorced</td>\n    </tr>\n    <tr>\n      <th>1753</th>\n      <td>Master</td>\n      <td>Together</td>\n    </tr>\n  </tbody>\n</table>\n<p>1754 rows × 2 columns</p>'
+
+Selecting only one column by name:
+
+```python
+df["Year_Birth"]
+```
+```
+0       1957
+1       1954
+2       1965
+3       1984
+4       1967
+        ... 
+1749    1977
+1750    1974
+1751    1967
+1752    1981
+1753    1956
 ```
 
-    0                           Dalheim
-    1                           Dalheim
-    2                       Gola Forest
-    3                    El Sidrón Cave
-    4                    El Sidrón Cave
-                       ...
-    1055    St. Gertrude’s Church, Riga
-    1056    St. Gertrude’s Church, Riga
-    1057    St. Gertrude’s Church, Riga
-    1058               Dom Square, Riga
-    1059       St. Peter’s Church, Riga
-    Name: site_name, Length: 1060, dtype: object
+We can also remove columns from the `DataFrame`.
+
+In this case, we want to remove the columns `Z_CostContact` and `Z_Revenue` and keep those changes.
 
 ```python
-# Also valid, but less preferred
-sample_df.site_name
+df = df.drop("Z_CostContact", axis=1)
+df = df.drop("Z_Revenue", axis=1)
 ```
 
-    0                           Dalheim
-    1                           Dalheim
-    2                       Gola Forest
-    3                    El Sidrón Cave
-    4                    El Sidrón Cave
-                       ...
-    1055    St. Gertrude’s Church, Riga
-    1056    St. Gertrude’s Church, Riga
-    1057    St. Gertrude’s Church, Riga
-    1058               Dom Square, Riga
-    1059       St. Peter’s Church, Riga
-    Name: site_name, Length: 1060, dtype: object
+### Conditional subsetting
+
+We can more specifically look at subsets of the data we might be interested in.
+
+This subsetting is a bit weird in the syntax at first but hopefully makes more sense when we go through it step by step.
+
+We can, for example, test each string in the column `Education` if it is equal to `PhD`:
+
 
 ```python
-# Removing a row
-sample_df.drop(0)
+education_is_grad = (df["Education"] == "Graduation")
+education_is_grad
+```
+```
+0        True
+1        True
+2        True
+3        True
+4       False
+        ...  
+1749     True
+1750     True
+1751     True
+1752     True
+1753    False
+Name: Education, Length: 1754, dtype: bool
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>project_name</th>
-      <th>publication_year</th>
-      <th>publication_doi</th>
-      <th>site_name</th>
-      <th>latitude</th>
-      <th>longitude</th>
-      <th>geo_loc_name</th>
-      <th>sample_name</th>
-      <th>sample_host</th>
-      <th>sample_age</th>
-      <th>sample_age_doi</th>
-      <th>community_type</th>
-      <th>material</th>
-      <th>archive</th>
-      <th>archive_project</th>
-      <th>archive_accession</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>1</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.840</td>
-      <td>Germany</td>
-      <td>G12</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473747,SRS473746,SRS473748,SRS473749,SRS473750</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Weyrich2017</td>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>Gola Forest</td>
-      <td>7.657</td>
-      <td>-10.841</td>
-      <td>Sierra Leone</td>
-      <td>Chimp</td>
-      <td>Pan troglodytes</td>
-      <td>100</td>
-      <td>10.1038/nature21674</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA685265</td>
-      <td>SRS7890499</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Weyrich2017</td>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>El Sidrón Cave</td>
-      <td>43.386</td>
-      <td>-5.328</td>
-      <td>Spain</td>
-      <td>ElSidron1</td>
-      <td>Homo sapiens neanderthalensis</td>
-      <td>49000</td>
-      <td>10.1038/nature21674</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA685265</td>
-      <td>SRS7890498</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Weyrich2017</td>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>El Sidrón Cave</td>
-      <td>43.386</td>
-      <td>-5.329</td>
-      <td>Spain</td>
-      <td>ElSidron2</td>
-      <td>Homo sapiens neanderthalensis</td>
-      <td>49000</td>
-      <td>10.1038/nature21674</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA685265</td>
-      <td>SRS7890496</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>Weyrich2017</td>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>Spy Cave</td>
-      <td>50.480</td>
-      <td>4.674</td>
-      <td>Belgium</td>
-      <td>Spy1</td>
-      <td>Homo sapiens neanderthalensis</td>
-      <td>35800</td>
-      <td>10.1038/nature21674</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA685265</td>
-      <td>SRS7890491</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>1055</th>
-      <td>Kazarina2021b</td>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>St. Gertrude’s Church, Riga</td>
-      <td>56.958</td>
-      <td>24.121</td>
-      <td>Latvia</td>
-      <td>T2</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283094,ERS7283095</td>
-    </tr>
-    <tr>
-      <th>1056</th>
-      <td>Kazarina2021b</td>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>St. Gertrude’s Church, Riga</td>
-      <td>56.958</td>
-      <td>24.121</td>
-      <td>Latvia</td>
-      <td>T3</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283096,ERS7283097</td>
-    </tr>
-    <tr>
-      <th>1057</th>
-      <td>Kazarina2021b</td>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>St. Gertrude’s Church, Riga</td>
-      <td>56.958</td>
-      <td>24.121</td>
-      <td>Latvia</td>
-      <td>T9</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283098,ERS7283099</td>
-    </tr>
-    <tr>
-      <th>1058</th>
-      <td>Kazarina2021b</td>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>Dom Square, Riga</td>
-      <td>56.949</td>
-      <td>24.104</td>
-      <td>Latvia</td>
-      <td>TZA3</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283100,ERS7283101</td>
-    </tr>
-    <tr>
-      <th>1059</th>
-      <td>Kazarina2021b</td>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>St. Peter’s Church, Riga</td>
-      <td>56.947</td>
-      <td>24.109</td>
-      <td>Latvia</td>
-      <td>TZA4</td>
-      <td>Homo sapiens</td>
-      <td>500</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283102,ERS7283103</td>
-    </tr>
-  </tbody>
-</table>
-<p>1059 rows × 16 columns</p>
-</div>
+We can also check for multiple conditions at once:
 
 ```python
-# Removing a columm
-sample_df.drop('project_name', axis=1)
+two_at_once = (df["Education"] == "Graduation") & (df["Marital_Status"] == "Single")
+two_at_once
+```
+```
+0        True
+1        True
+2       False
+3       False
+4       False
+        ...  
+1749    False
+1750    False
+1751    False
+1752    False
+1753    False
+Length: 1754, dtype: bool
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>publication_year</th>
-      <th>publication_doi</th>
-      <th>site_name</th>
-      <th>latitude</th>
-      <th>longitude</th>
-      <th>geo_loc_name</th>
-      <th>sample_name</th>
-      <th>sample_host</th>
-      <th>sample_age</th>
-      <th>sample_age_doi</th>
-      <th>community_type</th>
-      <th>material</th>
-      <th>archive</th>
-      <th>archive_project</th>
-      <th>archive_accession</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.840</td>
-      <td>Germany</td>
-      <td>B61</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473742,SRS473743,SRS473744,SRS473745</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.840</td>
-      <td>Germany</td>
-      <td>G12</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473747,SRS473746,SRS473748,SRS473749,SRS473750</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>Gola Forest</td>
-      <td>7.657</td>
-      <td>-10.841</td>
-      <td>Sierra Leone</td>
-      <td>Chimp</td>
-      <td>Pan troglodytes</td>
-      <td>100</td>
-      <td>10.1038/nature21674</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA685265</td>
-      <td>SRS7890499</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>El Sidrón Cave</td>
-      <td>43.386</td>
-      <td>-5.328</td>
-      <td>Spain</td>
-      <td>ElSidron1</td>
-      <td>Homo sapiens neanderthalensis</td>
-      <td>49000</td>
-      <td>10.1038/nature21674</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA685265</td>
-      <td>SRS7890498</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2017</td>
-      <td>10.1038/nature21674</td>
-      <td>El Sidrón Cave</td>
-      <td>43.386</td>
-      <td>-5.329</td>
-      <td>Spain</td>
-      <td>ElSidron2</td>
-      <td>Homo sapiens neanderthalensis</td>
-      <td>49000</td>
-      <td>10.1038/nature21674</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA685265</td>
-      <td>SRS7890496</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>1055</th>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>St. Gertrude’s Church, Riga</td>
-      <td>56.958</td>
-      <td>24.121</td>
-      <td>Latvia</td>
-      <td>T2</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283094,ERS7283095</td>
-    </tr>
-    <tr>
-      <th>1056</th>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>St. Gertrude’s Church, Riga</td>
-      <td>56.958</td>
-      <td>24.121</td>
-      <td>Latvia</td>
-      <td>T3</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283096,ERS7283097</td>
-    </tr>
-    <tr>
-      <th>1057</th>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>St. Gertrude’s Church, Riga</td>
-      <td>56.958</td>
-      <td>24.121</td>
-      <td>Latvia</td>
-      <td>T9</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283098,ERS7283099</td>
-    </tr>
-    <tr>
-      <th>1058</th>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>Dom Square, Riga</td>
-      <td>56.949</td>
-      <td>24.104</td>
-      <td>Latvia</td>
-      <td>TZA3</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283100,ERS7283101</td>
-    </tr>
-    <tr>
-      <th>1059</th>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>St. Peter’s Church, Riga</td>
-      <td>56.947</td>
-      <td>24.109</td>
-      <td>Latvia</td>
-      <td>TZA4</td>
-      <td>Homo sapiens</td>
-      <td>500</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283102,ERS7283103</td>
-    </tr>
-  </tbody>
-</table>
-<p>1060 rows × 15 columns</p>
-</div>
-
-##### 4 - Dealing with missing data
-
-Checking is some entries if the table have missing data (NA or NaN)
+This will create a `Series` of booleans, which can then be used to subset the data to rows where the condition(s) are **True**:
 
 ```python
-sample_df.isna()
+df[two_at_once]
+```
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>18</th>\n      <td>7892</td>\n      <td>1969</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>18589.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>6</td>\n      <td>4</td>\n      <td>25</td>\n      <td>15</td>\n      <td>12</td>\n      <td>13</td>\n      <td>2</td>\n      <td>1</td>\n      <td>3</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>20</th>\n      <td>5255</td>\n      <td>1986</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>NaN</td>\n      <td>1</td>\n      <td>0</td>\n      <td>5</td>\n      <td>1</td>\n      <td>3</td>\n      <td>3</td>\n      <td>263</td>\n      <td>362</td>\n      <td>27</td>\n      <td>0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>33</th>\n      <td>1371</td>\n      <td>1976</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>79941.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>123</td>\n      <td>164</td>\n      <td>266</td>\n      <td>227</td>\n      <td>30</td>\n      <td>174</td>\n      <td>2</td>\n      <td>4</td>\n      <td>9</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1720</th>\n      <td>10968</td>\n      <td>1969</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>57731.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>266</td>\n      <td>21</td>\n      <td>300</td>\n      <td>65</td>\n      <td>8</td>\n      <td>44</td>\n      <td>8</td>\n      <td>8</td>\n      <td>6</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1723</th>\n      <td>5959</td>\n      <td>1968</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>35893.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>158</td>\n      <td>0</td>\n      <td>23</td>\n      <td>0</td>\n      <td>0</td>\n      <td>18</td>\n      <td>3</td>\n      <td>1</td>\n      <td>5</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1743</th>\n      <td>4201</td>\n      <td>1962</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>57967.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>229</td>\n      <td>7</td>\n      <td>137</td>\n      <td>4</td>\n      <td>0</td>\n      <td>91</td>\n      <td>4</td>\n      <td>2</td>\n      <td>8</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1746</th>\n      <td>7004</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>11012.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>24</td>\n      <td>3</td>\n      <td>26</td>\n      <td>7</td>\n      <td>1</td>\n      <td>23</td>\n      <td>3</td>\n      <td>1</td>\n      <td>2</td>\n      <td>9</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1748</th>\n      <td>8080</td>\n      <td>1986</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>26816.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>5</td>\n      <td>1</td>\n      <td>6</td>\n      <td>3</td>\n      <td>4</td>\n      <td>3</td>\n      <td>0</td>\n      <td>0</td>\n      <td>3</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>252 rows × 20 columns</p>
+
+The syntax that seems more complicated and does it in one step without the extra `Series` is this:
+
+```python
+df[(df["Education"] == "Master") & (df["Marital_Status"] == "Single")]
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>26</th>\n      <td>10738</td>\n      <td>1951</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>49389.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>40</td>\n      <td>0</td>\n      <td>19</td>\n      <td>2</td>\n      <td>1</td>\n      <td>3</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>46</th>\n      <td>6853</td>\n      <td>1982</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>75777.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>712</td>\n      <td>26</td>\n      <td>538</td>\n      <td>69</td>\n      <td>13</td>\n      <td>80</td>\n      <td>3</td>\n      <td>6</td>\n      <td>11</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>76</th>\n      <td>11178</td>\n      <td>1972</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>42394.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>15</td>\n      <td>2</td>\n      <td>10</td>\n      <td>0</td>\n      <td>1</td>\n      <td>4</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>98</th>\n      <td>6205</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>32557.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>34</td>\n      <td>3</td>\n      <td>29</td>\n      <td>0</td>\n      <td>4</td>\n      <td>10</td>\n      <td>2</td>\n      <td>1</td>\n      <td>3</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>110</th>\n      <td>821</td>\n      <td>1992</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>92859.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>962</td>\n      <td>61</td>\n      <td>921</td>\n      <td>52</td>\n      <td>61</td>\n      <td>20</td>\n      <td>5</td>\n      <td>4</td>\n      <td>12</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1690</th>\n      <td>3520</td>\n      <td>1990</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>91172.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>162</td>\n      <td>28</td>\n      <td>818</td>\n      <td>0</td>\n      <td>28</td>\n      <td>56</td>\n      <td>4</td>\n      <td>3</td>\n      <td>7</td>\n      <td>3</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1709</th>\n      <td>4418</td>\n      <td>1983</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>89616.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>671</td>\n      <td>47</td>\n      <td>655</td>\n      <td>145</td>\n      <td>111</td>\n      <td>15</td>\n      <td>7</td>\n      <td>5</td>\n      <td>12</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1714</th>\n      <td>2980</td>\n      <td>1952</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>8820.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>12</td>\n      <td>0</td>\n      <td>13</td>\n      <td>4</td>\n      <td>2</td>\n      <td>4</td>\n      <td>3</td>\n      <td>0</td>\n      <td>3</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1738</th>\n      <td>7366</td>\n      <td>1982</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>75777.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>712</td>\n      <td>26</td>\n      <td>538</td>\n      <td>69</td>\n      <td>13</td>\n      <td>80</td>\n      <td>3</td>\n      <td>6</td>\n      <td>11</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1747</th>\n      <td>9817</td>\n      <td>1970</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>44802.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>853</td>\n      <td>10</td>\n      <td>143</td>\n      <td>13</td>\n      <td>10</td>\n      <td>20</td>\n      <td>9</td>\n      <td>4</td>\n      <td>12</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>75 rows × 20 columns</p>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
 
-    .dataframe thead th {
-        text-align: right;
-    }
+## Describing a DataFrame
 
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>project_name</th>
-      <th>publication_year</th>
-      <th>publication_doi</th>
-      <th>site_name</th>
-      <th>latitude</th>
-      <th>longitude</th>
-      <th>geo_loc_name</th>
-      <th>sample_name</th>
-      <th>sample_host</th>
-      <th>sample_age</th>
-      <th>sample_age_doi</th>
-      <th>community_type</th>
-      <th>material</th>
-      <th>archive</th>
-      <th>archive_project</th>
-      <th>archive_accession</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>1055</th>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>1056</th>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>1057</th>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>1058</th>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>1059</th>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-      <td>False</td>
-    </tr>
-  </tbody>
-</table>
-<p>1060 rows × 16 columns</p>
-</div>
+Pandas can easily create overview statistics for all numeric columns:
 
 ```python
-# making the sum by row - axis=1
-sample_df.isna().sum(axis=1)
+df.describe()
+```
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>count</th>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1735.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.0</td>\n      <td>1754.0</td>\n    </tr>\n    <tr>\n      <th>mean</th>\n      <td>5584.696123</td>\n      <td>1969.571266</td>\n      <td>51166.578098</td>\n      <td>0.456100</td>\n      <td>0.480616</td>\n      <td>276.072406</td>\n      <td>28.034778</td>\n      <td>166.492018</td>\n      <td>40.517104</td>\n      <td>28.958381</td>\n      <td>47.266819</td>\n      <td>3.990878</td>\n      <td>2.576967</td>\n      <td>5.714937</td>\n      <td>5.332383</td>\n      <td>0.011403</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>std</th>\n      <td>3254.655979</td>\n      <td>11.876614</td>\n      <td>26200.419179</td>\n      <td>0.537854</td>\n      <td>0.536112</td>\n      <td>314.604735</td>\n      <td>41.348883</td>\n      <td>225.561694</td>\n      <td>57.412986</td>\n      <td>42.830660</td>\n      <td>53.885647</td>\n      <td>2.708278</td>\n      <td>2.848335</td>\n      <td>3.231465</td>\n      <td>2.380183</td>\n      <td>0.106202</td>\n      <td>0.0</td>\n      <td>0.0</td>\n    </tr>\n    <tr>\n      <th>min</th>\n      <td>0.000000</td>\n      <td>1893.000000</td>\n      <td>1730.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>25%</th>\n      <td>2802.500000</td>\n      <td>1960.000000</td>\n      <td>33574.500000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>19.000000</td>\n      <td>2.000000</td>\n      <td>15.000000</td>\n      <td>3.000000</td>\n      <td>2.000000</td>\n      <td>10.000000</td>\n      <td>2.000000</td>\n      <td>0.000000</td>\n      <td>3.000000</td>\n      <td>3.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>50%</th>\n      <td>5468.000000</td>\n      <td>1971.000000</td>\n      <td>49912.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>160.500000</td>\n      <td>9.000000</td>\n      <td>66.000000</td>\n      <td>13.000000</td>\n      <td>9.000000</td>\n      <td>27.000000</td>\n      <td>3.000000</td>\n      <td>1.000000</td>\n      <td>5.000000</td>\n      <td>6.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>75%</th>\n      <td>8441.250000</td>\n      <td>1978.000000</td>\n      <td>68130.000000</td>\n      <td>1.000000</td>\n      <td>1.000000</td>\n      <td>454.000000</td>\n      <td>35.000000</td>\n      <td>232.000000</td>\n      <td>53.500000</td>\n      <td>35.000000</td>\n      <td>63.000000</td>\n      <td>6.000000</td>\n      <td>4.000000</td>\n      <td>8.000000</td>\n      <td>7.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>max</th>\n      <td>11191.000000</td>\n      <td>1996.000000</td>\n      <td>666666.000000</td>\n      <td>2.000000</td>\n      <td>2.000000</td>\n      <td>1492.000000</td>\n      <td>199.000000</td>\n      <td>1725.000000</td>\n      <td>259.000000</td>\n      <td>263.000000</td>\n      <td>362.000000</td>\n      <td>27.000000</td>\n      <td>28.000000</td>\n      <td>13.000000</td>\n      <td>20.000000</td>\n      <td>1.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n  </tbody>\n</table>\n<p>8 rows × 18 columns</p>
+
+You can also directly calculate the relevant statistics on columns you are interested in:
+
+```python
+df["MntWines"].max()
+```
+```
+1492
+```
+```python
+df[["Kidhome", "Teenhome"]].mean()
+```
+```
+Kidhome     0.456100
+Teenhome    0.480616
+dtype: float64
 ```
 
-    0       0
-    1       0
-    2       0
-    3       0
-    4       0
-           ..
-    1055    0
-    1056    0
-    1057    0
-    1058    0
-    1059    0
-    Length: 1060, dtype: int64
-
-Sorting by decreasing order to check which rows have missing values
+For non-numeric columns, you can get the represented values or their counts:
 
 ```python
-sample_df.isna().sum(axis=1).sort_values(ascending=False)
+df["Education"].unique()
+```
+```
+array(['Graduation', 'Master', 'Basic', '2n Cycle'], dtype=object)
 ```
 
-    800     2
-    962     2
-    992     2
-    801     2
-    802     2
-           ..
-    362     0
-    363     0
-    364     0
-    365     0
-    1059    0
-    Length: 1060, dtype: int64
-
 ```python
-sample_df.iloc[800,:]
+df["Marital_Status"].value_counts()
+```
+```
+Marital_Status
+Married     672
+Together    463
+Single      382
+Divorced    180
+Widow        53
+Alone         2
+Absurd        2
+Name: count, dtype: int64
 ```
 
-    project_name                         FellowsYates2021
-    publication_year                                 2021
-    publication_doi               10.1073/pnas.2021655118
-    site_name                               Not specified
-    latitude                                          NaN
-    longitude                                         NaN
-    geo_loc_name         Democratic Republic of the Congo
-    sample_name                                  GDC002.A
-    sample_host                   Gorilla gorilla gorilla
-    sample_age                                        200
-    sample_age_doi                10.1073/pnas.2021655118
-    community_type                                   oral
-    material                              dental calculus
-    archive                                           ENA
-    archive_project                            PRJEB34569
-    archive_accession                          ERS3774403
-    Name: 800, dtype: object
+**Task**
 
-What to do now ? The ideal scenario would be to correct or impute the data.  
-However, sometimes, the only thing we can do is remove the row with missing data, with the `.dropna() function`.  
-Here, we're just going to ignore them, and deal with it individually if necessary
+Subset the `DataFrame` in two different ways:
 
-## 5 - Computing basic statistics
+::: {.callout-tip}
+Just like with the "PhD" string before, you can subset using integers and $<$, $>$, $<=$ and $>=$.
+:::
 
-TLDR: use the `describe()` function, the equivalent of `summarize` in R
+
+- One where everybody is born before 1970
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python 
+  df_before = df[df["Year_Birth"] < 1970]
+  ```
+</details>
+- One where everybody is born in or after 1970
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python 
+  df_before = df[df["Year_Birth"] >= 1970]
+  ```
+</details>
+
+- How many people are in the two `DataFrames`? 
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python 
+  print("n(before)   =", df_before.shape[0])
+  print("n(after)   =", df_before.shape[0])
+  ```
+  ```
+  n(before)   = 804
+  n(after)   = 950
+  ```
+</details>
+
+- Do the total number of people sum up to the original `DataFrame` total?
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python
+   df_before.shape[0] + df_after.shape[0] == df.shape[0]
+  ```
+  True
+
+  ```python 
+  print("n(sum)      =", df_before.shape[0] + df_after.shape[0])
+  print("n(expected) =", df.shape[0])
+  ```
+  ```
+  n(sum)      = 1754
+  n(expected) = 1754
+  ```
+
+</details>
+- How does the mean income of the two groups differ?
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python 
+  print("income(before) =", df_before["Income"].mean())
+  print("income(after)  =", df_after["Income"].mean())
+  ```
+ income(before) = 55513.38113207547
+  income(after)  = 47490.29255319149  
+</details>
+
+**Extra task**
+- Can you find something else that differs a lot between the two groups?
+
+## Dealing with missing data
+
+We can check for missing data for each cell like this:
 
 ```python
-sample_df.describe()
+df.isna()
+```
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1749</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1750</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1751</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1752</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1753</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n  </tbody>\n</table>\n<p>1754 rows × 20 columns</p>
+
+By summing over each row, we see how many missing values are in each column.
+
+`True` is treated as `1` and `False` as `0`.
+
+```python
+df.isna().sum()
+```
+```
+ID                      0
+Year_Birth              0
+Education               0
+Marital_Status          0
+Income                 19
+Kidhome                 0
+Teenhome                0
+MntWines                0
+MntFruits               0
+MntMeatProducts         0
+MntFishProducts         0
+MntSweetProducts        0
+MntGoldProds            0
+NumWebPurchases         0
+NumCatalogPurchases     0
+NumStorePurchases       0
+NumWebVisitsMonth       0
+Complain                0
+dtype: int64
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+We don't really know what a missing value means so we are just going to keep them in the data.
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+However, we could remove them using `df.dropna()`
 
-    .dataframe thead th {
-        text-align: right;
-    }
+### Grouping data
 
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>publication_year</th>
-      <th>latitude</th>
-      <th>longitude</th>
-      <th>sample_age</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>1060.000000</td>
-      <td>1021.000000</td>
-      <td>1021.000000</td>
-      <td>1060.000000</td>
-    </tr>
-    <tr>
-      <th>mean</th>
-      <td>2019.377358</td>
-      <td>40.600493</td>
-      <td>3.749624</td>
-      <td>3588.443396</td>
-    </tr>
-    <tr>
-      <th>std</th>
-      <td>1.633877</td>
-      <td>18.469421</td>
-      <td>43.790316</td>
-      <td>9862.416855</td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td>2014.000000</td>
-      <td>-34.030000</td>
-      <td>-121.800000</td>
-      <td>100.000000</td>
-    </tr>
-    <tr>
-      <th>25%</th>
-      <td>2018.000000</td>
-      <td>29.240000</td>
-      <td>-1.257000</td>
-      <td>200.000000</td>
-    </tr>
-    <tr>
-      <th>50%</th>
-      <td>2020.000000</td>
-      <td>45.450000</td>
-      <td>14.381000</td>
-      <td>1000.000000</td>
-    </tr>
-    <tr>
-      <th>75%</th>
-      <td>2021.000000</td>
-      <td>52.699000</td>
-      <td>23.892000</td>
-      <td>2200.000000</td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td>2021.000000</td>
-      <td>79.000000</td>
-      <td>159.346000</td>
-      <td>102000.000000</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+We can group a `DataFrame` using a categorical column (for example `Education` or `Marital_Status`).
 
-Let's look at various individual summary statistics
-We can run them on the whole dataframe (for `int` or `float` columns), or on a subset of columns
+This allows us to do perform operations on each group individually.
+
+For example, we could group by `Education` and calculate the mean `Income`:
 
 ```python
-sample_df.mean()
+df.groupby(by="Education")["Income"].mean()
+```
+```
+Education
+2n Cycle      47633.190000
+Basic         20306.259259
+Graduation    52720.373656
+Master        52917.534247
+Name: Income, dtype: float6
 ```
 
-    /var/folders/1c/l1qb09f15jddsh65f6xv1n_r0000gp/T/ipykernel_69168/2260452167.py:1:
-    FutureWarning: Dropping of nuisance columns in DataFrame reductions (with 'numeric_only=None')
-    is deprecated; in a future version this will raise TypeError.  Select only valid columns
-    before calling the reduction.
+##  Combining data
 
+### Concatenation
 
+One way to combine multiple datasets is through **concatenation**, which either combines all columns or rows of multiple `DataFrames`.
 
+The command to combine two `DataFrames` by appending all rows is `pd.concat([first_dataframe, second_dataframe])`
 
+**Task**
 
-    publication_year    2019.377358
-    latitude              40.600493
-    longitude              3.749624
-    sample_age          3588.443396
-    dtype: float64
+- Read the **tsv** "phd_data.tsv" as a new `DataFrame` and name the variable `df2`
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python 
+  df2 = pd.read_csv("phd_data.tsv", sep="\t")
+  ```
+</details>
+
+- Concatenate the "old" `DataFrame` `df` and the new `df2` and name the concatenated one `concat_df`
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python 
+  concat_df = pd.concat([df, df2])
+  concat_df
+  ```
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>481</th>\n      <td>11133</td>\n      <td>1973</td>\n      <td>PhD</td>\n      <td>YOLO</td>\n      <td>48432.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>322</td>\n      <td>3</td>\n      <td>50</td>\n      <td>4</td>\n      <td>3</td>\n      <td>42</td>\n      <td>7</td>\n      <td>1</td>\n      <td>6</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>482</th>\n      <td>9589</td>\n      <td>1948</td>\n      <td>PhD</td>\n      <td>Widow</td>\n      <td>82032.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>332</td>\n      <td>194</td>\n      <td>377</td>\n      <td>149</td>\n      <td>125</td>\n      <td>57</td>\n      <td>4</td>\n      <td>6</td>\n      <td>7</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>483</th>\n      <td>4286</td>\n      <td>1970</td>\n      <td>PhD</td>\n      <td>Single</td>\n      <td>57642.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>580</td>\n      <td>6</td>\n      <td>58</td>\n      <td>8</td>\n      <td>0</td>\n      <td>27</td>\n      <td>7</td>\n      <td>6</td>\n      <td>6</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>484</th>\n      <td>4001</td>\n      <td>1946</td>\n      <td>PhD</td>\n      <td>Together</td>\n      <td>64014.0</td>\n      <td>2</td>\n      <td>1</td>\n      <td>406</td>\n      <td>0</td>\n      <td>30</td>\n      <td>0</td>\n      <td>0</td>\n      <td>8</td>\n      <td>8</td>\n      <td>2</td>\n      <td>5</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>485</th>\n      <td>9405</td>\n      <td>1954</td>\n      <td>PhD</td>\n      <td>Married</td>\n      <td>52869.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>84</td>\n      <td>3</td>\n      <td>61</td>\n      <td>2</td>\n      <td>1</td>\n      <td>21</td>\n      <td>3</td>\n      <td>1</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>2240 rows × 20 columns</p>
+
+</details>
+
+- Is there anything weird about the new `DataFrame` and can you fix that?
+<details>
+  <summary markdown="span">Solution</summary>
+  We previously removed the columns "Z_CostContact" and "Z_Revenue" but they are in the new data again.
+
+  We can remove them like before:
+
+  ```python 
+  concat_df = concat_df.drop("Z_CostContact", axis=1)
+  concat_df = concat_df.drop("Z_Revenue", axis=1)
+  concat_df
+  ```
+  <table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>481</th>\n      <td>11133</td>\n      <td>1973</td>\n      <td>PhD</td>\n      <td>YOLO</td>\n      <td>48432.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>322</td>\n      <td>3</td>\n      <td>50</td>\n      <td>4</td>\n      <td>3</td>\n      <td>42</td>\n      <td>7</td>\n      <td>1</td>\n      <td>6</td>\n      <td>8</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>482</th>\n      <td>9589</td>\n      <td>1948</td>\n      <td>PhD</td>\n      <td>Widow</td>\n      <td>82032.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>332</td>\n      <td>194</td>\n      <td>377</td>\n      <td>149</td>\n      <td>125</td>\n      <td>57</td>\n      <td>4</td>\n      <td>6</td>\n      <td>7</td>\n      <td>1</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>483</th>\n      <td>4286</td>\n      <td>1970</td>\n      <td>PhD</td>\n      <td>Single</td>\n      <td>57642.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>580</td>\n      <td>6</td>\n      <td>58</td>\n      <td>8</td>\n      <td>0</td>\n      <td>27</td>\n      <td>7</td>\n      <td>6</td>\n      <td>6</td>\n      <td>4</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>484</th>\n      <td>4001</td>\n      <td>1946</td>\n      <td>PhD</td>\n      <td>Together</td>\n      <td>64014.0</td>\n      <td>2</td>\n      <td>1</td>\n      <td>406</td>\n      <td>0</td>\n      <td>30</td>\n      <td>0</td>\n      <td>0</td>\n      <td>8</td>\n      <td>8</td>\n      <td>2</td>\n      <td>5</td>\n      <td>7</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>485</th>\n      <td>9405</td>\n      <td>1954</td>\n      <td>PhD</td>\n      <td>Married</td>\n      <td>52869.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>84</td>\n      <td>3</td>\n      <td>61</td>\n      <td>2</td>\n      <td>1</td>\n      <td>21</td>\n      <td>3</td>\n      <td>1</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n    </tr>\n  </tbody>\n</table>\n<p>2240 rows × 18 columns</p>
+</details>
+
+- Is there something interesting about the marital status of some people that have a PhD?
+<details>
+  <summary markdown="span">Solution</summary>
+
+  ```python 
+  concat_df[concat_df["Education"]=="PhD"]["Marital_Status"].value_counts()
+  ```
+  ```
+  Marital_Status
+  Married     192
+  Together    117
+  Single       98
+  Divorced     52
+  Widow        24
+  YOLO          2
+  Alone         1
+  Name: count, dtype: int64
+  ```
+
+  There's two people that have "YOLO" as their Marital Status ...
+
+</details>
+
+### Merging
+
+Analysing numbers can be easier than analysing categorial values, like "PhD" and "Master".
+
+To make our like easier, we might want to have a new column when the Education level is replaced with a number that "ranks" the Education levels by how long it takes.
+
+This information could be stored in a Python `Dictionary` (Also called Hash Map in other languages), which stores **key** and **value** pairs.
+
+We could store the Education information like this:
 
 ```python
-sample_df['publication_year'].describe()
+education_dictionary = {
+    "Basic": 1,
+    "2n Cycle": 2,
+    "Graduation": 3,
+    "Master": 4,
+    "PhD": 5
+}
 ```
-
-    count    1060.000000
-    mean     2019.377358
-    std         1.633877
-    min      2014.000000
-    25%      2018.000000
-    50%      2020.000000
-    75%      2021.000000
-    max      2021.000000
-    Name: publication_year, dtype: float64
+We can now convert this `Dictionary` to a `DataFrame`:
 
 ```python
-# The average publication year
-sample_df['publication_year'].mean()
+education_df = pd.DataFrame.from_dict(education_dictionary, orient="index")
+education_df
 ```
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>0</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>Basic</th>\n      <td>1</td>\n    </tr>\n    <tr>\n      <th>2n Cycle</th>\n      <td>2</td>\n    </tr>\n    <tr>\n      <th>Graduation</th>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>Master</th>\n      <td>4</td>\n    </tr>\n    <tr>\n      <th>PhD</th>\n      <td>5</td>\n    </tr>\n  </tbody>\n</table>
 
-    2019.377358490566
+The resulting `DataFrame` has the Education level as index and the column 0 has the level information.
+
+We can rename the column to "Level".
 
 ```python
-# The median publication year
-sample_df['publication_year'].median()
+education_df = education_df.rename(columns={0: "Level"})
+education_df
 ```
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Level</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>Basic</th>\n      <td>1</td>\n    </tr>\n    <tr>\n      <th>2n Cycle</th>\n      <td>2</td>\n    </tr>\n    <tr>\n      <th>Graduation</th>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>Master</th>\n      <td>4</td>\n    </tr>\n    <tr>\n      <th>PhD</th>\n      <td>5</td>\n    </tr>\n  </tbody>\n</table>
 
-    2020.0
+We can now **merge** this new `education_df` with our previous `concat_df`.
 
-```python
-# The minimum, or oldest publication year
-sample_df['publication_year'].min()
-```
+The left `DataFrame` is `concat_df` and we merge on "Education" because that's where the Eduction information is.
 
-    2014
+The right one is `education_df` and the information is in the index.
 
 ```python
-# The maximum, or most recent publication year
-sample_df['publication_year'].max()
-```
-
-    2021
-
-```python
-# The number of sites
-sample_df['site_name'].nunique()
-```
-
-    246
-
-```python
-# The number of samples from the different hosts
-sample_df['sample_host'].value_counts()
-```
-
-    Homo sapiens                      741
-    Ursus arctos                       85
-    Ambrosia artemisiifolia            46
-    Arabidopsis thaliana               34
-    Homo sapiens neanderthalensis      32
-    Pan troglodytes schweinfurthii     26
-    Gorilla beringei beringei          15
-    Canis lupus                        12
-    Gorilla gorilla gorilla             8
-    Mammuthus primigenius               8
-    Pan troglodytes verus               7
-    Rangifer tarandus                   6
-    Gorilla beringei graueri            6
-    Pan troglodytes ellioti             6
-    Papio hamadryas                     5
-    Alouatta palliata                   5
-    Conepatus chinga                    4
-    Gerbilliscus boehmi                 4
-    Strigocuscus celebensis             4
-    Papio anubis                        2
-    Gorilla beringei                    2
-    Papio sp.                           1
-    Pan troglodytes                     1
-    Name: sample_host, dtype: int64
-
-```python
-# The quantile of the publication years
-sample_df['publication_year'].quantile(np.arange(0,1,0.1))
-```
-
-    0.0    2014.0
-    0.1    2017.0
-    0.2    2018.0
-    0.3    2018.0
-    0.4    2020.0
-    0.5    2020.0
-    0.6    2020.0
-    0.7    2021.0
-    0.8    2021.0
-    0.9    2021.0
-    Name: publication_year, dtype: float64
-
-```python
-# We can also visualize it with built-in plot functions of pandas
-sample_df['publication_year'].plot.hist()
-```
-
-    <AxesSubplot:ylabel='Frequency'>
-
-![png](assets/images/chapters/python-pandas/tutorial_74_1.png)
-
-## 6 - Filtering
-
-There are different ways of filtering data with Pandas:
-
-- The **classic** method with bracket indexing/subsetting
-- The `query()` method
-
-The classic method
-
-```python
-# Getting all the publications before 2015
-sample_df[sample_df['publication_year']  < 2015 ]
-```
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>project_name</th>
-      <th>publication_year</th>
-      <th>publication_doi</th>
-      <th>site_name</th>
-      <th>latitude</th>
-      <th>longitude</th>
-      <th>geo_loc_name</th>
-      <th>sample_name</th>
-      <th>sample_host</th>
-      <th>sample_age</th>
-      <th>sample_age_doi</th>
-      <th>community_type</th>
-      <th>material</th>
-      <th>archive</th>
-      <th>archive_project</th>
-      <th>archive_accession</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.84</td>
-      <td>Germany</td>
-      <td>B61</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473742,SRS473743,SRS473744,SRS473745</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.84</td>
-      <td>Germany</td>
-      <td>G12</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473747,SRS473746,SRS473748,SRS473749,SRS473750</td>
-    </tr>
-    <tr>
-      <th>272</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP4</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428959</td>
-    </tr>
-    <tr>
-      <th>273</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP10</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428961</td>
-    </tr>
-    <tr>
-      <th>274</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP18</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428962</td>
-    </tr>
-    <tr>
-      <th>275</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP37</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428963</td>
-    </tr>
-    <tr>
-      <th>276</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP9</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428960</td>
-    </tr>
-    <tr>
-      <th>277</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP48</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428964</td>
-    </tr>
-    <tr>
-      <th>278</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP02,TP10,TP15,TP26</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428958</td>
-    </tr>
-    <tr>
-      <th>279</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP32,TP42,TP45,TP48</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428972</td>
-    </tr>
-    <tr>
-      <th>500</th>
-      <td>Appelt2014</td>
-      <td>2014</td>
-      <td>10.1128/AEM.03242-13</td>
-      <td>Place d'Armes, Namur</td>
-      <td>50.460</td>
-      <td>4.86</td>
-      <td>Belgium</td>
-      <td>4.453</td>
-      <td>Homo sapiens</td>
-      <td>600</td>
-      <td>10.1128/AEM.03242-13</td>
-      <td>gut</td>
-      <td>palaeofaeces</td>
-      <td>SRA</td>
-      <td>PRJNA230469</td>
-      <td>SRS510175</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-```python
-# Getting all the publications before 2015, only in the Northern hemisphere
-sample_df[(sample_df['publication_year']  < 2015) & (sample_df['longitude'] > 0)]
-```
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>project_name</th>
-      <th>publication_year</th>
-      <th>publication_doi</th>
-      <th>site_name</th>
-      <th>latitude</th>
-      <th>longitude</th>
-      <th>geo_loc_name</th>
-      <th>sample_name</th>
-      <th>sample_host</th>
-      <th>sample_age</th>
-      <th>sample_age_doi</th>
-      <th>community_type</th>
-      <th>material</th>
-      <th>archive</th>
-      <th>archive_project</th>
-      <th>archive_accession</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.84</td>
-      <td>Germany</td>
-      <td>B61</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473742,SRS473743,SRS473744,SRS473745</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.84</td>
-      <td>Germany</td>
-      <td>G12</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473747,SRS473746,SRS473748,SRS473749,SRS473750</td>
-    </tr>
-    <tr>
-      <th>500</th>
-      <td>Appelt2014</td>
-      <td>2014</td>
-      <td>10.1128/AEM.03242-13</td>
-      <td>Place d'Armes, Namur</td>
-      <td>50.460</td>
-      <td>4.86</td>
-      <td>Belgium</td>
-      <td>4.453</td>
-      <td>Homo sapiens</td>
-      <td>600</td>
-      <td>10.1128/AEM.03242-13</td>
-      <td>gut</td>
-      <td>palaeofaeces</td>
-      <td>SRA</td>
-      <td>PRJNA230469</td>
-      <td>SRS510175</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-This syntax can rapidly become quite cumbersome, which is why we can also use the `query()` method
-
-```python
-# Getting all the publications before 2015
-sample_df.query("publication_year < 2015")
-```
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>project_name</th>
-      <th>publication_year</th>
-      <th>publication_doi</th>
-      <th>site_name</th>
-      <th>latitude</th>
-      <th>longitude</th>
-      <th>geo_loc_name</th>
-      <th>sample_name</th>
-      <th>sample_host</th>
-      <th>sample_age</th>
-      <th>sample_age_doi</th>
-      <th>community_type</th>
-      <th>material</th>
-      <th>archive</th>
-      <th>archive_project</th>
-      <th>archive_accession</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.84</td>
-      <td>Germany</td>
-      <td>B61</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473742,SRS473743,SRS473744,SRS473745</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.84</td>
-      <td>Germany</td>
-      <td>G12</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473747,SRS473746,SRS473748,SRS473749,SRS473750</td>
-    </tr>
-    <tr>
-      <th>272</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP4</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428959</td>
-    </tr>
-    <tr>
-      <th>273</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP10</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428961</td>
-    </tr>
-    <tr>
-      <th>274</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP18</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428962</td>
-    </tr>
-    <tr>
-      <th>275</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP37</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428963</td>
-    </tr>
-    <tr>
-      <th>276</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP9</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428960</td>
-    </tr>
-    <tr>
-      <th>277</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP48</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428964</td>
-    </tr>
-    <tr>
-      <th>278</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP02,TP10,TP15,TP26</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428958</td>
-    </tr>
-    <tr>
-      <th>279</th>
-      <td>Campana2014</td>
-      <td>2014</td>
-      <td>10.1186/1756-0500-7-111</td>
-      <td>Teposcolula Yucundaa</td>
-      <td>17.490</td>
-      <td>-97.46</td>
-      <td>Mexico</td>
-      <td>TP32,TP42,TP45,TP48</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.7183/1045-6635.23.4.467</td>
-      <td>skeletal tissue</td>
-      <td>bone</td>
-      <td>SRA</td>
-      <td>PRJNA205039</td>
-      <td>SRS428972</td>
-    </tr>
-    <tr>
-      <th>500</th>
-      <td>Appelt2014</td>
-      <td>2014</td>
-      <td>10.1128/AEM.03242-13</td>
-      <td>Place d'Armes, Namur</td>
-      <td>50.460</td>
-      <td>4.86</td>
-      <td>Belgium</td>
-      <td>4.453</td>
-      <td>Homo sapiens</td>
-      <td>600</td>
-      <td>10.1128/AEM.03242-13</td>
-      <td>gut</td>
-      <td>palaeofaeces</td>
-      <td>SRA</td>
-      <td>PRJNA230469</td>
-      <td>SRS510175</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-```python
-# Getting all the publications before 2015, only the Northern hemisphere
-sample_df.query("publication_year < 2015 and longitude > 0 ")
-```
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>project_name</th>
-      <th>publication_year</th>
-      <th>publication_doi</th>
-      <th>site_name</th>
-      <th>latitude</th>
-      <th>longitude</th>
-      <th>geo_loc_name</th>
-      <th>sample_name</th>
-      <th>sample_host</th>
-      <th>sample_age</th>
-      <th>sample_age_doi</th>
-      <th>community_type</th>
-      <th>material</th>
-      <th>archive</th>
-      <th>archive_project</th>
-      <th>archive_accession</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.84</td>
-      <td>Germany</td>
-      <td>B61</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473742,SRS473743,SRS473744,SRS473745</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.84</td>
-      <td>Germany</td>
-      <td>G12</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473747,SRS473746,SRS473748,SRS473749,SRS473750</td>
-    </tr>
-    <tr>
-      <th>500</th>
-      <td>Appelt2014</td>
-      <td>2014</td>
-      <td>10.1128/AEM.03242-13</td>
-      <td>Place d'Armes, Namur</td>
-      <td>50.460</td>
-      <td>4.86</td>
-      <td>Belgium</td>
-      <td>4.453</td>
-      <td>Homo sapiens</td>
-      <td>600</td>
-      <td>10.1128/AEM.03242-13</td>
-      <td>gut</td>
-      <td>palaeofaeces</td>
-      <td>SRA</td>
-      <td>PRJNA230469</td>
-      <td>SRS510175</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-## 7 - GroupBy operations, and computing statistics on grouped values
-
-The "groupBy" operation, as the name suggests, allows us to group values by a grouping key, and perform a groupwise operation.  
-For example, we can group by the `sample_host` and get the age of the **youngest** sample in each group
-
-```python
-sample_df.groupby("sample_host")['sample_age'].min()
-```
-
-    sample_host
-    Alouatta palliata                   200
-    Ambrosia artemisiifolia             100
-    Arabidopsis thaliana                100
-    Canis lupus                         400
-    Conepatus chinga                    100
-    Gerbilliscus boehmi                 100
-    Gorilla beringei                    100
-    Gorilla beringei beringei           200
-    Gorilla beringei graueri            200
-    Gorilla gorilla gorilla             200
-    Homo sapiens                        100
-    Homo sapiens neanderthalensis     35800
-    Mammuthus primigenius             41800
-    Pan troglodytes                     100
-    Pan troglodytes ellioti             200
-    Pan troglodytes schweinfurthii      100
-    Pan troglodytes verus               200
-    Papio anubis                        100
-    Papio hamadryas                     100
-    Papio sp.                           100
-    Rangifer tarandus                   100
-    Strigocuscus celebensis             100
-    Ursus arctos                        100
-    Name: sample_age, dtype: int64
-
-Here `min()` is a so-called aggregation function
-
-Notice that `.value_counts()` is actually a special case of `.groupby()`
-
-```python
-sample_df.groupby("sample_host")["sample_host"].count()
-```
-
-    sample_host
-    Alouatta palliata                   5
-    Ambrosia artemisiifolia            46
-    Arabidopsis thaliana               34
-    Canis lupus                        12
-    Conepatus chinga                    4
-    Gerbilliscus boehmi                 4
-    Gorilla beringei                    2
-    Gorilla beringei beringei          15
-    Gorilla beringei graueri            6
-    Gorilla gorilla gorilla             8
-    Homo sapiens                      741
-    Homo sapiens neanderthalensis      32
-    Mammuthus primigenius               8
-    Pan troglodytes                     1
-    Pan troglodytes ellioti             6
-    Pan troglodytes schweinfurthii     26
-    Pan troglodytes verus               7
-    Papio anubis                        2
-    Papio hamadryas                     5
-    Papio sp.                           1
-    Rangifer tarandus                   6
-    Strigocuscus celebensis             4
-    Ursus arctos                       85
-    Name: sample_host, dtype: int64
-
-## 8 - Reshaping data, from wide to long and back
-
-![](assets/images/chapters/python-pandas/The-wide-versus-tidy-data-format-In-the-wide-spreadsheet-like-data-format-each-column.png)
-
-### From wide to long/tidy
-
-The tidy format, or long format idea is that one column = one kind of data.  
-Unfortunately for this tutorial, the AncientMetagenomeDir tables are already in the tidy format (good), so we'll see an example or the wide format just below
-
-```python
-wide_df = pd.DataFrame(
-    [
-    [150,155,157,160],
-    [149,153,154,155]
-    ]
-    , index = ['John','Jack']
-    , columns = [1991,1992,1993, 1994]
-).rename_axis('individual').reset_index()
-wide_df
-```
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>individual</th>
-      <th>1991</th>
-      <th>1992</th>
-      <th>1993</th>
-      <th>1994</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>John</td>
-      <td>150</td>
-      <td>155</td>
-      <td>157</td>
-      <td>160</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Jack</td>
-      <td>149</td>
-      <td>153</td>
-      <td>154</td>
-      <td>155</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-In this hypothetic dataframe, we have the years as column, the individual as index, and their height as value.  
-We'll reformat to the tidy/long format using the `.melt()` function
-
-```python
-tidy_df = wide_df.melt(id_vars='individual', var_name='birthyear', value_name='height')
-tidy_df
-```
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>individual</th>
-      <th>birthyear</th>
-      <th>height</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>John</td>
-      <td>1991</td>
-      <td>150</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Jack</td>
-      <td>1991</td>
-      <td>149</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>John</td>
-      <td>1992</td>
-      <td>155</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Jack</td>
-      <td>1992</td>
-      <td>153</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>John</td>
-      <td>1993</td>
-      <td>157</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>Jack</td>
-      <td>1993</td>
-      <td>154</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>John</td>
-      <td>1994</td>
-      <td>160</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>Jack</td>
-      <td>1994</td>
-      <td>155</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-> Bonus: How to deal with a dataframe with the kind of data indicated in the column name, typically like so
-
-```python
-wide_df = pd.DataFrame(
-    [
-    [150,155,157,160],
-    [149,153,154,155]
-    ]
-    , index = ['John','Jack']
-    , columns = ["year-1991","year-1992","year-1993", "year-1994"]
-).rename_axis('individual').reset_index()
-wide_df
-```
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>individual</th>
-      <th>year-1991</th>
-      <th>year-1992</th>
-      <th>year-1993</th>
-      <th>year-1994</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>John</td>
-      <td>150</td>
-      <td>155</td>
-      <td>157</td>
-      <td>160</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Jack</td>
-      <td>149</td>
-      <td>153</td>
-      <td>154</td>
-      <td>155</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-```python
-pd.wide_to_long(wide_df, ['year'], i='individual', j='birthyear', sep="-").rename(columns={'year':'height'})
-```
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th></th>
-      <th>height</th>
-    </tr>
-    <tr>
-      <th>individual</th>
-      <th>birthyear</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>John</th>
-      <th>1991</th>
-      <td>150</td>
-    </tr>
-    <tr>
-      <th>Jack</th>
-      <th>1991</th>
-      <td>149</td>
-    </tr>
-    <tr>
-      <th>John</th>
-      <th>1992</th>
-      <td>155</td>
-    </tr>
-    <tr>
-      <th>Jack</th>
-      <th>1992</th>
-      <td>153</td>
-    </tr>
-    <tr>
-      <th>John</th>
-      <th>1993</th>
-      <td>157</td>
-    </tr>
-    <tr>
-      <th>Jack</th>
-      <th>1993</th>
-      <td>154</td>
-    </tr>
-    <tr>
-      <th>John</th>
-      <th>1994</th>
-      <td>160</td>
-    </tr>
-    <tr>
-      <th>Jack</th>
-      <th>1994</th>
-      <td>155</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-### From long/tidy to wide format using the `.pivot()` function.
-
-```python
-tidy_df.pivot(index='individual', columns='birthyear', values='height')
-```
-
-    /Users/maxime/mambaforge/envs/intro-data/lib/python3.10/site-packages/pandas/core/algorithms.py:798: FutureWarning: In a future version, the Index constructor will not infer numeric dtypes when passed object-dtype sequences (matching Series behavior)
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th>birthyear</th>
-      <th>1991</th>
-      <th>1992</th>
-      <th>1993</th>
-      <th>1994</th>
-    </tr>
-    <tr>
-      <th>individual</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Jack</th>
-      <td>149</td>
-      <td>153</td>
-      <td>154</td>
-      <td>155</td>
-    </tr>
-    <tr>
-      <th>John</th>
-      <td>150</td>
-      <td>155</td>
-      <td>157</td>
-      <td>160</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-## 9 - Joining two different tables
-
-In AncientMetagenomeDir, the information about each sample is located in sample table, and about the library in the library table.  
-To match these two together, we need to join the tables together.
-
-To do so, we need a column in common between the two tables, the so-called **joining key** (this key can be the index)
-
-![](assets/images/chapters/python-pandas/08_merge_left.svg)
-
-For the samples and libraries dataframe, the joining key is the column `sample_name`
-
-```python
-sample_df.merge(library_df, on='sample_name').columns
-```
-
-    Index(['project_name_x', 'publication_year_x', 'publication_doi', 'site_name',
-           'latitude', 'longitude', 'geo_loc_name', 'sample_name', 'sample_host',
-           'sample_age', 'sample_age_doi', 'community_type', 'material',
-           'archive_x', 'archive_project_x', 'archive_accession', 'project_name_y',
-           'publication_year_y', 'data_publication_doi', 'archive_y',
-           'archive_project_y', 'archive_sample_accession', 'library_name',
-           'strand_type', 'library_polymerase', 'library_treatment',
-           'library_concentration', 'instrument_model', 'library_layout',
-           'library_strategy', 'read_count', 'archive_data_accession',
-           'download_links', 'download_md5s', 'download_sizes'],
-          dtype='object')
-
-We have some duplicate columns that we can get rid of:
-
-```python
-merged_df = sample_df.merge(library_df.drop(['project_name', 'publication_year', 'archive_project', 'archive'], axis=1), on='sample_name')
+merged_df = pd.merge(left=concat_df, right=education_df, left_on="Education", right_index=True)
 merged_df
 ```
+<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Level</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>5</th>\n      <td>965</td>\n      <td>1971</td>\n      <td>Graduation</td>\n      <td>Divorced</td>\n      <td>55635.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>235</td>\n      <td>65</td>\n      <td>164</td>\n      <td>50</td>\n      <td>49</td>\n      <td>27</td>\n      <td>7</td>\n      <td>3</td>\n      <td>7</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>481</th>\n      <td>11133</td>\n      <td>1973</td>\n      <td>PhD</td>\n      <td>YOLO</td>\n      <td>48432.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>322</td>\n      <td>3</td>\n      <td>50</td>\n      <td>4</td>\n      <td>3</td>\n      <td>42</td>\n      <td>7</td>\n      <td>1</td>\n      <td>6</td>\n      <td>8</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>482</th>\n      <td>9589</td>\n      <td>1948</td>\n      <td>PhD</td>\n      <td>Widow</td>\n      <td>82032.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>332</td>\n      <td>194</td>\n      <td>377</td>\n      <td>149</td>\n      <td>125</td>\n      <td>57</td>\n      <td>4</td>\n      <td>6</td>\n      <td>7</td>\n      <td>1</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>483</th>\n      <td>4286</td>\n      <td>1970</td>\n      <td>PhD</td>\n      <td>Single</td>\n      <td>57642.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>580</td>\n      <td>6</td>\n      <td>58</td>\n      <td>8</td>\n      <td>0</td>\n      <td>27</td>\n      <td>7</td>\n      <td>6</td>\n      <td>6</td>\n      <td>4</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>484</th>\n      <td>4001</td>\n      <td>1946</td>\n      <td>PhD</td>\n      <td>Together</td>\n      <td>64014.0</td>\n      <td>2</td>\n      <td>1</td>\n      <td>406</td>\n      <td>0</td>\n      <td>30</td>\n      <td>0</td>\n      <td>0</td>\n      <td>8</td>\n      <td>8</td>\n      <td>2</td>\n      <td>5</td>\n      <td>7</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>485</th>\n      <td>9405</td>\n      <td>1954</td>\n      <td>PhD</td>\n      <td>Married</td>\n      <td>52869.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>84</td>\n      <td>3</td>\n      <td>61</td>\n      <td>2</td>\n      <td>1</td>\n      <td>21</td>\n      <td>3</td>\n      <td>1</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n  </tbody>\n</table>\n<p>2240 rows × 19 columns</p>
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+## Data visualization
 
-    .dataframe thead th {
-        text-align: right;
-    }
+We can easily create simple graphs using `DataFrame.plot()`.
 
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>project_name</th>
-      <th>publication_year</th>
-      <th>publication_doi</th>
-      <th>site_name</th>
-      <th>latitude</th>
-      <th>longitude</th>
-      <th>geo_loc_name</th>
-      <th>sample_name</th>
-      <th>sample_host</th>
-      <th>sample_age</th>
-      <th>...</th>
-      <th>library_treatment</th>
-      <th>library_concentration</th>
-      <th>instrument_model</th>
-      <th>library_layout</th>
-      <th>library_strategy</th>
-      <th>read_count</th>
-      <th>archive_data_accession</th>
-      <th>download_links</th>
-      <th>download_md5s</th>
-      <th>download_sizes</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.84</td>
-      <td>Germany</td>
-      <td>B61</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>...</td>
-      <td>none</td>
-      <td>NaN</td>
-      <td>Illumina HiSeq 2000</td>
-      <td>SINGLE</td>
-      <td>WGS</td>
-      <td>13228381</td>
-      <td>SRR957738</td>
-      <td>ftp.sra.ebi.ac.uk/vol1/fastq/SRR957/SRR957738/...</td>
-      <td>9c40c43b5d455e760ae8db924347f0b2</td>
-      <td>953396663</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.84</td>
-      <td>Germany</td>
-      <td>B61</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>...</td>
-      <td>none</td>
-      <td>NaN</td>
-      <td>Illumina HiSeq 2000</td>
-      <td>SINGLE</td>
-      <td>WGS</td>
-      <td>13260566</td>
-      <td>SRR957739</td>
-      <td>ftp.sra.ebi.ac.uk/vol1/fastq/SRR957/SRR957739/...</td>
-      <td>dec1507f742de109529638bf00e0732f</td>
-      <td>1026825795</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.84</td>
-      <td>Germany</td>
-      <td>B61</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>...</td>
-      <td>none</td>
-      <td>NaN</td>
-      <td>Illumina HiSeq 2000</td>
-      <td>SINGLE</td>
-      <td>WGS</td>
-      <td>8869866</td>
-      <td>SRR957740</td>
-      <td>ftp.sra.ebi.ac.uk/vol1/fastq/SRR957/SRR957740/...</td>
-      <td>bc49c59f489b4009206f8abcb737d55d</td>
-      <td>661500786</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.84</td>
-      <td>Germany</td>
-      <td>B61</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>...</td>
-      <td>none</td>
-      <td>NaN</td>
-      <td>Illumina HiSeq 2000</td>
-      <td>SINGLE</td>
-      <td>WGS</td>
-      <td>11275013</td>
-      <td>SRR957741</td>
-      <td>ftp.sra.ebi.ac.uk/vol1/fastq/SRR957/SRR957741/...</td>
-      <td>e02e3549ddd3ba6dc278a7f573c07321</td>
-      <td>877360302</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.84</td>
-      <td>Germany</td>
-      <td>G12</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>...</td>
-      <td>none</td>
-      <td>NaN</td>
-      <td>Illumina HiSeq 2000</td>
-      <td>SINGLE</td>
-      <td>WGS</td>
-      <td>8978974</td>
-      <td>SRR957742</td>
-      <td>ftp.sra.ebi.ac.uk/vol1/fastq/SRR957/SRR957742/...</td>
-      <td>b7c620b8ee165c08bee204529341ca5b</td>
-      <td>690614774</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>1802</th>
-      <td>Maixner2021</td>
-      <td>2021</td>
-      <td>10.1016/j.cub.2021.09.031</td>
-      <td>Edlersbergwerk - oben, Hallstatt</td>
-      <td>47.560</td>
-      <td>13.63</td>
-      <td>Austria</td>
-      <td>2612</td>
-      <td>Homo sapiens</td>
-      <td>150</td>
-      <td>...</td>
-      <td>none</td>
-      <td>NaN</td>
-      <td>Illumina MiSeq</td>
-      <td>PAIRED</td>
-      <td>WGS</td>
-      <td>1858404</td>
-      <td>ERR5766179</td>
-      <td>ftp.sra.ebi.ac.uk/vol1/fastq/ERR576/009/ERR576...</td>
-      <td>542787c645b0aeebe15c66cc926d3f69;0bc58d56be3c3...</td>
-      <td>86783041;98100690</td>
-    </tr>
-    <tr>
-      <th>1803</th>
-      <td>Maixner2021</td>
-      <td>2021</td>
-      <td>10.1016/j.cub.2021.09.031</td>
-      <td>Edlersbergwerk - oben, Hallstatt</td>
-      <td>47.560</td>
-      <td>13.63</td>
-      <td>Austria</td>
-      <td>2612</td>
-      <td>Homo sapiens</td>
-      <td>150</td>
-      <td>...</td>
-      <td>none</td>
-      <td>NaN</td>
-      <td>Illumina MiSeq</td>
-      <td>PAIRED</td>
-      <td>WGS</td>
-      <td>1603064</td>
-      <td>ERR5766180</td>
-      <td>ftp.sra.ebi.ac.uk/vol1/fastq/ERR576/000/ERR576...</td>
-      <td>022bb28da460e66590e974b4135bdd2e;f88acec67b648...</td>
-      <td>74375931;77621627</td>
-    </tr>
-    <tr>
-      <th>1804</th>
-      <td>Maixner2021</td>
-      <td>2021</td>
-      <td>10.1016/j.cub.2021.09.031</td>
-      <td>Edlersbergwerk - oben, Hallstatt</td>
-      <td>47.560</td>
-      <td>13.63</td>
-      <td>Austria</td>
-      <td>2612</td>
-      <td>Homo sapiens</td>
-      <td>150</td>
-      <td>...</td>
-      <td>none</td>
-      <td>NaN</td>
-      <td>Illumina MiSeq</td>
-      <td>PAIRED</td>
-      <td>WGS</td>
-      <td>1075088</td>
-      <td>ERR5766181</td>
-      <td>ftp.sra.ebi.ac.uk/vol1/fastq/ERR576/001/ERR576...</td>
-      <td>57fc575d32db14f1d5c1ed7f6a106e91;4f57b9d978b53...</td>
-      <td>51852071;56288763</td>
-    </tr>
-    <tr>
-      <th>1805</th>
-      <td>Maixner2021</td>
-      <td>2021</td>
-      <td>10.1016/j.cub.2021.09.031</td>
-      <td>Edlersbergwerk - oben, Hallstatt</td>
-      <td>47.560</td>
-      <td>13.63</td>
-      <td>Austria</td>
-      <td>2612</td>
-      <td>Homo sapiens</td>
-      <td>150</td>
-      <td>...</td>
-      <td>none</td>
-      <td>NaN</td>
-      <td>Illumina HiSeq 2500</td>
-      <td>PAIRED</td>
-      <td>WGS</td>
-      <td>138836358</td>
-      <td>ERR5766182</td>
-      <td>ftp.sra.ebi.ac.uk/vol1/fastq/ERR576/002/ERR576...</td>
-      <td>64e63df8da7542957d1d9eb08e764d38;3fc6cba02c74d...</td>
-      <td>4332353625;4420486328</td>
-    </tr>
-    <tr>
-      <th>1806</th>
-      <td>Maixner2021</td>
-      <td>2021</td>
-      <td>10.1016/j.cub.2021.09.031</td>
-      <td>Edlersbergwerk - oben, Hallstatt</td>
-      <td>47.560</td>
-      <td>13.63</td>
-      <td>Austria</td>
-      <td>2612</td>
-      <td>Homo sapiens</td>
-      <td>150</td>
-      <td>...</td>
-      <td>none</td>
-      <td>NaN</td>
-      <td>HiSeq X Ten</td>
-      <td>PAIRED</td>
-      <td>WGS</td>
-      <td>84192332</td>
-      <td>ERR5766183</td>
-      <td>ftp.sra.ebi.ac.uk/vol1/fastq/ERR576/003/ERR576...</td>
-      <td>43ac661c4e211ed6ee2940dcab8b13cb;88de66a85df92...</td>
-      <td>3128863954;3460789287</td>
-    </tr>
-  </tbody>
-</table>
-<p>1807 rows × 31 columns</p>
-</div>
+This uses the package **matplotlib** in the background, which is a very powerful and popular plotting library but is not the most user friendly.
 
-## 10 - Visualizing some of the results with Plotnine
+Using this **Pandas** method is very easy and can be a good way to do some initial exploratory plots and later refine them using either pure **matplobib** or another library.
 
-Plotnine is the Python clone of ggplot2, the syntax is identical, which makes it great if you're working with data in tidy/long format, and are already familiar with the ggplot2 syntax
+### Histogram
+
+We can plot the data from a `DataFrame` like this:
+
+`kind` specifies the kind of plot (for example *hist* for histogram, *bar* for bar graph or *scatter* for scatter plot).
+
+We usually specify the columns from which the `x` and `y` components should be taken, but for a histogram we only need to specify one.
 
 ```python
-ggplot(merged_df, aes(x='publication_year')) + geom_histogram() + theme_classic()
+ax = merged_df.plot(kind="hist", y="Income")
+ax.set_xlabel("Income")
+ax.set_title("Histogram of income")
 ```
+Text(0.5, 1.0, 'Histogram of income')
 
-    /Users/maxime/mambaforge/envs/intro-data/lib/python3.10/
-    site-packages/plotnine/stats/stat_bin.py:95:
-    PlotnineWarning: 'stat_bin()' using 'bins = 15'. Pick better value with 'binwidth'.
+![png](https://github.com/Kevinnota/teaching_stuff/blob/main/histogram.png?raw=true)
 
-![png](assets/images/chapters/python-pandas/tutorial_111_1.png)
+**Task**
 
-    <ggplot: (366051178)>
+This doesn't look very good because the x-axis extends so much!
 
-We can start to ask some questions, for example, is the sequencing depth increasing with the years ?
+- Looking at the data, can you figure out what might cause this?
+<details>
+  <summary markdown="span">Solution</summary>
+
+ When we look at the highest earners, we see that somebody put *666666* as their income.
+
+ We can assume that this was put as a joke or is an outlier.
+
+ In either way, we can redo the plot with that datapoint removed.
+</details>
+
+- Can you "fix" the plot?
+<details>
+  <summary markdown="span">Solution</summary>
 
 ```python
-merged_df['publication_year'] = merged_df['publication_year'].astype('category')
+ax = merged_df[merged_df["Income"] != 666666].plot(kind="hist",y="Income")
+ax.set_xlabel("Income")
+ax.set_title("Fixed Histogram of income")
 ```
+Text(0.5, 1.0, 'Fixed Histogram of income')
+
+![png](https://github.com/Kevinnota/teaching_stuff/blob/main/fixed_histogram.png?raw=true)
+
+</details>
+
+### Bar plot
+
+Another visualization we could do is a bar plot.
+
+Using the `groupby` and `mean` methods, we can calculate the mean Income like we've learned before.
 
 ```python
-ggplot(merged_df, aes(x='publication_year', y='np.log10(read_count)', fill='publication_year')) +
-geom_jitter(alpha=0.1) + geom_boxplot(alpha=0.8) + theme_classic()
+grouped_by_education = merged_df.groupby(by="Education")["Income"].mean()
+grouped_by_education
+
 ```
-
-![png](assets/images/chapters/python-pandas/tutorial_114_0.png)
-
-    <ggplot: (366112582)>
-
-We could ask the same question, but first grouping the samples by publication year
+```
+Education
+2n Cycle      47633.190000
+Basic         20306.259259
+Graduation    52720.373656
+Master        52917.534247
+PhD           56145.313929
+Name: Income, dtype: float64
+```
+Now, this data can be shown:
 
 ```python
-avg_read_count_by_year = merged_df.groupby('publication_year')['read_count'].mean().to_frame().reset_index()
-avg_read_count_by_year
+ax = grouped_by_education.plot(kind="bar")
+ax.set_ylabel("Mean income")
+ax.set_title("Mean income for each education level")
 ```
+Text(0.5, 1.0, 'Mean income for each education level')
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+![png](https://github.com/Kevinnota/teaching_stuff/blob/main/bar_plot.png?raw=true)
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+### Scatter plot
 
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>publication_year</th>
-      <th>read_count</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>2014</td>
-      <td>1.437173e+07</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2016</td>
-      <td>3.653450e+04</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2017</td>
-      <td>5.712598e+06</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2018</td>
-      <td>9.273287e+06</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2019</td>
-      <td>2.211632e+07</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>2020</td>
-      <td>1.111819e+07</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>2021</td>
-      <td>2.547655e+07</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+Another kind of plot is the scatter plot, which needs two columns for the **x** and **y** axis.
 
 ```python
-ggplot(avg_read_count_by_year, aes(x='publication_year', y='np.log10(read_count)', fill='publication_year')) + geom_point()
+ax = df.plot(kind="scatter", x="MntWines", y="MntFruits")
+ax.set_title("Wine purchases and Fruit purchases")
 ```
+Text(0.5, 1.0, 'Wine purchases and Fruit purchases')
 
-![png](assets/images/chapters/python-pandas/tutorial_117_0.png)
+![png](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_01.png?raw=true)
 
-    <ggplot: (366206706)>
-
-**Your turn ! Make a plot to investigate the relation between the type of library treatment throughout the publication years**
-
-## 11 - Bonus, dealing with ill-formatted columns
-
-Sometimes, colums can contains entries which could be split in multiple columns, typically values separated by a comma.
-In AncientMetagenomeDir, this is the case with the archive accession column.
-
-Here is how we would solve it with pandas
+You can also specify whether the axes should be on the log scale or not.
 
 ```python
-sample_df.assign(archive_accession = sample_df.archive_accession.str.split(",")).explode('archive_accession')
+ax = df.plot(kind="scatter", x="MntWines", y="MntFruits", logy=True, logx=True)
+ax.set_title("Wine purchases and Fruit purchases, on log scale")
 ```
+Text(0.5, 1.0, 'Wine purchases and Fruit purchases, on log scale')
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+![png](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_02.png?raw=true)
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
 
-    .dataframe thead th {
-        text-align: right;
-    }
+## Plotnine
 
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>project_name</th>
-      <th>publication_year</th>
-      <th>publication_doi</th>
-      <th>site_name</th>
-      <th>latitude</th>
-      <th>longitude</th>
-      <th>geo_loc_name</th>
-      <th>sample_name</th>
-      <th>sample_host</th>
-      <th>sample_age</th>
-      <th>sample_age_doi</th>
-      <th>community_type</th>
-      <th>material</th>
-      <th>archive</th>
-      <th>archive_project</th>
-      <th>archive_accession</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.840</td>
-      <td>Germany</td>
-      <td>B61</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473742</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.840</td>
-      <td>Germany</td>
-      <td>B61</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473743</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.840</td>
-      <td>Germany</td>
-      <td>B61</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473744</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.840</td>
-      <td>Germany</td>
-      <td>B61</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473745</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Warinner2014</td>
-      <td>2014</td>
-      <td>10.1038/ng.2906</td>
-      <td>Dalheim</td>
-      <td>51.565</td>
-      <td>8.840</td>
-      <td>Germany</td>
-      <td>G12</td>
-      <td>Homo sapiens</td>
-      <td>900</td>
-      <td>10.1038/ng.2906</td>
-      <td>oral</td>
-      <td>dental calculus</td>
-      <td>SRA</td>
-      <td>PRJNA216965</td>
-      <td>SRS473747</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>1057</th>
-      <td>Kazarina2021b</td>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>St. Gertrude’s Church, Riga</td>
-      <td>56.958</td>
-      <td>24.121</td>
-      <td>Latvia</td>
-      <td>T9</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283099</td>
-    </tr>
-    <tr>
-      <th>1058</th>
-      <td>Kazarina2021b</td>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>Dom Square, Riga</td>
-      <td>56.949</td>
-      <td>24.104</td>
-      <td>Latvia</td>
-      <td>TZA3</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283100</td>
-    </tr>
-    <tr>
-      <th>1058</th>
-      <td>Kazarina2021b</td>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>Dom Square, Riga</td>
-      <td>56.949</td>
-      <td>24.104</td>
-      <td>Latvia</td>
-      <td>TZA3</td>
-      <td>Homo sapiens</td>
-      <td>400</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283101</td>
-    </tr>
-    <tr>
-      <th>1059</th>
-      <td>Kazarina2021b</td>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>St. Peter’s Church, Riga</td>
-      <td>56.947</td>
-      <td>24.109</td>
-      <td>Latvia</td>
-      <td>TZA4</td>
-      <td>Homo sapiens</td>
-      <td>500</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283102</td>
-    </tr>
-    <tr>
-      <th>1059</th>
-      <td>Kazarina2021b</td>
-      <td>2021</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>St. Peter’s Church, Riga</td>
-      <td>56.947</td>
-      <td>24.109</td>
-      <td>Latvia</td>
-      <td>TZA4</td>
-      <td>Homo sapiens</td>
-      <td>500</td>
-      <td>10.1016/j.jasrep.2021.103213</td>
-      <td>oral</td>
-      <td>tooth</td>
-      <td>ENA</td>
-      <td>PRJEB47251</td>
-      <td>ERS7283103</td>
-    </tr>
-  </tbody>
-</table>
-<p>1262 rows × 16 columns</p>
-</div>
+Plotnine is the Python clone of ggplot2, which is very powerful and is great if you are already familiar with the ggplot2 syntax!
+
+```python
+from plotnine import *
+```
+```python
+(ggplot(merged_df, aes("Education", "MntWines", fill="Education"))
+ + geom_boxplot(alpha=0.8))
+```
+![png](https://github.com/Kevinnota/teaching_stuff/blob/main/boxplot.png?raw=true)
+
+
+```python
+(ggplot(merged_df[(merged_df["Year_Birth"]>1900) & (merged_df["Income"]!=666666)],
+        aes("Year_Birth", "Income", fill="Education"))
+ + geom_point(alpha=0.5, stroke=0)
+ + facet_wrap("Marital_Status"))
+```
+![png](https://github.com/Kevinnota/teaching_stuff/blob/main/facet_scatter.png?raw=true)
+
+
+**task**
+
+Now that you are familiar with python, pandas, and plotting. There are two data.tables from **AncientMetagenomeDir** which contains metadata from metagenomes. You should, by using the code in the tutorial be able to explore the datasets and make some fancy plots.
+
+```
+file names:
+sample_table_url
+library_table_url
+```
