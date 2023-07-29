@@ -55,7 +55,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -510,14 +529,14 @@ Tip
 </div>
 <p>Until recently, the only option for ancient DNA samples was to take the short-read sequencing data and align them against some known reference genomes. However, this approach is heavily relying on whether all sources of our samples are represented in the available reference genomes. If a source is missing in the reference database - in our toy example, this is the case for the yellow source (<a href="#fig-denovoassembly-overview">Figure&nbsp;<span>12.1</span></a>) -, then we won’t be able to detect it using this reference database.</p>
 <p>While there is a potential workaround for modern metagenomic samples, <em>single-genome assembly</em> relies on being able to cultivate a microbial species to obtain an isolate. This is unfeasible for ancient metagenomic samples because there are no more viable microbial cells available that could be cultivated.</p>
-<p>Around 2015, a technical revolution started when the first programs, e.g.&nbsp;MEGAHIT <span class="citation" data-cites="LiMegahit2015">[@LiMegahit2015]</span> and metaSPAdes <span class="citation" data-cites="Nurk2017">[@Nurk2017]</span>, were published that could successfully perform <em>de novo</em> assembly from metagenomic data. Since then, tens of thousands metagenomic samples have been assembled and it was revealed that even well studied environments, such as the human gut microbiome, have a lot of additional microbial diversity that has not been observed previously via culturing and isolation <span class="citation" data-cites="Almeida2021">[@Almeida2021]</span>.</p>
+<p>Around 2015, a technical revolution started when the first programs, e.g.&nbsp;MEGAHIT <span class="citation" data-cites="LiMegahit2015">(<a href="introduction-to-ngs-sequencing.html#ref-LiMegahit2015" role="doc-biblioref">Li et al. 2015</a>)</span> and metaSPAdes <span class="citation" data-cites="Nurk2017">(<a href="introduction-to-ngs-sequencing.html#ref-Nurk2017" role="doc-biblioref">Nurk et al. 2017</a>)</span>, were published that could successfully perform <em>de novo</em> assembly from metagenomic data. Since then, tens of thousands metagenomic samples have been assembled and it was revealed that even well studied environments, such as the human gut microbiome, have a lot of additional microbial diversity that has not been observed previously via culturing and isolation <span class="citation" data-cites="Almeida2021">(<a href="introduction-to-ngs-sequencing.html#ref-Almeida2021" role="doc-biblioref">Almeida et al. 2021</a>)</span>.</p>
 <p>The technical advancement of being able to perform <em>de novo</em> assembly on metagenomic samples led to an explosion of studies that analysed samples that were considered almost impossible to study beforehand. For researchers that are exposed to ancient DNA, the imminent question arises: can we apply the same methods to ancient DNA data? In this practical course, we will walk through all required steps that are necessary to successfully perform <em>de novo</em> assembly from ancient DNA metagenomic sequencing data and show you what you can do once you have obtained the data.</p>
 </section>
 <section id="practical-course" class="level2" data-number="12.2">
 <h2 data-number="12.2" class="anchored" data-anchor-id="practical-course"><span class="header-section-number">12.2</span> Practical course</h2>
 <section id="sample-overview" class="level3" data-number="12.2.1">
 <h3 data-number="12.2.1" class="anchored" data-anchor-id="sample-overview"><span class="header-section-number">12.2.1</span> Sample overview</h3>
-<p>For this practical course, I selected a palaeofaeces sample from the study by <span class="citation" data-cites="Maixner2021">@Maixner2021</span>, who generated deep metagenomic sequencing data for four palaeofaeces samples that were excavated from an Austrian salt mine in Hallstatt and were associated with the Celtic Iron Age. We will focus on the youngest sample, <strong>2612</strong>, which was dated to be just a few hundred years old (<a href="#fig-denovoassembly-maixner">Figure&nbsp;<span>12.2</span></a>).</p>
+<p>For this practical course, I selected a palaeofaeces sample from the study by <span class="citation" data-cites="Maixner2021">Maixner et al. (<a href="introduction-to-ngs-sequencing.html#ref-Maixner2021" role="doc-biblioref">2021</a>)</span>, who generated deep metagenomic sequencing data for four palaeofaeces samples that were excavated from an Austrian salt mine in Hallstatt and were associated with the Celtic Iron Age. We will focus on the youngest sample, <strong>2612</strong>, which was dated to be just a few hundred years old (<a href="#fig-denovoassembly-maixner">Figure&nbsp;<span>12.2</span></a>).</p>
 <div id="fig-denovoassembly-maixner" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="assets/images/chapters/denovo-assembly/Maixner2021_GraphicalAbstract.jpg" class="img-fluid figure-img"></p>
@@ -581,7 +600,7 @@ Important
 <p>The characteristic of ancient DNA samples that pre-determines the success of the <em>de novo</em> assembly is the <strong>distribution of the DNA molecule length</strong>. Determine this distribution prior to running the <em>de novo</em> assembly to be able to predict the results of the <em>de novo</em> assembly.</p>
 </div>
 </div>
-<p>However, since the average length of the insert size of sequencing data (<a href="#fig-denovoassembly-illumina">Figure&nbsp;<span>12.3</span></a>) is highly correlated with the success of the assembly, we want to first evaluate it. For this we can make use of the program fastp <span class="citation" data-cites="Chen2018">[@Chen2018]</span>.</p>
+<p>However, since the average length of the insert size of sequencing data (<a href="#fig-denovoassembly-illumina">Figure&nbsp;<span>12.3</span></a>) is highly correlated with the success of the assembly, we want to first evaluate it. For this we can make use of the program fastp <span class="citation" data-cites="Chen2018">(<a href="introduction-to-ngs-sequencing.html#ref-Chen2018" role="doc-biblioref">Chen et al. 2018</a>)</span>.</p>
 <div id="fig-denovoassembly-illumina" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="assets/images/chapters/denovo-assembly/insert_size_scheme.png" class="img-fluid figure-img"></p>
@@ -593,7 +612,7 @@ Important
 <div id="fig-denovoassembly-lendist" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="assets/images/chapters/denovo-assembly/Orlando2013_FigS4.5.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;12.4: Example of a DNA molecule length distribution of a well-preserved ancient DNA sample. This histogram belongs to a 700,000-year-old horse that was preserved in permafrost, as reported in <span class="citation" data-cites="Orlando2013">@Orlando2013</span>, Fig. S4.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;12.4: Example of a DNA molecule length distribution of a well-preserved ancient DNA sample. This histogram belongs to a 700,000-year-old horse that was preserved in permafrost, as reported in <span class="citation" data-cites="Orlando2013">Orlando et al. (<a href="introduction-to-ngs-sequencing.html#ref-Orlando2013" role="doc-biblioref">2013</a>)</span>, Fig. S4.</figcaption>
 </figure>
 </div>
 <p>To infer the distribution of the DNA molecules, we can run the command</p>
@@ -644,7 +663,7 @@ Answer
 </section>
 <section id="de-novo-assembly" class="level3" data-number="12.2.3">
 <h3 data-number="12.2.3" class="anchored" data-anchor-id="de-novo-assembly"><span class="header-section-number">12.2.3</span> <em>De novo</em> assembly</h3>
-<p>Now, we will actual perform the <em>de novo</em> assembly on the sequencing data. For this, we will use the program MEGAHIT <span class="citation" data-cites="LiMegahit2015">[@LiMegahit2015]</span>, a <em>de Bruijn</em>-graph assembler.</p>
+<p>Now, we will actual perform the <em>de novo</em> assembly on the sequencing data. For this, we will use the program MEGAHIT <span class="citation" data-cites="LiMegahit2015">(<a href="introduction-to-ngs-sequencing.html#ref-LiMegahit2015" role="doc-biblioref">Li et al. 2015</a>)</span>, a <em>de Bruijn</em>-graph assembler.</p>
 <div id="fig-denovoassembly-kmers" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="assets/images/chapters/denovo-assembly/kmer_counting.png" class="img-fluid figure-img"></p>
@@ -675,7 +694,7 @@ Pros and cons of MEGAHIT
 </ul>
 </div>
 </div>
-<p>In the <a href="https://christinawarinner.com/about-us/">Warinner group</a>, we realised after some tests that MEGAHIT has a clear advantage when ancient DNA damage is present at higher quantities. While it produced a higher number of mis-assemblies compared to metaSPAdes when being evaluated on simulated modern metagenomic data <span class="citation" data-cites="Meyer2022">[Critical Assessment of Metagenome Interpretation II challenge, @Meyer2022]</span>, it produces more long contigs when ancient DNA damage is present.</p>
+<p>In the <a href="https://christinawarinner.com/about-us/">Warinner group</a>, we realised after some tests that MEGAHIT has a clear advantage when ancient DNA damage is present at higher quantities. While it produced a higher number of mis-assemblies compared to metaSPAdes when being evaluated on simulated modern metagenomic data <span class="citation" data-cites="Meyer2022">(Critical Assessment of Metagenome Interpretation II challenge, <a href="introduction-to-ngs-sequencing.html#ref-Meyer2022" role="doc-biblioref">Meyer et al. 2022</a>)</span>, it produces more long contigs when ancient DNA damage is present.</p>
 <p>To <em>de novo</em> assemble the short-read sequencing data of the sample <strong>2612</strong> using MEGAHIT, we can run the command</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">megahit</span> <span class="at">-1</span> 2612_R1.fastq.gz <span class="dt">\</span></span>
@@ -767,13 +786,13 @@ Answer
 <div id="fig-denovoassembly-debruijnbubble" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="assets/images/chapters/denovo-assembly/Leggett2013_Fig1a.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;12.7: <em>De Bruijn</em> graph with a bubble caused by a second allele. Adapted from <span class="citation" data-cites="Leggett2013">[@Leggett2013, Figure 1a]</span></figcaption>
+<figcaption class="figure-caption">Figure&nbsp;12.7: <em>De Bruijn</em> graph with a bubble caused by a second allele. Adapted from <span class="citation" data-cites="Leggett2013">(<a href="introduction-to-ngs-sequencing.html#ref-Leggett2013" role="doc-biblioref">Leggett et al. 2013, fig. 1a</a>)</span></figcaption>
 </figure>
 </div>
 <p>These C-to-T substitutions are similar to biological single-nucleotide polymorphisms in the sequencing data. Both lead the introduction of bubbles in the <em>de Bruijn</em> graph when two alleles are present in the k-mer sequences (<a href="#fig-denovoassembly-debruijnbubble">Figure&nbsp;<span>12.7</span></a>) and the assembler decides during its pruning steps which allele to keep in the contig sequence.</p>
-<p>While it does not really matter which allele is kept for biological polymorphisms, it does matter for technical artefacts that are introduced by the presence of ancient DNA damage. In our group we realised that the gene sequences that were annotated on the contigs of MEGAHIT tended to have a higher number of nonsense mutations compared to the known variants of the genes. After manual inspection, we observed that many of these mutations appeared because MEGAHIT chose the damage-derived T allele over the C allele or the damage-derived A allele over a G allele <span class="citation" data-cites="Klapper2023">[see @Klapper2023, Figure S1]</span>.</p>
+<p>While it does not really matter which allele is kept for biological polymorphisms, it does matter for technical artefacts that are introduced by the presence of ancient DNA damage. In our group we realised that the gene sequences that were annotated on the contigs of MEGAHIT tended to have a higher number of nonsense mutations compared to the known variants of the genes. After manual inspection, we observed that many of these mutations appeared because MEGAHIT chose the damage-derived T allele over the C allele or the damage-derived A allele over a G allele <span class="citation" data-cites="Klapper2023">(see <a href="introduction-to-ngs-sequencing.html#ref-Klapper2023" role="doc-biblioref">Klapper et al. 2023, fig. S1</a>)</span>.</p>
 <p>To overcome this issue, my colleagues Maxime Borry, James Fellows Yates and I developed a strategy to replace these damage-derived alleles in the contig sequences. This approach consists of aligning the short-read data against the contigs, performing genotyping along them, and finally replacing all alleles for which we have strong support for an allele that is different from the one selected by MEGAHIT.</p>
-<p>We standardised this approach and added it to the Nextflow pipeline nf-core/mag <span class="citation" data-cites="Krakau2022">[@Krakau2022]</span>. It can simply be activated by providing the parameter <code>--ancient_dna</code>.</p>
+<p>We standardised this approach and added it to the Nextflow pipeline nf-core/mag <span class="citation" data-cites="Krakau2022">(<a href="introduction-to-ngs-sequencing.html#ref-Krakau2022" role="doc-biblioref">Krakau et al. 2022</a>)</span>. It can simply be activated by providing the parameter <code>--ancient_dna</code>.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -868,15 +887,15 @@ Self-guided: data preparation
 </ul>
 <p>The idea here is that two contigs that are derived from the same bacterial genome will likely have a similar nucleotide composition and coverage.</p>
 <p>This approach works very well when the contigs are longer and they strongly differ in the nucleotide composition and the coverage from each other. However, if this is not the case, e.g.&nbsp;there is more than one strain of the same species in the sample, these approaches will likely not be able to assign some contigs to clusters: these contigs remain unbinned. In case there is a high number of unbinned contigs, one can also employ the more sensitive reference-based binning strategies but we will not cover this in this practical course.</p>
-<p>There are a number of different binning tools out there that can be used for this task. Since this number is constantly growing, there have been attempts to standardise the test data sets that these tools are run on so that their performances can be easily compared. The most well-known attempt is the Critical Assessment of Metagenome Interpretation <span class="citation" data-cites="Meyer2022">[Critical Assessment of Metagenome Interpretation II challenge, @Meyer2022]</span>, which released the latest comparison of commonly used tools for assembly, binning, and bin refinement in 2022. I recommend that you first check the performance of a new tool against the CAMI datasets before testing it to see whether it is worth using it.</p>
+<p>There are a number of different binning tools out there that can be used for this task. Since this number is constantly growing, there have been attempts to standardise the test data sets that these tools are run on so that their performances can be easily compared. The most well-known attempt is the Critical Assessment of Metagenome Interpretation <span class="citation" data-cites="Meyer2022">(Critical Assessment of Metagenome Interpretation II challenge, <a href="introduction-to-ngs-sequencing.html#ref-Meyer2022" role="doc-biblioref">Meyer et al. 2022</a>)</span>, which released the latest comparison of commonly used tools for assembly, binning, and bin refinement in 2022. I recommend that you first check the performance of a new tool against the CAMI datasets before testing it to see whether it is worth using it.</p>
 <p>Three commonly used binners are:</p>
 <ul>
-<li>metaBAT2 <span class="citation" data-cites="Kang2019">[@Kang2019, more than 1,300 citations]</span></li>
-<li>MaxBin2 <span class="citation" data-cites="WuMaxbin2016">[@WuMaxbin2016, more than 1,200 citations]</span></li>
-<li>CONCOCT <span class="citation" data-cites="Alneberg2014">[@Alneberg2014, more than 1,000 citation]</span></li>
+<li>metaBAT2 <span class="citation" data-cites="Kang2019">(<a href="introduction-to-ngs-sequencing.html#ref-Kang2019" role="doc-biblioref">Kang et al. 2019</a>, more than 1,300 citations)</span></li>
+<li>MaxBin2 <span class="citation" data-cites="WuMaxbin2016">(<a href="introduction-to-ngs-sequencing.html#ref-WuMaxbin2016" role="doc-biblioref">Wu, Simmons, and Singer 2016</a>, more than 1,200 citations)</span></li>
+<li>CONCOCT <span class="citation" data-cites="Alneberg2014">(<a href="introduction-to-ngs-sequencing.html#ref-Alneberg2014" role="doc-biblioref">Alneberg et al. 2014</a>, more than 1,000 citation)</span></li>
 </ul>
 <p>Each of these three binners employs a slightly different strategy. While metaBAT2 simply uses the two previously mentioned metrics, the tetra-nucleotide frequency and the coverage along the contigs, MaxBin2 additionally uses single-copy marker genes to infer the taxonomic origin of contigs. In contrast, CONCOCT also just uses the two aforementioned metrics but first performs a Principal Component Analysis (PCA) on these metrics and uses the PCA results for the clustering.</p>
-<p>The easiest way to run all these three programs is the program metaWRAP <span class="citation" data-cites="Uritskiy2018">[@Uritskiy2018]</span>. metaWRAP is in fact a pipeline that allows you to assemble your contigs, bin them, and subsequently refine the resulting MAGs. However, the pipeline is not very well written and does not contain any strategies to deal with ancient metagenomic sequencing data. Therefore, I prefer to use different pipelines, such as nf-core/mag for the assembly, and only use metaWRAP for binning and bin refinement.</p>
+<p>The easiest way to run all these three programs is the program metaWRAP <span class="citation" data-cites="Uritskiy2018">(<a href="introduction-to-ngs-sequencing.html#ref-Uritskiy2018" role="doc-biblioref">Uritskiy, DiRuggiero, and Taylor 2018</a>)</span>. metaWRAP is in fact a pipeline that allows you to assemble your contigs, bin them, and subsequently refine the resulting MAGs. However, the pipeline is not very well written and does not contain any strategies to deal with ancient metagenomic sequencing data. Therefore, I prefer to use different pipelines, such as nf-core/mag for the assembly, and only use metaWRAP for binning and bin refinement.</p>
 <p>To skip the first steps of metaWRAP and start straight with the binning, we need to create the folder structure and files that metaWRAP expects:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> metawrap/INITIAL_BINNING/2612/work_files</span>
@@ -948,7 +967,7 @@ Answer
 <div id="fig-denovoassembly-metawrap" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="assets/images/chapters/denovo-assembly/MetaWrap_Fig4.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;12.9: Performance of metaWRAP’s bin refinement algorithm compared to other tools. Adapted from <span class="citation" data-cites="Uritskiy2018">@Uritskiy2018</span>, Fig. 4</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;12.9: Performance of metaWRAP’s bin refinement algorithm compared to other tools. Adapted from <span class="citation" data-cites="Uritskiy2018">Uritskiy, DiRuggiero, and Taylor (<a href="introduction-to-ngs-sequencing.html#ref-Uritskiy2018" role="doc-biblioref">2018</a>)</span>, Fig. 4</figcaption>
 </figure>
 </div>
 <p>Using this approach, the authors of metaWRAP could show that they can outperform the individual binning tools and other bin refinement algorithms both regarding the <strong>completeness</strong> and <strong>contamination</strong> that was estimated for the MAGs (<a href="#fig-denovoassembly-metawrap">Figure&nbsp;<span>12.9</span></a>).</p>
@@ -966,7 +985,7 @@ Caution
 <p>If your computer infrastructure cannot provide so much memory, I have prepared the results of metaWRAP’s bin refinement algorithm, <code>metawrap_50_10_bins.stats</code>, which can be found in the folder <code>vol/volume/denovo_assembly</code>.</p>
 </div>
 </div>
-<p>To apply metaWRAP’s bin refinement to the bins that we obtained from metaBAT2 and MaxBin2, we first need to install the software checkM <span class="citation" data-cites="Parks2015">[@Parks2015]</span> that will provide the lineage-specific marker gene catalogue:</p>
+<p>To apply metaWRAP’s bin refinement to the bins that we obtained from metaBAT2 and MaxBin2, we first need to install the software checkM <span class="citation" data-cites="Parks2015">(<a href="introduction-to-ngs-sequencing.html#ref-Parks2015" role="doc-biblioref">Parks et al. 2015</a>)</span> that will provide the lineage-specific marker gene catalogue:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> checkM</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-O</span> checkM/checkm_data_2015_01_16.tar.gz <span class="dt">\</span></span>
@@ -1001,8 +1020,8 @@ The Minimum Information for MAG (MIMAG)
 <li>the <strong>completeness</strong>: how many of the expected lineage-specific single-copy marker genes were present in the MAG?</li>
 <li>the <strong>contamination</strong>: how many of the expected lineage-specific single-copy marker genes were present more than once in the MAG?</li>
 </ul>
-<p>These metric is usually calculated using the marker-gene catalogue of checkM <span class="citation" data-cites="Parks2015">[@Parks2015]</span>, also if there are other estimates from other tools such as BUSCO <span class="citation" data-cites="Manni2021">[@Manni2021]</span>, GUNC <span class="citation" data-cites="Orakov2021">[@Orakov2021]</span> or checkM2 <span class="citation" data-cites="Chklovski2022">[@Chklovski2022]</span>.</p>
-<p>Depending on the estimates on completeness and contamination plus the presence of RNA genes, MAGs are assigned to the quality category following the Minimum Information for MAG criteria <span class="citation" data-cites="Bowers2017">[@Bowers2017]</span> You can find the overview <a href="https://www.nature.com/articles/nbt.3893/tables/1">here</a>.</p>
+<p>These metric is usually calculated using the marker-gene catalogue of checkM <span class="citation" data-cites="Parks2015">(<a href="introduction-to-ngs-sequencing.html#ref-Parks2015" role="doc-biblioref">Parks et al. 2015</a>)</span>, also if there are other estimates from other tools such as BUSCO <span class="citation" data-cites="Manni2021">(<a href="introduction-to-ngs-sequencing.html#ref-Manni2021" role="doc-biblioref">Manni et al. 2021</a>)</span>, GUNC <span class="citation" data-cites="Orakov2021">(<a href="introduction-to-ngs-sequencing.html#ref-Orakov2021" role="doc-biblioref">Orakov et al. 2021</a>)</span> or checkM2 <span class="citation" data-cites="Chklovski2022">(<a href="introduction-to-ngs-sequencing.html#ref-Chklovski2022" role="doc-biblioref">Chklovski et al. 2022</a>)</span>.</p>
+<p>Depending on the estimates on completeness and contamination plus the presence of RNA genes, MAGs are assigned to the quality category following the Minimum Information for MAG criteria <span class="citation" data-cites="Bowers2017">(<a href="introduction-to-ngs-sequencing.html#ref-Bowers2017" role="doc-biblioref">Bowers et al. 2017</a>)</span> You can find the overview <a href="https://www.nature.com/articles/nbt.3893/tables/1">here</a>.</p>
 </div>
 </div>
 <p>As these two steps will run rather long and need a large amount of memory and disk space, I have provided the results of metaWRAP’s bin refinement. You can find the file here: <code>/vol/volume/denovo_assembly/metawrap_50_10_bins.stats</code>. Be aware that these results are based on the bin refinement of the results of three binning tools and include CONCOCT.</p>
@@ -1053,12 +1072,12 @@ Answer
 <li>NCBI Taxonomy</li>
 <li>GTDB</li>
 </ul>
-<p>As for any task that involves the alignment of sequences against a reference database, the chosen reference database should fit the sequences you are searching for. If your reference database does not capture the diversity of your samples, you will not be able to assign a subset of the contigs. There is also a trade-off between a large reference database that contains all sequences and its memory requirement. <span class="citation" data-cites="Wright2023">@Wright2023</span> elaborated on this quite extensively when comparing Kraken2 against MetaPhlAn.</p>
-<p>While all of these tools can do the job, I typically prefer to use the program MMSeqs2 <span class="citation" data-cites="Steinegger2017">[@Steinegger2017]</span> because it comes along with a very fast algorithm based on aminoacid sequence alignment and implements a lowest common ancestor (LCA) algorithm (<a href="#fig-denovoassembly-mmseqs2">Figure&nbsp;<span>12.10</span></a>). Recently, they implemented a <em>taxonomy</em> workflow <span class="citation" data-cites="Mirdita2021">[@Mirdita2021]</span> that allows to efficiently assign contigs to taxons. Luckily, it comes with multiple pre-computed reference databases, such as the GTDB v207 reference database <span class="citation" data-cites="Parks2020">[@Parks2020]</span>, and therefore it is even more accessible for users.</p>
+<p>As for any task that involves the alignment of sequences against a reference database, the chosen reference database should fit the sequences you are searching for. If your reference database does not capture the diversity of your samples, you will not be able to assign a subset of the contigs. There is also a trade-off between a large reference database that contains all sequences and its memory requirement. <span class="citation" data-cites="Wright2023">Wright, Comeau, and Langille (<a href="introduction-to-ngs-sequencing.html#ref-Wright2023" role="doc-biblioref">2023</a>)</span> elaborated on this quite extensively when comparing Kraken2 against MetaPhlAn.</p>
+<p>While all of these tools can do the job, I typically prefer to use the program MMSeqs2 <span class="citation" data-cites="Steinegger2017">(<a href="introduction-to-ngs-sequencing.html#ref-Steinegger2017" role="doc-biblioref">Steinegger and Söding 2017</a>)</span> because it comes along with a very fast algorithm based on aminoacid sequence alignment and implements a lowest common ancestor (LCA) algorithm (<a href="#fig-denovoassembly-mmseqs2">Figure&nbsp;<span>12.10</span></a>). Recently, they implemented a <em>taxonomy</em> workflow <span class="citation" data-cites="Mirdita2021">(<a href="introduction-to-ngs-sequencing.html#ref-Mirdita2021" role="doc-biblioref">Mirdita et al. 2021</a>)</span> that allows to efficiently assign contigs to taxons. Luckily, it comes with multiple pre-computed reference databases, such as the GTDB v207 reference database <span class="citation" data-cites="Parks2020">(<a href="introduction-to-ngs-sequencing.html#ref-Parks2020" role="doc-biblioref">Parks et al. 2020</a>)</span>, and therefore it is even more accessible for users.</p>
 <div id="fig-denovoassembly-mmseqs2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="assets/images/chapters/denovo-assembly/MMSeqs2_classify_Fig1.jpeg" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;12.10: Scheme of the <em>taxonomy</em> workflow implemented into MMSeqs2. Adapted from <span class="citation" data-cites="Mirdita2021">@Mirdita2021</span>, Fig. 1.</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;12.10: Scheme of the <em>taxonomy</em> workflow implemented into MMSeqs2. Adapted from <span class="citation" data-cites="Mirdita2021">Mirdita et al. (<a href="introduction-to-ngs-sequencing.html#ref-Mirdita2021" role="doc-biblioref">2021</a>)</span>, Fig. 1.</figcaption>
 </figure>
 </div>
 <div class="callout callout-style-default callout-caution callout-titled">
@@ -1134,7 +1153,7 @@ Answer
 <section id="taxonomic-assignment-of-mags" class="level3" data-number="12.2.7">
 <h3 data-number="12.2.7" class="anchored" data-anchor-id="taxonomic-assignment-of-mags"><span class="header-section-number">12.2.7</span> Taxonomic assignment of MAGs</h3>
 <p>MMSeqs2’s <em>taxonomy</em> workflow is very useful to classify all contigs taxonomically. However, how would we determine which species we reconstructed by binning our contigs?</p>
-<p>The simplest approach would be that we could summarise MMSeqs2’s taxonomic assignments of all contigs of a MAG and then determine which lineage is the most frequent one. Although this would work in general, there is another approach that is more sophisticated: GTDB toolkit <span class="citation" data-cites="Chaumeil2020">[GTDBTK, @Chaumeil2020]</span>.</p>
+<p>The simplest approach would be that we could summarise MMSeqs2’s taxonomic assignments of all contigs of a MAG and then determine which lineage is the most frequent one. Although this would work in general, there is another approach that is more sophisticated: GTDB toolkit <span class="citation" data-cites="Chaumeil2020">(GTDBTK, <a href="introduction-to-ngs-sequencing.html#ref-Chaumeil2020" role="doc-biblioref">Chaumeil et al. 2020</a>)</span>.</p>
 <p>GTDBTK performs three steps to assign a MAG to a taxonomic lineage:</p>
 <ol type="1">
 <li><strong>Lineage identification</strong> based on single-copy marker genes using Hidden Markov Models (HMMs)</li>
@@ -1216,14 +1235,14 @@ Answer
 <section id="evaluating-the-amount-of-ancient-dna-damage" class="level3" data-number="12.2.8">
 <h3 data-number="12.2.8" class="anchored" data-anchor-id="evaluating-the-amount-of-ancient-dna-damage"><span class="header-section-number">12.2.8</span> Evaluating the amount of ancient DNA damage</h3>
 <p>One of the common questions that remain at this point of our analysis is whether the contigs that we assembled show evidence for the presence of ancient DNA damage. If yes, we could argue that these microbes are indeed ancient, particularly when their DNA fragment length distribution is rather short, too.</p>
-<p>MAGs typically consist of either tens or hundreds of contigs. For this case, many of the commonly used tools for quantifying the amount of ancient DNA damage, such as damageprofiler <span class="citation" data-cites="Neukamm2021">[@Neukamm2021]</span> or mapDamage2 <span class="citation" data-cites="Jonsson2013">[@Jonsson2013]</span>, are not very well suited because they would require us to manually check each of their generated “smiley plots”, which visualise the amount of C-to-T substitutions at the end of reads.</p>
+<p>MAGs typically consist of either tens or hundreds of contigs. For this case, many of the commonly used tools for quantifying the amount of ancient DNA damage, such as damageprofiler <span class="citation" data-cites="Neukamm2021">(<a href="introduction-to-ngs-sequencing.html#ref-Neukamm2021" role="doc-biblioref">Neukamm, Peltzer, and Nieselt 2021</a>)</span> or mapDamage2 <span class="citation" data-cites="Jonsson2013">(<a href="introduction-to-ngs-sequencing.html#ref-Jonsson2013" role="doc-biblioref">Jónsson et al. 2013</a>)</span>, are not very well suited because they would require us to manually check each of their generated “smiley plots”, which visualise the amount of C-to-T substitutions at the end of reads.</p>
 <div id="fig-denovoassembly-pydamage" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="assets/images/chapters/denovo-assembly/Pydamage_NZ_JHCB02000011.1.png" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">Figure&nbsp;12.11: Overview of the model comparison performed by pyDamage. The green line represents the null model, i.e.&nbsp;the absence of ancient DNA damage, while the orange line represents the alternative model, i.e.&nbsp;the presence of ancient DNA damage.</figcaption>
 </figure>
 </div>
-<p>Instead, we will use the program pyDamage <span class="citation" data-cites="Borry2021">[@Borry2021]</span> that was written with the particular use-case of metagenome-assembled contigs in mind. Although pyDamage can visualise the amount of C-to-T substitutions at the 5’ end of reads, it goes a step further and fits two models upon the substitution frequency (<a href="#fig-denovoassembly-pydamage">Figure&nbsp;<span>12.11</span></a>). The null hypothesis is that the observed distribution of C-to-T substitutions at the 5’ end of reads reflects a flat line, i.e.&nbsp;a case when no ancient DNA damage is present. The alternative model assumes that the distribution resembles an exponential decay, i.e.&nbsp;a case when ancient DNA damage is present. By comparing the fit of these two models to the observed data for each contig, pyDamage can quickly identify contigs that are likely of ancient origin without requiring the user to inspect the plots visually.</p>
+<p>Instead, we will use the program pyDamage <span class="citation" data-cites="Borry2021">(<a href="introduction-to-ngs-sequencing.html#ref-Borry2021" role="doc-biblioref">Borry et al. 2021</a>)</span> that was written with the particular use-case of metagenome-assembled contigs in mind. Although pyDamage can visualise the amount of C-to-T substitutions at the 5’ end of reads, it goes a step further and fits two models upon the substitution frequency (<a href="#fig-denovoassembly-pydamage">Figure&nbsp;<span>12.11</span></a>). The null hypothesis is that the observed distribution of C-to-T substitutions at the 5’ end of reads reflects a flat line, i.e.&nbsp;a case when no ancient DNA damage is present. The alternative model assumes that the distribution resembles an exponential decay, i.e.&nbsp;a case when ancient DNA damage is present. By comparing the fit of these two models to the observed data for each contig, pyDamage can quickly identify contigs that are likely of ancient origin without requiring the user to inspect the plots visually.</p>
 <p>We can run pyDamage directly on the alignment data in BAM format:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pydamage</span> analyze <span class="at">-w</span> 30 <span class="at">-p</span> 14 alignment/2612.sorted.calmd.bam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1266,7 +1285,7 @@ Answer
 <p>While it is very interesting to reconstruct the metagenome-assembled genomes from contigs and speculate about the evolution of a certain taxon, this does not always help when studying the ecology of a microbiome. Studying the ecology of a microbiome means to understand which taxa are present in an environment, what type of community do they form, what kind of natural products do they produce etc.?</p>
 <p>With the lack of any data from culture isolates, it is rather difficult to discriminate from which species a reconstructed gene sequence is coming from, particularly when the contigs are short. Many microbial species exchange genes among each other via horizontal gene transfer which leads to multiple copies of a gene to be present in our metagenome and increases the level of difficulty further.</p>
 <p>Because of this, many researchers tend to annotate all genes of a MAGs and compare the presence and absence of these genes across other genomes that were taxonomically assigned to the same taxon. This analysis, called pan-genome analysis, allows us to estimate the diversity of a microbial species with respect to their repertoire of protein-coding genes.</p>
-<p>One of the most commonly used annotation tools for MAGs is Prokka <span class="citation" data-cites="Seemann2014">[@Seemann2014]</span>, although it has recently been challenged by Bakta <span class="citation" data-cites="Schwengers2021">[@Schwengers2021]</span>. The latter provides the same functionality as Prokka but incorporates more up-to-date reference databases for the annotation. Therefore, the scientific community is slowly shifting to Bakta.</p>
+<p>One of the most commonly used annotation tools for MAGs is Prokka <span class="citation" data-cites="Seemann2014">(<a href="introduction-to-ngs-sequencing.html#ref-Seemann2014" role="doc-biblioref">Seemann 2014</a>)</span>, although it has recently been challenged by Bakta <span class="citation" data-cites="Schwengers2021">(<a href="introduction-to-ngs-sequencing.html#ref-Schwengers2021" role="doc-biblioref">Schwengers et al. 2021</a>)</span>. The latter provides the same functionality as Prokka but incorporates more up-to-date reference databases for the annotation. Therefore, the scientific community is slowly shifting to Bakta.</p>
 <p>Next to returning information on the protein-coding genes, Prokka also returns the annotation of RNA genes (tRNAs and rRNAs), which will help us to evaluate the quality of MAGs regarding the MIMAG criteria.</p>
 <p>For this practical course, we will use Prokka and we will focus on annotating the MAG <code>bin.3.fa</code> that we reconstructed from the sample 2612.</p>
 <div class="cell">
@@ -1335,6 +1354,95 @@ Cautionary note - sequencing depth
 </div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-Almeida2021" class="csl-entry" role="listitem">
+Almeida, Alexandre, Stephen Nayfach, Miguel Boland, Francesco Strozzi, Martin Beracochea, Zhou Jason Shi, Katherine S. Pollard, et al. 2021. <span>“A Unified Catalog of 204,938 Reference Genomes from the Human Gut Microbiome.”</span> <em>Nature Biotechnology</em> 39 (1): 105–14. <a href="https://doi.org/10.1038/s41587-020-0603-3">https://doi.org/10.1038/s41587-020-0603-3</a>.
+</div>
+<div id="ref-Alneberg2014" class="csl-entry" role="listitem">
+Alneberg, Johannes, Brynjar Smári Bjarnason, Ino de Bruijn, Melanie Schirmer, Joshua Quick, Umer Z. Ijaz, Leo Lahti, Nicholas J. Loman, Anders F. Andersson, and Christopher Quince. 2014. <span>“Binning Metagenomic Contigs by Coverage and Composition.”</span> <em>Nature Methods</em> 11 (11): 1144–46. <a href="https://doi.org/10.1038/nmeth.3103">https://doi.org/10.1038/nmeth.3103</a>.
+</div>
+<div id="ref-Borry2021" class="csl-entry" role="listitem">
+Borry, Maxime, Alexander Hübner, Adam B. Rohrlach, and Christina Warinner. 2021. <span>“<span>PyDamage</span>: Automated Ancient Damage Identification and Estimation for Contigs in Ancient <span>DNA</span> de Novo Assembly.”</span> <em>PeerJ</em> 9: e11845. <a href="https://doi.org/10.7717/peerj.11845">https://doi.org/10.7717/peerj.11845</a>.
+</div>
+<div id="ref-Bowers2017" class="csl-entry" role="listitem">
+Bowers, Robert M., Nikos C. Kyrpides, Ramunas Stepanauskas, Miranda Harmon-Smith, Devin Doud, T. B. K. Reddy, Frederik Schulz, et al. 2017. <span>“Minimum Information about a Single Amplified Genome (<span>MISAG</span>) and a Metagenome-Assembled Genome (<span>MIMAG</span>) of Bacteria and Archaea.”</span> <em>Nature Biotechnology</em> 35 (8): 725–31. <a href="https://doi.org/10.1038/nbt.3893">https://doi.org/10.1038/nbt.3893</a>.
+</div>
+<div id="ref-Chaumeil2020" class="csl-entry" role="listitem">
+Chaumeil, Pierre-Alain, Aaron J Mussig, Philip Hugenholtz, and Donovan H Parks. 2020. <span>“<span>GTDB-Tk</span>: A Toolkit to Classify Genomes with the <span>Genome Taxonomy Database</span>.”</span> <em>Bioinformatics</em> 36 (6): 1925–27. <a href="https://doi.org/10.1093/bioinformatics/btz848">https://doi.org/10.1093/bioinformatics/btz848</a>.
+</div>
+<div id="ref-Chen2018" class="csl-entry" role="listitem">
+Chen, Shifu, Yanqing Zhou, Yaru Chen, and Jia Gu. 2018. <span>“Fastp: An Ultra-Fast All-in-One <span>FASTQ</span> Preprocessor.”</span> <em>Bioinformatics</em> 34 (17): i884–90. <a href="https://doi.org/10.1093/bioinformatics/bty560">https://doi.org/10.1093/bioinformatics/bty560</a>.
+</div>
+<div id="ref-Chklovski2022" class="csl-entry" role="listitem">
+Chklovski, Alex, Donovan H. Parks, Ben J. Woodcroft, and Gene W. Tyson. 2022. <span>“<span>CheckM2</span>: A Rapid, Scalable and Accurate Tool for Assessing Microbial Genome Quality Using Machine Learning.”</span> <span>bioRxiv</span>. <a href="https://doi.org/10.1101/2022.07.11.499243">https://doi.org/10.1101/2022.07.11.499243</a>.
+</div>
+<div id="ref-Jonsson2013" class="csl-entry" role="listitem">
+Jónsson, Hákon, Aurélien Ginolhac, Mikkel Schubert, Philip L. F. Johnson, and Ludovic Orlando. 2013. <span>“<span class="nocase">mapDamage2</span>.0: Fast Approximate <span>Bayesian</span> Estimates of Ancient <span>DNA</span> Damage Parameters.”</span> <em>Bioinformatics</em> 29 (13): 1682–84. <a href="https://doi.org/10.1093/bioinformatics/btt193">https://doi.org/10.1093/bioinformatics/btt193</a>.
+</div>
+<div id="ref-Kang2019" class="csl-entry" role="listitem">
+Kang, Dongwan D., Feng Li, Edward Kirton, Ashleigh Thomas, Rob Egan, Hong An, and Zhong Wang. 2019. <span>“<span>MetaBAT</span> 2: An Adaptive Binning Algorithm for Robust and Efficient Genome Reconstruction from Metagenome Assemblies.”</span> <em>PeerJ</em> 7 (July): e7359. <a href="https://doi.org/10.7717/peerj.7359">https://doi.org/10.7717/peerj.7359</a>.
+</div>
+<div id="ref-Klapper2023" class="csl-entry" role="listitem">
+Klapper, Martin, Alexander Hübner, Anan Ibrahim, Ina Wasmuth, Maxime Borry, Veit G. Haensch, Shuaibing Zhang, et al. 2023. <span>“Natural Products from Reconstructed Bacterial Genomes of the <span>Middle</span> and <span>Upper Paleolithic</span>.”</span> <em>Science</em> 380 (6645): 619–24. <a href="https://doi.org/10.1126/science.adf5300">https://doi.org/10.1126/science.adf5300</a>.
+</div>
+<div id="ref-Krakau2022" class="csl-entry" role="listitem">
+Krakau, Sabrina, Daniel Straub, Hadrien Gourlé, Gisela Gabernet, and Sven Nahnsen. 2022. <span>“Nf-Core/Mag: A Best-Practice Pipeline for Metagenome Hybrid Assembly and Binning.”</span> <em>NAR Genomics and Bioinformatics</em> 4 (1): lqac007. <a href="https://doi.org/10.1093/nargab/lqac007">https://doi.org/10.1093/nargab/lqac007</a>.
+</div>
+<div id="ref-Leggett2013" class="csl-entry" role="listitem">
+Leggett, Richard M., Ricardo H. Ramirez-Gonzalez, Walter Verweij, Cintia G. Kawashima, Zamin Iqbal, Jonathan D. G. Jones, Mario Caccamo, and Daniel MacLean. 2013. <span>“Identifying and <span>Classifying Trait Linked Polymorphisms</span> in <span>Non-Reference Species</span> by <span>Walking Coloured</span> de <span>Bruijn Graphs</span>.”</span> <em>PLOS ONE</em> 8 (3): e60058. <a href="https://doi.org/10.1371/journal.pone.0060058">https://doi.org/10.1371/journal.pone.0060058</a>.
+</div>
+<div id="ref-LiMegahit2015" class="csl-entry" role="listitem">
+Li, Dinghua, Chi-Man Liu, Ruibang Luo, Kunihiko Sadakane, and Tak-Wah Lam. 2015. <span>“<span>MEGAHIT</span>: An Ultra-Fast Single-Node Solution for Large and Complex Metagenomics Assembly via Succinct de <span>Bruijn</span> Graph.”</span> <em>Bioinformatics</em> 31 (10): 1674–76. <a href="https://doi.org/10.1093/bioinformatics/btv033">https://doi.org/10.1093/bioinformatics/btv033</a>.
+</div>
+<div id="ref-Maixner2021" class="csl-entry" role="listitem">
+Maixner, Frank, Mohamed S. Sarhan, Kun D. Huang, Adrian Tett, Alexander Schoenafinger, Stefania Zingale, Aitor Blanco-Míguez, et al. 2021. <span>“Hallstatt Miners Consumed Blue Cheese and Beer During the <span>Iron Age</span> and Retained a Non-<span>Westernized</span> Gut Microbiome Until the <span>Baroque</span> Period.”</span> <em>Current Biology</em> 31 (23): 5149–5162.e6. <a href="https://doi.org/10.1016/j.cub.2021.09.031">https://doi.org/10.1016/j.cub.2021.09.031</a>.
+</div>
+<div id="ref-Manni2021" class="csl-entry" role="listitem">
+Manni, Mosè, Matthew R Berkeley, Mathieu Seppey, Felipe A Simão, and Evgeny M Zdobnov. 2021. <span>“<span>BUSCO Update</span>: <span>Novel</span> and <span>Streamlined Workflows</span> Along with <span>Broader</span> and <span>Deeper Phylogenetic Coverage</span> for <span>Scoring</span> of <span>Eukaryotic</span>, <span>Prokaryotic</span>, and <span>Viral Genomes</span>.”</span> <em>Molecular Biology and Evolution</em> 38 (10): 4647–54. <a href="https://doi.org/10.1093/molbev/msab199">https://doi.org/10.1093/molbev/msab199</a>.
+</div>
+<div id="ref-Meyer2022" class="csl-entry" role="listitem">
+Meyer, Fernando, Adrian Fritz, Zhi-Luo Deng, David Koslicki, Till Robin Lesker, Alexey Gurevich, Gary Robertson, et al. 2022. <span>“Critical <span>Assessment</span> of <span>Metagenome Interpretation</span>: The Second Round of Challenges.”</span> <em>Nature Methods</em> 19 (4): 429–40. <a href="https://doi.org/10.1038/s41592-022-01431-4">https://doi.org/10.1038/s41592-022-01431-4</a>.
+</div>
+<div id="ref-Mirdita2021" class="csl-entry" role="listitem">
+Mirdita, M, M Steinegger, F Breitwieser, J Söding, and E Levy Karin. 2021. <span>“Fast and Sensitive Taxonomic Assignment to Metagenomic Contigs.”</span> <em>Bioinformatics</em> 37 (18): 3029–31. <a href="https://doi.org/10.1093/bioinformatics/btab184">https://doi.org/10.1093/bioinformatics/btab184</a>.
+</div>
+<div id="ref-Neukamm2021" class="csl-entry" role="listitem">
+Neukamm, Judith, Alexander Peltzer, and Kay Nieselt. 2021. <span>“<span>DamageProfiler</span>: Fast Damage Pattern Calculation for Ancient <span>DNA</span>.”</span> <em>Bioinformatics</em> 37 (20): 3652–53. <a href="https://doi.org/10.1093/bioinformatics/btab190">https://doi.org/10.1093/bioinformatics/btab190</a>.
+</div>
+<div id="ref-Nurk2017" class="csl-entry" role="listitem">
+Nurk, Sergey, Dmitry Meleshko, Anton Korobeynikov, and Pavel A. Pevzner. 2017. <span>“<span class="nocase">metaSPAdes</span>: A New Versatile Metagenomic Assembler.”</span> <em>Genome Research</em> 27 (5): 824–34. <a href="https://doi.org/10.1101/gr.213959.116">https://doi.org/10.1101/gr.213959.116</a>.
+</div>
+<div id="ref-Orakov2021" class="csl-entry" role="listitem">
+Orakov, Askarbek, Anthony Fullam, Luis Pedro Coelho, Supriya Khedkar, Damian Szklarczyk, Daniel R. Mende, Thomas S. B. Schmidt, and Peer Bork. 2021. <span>“<span>GUNC</span>: Detection of Chimerism and Contamination in Prokaryotic Genomes.”</span> <em>Genome Biology</em> 22 (1): 178. <a href="https://doi.org/10.1186/s13059-021-02393-0">https://doi.org/10.1186/s13059-021-02393-0</a>.
+</div>
+<div id="ref-Orlando2013" class="csl-entry" role="listitem">
+Orlando, Ludovic, Aurélien Ginolhac, Guojie Zhang, Duane Froese, Anders Albrechtsen, Mathias Stiller, Mikkel Schubert, et al. 2013. <span>“Recalibrating <span>Equus</span> Evolution Using the Genome Sequence of an Early <span>Middle Pleistocene</span> Horse.”</span> <em>Nature</em> 499 (7456): 74–78. <a href="https://doi.org/10.1038/nature12323">https://doi.org/10.1038/nature12323</a>.
+</div>
+<div id="ref-Parks2020" class="csl-entry" role="listitem">
+Parks, Donovan H., Maria Chuvochina, Pierre-Alain Chaumeil, Christian Rinke, Aaron J. Mussig, and Philip Hugenholtz. 2020. <span>“A Complete Domain-to-Species Taxonomy for <span>Bacteria</span> and <span>Archaea</span>.”</span> <em>Nature Biotechnology</em> 38 (9): 1079–86. <a href="https://doi.org/10.1038/s41587-020-0501-8">https://doi.org/10.1038/s41587-020-0501-8</a>.
+</div>
+<div id="ref-Parks2015" class="csl-entry" role="listitem">
+Parks, Donovan H., Michael Imelfort, Connor T. Skennerton, Philip Hugenholtz, and Gene W. Tyson. 2015. <span>“<span>CheckM</span>: Assessing the Quality of Microbial Genomes Recovered from Isolates, Single Cells, and Metagenomes.”</span> <em>Genome Research</em> 25 (7): 1043–55. <a href="https://doi.org/10.1101/gr.186072.114">https://doi.org/10.1101/gr.186072.114</a>.
+</div>
+<div id="ref-Schwengers2021" class="csl-entry" role="listitem">
+Schwengers, Oliver, Lukas Jelonek, Marius Alfred Dieckmann, Sebastian Beyvers, Jochen Blom, and AlexanderYR 2021 Goesmann. 2021. <span>“Bakta: Rapid and Standardized Annotation of Bacterial Genomes via Alignment-Free Sequence Identification.”</span> <em>Microbial Genomics</em> 7 (11): 000685. <a href="https://doi.org/10.1099/mgen.0.000685">https://doi.org/10.1099/mgen.0.000685</a>.
+</div>
+<div id="ref-Seemann2014" class="csl-entry" role="listitem">
+Seemann, Torsten. 2014. <span>“Prokka: Rapid Prokaryotic Genome Annotation.”</span> <em>Bioinformatics</em> 30 (14): 2068–69. <a href="https://doi.org/10.1093/bioinformatics/btu153">https://doi.org/10.1093/bioinformatics/btu153</a>.
+</div>
+<div id="ref-Steinegger2017" class="csl-entry" role="listitem">
+Steinegger, Martin, and Johannes Söding. 2017. <span>“<span>MMseqs2</span> Enables Sensitive Protein Sequence Searching for the Analysis of Massive Data Sets.”</span> <em>Nature Biotechnology</em> 35 (11): 1026–28. <a href="https://doi.org/10.1038/nbt.3988">https://doi.org/10.1038/nbt.3988</a>.
+</div>
+<div id="ref-Uritskiy2018" class="csl-entry" role="listitem">
+Uritskiy, Gherman V., Jocelyne DiRuggiero, and James Taylor. 2018. <span>“<span>MetaWRAP</span>a Flexible Pipeline for Genome-Resolved Metagenomic Data Analysis.”</span> <em>Microbiome</em> 6 (1): 158. <a href="https://doi.org/10.1186/s40168-018-0541-1">https://doi.org/10.1186/s40168-018-0541-1</a>.
+</div>
+<div id="ref-Wright2023" class="csl-entry" role="listitem">
+Wright, Robyn J., Andrè M. Comeau, and Morgan G. I. Langille. 2023. <span>“From Defaults to Databases: Parameter and Database Choice Dramatically Impact the Performance of Metagenomic Taxonomic Classification Tools.”</span> <em>Microbial Genomics</em> 9 (3): 000949. <a href="https://doi.org/10.1099/mgen.0.000949">https://doi.org/10.1099/mgen.0.000949</a>.
+</div>
+<div id="ref-WuMaxbin2016" class="csl-entry" role="listitem">
+Wu, Yu-Wei, Blake A. Simmons, and Steven W. Singer. 2016. <span>“<span>MaxBin</span> 2.0: An Automated Binning Algorithm to Recover Genomes from Multiple Metagenomic Datasets.”</span> <em>Bioinformatics</em> 32 (4): 605–7. <a href="https://doi.org/10.1093/bioinformatics/btv638">https://doi.org/10.1093/bioinformatics/btv638</a>.
+</div>
+</div>
 </section>
 </section>
 
