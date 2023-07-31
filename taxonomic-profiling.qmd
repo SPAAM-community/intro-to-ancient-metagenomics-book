@@ -19,7 +19,7 @@ In this chapter, we're going to look at taxonomic profiling, or in other words, 
 
 Though there are many algorithms, and even more different tools available to perform taxonomic profiling, the general idea remains the same (@fig-overview).
 
-After cleaning up the sequencing data, generally saved as `fastq` files, a **taxonomic profiler** is used to compare the sequenced DNA to a reference database of sequences from known organisms, in order to generate a taxonomic profile of all organisms identified in a sample (@fig-overview)
+After cleaning up the sequencing data, generally saved as FASTQ files, a **taxonomic profiler** is used to compare the sequenced DNA to a reference database of sequences from known organisms, in order to generate a taxonomic profile of all organisms identified in a sample (@fig-overview)
 
 ![General overview of a taxonomic profiling analysis workflow](assets/images/chapters/taxonomic-profiling/how_to_analyze.png){#fig-overview}
 
@@ -31,26 +31,21 @@ Because different organisms can possess the same DNA, especially when looking at
 
 ![Different species can share the same DNA sequence](assets/images/chapters/taxonomic-profiling/ambiguity.png){#fig-ambiguity}
 
-By leveraging an algorithm known a the [Lowest Common Ancestor](https://en.wikipedia.org/wiki/Lowest_common_ancestor) (LCA), and the taxonomic tree of all known species, ambiguities are going to be resolved by assigning a higher, less precise, taxonomic rank to ambiguous matches(@fig-lca).
+By leveraging an algorithm known as the [Lowest Common Ancestor](https://en.wikipedia.org/wiki/Lowest_common_ancestor) (LCA), and the taxonomic tree of all known species, ambiguities are going to be resolved by assigning a higher, less precise, taxonomic rank to ambiguous matches(@fig-lca).
 
-![the LCA algorithm, a way to resolve these ambiguities](assets/images/chapters/taxonomic-profiling/lca.png){#fig-lca}
+![A diagram of the LCA algorithm, a way to resolve these ambiguities](assets/images/chapters/taxonomic-profiling/lca.png){#fig-lca}
 
-## What we're going to cover today
+## Chapter Overview
 
 Today, we're going to use the following tools:
 
-- fastp (@chenFastpUltrafastAllinone2018) for sequencing data cleaning 
-- metaphlan (@segata2012metagenomic), for taxonomic profiling 
-- krona (@ondovInteractiveMetagenomicVisualization2011) and pavian (@breitwieserPavianInteractiveAnalysis2016) for the interactive exploration of the taxonomic profiles
-- curateMetagenomicData (@pasolliAccessibleCuratedMetagenomic2017) for retrieving modern comparison data
-- Python, pandas (@rebackPandasdevPandasPandas2022), [plotnine](https://plotnine.readthedocs.io/en/stable/) , and scikit-bio (@scikit-bioScikitbioBioinformaticsLibrary2022) to perform exploratory data analysis and a bit of microbial ecology.
+- fastp [@chenFastpUltrafastAllinone2018] for sequencing data cleaning 
+- MetaPhlAn [@segata2012metagenomic], for taxonomic profiling 
+- Krona [@ondovInteractiveMetagenomicVisualization2011] and Pavian [@breitwieserPavianInteractiveAnalysis2016] for the interactive exploration of the taxonomic profiles
+- curatedMetagenomicData [@pasolliAccessibleCuratedMetagenomic2017] for retrieving modern comparison data
+- Python, pandas [@rebackPandasdevPandasPandas2022], [plotnine](https://plotnine.readthedocs.io/en/stable/) , and scikit-bio [@scikit-bioScikitbioBioinformaticsLibrary2022] to perform exploratory data analysis and a bit of microbial ecology
 
-
-::: {.callout-warning}
-We highly recommend viewing this walkthrough via the Jupyter notebook above!
-The output of commands on the website for this walkthrough are displayed in their
-own code blocks - be wary of what you copy-paste!
-:::
+to explore a toy dataset that has already been prepared for you.
 
 ::: {.callout-note collapse="true"}
 ## Preamble: what has been done to generate this toy dataset
@@ -88,58 +83,54 @@ for f in glob.glob("../data/raw/*"):
     subsample(f, outdir)
 ```
 
-    seqtk sample -s42 ../data/raw/ERR5766177_PE.mapped.hostremoved.fwd.fq.gz 1000000 >
-    ../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq
-    seqtk sample -s42 ../data/raw/ERR5766177_PE.mapped.hostremoved.rev.fq.gz 1000000 >
-    ../data/subsampled/ERR5766177_PE.mapped.hostremoved.rev.fq_subsample_1000000.fastq
-
-Finally, we compress all files to gzip format
-
-```python
-! gzip -f ../data/subsampled/*.fastq
+::: {.callout-tip collapse="true" title='Expand to see command output'}
+```
+seqtk sample -s42 ../data/raw/ERR5766177_PE.mapped.hostremoved.fwd.fq.gz 1000000 >
+../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq
+seqtk sample -s42 ../data/raw/ERR5766177_PE.mapped.hostremoved.rev.fq.gz 1000000 >
+../data/subsampled/ERR5766177_PE.mapped.hostremoved.rev.fq_subsample_1000000.fastq
 ```
 :::
 
-## Hands on introduction to ancient microbiome analysis
+Finally, we compress all files to gzip format
 
-Author: Maxime Borry  
-Date: 12/08/2021
-
-In this tutorial, we're going to go through the steps necessary to:
-
-- generate a taxonomic profile table with [metaphlan v3.0](https://github.com/biobakery/MetaPhlAn)
-- have a look at metaphlan results with [Pavian](https://github.com/fbreitwieser/pavian) and generate a [Krona plot](https://github.com/marbl/Krona/wiki)
-- Compare the diversity of our samples vs the diversity of modern human gut samples
-- Compare the composition of our samples vs modern gut samples, and see where they fit in a lower dimensional space
-
-### Data pre-processing
-
-Before starting to analyze our data, we will need to pre-process them to remove reads mapping to the host genome, here, _Homo sapiens_
-
-To do so, I've used [nf-core/eager](https://github.com/nf-core/eager)
-
-I've already pre-processed the data, and the resulting cleaned files are available in the [data/eager_cleaned](data/eager_cleaned), but the basic eager command to do so is:
-
+```bash
+gzip -f ../data/subsampled/*.fastq
 ```
-nextflow run nf-core/eager -profile <docker/singularity/podman/conda/institute> --input '*_R{1,2}.fastq.gz' \
---fasta 'human_genome.fasta' --hostremoval_input_fastq
+:::
+
+## Data pre-processing
+
+Before starting to analyze our data, we will need to pre-process them to remove reads mapping to the host genome, here, _Homo sapiens_.
+
+To do so, I've used the first steps of the [nf-core/eager](https://github.com/nf-core/eager) pipeline, more information of which can be found in the [Ancient Metagenomic Pipelines](ancient-metagenomic-pipelines.qmd) chapter.
+
+I've already done some pre-processed the data, and the resulting cleaned files are available in the `data/eager_cleaned/` but the basic eager command to do so is:
+
+```bash
+nextflow run nf-core/eager \
+-r 2.4.7 \
+-profile <docker/singularity/podman/conda/institute> \
+--input '*_R{1,2}.fastq.gz' \
+--fasta 'human_genome.fasta' \
+--hostremoval_input_fastq
 ```
 
-### Adapter sequence trimming and low-quality bases trimming
+## Adapter sequence trimming and low-quality bases trimming
 
 Sequencing adapters are small DNA sequences adding prior to DNA sequencing to allow the DNA fragments to attach to the
-sequencing flow cells. Because these adapters could interfere with downtstream analyses, we need to remove them before
+sequencing flow cells (see [Introduction to NGS Sequencing](introduction-to-ngs-sequencing.qmd)). Because these adapters could interfere with downstream analyses, we need to remove them before
 proceeding any further. Furthermore, because the quality of the sequencing is not always optimal, we need to remove bases
 of lower sequencing quality to might lead to spurious results in downstream analyses.
 
 To perform both of these tasks, we'll use the program [fastp](https://github.com/OpenGene/fastp).
 
-The following command gets you the help of fastp
+The following command gets you the help of fastp (the `--help` option is a common option in command-line tools that displays a list of available options and their descriptions).
 
 ```bash
 fastp -h
 ```
-::: {.callout-tip collapse="true" title='expand to see command output'}
+::: {.callout-tip collapse="true" title='Expand to see command output'}
     option needs value: --html
     usage: fastp [options] ...
     options:
@@ -263,7 +254,7 @@ fastp -h
       -?, --help                           print this message
 :::
 
-Here we use fastp to preprocess a pair of FASTQ files. The code specifies the input files, merges the paired-end reads on their overlaps, removes duplicate reads, and generates JSON and HTML reports. The output files are saved in the ../results/fastp/ directory.
+Here we use fastp to preprocess a pair of FASTQ files. The code specifies the input files, merges the paired-end reads on their overlaps, removes duplicate reads, and generates JSON and HTML reports. The output files are saved in the `../results/fastp/ directory`.
 
 ```bash
 fastp \
@@ -276,7 +267,7 @@ fastp \
     --json ../results/fastp/ERR5766177.fastp.json \
     --html ../results/fastp/ERR5766177.fastp.html \
 ```
-::: {.callout-tip collapse="true" title='expand to see command output'}
+::: {.callout-tip collapse="true" title='Expand to see command output'}
     Read1 before filtering:
     total reads: 1000000
     total bases: 101000000
@@ -324,14 +315,14 @@ fastp \
     fastp v0.23.2, time used: 11 seconds
 :::
 
-##### Taxonomic profiling with Metaphlan
+## Taxonomic profiling with Metaphlan
 
-MetaPhlAn is a computational tool for profiling the composition of microbial communities from metagenomic shotgun sequencing data. The --help option is a common option in command-line tools that displays a list of available options and their descriptions.
+MetaPhlAn is a computational tool for profiling the composition of microbial communities from metagenomic shotgun sequencing data. 
 
 ```bash
-! metaphlan  --help
+metaphlan  --help
 ```
-::: {.callout-tip collapse="true" title='expand to see command output'}
+::: {.callout-tip collapse="true" title='Expand to see command output'}
     usage: metaphlan --input_type {fastq,fasta,bowtie2out,sam} [--force]
                      [--bowtie2db METAPHLAN_BOWTIE2_DB] [-x INDEX]
                      [--bt2_ps BowTie2 presets] [--bowtie2_exe BOWTIE2_EXE]
@@ -575,7 +566,7 @@ MetaPhlAn is a computational tool for profiling the composition of microbial com
       -h, --help            show this help message and exit
 :::
 
-This command uses MetaPhlAn to profile the taxonomic composition of the ERR5766177 metagenomic sample. The input file is specified as a merged FASTQ file, and the output is saved as a text file containing the taxonomic profile. The --bowtie2out option is used to specify the output file for the Bowtie2 alignment, and the --nproc option is used to specify the number of CPUs to use for the analysis.
+The following command uses MetaPhlAn to profile the taxonomic composition of the ERR5766177 metagenomic sample. The input file is specified as a merged FASTQ file, and the output is saved as a text file containing the taxonomic profile. The `--bowtie2out` option is used to specify the output file for the Bowtie2 alignment, and the --nproc option is used to specify the number of CPUs to use for the analysis.
 
 ```bash
 metaphlan ../results/fastp/ERR5766177.merged.fastq.gz  \
@@ -586,14 +577,14 @@ metaphlan ../results/fastp/ERR5766177.merged.fastq.gz  \
 ```
 
 The main results files that we're interested in is located at
-[../results/metaphlan/ERR5766177.metaphlan_profile.txt](../results/metaphlan/ERR5766177.metaphlan_profile.txt)
+`../results/metaphlan/ERR5766177.metaphlan_profile.txt`
 
 It's a tab separated file, with taxons in rows, with their relative abundance in the sample
 
-```python
-! head ../results/metaphlan/ERR5766177.metaphlan_profile.txt
+```bash
+head ../results/metaphlan/ERR5766177.metaphlan_profile.txt
 ```
-::: {.callout-tip collapse="true" title='expand to see command output'}
+::: {.callout-tip collapse="true" title='Expand to see command output'}
     #mpa_v30_CHOCOPhlAn_201901
     #/home/maxime_borry/.conda/envs/maxime/envs/summer_school_microbiome/bin/metaphlan ../results/fastp/ERR5766177.merged.fastq.gz \
     --input_type fastq --bowtie2out ../results/metaphlan/ERR5766177.bt2.out --nproc 8
@@ -607,39 +598,42 @@ It's a tab separated file, with taxons in rows, with their relative abundance in
     k__Archaea|p__Euryarchaeota	2157|28890	17.76802
 :::
 
-### Visualizing the taxonomic profile
+## Visualizing the taxonomic profile
 
-#### Visualizing metaphlan taxonomic profile with Pavian
+### Visualizing metaphlan taxonomic profile with Pavian
 
-[Pavian](https://github.com/fbreitwieser/pavian) is a web-based tool for interactive visualization and analysis of metagenomics data. It provides a user-friendly interface for exploring taxonomic and functional profiles of microbial communities, and allows users to generate interactive plots and tables that can be customized and shared.
+[Pavian](https://github.com/fbreitwieser/pavian) is a web-based tool for interactive visualization and analysis of metagenomics data. It provides a user-friendly interface for exploring taxonomic and functional profiles of microbial communities, and allows users to generate interactive plots and tables that can be customized and shared (@fig-pavian-interface).
+
+You can open Pavian in your browser by visiting [fbreitwieser.shinyapps.io/pavian](https://fbreitwieser.shinyapps.io/pavian/.).
+
+![Screenshot of the pavian metagenomics visualisation interface, with menus on the left, a select sample and filter taxa search bar at the top, and a Sankey visualisation of the example metagenome sample](assets/images/chapters/taxonomic-profiling/pavian.png){#fig-pavian-interface}
+
+::: {.callout-note collapse="true" title='Expand for instructions for running yourself'}
 
 There are different ways to run it:
 
 - If you have [docker](https://www.docker.com/) installed
 
-```bash
-docker pull 'florianbw/pavian'
-docker run --rm -p 5000:80 florianbw/pavian
-```
+  ```bash
+  docker pull 'florianbw/pavian'
+  docker run --rm -p 5000:80 florianbw/pavian
+  ```
 
 Then open your browser and visit [localhost:5000](localhost:5000)
 
 - If you are familiar with [R](https://www.r-project.org/)
 
-```r
-if (!require(remotes)) { install.packages("remotes") }
-remotes::install_github("fbreitwieser/pavian")
+  ```r
+  if (!require(remotes)) { install.packages("remotes") }
+  remotes::install_github("fbreitwieser/pavian")
 
-pavian::runApp(port=5000)
-```
+  pavian::runApp(port=5000)
+  ```
 
 Then open your browser and visit [localhost:5000](localhost:5000)
+:::
 
-- Otherwise, just visit [fbreitwieser.shinyapps.io/pavian](https://fbreitwieser.shinyapps.io/pavian/.).
-
-![Pavian interface](assets/images/chapters/taxonomic-profiling/pavian.png)
-
-#### Visualizing metaphlan taxonomic profile with [Krona](https://github.com/marbl/Krona/wiki)
+### Visualizing metaphlan taxonomic profile with Krona
 
 [Krona](https://github.com/marbl/Krona/wiki) is a software tool for interactive visualization of hierarchical data, such as taxonomic profiles generated by metagenomics tools like MetaPhlAn. Krona allows users to explore the taxonomic composition of microbial communities in a hierarchical manner, from the highest taxonomic level down to the species level.
 
@@ -649,70 +643,62 @@ The `metaphlan2krona.py` script is used to convert the MetaPhlAn taxonomic profi
 python ../scripts/metaphlan2krona.py -p ../results/metaphlan/ERR5766177.metaphlan_profile.txt -k ../results/krona/ERR5766177_krona.out
 ktImportText -o ../results/krona/ERR5766177_krona.html ../results/krona/ERR5766177_krona.out
 ```
-
+::: {.callout-tip collapse="true" title='Expand to see command output'}
     Writing ../results/krona/ERR5766177_krona.html...
+:::
 
-## Getting modern reference data
+## Getting modern comparative reference data
 
 In order to compare our sample with modern reference samples, I used the curatedMetagenomicsData package,
 which provides both curated metadata, and pre-computed metaphlan taxonomic profiles for published modern human samples.
-The full R code to get these data is available in [curatedMetagenomics/get_sources.Rmd](./curatedMetagenomics/get_sources.Rmd)
+
+The full R code to get these data is available in `curatedMetagenomics/get_sources.Rmd`.
 
 I pre-selected 200 gut microbiome samples from non-westernized (100) and westernized (100) from healthy, non-antibiotic users donors.
 
-```R
+```{r}
+#| eval: false
+
 # Load required packages
 library(curatedMetagenomicData)
 library(tidyverse)
 
 # Filter samples based on specific criteria
 sampleMetadata %>%
-  filter(body_site == 'stool' & antibiotics_current_use == 'no' & disease == 'healthy') %>%
-  group_by(non_westernized) %>%
-  sample_n(100) %>%
-  ungroup() -> selected_samples
+    filter(body_site == "stool" & antibiotics_current_use == "no" & disease == "healthy") %>%
+    group_by(non_westernized) %>%
+    sample_n(100) %>%
+    ungroup() -> selected_samples
 
 # Extract relative abundance data for selected samples
 selected_samples %>%
-  returnSamples("relative_abundance") -> rel_ab
+    returnSamples("relative_abundance") -> rel_ab
 
 # Split relative abundance data by taxonomic rank and write to CSV files
-data_ranks = splitByRanks(rel_ab)
+data_ranks <- splitByRanks(rel_ab)
 
 for (r in names(data_ranks)) {
-  # Print taxonomic rank and output file name
-  print(r)
-  output_file = paste0("../../data/curated_metagenomics/modern_sources_", tolower(r), ".csv")
-  print(output_file)
-  
-  # Write relative abundance data to CSV file
-  assay_rank = as.data.frame(assay(data_ranks[[r]]))
-  write.csv(assay_rank, output_file)
+    # Print taxonomic rank and output file name
+    print(r)
+    output_file <- paste0("../../data/curated_metagenomics/modern_sources_", tolower(r), ".csv")
+    print(output_file)
+
+    # Write relative abundance data to CSV file
+    assay_rank <- as.data.frame(assay(data_ranks[[r]]))
+    write.csv(assay_rank, output_file)
 }
 
 ```
 
-- The resulting metaphlan taxonomic profiles (split by taxonomic ranks) are available at
-- [../data/curated_metagenomics](../data/curated_metagenomics)
-- The associated metadata is available at
-- [../data/metadata/curated_metagenomics_modern_sources.csv](../data/metadata/curated_metagenomics_modern_sources.csv)
-
-![](assets/images/chapters/taxonomic-profiling/800px-Taxonomic_Rank_Graph.svg.png)
+- The resulting pre-computed metaphlan taxonomic profiles (split by taxonomic ranks) are available in `data/curated_metagenomics`
+- The associated metadata is available at `data/metadata/curated_metagenomics_modern_sources.csv`
 
 ## Loading the ancient sample taxonomic profile
 
-This is the moment where we will the [Pandas](https://pandas.pydata.org) [Python](https://www.python.org/) library to perform some data manipulation.  
-We will also use the [Taxopy](https://github.com/apcamargo/taxopy) library to work to taxonomic informations.
+This is the moment where we will use the [Pandas](https://pandas.pydata.org) library [Python](https://www.python.org/) to perform some data manipulation.  
+We will also use the [Taxopy](https://github.com/apcamargo/taxopy) library to work with taxonomic information.
 
-First we install the latest version of taxopy using pip
-
-```python
-! pip install taxopy
-```
-
-    Requirement already satisfied: taxopy in /Users/maxime/mambaforge/envs/summer_school_microbiome/lib/python3.9/site-packages (0.10.0)
-
-We need to import the necessary libraries
+In python we need to import necessary libraries, i.e. pandas and taxopy, and a couple of other utility libraries.
 
 ```python
 import pandas as pd
@@ -722,11 +708,13 @@ import gzip
 ```
 
 And we then create an instance of the taxopy taxonomy database. This will take a few seconds/minutes, as it needs to download the entire NCBI taxonomy before storing in a local database.
+
 ```python
 taxdb = taxopy.TaxDb()
 ```
 
-Let's read the metaphlan profile table with pandas. It's a tab separated file, so we need to specify the delimiter as `\t`, and skip the comment lines of the files that start with `#`.
+Let's read the metaphlan profile table with pandas (a python package with a similar concept to tidyverse dyplyr, tidyr packa). It's a tab separated file, so we need to specify the delimiter as `\t`, and skip the comment lines of the files that start with `#`.
+
 ```python
 ancient_data = pd.read_csv("../results/metaphlan/ERR5766177.metaphlan_profile.txt",
                             comment="#",
@@ -734,183 +722,45 @@ ancient_data = pd.read_csv("../results/metaphlan/ERR5766177.metaphlan_profile.tx
                             names=['clade_name','NCBI_tax_id','relative_abundance','additional_species'])
 ```
 
-To look at the head of a dataframe with pandas
+To look at the head of a dataframe (@tbl-mp3-raw) with pandas
 
 ```python
 ancient_data.head()
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+|   | clade_name                     | NCBI_tax_id | relative_abundance | additional_species |
+|---|--------------------------------|-------------|--------------------|--------------------|
+| 0 | k__Bacteria                    | 2           | 82.23198           | NaN                |
+| 1 | k__Archaea                     | 2157        | 17.76802           | NaN                |
+| 2 | k__Bacteria\|p__Firmicutes     | 2\|1239     | 33.47957           | NaN                |
+| 3 | k__Bacteria\|p__Bacteroidetes  | 2\|976      | 28.42090           | NaN                |
+| 4 | k__Bacteria\|p__Actinobacteria | 2\|201174   | 20.33151           | NaN                |
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+: Top few lines of a MetaPhlAn taxonomic profile {#tbl-mp3-raw}
 
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>clade_name</th>
-      <th>NCBI_tax_id</th>
-      <th>relative_abundance</th>
-      <th>additional_species</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>k__Bacteria</td>
-      <td>2</td>
-      <td>82.23198</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>k__Archaea</td>
-      <td>2157</td>
-      <td>17.76802</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>k__Bacteria|p__Firmicutes</td>
-      <td>2|1239</td>
-      <td>33.47957</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>k__Bacteria|p__Bacteroidetes</td>
-      <td>2|976</td>
-      <td>28.42090</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>k__Bacteria|p__Actinobacteria</td>
-      <td>2|201174</td>
-      <td>20.33151</td>
-      <td>NaN</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+We can also specify more rows by randomly picking 10 rows to display (@tbl-mp3-sampled).
 
 ```python
 ancient_data.sample(10)
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+|    | clade_name                                           | NCBI_tax_id                                    | relative_abundance | additional_species                                   |
+|----|------------------------------------------------------|------------------------------------------------|--------------------|------------------------------------------------------|
+| 1  | k__Archaea                                           | 2157                                           | 17.76802           | NaN                                                  |
+| 46 | k__Bacteria\|p__Bacteroidetes\|c__Bacteroidia\|o_... | 2\|976\|200643\|171549\|171552\|838\|165179    | 25.75544           | k__Bacteria\|p__Bacteroidetes\|c__Bacteroidia\|o_... |
+| 55 | k__Bacteria\|p__Firmicutes\|c__Clostridia\|o__Clo... | 2\|1239\|186801\|186802\|186803\|189330\|88431 | 0.91178            | NaN                                                  |
+| 18 | k__Archaea\|p__Euryarchaeota\|c__Halobacteria\|o_... | 2157\|28890\|183963\|2235                      | 0.71177            | NaN                                                  |
+| 36 | k__Bacteria\|p__Actinobacteria\|c__Actinobacteri...  | 2\|201174\|1760\|85004\|31953\|1678            | 9.39377            | NaN                                                  |
+| 65 | k__Bacteria\|p__Actinobacteria\|c__Actinobacteri...  | 2\|201174\|1760\|85004\|31953\|1678\|216816    | 0.05447            | k__Bacteria\|p__Actinobacteria\|c__Actinobacteri...  |
+| 37 | k__Bacteria\|p__Firmicutes\|c__Clostridia\|o__Clo... | 2\|1239\|186801\|186802\|186803\|              | 2.16125            | NaN                                                  |
+| 38 | k__Bacteria\|p__Firmicutes\|c__Clostridia\|o__Clo... | 2\|1239\|186801\|186802\|541000\|216851        | 1.24537            | NaN                                                  |
+| 26 | k__Bacteria\|p__Actinobacteria\|c__Actinobacteri...  | 2\|201174\|1760\|85004\|31953                  | 9.39377            | NaN                                                  |
+| 48 | k__Bacteria\|p__Firmicutes\|c__Clostridia\|o__Clo... | 2\|1239\|186801\|186802\|541000\|1263\|40518   | 14.96816           | k__Bacteria\|p__Firmicutes\|c__Clostridia\|o__Clo... |
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>clade_name</th>
-      <th>NCBI_tax_id</th>
-      <th>relative_abundance</th>
-      <th>additional_species</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>1</th>
-      <td>k__Archaea</td>
-      <td>2157</td>
-      <td>17.76802</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>46</th>
-      <td>k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o_...</td>
-      <td>2|976|200643|171549|171552|838|165179</td>
-      <td>25.75544</td>
-      <td>k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o_...</td>
-    </tr>
-    <tr>
-      <th>55</th>
-      <td>k__Bacteria|p__Firmicutes|c__Clostridia|o__Clo...</td>
-      <td>2|1239|186801|186802|186803|189330|88431</td>
-      <td>0.91178</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>k__Archaea|p__Euryarchaeota|c__Halobacteria|o_...</td>
-      <td>2157|28890|183963|2235</td>
-      <td>0.71177</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>36</th>
-      <td>k__Bacteria|p__Actinobacteria|c__Actinobacteri...</td>
-      <td>2|201174|1760|85004|31953|1678</td>
-      <td>9.39377</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>65</th>
-      <td>k__Bacteria|p__Actinobacteria|c__Actinobacteri...</td>
-      <td>2|201174|1760|85004|31953|1678|216816</td>
-      <td>0.05447</td>
-      <td>k__Bacteria|p__Actinobacteria|c__Actinobacteri...</td>
-    </tr>
-    <tr>
-      <th>37</th>
-      <td>k__Bacteria|p__Firmicutes|c__Clostridia|o__Clo...</td>
-      <td>2|1239|186801|186802|186803|</td>
-      <td>2.16125</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>38</th>
-      <td>k__Bacteria|p__Firmicutes|c__Clostridia|o__Clo...</td>
-      <td>2|1239|186801|186802|541000|216851</td>
-      <td>1.24537</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>26</th>
-      <td>k__Bacteria|p__Actinobacteria|c__Actinobacteri...</td>
-      <td>2|201174|1760|85004|31953</td>
-      <td>9.39377</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>48</th>
-      <td>k__Bacteria|p__Firmicutes|c__Clostridia|o__Clo...</td>
-      <td>2|1239|186801|186802|541000|1263|40518</td>
-      <td>14.96816</td>
-      <td>k__Bacteria|p__Firmicutes|c__Clostridia|o__Clo...</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+: Ten randomly selected lines of a MetaPhlAn taxonomic profile {#tbl-mp3-sampled}
 
 Because for this analysis, we're only going to look at the relative abundance, we'll only use this column, and
-the [TAXID](https://www.ncbi.nlm.nih.gov/taxonomy) information, so we can `drop` (get rid of) the unnecessary columns.
+the [Taxonomic ID (TAXID)](https://www.ncbi.nlm.nih.gov/taxonomy) information, so we can `drop` (get rid of) the unnecessary columns.
 
 ```python
 ancient_data = (
@@ -933,66 +783,23 @@ ancient_data.relative_abundance.sum()
 :::
 
 ::: {.callout-tip collapse="true" title="Unfold to see what's happening"}
-Let's proceed further and try to understand what's happening.
+Let's proceed further and try to understand what's happening (@tbl-taxid-table).
 
 ```python
 ancient_data.head()
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+|   | TAXID     | relative_abundance |
+|---|-----------|--------------------|
+| 0 | 2         | 82.23198           |
+| 1 | 2157      | 17.76802           |
+| 2 | 2\|1239   | 33.47957           |
+| 3 | 2\|976    | 28.42090           |
+| 4 | 2\|201174 | 20.33151           |
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+: A two column table of TAXIDs and the organisms corresponding relative abundance {#tbl-taxid-table}
 
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>TAXID</th>
-      <th>relative_abundance</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>2</td>
-      <td>82.23198</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2157</td>
-      <td>17.76802</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2|1239</td>
-      <td>33.47957</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2|976</td>
-      <td>28.42090</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2|201174</td>
-      <td>20.33151</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-To make sense of the TAXID, we will use taxopy to get all the taxonomic related informations such as:
+To make sense of the TAXID, we will use taxopy to get all the taxonomic related informations such as (@tbl-taxid-table-with-path):
 
 - name of the taxon
 - rank of the taxon
@@ -1023,70 +830,19 @@ def to_taxopy(taxid_entry, taxo_db):
 
 ```python
 ancient_data['taxopy'] = ancient_data['TAXID'].apply(to_taxopy, taxo_db=taxo_db)
-```
 
-```python
 ancient_data.head()
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+|   | TAXID     | relative_abundance | taxopy                                            |
+|---|-----------|--------------------|---------------------------------------------------|
+| 0 | 2         | 82.23198           | s__Bacteria                                       |
+| 1 | 2157      | 17.76802           | s__Archaea                                        |
+| 2 | 2\|1239   | 33.47957           | s__Bacteria;c__Terrabacteria group;p__Firmicutes  |
+| 3 | 2\|976    | 28.42090           | s__Bacteria;c__FCB group;p__Bacteroidetes         |
+| 4 | 2\|201174 | 20.33151           | s__Bacteria;c__Terrabacteria group;p__Actinoba... |
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>TAXID</th>
-      <th>relative_abundance</th>
-      <th>taxopy</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>2</td>
-      <td>82.23198</td>
-      <td>s__Bacteria</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2157</td>
-      <td>17.76802</td>
-      <td>s__Archaea</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2|1239</td>
-      <td>33.47957</td>
-      <td>s__Bacteria;c__Terrabacteria group;p__Firmicutes</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2|976</td>
-      <td>28.42090</td>
-      <td>s__Bacteria;c__FCB group;p__Bacteroidetes</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2|201174</td>
-      <td>20.33151</td>
-      <td>s__Bacteria;c__Terrabacteria group;p__Actinoba...</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+: A three column table of TAXIDs and the organisms corresponding relative abundance, and the attached taxonomic path associated with the TAXID {#tbl-taxid-table-with-path}
 
 ```python
 ancient_data = ancient_data.assign(
@@ -1094,359 +850,92 @@ ancient_data = ancient_data.assign(
     name = ancient_data.taxopy.apply(lambda x: x.name),
     lineage = ancient_data.taxopy.apply(lambda x: x.name_lineage),
 )
-```
 
-```python
 ancient_data
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+|     | TAXID                                            | relative_abundance | taxopy                                            | rank         | name                       | lineage                                           |
+|-----|--------------------------------------------------|--------------------|---------------------------------------------------|--------------|----------------------------|---------------------------------------------------|
+| 0   | 2                                                | 82.23198           | s__Bacteria                                       | superkingdom | Bacteria                   | [Bacteria, cellular organisms, root]              |
+| 1   | 2157                                             | 17.76802           | s__Archaea                                        | superkingdom | Archaea                    | [Archaea, cellular organisms, root]               |
+| 2   | 2\|1239                                          | 33.47957           | s__Bacteria;c__Terrabacteria group;p__Firmicutes  | phylum       | Firmicutes                 | [Firmicutes, Terrabacteria group, Bacteria, ce... |
+| 3   | 2\|976                                           | 28.42090           | s__Bacteria;c__FCB group;p__Bacteroidetes         | phylum       | Bacteroidetes              | [Bacteroidetes, Bacteroidetes/Chlorobi group, ... |
+| 4   | 2\|201174                                        | 20.33151           | s__Bacteria;c__Terrabacteria group;p__Actinoba... | phylum       | Actinobacteria             | [Actinobacteria, Terrabacteria group, Bacteria... |
+| ... | ...                                              | ...                | ...                                               | ...          | ...                        | ...                                               |
+| 62  | 2\|1239\|186801\|186802\|186803\|572511\|33039   | 0.24910            | s__Bacteria;c__Terrabacteria group;p__Firmicut... | species      | [Ruminococcus] torques     | [[Ruminococcus] torques, Mediterraneibacter, L... |
+| 63  | 2\|201174\|84998\|84999\|84107\|1472762\|1232426 | 0.17084            | s__Bacteria;c__Terrabacteria group;p__Actinoba... | species      | [Collinsella] massiliensis | [[Collinsella] massiliensis, Enorma, Coriobact... |
+| 64  | 2\|1239\|186801\|186802\|186803\|189330\|39486   | 0.07690            | s__Bacteria;c__Terrabacteria group;p__Firmicut... | species      | Dorea formicigenerans      | [Dorea formicigenerans, Dorea, Lachnospiraceae... |
+| 65  | 2\|201174\|1760\|85004\|31953\|1678\|216816      | 0.05447            | s__Bacteria;c__Terrabacteria group;p__Actinoba... | species      | Bifidobacterium longum     | [Bifidobacterium longum, Bifidobacterium, Bifi... |
+| 66  | 2\|1239\|186801\|186802\|541000\|1263\|1262959   | 0.01440            | s__Bacteria;c__Terrabacteria group;p__Firmicut... | species      | Ruminococcus sp. CAG:488   | [Ruminococcus sp. CAG:488, environmental sampl... |
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>TAXID</th>
-      <th>relative_abundance</th>
-      <th>taxopy</th>
-      <th>rank</th>
-      <th>name</th>
-      <th>lineage</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>2</td>
-      <td>82.23198</td>
-      <td>s__Bacteria</td>
-      <td>superkingdom</td>
-      <td>Bacteria</td>
-      <td>[Bacteria, cellular organisms, root]</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2157</td>
-      <td>17.76802</td>
-      <td>s__Archaea</td>
-      <td>superkingdom</td>
-      <td>Archaea</td>
-      <td>[Archaea, cellular organisms, root]</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2|1239</td>
-      <td>33.47957</td>
-      <td>s__Bacteria;c__Terrabacteria group;p__Firmicutes</td>
-      <td>phylum</td>
-      <td>Firmicutes</td>
-      <td>[Firmicutes, Terrabacteria group, Bacteria, ce...</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2|976</td>
-      <td>28.42090</td>
-      <td>s__Bacteria;c__FCB group;p__Bacteroidetes</td>
-      <td>phylum</td>
-      <td>Bacteroidetes</td>
-      <td>[Bacteroidetes, Bacteroidetes/Chlorobi group, ...</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2|201174</td>
-      <td>20.33151</td>
-      <td>s__Bacteria;c__Terrabacteria group;p__Actinoba...</td>
-      <td>phylum</td>
-      <td>Actinobacteria</td>
-      <td>[Actinobacteria, Terrabacteria group, Bacteria...</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>62</th>
-      <td>2|1239|186801|186802|186803|572511|33039</td>
-      <td>0.24910</td>
-      <td>s__Bacteria;c__Terrabacteria group;p__Firmicut...</td>
-      <td>species</td>
-      <td>[Ruminococcus] torques</td>
-      <td>[[Ruminococcus] torques, Mediterraneibacter, L...</td>
-    </tr>
-    <tr>
-      <th>63</th>
-      <td>2|201174|84998|84999|84107|1472762|1232426</td>
-      <td>0.17084</td>
-      <td>s__Bacteria;c__Terrabacteria group;p__Actinoba...</td>
-      <td>species</td>
-      <td>[Collinsella] massiliensis</td>
-      <td>[[Collinsella] massiliensis, Enorma, Coriobact...</td>
-    </tr>
-    <tr>
-      <th>64</th>
-      <td>2|1239|186801|186802|186803|189330|39486</td>
-      <td>0.07690</td>
-      <td>s__Bacteria;c__Terrabacteria group;p__Firmicut...</td>
-      <td>species</td>
-      <td>Dorea formicigenerans</td>
-      <td>[Dorea formicigenerans, Dorea, Lachnospiraceae...</td>
-    </tr>
-    <tr>
-      <th>65</th>
-      <td>2|201174|1760|85004|31953|1678|216816</td>
-      <td>0.05447</td>
-      <td>s__Bacteria;c__Terrabacteria group;p__Actinoba...</td>
-      <td>species</td>
-      <td>Bifidobacterium longum</td>
-      <td>[Bifidobacterium longum, Bifidobacterium, Bifi...</td>
-    </tr>
-    <tr>
-      <th>66</th>
-      <td>2|1239|186801|186802|541000|1263|1262959</td>
-      <td>0.01440</td>
-      <td>s__Bacteria;c__Terrabacteria group;p__Firmicut...</td>
-      <td>species</td>
-      <td>Ruminococcus sp. CAG:488</td>
-      <td>[Ruminococcus sp. CAG:488, environmental sampl...</td>
-    </tr>
-  </tbody>
-</table>
-<p>67 rows × 6 columns</p>
-</div>
+: A five column table of TAXIDs and the organisms corresponding relative abundance, and the attached taxonomic path associated with the TAXID, but also the rank and name of the particular taxonomic ID {#tbl-taxid-table-with-path-sep}
 
 Because our modern data are split by ranks, we'll first split our ancient sample by rank
 
-Which of the entries are at the `species rank` level ?
+Which of the entries are at the `species rank` level?
 
 ```python
 ancient_species = ancient_data.query("rank == 'species'")
-```
 
-```python
 ancient_species.head()
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+|    | TAXID                                         | relative_abundance | taxopy                                            | rank    | name                       | lineage                                           |
+|----|-----------------------------------------------|--------------------|---------------------------------------------------|---------|----------------------------|---------------------------------------------------|
+| 46 | 2\|976\|200643\|171549\|171552\|838\|165179   | 25.75544           | s__Bacteria;c__FCB group;p__Bacteroidetes;c__B... | species | Prevotella copri           | [Prevotella copri, Prevotella, Prevotellaceae,... |
+| 47 | 2157\|28890\|183925\|2158\|2159\|2172\|2173   | 17.05626           | s__Archaea;p__Euryarchaeota;c__Methanomada gro... | species | Methanobrevibacter smithii | [Methanobrevibacter smithii, Methanobrevibacte... |
+| 48 | 2\|1239\|186801\|186802\|541000\|1263\|40518  | 14.96816           | s__Bacteria;c__Terrabacteria group;p__Firmicut... | species | Ruminococcus bromii        | [Ruminococcus bromii, Ruminococcus, Oscillospi... |
+| 49 | 2\|1239\|186801\|186802\|186803\|841\|301302  | 13.57908           | s__Bacteria;c__Terrabacteria group;p__Firmicut... | species | Roseburia faecis           | [Roseburia faecis, Roseburia, Lachnospiraceae,... |
+| 50 | 2\|201174\|84998\|84999\|84107\|102106\|74426 | 9.49165            | s__Bacteria;c__Terrabacteria group;p__Actinoba... | species | Collinsella aerofaciens    | [Collinsella aerofaciens, Collinsella, Corioba... |
 
-    .dataframe thead th {
-        text-align: right;
-    }
+: A five column table of TAXIDs and the organisms corresponding relative abundance, and the attached taxonomic path associated with the TAXID, but also the rank and name of the particular taxonomic ID, filtered to only species {#tbl-taxid-table-with-path-species}
 
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>TAXID</th>
-      <th>relative_abundance</th>
-      <th>taxopy</th>
-      <th>rank</th>
-      <th>name</th>
-      <th>lineage</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>46</th>
-      <td>2|976|200643|171549|171552|838|165179</td>
-      <td>25.75544</td>
-      <td>s__Bacteria;c__FCB group;p__Bacteroidetes;c__B...</td>
-      <td>species</td>
-      <td>Prevotella copri</td>
-      <td>[Prevotella copri, Prevotella, Prevotellaceae,...</td>
-    </tr>
-    <tr>
-      <th>47</th>
-      <td>2157|28890|183925|2158|2159|2172|2173</td>
-      <td>17.05626</td>
-      <td>s__Archaea;p__Euryarchaeota;c__Methanomada gro...</td>
-      <td>species</td>
-      <td>Methanobrevibacter smithii</td>
-      <td>[Methanobrevibacter smithii, Methanobrevibacte...</td>
-    </tr>
-    <tr>
-      <th>48</th>
-      <td>2|1239|186801|186802|541000|1263|40518</td>
-      <td>14.96816</td>
-      <td>s__Bacteria;c__Terrabacteria group;p__Firmicut...</td>
-      <td>species</td>
-      <td>Ruminococcus bromii</td>
-      <td>[Ruminococcus bromii, Ruminococcus, Oscillospi...</td>
-    </tr>
-    <tr>
-      <th>49</th>
-      <td>2|1239|186801|186802|186803|841|301302</td>
-      <td>13.57908</td>
-      <td>s__Bacteria;c__Terrabacteria group;p__Firmicut...</td>
-      <td>species</td>
-      <td>Roseburia faecis</td>
-      <td>[Roseburia faecis, Roseburia, Lachnospiraceae,...</td>
-    </tr>
-    <tr>
-      <th>50</th>
-      <td>2|201174|84998|84999|84107|102106|74426</td>
-      <td>9.49165</td>
-      <td>s__Bacteria;c__Terrabacteria group;p__Actinoba...</td>
-      <td>species</td>
-      <td>Collinsella aerofaciens</td>
-      <td>[Collinsella aerofaciens, Collinsella, Corioba...</td>
-    </tr>
-  </tbody>
-</table>
-</div>
 
 Let's do a bit of renaming to prepare for what's coming next
 
 ```python
 ancient_species = ancient_species[['relative_abundance','name']].set_index('name').rename(columns={'relative_abundance':'ERR5766177'})
-```
 
-```python
 ancient_species.head()
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+| name                       | ERR5766177 |
+|----------------------------|------------|
+| Prevotella copri           | 25.75544   |
+| Methanobrevibacter smithii | 17.05626   |
+| Ruminococcus bromii        | 14.96816   |
+| Roseburia faecis           | 13.57908   |
+| Collinsella aerofaciens    | 9.49165    |
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+: Reconstruction of the first two column taxonomic profile but with species-level organism names rather than TAXIDs {#tbl-taxid-table-with-name}
 
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>ERR5766177</th>
-    </tr>
-    <tr>
-      <th>name</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Prevotella copri</th>
-      <td>25.75544</td>
-    </tr>
-    <tr>
-      <th>Methanobrevibacter smithii</th>
-      <td>17.05626</td>
-    </tr>
-    <tr>
-      <th>Ruminococcus bromii</th>
-      <td>14.96816</td>
-    </tr>
-    <tr>
-      <th>Roseburia faecis</th>
-      <td>13.57908</td>
-    </tr>
-    <tr>
-      <th>Collinsella aerofaciens</th>
-      <td>9.49165</td>
-    </tr>
-  </tbody>
-</table>
-</div>
 
 ```python
 ancient_phylums = ancient_data.query("rank == 'phylum'")
-```
 
-```python
 ancient_phylums = ancient_phylums[['relative_abundance','name']].set_index('name').rename(columns={'relative_abundance':'ERR5766177'})
-```
 
-```python
 ancient_phylums
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+| name           | ERR5766177 |
+|----------------|------------|
+| Firmicutes     | 33.47957   |
+| Bacteroidetes  | 28.42090   |
+| Actinobacteria | 20.33151   |
+| Euryarchaeota  | 17.76802   |
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>ERR5766177</th>
-    </tr>
-    <tr>
-      <th>name</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Firmicutes</th>
-      <td>33.47957</td>
-    </tr>
-    <tr>
-      <th>Bacteroidetes</th>
-      <td>28.42090</td>
-    </tr>
-    <tr>
-      <th>Actinobacteria</th>
-      <td>20.33151</td>
-    </tr>
-    <tr>
-      <th>Euryarchaeota</th>
-      <td>17.76802</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+: Reconstruction of the first two column taxonomic profile but with phylum-level organism names rather than TAXIDs {#tbl-taxid-table-with-name}
 
 Now, let's go back to the 700% relative abundance issue...
 
 ```python
 ancient_data.groupby('rank')['relative_abundance'].sum()
 ```
+::: {.callout-tip collapse="true" title='Expand to see command output'}
 
+```
     rank
     class            99.72648
     family           83.49854
@@ -1457,6 +946,8 @@ ancient_data.groupby('rank')['relative_abundance'].sum()
     species         100.00002
     superkingdom    100.00000
     Name: relative_abundance, dtype: float64
+```
+:::
 
 Seems better, right ?
 
@@ -1467,358 +958,45 @@ Seems better, right ?
 
 Now let's load our modern reference samples
 
-First at the phylum level
+First at the phylum level (@tbl-modern-taxtable-phylum)
 
 ```python
 modern_phylums = pd.read_csv("../data/curated_metagenomics/modern_sources_phylum.csv", index_col=0)
 modern_phylums.head()
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+|                 | de028ad4-7ae6-11e9-a106-68b59976a384 | PNP_Main_283 | PNP_Validation_55 | G80275   | PNP_Main_363 | SAMEA7045572 | SAMEA7045355 | HD-13    | EGAR00001420773_9002000001423910 | SID5428-4 | ... | A46_02_1FE | TZ_87532 | A94_01_1FE | KHG_7    | LDK_4    | KHG_9    | A48_01_1FE | KHG_1    | TZ_81781 | A09_01_1FE |
+|-----------------|--------------------------------------|--------------|-------------------|----------|--------------|--------------|--------------|----------|----------------------------------|-----------|-----|------------|----------|------------|----------|----------|----------|------------|----------|----------|------------|
+| Bacteroidetes   | 0.00000                              | 17.44332     | 82.86400          | 69.99087 | 31.93081     | 51.76204     | 53.32801     | 74.59667 | 8.81074                          | 26.39694  | ... | 1.97760    | 1.49601  | 67.21410   | 4.29848  | 68.16890 | 38.59709 | 14.81828   | 10.13908 | 57.14031 | 11.61544   |
+| Firmicutes      | 95.24231                             | 60.47031     | 16.53946          | 22.81977 | 65.23075     | 41.96928     | 45.77661     | 23.51065 | 54.35341                         | 62.23094  | ... | 76.68499   | 78.13269 | 29.72394   | 33.51772 | 19.11149 | 46.87139 | 72.68136   | 35.43789 | 40.57101 | 24.72113   |
+| Proteobacteria  | 4.49959                              | 0.77098      | 0.05697           | 4.07757  | 0.27316      | 3.33972      | 0.02001      | 1.72865  | 0.00000                          | 1.81016   | ... | 16.57250   | 0.76159  | 2.35058    | 9.83772  | 5.32392  | 0.19699  | 3.64655    | 17.64151 | 0.30580  | 56.20177   |
+| Actinobacteria  | 0.25809                              | 10.27631     | 0.45187           | 1.11902  | 2.31075      | 2.92715      | 0.77667      | 0.16403  | 36.55138                         | 1.19951   | ... | 3.01814    | 19.20468 | 0.69913    | 46.99479 | 7.39093  | 14.26365 | 5.47750    | 36.77145 | 1.16426  | 7.40894    |
+| Verrucomicrobia | 0.00000                              | 0.00784      | 0.00000           | 1.99276  | 0.25451      | 0.00000      | 0.00000      | 0.00000  | 0.09940                          | 3.29795   | ... | 0.05011    | 0.00000  | 0.00000    | 0.00000  | 0.00000  | 0.00000  | 0.00000    | 0.00000  | 0.00000  | 0.00000    |
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+: Taxonomic profiles at phylum level of multiple modern samples {#tbl-modern-taxtable-phylum}
 
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>de028ad4-7ae6-11e9-a106-68b59976a384</th>
-      <th>PNP_Main_283</th>
-      <th>PNP_Validation_55</th>
-      <th>G80275</th>
-      <th>PNP_Main_363</th>
-      <th>SAMEA7045572</th>
-      <th>SAMEA7045355</th>
-      <th>HD-13</th>
-      <th>EGAR00001420773_9002000001423910</th>
-      <th>SID5428-4</th>
-      <th>...</th>
-      <th>A46_02_1FE</th>
-      <th>TZ_87532</th>
-      <th>A94_01_1FE</th>
-      <th>KHG_7</th>
-      <th>LDK_4</th>
-      <th>KHG_9</th>
-      <th>A48_01_1FE</th>
-      <th>KHG_1</th>
-      <th>TZ_81781</th>
-      <th>A09_01_1FE</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Bacteroidetes</th>
-      <td>0.00000</td>
-      <td>17.44332</td>
-      <td>82.86400</td>
-      <td>69.99087</td>
-      <td>31.93081</td>
-      <td>51.76204</td>
-      <td>53.32801</td>
-      <td>74.59667</td>
-      <td>8.81074</td>
-      <td>26.39694</td>
-      <td>...</td>
-      <td>1.97760</td>
-      <td>1.49601</td>
-      <td>67.21410</td>
-      <td>4.29848</td>
-      <td>68.16890</td>
-      <td>38.59709</td>
-      <td>14.81828</td>
-      <td>10.13908</td>
-      <td>57.14031</td>
-      <td>11.61544</td>
-    </tr>
-    <tr>
-      <th>Firmicutes</th>
-      <td>95.24231</td>
-      <td>60.47031</td>
-      <td>16.53946</td>
-      <td>22.81977</td>
-      <td>65.23075</td>
-      <td>41.96928</td>
-      <td>45.77661</td>
-      <td>23.51065</td>
-      <td>54.35341</td>
-      <td>62.23094</td>
-      <td>...</td>
-      <td>76.68499</td>
-      <td>78.13269</td>
-      <td>29.72394</td>
-      <td>33.51772</td>
-      <td>19.11149</td>
-      <td>46.87139</td>
-      <td>72.68136</td>
-      <td>35.43789</td>
-      <td>40.57101</td>
-      <td>24.72113</td>
-    </tr>
-    <tr>
-      <th>Proteobacteria</th>
-      <td>4.49959</td>
-      <td>0.77098</td>
-      <td>0.05697</td>
-      <td>4.07757</td>
-      <td>0.27316</td>
-      <td>3.33972</td>
-      <td>0.02001</td>
-      <td>1.72865</td>
-      <td>0.00000</td>
-      <td>1.81016</td>
-      <td>...</td>
-      <td>16.57250</td>
-      <td>0.76159</td>
-      <td>2.35058</td>
-      <td>9.83772</td>
-      <td>5.32392</td>
-      <td>0.19699</td>
-      <td>3.64655</td>
-      <td>17.64151</td>
-      <td>0.30580</td>
-      <td>56.20177</td>
-    </tr>
-    <tr>
-      <th>Actinobacteria</th>
-      <td>0.25809</td>
-      <td>10.27631</td>
-      <td>0.45187</td>
-      <td>1.11902</td>
-      <td>2.31075</td>
-      <td>2.92715</td>
-      <td>0.77667</td>
-      <td>0.16403</td>
-      <td>36.55138</td>
-      <td>1.19951</td>
-      <td>...</td>
-      <td>3.01814</td>
-      <td>19.20468</td>
-      <td>0.69913</td>
-      <td>46.99479</td>
-      <td>7.39093</td>
-      <td>14.26365</td>
-      <td>5.47750</td>
-      <td>36.77145</td>
-      <td>1.16426</td>
-      <td>7.40894</td>
-    </tr>
-    <tr>
-      <th>Verrucomicrobia</th>
-      <td>0.00000</td>
-      <td>0.00784</td>
-      <td>0.00000</td>
-      <td>1.99276</td>
-      <td>0.25451</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.09940</td>
-      <td>3.29795</td>
-      <td>...</td>
-      <td>0.05011</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-    </tr>
-  </tbody>
-</table>
-<p>5 rows × 200 columns</p>
-</div>
 
 Then at the species level
+
 ```python
 modern_species = pd.read_csv("../data/curated_metagenomics/modern_sources_species.csv", index_col=0)
 ```
 
-As usual, we always check if our data has been loaded correctly
+As usual, we always check if our data has been loaded correctly (@tbl-modern-taxtable-species)
+
 ```python
 modern_species.head()
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+|                            | de028ad4-7ae6-11e9-a106-68b59976a384 | PNP_Main_283 | PNP_Validation_55 | G80275  | PNP_Main_363 | SAMEA7045572 | SAMEA7045355 | HD-13    | EGAR00001420773_9002000001423910 | SID5428-4 | ... | A46_02_1FE | TZ_87532 | A94_01_1FE | KHG_7   | LDK_4   | KHG_9   | A48_01_1FE | KHG_1   | TZ_81781 | A09_01_1FE |
+|----------------------------|--------------------------------------|--------------|-------------------|---------|--------------|--------------|--------------|----------|----------------------------------|-----------|-----|------------|----------|------------|---------|---------|---------|------------|---------|----------|------------|
+| Bacteroides vulgatus       | 0.0                                  | 0.60446      | 1.59911           | 4.39085 | 0.04494      | 4.66505      | 2.99431      | 29.30325 | 1.48560                          | 0.98818   | ... | 0.20717    | 0.0      | 0.00309    | 0.48891 | 0.00000 | 0.02230 | 0.00000    | 0.15112 | 0.0      | 0.00836    |
+| Bacteroides stercoris      | 0.0                                  | 0.00546      | 0.00000           | 0.00000 | 2.50789      | 0.00000      | 20.57498     | 8.28443  | 1.23261                          | 0.00000   | ... | 0.00000    | 0.0      | 0.00000    | 0.00693 | 0.00000 | 0.02603 | 0.00000    | 0.19318 | 0.0      | 0.00000    |
+| Acidaminococcus intestini  | 0.0                                  | 0.00000      | 0.00000           | 0.00000 | 0.00000      | 0.00000      | 0.00000      | 0.00000  | 0.32822                          | 0.00000   | ... | 0.00000    | 0.0      | 0.00000    | 0.00000 | 0.00000 | 0.00000 | 0.00000    | 0.00000 | 0.0      | 0.00000    |
+| Eubacterium sp CAG 38      | 0.0                                  | 0.06712      | 0.81149           | 0.05247 | 0.26027      | 0.00000      | 0.00000      | 2.62415  | 0.46585                          | 0.23372   | ... | 0.78140    | 0.0      | 0.00000    | 0.00499 | 0.00000 | 0.02446 | 0.00000    | 0.00000 | 0.0      | 0.00000    |
+| Parabacteroides distasonis | 0.0                                  | 1.34931      | 2.00672           | 5.85067 | 0.59019      | 7.00027      | 1.28075      | 0.61758  | 0.07383                          | 2.80355   | ... | 0.11423    | 0.0      | 0.01181    | 0.01386 | 0.03111 | 0.07463 | 0.15597    | 0.07541 | 0.0      | 0.01932    |
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>de028ad4-7ae6-11e9-a106-68b59976a384</th>
-      <th>PNP_Main_283</th>
-      <th>PNP_Validation_55</th>
-      <th>G80275</th>
-      <th>PNP_Main_363</th>
-      <th>SAMEA7045572</th>
-      <th>SAMEA7045355</th>
-      <th>HD-13</th>
-      <th>EGAR00001420773_9002000001423910</th>
-      <th>SID5428-4</th>
-      <th>...</th>
-      <th>A46_02_1FE</th>
-      <th>TZ_87532</th>
-      <th>A94_01_1FE</th>
-      <th>KHG_7</th>
-      <th>LDK_4</th>
-      <th>KHG_9</th>
-      <th>A48_01_1FE</th>
-      <th>KHG_1</th>
-      <th>TZ_81781</th>
-      <th>A09_01_1FE</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Bacteroides vulgatus</th>
-      <td>0.0</td>
-      <td>0.60446</td>
-      <td>1.59911</td>
-      <td>4.39085</td>
-      <td>0.04494</td>
-      <td>4.66505</td>
-      <td>2.99431</td>
-      <td>29.30325</td>
-      <td>1.48560</td>
-      <td>0.98818</td>
-      <td>...</td>
-      <td>0.20717</td>
-      <td>0.0</td>
-      <td>0.00309</td>
-      <td>0.48891</td>
-      <td>0.00000</td>
-      <td>0.02230</td>
-      <td>0.00000</td>
-      <td>0.15112</td>
-      <td>0.0</td>
-      <td>0.00836</td>
-    </tr>
-    <tr>
-      <th>Bacteroides stercoris</th>
-      <td>0.0</td>
-      <td>0.00546</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>2.50789</td>
-      <td>0.00000</td>
-      <td>20.57498</td>
-      <td>8.28443</td>
-      <td>1.23261</td>
-      <td>0.00000</td>
-      <td>...</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>0.00693</td>
-      <td>0.00000</td>
-      <td>0.02603</td>
-      <td>0.00000</td>
-      <td>0.19318</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-    </tr>
-    <tr>
-      <th>Acidaminococcus intestini</th>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.32822</td>
-      <td>0.00000</td>
-      <td>...</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-    </tr>
-    <tr>
-      <th>Eubacterium sp CAG 38</th>
-      <td>0.0</td>
-      <td>0.06712</td>
-      <td>0.81149</td>
-      <td>0.05247</td>
-      <td>0.26027</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>2.62415</td>
-      <td>0.46585</td>
-      <td>0.23372</td>
-      <td>...</td>
-      <td>0.78140</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>0.00499</td>
-      <td>0.00000</td>
-      <td>0.02446</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-    </tr>
-    <tr>
-      <th>Parabacteroides distasonis</th>
-      <td>0.0</td>
-      <td>1.34931</td>
-      <td>2.00672</td>
-      <td>5.85067</td>
-      <td>0.59019</td>
-      <td>7.00027</td>
-      <td>1.28075</td>
-      <td>0.61758</td>
-      <td>0.07383</td>
-      <td>2.80355</td>
-      <td>...</td>
-      <td>0.11423</td>
-      <td>0.0</td>
-      <td>0.01181</td>
-      <td>0.01386</td>
-      <td>0.03111</td>
-      <td>0.07463</td>
-      <td>0.15597</td>
-      <td>0.07541</td>
-      <td>0.0</td>
-      <td>0.01932</td>
-    </tr>
-  </tbody>
-</table>
-<p>5 rows × 200 columns</p>
-</div>
+: Taxonomic profiles at species level of multiple modern samples  {#tbl-modern-taxtable-species}
 
 ### Time to merge !
 
@@ -1830,183 +1008,23 @@ all_species = ancient_species.merge(modern_species, left_index=True, right_index
 all_phylums = ancient_phylums.merge(modern_phylums, left_index=True, right_index=True, how='outer').fillna(0)
 ```
 
-Finally, let's load the metadata, which contains the information about the modern samples.
+Finally, let's load the metadata, which contains the information about the modern samples (@tbl-sample-metadata).
 
 ```python
 metadata = pd.read_csv("../data/metadata/curated_metagenomics_modern_sources.csv")
-```
 
-```python
 metadata.head()
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+|   | study_name    | sample_id                            | subject_id        | body_site | antibiotics_current_use | study_condition | disease | age | infant_age | age_category | ... | hla_drb11 | birth_order | age_twins_started_to_live_apart | zigosity | brinkman_index | alcohol_numeric | breastfeeding_duration | formula_first_day | ALT | eGFR |
+|---|---------------|--------------------------------------|-------------------|-----------|-------------------------|-----------------|---------|-----|------------|--------------|-----|-----------|-------------|---------------------------------|----------|----------------|-----------------|------------------------|-------------------|-----|------|
+| 0 | ShaoY_2019    | de028ad4-7ae6-11e9-a106-68b59976a384 | C01528_ba         | stool     | no                      | control         | healthy | 0.0 | 4.0        | newborn      | ... | NaN       | NaN         | NaN                             | NaN      | NaN            | NaN             | NaN                    | NaN               | NaN | NaN  |
+| 1 | ZeeviD_2015   | PNP_Main_283                         | PNP_Main_283      | stool     | no                      | control         | healthy | NaN | NaN        | adult        | ... | NaN       | NaN         | NaN                             | NaN      | NaN            | NaN             | NaN                    | NaN               | NaN | NaN  |
+| 2 | ZeeviD_2015   | PNP_Validation_55                    | PNP_Validation_55 | stool     | no                      | control         | healthy | NaN | NaN        | adult        | ... | NaN       | NaN         | NaN                             | NaN      | NaN            | NaN             | NaN                    | NaN               | NaN | NaN  |
+| 3 | VatanenT_2016 | G80275                               | T014806           | stool     | no                      | control         | healthy | 1.0 | NaN        | child        | ... | NaN       | NaN         | NaN                             | NaN      | NaN            | NaN             | NaN                    | NaN               | NaN | NaN  |
+| 4 | ZeeviD_2015   | PNP_Main_363                         | PNP_Main_363      | stool     | no                      | control         | healthy | NaN | NaN        | adult        | ... | NaN       | NaN         | NaN                             | NaN      | NaN            | NaN             | NaN                    | NaN               | NaN | NaN  |
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>study_name</th>
-      <th>sample_id</th>
-      <th>subject_id</th>
-      <th>body_site</th>
-      <th>antibiotics_current_use</th>
-      <th>study_condition</th>
-      <th>disease</th>
-      <th>age</th>
-      <th>infant_age</th>
-      <th>age_category</th>
-      <th>...</th>
-      <th>hla_drb11</th>
-      <th>birth_order</th>
-      <th>age_twins_started_to_live_apart</th>
-      <th>zigosity</th>
-      <th>brinkman_index</th>
-      <th>alcohol_numeric</th>
-      <th>breastfeeding_duration</th>
-      <th>formula_first_day</th>
-      <th>ALT</th>
-      <th>eGFR</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>ShaoY_2019</td>
-      <td>de028ad4-7ae6-11e9-a106-68b59976a384</td>
-      <td>C01528_ba</td>
-      <td>stool</td>
-      <td>no</td>
-      <td>control</td>
-      <td>healthy</td>
-      <td>0.0</td>
-      <td>4.0</td>
-      <td>newborn</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>ZeeviD_2015</td>
-      <td>PNP_Main_283</td>
-      <td>PNP_Main_283</td>
-      <td>stool</td>
-      <td>no</td>
-      <td>control</td>
-      <td>healthy</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>adult</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>ZeeviD_2015</td>
-      <td>PNP_Validation_55</td>
-      <td>PNP_Validation_55</td>
-      <td>stool</td>
-      <td>no</td>
-      <td>control</td>
-      <td>healthy</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>adult</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>VatanenT_2016</td>
-      <td>G80275</td>
-      <td>T014806</td>
-      <td>stool</td>
-      <td>no</td>
-      <td>control</td>
-      <td>healthy</td>
-      <td>1.0</td>
-      <td>NaN</td>
-      <td>child</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>ZeeviD_2015</td>
-      <td>PNP_Main_363</td>
-      <td>PNP_Main_363</td>
-      <td>stool</td>
-      <td>no</td>
-      <td>control</td>
-      <td>healthy</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>adult</td>
-      <td>...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-  </tbody>
-</table>
-<p>5 rows × 130 columns</p>
-</div>
+: Taxonomic profiles at species level of multiple modern samples {#tbl-sample-metadata}
 
 ## Comparing ancient and modern samples
 
@@ -2014,7 +1032,7 @@ metadata.head()
 
 One common plot in microbiome papers in a stacked barplot, often at the phylum or family level.
 
-First, we'll do some renaming, to make the value of the metadata variables a bit easier to understand
+First, we'll do some renaming, to make the value of the metadata variables a bit easier to understand (@tbl-sample-groups)
 
 ```python
 group_info = pd.concat(
@@ -2034,424 +1052,53 @@ group_info = pd.concat(
 group_info
 ```
 
+::: {.callout-tip collapse="true" title='Expand to see command output'}
+
+```
     /var/folders/1c/l1qb09f15jddsh65f6xv1n_r0000gp/T/ipykernel_40830/27419655.py:2:
     FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version.
     Use pandas.concat instead.
       metadata['non_westernized']
+```
+:::
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+|     | sample_id                            | group           |
+|-----|--------------------------------------|-----------------|
+| 0   | de028ad4-7ae6-11e9-a106-68b59976a384 | westernized     |
+| 1   | PNP_Main_283                         | westernized     |
+| 2   | PNP_Validation_55                    | westernized     |
+| 3   | G80275                               | westernized     |
+| 4   | PNP_Main_363                         | westernized     |
+| ... | ...                                  | ...             |
+| 196 | A48_01_1FE                           | non_westernized |
+| 197 | KHG_1                                | non_westernized |
+| 198 | TZ_81781                             | non_westernized |
+| 199 | A09_01_1FE                           | non_westernized |
+| 200 | ERR5766177                           | ancient         |
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>sample_id</th>
-      <th>group</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>de028ad4-7ae6-11e9-a106-68b59976a384</td>
-      <td>westernized</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>PNP_Main_283</td>
-      <td>westernized</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>PNP_Validation_55</td>
-      <td>westernized</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>G80275</td>
-      <td>westernized</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>PNP_Main_363</td>
-      <td>westernized</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>196</th>
-      <td>A48_01_1FE</td>
-      <td>non_westernized</td>
-    </tr>
-    <tr>
-      <th>197</th>
-      <td>KHG_1</td>
-      <td>non_westernized</td>
-    </tr>
-    <tr>
-      <th>198</th>
-      <td>TZ_81781</td>
-      <td>non_westernized</td>
-    </tr>
-    <tr>
-      <th>199</th>
-      <td>A09_01_1FE</td>
-      <td>non_westernized</td>
-    </tr>
-    <tr>
-      <th>200</th>
-      <td>ERR5766177</td>
-      <td>ancient</td>
-    </tr>
-  </tbody>
-</table>
-<p>201 rows × 2 columns</p>
-</div>
+: Table of samples and their group {#tbl-sample-groups}
 
 We need transform our data in [tidy](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) format to
 plot with [plotnine](https://plotnine.readthedocs.io/en/stable/), a python clone of [ggplot](https://ggplot2.tidyverse.org/index.html).  
-We then add the group information (Westernized, non westernized, or ancient sample), and compute the mean abundance for each phylum.
 
-First we transpose the dataframe to have the samples as index, and the phylums as columns
+|     | Actinobacteria | Apicomplexa | Ascomycota | Bacteroidetes | Basidiomycota | Candidatus Melainabacteria | Chlamydiae | Chloroflexi | Cyanobacteria | Deferribacteres | ... | Fusobacteria | Lentisphaerae | Planctomycetes | Proteobacteria | Spirochaetes | Synergistetes | Tenericutes | Verrucomicrobia | sample_id                            | group           |
+|-----|----------------|-------------|------------|---------------|---------------|----------------------------|------------|-------------|---------------|-----------------|-----|--------------|---------------|----------------|----------------|--------------|---------------|-------------|-----------------|--------------------------------------|-----------------|
+| 200 | 20.33151       | 0.0         | 0.0        | 28.42090      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 0.00000        | 0.00000      | 0.0           | 0.0         | 0.00000         | ERR5766177                           | ancient         |
+| 0   | 0.25809        | 0.0         | 0.0        | 0.00000       | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 4.49959        | 0.00000      | 0.0           | 0.0         | 0.00000         | de028ad4-7ae6-11e9-a106-68b59976a384 | westernized     |
+| 1   | 10.27631       | 0.0         | 0.0        | 17.44332      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.01486       | 0.0            | 0.77098        | 0.00000      | 0.0           | 0.0         | 0.00784         | PNP_Main_283                         | westernized     |
+| 2   | 0.45187        | 0.0         | 0.0        | 82.86400      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 0.05697        | 0.00000      | 0.0           | 0.0         | 0.00000         | PNP_Validation_55                    | westernized     |
+| 3   | 1.11902        | 0.0         | 0.0        | 69.99087      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 4.07757        | 0.00000      | 0.0           | 0.0         | 1.99276         | G80275                               | westernized     |
+| ... | ...            | ...         | ...        | ...           | ...           | ...                        | ...        | ...         | ...           | ...             | ... | ...          | ...           | ...            | ...            | ...          | ...           | ...         | ...             | ...                                  | ...             |
+| 195 | 14.26365       | 0.0         | 0.0        | 38.59709      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 0.19699        | 0.00000      | 0.0           | 0.0         | 0.00000         | KHG_9                                | non_westernized |
+| 196 | 5.47750        | 0.0         | 0.0        | 14.81828      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 3.64655        | 0.09964      | 0.0           | 0.0         | 0.00000         | A48_01_1FE                           | non_westernized |
+| 197 | 36.77145       | 0.0         | 0.0        | 10.13908      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 17.64151       | 0.00000      | 0.0           | 0.0         | 0.00000         | KHG_1                                | non_westernized |
+| 198 | 1.16426        | 0.0         | 0.0        | 57.14031      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 0.30580        | 0.70467      | 0.0           | 0.0         | 0.00000         | TZ_81781                             | non_westernized |
+| 199 | 7.40894        | 0.0         | 0.0        | 11.61544      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 56.20177       | 0.00000      | 0.0           | 0.0         | 0.00000         | A09_01_1FE                           | non_westernized |
 
-We then add the metadata information
+: Table of the raw multi-sample taxonomic table {#tbl-raw-multi-sample-table}
 
-```python
-(
-    all_phylums
-    .transpose()
-    .merge(group_info, left_index=True, right_on='sample_id')
-)
-```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Actinobacteria</th>
-      <th>Apicomplexa</th>
-      <th>Ascomycota</th>
-      <th>Bacteroidetes</th>
-      <th>Basidiomycota</th>
-      <th>Candidatus Melainabacteria</th>
-      <th>Chlamydiae</th>
-      <th>Chloroflexi</th>
-      <th>Cyanobacteria</th>
-      <th>Deferribacteres</th>
-      <th>...</th>
-      <th>Fusobacteria</th>
-      <th>Lentisphaerae</th>
-      <th>Planctomycetes</th>
-      <th>Proteobacteria</th>
-      <th>Spirochaetes</th>
-      <th>Synergistetes</th>
-      <th>Tenericutes</th>
-      <th>Verrucomicrobia</th>
-      <th>sample_id</th>
-      <th>group</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>200</th>
-      <td>20.33151</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>28.42090</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>ERR5766177</td>
-      <td>ancient</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>0.25809</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>4.49959</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>de028ad4-7ae6-11e9-a106-68b59976a384</td>
-      <td>westernized</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>10.27631</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>17.44332</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.01486</td>
-      <td>0.0</td>
-      <td>0.77098</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.00784</td>
-      <td>PNP_Main_283</td>
-      <td>westernized</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>0.45187</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>82.86400</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.05697</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>PNP_Validation_55</td>
-      <td>westernized</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1.11902</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>69.99087</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>4.07757</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.99276</td>
-      <td>G80275</td>
-      <td>westernized</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>195</th>
-      <td>14.26365</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>38.59709</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.19699</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>KHG_9</td>
-      <td>non_westernized</td>
-    </tr>
-    <tr>
-      <th>196</th>
-      <td>5.47750</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>14.81828</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>3.64655</td>
-      <td>0.09964</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>A48_01_1FE</td>
-      <td>non_westernized</td>
-    </tr>
-    <tr>
-      <th>197</th>
-      <td>36.77145</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>10.13908</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>17.64151</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>KHG_1</td>
-      <td>non_westernized</td>
-    </tr>
-    <tr>
-      <th>198</th>
-      <td>1.16426</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>57.14031</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.30580</td>
-      <td>0.70467</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>TZ_81781</td>
-      <td>non_westernized</td>
-    </tr>
-    <tr>
-      <th>199</th>
-      <td>7.40894</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>11.61544</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>56.20177</td>
-      <td>0.00000</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.00000</td>
-      <td>A09_01_1FE</td>
-      <td>non_westernized</td>
-    </tr>
-  </tbody>
-</table>
-<p>201 rows × 24 columns</p>
-</div>
-
-Now, we need transform in the tidy format, with the `melt` function.
+Now, we need transform this (@tbl-raw-multi-sample-table) in the tidy format, with the `melt` function.
 
 ```python
 tidy_phylums = (
@@ -2480,14 +1127,15 @@ tidy_phylums.groupby('group')['relative_abundance'].sum()
     westernized         99.905089
     Name: relative_abundance, dtype: float64
 
-### Let's make some plots 
+## Let's make some plots 
 
 We first import plotnine
+
 ```python
 from plotnine import *
 ```
 
-And then run plotnine to a barplot of the mean abundance per group. 
+And then run plotnine to a barplot of the mean abundance per group (@fig-plotnine-phylum-abundance). 
 
 ```python
 ggplot(tidy_phylums, aes(x='group', y='relative_abundance', fill='Phylum')) \
@@ -2497,9 +1145,7 @@ ggplot(tidy_phylums, aes(x='group', y='relative_abundance', fill='Phylum')) \
 + theme_classic()
 ```
 
-![](assets/images/chapters/taxonomic-profiling/analysis_80_0.png)
-
-    <ggplot: (406187548)>
+![Stacked bar chart of ancient, non-westernised, and westernised sample groups on the X axis columns, and mean abundance percentage on the Y-axis. The legend and stacks of the bar represent different phyla each with a different colour](assets/images/chapters/taxonomic-profiling/analysis_80_0.png){#fig-plotnine-phylum-abundance}
 
 ## Ecological diversity
 
@@ -2514,7 +1160,7 @@ import skbio
 ```
 
 Let's compute the [species richness](https://en.wikipedia.org/wiki/Species_richness), the
-[Shannon, and Simpson index of diversity](https://www.biologydiscussion.com/biodiversity/types/2-types-of-diversity-indices-of-biodiversity/8388) index
+[Shannon, and Simpson index of diversity](https://www.biologydiscussion.com/biodiversity/types/2-types-of-diversity-indices-of-biodiversity/8388) index (@tbl-alpha-div)
 
 ```python
 shannon = skbio.diversity.alpha_diversity(metric='shannon', counts=all_species.transpose(), ids=all_species.columns)
@@ -2526,101 +1172,21 @@ alpha_diversity = (shannon.to_frame(name='shannon')
 alpha_diversity
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+|                                      | shannon  | simpson  | richness |
+|--------------------------------------|----------|----------|----------|
+| ERR5766177                           | 3.032945 | 0.844769 | 21       |
+| de028ad4-7ae6-11e9-a106-68b59976a384 | 0.798112 | 0.251280 | 11       |
+| PNP_Main_283                         | 5.092878 | 0.954159 | 118      |
+| PNP_Validation_55                    | 3.670162 | 0.812438 | 72       |
+| G80275                               | 3.831358 | 0.876712 | 66       |
+| ...                                  | ...      | ...      | ...      |
+| KHG_9                                | 3.884285 | 0.861683 | 87       |
+| A48_01_1FE                           | 4.377755 | 0.930024 | 53       |
+| KHG_1                                | 3.733834 | 0.875335 | 108      |
+| TZ_81781                             | 2.881856 | 0.719491 | 44       |
+| A09_01_1FE                           | 2.982322 | 0.719962 | 75       |
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>shannon</th>
-      <th>simpson</th>
-      <th>richness</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>ERR5766177</th>
-      <td>3.032945</td>
-      <td>0.844769</td>
-      <td>21</td>
-    </tr>
-    <tr>
-      <th>de028ad4-7ae6-11e9-a106-68b59976a384</th>
-      <td>0.798112</td>
-      <td>0.251280</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <th>PNP_Main_283</th>
-      <td>5.092878</td>
-      <td>0.954159</td>
-      <td>118</td>
-    </tr>
-    <tr>
-      <th>PNP_Validation_55</th>
-      <td>3.670162</td>
-      <td>0.812438</td>
-      <td>72</td>
-    </tr>
-    <tr>
-      <th>G80275</th>
-      <td>3.831358</td>
-      <td>0.876712</td>
-      <td>66</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>KHG_9</th>
-      <td>3.884285</td>
-      <td>0.861683</td>
-      <td>87</td>
-    </tr>
-    <tr>
-      <th>A48_01_1FE</th>
-      <td>4.377755</td>
-      <td>0.930024</td>
-      <td>53</td>
-    </tr>
-    <tr>
-      <th>KHG_1</th>
-      <td>3.733834</td>
-      <td>0.875335</td>
-      <td>108</td>
-    </tr>
-    <tr>
-      <th>TZ_81781</th>
-      <td>2.881856</td>
-      <td>0.719491</td>
-      <td>44</td>
-    </tr>
-    <tr>
-      <th>A09_01_1FE</th>
-      <td>2.982322</td>
-      <td>0.719962</td>
-      <td>75</td>
-    </tr>
-  </tbody>
-</table>
-<p>201 rows × 3 columns</p>
-</div>
+: Table of the shannon, simpson, and richness alpha diversity indicies for a subset of samples {#tbl-alpha-div}
 
 Let's load the group information from the metadata. To do so, we merge the alpha diversity dataframe that we compute previously, with the metadata dataframe, using the `sample_id` as a merge key.
 Finally, we do a bit of renaming to re-encode `yes`/`no` as `non_westernized`/`westernized`.
@@ -2633,240 +1199,53 @@ alpha_diversity = (
     .rename(columns={'non_westernized':'group'})
 )
 alpha_diversity['group'] = alpha_diversity['group'].replace({'yes':'non_westernized','no':'westernized', pd.NA:'ERR5766177'})
-```
 
-```python
 alpha_diversity
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+|                                      | shannon  | simpson  | richness | group           |
+|--------------------------------------|----------|----------|----------|-----------------|
+| sample_id                            |          |          |          |                 |
+| ERR5766177                           | 3.032945 | 0.844769 | 21       | ERR5766177      |
+| de028ad4-7ae6-11e9-a106-68b59976a384 | 0.798112 | 0.251280 | 11       | westernized     |
+| PNP_Main_283                         | 5.092878 | 0.954159 | 118      | westernized     |
+| PNP_Validation_55                    | 3.670162 | 0.812438 | 72       | westernized     |
+| G80275                               | 3.831358 | 0.876712 | 66       | westernized     |
+| ...                                  | ...      | ...      | ...      | ...             |
+| KHG_9                                | 3.884285 | 0.861683 | 87       | non_westernized |
+| A48_01_1FE                           | 4.377755 | 0.930024 | 53       | non_westernized |
+| KHG_1                                | 3.733834 | 0.875335 | 108      | non_westernized |
+| TZ_81781                             | 2.881856 | 0.719491 | 44       | non_westernized |
+| A09_01_1FE                           | 2.982322 | 0.719962 | 75       | non_westernized |
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+: Table of the shannon, simpson, and richness alpha diversity indicies for a subset of samples but with the group metadata {#tbl-alpha-div-group}
 
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>shannon</th>
-      <th>simpson</th>
-      <th>richness</th>
-      <th>group</th>
-    </tr>
-    <tr>
-      <th>sample_id</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>ERR5766177</th>
-      <td>3.032945</td>
-      <td>0.844769</td>
-      <td>21</td>
-      <td>ERR5766177</td>
-    </tr>
-    <tr>
-      <th>de028ad4-7ae6-11e9-a106-68b59976a384</th>
-      <td>0.798112</td>
-      <td>0.251280</td>
-      <td>11</td>
-      <td>westernized</td>
-    </tr>
-    <tr>
-      <th>PNP_Main_283</th>
-      <td>5.092878</td>
-      <td>0.954159</td>
-      <td>118</td>
-      <td>westernized</td>
-    </tr>
-    <tr>
-      <th>PNP_Validation_55</th>
-      <td>3.670162</td>
-      <td>0.812438</td>
-      <td>72</td>
-      <td>westernized</td>
-    </tr>
-    <tr>
-      <th>G80275</th>
-      <td>3.831358</td>
-      <td>0.876712</td>
-      <td>66</td>
-      <td>westernized</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>KHG_9</th>
-      <td>3.884285</td>
-      <td>0.861683</td>
-      <td>87</td>
-      <td>non_westernized</td>
-    </tr>
-    <tr>
-      <th>A48_01_1FE</th>
-      <td>4.377755</td>
-      <td>0.930024</td>
-      <td>53</td>
-      <td>non_westernized</td>
-    </tr>
-    <tr>
-      <th>KHG_1</th>
-      <td>3.733834</td>
-      <td>0.875335</td>
-      <td>108</td>
-      <td>non_westernized</td>
-    </tr>
-    <tr>
-      <th>TZ_81781</th>
-      <td>2.881856</td>
-      <td>0.719491</td>
-      <td>44</td>
-      <td>non_westernized</td>
-    </tr>
-    <tr>
-      <th>A09_01_1FE</th>
-      <td>2.982322</td>
-      <td>0.719962</td>
-      <td>75</td>
-      <td>non_westernized</td>
-    </tr>
-  </tbody>
-</table>
-<p>201 rows × 4 columns</p>
-</div>
-
-And as always, we need it in tidy format for plotnine.
+And as always, we need it in tidy format (@tbl-alpha-div-group-long) for plotnine.
 
 ```python
 alpha_diversity = alpha_diversity.melt(id_vars='group', value_name='alpha diversity', var_name='diversity_index', ignore_index=False)
-```
 
-```python
 alpha_diversity
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+|                                      | group           | diversity_index | alpha diversity |
+|--------------------------------------|-----------------|-----------------|-----------------|
+| sample_id                            |                 |                 |                 |
+| ERR5766177                           | ERR5766177      | shannon         | 3.032945        |
+| de028ad4-7ae6-11e9-a106-68b59976a384 | westernized     | shannon         | 0.798112        |
+| PNP_Main_283                         | westernized     | shannon         | 5.092878        |
+| PNP_Validation_55                    | westernized     | shannon         | 3.670162        |
+| G80275                               | westernized     | shannon         | 3.831358        |
+| ...                                  | ...             | ...             | ...             |
+| KHG_9                                | non_westernized | richness        | 87.000000       |
+| A48_01_1FE                           | non_westernized | richness        | 53.000000       |
+| KHG_1                                | non_westernized | richness        | 108.000000      |
+| TZ_81781                             | non_westernized | richness        | 44.000000       |
+| A09_01_1FE                           | non_westernized | richness        | 75.000000       |
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+: Table of the shannon, simpson, and richness alpha diversity indicies for a subset of samples but with the group metadata but in long-form tidy format {#tbl-alpha-div-group-long}
 
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>group</th>
-      <th>diversity_index</th>
-      <th>alpha diversity</th>
-    </tr>
-    <tr>
-      <th>sample_id</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>ERR5766177</th>
-      <td>ERR5766177</td>
-      <td>shannon</td>
-      <td>3.032945</td>
-    </tr>
-    <tr>
-      <th>de028ad4-7ae6-11e9-a106-68b59976a384</th>
-      <td>westernized</td>
-      <td>shannon</td>
-      <td>0.798112</td>
-    </tr>
-    <tr>
-      <th>PNP_Main_283</th>
-      <td>westernized</td>
-      <td>shannon</td>
-      <td>5.092878</td>
-    </tr>
-    <tr>
-      <th>PNP_Validation_55</th>
-      <td>westernized</td>
-      <td>shannon</td>
-      <td>3.670162</td>
-    </tr>
-    <tr>
-      <th>G80275</th>
-      <td>westernized</td>
-      <td>shannon</td>
-      <td>3.831358</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>KHG_9</th>
-      <td>non_westernized</td>
-      <td>richness</td>
-      <td>87.000000</td>
-    </tr>
-    <tr>
-      <th>A48_01_1FE</th>
-      <td>non_westernized</td>
-      <td>richness</td>
-      <td>53.000000</td>
-    </tr>
-    <tr>
-      <th>KHG_1</th>
-      <td>non_westernized</td>
-      <td>richness</td>
-      <td>108.000000</td>
-    </tr>
-    <tr>
-      <th>TZ_81781</th>
-      <td>non_westernized</td>
-      <td>richness</td>
-      <td>44.000000</td>
-    </tr>
-    <tr>
-      <th>A09_01_1FE</th>
-      <td>non_westernized</td>
-      <td>richness</td>
-      <td>75.000000</td>
-    </tr>
-  </tbody>
-</table>
-<p>603 rows × 3 columns</p>
-</div>
-
-We now make a violin plot to compare the alpha diversity for each group, faceted by the type of alpha diversity index.
+We now make a violin plot to compare the alpha diversity for each group, faceted by the type of alpha diversity index (@fig-diversity-violin-plots).
 
 ```python
 g = ggplot(alpha_diversity, aes(x='group', y='alpha diversity', color='group'))
@@ -2880,9 +1259,8 @@ g += theme(subplots_adjust={'wspace': 0.15})
 g
 ```
 
-![png](assets/images/chapters/taxonomic-profiling/analysis_91_1.png)
+![Three groups of violin plots of an ancient sample, westernised samples and non-westernised samples (x-axis) of the alpha diversity (y-axis) calculated for richness, shannon and simpson alpha indicies](assets/images/chapters/taxonomic-profiling/analysis_91_1.png){#fig-diversity-violin-plots}
 
-    <ggplot: (407407577)>
 
 :::{.callout-note}
 **Pause and think: Why do we observe a smaller species richness and diversity in our sample ?**
@@ -2904,6 +1282,9 @@ We get a distance matrix
 print(beta_diversity)
 ```
 
+::: {.callout-tip collapse="true" title='Expand to see command output'}
+
+```
     201x201 distance matrix
     IDs:
     'ERR5766177', 'de028ad4-7ae6-11e9-a106-68b59976a384', 'PNP_Main_283', ...
@@ -2915,368 +1296,74 @@ print(beta_diversity)
      [0.85716612 0.99853413 0.82311942 ... 0.         0.84253376 0.76616679]
      [0.69790092 0.994116   0.87202543 ... 0.84253376 0.         0.82409272]
      [0.8303726  0.99877258 0.91363156 ... 0.76616679 0.82409272 0.        ]]
+```
+
+:::
 
 To visualize this distance matrix in a lower dimensional space, we'll use a [PCoA](https://en.wikipedia.org/wiki/Multidimensional_scaling#Types), which is is a method very similar to a PCA, but taking a distance matrix as input.
 
 ```python
 pcoa = skbio.stats.ordination.pcoa(beta_diversity)
 ```
+::: {.callout-tip collapse="true" title='Expand to see command output'}
 
+```
     /Users/maxime/mambaforge/envs/summer_school_microbiome/lib/python3.9/site-packages/skbio/stats/ordination/_principal_coordinate_analysis.py:143: RuntimeWarning:
     The result contains negative eigenvalues. Please compare their magnitude with the magnitude of some of the largest positive eigenvalues.
     If the negative ones are smaller, it's probably safe to ignore them, but if they are large in magnitude, the results won't be useful.
     See the Notes section for more details. The smallest eigenvalue is -0.25334842745723996 and the largest is 10.204440747987945.
+```
+:::
 
 ```python
 pcoa.samples
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+|                                      | PC1       | PC2       | PC3       | PC4       | PC5       | PC6       | PC7       | PC8       | PC9       | PC10      | ... | PC192 | PC193 | PC194 | PC195 | PC196 | PC197 | PC198 | PC199 | PC200 | PC201 |
+|--------------------------------------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
+| ERR5766177                           | 0.216901  | -0.039778 | 0.107412  | 0.273272  | 0.020540  | 0.114876  | -0.256332 | -0.151069 | 0.097451  | 0.060211  | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
+| de028ad4-7ae6-11e9-a106-68b59976a384 | -0.099355 | 0.145224  | -0.191676 | 0.127626  | 0.119754  | -0.132209 | -0.097382 | 0.036728  | 0.081294  | -0.056686 | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
+| PNP_Main_283                         | -0.214108 | -0.147466 | 0.116027  | 0.090059  | 0.076644  | 0.111536  | 0.092115  | 0.026477  | -0.006460 | -0.018592 | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
+| PNP_Validation_55                    | 0.244827  | -0.173996 | -0.311197 | -0.012836 | 0.031759  | 0.117548  | 0.148715  | -0.135641 | 0.034730  | -0.009395 | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
+| G80275                               | -0.261358 | -0.077147 | -0.254374 | -0.065932 | 0.088538  | 0.165970  | -0.005260 | -0.028739 | -0.002016 | 0.015719  | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
+| ...                                  | ...       | ...       | ...       | ...       | ...       | ...       | ...       | ...       | ...       | ...       | ... | ...   | ...   | ...   | ...   | ...   | ...   | ...   | ...   | ...   | ...   |
+| KHG_9                                | 0.296057  | -0.150300 | 0.013941  | 0.032649  | -0.147692 | 0.019663  | -0.063120 | -0.034453 | -0.073514 | 0.070085  | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
+| A48_01_1FE                           | 0.110621  | 0.030971  | 0.154231  | -0.185961 | -0.008512 | -0.103420 | 0.028169  | -0.044530 | 0.041902  | 0.068597  | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
+| KHG_1                                | -0.100009 | 0.167885  | 0.009915  | 0.076842  | -0.405582 | -0.039111 | -0.006421 | -0.009774 | -0.072252 | 0.150000  | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
+| TZ_81781                             | 0.405716  | -0.139297 | -0.075026 | -0.079716 | -0.053264 | -0.119271 | 0.068261  | -0.018821 | 0.198152  | -0.012792 | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
+| A09_01_1FE                           | 0.089101  | 0.471135  | 0.069629  | -0.125644 | -0.036793 | 0.115151  | 0.060507  | -0.000912 | -0.027239 | -0.138436 | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+: Table principal coordinates (columns) for each of the samples (rows) {#tbl-alpha-div-group-long}
 
-    .dataframe thead th {
-        text-align: right;
-    }
-
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>PC1</th>
-      <th>PC2</th>
-      <th>PC3</th>
-      <th>PC4</th>
-      <th>PC5</th>
-      <th>PC6</th>
-      <th>PC7</th>
-      <th>PC8</th>
-      <th>PC9</th>
-      <th>PC10</th>
-      <th>...</th>
-      <th>PC192</th>
-      <th>PC193</th>
-      <th>PC194</th>
-      <th>PC195</th>
-      <th>PC196</th>
-      <th>PC197</th>
-      <th>PC198</th>
-      <th>PC199</th>
-      <th>PC200</th>
-      <th>PC201</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>ERR5766177</th>
-      <td>0.216901</td>
-      <td>-0.039778</td>
-      <td>0.107412</td>
-      <td>0.273272</td>
-      <td>0.020540</td>
-      <td>0.114876</td>
-      <td>-0.256332</td>
-      <td>-0.151069</td>
-      <td>0.097451</td>
-      <td>0.060211</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>de028ad4-7ae6-11e9-a106-68b59976a384</th>
-      <td>-0.099355</td>
-      <td>0.145224</td>
-      <td>-0.191676</td>
-      <td>0.127626</td>
-      <td>0.119754</td>
-      <td>-0.132209</td>
-      <td>-0.097382</td>
-      <td>0.036728</td>
-      <td>0.081294</td>
-      <td>-0.056686</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>PNP_Main_283</th>
-      <td>-0.214108</td>
-      <td>-0.147466</td>
-      <td>0.116027</td>
-      <td>0.090059</td>
-      <td>0.076644</td>
-      <td>0.111536</td>
-      <td>0.092115</td>
-      <td>0.026477</td>
-      <td>-0.006460</td>
-      <td>-0.018592</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>PNP_Validation_55</th>
-      <td>0.244827</td>
-      <td>-0.173996</td>
-      <td>-0.311197</td>
-      <td>-0.012836</td>
-      <td>0.031759</td>
-      <td>0.117548</td>
-      <td>0.148715</td>
-      <td>-0.135641</td>
-      <td>0.034730</td>
-      <td>-0.009395</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>G80275</th>
-      <td>-0.261358</td>
-      <td>-0.077147</td>
-      <td>-0.254374</td>
-      <td>-0.065932</td>
-      <td>0.088538</td>
-      <td>0.165970</td>
-      <td>-0.005260</td>
-      <td>-0.028739</td>
-      <td>-0.002016</td>
-      <td>0.015719</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>KHG_9</th>
-      <td>0.296057</td>
-      <td>-0.150300</td>
-      <td>0.013941</td>
-      <td>0.032649</td>
-      <td>-0.147692</td>
-      <td>0.019663</td>
-      <td>-0.063120</td>
-      <td>-0.034453</td>
-      <td>-0.073514</td>
-      <td>0.070085</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>A48_01_1FE</th>
-      <td>0.110621</td>
-      <td>0.030971</td>
-      <td>0.154231</td>
-      <td>-0.185961</td>
-      <td>-0.008512</td>
-      <td>-0.103420</td>
-      <td>0.028169</td>
-      <td>-0.044530</td>
-      <td>0.041902</td>
-      <td>0.068597</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>KHG_1</th>
-      <td>-0.100009</td>
-      <td>0.167885</td>
-      <td>0.009915</td>
-      <td>0.076842</td>
-      <td>-0.405582</td>
-      <td>-0.039111</td>
-      <td>-0.006421</td>
-      <td>-0.009774</td>
-      <td>-0.072252</td>
-      <td>0.150000</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>TZ_81781</th>
-      <td>0.405716</td>
-      <td>-0.139297</td>
-      <td>-0.075026</td>
-      <td>-0.079716</td>
-      <td>-0.053264</td>
-      <td>-0.119271</td>
-      <td>0.068261</td>
-      <td>-0.018821</td>
-      <td>0.198152</td>
-      <td>-0.012792</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>A09_01_1FE</th>
-      <td>0.089101</td>
-      <td>0.471135</td>
-      <td>0.069629</td>
-      <td>-0.125644</td>
-      <td>-0.036793</td>
-      <td>0.115151</td>
-      <td>0.060507</td>
-      <td>-0.000912</td>
-      <td>-0.027239</td>
-      <td>-0.138436</td>
-      <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-  </tbody>
-</table>
-<p>201 rows × 201 columns</p>
-</div>
-
-Let's look at the variance explained by the first axes by using a scree plot
+Let's look at the variance explained by the first axes by using a scree plot (@fig-scree-plot).
 
 ```python
 var_explained = pcoa.proportion_explained[:9].to_frame(name='variance explained').reset_index().rename(columns={'index':'PC'})
-```
 
-```python
 ggplot(var_explained, aes(x='PC', y='variance explained', group=1)) \
 + geom_point() \
 + geom_line() \
 + theme_classic()
 ```
 
-![png](assets/images/chapters/taxonomic-profiling/analysis_102_0.png)
-
-    <ggplot: (407531271)>
+![Scree plot describing the variance explained (Y-axis), for each Principal Componanent (X-axis), with a curved line from PC1 having highest variance to lowest on PC9.](assets/images/chapters/taxonomic-profiling/analysis_102_0.png){#fig-scree-plot}
 
 In this scree plot, we're looking for the "elbow", where there is a drop in the slope. Here, it seems that most of the variance is captures by the 3 first principal components
 
 ```python
 pcoa_embed = pcoa.samples[['PC1','PC2','PC3']].rename_axis('sample').reset_index()
-```
 
-```python
 pcoa_embed = (
     pcoa_embed
     .merge(metadata[['sample_id', 'non_westernized']], left_on='sample', right_on='sample_id', how='outer')
     .drop('sample_id', axis=1)
     .rename(columns={'non_westernized':'group'})
 )
+
 pcoa_embed['group'] = pcoa_embed['group'].replace({'yes':'non_westernized','no':'westernized', pd.NA:'ERR5766177'})
 ```
 
-Let's first look at these components with 2D plots
+Let's first look at these components with 2D plots (@fig-poca-1, @fig-poca-2)
 
 ```python
 ggplot(pcoa_embed, aes(x='PC1', y='PC2', color='group')) \
@@ -3285,9 +1372,7 @@ ggplot(pcoa_embed, aes(x='PC1', y='PC2', color='group')) \
 + scale_color_manual({'ERR5766177':'#DB5F57','westernized':'#5F57DB','non_westernized':'#57DB5E'})
 ```
 
-![png](assets/images/chapters/taxonomic-profiling/analysis_107_0.png)
-
-    <ggplot: (407572134)>
+![Principal Coordinate Analysis plot of PC1 (X-axis) and PC2 (Y-axis), with three groups of points in the scatter plot - blue circles of westernised data points in the bottom left, overlapping with green circles of non-westernised datapoints in the top right, and the single ancient sample as a red circle falling in between the two on the right of the overlap](assets/images/chapters/taxonomic-profiling/analysis_107_0.png){#fig-poca-1}
 
 ```python
 ggplot(pcoa_embed, aes(x='PC1', y='PC3', color='group')) +
@@ -3296,11 +1381,11 @@ theme_classic() +
 scale_color_manual({'ERR5766177':'#DB5F57','westernized':'#5F57DB','non_westernized':'#57DB5E'})
 ```
 
-![png](assets/images/chapters/taxonomic-profiling/analysis_108_0.png)
+![Principal Coordinate Analysis plot of PC1 (X-axis) and PC3 (Y-axis), a similar overlap between westernised/non-westernised individuals and position of the ancient sample as in the PC1-PC2 PCoA, however this time in a horseshoe shape from bottom left for the westernised data points, curving up to the top of PC3 at a peak, and then falling again at the top of PC1](assets/images/chapters/taxonomic-profiling/analysis_108_0.png){#fig-poca-2}
 
-    <ggplot: (407612651)>
+::: {.callout-tip collapse="true" title='Expand to see additional visualisations'}
 
-Then with a 3d plot
+You can also plot the data above as a with a 3d plot if you were to run the following command
 
 ```python
 import plotly.express as px
@@ -3311,15 +1396,13 @@ fig = px.scatter_3d(pcoa_embed, x="PC1", y="PC2", z="PC3",
                   hover_name="sample")
 fig.show()
 ```
-::: {.callout-important}
-3D PLOT HERE NOT DISPLAYED DUE TO RENDERING LIMITATIONS - PLEASE SEE JUPYTER NOTEBOOK
 :::
 
 :::{.callout-note}
 **Pause and think: How do you think this embedding represents how our sample relates to modern reference samples ?**
 :::
 
-We can also visualize this distance matrix using a clustered heatmap, where pairs of sample with a small beta diversity are clustered together
+Finally, we can also visualize this distance matrix using a clustered heatmap, where pairs of sample with a small beta diversity are clustered together (@fig-heatmap).
 
 ```python
 import seaborn as sns
@@ -3330,9 +1413,7 @@ We set the color in seaborn to match the color palette we've used so far.
 
 ```python
 pcoa_embed['colour'] = pcoa_embed['group'].map({'ERR5766177':'#DB5F57','westernized':'#5F57DB','non_westernized':'#57DB5E'})
-```
 
-```python
 linkage = hc.linkage(sp.distance.squareform(beta_diversity.to_data_frame()), method='average')
 
 sns.clustermap(
@@ -3343,6 +1424,9 @@ sns.clustermap(
 )
 ```
 
-    <seaborn.matrix.ClusterGrid at 0x185b56100>
+![Sample-by-sample clustered heatmap, with tree representation of the clustering on the left and top of the heatmap](assets/images/chapters/taxonomic-profiling/analysis_115_1.png){#fig-heatmap}
 
-![png](assets/images/chapters/taxonomic-profiling/analysis_115_1.png)
+## References
+
+::: {#refs}
+:::
