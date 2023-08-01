@@ -17,6 +17,9 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
+      - name: Install jupyter
+        run: python3 -m pip install jupyter
+
       - name: Install R
         uses: r-lib/actions/setup-r@v2
         with:
@@ -27,6 +30,8 @@ jobs:
         with:
           packages: any::knitr
             any::rmarkdown
+            any::pander
+            any::tidyverse
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
