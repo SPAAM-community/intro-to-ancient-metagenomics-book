@@ -464,15 +464,15 @@ Tip
 <section id="mapping-to-a-reference-genome" class="level2" data-number="14.2">
 <h2 data-number="14.2" class="anchored" data-anchor-id="mapping-to-a-reference-genome"><span class="header-section-number">14.2</span> Mapping to a Reference Genome</h2>
 <p>One way of reconstructing genomic information from DNA sequencing reads is mapping/aligning them to a reference genome. This allows for identification of differences between the genome from your sample and the reference genome. This information can be used for example for comparative analyses such as in phylogenetics. For a detailed explanation of the read alignment problem and an overview of concepts for solving it, please see <a href="https://doi.org/10.1146/annurev-genom-090413-025358">https://doi.org/10.1146/annurev-genom-090413-025358</a>.</p>
-<p>In this session we will map two samples to the <em>Yersinia pestis</em> (plague) genome using different parameter sets. We will do this “manually” in the sense that we will use all necessary commands one by one in the terminal. These commands usually run in the back when you apply DNA sequencing data processing pipelines.</p>
+<p>In this session we will map two samples to the <em>Yersinia pestis</em> (plague) genome using different parameter sets. We will do this “manually” in the sense that we will use all necessary commands one by one in the terminal. These commands usually run in the background when you apply DNA sequencing data processing pipelines.</p>
 <section id="preparation" class="level3" data-number="14.2.1">
 <h3 data-number="14.2.1" class="anchored" data-anchor-id="preparation"><span class="header-section-number">14.2.1</span> Preparation</h3>
 <p>The data and conda environment <code>.yaml</code> file for this practical session can be downloaded from here: <a href="https://doi.org/10.5281/zenodo.6983174">https://doi.org/10.5281/zenodo.6983174</a>. See instructions on page.</p>
-<p>We will open a terminal and then navigate to the working directory of this session:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/genome-mapping/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Then, we need to activate the conda environment of this session. By this all the necessary tools can be accessed in the current terminal session:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate microbial-genomics</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>We will be using the Burrows-Wheeler Aligner (Li et al.&nbsp;2009 – <a href="http://bio-bwa.sourceforge.net">http://bio-bwa.sourceforge.net</a>). There are different algorithms implemented for different types of data (e.g.&nbsp;different read lengths). Here, we use BWA backtrack (<em>bwa aln</em>), which is well suitable for Illumina sequences up to 100bp. Other algorithms are <em>bwa mem</em> and <em>bwa sw</em> for longer reads.</p>
+<p>We will open a terminal and then navigate to the working directory of this session (cd /<path>/<to>/genome-mapping/):</to></path></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /vol/volume/genome-mapping</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then, as already mentioned above, we need to activate the conda environment of this session. By doing this all the necessary tools can be accessed in the current terminal session:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate genome-mapping</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We will be using the Burrows-Wheeler Aligner (Li et al.&nbsp;2009 – <a href="http://bio-bwa.sourceforge.net">http://bio-bwa.sourceforge.net</a>). There are different algorithms implemented for different types of data (e.g.&nbsp;different read lengths). Here, we use BWA backtrack (<em>bwa aln</em>), which is suitable for Illumina sequences up to 100bp. Other algorithms are <em>bwa mem</em> and <em>bwa sw</em> for longer reads.</p>
 </section>
 <section id="reference-genome" class="level3" data-number="14.2.2">
 <h3 data-number="14.2.2" class="anchored" data-anchor-id="reference-genome"><span class="header-section-number">14.2.2</span> Reference Genome</h3>
@@ -544,6 +544,19 @@ Tip
 <p>Let’s now continue with mapping and genotyping for the other samples and parameter settings.</p>
 <section id="sample2-lenient" class="level4" data-number="14.2.6.1">
 <h4 data-number="14.2.6.1" class="anchored" data-anchor-id="sample2-lenient"><span class="header-section-number">14.2.6.1</span> Sample2 Lenient</h4>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is a larger file and lenient mapping takes longer so this file will likely take a few minutes. If you are short on time, proceed with the other sample/parameter settings first and come back to this later if there is time.</p>
+</div>
+</div>
 <div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ..</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> sample2_lenient</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -665,7 +678,7 @@ Tip
 </section>
 <section id="examples" class="level3" data-number="14.2.9">
 <h3 data-number="14.2.9" class="anchored" data-anchor-id="examples"><span class="header-section-number">14.2.9</span> Examples</h3>
-<p>Please find here a few examples for exploration. To get a better visualization we have loaded here only <code>sample2_lenient</code> (top track) and <code>sample2_strict</code> (bottom track):</p>
+<p>Please find here a few examples for exploration. To get a better visualization we only loaded <code>sample2_lenient</code> (top track) and <code>sample2_strict</code> (bottom track):</p>
 <p><img src="assets/images/chapters/genome-mapping/IGV_example_intro.png" class="img-fluid"></p>
 <p>You can see all aligned reads in the current genomic region as stacks of grey arrows. In the middle of the image you see brown dashes in all of the reads. This is a SNP. You also see sporadically green or red dashes in some reads but not all of them at a given position. These sporadic differences are DNA damage such as we typically find it for ancient DNA.</p>
 <p>For jumping to a specific coordinate you need to enter it into the coordinate field at the top:</p>
@@ -678,7 +691,7 @@ Tip
 <p>Does this mean that stricter parameters will always give us a clean mapping? Let’s have a look at position <code>219200</code>:</p>
 <p><img src="assets/images/chapters/genome-mapping/IGV_SNP_219200.png" class="img-fluid"></p>
 <p>You might need to zoom out a bit using the slider in the upper right corner.</p>
-<p>So, what is going on here? We see a lot of variation in most of the reads. This is reduced a bit with strict mapping parameters (bottom track) but the effect is still quite pronounced. Here, we see a region that seems to be conserved in other species as well, so we have a lot of mapping from other organisms. We can’t compensate that with stricter mapping parameters and we would have to apply some filtering on genotype level to remove this variation from our genotyping. Removing false positive SNP calls is important as it would interfere with downstream analysis such as phylogenomics.</p>
+<p>So, what is going on here? We see a lot of variation in most of the reads. This is reduced a bit with strict mapping parameters (bottom track) but the effect is still quite pronounced. Here, we see a region that seems to be conserved in other species as well, so we have a lot of mapping from other organisms. We can’t compensate that with stricter mapping parameters and we would have to apply some filtering on genotype level to remove this variation from our genotyping. Removing false positive SNP calls is important as it would interfere with downstream analyses such as phylogenomics.</p>
 <p>Such regions can be fairly large. For example, see this 20 kb region around position <code>224750</code>:</p>
 <p><img src="assets/images/chapters/genome-mapping/IGV_SNP_224750.png" class="img-fluid"></p>
 </section>
