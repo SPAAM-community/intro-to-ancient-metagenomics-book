@@ -80,15 +80,21 @@ However, because the sample was very deeply sequenced for more than 250 million 
 You can access the sub-sampled data by changing to the folder 
 
 ```bash
-ln -s /vol/volume/denovo_assembly/2612_R1.fastq.gz 2612_R1.fastq.gz
-ln -s /vol/volume/denovo_assembly/2612_R2.fastq.gz 2612_R2.fastq.gz
+ln -s /vol/volume/denovo-assembly/2612_R1.fastq.gz 2612_R1.fastq.gz
+ln -s /vol/volume/denovo-assembly/2612_R2.fastq.gz 2612_R2.fastq.gz
 ```
 
-on the cluster. If you would like to repeat the practical on your own computational infrastructure, you can download the sequencing data from here:
+on the cluster. If you would like to repeat the practical on your own computational infrastructure, you will find information on how to access the files in the following boxes with the title "Self-guided: data preparation":
+
+
+:::{.callout-note title="Self-guided: data preparation" collapse="true"}
+For everyone, who runs this practical on their own infrastructure, you can download the sequencing data from here:
 
 ```{bash, eval = F}
 wget https://share.eva.mpg.de/index.php/s/CtLq2R9iqEcAFyg/download/2612_R1.fastq.gz
 wget https://share.eva.mpg.de/index.php/s/mc5JrpDWdL4rC24/download/2612_R2.fastq.gz
+
+:::
 ```
 
 ::: {.callout-tip title="Question" appearance="simple"}
@@ -373,7 +379,7 @@ the folder `metawrap/INITIAL_BINNING/2612`.
 
 **How many bins did metaBAT2 and MaxBin2 reconstruct, respectively? Is there a difference in the genome sizes of these reconstructed bins?**
 
-Hint: You can use the previously introduced script `k8 .calN50.js` to analyse the genome size of the individual bins.
+Hint: You can use the previously introduced script `k8 ./calN50.js` to analyse the genome size of the individual bins.
 :::
 
 ::: {.callout-note collapse="true" title="Answer"}
@@ -399,7 +405,7 @@ Using this approach, the authors of metaWRAP could show that they can outperform
 ::: {.callout-caution}
 Running metaWRAP's bin refinement module requires about 72 GB of memory because it has to load a larger reference database containing the lineage-specific marker genes of checkM.
 
-If your computer infrastructure cannot provide so much memory, I have prepared the results of metaWRAP's bin refinement algorithm, `metawrap_50_10_bins.stats`, which can be found in the folder `vol/volume/denovo_assembly`.
+If your computer infrastructure cannot provide so much memory, I have prepared the results of metaWRAP's bin refinement algorithm, `metawrap_50_10_bins.stats`, which can be found in the folder `/vol/volume/denovo-assembly`.
 :::
 
 To apply metaWRAP's bin refinement to the bins that we obtained from metaBAT2 and MaxBin2, we first need to install the software checkM [@Parks2015] that will provide the lineage-specific marker gene catalogue:
@@ -440,13 +446,13 @@ Depending on the estimates on completeness and contamination plus the presence o
 
 :::
 
-As these two steps will run rather long and need a large amount of memory and disk space, I have provided the results of metaWRAP's bin refinement. You can find the file here: `/vol/volume/denovo_assembly/metawrap_50_10_bins.stats`. Be aware that these results are based on the bin refinement of the results of three binning tools and include CONCOCT.
+As these two steps will run rather long and need a large amount of memory and disk space, I have provided the results of metaWRAP's bin refinement. You can find the file here: `/vol/volume/denovo-assembly/metawrap_50_10_bins.stats`. Be aware that these results are based on the bin refinement of the results of three binning tools and include CONCOCT.
 
 ::: {.callout-tip title="Question" appearence="simple"}
 
 **How many bins were retained after the refinement with metaWRAP? How many high-quality and medium-quality MAGs did the refinement yield following the MIMAG criteria?**
 
-Hint: You can more easily visualise tables on the terminal using the Python program `visidata`. After installing it with `pip install visidata`, you can open a table using `vd -f tsv /vol/volume/denovo_assembly/metawrap_50_10_bins.stats`. Next to separating the columns nicely, it allows you to perform a lot of operations like sorting conveniently. Check the cheat sheet [here](https://jsvine.github.io/visidata-cheat-sheet/en/).
+Hint: You can more easily visualise tables on the terminal using the Python program `visidata`. After installing it with `pip install visidata`, you can open a table using `vd -f tsv /vol/volume/denovo-assembly/metawrap_50_10_bins.stats`. Next to separating the columns nicely, it allows you to perform a lot of operations like sorting conveniently. Check the cheat sheet [here](https://jsvine.github.io/visidata-cheat-sheet/en/).
 
 :::
 
@@ -483,7 +489,7 @@ While all of these tools can do the job, I typically prefer to use the program M
 ::: {.callout-caution}
 The latest version of the pre-computed GTDB reference database (r207) requires about 105 GB of harddisk space and 700 GB of memory for running.
 
-As our computer infrastructure does not provide so much memory for every user, I pre-computed the results. You can find the results `2612.mmseqs2_gtdb.tsv` in the folder `/vol/volume/denovo_assembly`.
+As our computer infrastructure does not provide so much memory for every user, I pre-computed the results. You can find the results `2612.mmseqs2_gtdb.tsv` in the folder `/vol/volume/denovo-assembly`.
 
 An alternative for users with a less powerful infrastructure is the program [KrakenUniq](https://github.com/fbreitwieser/krakenuniq).
 :::
@@ -552,7 +558,7 @@ To infer which taxa our five reconstructed MAGs represent, we can run the GTDBTK
 ::: {.callout-caution}
 The latest version of the database used by GTDBTK (r207) requires about 70 GB of harddisk space and 80 GB of memory for running.
 
-As our computer infrastructure does not provide so much memory for every user, I pre-computed the results. You can find the results `2612.gtdbtk_archaea.tsv` and `2612.gtdbtk_bacteria.tsv` in the folder `/vol/volume/denovo_assembly`.
+As our computer infrastructure does not provide so much memory for every user, I pre-computed the results. You can find the results `2612.gtdbtk_archaea.tsv` and `2612.gtdbtk_bacteria.tsv` in the folder `/vol/volume/denovo-assembly`.
 :::
 
 First, we need to install the GTDB database:
