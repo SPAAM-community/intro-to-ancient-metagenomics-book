@@ -545,12 +545,15 @@ Tip
 </div>
 <p>However, because the sample was very deeply sequenced for more than 250 million paired-end reads and we do not want to wait for days for the analysis to finish, we will not use all data but just a sub-sample of them.</p>
 <p>You can access the sub-sampled data by changing to the folder</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> /vol/volume/denovo_assembly/2612_R1.fastq.gz 2612_R1.fastq.gz</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> /vol/volume/denovo_assembly/2612_R2.fastq.gz 2612_R2.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>on the cluster. If you would like to repeat the practical on your own computational infrastructure, you can download the sequencing data from here:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> /vol/volume/denovo-assembly/2612_R1.fastq.gz 2612_R1.fastq.gz</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> /vol/volume/denovo-assembly/2612_R2.fastq.gz 2612_R2.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>on the cluster. If you would like to repeat the practical on your own computational infrastructure, you will find information on how to access the files in the following boxes with the title “Self-guided: data preparation”:</p>
+<p>:::{.callout-note title=“Self-guided: data preparation” collapse=“true”} For everyone, who runs this practical on their own infrastructure, you can download the sequencing data from here:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://share.eva.mpg.de/index.php/s/CtLq2R9iqEcAFyg/download/2612_R1.fastq.gz</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://share.eva.mpg.de/index.php/s/mc5JrpDWdL4rC24/download/2612_R2.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://share.eva.mpg.de/index.php/s/mc5JrpDWdL4rC24/download/2612_R2.fastq.gz</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">:::</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Question">
 <div class="callout-header d-flex align-content-center">
@@ -940,7 +943,7 @@ Question
 </div>
 <div class="callout-body-container callout-body">
 <p><strong>How many bins did metaBAT2 and MaxBin2 reconstruct, respectively? Is there a difference in the genome sizes of these reconstructed bins?</strong></p>
-<p>Hint: You can use the previously introduced script <code>k8 .calN50.js</code> to analyse the genome size of the individual bins.</p>
+<p>Hint: You can use the previously introduced script <code>k8 ./calN50.js</code> to analyse the genome size of the individual bins.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
@@ -982,7 +985,7 @@ Caution
 </div>
 <div class="callout-body-container callout-body">
 <p>Running metaWRAP’s bin refinement module requires about 72 GB of memory because it has to load a larger reference database containing the lineage-specific marker genes of checkM.</p>
-<p>If your computer infrastructure cannot provide so much memory, I have prepared the results of metaWRAP’s bin refinement algorithm, <code>metawrap_50_10_bins.stats</code>, which can be found in the folder <code>vol/volume/denovo_assembly</code>.</p>
+<p>If your computer infrastructure cannot provide so much memory, I have prepared the results of metaWRAP’s bin refinement algorithm, <code>metawrap_50_10_bins.stats</code>, which can be found in the folder <code>/vol/volume/denovo-assembly</code>.</p>
 </div>
 </div>
 <p>To apply metaWRAP’s bin refinement to the bins that we obtained from metaBAT2 and MaxBin2, we first need to install the software checkM <span class="citation" data-cites="Parks2015">(<a href="introduction-to-ngs-sequencing.html#ref-Parks2015" role="doc-biblioref">Parks et al. 2015</a>)</span> that will provide the lineage-specific marker gene catalogue:</p>
@@ -1024,7 +1027,7 @@ The Minimum Information for MAG (MIMAG)
 <p>Depending on the estimates on completeness and contamination plus the presence of RNA genes, MAGs are assigned to the quality category following the Minimum Information for MAG criteria <span class="citation" data-cites="Bowers2017">(<a href="introduction-to-ngs-sequencing.html#ref-Bowers2017" role="doc-biblioref">Bowers et al. 2017</a>)</span> You can find the overview <a href="https://www.nature.com/articles/nbt.3893/tables/1">here</a>.</p>
 </div>
 </div>
-<p>As these two steps will run rather long and need a large amount of memory and disk space, I have provided the results of metaWRAP’s bin refinement. You can find the file here: <code>/vol/volume/denovo_assembly/metawrap_50_10_bins.stats</code>. Be aware that these results are based on the bin refinement of the results of three binning tools and include CONCOCT.</p>
+<p>As these two steps will run rather long and need a large amount of memory and disk space, I have provided the results of metaWRAP’s bin refinement. You can find the file here: <code>/vol/volume/denovo-assembly/metawrap_50_10_bins.stats</code>. Be aware that these results are based on the bin refinement of the results of three binning tools and include CONCOCT.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Question" data-appearence="simple">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1036,7 +1039,7 @@ Question
 </div>
 <div class="callout-body-container callout-body">
 <p><strong>How many bins were retained after the refinement with metaWRAP? How many high-quality and medium-quality MAGs did the refinement yield following the MIMAG criteria?</strong></p>
-<p>Hint: You can more easily visualise tables on the terminal using the Python program <code>visidata</code>. After installing it with <code>pip install visidata</code>, you can open a table using <code>vd -f tsv /vol/volume/denovo_assembly/metawrap_50_10_bins.stats</code>. Next to separating the columns nicely, it allows you to perform a lot of operations like sorting conveniently. Check the cheat sheet <a href="https://jsvine.github.io/visidata-cheat-sheet/en/">here</a>.</p>
+<p>Hint: You can more easily visualise tables on the terminal using the Python program <code>visidata</code>. After installing it with <code>pip install visidata</code>, you can open a table using <code>vd -f tsv /vol/volume/denovo-assembly/metawrap_50_10_bins.stats</code>. Next to separating the columns nicely, it allows you to perform a lot of operations like sorting conveniently. Check the cheat sheet <a href="https://jsvine.github.io/visidata-cheat-sheet/en/">here</a>.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
@@ -1091,7 +1094,7 @@ Caution
 </div>
 <div class="callout-body-container callout-body">
 <p>The latest version of the pre-computed GTDB reference database (r207) requires about 105 GB of harddisk space and 700 GB of memory for running.</p>
-<p>As our computer infrastructure does not provide so much memory for every user, I pre-computed the results. You can find the results <code>2612.mmseqs2_gtdb.tsv</code> in the folder <code>/vol/volume/denovo_assembly</code>.</p>
+<p>As our computer infrastructure does not provide so much memory for every user, I pre-computed the results. You can find the results <code>2612.mmseqs2_gtdb.tsv</code> in the folder <code>/vol/volume/denovo-assembly</code>.</p>
 <p>An alternative for users with a less powerful infrastructure is the program <a href="https://github.com/fbreitwieser/krakenuniq">KrakenUniq</a>.</p>
 </div>
 </div>
@@ -1174,7 +1177,7 @@ Caution
 </div>
 <div class="callout-body-container callout-body">
 <p>The latest version of the database used by GTDBTK (r207) requires about 70 GB of harddisk space and 80 GB of memory for running.</p>
-<p>As our computer infrastructure does not provide so much memory for every user, I pre-computed the results. You can find the results <code>2612.gtdbtk_archaea.tsv</code> and <code>2612.gtdbtk_bacteria.tsv</code> in the folder <code>/vol/volume/denovo_assembly</code>.</p>
+<p>As our computer infrastructure does not provide so much memory for every user, I pre-computed the results. You can find the results <code>2612.gtdbtk_archaea.tsv</code> and <code>2612.gtdbtk_bacteria.tsv</code> in the folder <code>/vol/volume/denovo-assembly</code>.</p>
 </div>
 </div>
 <p>First, we need to install the GTDB database:</p>
