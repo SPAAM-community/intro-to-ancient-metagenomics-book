@@ -2,7 +2,9 @@
 
 The summer school course that this textbook is derived from was designed to be as practical as possible. This means that most of the chapters are designed to act as a walkthrough to guide you through the steps on how to generate and analyse data for each of the major steps of an ancient metagenomics project.
 
-The summer school utilised cloud computing to provide a consistent computing platform for all participants, however all tools and data demonstrated are open-source and publicly available.
+The summer school utilised cloud computing to provide a consistent computing platform for all participants, however all tools and data demonstrated are open-source and publicly available. We describe here to approximately recreate the computing platform used during the summer schools.
+
+## Basic requirements
 
 ::: {.callout-warning}
 Bioinformatics often involve large computing resource requirements! While we aim to make example data and processing as efficient as possible, we cannot guarantee that they will all be able to work on standard laptops or desktop computing - most likely due to memory/RAM requirements. As a guide, the cloud nodes used during the summer school had 16 cores and 32 GB of RAM.
@@ -18,27 +20,80 @@ To following the practical chapters of this text book, you will require:
     - Conda is a very popular package manager for installing software in bioinformatics. `bioconda` is a the main source of bioinformatics software for conda.
     - To speed up installation, we would also highly recommend setting up the [`libmamba-solver`](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community)
 
-For each chapter we will provide a link to a `tar` archive that will contain the raw data and a conda `yml` file that specifies the software environment for that chapter.
+For each chapter, if it requires pre-prepared data, the top of the page will have a link to a `.tar` archive that will contain the raw data will be available to download.
 
-Before loading the environment for the exercises, the environment will need to be installed using the `yml` with the instructions below, and then activated. A list of the software in each chapter's environment can be found in the [Appendix](appendix.html#conda-environments).
+A conda `.yml` file that specifies the software environment for that chapter will also be available for you to install. 
 
-## Creating a conda environment {.unnumbered}
+See the rest of this page on how to install `conda` (if not already available to you), and also how to create `conda` software environments
+
+## Software Environments
+
+Before loading the environment for the exercises, the software environment will need to be created using the `.yml` with the instructions below, and then activated. A list of the software in each chapter's environment can be found in the [Appendix](appendix.html#conda-environments).
+
+If you've not yet installed `conda`, please follow the instructions in the box below.
+
+::: {.callout-note title="Quick guide to installing conda and libmamba-solver" collapse=true}
+These instructions have been tested on Ubuntu 22.04, but should apply to most Linux operating systems. For OSX you may need to download a different file from [here](https://www.google.com/search?channel=fs&client=ubuntu-sn&q=miniconda).
+
+- Change directory to somewhere suitable for installing a few gigabytes of software, e.g. `mkdir ~/bin/ && cd ~/bin/`
+- Download miniconda
+
+    ```bash
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    ```
+
+- Run the install script
+
+    ```bash
+    bash bash Miniconda3-latest-Linux-x86_64.sh
+    ```
+
+    - Review license
+    - Agree to license
+    - Make sure to install miniconda to the correct directory! e.g. `/home/<YOUR_USER>/bin/miniconda3`
+    - Yes to running `conda init`
+    - Copy the `conda config` command
+    - Close the terminal (e.g. with `exit` or <kbd>ctrl</kbd> + <kbd>d</kbd>)
+    - Open the terminal again and run the command you copied (i.e., `conda config --set auto_activate_base false`)
+    - Exit and open the terminal again
+    - Type `conda --version` to check conda is installed and working
+    - Install `libsolver-mamba` for faster software installation
+
+        ```bash
+        conda install -n base conda-libmamba-solver
+        conda config --set solver libmamba
+        ```
+
+    - Set up bioconda
+
+        ```bash
+        conda config --add channels defaults
+        conda config --add channels bioconda
+        conda config --add channels conda-forge
+        ```
+:::
 
 Once `conda` is installed and `bioconda` configured, at the beginning of each chapter, to create the `conda` environment from the `yml` file, you will need to run the following:
 
-1. Download the `conda` env on 
+1. Download the `conda` env file the top of the chapter by right clicking on the link and pressing 'save as', or copy and paste the contents of the file to an empty file in your terminal.
 
-2. Within the resulting directory run the following conda command to install the software into it's dedicated environment 
+    For example:
 
     ```bash
-    conda env create -f <env_file>.yml
+    wget https://<URL>/<FILE_NAME>.yml
     ```
 
-    ::: {.callout-note}
-    Note: you only have to run the environment creation once.
-    :::
+2. Then you can run the following conda command to install the software into it's dedicated environment 
 
-3. Follow the instructions as prompted. Once created, you can see a list of environments with
+    ```bash
+    conda env create -f /<PATH/<TO>/<DOWNLOADED_FILE>.yml
+    ```
+
+::: {.callout-note}
+You only have to run the environment creation once!
+:::
+
+3. Follow the instructions as prompted. Once created, you can see a list of installed environments with
 
     ```bash
     conda env list
@@ -47,10 +102,10 @@ Once `conda` is installed and `bioconda` configured, at the beginning of each ch
 4. To load the relevant environment, you can run
 
     ```bash
-    conda activate <name_of_envonment>.yml
+    conda activate <NAME_OF_ENVIRONMENT>
     ```
 
-5. Once finished with the chapter, you can deactivate the environment with 
+3. Once finished with the chapter, you can deactivate the environment with 
 
     ```bash
     conda deactivate
@@ -66,35 +121,17 @@ To delete a conda software environment, just get the path listed on `conda env l
 
 For some chapters you may need the following software/and or data manually installed, which are not available on `bioconda`:
 
-- Docker (installation method will vary depending on your OS)
-  - [Standard install](https://docs.docker.com/engine/install/ubuntu/)
-  - Linux-nerd install
+### Introduction to the command line
 
-      ```bash
-      sudo install -m 0755 -d /etc/apt/keyrings
-      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-      sudo chmod a+r /etc/apt/keyrings/docker.gpg
-      echo \
-      "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-      "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-      sudo apt-get update
-      sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-      ## May need to do a reboot or something here
-      sudo groupadd docker
-      sudo usermod -aG docker $USER
-      newgrp docker
-      sudo reboot ## will kick you out, but it'll be back in a minute or two
-      ```
-
-- rename (if not already installed, e.g. on OSX)
+- [rename](https://www.gnu.org/software/libc/manual/html_node/Renaming-Files.html) (if not already installed, e.g. on OSX)
 
     ```bash
     sudo apt install rename
     ```
 
-- _De novo_ assembly
-    - MetaWrap
+### _De novo_ assembly
+
+- [MetaWRAP](https://github.com/bxlab/metaWRAP)
 
     ```bash
     conda create -n metawrap-env python=2.7
@@ -105,54 +142,79 @@ For some chapters you may need the following software/and or data manually insta
     echo "export PATH=$PATH:~/bin/metaWRAP/bin" >> ~/.bashrc
     ```
 
-- Functional Profiling
-    - HUMAnN3 UniRef database (where the functional providing conda environment is already activated - see the Functional Profiling chapter for more details)
+### Functional Profiling
 
-        ```bash
-        humann3_databases --download uniref uniref90_ec_filtered_diamond /vol/volume/5c-functional-genomics/humann3_db
-        ```
+- [HUMAnN3](https://github.com/biobakery/humann) UniRef database (where the functional providing conda environment is already activated - see the Functional Profiling chapter for more details)
 
-- Phylogenomics
-    - [Tempest](http://tree.bio.ed.ac.uk/download.html?name=tempest&id=102&num=3) (v1.5.3)
+    ```bash
+    humann3_databases --download uniref uniref90_ec_filtered_diamond /vol/volume/5c-functional-genomics/humann3_db
+    ```
+
+### Authentication and Decontamination <!-- TODO: update to use path method like e.g. metaWrap/tempest -->
+
+- [Sourcetracker](https://github.com/danknights/sourcetracker)
+
+    ```bash
+    cd /<path>/<to>/authentication-decontamination/sourcetracker/
+    git clone https://github.com/danknights/sourcetracker.git
+
+    ## patch due to R update
+    sed -i '538,539s/^/#/' sourcetracker/src/SourceTracker.r
+    ```
+
+- [decOM](https://github.com/CamilaDuitama/decOM) <!-- TODO: remove with bioconda env once available  -->
+
+    ```bash
+    cd /<path>/<to>/authentication-decontamination/decom
+    git clone https://github.com/CamilaDuitama/decOM.git  
+    cd decOM  
+    conda env create -n decOM --file environment.yml  
+    conda deactivate
+    conda activate decOM  
+
+    export PATH=/absolute/path/to/decOM:${PATH}
+    ```
+
+### Phylogenomics
+
+- [Tempest](http://tree.bio.ed.ac.uk/download.html?name=tempest&id=102&num=3) (v1.5.3)
     - It is also recommended to assign the following `bash` variable so you can access the tool without the full path
 
         ```bash
         export tempest='bash /home/ubuntu/bin/TempEst_v1.5.3/bin/tempest'
         ```
 
-    - [MEGAX](https://www.megasoftware.net) (v11.0.11)
+- [MEGAX](https://www.megasoftware.net) (v11.0.11)
 
-- Authentication and Decontamination <!-- TODO: update to use path method like e.g. metaWrap/tempest -->
+### Ancient metagenomic pipelines
 
-    - Sourcetracker
+- [Docker](https://www.docker.com/) (installation method will vary depending on your OS)
+    - [Standard install](https://docs.docker.com/engine/install/ubuntu/)
+    - Linux-nerd install
 
-        ```bash
-        cd /<path>/<to>/authentication-decontamination/sourcetracker/
-        git clone https://github.com/danknights/sourcetracker.git
+    ```bash
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo \
+    "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+    "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    ## May need to do a reboot or something here
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+    newgrp docker
+    sudo reboot ## will kick you out, but it'll be back in a minute or two
+    ```
 
-        ## patch due to R update
-        sed -i '538,539s/^/#/' sourcetracker/src/SourceTracker.r
-        ```
+- [aMeta](https://github.com/NBISweden/aMeta)
 
-    - decOM <!-- TODO: remove with bioconda env once available  -->
-
-        ```bash
-        cd /<path>/<to>/authentication-decontamination/decom
-        git clone https://github.com/CamilaDuitama/decOM.git  
-        cd decOM  
-        conda env create -n decOM --file environment.yml  
-        conda deactivate
-        conda activate decOM  
-
-        export PATH=/absolute/path/to/decOM:${PATH}
-        ```
-
-- Ancient Metagenomic Pipelines <!-- TODO: update to use path method like e.g. metaWrap/tempest -->
-
-        ```bash
-        cd /<path>/<to>/ancient-metagenomic-pipelines/
-        git clone https://github.com/NBISweden/aMeta
-        cd aMeta
-        conda env create -f workflow/envs/environment.yaml
-        conda activate aMeta
-        ```
+    ```bash
+    cd /<path>/<to>/ancient-metagenomic-pipelines/
+    git clone https://github.com/NBISweden/aMeta
+    cd aMeta
+    conda env create -f workflow/envs/environment.yaml
+    conda activate aMeta
+    ```

@@ -4,34 +4,25 @@ author: Thiseas C. Lamnidis, Aida Andrades Valtueña
 ---
 
 ::: {.callout-tip}
-For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [link](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/bare-bones-bash.yml) (right click and save as to download), and once created, activate the environment with:
+For this chapter's exercises, if not already performed, you will need to [create the conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [link](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/bare-bones-bash.yml) (use `wget`, or right click and save as to download). Once created, activate the environment with:
 
 ```bash
 conda activate bare-bones-bash
 ```
 :::
 
-### Introduction
+## Preamble
 
-This is the Brief version of a more Broad two-part session that we gave in 2022,
-which can be found [here](https://spaam-community.github.io/wss-summer-school/#/2022/day-1?id=practical-1b-bare-bones-bash-1).
+This chapter is a condensed version of the both 'Basic' and 'Boosted' Bare Bones Bash courses that can be found in the [Bare Bones Bash website](https://barebonesbash.github.io/#/). The material is displayed here under a [CC-BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/) license.
 
-The teaching material for the Boundless Bare Bones Bash (Basic + Boosted) can be
-found in the [Bare Bones Bash website](https://barebonesbash.github.io/#/).
+![Logo of BareBonesBash, a computer monitor with a command prompt dollar symbol, BBB and a bone on the screen.](assets/images/chapters/bare-bones-bash/BareBonesBash_Icon.png){width=15% fig-align="center"}
 
-![BareBonesBash Logo](assets/images/chapters/bare-bones-bash/BareBonesBash_Icon.png){width=15% fig-align="center"}
+The original Bare Bones Bash material was created by Aida Andrades Valtueña, James Fellows Yates, and Thiseas C. Lamnidis.
 
-The original Bare Bones Bash material was created by Aida Andrades Valtueña,
-James Fellows Yates, and Thiseas C. Lamnidis.
-
-<!-- Needed the HTML code to align all three images centrally on the same line for some reason -->
 <p align="center"> ![Aida](assets/images/chapters/bare-bones-bash/bbb_aida.png){width=15%}  ![James](assets/images/chapters/bare-bones-bash/bbb_james.png){width=15%}  ![Thiseas](assets/images/chapters/bare-bones-bash/bbb_thiseas.png){width=15%}</p>
 
-The author portraits were designed by Zandra Fagernäs.
 
-![](https://i.creativecommons.org/l/by-sa/4.0/88x31.png){fig-align="center"}
-
-All material is provided under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/).
+![Cartoony pictures of the three authors of the BareBonesBash course. Designed by Zandra Fagernäs.](https://i.creativecommons.org/l/by-sa/4.0/88x31.png){fig-align="center"}
 
 ::: {.callout-tip collapse="true" title="TL;DR: uncollapse me!"}
 
@@ -74,7 +65,7 @@ consider following the full Bare Bones Bash walkthroughs [here](https://barebone
 
 :::
 
-### Introduction
+## Introduction
 
 The aim of this tutorial is to make you familiar with using bash everyday... 
 for the rest of your life! More specifically, we want 
@@ -154,12 +145,28 @@ pwd
 ```
 
 ```
-/home/ubuntu
+/home/<YOUR_USERNAME>
 ```
+
+::: {.callout-warning}
+In programming _documentation_, it is very common to use `<ALL_CAPS>` notation to indicate something that doesn't exist, or will vary depending on the user.
+
+Whenever you see such a notation (i.e., triangular brackets and all caps), you must _always_ replace that whole section (including the `<>`) with whatever is on your system! You should never copy and paste this blindly!
+:::
 
 This prints the entire "filepath" of the directory i.e. the route from the
 "root" (the deepest directory of the machine), through every subdirectory,
-leading to your particular working directory. 
+leading to your particular working directory.
+
+::: {.callout-note}
+If you're not in your **home** directory (i.e., the output isn't exactly the same as the output above), please run the command
+
+```bash
+cd $HOME
+```
+
+You'll learn about this commands in a bit!
+:::
 
 ### Absolute vs Relative paths
 
@@ -198,7 +205,7 @@ ALWAYS take you to MPI-EVA, but you can only apply these directions **if** you
 start from Leipzig Main Station!
 
 Examples of absolute paths:  
-`/home/ubuntu`  
+`/home/<PATH>/<TO>/`  
 `/Leipzig_Main_Station/Querstraße/Nürnberger_Str/Str_18_Oktober/Deutscher_Platz/MPI-EVA`  
 :::
 
@@ -216,7 +223,7 @@ Lucky for you, a friendly looking local is passing by (@fig-bbb_aida)!
 These directions are equivalent to a relative path! They are easy to follow, but only work when you happen to start at the position you were in when you first got the directions!
 
 Examples of relative paths:  
-`./my_directory/my_file.txt`  
+`./<PATH>/<TO>/my_file.txt`  
 `../Str_18_Oktober/Deutscher_Platz/MPI-EVA`
 :::
 
@@ -242,6 +249,7 @@ We will use this format to show you commands and their corresponding output in t
 
 - **m**a**k**e a **dir**ectory:
 ```bash
+## ⚠ this will be your working directory for the rest of this chapter! Do not move out of it unless asked to! ⚠
 mkdir barebonesbash
 ```
 
@@ -540,8 +548,8 @@ You can also ask your computer where you have put your files, in case you forgot
 The `find` command has the following syntax:
 
 ```bash
-## Don't run! Fake example
-find /your/folder/ -type f -name 'your_file.txt'
+## ⚠ Don't run! Fake example ⚠
+find /<PATH>/<TO>/ -type f -name 'your_file.txt'
 ```
 
 - **First** part of the `find` command: *the place to look from*
@@ -694,18 +702,18 @@ you know what you are talking about.
 ![How to cat the BASH way (i.e., include the the language in your Google search and you get lots of terminal pictures! Much better, right? ...right?)](assets/images/chapters/bare-bones-bash/How_to_cat_bash.png){#fig-how-to-cat-bash width=45%}
 :::
 
-### (optional) Clean-up
+### (Optional) clean-up
 
 It is extremely important to ALWAYS keep your directories clean from random
 clutter. This lowers the chances you will get lost in your  directories, but
 also ensures you can stay lazy, since <kbd>tab</kbd> completion will not keep finding
 similarly named files. So let's clean up your home directory by removing all
 the clutter we downloaded and worked with today. The command below will remove
-the `~/BareBonesBash` directory **as well as all of its contents**. 
+the `/<PATH>/<TO>/BareBonesBash` directory **as well as all of its contents**. 
 
 ```bash
 cd ~     ## We shouldn't delete a directory while we are still in it. (It is possible though).
-rm -r ~/BareBonesBash
+rm -r /<PATH>/<TO>/BareBonesBash
 ```
 
 :::{.callout-tip}
