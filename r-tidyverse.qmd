@@ -15,10 +15,20 @@ This session is typically ran held in parallel to the Introduction to Python and
 :::
 
 ::: callout-tip
-For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [link](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/r-tidyverse.yml) (right click and save as to download), and once created, activate the environment with:
+For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [link](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/r-tidyverse.yml) (use `wget`, or right click and save as to download), and once created, activate the environment with:
 
 ``` bash
 conda activate r-tidyverse
+```
+
+To download the data for this chapter, please download following archive with, extract the tar, and change into the directory.
+
+For example
+
+```bash
+wget https://www.dropbox.com/s/61zy5uadsatxz7y/r-tidyverse.tar.gz -P /<PATH>/<TO>/<SOMEWHERE_TO_STORE>/
+tar -xzf r-tidyverse.tar.gz
+cd r-tidyverse
 ```
 :::
 
@@ -38,9 +48,9 @@ The tidyverse [@Wickham2019-ot] is a powerful collection of R packages with well
 
 The `palmerpenguins` package [@Horst2020] provides a neat example dataset to learn data exploration and visualization in R (<https://allisonhorst.github.io/palmerpenguins>)
 
-::: {.callout-note title="Environment preparation code (self-guided)" collapse=true}
+::: {.callout-note title="Instructions for running this chapter without conda" collapse=true}
 
-When you are going through the textbook in your own time, to set up your working environment for this tutorial, please carry out the following steps.
+If you wish to follow this chapter without installing conda, you can recreate the conda environment and data generation by running the following steps.
 
 1. Install R and RStudio for your operating system according to one of the many instructions online (e.g. [here](https://www.r-bloggers.com/2022/01/how-to-install-and-update-r-and-rstudio))
 2. Download the .qmd file underlying this webpage [here](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/blob/main/r-tidyverse.qmd) and copy it to a new directory
@@ -82,6 +92,14 @@ peng_prepped %>%
 ```
 
 :::
+
+To load RStudio from within your `conda` environment, please run
+
+```bash
+rstudio
+```
+
+And the RStudio window will open.
 
 ## Loading data into tibbles
 
@@ -933,6 +951,33 @@ dplyr::anti_join(mtcars, gear_opinions, by = "gear") %>%
 ```
 
 :::
+
+### (Optional) clean-up
+
+Let's clean up your working directory by removing all the data and output from this chapter.
+
+When closing `rstudio`, say no to saving any additional files.
+
+The command below will remove the `/<PATH>/<TO>/r-tidyverse` directory **as well as all of its contents**. 
+
+:::{.callout-tip}
+## Pro Tip
+Always be VERY careful when using `rm -r`. Check 3x that the path you are
+specifying is exactly what you want to delete and nothing more before pressing
+ENTER!
+:::
+
+```bash
+rm -r /<PATH>/<TO>/r-tidyverse
+```
+
+Once deleted you can move elsewhere (e.g. `cd ~`).
+
+We can also get out of the `conda` environment with
+
+```bash
+conda deactivate
+```
 
 ## References
 
