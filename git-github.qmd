@@ -1,11 +1,7 @@
 ---
 title: Introduction to Git(Hub)
-author: Megan Michel
+author: Megan Michel, James Fellows Yates
 ---
-
-## Introduction
-
-In this walkthrough, we will introduce the version control system **Git** as well as **Github**, a remote hosting service for version controlled repositories. Git and Github are increasingly popular tools for tracking data, collaborating on research projects, and sharing data and code, and learning to use them will help in many aspects of your own research. For more information on the benefits of using version control systems, see the slides.
 
 ::: {.callout-tip}
 For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [link](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/git-github.yml) (right click and save as to download), and once created, activate the environment with:
@@ -15,20 +11,89 @@ conda activate git-github
 ```
 :::
 
-## SSH setup
+## Introduction
 
-To begin, you will set up an SSH key to facilitate easier authentication when transferring data between local and remote repositories. In other words, follow this section of the tutorial so that you never have to type in your github password again!
-Begin by activating the conda environment for this section (see **Introduction** above).
+In this walkthrough, we will introduce the version control system **Git** as well as **Github**, a remote hosting service for version controlled repositories. Git and Github are increasingly popular tools for tracking data, collaborating on research projects, and sharing data and code, and learning to use them will help in many aspects of your own research. For more information on the benefits of using version control systems, see the slides.
 
-Next, generate your own ssh key, replacing the email below with your own address.
+## Background
+
+What is a version control system? This is a general term for tools that allow you to track changes to objects - in this case files - over time. 
+When it comes to bioinformatics, this is typically files such as scripts or notebooks, or simple text files such as CSV and FASTAs (although it can also apply to much larger binary files!). 
+The use of a good version control system allows the restoration of old versions, modification to previous changes, tracking contributions by multiple people etc.
+By far the most popular version control system in bioinformatics is [git](https://git-scm.com/) - which was in fact also originally co-written by the creator of the Linux operating system!
+
+Nowadays it is popular to include a remote hosting service for your version-controlled repositories.
+In bioinformatics, the most popular remote hosting service for Git version controlled code repositories is [GitHub](https://github.com). 
+While other open-source alternatives exist (e.g. [GitLab](https://gitlab.com) or [BitBucket](htttps://bitbucket.org)), the most popular in bioinformatics is GitHub.
+It provides a user-friendly GUI and a range of other useful tools and functionality, in addition to most bioinformatic code and tools are hosted there.
+
+So why should you use a version control system, such as GitHub?
+
+1. To have a (deep) backup of your work
+2. Allow you to revert to old versions/modify previous changes to files
+3. Allow multiple contributors to work simultaneously
+4. Allow you to test new scripts or code before updating a public version in a 'sandbox' area of the repository
+5. Help share your data, code, and results with the world!
+
+## Basic workflow
+
+The basic concepts of using git and GitHub are as shown in (@fig-git-github-workflowdiagram)
+
+![Overview of basic operations when using git, and the pushing to a remote host such as GitHub. See chapter text for description of image. Reconstructed and modified after S. Chacon, B. Straub, Pro Git (Apress, Second Edition., 2022), The Expert’s Voice.](assets/images/chapters/git-github/git-workflow.png){#fig-git-github-workflowdiagram}
+
+In the diagram of @fig-git-github-workflowdiagram, the two dark gray boxes represent a local machine (e.g. a laptop) and a remote server. 
+Within the local machine, an 'untracked' box represent files not indexed by the local git repository. 
+The arrow pointing into a light grey box (the local repository) in which three white boxes are present. 
+These represent different 'stages' of an object of the repository. 
+This first arrow from the 'untracked' box then spans to the furthest box called 'staged', which is the operation when you add a file to be indexed by the repository (this only happens once). 
+Once staged, the arrow pointing from the 'staged' box back to the first box or 'status' within the local repository, called 'unmodified'. 
+This arrow represents making a 'commit' (i.e. recording to git history a repository change).
+You can imagine commiting to be equivalent to a permanent(!) save.   
+The next arrow represents an edit to a file, which spans the 'unmodified' box to the middle 'modified' status.
+Once all edits have been made, the edited file is 'staged' - the arrow that goes from the middle of the 'modified' state to the 'staged' state - after which a commit again would be made to record that file as 'unmodified' compared to the change history. 
+The arrow pointing from the local repository back to the furthest left 'untracked' state of the local repository represents the removal of the file from indexing/tracking in the git history.
+Finally the two arrows that span between the local machine and remote server - one going from the local repository to the a remote repository (on the server) - represent 'pushing' the commit history to the server, and in the reverse direction - 'pulling' the commit history back to the local repository. 
+These can be imagined as backing-up your git history to a cloud server, and the retrieving the backup (albeit with changes from others)
+
+## Preparation
+
+We will now practise some of the git operations described above.
+
+However, before we do this, we need to set up your GitHub account so that you can communicate via the command line.
+
+GitHub does not allow pushing and pulling with normal passwords, but rather with a concept called 'ssh keys'.
+These are special cryptographic strings of characters and numbers.
+When generating a pair, you get both a 'private' and 'public' key.
+The former you keep privately, whereas the other you upload to other servers/people.
+When you want to 'prove' that it's you sending changes to the repository, you securely send your private key and this gets compared with your public key on the remote server.
+If after some cryptographic maths magic they match, the server will trust you and will accept your changes.
+
+## Creating ssh keys
+
+So, to begin, you will set up an SSH key to facilitate easier authentication when transferring data between local and remote repositories.
+In other words, follow this section of the tutorial so that you never have to type in your github password again!
+
+First, generate you can generate your own ssh key pair, replacing the email below with your own address.
 
 ```bash
-ssh-keygen -t ed25519 -C "your_email@example.com"
+ssh-keygen -t ed25519 -C "<YOUR_EMAIL>@<EXAMPLE>.com"
 ```
 
-I recommend saving the file to the default location and skipping passphrase setup. To do this, simply press enter without typing anything.
+::: {.callout-note}
+The `-t` flag tells the command which cryptographic algorithm to use.
+:::
 
-You should now (hopefully!) have generated an ssh key. To check that it worked, run the following commands to list the files containing your public and private keys and check that the ssh program is running.
+When you type this command, you will be asked a range of questions:
+
+1. Enter file which to save key: here we suggest keep as default
+2. Enter passphrase: don't specify one here (unless you want to be _ultra_ secure), just press enter
+3. Enter same passphrase again: same as 2 (i.e., recommended - just press enter without any password)
+
+You should now (hopefully!) have generated an ssh key.
+This is normally indicated by a 'randomart image' being pasted to console.
+
+To check that it worked, we can change into the default directory where keys are stored.
+Run the following commands to list the files containing your public and private keys and check that the ssh program is running.
 
 ```bash
 cd ~/.ssh/
@@ -41,6 +106,8 @@ Now you need to give ssh your key to record:
 ```bash
 ssh-add ~/.ssh/id_ed25519
 ```
+
+## Registering keys on GitHub
 
 Next, open your webbrowser and navigate to your github account. Go to settings -> SSH & GPG Keys -> New SSH Key. 
 

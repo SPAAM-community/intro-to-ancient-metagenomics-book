@@ -7,21 +7,25 @@ author: Robin Warner, Kevin Nota, and Maxime Borry
 This session is typically ran held in parallel to the Introduction to R and Tidyverse. Participants of the summer schools chose which to attend based on their prior experience. We recommend the [introduction to R session](r-tidyverse.qmd) if you have no experience with neither R nor Python.
 :::
 
-::: {.callout-tip}
-For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [link](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/python-pandas.yml) (right click and save as to download), and once created, activate the environment with:
+::: callout-tip
+For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [link](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/python-pandas.yml) (use `wget`, or right click and save as to download), and once created, activate the environment with:
+
+``` bash
+conda activate python-pandas
+```
+
+To download the data for this chapter, please download following archive with, extract the tar, and change into the directory.
+
+For example
 
 ```bash
-conda activate python-pandas
+wget -O python-pandas.tar.gz https://www.dropbox.com/scl/fi/ogyfda9qzoz7cl8wpoyth/python-pandas.tar.gz?rlkey=mbbx0e4p4us4m1fo4kzkzy9e6&dl=0 -P /<PATH>/<TO>/<SOMEWHERE_TO_STORE>/
+tar -xzf python-pandas.tar.gz
+cd python-pandas
 ```
 :::
 
-::: {.callout-warning}
-We highly recommend viewing this walkthrough via the Jupyter notebook above!
-The output of commands on the website for this walkthrough are displayed in their
-own code blocks - be wary of what you copy-paste!
-:::
-
-## Introduction to data manipulation in Python with Pandas and visualisation
+## Introduction
 
 Over the last few years, Python has gained popularity thanks to the numerous libraries (packages with pre-written functions) in the field of machine learning, statistical data analysis, and bioinformatics. While a few years ago, it was often necessary to go to R for performing routine data manipulation and analysis tasks, nowadays Python has a vast ecosystem of libraries. Libraries exist for many different file formats that you might encounter in metagenomics, such as fasta, fastq, sam, bam, etc.
 
@@ -29,25 +33,13 @@ This tutorial/walkthrough will provide a short introduction to the most popular 
 
 The aim of this walkthrough is to first: get familiar with the Python code syntax and use Jupiter Notebook for executing codes and secondly get a kickstart to utilising the endless possibilities of data analysis in Python that can be applied to your data.  
 
-## Table of content:
-
-- 8.3 [Working in a jupyter environment]
-- 8.4 [Pandas]
-- 8.5 [Reading data with Pandas]
-- 8.6 [Data exploration]
-- 8.7 [Describing a DataFrame]
-- 8.8 [Dealing with missing data]
-- 8.9 [Combining data]
-- 8.10 [Data visualization]
-- 8.11 [Plotnine]
-- 8.12 [Lecture from 2022]
-
-
 ## Working in a jupyter environment
 
 This tutorial run-through is using a [Jupyter Notebook](https://jupyter.org) for writing & executing Python code and for annotating.
 
 Jupyter notebooks are convenient and have two types of cells: **Markdown** and **Code**. The **markup cell** syntax is very similar to **R markdown**. The markdown cells are used for annotating, which is important for sharing code with collaborators, reproducibility, and documentation.
+
+To load `jupyter`
 
 A few examples are shown below. For a full list of possible syntax [click here](https://www.ibm.com/docs/en/watson-studio-local/1.2.3?topic=notebooks-markdown-jupyter-cheatsheet) for a Jupyter Notebook cheat-sheet.  
 
@@ -889,4 +881,31 @@ Now that you are familiar with python, pandas, and plotting. There are two data.
 file names:
 sample_table_url
 library_table_url
+```
+
+## (Optional) clean-up
+
+Let's clean up your working directory by removing all the data and output from this chapter.
+
+When closing your `jupyter` notebook(s), say no to saving any additional files.
+
+The command below will remove the `/<PATH>/<TO>/python-pandas` directory **as well as all of its contents**. 
+
+:::{.callout-tip}
+## Pro Tip
+Always be VERY careful when using `rm -r`. Check 3x that the path you are
+specifying is exactly what you want to delete and nothing more before pressing
+ENTER!
+:::
+
+```bash
+rm -r /<PATH>/<TO>/python-pandas
+```
+
+Once deleted you can move elsewhere (e.g. `cd ~`).
+
+We can also get out of the `conda` environment with
+
+```bash
+conda deactivate
 ```

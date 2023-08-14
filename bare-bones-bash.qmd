@@ -4,34 +4,25 @@ author: Thiseas C. Lamnidis, Aida Andrades Valtueña
 ---
 
 ::: {.callout-tip}
-For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [link](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/bare-bones-bash.yml) (right click and save as to download), and once created, activate the environment with:
+For this chapter's exercises, if not already performed, you will need to [create the conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [link](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/bare-bones-bash.yml) (use `wget`, or right click and save as to download). Once created, activate the environment with:
 
 ```bash
 conda activate bare-bones-bash
 ```
 :::
 
-### Introduction
+## Preamble
 
-This is the Brief version of a more Broad two-part session that we gave in 2022,
-which can be found [here](https://spaam-community.github.io/wss-summer-school/#/2022/day-1?id=practical-1b-bare-bones-bash-1).
+This chapter is a condensed version of the both 'Basic' and 'Boosted' Bare Bones Bash courses that can be found in the [Bare Bones Bash website](https://barebonesbash.github.io/#/). The material is displayed here under a [CC-BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/) license.
 
-The teaching material for the Boundless Bare Bones Bash (Basic + Boosted) can be
-found in the [Bare Bones Bash website](https://barebonesbash.github.io/#/).
+![Logo of BareBonesBash, a computer monitor with a command prompt dollar symbol, BBB and a bone on the screen.](assets/images/chapters/bare-bones-bash/BareBonesBash_Icon.png){width=15% fig-align="center"}
 
-![BareBonesBash Logo](assets/images/chapters/bare-bones-bash/BareBonesBash_Icon.png){width=15% fig-align="center"}
+The original Bare Bones Bash material was created by Aida Andrades Valtueña, James Fellows Yates, and Thiseas C. Lamnidis.
 
-The original Bare Bones Bash material was created by Aida Andrades Valtueña,
-James Fellows Yates, and Thiseas C. Lamnidis.
-
-<!-- Needed the HTML code to align all three images centrally on the same line for some reason -->
 <p align="center"> ![Aida](assets/images/chapters/bare-bones-bash/bbb_aida.png){width=15%}  ![James](assets/images/chapters/bare-bones-bash/bbb_james.png){width=15%}  ![Thiseas](assets/images/chapters/bare-bones-bash/bbb_thiseas.png){width=15%}</p>
 
-The author portraits were designed by Zandra Fagernäs.
 
-![](https://i.creativecommons.org/l/by-sa/4.0/88x31.png){fig-align="center"}
-
-All material is provided under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/).
+![Cartoony pictures of the three authors of the BareBonesBash course. Designed by Zandra Fagernäs.](https://i.creativecommons.org/l/by-sa/4.0/88x31.png){fig-align="center"}
 
 ::: {.callout-tip collapse="true" title="TL;DR: uncollapse me!"}
 
@@ -74,7 +65,7 @@ consider following the full Bare Bones Bash walkthroughs [here](https://barebone
 
 :::
 
-### Introduction
+## Introduction
 
 The aim of this tutorial is to make you familiar with using bash everyday... 
 for the rest of your life! More specifically, we want 
@@ -86,7 +77,7 @@ tricks to make your life generally easier.
 This tutorial is designed so you follow along on any machine with a UNIX
 terminal (no warranty provided).
 
-### The 5 commandments of Bare Bones Bash
+## The 5 commandments of Bare Bones Bash
 
 The Bare Bones Bash philosophy of learning to code follows five simple commandments:
 
@@ -103,7 +94,7 @@ The Bare Bones Bash philosophy of learning to code follows five simple commandme
 Remember: No one writes code that works first time, or without looking at StackOverflow sooner or later.
 :::
 
-### What is a terminal?
+## What is a terminal?
 
 A terminal is simply a fancy window that allows you to access the command-line
 interface of a computer or server (@fig-Command_line_screenshot).
@@ -114,7 +105,7 @@ The command-line itself is how you can work on the computer with just text.
 used in the
 terminal.
 
-### Understanding the command prompt
+## Understanding the command prompt
 
 ![An example command prompt](assets/images/chapters/bare-bones-bash/Command_line_screenshot.png){#fig-Command_line_screenshot width=100%}
 
@@ -154,14 +145,30 @@ pwd
 ```
 
 ```
-/home/ubuntu
+/home/<YOUR_USERNAME>
 ```
+
+::: {.callout-warning}
+In programming _documentation_, it is very common to use `<ALL_CAPS>` notation to indicate something that doesn't exist, or will vary depending on the user.
+
+Whenever you see such a notation (i.e., triangular brackets and all caps), you must _always_ replace that whole section (including the `<>`) with whatever is on your system! You should never copy and paste this blindly!
+:::
 
 This prints the entire "filepath" of the directory i.e. the route from the
 "root" (the deepest directory of the machine), through every subdirectory,
-leading to your particular working directory. 
+leading to your particular working directory.
 
-### Absolute vs Relative paths
+::: {.callout-note}
+If you're not in your **home** directory (i.e., the output isn't exactly the same as the output above), please run the command
+
+```bash
+cd $HOME
+```
+
+You'll learn about this commands in a bit!
+:::
+
+## Absolute vs Relative paths
 
 Filepaths (a.k.a. "paths"), come in two flavours. Let's talk a bit about them!
 
@@ -175,7 +182,7 @@ Filepaths (a.k.a. "paths"), come in two flavours. Let's talk a bit about them!
   the syntax of relative pathways `.` means "the current directory" and `..` 
   means "the parent directory" (or the 'one above'). 
 
-#### A real life analogy for paths
+### A real life analogy for paths
 
 You have just arrived to Leipzig for a summer school that is taking place at
 MPI-EVA. After some questionable navigation, you find yourself at the Bayerische
@@ -198,7 +205,7 @@ ALWAYS take you to MPI-EVA, but you can only apply these directions **if** you
 start from Leipzig Main Station!
 
 Examples of absolute paths:  
-`/home/ubuntu`  
+`/home/<PATH>/<TO>/`  
 `/Leipzig_Main_Station/Querstraße/Nürnberger_Str/Str_18_Oktober/Deutscher_Platz/MPI-EVA`  
 :::
 
@@ -216,11 +223,11 @@ Lucky for you, a friendly looking local is passing by (@fig-bbb_aida)!
 These directions are equivalent to a relative path! They are easy to follow, but only work when you happen to start at the position you were in when you first got the directions!
 
 Examples of relative paths:  
-`./my_directory/my_file.txt`  
+`./<PATH>/<TO>/my_file.txt`  
 `../Str_18_Oktober/Deutscher_Platz/MPI-EVA`
 :::
 
-### Basic commands
+## Basic commands
 We will now explore some basic commands that you will use to explore folders and interact with files:
 
 - **l**i**s**t directory contents:
@@ -242,6 +249,7 @@ We will use this format to show you commands and their corresponding output in t
 
 - **m**a**k**e a **dir**ectory:
 ```bash
+## ⚠ this will be your working directory for the rest of this chapter! Do not move out of it unless asked to! ⚠
 mkdir barebonesbash
 ```
 
@@ -300,7 +308,7 @@ wc -l Boosted-BBB-meta.tsv
 15 Boosted-BBB-meta.tsv
 ```
 
-### Datastreams, piping, and redirects
+## Datastreams, piping, and redirects
 
 Each of the commands you learned above is a small program with a very
 specialised functionality. Programs come in many forms and can be written
@@ -308,7 +316,7 @@ in various programming languages, but most of them share some features.
 Specifically, most programs take some data in and spit some data out!
 Here's how that works, conceptually:
 
-#### Datastreams
+### Datastreams
 
 Computer programs can take in and spit out data from different _streams_ (@fig-Datastreams). By
 default there are 3 such data streams.
@@ -334,7 +342,7 @@ to your terminal to let you know when something is not going according to plan (
 
 ![This program (in the form of a bash script executed in the terminal) takes no input, and prints one line to the stdout and one line to the stderr.](assets/images/chapters/bare-bones-bash/Datastream_showcase.png){#fig-Datastream_showcase width=100%}
 
-#### Piping
+### Piping
 
 A "pipe" (`|`) is a really useful feature of `bash` that lets you chain together
 multiple commands! When two commands are chained together with a pipe, the
@@ -357,7 +365,7 @@ The above command will only show the 10th line of `Boosted-BBB-meta.tsv`.
 The way it works is that `head` will take the first 10 lines of the file. These
 lines are then passed on to `tail` which will keep only the last of those lines.
 
-#### Redirects
+### Redirects
 
 Much like streams of water in the real world, datastreams can be redirected.
 
@@ -396,7 +404,7 @@ netsukeJapan    C       Artwork
 
 ![Here you can see an example of redirecting the output of the `datastreams_demo.sh` program from before. Redirecting the stdout with `>` only prints the stderr to the screen, and saves the stdout into `output.txt`. Additionally, we can redirect the stderr with `2>` into `runtime.log`, and then nothing is printed onto the screen.](assets/images/chapters/bare-bones-bash/Redirects_showcase.png){#fig-Redirects_showcase width=100%}
 
-### Help text
+## Help text
 
 You don't always have to google for documentation! Many programs come with in-built help text,
 or access to online manuals right from your terminal!
@@ -418,7 +426,7 @@ or access to online manuals right from your terminal!
     man cat
     ```
 
-### Variables
+## Variables
 
 Variables are a central concept of all programming. In short, a variable
 is a named container whose contents you can expand at will or change.
@@ -498,7 +506,7 @@ I have been to Greece 7 times already this year, for the food and wine!
 In these examples you have seen how the same variable has been overwritten, this means that you can only access the last content that you stored in the variable. All the previous contents that a variable may have had are inaccessible as soon as the same variable is given a new value.
 :::
 
-### Quotes matter!
+## Quotes matter!
 
 In bash, there is a big difference between a single quote `'` and a double quote `"`!
 
@@ -534,14 +542,14 @@ This is because in the second example we are using a variable. We have assigned 
 
  In the `echo` with the double (`"`) quotes we are telling the computer to extract the value from the variable `$Arr` and that is why we see the store value (`Banana`) in the printed output in the terminal.
 
-### Find
+## Find
 
 You can also ask your computer where you have put your files, in case you forgot. To do this you can use `find`! 
 The `find` command has the following syntax:
 
 ```bash
-## Don't run! Fake example
-find /your/folder/ -type f -name 'your_file.txt'
+## ⚠ Don't run! Fake example ⚠
+find /<PATH>/<TO>/ -type f -name 'your_file.txt'
 ```
 
 - **First** part of the `find` command: *the place to look from*
@@ -613,7 +621,7 @@ After `-name` we have written `'*JPG*'`, this tells to `find` to search for any 
 
 Now you have all the paths of the files that you will need!
 
-### For loops
+## For loops
 
 Until now we have seen how to run single commands on a file. But, what about when
 you need to **repeat** a command multiple times on a list of things, for example
@@ -657,7 +665,7 @@ We see that changing the order of the list will affect the output, this is becau
 
 We can also add more elements to the list, and the **for** loop will continue until it reaches the end of the list.
 
-### How to Google like a pro
+## How to Google like a pro
 
 One of the most important skills you develop when coding and/or using the
 command line is __how to phrase your questions__ so you can get relevant
@@ -694,19 +702,14 @@ you know what you are talking about.
 ![How to cat the BASH way (i.e., include the the language in your Google search and you get lots of terminal pictures! Much better, right? ...right?)](assets/images/chapters/bare-bones-bash/How_to_cat_bash.png){#fig-how-to-cat-bash width=45%}
 :::
 
-### (optional) Clean-up
+## (Optional) clean-up
 
 It is extremely important to ALWAYS keep your directories clean from random
 clutter. This lowers the chances you will get lost in your  directories, but
 also ensures you can stay lazy, since <kbd>tab</kbd> completion will not keep finding
-similarly named files. So let's clean up your home directory by removing all
+similarly named files. So let's clean up your working directory by removing all
 the clutter we downloaded and worked with today. The command below will remove
-the `~/BareBonesBash` directory **as well as all of its contents**. 
-
-```bash
-cd ~     ## We shouldn't delete a directory while we are still in it. (It is possible though).
-rm -r ~/BareBonesBash
-```
+the `/<PATH>/<TO>/BareBonesBash` directory **as well as all of its contents**.
 
 :::{.callout-tip}
 ## Pro Tip
@@ -714,6 +717,17 @@ Always be VERY careful when using `rm -r`. Check 3x that the path you are
 specifying is exactly what you want to delete and nothing more before pressing
 ENTER!
 :::
+
+```bash
+cd ~     ## We shouldn't delete a directory while we are still in it. (It is possible though).
+rm -r /<PATH>/<TO>/BareBonesBash
+```
+
+We can also get out of the `conda` environment with
+
+```bash
+conda deactivate
+```
 
 ### Conclusion
 
