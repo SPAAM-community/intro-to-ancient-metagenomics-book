@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Megan Michel">
+<meta name="author" content="Megan Michel, James Fellows Yates">
 
 <title>Introduction to Ancient Metagenomics - 9&nbsp; Introduction to Git(Hub)</title>
 <style>
@@ -103,10 +103,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <meta property="og:title" content="Introduction to Ancient Metagenomics - 9&nbsp; Introduction to Git(Hub)">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://spaam-community.github.org/intro-to-ancient-metagenomics-book/assets/images/chapters/git-github/create_repo.png">
+<meta property="og:image" content="https://spaam-community.github.org/intro-to-ancient-metagenomics-book/assets/images/chapters/git-github/git-workflow.png">
 <meta property="og:site-name" content="Introduction to Ancient Metagenomics">
-<meta property="og:image:height" content="1290">
-<meta property="og:image:width" content="2150">
+<meta property="og:image:height" content="1309">
+<meta property="og:image:width" content="2656">
 </head>
 
 <body class="nav-sidebar floating">
@@ -396,11 +396,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">9.1</span> Introduction</a></li>
-  <li><a href="#ssh-setup" id="toc-ssh-setup" class="nav-link" data-scroll-target="#ssh-setup"><span class="header-section-number">9.2</span> SSH setup</a></li>
-  <li><a href="#the-only-6-commands-you-really-need-to-know" id="toc-the-only-6-commands-you-really-need-to-know" class="nav-link" data-scroll-target="#the-only-6-commands-you-really-need-to-know"><span class="header-section-number">9.3</span> The only 6 commands you really need to know</a></li>
-  <li><a href="#working-collaboratively" id="toc-working-collaboratively" class="nav-link" data-scroll-target="#working-collaboratively"><span class="header-section-number">9.4</span> Working collaboratively</a></li>
-  <li><a href="#pull-requests" id="toc-pull-requests" class="nav-link" data-scroll-target="#pull-requests"><span class="header-section-number">9.5</span> Pull requests</a></li>
-  <li><a href="#questions-to-think-about" id="toc-questions-to-think-about" class="nav-link" data-scroll-target="#questions-to-think-about"><span class="header-section-number">9.6</span> Questions to think about</a></li>
+  <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background"><span class="header-section-number">9.2</span> Background</a></li>
+  <li><a href="#basic-workflow" id="toc-basic-workflow" class="nav-link" data-scroll-target="#basic-workflow"><span class="header-section-number">9.3</span> Basic workflow</a></li>
+  <li><a href="#preparation" id="toc-preparation" class="nav-link" data-scroll-target="#preparation"><span class="header-section-number">9.4</span> Preparation</a></li>
+  <li><a href="#creating-ssh-keys" id="toc-creating-ssh-keys" class="nav-link" data-scroll-target="#creating-ssh-keys"><span class="header-section-number">9.5</span> Creating ssh keys</a></li>
+  <li><a href="#registering-keys-on-github" id="toc-registering-keys-on-github" class="nav-link" data-scroll-target="#registering-keys-on-github"><span class="header-section-number">9.6</span> Registering keys on GitHub</a></li>
+  <li><a href="#the-only-6-commands-you-really-need-to-know" id="toc-the-only-6-commands-you-really-need-to-know" class="nav-link" data-scroll-target="#the-only-6-commands-you-really-need-to-know"><span class="header-section-number">9.7</span> The only 6 commands you really need to know</a></li>
+  <li><a href="#working-collaboratively" id="toc-working-collaboratively" class="nav-link" data-scroll-target="#working-collaboratively"><span class="header-section-number">9.8</span> Working collaboratively</a></li>
+  <li><a href="#pull-requests" id="toc-pull-requests" class="nav-link" data-scroll-target="#pull-requests"><span class="header-section-number">9.9</span> Pull requests</a></li>
+  <li><a href="#questions-to-think-about" id="toc-questions-to-think-about" class="nav-link" data-scroll-target="#questions-to-think-about"><span class="header-section-number">9.10</span> Questions to think about</a></li>
   </ul>
 </nav>
     </div>
@@ -419,7 +423,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Megan Michel </p>
+             <p>Megan Michel, James Fellows Yates </p>
           </div>
   </div>
     
@@ -430,9 +434,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="introduction" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">9.1</span> Introduction</h2>
-<p>In this walkthrough, we will introduce the version control system <strong>Git</strong> as well as <strong>Github</strong>, a remote hosting service for version controlled repositories. Git and Github are increasingly popular tools for tracking data, collaborating on research projects, and sharing data and code, and learning to use them will help in many aspects of your own research. For more information on the benefits of using version control systems, see the slides.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -447,19 +448,75 @@ Tip
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate git-github</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+<section id="introduction" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">9.1</span> Introduction</h2>
+<p>In this walkthrough, we will introduce the version control system <strong>Git</strong> as well as <strong>Github</strong>, a remote hosting service for version controlled repositories. Git and Github are increasingly popular tools for tracking data, collaborating on research projects, and sharing data and code, and learning to use them will help in many aspects of your own research. For more information on the benefits of using version control systems, see the slides.</p>
 </section>
-<section id="ssh-setup" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="ssh-setup"><span class="header-section-number">9.2</span> SSH setup</h2>
-<p>To begin, you will set up an SSH key to facilitate easier authentication when transferring data between local and remote repositories. In other words, follow this section of the tutorial so that you never have to type in your github password again! Begin by activating the conda environment for this section (see <strong>Introduction</strong> above).</p>
-<p>Next, generate your own ssh key, replacing the email below with your own address.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"your_email@example.com"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>I recommend saving the file to the default location and skipping passphrase setup. To do this, simply press enter without typing anything.</p>
-<p>You should now (hopefully!) have generated an ssh key. To check that it worked, run the following commands to list the files containing your public and private keys and check that the ssh program is running.</p>
+<section id="background" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="background"><span class="header-section-number">9.2</span> Background</h2>
+<p>What is a version control system? This is a general term for tools that allow you to track changes to objects - in this case files - over time. When it comes to bioinformatics, this is typically files such as scripts or notebooks, or simple text files such as CSV and FASTAs (although it can also apply to much larger binary files!). The use of a good version control system allows the restoration of old versions, modification to previous changes, tracking contributions by multiple people etc. By far the most popular version control system in bioinformatics is <a href="https://git-scm.com/">git</a> - which was in fact also originally co-written by the creator of the Linux operating system!</p>
+<p>Nowadays it is popular to include a remote hosting service for your version-controlled repositories. In bioinformatics, the most popular remote hosting service for Git version controlled code repositories is <a href="https://github.com">GitHub</a>. While other open-source alternatives exist (e.g.&nbsp;<a href="https://gitlab.com">GitLab</a> or <a href="htttps://bitbucket.org">BitBucket</a>), the most popular in bioinformatics is GitHub. It provides a user-friendly GUI and a range of other useful tools and functionality, in addition to most bioinformatic code and tools are hosted there.</p>
+<p>So why should you use a version control system, such as GitHub?</p>
+<ol type="1">
+<li>To have a (deep) backup of your work</li>
+<li>Allow you to revert to old versions/modify previous changes to files</li>
+<li>Allow multiple contributors to work simultaneously</li>
+<li>Allow you to test new scripts or code before updating a public version in a ‘sandbox’ area of the repository</li>
+<li>Help share your data, code, and results with the world!</li>
+</ol>
+</section>
+<section id="basic-workflow" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="basic-workflow"><span class="header-section-number">9.3</span> Basic workflow</h2>
+<p>The basic concepts of using git and GitHub are as shown in (<a href="#fig-git-github-workflowdiagram">Figure&nbsp;<span>9.1</span></a>)</p>
+<div id="fig-git-github-workflowdiagram" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assets/images/chapters/git-github/git-workflow.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;9.1: Overview of basic operations when using git, and the pushing to a remote host such as GitHub. See chapter text for description of image. Reconstructed and modified after S. Chacon, B. Straub, Pro Git (Apress, Second Edition., 2022), The Expert’s Voice.</figcaption>
+</figure>
+</div>
+<p>In the diagram of <a href="#fig-git-github-workflowdiagram">Figure&nbsp;<span>9.1</span></a>, the two dark gray boxes represent a local machine (e.g.&nbsp;a laptop) and a remote server. Within the local machine, an ‘untracked’ box represent files not indexed by the local git repository. The arrow pointing into a light grey box (the local repository) in which three white boxes are present. These represent different ‘stages’ of an object of the repository. This first arrow from the ‘untracked’ box then spans to the furthest box called ‘staged’, which is the operation when you add a file to be indexed by the repository (this only happens once). Once staged, the arrow pointing from the ‘staged’ box back to the first box or ‘status’ within the local repository, called ‘unmodified’. This arrow represents making a ‘commit’ (i.e.&nbsp;recording to git history a repository change). You can imagine commiting to be equivalent to a permanent(!) save.<br>
+The next arrow represents an edit to a file, which spans the ‘unmodified’ box to the middle ‘modified’ status. Once all edits have been made, the edited file is ‘staged’ - the arrow that goes from the middle of the ‘modified’ state to the ‘staged’ state - after which a commit again would be made to record that file as ‘unmodified’ compared to the change history. The arrow pointing from the local repository back to the furthest left ‘untracked’ state of the local repository represents the removal of the file from indexing/tracking in the git history. Finally the two arrows that span between the local machine and remote server - one going from the local repository to the a remote repository (on the server) - represent ‘pushing’ the commit history to the server, and in the reverse direction - ‘pulling’ the commit history back to the local repository. These can be imagined as backing-up your git history to a cloud server, and the retrieving the backup (albeit with changes from others)</p>
+</section>
+<section id="preparation" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="preparation"><span class="header-section-number">9.4</span> Preparation</h2>
+<p>We will now practise some of the git operations described above.</p>
+<p>However, before we do this, we need to set up your GitHub account so that you can communicate via the command line.</p>
+<p>GitHub does not allow pushing and pulling with normal passwords, but rather with a concept called ‘ssh keys’. These are special cryptographic strings of characters and numbers. When generating a pair, you get both a ‘private’ and ‘public’ key. The former you keep privately, whereas the other you upload to other servers/people. When you want to ‘prove’ that it’s you sending changes to the repository, you securely send your private key and this gets compared with your public key on the remote server. If after some cryptographic maths magic they match, the server will trust you and will accept your changes.</p>
+</section>
+<section id="creating-ssh-keys" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="creating-ssh-keys"><span class="header-section-number">9.5</span> Creating ssh keys</h2>
+<p>So, to begin, you will set up an SSH key to facilitate easier authentication when transferring data between local and remote repositories. In other words, follow this section of the tutorial so that you never have to type in your github password again!</p>
+<p>First, generate you can generate your own ssh key pair, replacing the email below with your own address.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"&lt;YOUR_EMAIL&gt;@&lt;EXAMPLE&gt;.com"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>-t</code> flag tells the command which cryptographic algorithm to use.</p>
+</div>
+</div>
+<p>When you type this command, you will be asked a range of questions:</p>
+<ol type="1">
+<li>Enter file which to save key: here we suggest keep as default</li>
+<li>Enter passphrase: don’t specify one here (unless you want to be <em>ultra</em> secure), just press enter</li>
+<li>Enter same passphrase again: same as 2 (i.e., recommended - just press enter without any password)</li>
+</ol>
+<p>You should now (hopefully!) have generated an ssh key. This is normally indicated by a ‘randomart image’ being pasted to console.</p>
+<p>To check that it worked, we can change into the default directory where keys are stored. Run the following commands to list the files containing your public and private keys and check that the ssh program is running.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/.ssh/</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> id<span class="pp">*</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span> <span class="st">"</span><span class="va">$(</span><span class="fu">ssh-agent</span> <span class="at">-s</span><span class="va">)</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Now you need to give ssh your key to record:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-add</span> ~/.ssh/id_ed25519</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="registering-keys-on-github" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="registering-keys-on-github"><span class="header-section-number">9.6</span> Registering keys on GitHub</h2>
 <p>Next, open your webbrowser and navigate to your github account. Go to settings -&gt; SSH &amp; GPG Keys -&gt; New SSH Key.</p>
 <p>Here, give you key a title, and then paste the <em>public</em> key into the main text box that you just generated on your local machine - i.e., the <em>whole</em> string (starting <code>ssh-ed</code> and ending in your email address) when you run the following command:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/.ssh/id_ed25519.pub</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -467,8 +524,8 @@ Tip
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="at">-T</span> git@github.com</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>For more information about setting up the SSH key, including instructions for different operating systems, check out github’s documentation: <a href="https://docs.github.com/es/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">https://docs.github.com/es/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent</a>.</p>
 </section>
-<section id="the-only-6-commands-you-really-need-to-know" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="the-only-6-commands-you-really-need-to-know"><span class="header-section-number">9.3</span> The only 6 commands you really need to know</h2>
+<section id="the-only-6-commands-you-really-need-to-know" class="level2" data-number="9.7">
+<h2 data-number="9.7" class="anchored" data-anchor-id="the-only-6-commands-you-really-need-to-know"><span class="header-section-number">9.7</span> The only 6 commands you really need to know</h2>
 <p>Now that you have set up your own SSH key, we can begin working on some version controlled data! Navigate to your github homepage and create a new repository. You can choose any name for your new repo (including the default). Add a README file, then select Create Repository.</p>
 <p><img src="assets/images/chapters/git-github/create_repo.png" class="img-fluid" alt="Example GitHub Interface for creating a new repository, showing owner, empty respoitory name box, radio boxes indicating whether the repository should be Public or Private"> <!-- TODO --> <!-- alt text/captions for all images--></p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -507,8 +564,8 @@ Note
 <p>You should see that your repository is already up-to-date, since we have not made new changes to the remote repo. Let’s try making a change to the remote repository’s README file (as below). Then, back on the command line, pull the repository again.</p>
 <p><img src="assets/images/chapters/git-github/git_pull.png" class="img-fluid"></p>
 </section>
-<section id="working-collaboratively" class="level2" data-number="9.4">
-<h2 data-number="9.4" class="anchored" data-anchor-id="working-collaboratively"><span class="header-section-number">9.4</span> Working collaboratively</h2>
+<section id="working-collaboratively" class="level2" data-number="9.8">
+<h2 data-number="9.8" class="anchored" data-anchor-id="working-collaboratively"><span class="header-section-number">9.8</span> Working collaboratively</h2>
 <p>Github facilitates simultaneous work by small teams through branching, which generates a copy of the main repository within the repository. This can be edited without breaking the ‘master’ version. First, back on github, make a new branch of your repository.</p>
 <p><img src="assets/images/chapters/git-github/git_switch.png" class="img-fluid"></p>
 <p>From the command line, you can create a new branch as follows:</p>
@@ -517,12 +574,12 @@ Note
 <div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> switch main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Note that you <strong>must commit changes</strong> for them to be saved to the desired branch!</p>
 </section>
-<section id="pull-requests" class="level2" data-number="9.5">
-<h2 data-number="9.5" class="anchored" data-anchor-id="pull-requests"><span class="header-section-number">9.5</span> Pull requests</h2>
+<section id="pull-requests" class="level2" data-number="9.9">
+<h2 data-number="9.9" class="anchored" data-anchor-id="pull-requests"><span class="header-section-number">9.9</span> Pull requests</h2>
 <p>A <strong>Pull request</strong> (aka PR) is used to propose changes to a branch from another branch. Others can comment and make suggestinos before your changes are merged into the main branch. For more information on creating a pull request, see github’s documentation: <a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request">https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request</a>.</p>
 </section>
-<section id="questions-to-think-about" class="level2" data-number="9.6">
-<h2 data-number="9.6" class="anchored" data-anchor-id="questions-to-think-about"><span class="header-section-number">9.6</span> Questions to think about</h2>
+<section id="questions-to-think-about" class="level2" data-number="9.10">
+<h2 data-number="9.10" class="anchored" data-anchor-id="questions-to-think-about"><span class="header-section-number">9.10</span> Questions to think about</h2>
 <ol type="1">
 <li>Why is using a version control software for tracking data and code important?</li>
 <li>How can using Git(Hub) help me to collaborate on group projects?</li>
