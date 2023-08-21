@@ -45,14 +45,14 @@ In the diagram of @fig-git-github-workflowdiagram, the two dark gray boxes repre
 Within the local machine, an 'untracked' box represent files not indexed by the local git repository. 
 The arrow pointing into a light grey box (the local repository) in which three white boxes are present. 
 These represent different 'stages' of an object of the repository. 
-This first arrow from the 'untracked' box then spans to the furthest box called 'staged', which is the operation when you add a file to be indexed by the repository (this only happens once). 
-Once staged, the arrow pointing from the 'staged' box back to the first box or 'status' within the local repository, called 'unmodified'. 
-This arrow represents making a 'commit' (i.e. recording to git history a repository change).
-You can imagine commiting to be equivalent to a permanent(!) save.   
-The next arrow represents an edit to a file, which spans the 'unmodified' box to the middle 'modified' status.
+This first arrow from the 'untracked' box then spans to the furthest box called '**staged**', which is the operation when you add a file to be indexed by the repository (this only happens once). 
+Once staged, the arrow pointing from the 'staged' box back to the first box or 'status' within the local repository, called '**unmodified**'. 
+This arrow, converting a staged file to unmodified, represents making a '**commit**' (i.e. recording to git history a repository change).
+You can imagine committing to be equivalent to a permanent(!) save.
+The next arrow represents an edit to a file, which spans the 'unmodified' box to the middle '**modified**'' status.
 Once all edits have been made, the edited file is 'staged' - the arrow that goes from the middle of the 'modified' state to the 'staged' state - after which a commit again would be made to record that file as 'unmodified' compared to the change history. 
-The arrow pointing from the local repository back to the furthest left 'untracked' state of the local repository represents the removal of the file from indexing/tracking in the git history.
-Finally the two arrows that span between the local machine and remote server - one going from the local repository to the a remote repository (on the server) - represent 'pushing' the commit history to the server, and in the reverse direction - 'pulling' the commit history back to the local repository. 
+The arrow pointing from the local repository back to the furthest left '**untracked**' state of the local repository represents the removal of the file from indexing/tracking in the git history.
+Finally the two arrows that span between the local machine and remote server - one going from the local repository to the a remote repository (on the server) - represent '**push**ing' the commit history to the server, and in the reverse direction - '**pull**ing' the commit history back to the local repository. 
 These can be imagined as backing-up your git history to a cloud server, and the retrieving the backup (albeit with changes from others)
 
 ## Preparation
@@ -86,22 +86,67 @@ The `-t` flag tells the command which cryptographic algorithm to use.
 When you type this command, you will be asked a range of questions:
 
 1. Enter file which to save key: here we suggest keep as default
-2. Enter passphrase: don't specify one here (unless you want to be _ultra_ secure), just press enter
+2. Enter passphrase: **don't** specify one here (unless you want to be _ultra_ secure), just press enter
 3. Enter same passphrase again: same as 2 (i.e., recommended - just press enter without any password)
 
 You should now (hopefully!) have generated an ssh key.
 This is normally indicated by a 'randomart image' being pasted to console.
 
+A random art image normally looks like something like:
+
+```bash
++--[ RSA 2048]----+
+|       o=.       |
+|    o  o++E      |
+|   + . Ooo.      |
+|    + O B..      |
+|     = *S.       |
+|      o          |
+|                 |
+|                 |
+|                 |
++-----------------+
+```
+
 To check that it worked, we can change into the default directory where keys are stored.
-Run the following commands to list the files containing your public and private keys and check that the ssh program is running.
+By default on UNIX operating system this is in your your home directory under a folder called `.ssh`.
+Lets change into that directory, and check the contents.
 
 ```bash
 cd ~/.ssh/
 ls id*
+```
+
+You should see two files: `id_ed25519`, and `id_ed25519.pub`.
+
+The first is your _private_ key.
+This you should not share this any one, and should always stay on your local machine.
+
+The second file (ending in `.pub`), is your _public_ key.
+This you can give to others, on remote servers, or websites, to allow those places to know it is you.
+
+So lets try this out on GitHub!
+
+## Logging the keys
+
+First, we need to tell your computer that the keys exist and should be used for validation to remote locations.
+The tool that does that is called `ssh-agent`. 
+We can check if it is running with the following command.
+
+```bash
 eval "$(ssh-agent -s)"
 ```
 
-Now you need to give ssh your key to record:
+If it's running, you should get a text such as `Agent pid <NUMBERS>`.
+
+If it's not running, see the [GitHub documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent) for more information.
+
+::: {.callout-information}
+An operating system assigns each running program a unique number ID. If a program isn't running, it won't have a process ID!
+:::
+
+
+When the agent is running, you need to give the path to the _private_ key file as follows.
 
 ```bash
 ssh-add ~/.ssh/id_ed25519
@@ -109,46 +154,116 @@ ssh-add ~/.ssh/id_ed25519
 
 ## Registering keys on GitHub
 
-Next, open your webbrowser and navigate to your github account. Go to settings -> SSH & GPG Keys -> New SSH Key. 
+Next, GitHub needs to have your public key on record so it can compare between the public and private keys.
+Open your webbrowser and navigate to your github account settings (typically: press your profile picture in the top bar menu, then settings). 
 
-Here, give you key a title, and then paste the _public_ key into the main text box that you just generated on your local machine - i.e., the _whole_ string (starting `ssh-ed` and ending in your email address) when you run the following command:
+Then, under settings, in the side bar go to **SSH & GPG Keys** (@fig-git-github-settings-sidebar), then press **New SSH Key** (@fig-git-github-settings-newkey). 
+
+![Screenshot of Github settings page sidebar (as of August 2023), with the 'SSH and GPG keys' section highlighted under the 'Access' section.](assets/images/chapters/git-github/github-settings-1.png){#fig-git-github-settings-sidebar}
+
+![Screenshot of the top of the Github SSH and GPG keys page (as of August 2023), with a green 'New SSH Key' button.](assets/images/chapters/git-github/github-settings-2.png){#fig-git-github-settings-newkey}
+
+When in the 'new SHH key' page, you can give key a title (e.g. the local machine the key was generated on).
+Leave the 'Key type' as 'Autentication Key' 
+Then paste the entire contents of _public_ key into the main text box that you just generated on your local machine.
 
 ```bash
 cat ~/.ssh/id_ed25519.pub
 ```
 
-Finally, press Add SSH key. To check that it worked, run the following command on your local machine. You should see a message telling you that you've successfully authenticated.
+::: {.callout-warning}
+It's very important to paste the _whole_ string! 
+This starts with `ssh-ed` (or whatever algorithm used) and ending in your email address.
+:::
+
+
+Finally, press the Add SSH key.
+To check that it worked, run the following command on your local machine. 
 
 ```bash
 ssh -T git@github.com
 ```
 
-For more information about setting up the SSH key, including instructions for different operating systems, check out github's documentation: [https://docs.github.com/es/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent](https://docs.github.com/es/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
+You should see a message along the lines of:
 
-## The only 6 commands you really need to know
+```bash
+Hi <YOUR_USERNAME>! you that you've successfully authenticated.
+```
 
-Now that you have set up your own SSH key, we can begin working on some version controlled data! Navigate to your github homepage and create a new repository. You can choose any name for your new repo (including the default). Add a README file, then select Create Repository.
+::: {.callout-note}
+If you get a message saying something such as 
 
-![Example GitHub Interface for creating a new repository, showing owner, empty respoitory name box, radio boxes indicating whether the repository should be Public or Private](assets/images/chapters/git-github/create_repo.png)
-<!-- TODO -->
-<!-- alt text/captions for all images-->
+```bash
+The authenticity of host 'github.com (140.82.121.3)' can't be established.
+```
 
-:::  {.callout-note}
+Type `yes` on your keyboard and press enter.
+:::
+
+For more information about setting up the SSH key, including instructions for different operating systems, check out github's [documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
+
+## Creating a GitHub repository
+
+Now that you have set up your own SSH key, we can begin working on some version controlled data!
+
+Navigate to your GitHub homepage ([https://github.com](https://github.com)) and create a new repository.
+You can normally do this by pressing the green 'New' repository button, or the ➕ icon on the homepage (typically in sidebars or top bars).
+
+For this tutorial, on the new repository page (@fig-git-github-createnewrepo):
+- choose any name for your new repo (including the auto-generated 'inspired ones').
+- Leave the description as empty
+- Select that the repository is 'public' (the default)
+- Tick the 'Add a README file; checkbox
+- Leave as default the `.gitignore` and license sections
+
+Then press the green 'Create repository' button.
+
+![Screenshot of top half of GitHub's Create repository interface for creating a new repository, showing owner, empty repository name box, radio boxes indicating whether the repository should be Public or Private](assets/images/chapters/git-github/create_repo.png){#fig-git-github-createnewrepo}
+
+:::  {.callout-warning}
 For the remainder of the session, replace the name of my repository (vigilant-octo-journey) with your own repo name.
 :::
-<!-- TODO -->
-<!-- replace all 'notes' with call outs -->
 
 Change into the directory where you would like to work, and let's get started!
-First, we will learn to **clone** a remote repository onto your local machine. Navigate to your new repo, select the _Code_ dropdown menu, select SSH, and copy the address as shown below.
+
+## The only 6 commands you only need to really know
+
+We have set all our authentication keys for GitHub, and created a new repository.
+We can now run through the some of the concepts we learnt in the [Basic Workflow](#basic-workflow) section.
+
+This can be boiled down to just **six** that you really need to work with for Git(Hub) for basic version control of all your software, scripts, and (small) data!
+
+To start, change into the chapter's data directory with
+
+```bash
+cd /<path>/<to>/git-github
+```
+
+### clone
+
+First, we will learn to **clone** a remote repository onto your local machine.
+
+This is actually _not_ in our basic workflow diagram in @fig-git-github-workflowdiagram, however you only need to do it once, and is only needed when you work with a remote server.
+With `clone` we are making a copy of the remote repository, and linking it so you can transmit data between the copy on the 'local' machine with the 'remote' repository on the server.  
+
+To make the 'copy', navigate to your new repo, select the green code dropdown button, select SSH, and copy the address as shown below.
 
 ![](assets/images/chapters/git-github/git_clone.png)
 
 Back at your command line, clone the repo as follows:
 
 ```bash
-git clone git@github.com:meganemichel/vigilant-octo-journey.git
+git clone git@github.com:<YOUR_USERNAME>/<YOUR_REPO_NAME>.git
 ```
+
+::: {.callout-warning}
+It's important that you do select the `ssh` tab, otherwise you will not be able to push and pull with your ssh keys!
+If you get asked for a password, you've not used `ssh`! 
+Press <kbd>ctrl</kbd> + <kbd>c</kbd>, to cancel, and try the command again but with the correct `ssh` address.
+:::
+
+
+### add
 
 Next, let's **add** a new or modified file to our 'staging area' on our local machine.
 
@@ -161,11 +276,15 @@ git add file_A.txt
 
 Now we can check what files have been locally changed, staged, etc. with **status**.
 
+### status
+
 ```bash
 git status
 ```
 
 You should see that `file_A.txt` is staged to be committed, but `README.md` is NOT. Try adding `README.md` and check the status again.
+
+### commit
 
 Now we need to package or save the changes into a **commit** with a message describing the changes we've made. Each commit comes with a unique hash ID and will be stored forever in git history.
 
@@ -173,11 +292,15 @@ Now we need to package or save the changes into a **commit** with a message desc
 git commit -m "Add example file"
 ```
 
+### push
+
 Finally, let's **push** our local commit back to our remote repository.
 
 ```bash
 git push
 ```
+
+### pull
 
 What if we want to download new commits from our remote to our local repository?
 
