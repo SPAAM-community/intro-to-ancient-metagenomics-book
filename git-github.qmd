@@ -396,33 +396,128 @@ This means that our local copy has an extra entry in the git history, compared t
 
 ### git push
 
-How then do we 'backup'
+How then do we 'backup' our local changes and the git history back up to the server?
 
-Finally, let's **push** our local commit back to our remote repository.
+We do that with, you guessed it, the `git push` command!
+This is the red dashed arrow in (@fig-git-github-workflowdiagram-push).
 
-![Overview of basic operations when using git (following @fig-git-github-workflowdiagram) but with the command `git commit` operations highlighted. XXXX. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-push.png){#fig-git-github-workflowdiagram-push}
+![Overview of basic operations when using git (following @fig-git-github-workflowdiagram) but with the command `git push` operations highlighted. The red dashed arrow between the local repository box of the local machine, to the remote repository on the server. This represents 'pushing' or sending the changes made on the local machine back up to remote repository, so both the local and remote repository have the same records of changes to the files. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-push.png){#fig-git-github-workflowdiagram-push}
+
+You can run this as follows.
 
 ```bash
 git push
 ```
+```default
+Enumerating objects: 6, done.
+Counting objects: 100% (6/6), done.
+Delta compression using up to 14 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (4/4), 367 bytes | 367.00 KiB/s, done.
+Total 4 (delta 0), reused 0 (delta 0), pack-reused 0
+To github.com:jfy133/special-barnacle.git
+   536183b..2d252b5  main -> main
+```
+
+When you do this, you will get a bunch of lines including a set of progress information.
+Once you get a couple of hash strings, all your changes have been copied to the remote!
+
+
+::: {.callout-tip title="Question" appearance="simple"}
+We mentioned earlier that as well as your human-readable commit 'message', you will also get a unique hash string for each commit.
+Where on the output are the commit hashes?
+What do you think the two hashes represent?
+:::
+
+::: {.callout-note title="Answer" collapse="true"}
+The hash line is:
+
+```default
+   536183b..2d252b5  main -> main
+```
+
+The two hashes represent the previous (536183b) entry in the git history, and the new one (2d252b5) of the one you just made when you ran `git commit`.
+
+Tip: try typing `git log`!
+
+The `main` bit of the string represents the branch you pushed to. We will learn more about this later in this chapter.
+:::
+
+If you go to your GitHub repository on the website, and refresh the page, you should see the changes - both the file in the file browser at the top, and the new test you added to the `README.md` file!
 
 ### git pull
 
-What if we want to download new commits from our remote to our local repository?
+But what if we worked on a different local machine, and pushed changes from there?
+How do we the download new commits from our remote to our local repository?
 
-![Overview of basic operations when using git (following @fig-git-github-workflowdiagram) but with the command `git commit` operations highlighted. XXXX. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-pull.png){#fig-git-github-workflowdiagram-pull}
+![Overview of basic operations when using git (following @fig-git-github-workflowdiagram) but with the command `git pull` operations highlighted. The red dashed arrow going from the remote repository on the server back to the local repository represents copying changes pushed from _elsewhere_ back to your local copy of the repository. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-pull.png){#fig-git-github-workflowdiagram-pull}
+
+We carry this out with the counterpart of `push`, `pull` (@fig-git-github-workflowdiagram-pull)!
+Try running the command now!
 
 ```bash
 git pull
 ```
 
-You should see that your repository is already up-to-date, since we have not made new changes to the remote repo. Let's try making a change to the remote repository's README file (as below). Then, back on the command line, pull the repository again.
+::: {.callout-tip title="Question" appearance="simple"}
+What output do you get from running `git pull`?
+Why does it say what it says?
+:::
 
-![](assets/images/chapters/git-github/git_pull.png)
+::: {.callout-note title="Answer" collapse="true"}
+You should get a message of `Already up to date`.
+This is because we have made no further changes to the remote version of the repository since we pushed!
+:::
+
+So how can we make changes to the remote repository?
+One way would be to make a local clone elsewhere on a difference machine (or in a different folder on the same machine!), make some changes and commits there, and then push from there, and pull to our current local repository...
+
+But that sounds rather convoluted, no 😉?
+
+Instead, another benefit of GitHub is you can actually make changes to your repository from your web browser!
+In your web browser, in the file browser click on the `README.md`.
+If you're still logged into your GitHub account, you should see a small pencil icon in the top right of the file viewer (@fig-git-github-exampleeditgithub). 
+
+![Screenshot of a GitHub file viewer of a README.md file, with the pen 'edit' icon in the top right hand corner](assets/images/chapters/git-github/github-edit-file.png){#fig-git-github-exampleeditgithub}
+
+After pressing the pencil icon, add some more contents to the `README.md` file, then press the green 'Commit changes' button in the top right, write a commit message (sounds familiar?), and press the next 'green 'Commit changes' button (you can ignore the extended description). 
+
+On the resulting file browser, you should see your changes, and your commit message above the file browser with the commit hash!
+
+Moving back to your terminal, try running `git pull` again.
+This time you should get a bunch of progress bars and statistics again
+
+::: {.callout-tip title="Question" appearance="simple"}
+What do you think the number next to the pulled file name means?
+What do the two colours represent?
+:::
+
+::: {.callout-note title="Answer" collapse="true"}
+The number represents the number of lines with changes on them. The green plus and red minus symbol represents number lines with 'additions' modifications, and deletion modifications accordingly!
+
+A description of the changes is seen in the last line of the `git pull` output. 
+:::
+
+### Summary
+
+And that's the basic 6 commands you need to know to work with Git and GitHub for your own work - repeat _ad nauseum_!
+
+Git is supremely powerful, but can get extremely complicated because of this.
+If you stick with these 6 commands to begin, as you slowly get more comfortable with the routine, we recommend to start step-by-step broadening your `git` knowledge as you come across other questions and problems with `git`.
+There is no one comprehensive course or documentation, so we recommend just keep practising!
 
 ## Working in sandboxes and collaboratively
 
-Github facilitates simultaneous work by small teams through branching, which generates a copy of the main repository within the repository. This can be edited without breaking the 'master' version.
+Once you're comfortable with working Git for your own projects, it's time to learn a few more things to help you work both more safely, efficiently, and also eventually collaboratively!
+
+Git facilitates 'sandboxes' potential changes and also simultaneous work by small teams through branching.
+
+Branching generates an independent copy of the 'mainline' repository contents.
+When working on this branch, you can make as many changes and edits as you wish without breaking or modifying the 'master' version.
+Once you're happy with the changes you've made in your branch acting as the 'sandbox', you can then incorporate these changes into your 'mainline' repository using a `merge`.
+
+
+
 First, back on github, make a new branch of your repository.
 
 ![](assets/images/chapters/git-github/git_switch.png)
