@@ -1,6 +1,7 @@
 ---
 title: Introduction to Git(Hub)
 author: Megan Michel, James Fellows Yates
+bibliography: assets/references/chapters/git-github/references.bib
 ---
 
 ::: {.callout-tip}
@@ -39,7 +40,7 @@ So why should you use a version control system, such as GitHub?
 
 The basic concepts of using git and GitHub are as shown in (@fig-git-github-workflowdiagram)
 
-![Overview of basic operations when using git, and the pushing to a remote host such as GitHub. See chapter text for description of image. Reconstructed and modified after S. Chacon, B. Straub, Pro Git (Apress, Second Edition., 2022), The Expert’s Voice.](assets/images/chapters/git-github/git-workflow.png){#fig-git-github-workflowdiagram}
+![Overview of basic operations when using git, and the pushing to a remote host such as GitHub. See chapter text for description of image. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow.png){#fig-git-github-workflowdiagram}
 
 In the diagram of @fig-git-github-workflowdiagram, the two dark gray boxes represent a local machine (e.g. a laptop) and a remote server. 
 Within the local machine, an 'untracked' box represent files not indexed by the local git repository. 
@@ -239,16 +240,16 @@ To start, change into the chapter's data directory with
 cd /<path>/<to>/git-github
 ```
 
-### clone
+### git clone
 
 First, we will learn to **clone** a remote repository onto your local machine.
 
 This is actually _not_ in our basic workflow diagram in @fig-git-github-workflowdiagram, however you only need to do it once, and is only needed when you work with a remote server.
 With `clone` we are making a copy of the remote repository, and linking it so you can transmit data between the copy on the 'local' machine with the 'remote' repository on the server.  
 
-To make the 'copy', navigate to your new repo, select the green code dropdown button, select SSH, and copy the address as shown below.
+To make the 'copy', navigate to your new repo, select the green code dropdown button (@fig-git-github-clonebutton), select SSH, and copy the address as shown below.
 
-![](assets/images/chapters/git-github/git_clone.png)
+![Screenshot of the GitHub repository interface with the green 'code' drop down button pressed, and the menu showing the 'clone' information for SSH cloning (i.e., the copyable SSH address)](assets/images/chapters/git-github/git_clone.png){#fig-git-github-clonebutton}
 
 Back at your command line, clone the repo as follows:
 
@@ -262,47 +263,154 @@ If you get asked for a password, you've not used `ssh`!
 Press <kbd>ctrl</kbd> + <kbd>c</kbd>, to cancel, and try the command again but with the correct `ssh` address.
 :::
 
-
-### add
-
-Next, let's **add** a new or modified file to our 'staging area' on our local machine.
+Once cloned, you can run `ls` to see there is now a directory with the same name as repository
 
 ```bash
-cd vigilant-octo-journey
+ls
+```
+
+and if you change into it and run `ls` again, you should see the `README.md` file we specified to be generated on GitHub.
+
+```bash
+cd <NAME_OF_REPO>
+ls
+```
+
+### git add
+
+Next, let's **add** a new and modified file to our 'staging area' on our local machine.
+
+This corresponds either to the red arrow or blue arrows in (@fig-git-github-workflowdiagram-staging).
+
+We can do this in two ways
+
+1. Stage a previously untracked file
+2. Stage a tracked, but now modified file 
+
+![Overview of basic operations when using git (following @fig-git-github-workflowdiagram) but with the command `git add` operations highlighted . The arrows indicating the two 'staging' operations, carried out by the `git add` command, are coloured red for a staging a 'previously untracked', and blue for the editing of an already tracked file and staging of the edited file. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-staging.png){#fig-git-github-workflowdiagram-staging}
+
+First we will make a new file called `file_A.txt`, and also add some extra text to the end of the `README.md` file (i.e., just modify).
+
+Once you've made those both, lets first only stage the new file. 
+
+```bash
 echo "test_file" > file_A.txt
 echo "Just an example repo" >> README.md
 git add file_A.txt
 ```
 
-Now we can check what files have been locally changed, staged, etc. with **status**.
+### git status
 
-### status
+So hopefully we've staged at least one file, but how do you know exactly what the status is of the modified and unmodified files in the repository?
+
+At any point you can use the command `git status` to give a summary of any files present in the repository directory that changed status since the last commit (i.e., the last preserved entry in the git history). 
 
 ```bash
 git status
 ```
-
-You should see that `file_A.txt` is staged to be committed, but `README.md` is NOT. Try adding `README.md` and check the status again.
-
-### commit
-
-Now we need to package or save the changes into a **commit** with a message describing the changes we've made. Each commit comes with a unique hash ID and will be stored forever in git history.
-
 ```bash
-git commit -m "Add example file"
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   file_A.txt
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   README.md
 ```
 
-### push
+You should see that `file_A.txt` is staged and 'ready to be committed' but `README.md` is NOT staged - thus the changes would not be preserved to the git history. 
+Comparing to our diagram in @fig-git-github-workflowdiagram-staging, we have performed the 'red' arrow, but for the blue arrow, we've only carried out the 'Edit file' arrow, the second 'Stage edited file' is not yet carried out.
+
+::: {.callout-tip title="Task" appearance="simple"}
+Stage the modified `README.md` file and check the status again.
+:::
+
+
+::: {.callout-note collapse="true" title="Answer"}
+```bash
+git add README.md
+git status
+```
+```default
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   README.md
+	new file:   file_A.txt
+```
+
+You should now see both `README.md` and `file_A.txt` coloured green, and in the 'changes to be committed' section.
+You can also see the README is 'modified' whereas `file_A.txt` is a _new_ file, so will be newly indexed with git (i.e., will be the first entry in the git history for that file).
+:::
+
+
+### git commit
+
+Now we need to package or save the changes into a _commit_ with a message describing the changes we've just made. 
+Each commit (i.e., entry in the git history) comes with a unique hash ID and will be stored forever in git history.
+Committing corresponds to the read arrow taking all _staged_ modified or newly added files from  the 'Staged' to 'Unmodified state' in (@fig-git-github-workflowdiagram-commit).
+
+![Overview of basic operations when using git (following @fig-git-github-workflowdiagram) but with the command `git commit` operations highlighted. The red arrow shows committing the changes to history, i.e., taking a tracked file in the staging error, writing the modifications in the file to the git history and placing the file back into the 'unmodified' status column. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-commit.png){#fig-git-github-workflowdiagram-commit}
+
+```bash
+git commit -m "Add new file and modify README"
+```
+
+::: {.callout-note}
+The first time you commit, you may get a message about something like this.
+
+```
+Your name and email address were configured automatically based
+on your username and hostname. <...>
+```
+
+For the purposes of this tutorial this is fine, but it is highly recommended to follow the instructions in the message to correctly associate your commits to your own GitHub account.
+
+:::
+
+The `-m` part of the command corresponds to the human-readable description of the change.
+
+::: {.callout-tip title="Question" appearance="simple"}
+What happens if you run `git status` again?
+:::
+
+::: {.callout-note title="Answer" collapse="true"}
+
+```default
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+```
+
+You can see while there are no modified or staged files listed any more, our 'branch' is now ahead by 1 commit.
+This means that our local copy has an extra entry in the git history, compared to the remote server ('origin') copy of the repository.
+:::
+
+### git push
+
+How then do we 'backup'
 
 Finally, let's **push** our local commit back to our remote repository.
+
+![Overview of basic operations when using git (following @fig-git-github-workflowdiagram) but with the command `git commit` operations highlighted. XXXX. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-push.png){#fig-git-github-workflowdiagram-push}
 
 ```bash
 git push
 ```
 
-### pull
+### git pull
 
 What if we want to download new commits from our remote to our local repository?
+
+![Overview of basic operations when using git (following @fig-git-github-workflowdiagram) but with the command `git commit` operations highlighted. XXXX. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-pull.png){#fig-git-github-workflowdiagram-pull}
 
 ```bash
 git pull
@@ -312,7 +420,7 @@ You should see that your repository is already up-to-date, since we have not mad
 
 ![](assets/images/chapters/git-github/git_pull.png)
 
-## Working collaboratively
+## Working in sandboxes and collaboratively
 
 Github facilitates simultaneous work by small teams through branching, which generates a copy of the main repository within the repository. This can be edited without breaking the 'master' version.
 First, back on github, make a new branch of your repository.
