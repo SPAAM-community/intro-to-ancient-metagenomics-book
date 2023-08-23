@@ -69,10 +69,12 @@ The former you keep privately, whereas the other you upload to other servers/peo
 When you want to 'prove' that it's you sending changes to the repository, you securely send your private key and this gets compared with your public key on the remote server.
 If after some cryptographic maths magic they match, the server will trust you and will accept your changes.
 
-## Creating ssh keys
+## Using ssh keys for passwordless interaction with GitHub
 
 So, to begin, you will set up an SSH key to facilitate easier authentication when transferring data between local and remote repositories.
 In other words, follow this section of the tutorial so that you never have to type in your github password again!
+
+### Creating SSH keys
 
 First, generate you can generate your own ssh key pair, replacing the email below with your own address.
 
@@ -128,7 +130,7 @@ This you can give to others, on remote servers, or websites, to allow those plac
 
 So lets try this out on GitHub!
 
-## Logging the keys
+### Logging the keys
 
 First, we need to tell your computer that the keys exist and should be used for validation to remote locations.
 The tool that does that is called `ssh-agent`. 
@@ -153,7 +155,7 @@ When the agent is running, you need to give the path to the _private_ key file a
 ssh-add ~/.ssh/id_ed25519
 ```
 
-## Registering keys on GitHub
+### Registering keys on GitHub
 
 Next, GitHub needs to have your public key on record so it can compare between the public and private keys.
 Open your webbrowser and navigate to your github account settings (typically: press your profile picture in the top bar menu, then settings). 
@@ -329,7 +331,6 @@ Comparing to our diagram in @fig-git-github-workflowdiagram-staging, we have per
 Stage the modified `README.md` file and check the status again.
 :::
 
-
 ::: {.callout-note collapse="true" title="Answer"}
 ```bash
 git add README.md
@@ -415,7 +416,7 @@ Delta compression using up to 14 threads
 Compressing objects: 100% (2/2), done.
 Writing objects: 100% (4/4), 367 bytes | 367.00 KiB/s, done.
 Total 4 (delta 0), reused 0 (delta 0), pack-reused 0
-To github.com:jfy133/special-barnacle.git
+To github.com:<USERNAME>/<REPOSITORY_NAME>.git
    536183b..2d252b5  main -> main
 ```
 
@@ -510,36 +511,222 @@ There is no one comprehensive course or documentation, so we recommend just keep
 
 Once you're comfortable with working Git for your own projects, it's time to learn a few more things to help you work both more safely, efficiently, and also eventually collaboratively!
 
-Git facilitates 'sandboxes' potential changes and also simultaneous work by small teams through branching.
+Git facilitates 'sandboxes' potential changes and also simultaneous work by small teams through branching and pull requests.
 
-Branching generates an independent copy of the 'mainline' repository contents.
-When working on this branch, you can make as many changes and edits as you wish without breaking or modifying the 'master' version.
-Once you're happy with the changes you've made in your branch acting as the 'sandbox', you can then incorporate these changes into your 'mainline' repository using a `merge`.
+Branching generates an independent copy of the 'mainline' repository contents. When working on this branch, you can make as many changes and edits as you wish without breaking or modifying the 'master' version.
+
+Once you're happy with the changes you've made in your branch acting as the 'sandbox', you can then incorporate these changes into your 'mainline' repository using a `pull request` and a `merge`.
+
+You can make a branch from any point in your git history, and also make as many branches as you want!
+
+### Branches
 
 
 
-First, back on github, make a new branch of your repository.
 
-![](assets/images/chapters/git-github/git_switch.png)
+There are two ways you can make a branch.
+The first way is using the GitHub interface, as in @fig-git-github-githubbranch.
 
-From the command line, you can create a new branch as follows:
+![Three panel screenshot of GitHub interface for switching and creating branches. Panel A: A dropdown menu appears when you press 'main' (or the name of the current branch). Panel B: A search bar in the dropdown allows you to search for existing branches which appears in the search results. If no branch with that name exists, the search results presents a button saying 'Create branch <name> from 'main'. Panel C: Once the new branch is made, you are returned to the repository file or file browser, but with the name on the dropdown listing the name of the new branch you made.](assets/images/chapters/git-github/git_switch.png){#fig-git-github-githubbranch}
+
+The instructions in @fig-git-github-githubbranch would result in the branch existing on the _remote_ copy of your repository i.e., on GitHub.
+To get this branch on your local copy, you can simply run `git pull` in your terminal!
+
+You can also create branches via command line.
+
+From your terminal, you can create a new branch as follows.
 
 ```bash
-git switch -c new_branch
+git switch -c test-branch
+```
+```default
+Switched to a new branch 'test-branch'
 ```
 
-To switch back to the main branch, use
+The `-c` flag indicates to _create_ the new branch with the name you provide, in the example above this is `test-branch`.
+
+::: {.callout-note}
+Earlier versions of `git` used a command called `git checkout`.
+You will see this command on many older tutorials.
+However `git switch` was created as a simpler and more intuitive command.
+`git checkout` is much more powerful command, but with great power comes great responsibility (and the risk to break things...) 
+:::
+
+To switch back to the original main branch you were on, run the same command but without the `-c` flag and with the name of the branch you switch to.
 
 ```bash
 git switch main
 ```
+::: {.callout-warning}
+Note that if you start making changes on one branch you **must commit changes** for them to be saved to the desired branch, before you switch to a new branch!
 
-Note that you **must commit changes** for them to be saved to the desired branch!
+Uncommitted changes will 'follow' you to which ever branch you are on _until_ make a commit.
+:::
 
-## Pull requests
+::: {.callout-tip title="Bonus Question" appearance="simple"}
+What command could you run to see which branches already exist in the local repository we are on? This command has not been introduced in this tutorial! Try running `git --help` or Google it to find the answer!
+:::
 
-A **Pull request** (aka PR) is used to propose changes to a branch from another branch. Others can comment and make suggestinos before your changes are merged into the main branch.
-For more information on creating a pull request, see github's documentation: [https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
+::: {.callout-note title="Answer" collapse="true"}
+```bash
+git branch
+```
+```default
+  main
+* test-branch
+```
+Where the green colour and the star indicates the branch you are currently on.
+:::
+
+
+### Pull requests
+
+A Pull request (a.k.a. PR) is the GitHub term for proposing changes to a branch from another branch. 
+
+Others can comment and make suggestions before your changes are merged into the main branch.
+
+A pull request is the safest way to check your changes before you merge them in, ensure you don't make any mistakes breaking something else in your 'receiving' branch. 
+
+::: {.callout-tip}
+Git(Hub) will tell and warn you if you are proposing changes on a line where _since_ you branched, someone else has modified that line in the 'receiving' branch.
+
+This is called a merge conflict, and is up to you to decide which is the correct change to retain.
+:::
+
+To make a pull request, you first make sure you have a branch with some changes on it.
+
+::: {.callout-tip title="Task" appearance="simple"}
+On your local repository, in your terminal, switch back to your `test-branch`, and add another new line to the end of `README.md`, stage the file, commit, and push.
+(If you get stuck, or unsure, feel free to check the Answer).
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+```bash
+git switch test-branch
+```
+```default
+Switched to branch 'test-branch'
+```
+
+```bash
+echo 'We love SPAAM!' >> README.md
+git status
+```
+```default
+Switched to branch 'test-branch'
+```
+
+```bash
+git add README.md
+git commit -m 'Update README'
+
+```
+```default
+[test-branch 99c4266] Update README
+ 1 file changed, 1 insertion(+)
+```
+
+```bash
+git push
+```
+```default
+fatal: The current branch test-branch has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream origin test-branch
+
+```
+
+In this case, our remote copy of the reposity does not have the branch.
+Therefore the first time we push, we tell Git to tell GitHub to create the branch on the remote as well by using the command it suggests.
+
+```bash
+git push --set-upstream origin test-branch
+```
+```default
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 14 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 352 bytes | 352.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+remote: 
+remote: Create a pull request for 'test-branch' on GitHub by visiting:
+remote:      https://github.com/<USERNAME>/<REPOSITORY_NAME>/pull/new/test-branch
+remote: 
+To github.com:<USERNAME>/<REPOSITORY_NAME>.git
+ * [new branch]      test-branch -> test-branch
+Branch 'test-branch' set up to track remote branch 'test-branch' from 'origin
+```
+:::
+
+Once you've pushed your changes to you `test-branch` branch, go to the GitHub interface for your repository.
+
+Open the 'Pull requests tab' and press the green 'New pull request' button, or press the green 'Compare & pull request' button in the yellow box that _may_ appear if you recently pushed (@fig-git-github-newpullrequest).
+
+![Screenshot of GitHub pull requests tab, with green button for 'New pull request' and a yellow message saying a branch had recent pushes and another green button next to it saying 'Compare & pull request'.](assets/images/chapters/git-github/github-new-pull-request.png){#fig-git-github-newpullrequest}
+
+Once opened, you can add a title and a description of the pull request (@fig-git-github-openingpullrequest).
+
+![Screenshot of the opening a pull request page, with two text boxes for adding a title, a longer description, and a green 'Create pull request' button at the bottom.](assets/images/chapters/git-github/git-pullrequest-example.png){#fig-git-github-openingpullrequest}
+
+Once you press the Create pull request button, it'll open the unique Pull request of this branch, in which others can leave comments and suggestions (@fig-git-github-pr-conversation).
+By pressing the 'Files changed' tab, you can see exactly what has changed (@fig-git-github-pr-files).
+
+::: {layout-ncol=2}
+![Example screenshot of conversations tab of an open GitHub pull request, with the title, multiple tabs (Conversation, commits, checks, and file changed), an empty description box, and a comment box at the bottom.](assets/images/chapters/git-github/github-pr-conversation.png){#fig-git-github-pr-conversation}
+
+![Example screenshot of files tab of an open GitHub pull request with a text file of README.md being displayed. In the display a red line highlights the old state of a modified line, and a green line right below shows the changes (in this case, a number of empty spaces have been added to the end of the line).](assets/images/chapters/git-github/github-pr-files.png){#fig-git-github-pr-files}
+:::
+
+Once we and our collaborators are happy with the changes (a code or pull request 'review'), we can go back to the 'Conversation' tab of the unique pull request, and press the green 'Merge pull request' button, and confirm the merge.
+
+When back on the `main` branch of your repository, you should see your updated `README.md` in all it's glory!
+
+![Screenshot of GitHub repository `main` branch after a pull request merge, with the text changes that were originally written on the `test-branch` displayed in the `README.md` file.](assets/images/chapters/git-github/github-merged-changes.png){#fig-git-github-merged-changes}
+
+For more information on creating a pull request, see [GitHub's documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
+
+::: {.callout-tip title="Task" appearance="simple"}
+What command would you use to merge one branch into another on a local copy of your repository.
+Tip: you are working with yourself when you work on your local repository, thus you don't need to 'request' a pull!
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+```bash
+git switch main
+```
+```default
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+```
+```bash
+git merge test-branch
+```
+```default
+Updating 0ad9bb3..99c4266
+Fast-forward
+ README.md | 1 +
+ 1 file changed, 1 insertion(+)
+```
+:::
+
+## Summary
+
+In this chapter, we have gone over the fundamental concepts of Git.
+
+We've gone through setting up your GitHub account to allow passwordless interaction between the GitHub remote repository and your local copy on your machine with SSH keys.
+
+Through the GitHub website interface we made a new repository and gone through the 6 basic commands you need for using Git
+
+1. git clone
+2. git add
+3. git status
+4. git commit
+5. git push
+6. git pull
+
+We finally covered how to work in sandboxes and collaboratively with branches and pull requests.
 
 ## Questions to think about
 
