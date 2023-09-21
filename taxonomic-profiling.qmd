@@ -10,8 +10,18 @@ For this chapter's exercises, if not already performed, you will need to create 
 ```bash
 conda activate taxonomic-profiling
 ```
-:::
 
+To download the data for this chapter, please download following archive with, extract the tar, and change into the directory.
+
+For example
+
+```bash
+wget -q -O taxonomic-profiling.tar.gz -P /<PATH>/<TO>/<SOMEWHERE_TO_STORE>/ https://www.dropbox.com/scl/fi/xc9mf1qnr4rijzvcggnjt/taxonomic-profiling.tar.gz?rlkey=z4wadv3ogen02a7ls5krdrrc0&dl=0  
+
+tar -xzf taxonomic-profiling.tar.gz
+cd taxonomic-profiling
+```
+:::
 
 ## Introduction
 
@@ -103,9 +113,14 @@ gzip -f ../data/subsampled/*.fastq
 
 Before starting to analyze our data, we will need to pre-process them to remove reads mapping to the host genome, here, _Homo sapiens_.
 
-To do so, I've used the first steps of the [nf-core/eager](https://github.com/nf-core/eager) pipeline, more information of which can be found in the [Ancient Metagenomic Pipelines](ancient-metagenomic-pipelines.qmd) chapter.
+To do so, I've used the first steps of the [nf-core/eager](https://github.com/nf-core/eager) pipeline, more information of which can be found in the [Ancient Metagenomic Pipelines](ancient-metagenomic-pipelines.qmd) chapter. 
 
-I've already done some pre-processed the data, and the resulting cleaned files are available in the `data/eager_cleaned/` but the basic eager command to do so is:
+I've already done some pre-processed the data, and the resulting cleaned files are available in the `data/eager_cleaned/`.
+
+::: {.callout-note collapse="true"}
+## Instructions for manual pre-preparation of data
+
+If you wish to re-pre-prepare the data yourself, the basic eager command to do so is below, running on the output of the previous block in [chapter overview](#chapter-overview).
 
 ```bash
 nextflow run nf-core/eager \
@@ -115,6 +130,7 @@ nextflow run nf-core/eager \
 --fasta 'human_genome.fasta' \
 --hostremoval_input_fastq
 ```
+:::
 
 ## Adapter sequence trimming and low-quality bases trimming
 
