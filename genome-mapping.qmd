@@ -21,8 +21,7 @@ cd genome-mapping
 ```
 :::
 
-
-## Mapping to a Reference Genome
+## Introduction 
 
 One way of reconstructing genomic information from DNA sequencing reads is mapping/aligning them to a reference genome. This allows for identification of differences between the genome from your sample and the reference genome. This information can be used for example for comparative analyses such as in phylogenetics. For a detailed explanation of the read alignment problem and an overview of concepts for solving it, please see [https://doi.org/10.1146/annurev-genom-090413-025358](https://doi.org/10.1146/annurev-genom-090413-025358).
 
@@ -34,7 +33,7 @@ different algorithms implemented for different types of data (e.g. different rea
 Here, we use BWA backtrack (_bwa aln_), which is suitable for Illumina sequences up to 100bp.
 Other algorithms are _bwa mem_ and _bwa sw_ for longer reads.
 
-### Reference Genome
+## Reference Genome
 
 For mapping we need a reference genome in FASTA format. Ideally we use a genome from the same species that our data relates to or, if not available, a closely related species. The selection of the correct reference genome is highly relevant. E.g. if the chosen genome differs too much from the organism the data relates to, it might not be possible to map most of the reads.
 Reference genomes can be retrieved from comprehensive databases such as [NCBI](https://www.ncbi.nlm.nih.gov/).
@@ -60,7 +59,7 @@ We need to build a third index that is necessary for the genotyping step, which 
 picard CreateSequenceDictionary R=YpestisCO92.fa
 ```
 
-### Mapping Parameters
+## Mapping Parameters
 
 We will be using _bwa aln_, but we need to specify parameters.
 For now we will concentrate on the "seed length" and the "maximum edit distance". We will use the default setting for all other parameters during this session. The choice of the right parameters depend on many factors such as the type of data and the specific use case. One aspect is the mapping sensitivity, i.e. how different a read can be from the chosen reference and still be mapped. In this context we generally differentiate between _strict_ and _lenient_ mapping parameters.
@@ -92,7 +91,7 @@ For this, we will make 4 separate directories, to avoid mixing up files:
 mkdir sample1_lenient sample2_lenient sample1_strict sample2_strict
 ```
 
-### Mapping Sample1
+## Mapping Sample1
 
 Let’s begin with a lenient mapping of sample1.
 
@@ -167,7 +166,7 @@ We can also get a summary about the number of mapped reads. For this we use the 
 samtools idxstats reads_mapped_sorted_dedup.bam
 ```
 
-### Genotyping
+## Genotyping
 
 The next step we need to perform is genotyping, i.e. the identification of all SNPs that differentiate the sample from the reference.
 For this we use the _Genome Analysis Toolkit (GATK)_ (DePristo et al. 2011 – [http://www.broadinstitute.org/gatk/](http://www.broadinstitute.org/gatk/))
@@ -188,11 +187,11 @@ cat mysnps.vcf | less -S
 
 (exit by pressing <kbd>q</kbd>)
 
-### Mapping and Genotyping for the other Samples/Parameters
+## Mapping and Genotyping for the other Samples/Parameters
 
 Let's now continue with mapping and genotyping for the other samples and parameter settings.
 
-#### Sample2 Lenient
+### Sample2 Lenient
 
 ::: {.callout-note}
 This is a larger file and lenient mapping takes longer so this file will likely take a few minutes. If you are short on time, proceed with the other sample/parameter settings first and come back to this later if there is time.
@@ -219,7 +218,7 @@ samtools index reads_mapped_sorted_dedup.bam
 gatk3 -T UnifiedGenotyper -R ../YpestisCO92.fa -I reads_mapped_sorted_dedup.bam --output_mode EMIT_ALL_SITES -o mysnps.vcf
 ```
 
-#### Sample1 Strict
+### Sample1 Strict
 
 ```bash
 cd ..
@@ -242,7 +241,7 @@ samtools index reads_mapped_sorted_dedup.bam
 gatk3 -T UnifiedGenotyper -R ../YpestisCO92.fa -I reads_mapped_sorted_dedup.bam --output_mode EMIT_ALL_SITES -o mysnps.vcf
 ```
 
-#### Sample2 Strict
+### Sample2 Strict
 
 ```bash
 cd ..
@@ -265,7 +264,7 @@ samtools index reads_mapped_sorted_dedup.bam
 gatk3 -T UnifiedGenotyper -R ../YpestisCO92.fa -I reads_mapped_sorted_dedup.bam --output_mode EMIT_ALL_SITES -o mysnps.vcf
 ```
 
-### Comparing Genotypes
+## Comparing Genotypes
 
 In order to combine the results from multiple samples and parameter settings we need to agregate and comparatively analyse the information from all the _vcf_ files.
 For this we will use the software
@@ -336,7 +335,7 @@ sample2_strict	1218	0	8.94	83.76
 First we find the most important parameter settings and then the table of results.
 The first column contains the dataset name and the second column the number of called SNPs. The genome coverage and the fraction of the genome covered with the used threshold can be found in columns 4 and 5, respectively. For example, sample1 had 207 SNP calls with strict parameters. The coverage is about 16-fold and about 93% of the genome are covered 3 fold or higher (The coverage threshold we set was 3).
 
-### Exploring the Results
+## Exploring the Results
 
 For visual exploration of mapping results so-called "Genome Browsers" are used.
 Here we will use the _Integrative Genomics Viewer (IGV)_ ([https://software.broadinstitute.org/software/igv/](https://software.broadinstitute.org/software/igv/)).
@@ -384,7 +383,7 @@ Let’s check out some of these in IGV.
 Do you observe certain patterns in these genomic regions?
 :::
 
-### Examples
+## Examples
 
 Please find here a few examples for exploration. To get a better visualization we only loaded `sample2_lenient` (top track) and `sample2_strict` (bottom track):
 
