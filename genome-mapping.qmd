@@ -3,35 +3,30 @@ title: Genome Mapping
 author: Alexander Herbig and Alina Hiß
 ---
 
-::: {.callout-tip}
-For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [link](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/genome-mapping.yml) (right click and save as to download), and once created, activate the environment with:
+::: callout-tip
+For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [link](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/genome-mapping.yml) (use `wget`, or right click and save as to download), and once created, activate the environment with:
 
-```bash
+``` bash
 conda activate genome-mapping
 ```
+
+To download the data for this chapter, please download following archive with, extract the tar, and change into the directory.
+
+For example
+
+```bash
+wget --quiet -O genome-mapping.tar.gz https://www.dropbox.com/scl/fi/wghlf22dxyl4imp96wf9x/genome-mapping.tar.gz?rlkey=mw90slu9ep9tdzpypfxrsrfuj&dl=0 -P /<PATH>/<TO>/<SOMEWHERE_TO_STORE>/
+tar -xzf genome-mapping.tar.gz
+cd genome-mapping
+```
 :::
+
 
 ## Mapping to a Reference Genome
 
 One way of reconstructing genomic information from DNA sequencing reads is mapping/aligning them to a reference genome. This allows for identification of differences between the genome from your sample and the reference genome. This information can be used for example for comparative analyses such as in phylogenetics. For a detailed explanation of the read alignment problem and an overview of concepts for solving it, please see [https://doi.org/10.1146/annurev-genom-090413-025358](https://doi.org/10.1146/annurev-genom-090413-025358).
 
 In this session we will map two samples to the _Yersinia pestis_ (plague) genome using different parameter sets. We will do this "manually" in the sense that we will use all necessary commands one by one in the terminal. These commands usually run in the background when you apply DNA sequencing data processing pipelines.
-
-### Preparation
-
-The data and conda environment `.yaml` file for this practical session can be downloaded from here: [https://doi.org/10.5281/zenodo.6983174](https://doi.org/10.5281/zenodo.6983174). See instructions on page.
-
-We will open a terminal and then navigate to the working directory of this session:
-
-```bash
-cd /<path>/<to>/genome-mapping/
-```
-
-Then, as already mentioned above, we need to activate the conda environment of this session. By doing this all the necessary tools can be accessed in the current terminal session:
-
-```bash
-conda activate genome-mapping
-```
 
 We will be using the Burrows-Wheeler Aligner
 (Li et al. 2009 – [http://bio-bwa.sourceforge.net](http://bio-bwa.sourceforge.net)). There are
@@ -360,7 +355,7 @@ _→ Genomes → Load Genome from File_
 
 ![](assets/images/chapters/genome-mapping/IGV_load_genome.png)
 
-Load your _bam_ files (do this 4 times, once for each mapping):
+Load your sorted and dedupp'ed _bam_ files (do this 4 times, once for each mapping):
 
 _→ File → Load from File_
 
@@ -368,23 +363,26 @@ _→ File → Load from File_
 
 Try to explore the mapping results yourself. Here are some questions to guide you. Please also have a look at the examples below.
 
-What differences do you observe between the samples and parameters?
-
-Differences in number of mapped reads, coverage, number of SNPs
-
-Do you see any global patterns?
-
-Which sample is more affected by changing the parameters?
-
-Which of the two samples might be ancient, which is modern?
+::: {.callout-tip title="Question" appearance="simple"}
+- What differences do you observe between the samples and parameters?
+- Differences in number of mapped reads, coverage, number of SNPs
+- Do you see any global patterns?
+- Which sample is more affected by changing the parameters?
+- Which of the two samples might be ancient, which is modern?
+:::
 
 Let’s examine some SNPs.
 Have a look at `snpTable.tsv`.
 
+::: {.callout-tip title="Question" appearance="simple"}
 Can you identify SNPs that were called with lenient but not with strict parameters or vice versa?
+:::
 
 Let’s check out some of these in IGV.
+
+::: {.callout-tip title="Question" appearance="simple"}
 Do you observe certain patterns in these genomic regions?
+:::
 
 ### Examples
 
@@ -399,7 +397,7 @@ For jumping to a specific coordinate you need to enter it into the coordinate fi
 
 ![](assets/images/chapters/genome-mapping/IGV_coordinate_example.png)
 
-E.g. if you enter `2326942` after the colon in the coordinate field and hit enter, you will jump to the same position as in the screenshot above.
+E.g. if you enter `12326942` after the colon in the coordinate field and hit enter, you will jump to the same position as in the screenshot above.
 
 Let's have a look at some positions.
 
@@ -421,6 +419,35 @@ Such regions can be fairly large. For example, see this 20 kb region around posi
 
 ![](assets/images/chapters/genome-mapping/IGV_SNP_224750.png)
 
+## (Optional) clean-up
+
+Let's clean up your working directory by removing all the data and output from this chapter.
+
+When closing your `jupyter` notebook(s), say no to saving any additional files.
+
+Press <kbd>ctrl</kbd> + <kbd>c</kbd> on your terminal, and type <kbd>y</kbd> when requested. 
+Once completed, the command below will remove the `/<PATH>/<TO>/genome-mapping directory` **as well as all of its contents**. 
+
+::: {.callout-tip}
+## Pro Tip
+Always be VERY careful when using `rm -r`. Check 3x that the path you are
+specifying is exactly what you want to delete and nothing more before pressing
+ENTER!
+:::
+
+```bash
+rm -r /<PATH>/<TO>/genome-mapping
+```
+
+Once deleted you can move elsewhere (e.g. `cd ~`).
+
+We can also get out of the `conda` environment with
+
+```bash
+conda deactivate
+```
+
+
 ### Conclusions
 
 - Mapping DNA sequencing reads to a reference genome is a complex procedure that requires multiple steps.
@@ -428,3 +455,4 @@ Such regions can be fairly large. For example, see this 20 kb region around posi
 - The genotyping results can be aggregated from multiple samples and comparatively analysed e.g. in the context of phylogenomics.
 - The chosen mapping parameters can have a strong influence on the results of any downstream analysis.
 - This is particularly true when dealing with ancient DNA samples as they tend to contain DNA from multiple organisms. This can lead to mismapped reads and therefore incorrect genotypes, which can further influence downstream analyses.
+
