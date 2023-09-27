@@ -9,14 +9,24 @@ library(tidyverse)
 library(pander)
 ```
 
-
 ::: {.callout-tip}
 For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [link](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/denovo-assembly.yml) (right click and save as to download), and once created, activate the environment with:
 
 ```bash
 conda activate denovo-assembly
 ```
+
+To download the data for this chapter, please download following archive with, extract the tar, and change into the directory.
+
+For example
+
+```bash
+wget -O denovo-assembly.tar.gz https://www.dropbox.com/scl/fi/a2ax5retqrhci51gg8nzq/denovo-assembly.tar.gz?rlkey=8j8u18g710omadudhcwz61072&dl=0 -P /<PATH>/<TO>/<SOMEWHERE_TO_STORE>/ 
+tar -xzf denovo-assembly.tar.gz
+cd denovo-assembly
+```
 :::
+
 
 ## Introduction
 
@@ -66,30 +76,30 @@ For this practical course, I selected a palaeofaeces sample from the study by @M
 
 However, because the sample was very deeply sequenced for more than 250 million paired-end reads and we do not want to wait for days for the analysis to finish, we will not use all data but just a sub-sample of them.
 
-You can access the sub-sampled data by changing to the folder 
+You can access the sub-sampled data by making a symbolic link of the chapter pre-made data into the main chapter folder. 
 
 ```bash
-ln -s /vol/volume/denovo-assembly/2612_R1.fastq.gz 2612_R1.fastq.gz
-ln -s /vol/volume/denovo-assembly/2612_R2.fastq.gz 2612_R2.fastq.gz
+ln -s /<PATH>/<TO>/denovo-assembly/seqdata_files/2612_R1.fastq.gz 2612_R1.fastq.gz
+ln -s /<PATH>/<TO>/denovo-assembly/seqdata_files/2612_R2.fastq.gz 2612_R2.fastq.gz
 ```
-
-on the cluster. If you would like to repeat the practical on your own computational infrastructure, you will find information on how to access the files in the following boxes with the title "Self-guided: data preparation":
-
-
-:::{.callout-note title="Self-guided: data preparation" collapse="true"}
-For everyone, who runs this practical on their own infrastructure, you can download the sequencing data from here:
-
-```{bash, eval = F}
-wget https://share.eva.mpg.de/index.php/s/CtLq2R9iqEcAFyg/download/2612_R1.fastq.gz
-wget https://share.eva.mpg.de/index.php/s/mc5JrpDWdL4rC24/download/2612_R2.fastq.gz
-```
-:::
 
 ::: {.callout-tip title="Question" appearance="simple"}
 
 **How many sequences are in each FastQ file?**
 
-Hint: You can run either `seqtk size <FastQ file>` or `bioawk -c fastx 'END{print NR}' <FastQ file>` to find this out.
+Hint: You can run either bioawk.
+
+```bash
+bioawk -c fastx 'END{print NR}' <FastQ file>
+``` 
+
+or (if installed) you can use seqtk.
+
+```bash
+seqtk size <FastQ file>
+```
+
+to find this out.
 
 :::
 
@@ -131,7 +141,7 @@ fastp --in1 2612_R1.fastq.gz \
 
 **Infer the distribution of the DNA molecule length of the sequencing data. Is this sample well-preserved?**
 
-Hint: You can easily inspect the distribution by opening the HTML report `overlaps.html`.
+Hint: You can easily inspect the distribution by opening the HTML report `overlaps.html` in your web browser.
 
 :::
 
@@ -201,12 +211,13 @@ While we are waiting for MEGAHIT to finish, here is a question:
 Based on the maximum read length, MEGAHIT decided to use the _k_-mer lengths of 21, 29, 39, 59, 79, 99, 119, and 141.
 :::
 
-Now, as MEGAHIT has finished, we want to evaluate the quality of the assembly results. MEGAHIT has written the contiguous sequences (contigs) into a single FastA file stored in the folder `megahit`. We will process this FastA file with a small script, calN50, which will count the number of contigs and give us an overview of their length distribution.
+Now, as MEGAHIT has finished, we want to evaluate the quality of the assembly results. MEGAHIT has written the contiguous sequences (contigs) into a single FastA file stored in the folder `megahit`. 
 
-To download the script and run it, we can execute the following commands:
+We will process this FastA file with a small script from Heng Li (creator of the famous `bwa` aligner among others), [calN50](https://github.com/lh3/calN50/), which will count the number of contigs and give us an overview of their length distribution.
+
+The script is already present in the chapter's directory.
 
 ```{bash, eval = F}
-wget https://raw.githubusercontent.com/lh3/calN50/master/calN50.js
 k8 ./calN50.js megahit/final.contigs.fa
 ```
 
@@ -259,45 +270,32 @@ Aligning the short-read data to the contigs requires multiple steps:
   4. Sort the aligned reads by the contig name and the coordinate they were aligned to
   5. Index the resulting alignment file for faster access
 
-To execute the alignment step we can run the following commands:
-
-```{bash, eval = F}
-mkdir alignment
-bowtie2-build -f megahit/final.contigs.fa alignment/2612
-bowtie2 -p 14 –-very-sensitive -N 1 -x alignment/2612 \
-    -1 2612_R1.fastq.gz -2 2612_R2.fastq.gz | \
-samtools view -Sb - | \
-samtools calmd -u /dev/stdin megahit/final.contigs.fa | \
-samtools sort -o alignment/2612.sorted.calmd.bam -
-samtools index alignment/2612.sorted.calmd.bam
-```
-
 However, these steps are rather time-consuming, even when we just have so little sequencing data as we do for our course example. The alignment is rather slow because we allow a single mismatch in the seeds that are used by the aligner BowTie2 to quickly determine the position of a read along the contig sequences (parameter `-N 1`). This is necessary because otherwise we might not be able to align reads with ancient DNA damage present on them. Secondly, the larger the resulting alignment file is the longer it takes to sort it by coordinate.
 
 To save us some time and continue with the more interesting analyses, I prepared the resulting files for us. For this, I also corrected damage-derived alleles in the contig sequences. You can access these files on the cluster by running the following commands:
 
 ```{bash, eval = F}
 mkdir alignment
-ln -s /vol/volume/denovo-assembly/2612.sorted.calmd.bam alignment/
-ln -s /vol/volume/denovo-assembly/2612.sorted.calmd.bam.bai alignment/
-ln -s /vol/volume/denovo-assembly/2612.fa alignment/
+ln -s /<PATH>/<TO>/denovo-assembly/seqdata_files/2612.sorted.calmd.bam alignment/
+ln -s /<PATH>/<TO>/denovo-assembly/seqdata_files/2612.sorted.calmd.bam.bai alignment/
+ln -s /<PATH>/<TO>/denovo-assembly/seqdata_files/2612.fa alignment/
 ```
 
+If we wanted to generate the alignments ourselves, we can check the commands in the box below.
 
-:::{.callout-note title="Self-guided: data preparation" collapse="true"}
-For everyone, who runs this practical on their own infrastructure, you can download the files:
+::: {.callout-note title="Manual alignment with Bowtie2" collapse="true"}
+To execute the alignment step ourselves we could theoretically run the following commands:
 
 ```{bash, eval = F}
 mkdir alignment
-wget -O alignment/2612.sorted.calmd.bam \
-    https://share.eva.mpg.de/index.php/s/bDKgFLj9GpRFdPg/download/2612.sorted.calmd.bam
-wget -O alignment/2612.sorted.calmd.bam.bai \
-    https://share.eva.mpg.de/index.php/s/HWqg6fJj6ZEEBAL/download/2612.sorted.calmd.bam.bai
-wget -O alignment/2612.fa \
-    https://share.eva.mpg.de/index.php/s/z6ZAai42RPribX5/download/final.contigs.fa
+bowtie2-build -f megahit/final.contigs.fa alignment/2612
+bowtie2 -p 14 --very-sensitive -N 1 -x alignment/2612 -1 2612_R1.fastq.gz -2 2612_R2.fastq.gz | \
+samtools view -Sb - | \
+samtools calmd -u /dev/stdin megahit/final.contigs.fa | \
+samtools sort -o alignment/2612.sorted.calmd.bam -
+samtools index alignment/2612.sorted.calmd.bam
 ```
 :::
-
 
 ### Reconstructing metagenome-assembled genomes
 
@@ -331,6 +329,8 @@ Each of these three binners employs a slightly different strategy. While metaBAT
 The easiest way to run all these three programs is the program metaWRAP [@Uritskiy2018]. metaWRAP is in fact a pipeline that allows you to assemble your contigs, bin them, and subsequently refine the resulting MAGs. However, the pipeline is not very well written and does not contain any strategies to deal with ancient metagenomic sequencing data. Therefore, I prefer to use different pipelines, such as nf-core/mag for the assembly, and only use metaWRAP for binning and bin refinement.
 
 To skip the first steps of metaWRAP and start straight with the binning, we need to create the folder structure and files that metaWRAP expects:
+
+<!-- UP TI HERRE -->
 
 ```{bash, eval = F}
 mkdir -p metawrap/INITIAL_BINNING/2612/work_files
@@ -393,7 +393,7 @@ Using this approach, the authors of metaWRAP could show that they can outperform
 ::: {.callout-caution}
 Running metaWRAP's bin refinement module requires about 72 GB of memory because it has to load a larger reference database containing the lineage-specific marker genes of checkM.
 
-If your computer infrastructure cannot provide so much memory, I have prepared the results of metaWRAP's bin refinement algorithm, `metawrap_50_10_bins.stats`, which can be found in the folder `/vol/volume/denovo-assembly`.
+If your computer infrastructure cannot provide so much memory, I have prepared the results of metaWRAP's bin refinement algorithm, `metawrap_50_10_bins.stats`, which can be found in the folder `/<PATH>/<TO>/denovo-assembly/seqdata_files`.
 :::
 
 To apply metaWRAP's bin refinement to the bins that we obtained from metaBAT2 and MaxBin2, we first need to install the software checkM [@Parks2015] that will provide the lineage-specific marker gene catalogue:
@@ -434,13 +434,13 @@ Depending on the estimates on completeness and contamination plus the presence o
 
 :::
 
-As these two steps will run rather long and need a large amount of memory and disk space, I have provided the results of metaWRAP's bin refinement. You can find the file here: `/vol/volume/denovo-assembly/metawrap_50_10_bins.stats`. Be aware that these results are based on the bin refinement of the results of three binning tools and include CONCOCT.
+As these two steps will run rather long and need a large amount of memory and disk space, I have provided the results of metaWRAP's bin refinement. You can find the file here: `/<PATH>/<TO>/denovo-assembly/metawrap_50_10_bins.stats`. Be aware that these results are based on the bin refinement of the results of three binning tools and include CONCOCT.
 
 ::: {.callout-tip title="Question" appearence="simple"}
 
 **How many bins were retained after the refinement with metaWRAP? How many high-quality and medium-quality MAGs did the refinement yield following the MIMAG criteria?**
 
-Hint: You can more easily visualise tables on the terminal using the Python program `visidata`. After installing it with `pip install visidata`, you can open a table using `vd -f tsv /vol/volume/denovo-assembly/metawrap_50_10_bins.stats`. Next to separating the columns nicely, it allows you to perform a lot of operations like sorting conveniently. Check the cheat sheet [here](https://jsvine.github.io/visidata-cheat-sheet/en/).
+Hint: You can more easily visualise tables on the terminal using the Python program `visidata`. After installing it with `pip install visidata`, you can open a table using `vd -f tsv /<PATH>/<TO>/denovo-assembly/metawrap_50_10_bins.stats`. Next to separating the columns nicely, it allows you to perform a lot of operations like sorting conveniently. Check the cheat sheet [here](https://jsvine.github.io/visidata-cheat-sheet/en/).
 
 :::
 
@@ -477,7 +477,7 @@ While all of these tools can do the job, I typically prefer to use the program M
 ::: {.callout-caution}
 The latest version of the pre-computed GTDB reference database (r207) requires about 105 GB of harddisk space and 700 GB of memory for running.
 
-As our computer infrastructure does not provide so much memory for every user, I pre-computed the results. You can find the results `2612.mmseqs2_gtdb.tsv` in the folder `/vol/volume/denovo-assembly`.
+As our computer infrastructure does not provide so much memory for every user, I pre-computed the results. You can find the results `2612.mmseqs2_gtdb.tsv` in the folder `/<PATH>/<TO>/denovo-assembly/seqdata_files`.
 
 An alternative for users with a less powerful infrastructure is the program [KrakenUniq](https://github.com/fbreitwieser/krakenuniq).
 :::
@@ -546,7 +546,7 @@ To infer which taxa our five reconstructed MAGs represent, we can run the GTDBTK
 ::: {.callout-caution}
 The latest version of the database used by GTDBTK (r207) requires about 70 GB of harddisk space and 80 GB of memory for running.
 
-As our computer infrastructure does not provide so much memory for every user, I pre-computed the results. You can find the results `2612.gtdbtk_archaea.tsv` and `2612.gtdbtk_bacteria.tsv` in the folder `/vol/volume/denovo-assembly`.
+As our computer infrastructure does not provide so much memory for every user, I pre-computed the results. You can find the results `2612.gtdbtk_archaea.tsv` and `2612.gtdbtk_bacteria.tsv` in the folder `/<PATH>/<TO>/denovo-assembly/seqdata_files`.
 :::
 
 First, we need to install the GTDB database:
@@ -672,6 +672,31 @@ Prokka returns the following files:
 Prokka found 1,797 coding sequences, 32 tRNAs, but no rRNAs. Finding no rRNAs is a common issues when trying to assemble MAGs without long-read sequencing data and is not just characteristic for ancient DNA samples. However, this means that we cannot technically call this MAG a high-quality MAG due to the lack of the rRNA genes. 
 
 :::
+
+## (Optional) clean-up
+
+Let's clean up your working directory by removing all the data and output from this chapter.
+
+The command below will remove the `/<PATH>/<TO>/denovo-assembly` directory **as well as all of its contents**. 
+
+::: {.callout-tip}
+## Pro Tip
+Always be VERY careful when using `rm -r`. Check 3x that the path you are
+specifying is exactly what you want to delete and nothing more before pressing
+ENTER!
+:::
+
+```bash
+rm -r /<PATH>/<TO>/denovo-assembly
+```
+
+Once deleted you can move elsewhere (e.g. `cd ~`).
+
+We can also get out of the `conda` environment with
+
+```bash
+conda deactivate
+```
 
 ### Summary
 
