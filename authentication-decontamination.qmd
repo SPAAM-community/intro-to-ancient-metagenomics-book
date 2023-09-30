@@ -22,6 +22,12 @@ cd authentication-decontamination
 ```
 :::
 
+::: {.callout-warning}
+There are additional software requirements for this chapter
+
+Please see the relevant chapter section in [Before you start](/before-you-start.qmd) before continuing with this chapter.
+:::
+
 # Introduction
 
 In ancient metagenomics we typically try to answer two questions: "Who is there?" and "How ancient?", meaning we would like to detect an organism and investigate whether this organism is ancient. There are three typical ways to identify the presence of an organism in a metagenomic sample:
@@ -168,6 +174,8 @@ KrakenUniq by default delivers a proxy metric for breadth of coverage called the
 
 We can filter the KrakenUniq output with respect to both depth (*taxReads*) and breadth (*kmers*) of coverage with the following custom Python script, which selects only species with at east 200 assigned reads and 1000 unique k-mers. After the filtering, we can see a *Yersinia pestis* hit in the *sample 10* that possess the filtering thresholds with respect to both depth and breadth of coverage.
 
+Run this from within the `krakenuniq/` directory.
+
 ```bash
 for i in $(ls *.krakenuniq.output)
 do
@@ -192,8 +200,8 @@ While KrakenUniq delivers information about breadth of coverage by default, you 
 
 For this one has to use a special flag *--report-minimizer-data* when running Kraken2 in order to get the breadth of coverage proxy which is called the **number of distinct minimizers** for the case of Kraken2. Below, we provide an example Kraken2 command line containing the distinct minimizer flag:
 
+::: {.callout-warning title="Example only -, do not run!"}
 ```bash
-# Example command - do not run!
 DBNAME=Kraken2_DB_directory
 KRAKEN_INPUT=sample.fastq.gz
 KRAKEN_OUTPUT=Kraken2_output_directory
@@ -204,6 +212,7 @@ kraken2 --db $DBNAME --fastq-input $KRAKEN_INPUT --threads 20 \
 --report $KRAKEN_OUTPUT/kraken2.output \
 --use-names --report-minimizer-data
 ```
+:::
 
 Then the filtering of Kraken2 output with respect to breadth and depth of coverage can be done by analogy with filtering KrakenUniq output table. In case of *de-novo* assembly, the original DNA reads are typically aligned back to the assembled contigs, and the evenness / breadth of coverage can be computed from these alignments.
 
@@ -225,8 +234,8 @@ wget $NCBI/genomes/all/GCF/000/222/975/${ID}/${ID}_genomic.fna.gz
 cd /<path/<to>/authentication-decontamination/bowtie2
 
 ## Prepare reference genome and build Bowtie2 index
-gunzip ${ID}_genomic.fna.gz; echo NC_017168.1 > region.bed
-seqtk subseq ${ID}_genomic.fna region.bed > NC_017168.1.fasta
+gunzip GCF_000222975.1_ASM22297v1_genomic.fna.gz; echo NC_017168.1 > region.bed
+seqtk subseq GCF_000222975.1_ASM22297v1_genomic.fna region.bed > NC_017168.1.fasta
 bowtie2-build --large-index NC_017168.1.fasta NC_017168.1.fasta --threads 10
 
 ## Run alignment of raw reads against FASTQ
@@ -244,9 +253,15 @@ Next, the breadth / evenness of coverage can be computed from the BAM-alignments
 ```bash
 samtools depth -a Y.pestis_sample10.sorted.bam > Y.pestis_sample10.sorted.boc
 ```
-and visualized using for example the following R code snippet (alternatively [aDNA-BAMPlotter](https://github.com/MeriamGuellil/aDNA-BAMPlotter) can be used):
+and visualized using for example the following R code snippet (alternatively [aDNA-BAMPlotter](https://github.com/MeriamGuellil/aDNA-BAMPlotter) can be used).
 
-Load R by typing `R` into your terminal. Note the following may take a minute or so to run.
+Load R by running `R` in your terminal
+
+```bash
+R
+``` 
+
+Note the following may take a minute or so to run.
 
 ```R
 # Read output of samtools depth commans
@@ -295,15 +310,16 @@ samtools view Y.pestis_sample10.sorted.bam | cut -f5 > mapq.txt
 
 Then the 5th column of the filtered BAM-alignment can be visualized via a simple histogram in R as below for two random metagenomic samples.
 
-```R
-hist(as.numeric(readLines("mapq.txt")), col = "darkred", breaks = 100)
-```
-
-Once finished examining the plot you can quit R
+Load R
 
 ```bash
-## Press 'n' when asked if you want to save your workspace image.
-quit()
+R
+```
+
+And generate the histogram with.
+
+```R
+hist(as.numeric(readLines("mapq.txt")), col = "darkred", breaks = 100)
 ```
 
 ![](assets/images/chapters/authentication-decontamination/MAPQ.png)
@@ -322,7 +338,7 @@ bam <- scanBam("Y.pestis_sample10.sorted.bam", param = param)
 barplot(table(bam[[1]]$tag$NM), ylab="Number of reads", xlab="Number of mismatches")
 ```
 
-Once finished examining the plot you can quit R
+Once finished examining the plot you can quit R.
 
 ```bash
 ## Press 'n' when asked if you want to save your workspace image.
@@ -369,7 +385,15 @@ Another useful tool that can be applied to assess how DNA is damaged is [PMDtool
 samtools view -h Y.pestis_sample10.bam | pmdtools --printDS > PMDscores.txt
 ```
 
-The distribution of PMD scores can be visualized via a histogram in R as follows:
+The distribution of PMD scores can be visualized via a histogram in R as follows.
+
+Load R.
+
+```
+R
+```
+
+Then generate the histogram.
 
 ```R
 pmd_scores <- read.delim("PMDscores.txt", header = FALSE, sep = "\t")
@@ -391,7 +415,11 @@ As mapDamage, PMDtools can also compute deamination profile. However, the advant
 
 ```bash
 samtools view Y.pestis_sample10.bam | pmdtools --platypus > PMDtemp.txt
+```
 
+We can then run simple R commands directly from the terminal (without loading R itself with) the following.
+
+```bash
 R CMD BATCH plotPMD
 ```
 
@@ -403,10 +431,11 @@ When performing ancient status analysis on **de-novo** assembled contigs, it can
 
 pyDamage can be run on a sorted BAM-alignments of the microbial reads to the **de-novo** assembled contigs using the following command line:
 
+::: {.callout-warning title="Example command - do not run!"}
 ```bash
-## Do not run!
 pydamage analyze -w 30 -p 14 filtered.sorted.bam
 ```
+:::
 
 # Microbiome contamination correction
 
@@ -499,6 +528,14 @@ cd /<path>/<to>/authentication-decontamination/cuperdec
 
 Then we can load the files, generate the decay curves, set a preservation threshold cut-off, and plot the result.
 
+Load R as usual.
+
+```bash
+R
+```
+
+Then load the libraries and run the typical cuperdec workflow.
+
 ```R
 library("cuperdec"); library("magrittr"); library("dplyr")
 
@@ -533,6 +570,8 @@ In the figure above, one curve represents one sample, and the red curves have a 
 
 For the case of ancient microbiome profiling, in addition to traditional inspection of the list of detected organisms and comparing it with the ones detected on blanks, we can use tools that make a prediction on what environment the detected organisms most likely come from. 
 
+### Sourcetracker
+
 The most popular and widely used tool is called [**SourceTracker**](https://www.nature.com/articles/nmeth.1650#citeas). SourceTracker is a Bayesian version of the Gaussian Mixture Model (GMM) clustering algorithm that is trained on a user-supplied reference data called **Sources**, i.e. different classes such as Soil or Human Oral or Human Gut microbial communities etc., and then it can estimate proportion / contribution of each of these sources the users actual samples called **Sinks**.
 
 ![](assets/images/chapters/authentication-decontamination/SourceTracker.png)
@@ -549,8 +588,6 @@ cd /<path>/<to>/authentication-decontamination/sourcetracker/
 git clone https://github.com/danknights/sourcetracker.git
 ```
 
-:::
-
 ::: {.callout-warning title="Patching sourcetracker for newer R versions"}
 
 Unfortunately Sourcetracker's original R code was done a very long time ago, and has resulted in some incompatiblities with more recent versions of R.
@@ -565,6 +602,7 @@ sed -i '538,539s/^/#/' sourcetracker/src/SourceTracker.r
 ```
 
 :::
+:::
 
 Sourcetracker expects two input data frames: metadata with at least sample name, environment and source / sink labels, and abundance matrix. Note that source and sink metadata and abundances have to be merged together prior to using SourceTracker. Here we are going to use data from the [Human Microbiome Project (HMP)](https://hmpdacc.org/) as sources, and we are going to merge the HMP data with the sink samples into single OTU table and meta-data table.
 
@@ -576,6 +614,10 @@ R
 ```
 
 Then in R we can load the HMP source files, and our 'sink samples' from the KrakenUniq matrix we made earlier, and clean them up to make them compatible for Sourcetracker. 
+
+::: {.callout-note}
+We've included the Sourcetracker R script in the repository for you, as it's **not** available on conda.
+:::
 
 ```R
 ## Load files
@@ -642,7 +684,6 @@ Once finished examining the plot you can quit R
 quit()
 ```
 
-
 ![Stacked barchart of each sample (sinks) with the estimated fraction of each source 'sample group' that each sink is made up of. Note that the X-axis sorting of samples may change between each person, thus your plot may not match exactly the same as the one here.](assets/images/chapters/authentication-decontamination/source_tracker1.png){#fig-authenticationdecontamination-sourcetrackeroutput}
 
 In the figure above (@fig-authenticationdecontamination-sourcetrackeroutput) the SourceTracker was trained on Human Microbiome Project (HMP) data, and was capable of predicting the fractions of oral, gut, skin or other microbial composition on the query sink samples. In a similar way, environmental soil or marine microbes can be used as Sources. In this way, environmental percentage of contamination can be detected per sample.
@@ -651,24 +692,15 @@ A drawback of SourceTracker, mSourceTracker and FEAST is that they require a mic
 
 ![](assets/images/chapters/authentication-decontamination/deCOM.png)
 
+### deCOM
+
 *decOM* uses [kmtricks](https://academic.oup.com/bioinformaticsadvances/article/2/1/vbac029/6576015) to compute a matrix of k-mer counts on raw reads (FASTQ files) from source samples, and then uses the source k-mer abundance matrix for looking up k-mer composition of sink samples. This allows *decOM* to calculate microbial contributions / fractions from the sources. For example, for estimating contributions from ancient Oral (aOral), modern Oral (mOral), Skin and Sediment / Soil environments one can use an already computed source matrix from here [https://github.com/CamilaDuitama/decOM/](https://github.com/CamilaDuitama/decOM/) and provide it as a *-p_sources* parameter. 
 
 
 ::: {.callout-note title="Self guided: data preparation" collapse=true}
 
 If doing a self-guided tutorial, you will need to download a rather large pre-built database.
-<!-- TODO: replace with link to before-you-start -->
 ```bash
-
-cd /<path>/<to>/authentication-decontamination/decom
-git clone https://github.com/CamilaDuitama/decOM.git  
-cd decOM  
-conda env create -n decOM --file environment.yml  
-conda deactivate
-conda activate decOM  
-
-export PATH=/absolute/path/to/decOM:${PATH}
-
 ## In the directory 
 ## Note that decOM does not like dots in names so make symlinks
 for i in ../rawdata/*trimmed.fastq.gz; do 
@@ -690,18 +722,23 @@ tar -xf decOM_sources.tar.gz
 
 The following example command is how you would execute deCOM. However as this requires a very large database file and thus large memory requirements, therefore we have already made available for you the output files from this step.
 
+::: {.callout-warning title="Example command - do not run!"}
 ```bash
 # DO NOT RUN!: Run decOM predictions
 decOM -p_sources decOM_sources/ -p_sinks FASTQ_NAMES_LIST.txt -p_keys decOM/FASTQ -mem 900GB -t 15
 ```
 
-You can find the relevant output files in the following directory (the output of deCOM with our simulated data from the command above was 29GB worth of files!). 
+You can find the _relevant_ output files for the rest of this chapter in the following directory already prepared for you  i.e.the output of deCOM with our simulated data from the command above.
 
 ```bash
 cd /<path>/<to>/authentication-decontamination/decom
 ```
 
-In the command line used to generate, the *-p_sinks* parameter provides a list of sink samples, for example *SRR13355807*.
+::: {.callout-note} 
+The entire output from running deCOM on the simulated data was 29GB!
+:::
+
+In the example command line used to generate, the *-p_sinks* parameter provides a list of sink samples, for example *SRR13355807*.
 
 The sink fastq-files are placed together with _keys_ fof-files containing the mapping between fastq file names and locations of the fastq-files, for example `SRR13355807 : SRR13355807.fastq.gz`. The contributions from the sources to the sink samples, which are recorded in the `decOM_output.csv` output file (which is in the `authentication-decontamination/decom` directory already for you), can then be processed and plotted as follows:
 
@@ -745,6 +782,30 @@ quit()
 
 *decOM* has certain advantages compared to *SourceTracker* as its is a taxonomic classification / database free approach. However, it also appears to be very sensitive to the particular training / source data set. In the example above it can be seen that the microbial source tracking of sink samples is very much dominated by the Oral community, which was the training / source data set.
 
+## (Optional) clean-up
+
+Let's clean up your working directory by removing all the data and output from this chapter.
+
+The command below will remove the `/<PATH>/<TO>/authentication-decontamination` directory **as well as all of its contents**. 
+
+::: {.callout-tip}
+## Pro Tip
+Always be VERY careful when using `rm -r`. Check 3x that the path you are
+specifying is exactly what you want to delete and nothing more before pressing
+ENTER!
+:::
+
+```bash
+rm -r /<PATH>/<TO>/authentication-decontamination
+```
+
+Once deleted you can move elsewhere (e.g. `cd ~`).
+
+We can also get out of the `conda` environment with
+
+```bash
+conda deactivate
+```
 
 ## Summary
 
@@ -754,7 +815,6 @@ In this chapter we have learned that:
 - Deamination profile, DNA fragmentation, mapping quality, edit distance and PMD scores are other authentication / validation metrics to consider
 - Negative controls are important for disentangling ancient / endogenous from modern / exogenous contamination
 - Microbial source tracking is another layer of evidence that can facilitate interpretation of ancient metagenomic findings
-
 
 ## Questions to think about
 
