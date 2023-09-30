@@ -897,6 +897,19 @@ Manual alignment with Bowtie2
 </ul>
 <p>Each of these three binners employs a slightly different strategy. While metaBAT2 simply uses the two previously mentioned metrics, the tetra-nucleotide frequency and the coverage along the contigs, MaxBin2 additionally uses single-copy marker genes to infer the taxonomic origin of contigs. In contrast, CONCOCT also just uses the two aforementioned metrics but first performs a Principal Component Analysis (PCA) on these metrics and uses the PCA results for the clustering.</p>
 <p>The easiest way to run all these three programs is the program metaWRAP <span class="citation" data-cites="Uritskiy2018">(<a href="introduction-to-ngs-sequencing.html#ref-Uritskiy2018" role="doc-biblioref">Uritskiy, DiRuggiero, and Taylor 2018</a>)</span>. metaWRAP is in fact a pipeline that allows you to assemble your contigs, bin them, and subsequently refine the resulting MAGs. However, the pipeline is not very well written and does not contain any strategies to deal with ancient metagenomic sequencing data. Therefore, I prefer to use different pipelines, such as nf-core/mag for the assembly, and only use metaWRAP for binning and bin refinement.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Make sure you have followed the instructions for setting up the additional software requirements for this chapter already! See the beginning of the chapter for more information.</p>
+</div>
+</div>
 <p>To skip the first steps of metaWRAP and start straight with the binning, we need to create the folder structure and files that metaWRAP expects:</p>
 <!-- UP TI HERRE -->
 <div class="cell">
@@ -914,8 +927,7 @@ Manual alignment with Bowtie2
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">-t</span> 14 <span class="dt">\</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> alignment/2612.fa <span class="dt">\</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--metabat2</span> <span class="at">--maxbin2</span> <span class="at">--universal</span> <span class="dt">\</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    metawrap/faux_reads/2612_1.fastq metawrap/faux_reads/2612_2.fastq</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    metawrap/faux_reads/2612_1.fastq metawrap/faux_reads/2612_2.fastq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -946,7 +958,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -955,7 +967,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>metaBAT2 reconstructed seven bins, while MaxBin2 reconstructed only five bins.</p>
 <p>When comparing the genome sizes of these bins, we can see that despite having reconstructed fewer bins, MaxBin2’s bins have on average larger genome size and all of them are at least 1.5 Mb. In contrast, five out of seven metaBAT2 bins are shorter than 1.5 Mb.</p>
@@ -1006,6 +1018,8 @@ Caution
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">-A</span> metawrap/INITIAL_BINNING/2612/maxbin2_bins <span class="dt">\</span></span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">-B</span> metawrap/INITIAL_BINNING/2612/metabat2_bins</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Once finished you can deactivate the metawrap conda environment.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The latter step will produce a summary file, <code>metawrap_50_10_bins.stats</code>, that lists all retained bins and some key characteristics, such as the genome size, the completeness estimate, and the contamination estimate. The latter two can be used to assign a quality score according to the Minimum Information for MAG (MIMAG; see info box).</p>
 <div class="callout callout-style-default callout-note callout-titled" title="The Minimum Information for MAG (MIMAG)">
 <div class="callout-header d-flex align-content-center">
@@ -1042,7 +1056,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1051,7 +1065,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div id="callout-23" class="callout-23-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>In total, metaWRAP retained five bins, similarly to MaxBin2. Of these five bins, the bins <code>bin.3</code> and <code>bin.4</code> had completeness and contamination estimates that would qualify them for being high-quality MAGs. However, we would need to check the presence of rRNA and tRNA genes. The other three bins are medium-quality bins because their completeness estimate was &lt; 90%.</p>
 </div>
@@ -1099,25 +1113,25 @@ Caution
 </div>
 <p>Before running MMSeqs2’s <em>taxonomy</em> workflow against the GTDB reference database, we need to install it.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> refdbs/mmseqs2/gtdb</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mmseqs</span> databases GTDB <span class="dt">\</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    refdbs/mmseqs2/gtdb /tmp <span class="at">--threads</span> 14</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> refdbs/mmseqs2/gtdb</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mmseqs</span> databases GTDB <span class="dt">\</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    refdbs/mmseqs2/gtdb /tmp <span class="at">--threads</span> 14</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Subsequently, we can align all the contigs of the sample 2612 against the GTDB r207 with MMSeqs2:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> mmseqs2</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mmseqs</span> createdb alignment/2612.fa mmseqs2/2612.contigs</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">mmseqs</span> taxonomy  mmseqs2/2612.contigs <span class="dt">\</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    refdbs/mmseqs2/gtdb/mmseqs2_gtdb <span class="dt">\</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    mmseqs2/2612.mmseqs2_gtdb <span class="dt">\</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    /tmp <span class="dt">\</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> <span class="at">--tax-lineage</span> 1 <span class="dt">\</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">--lca-ranks</span> kingdom,phylum,class,order,family,genus,species <span class="dt">\</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">--orf-filter</span> 1 <span class="dt">\</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">--remove-tmp-files</span> 1 <span class="dt">\</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">--threads</span> 14</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="ex">mmseqs</span> createtsv mmseqs2/2612.contigs <span class="dt">\</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    mmseqs2/2612.mmseqs2_gtdb <span class="dt">\</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> mmseqs2</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mmseqs</span> createdb alignment/2612.fa mmseqs2/2612.contigs</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">mmseqs</span> taxonomy  mmseqs2/2612.contigs <span class="dt">\</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    refdbs/mmseqs2/gtdb/mmseqs2_gtdb <span class="dt">\</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    mmseqs2/2612.mmseqs2_gtdb <span class="dt">\</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    /tmp <span class="dt">\</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">-a</span> <span class="at">--tax-lineage</span> 1 <span class="dt">\</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">--lca-ranks</span> kingdom,phylum,class,order,family,genus,species <span class="dt">\</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">--orf-filter</span> 1 <span class="dt">\</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">--remove-tmp-files</span> 1 <span class="dt">\</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">--threads</span> 14</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="ex">mmseqs</span> createtsv mmseqs2/2612.contigs <span class="dt">\</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    mmseqs2/2612.mmseqs2_gtdb <span class="dt">\</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Question" data-appearence="simple">
 <div class="callout-header d-flex align-content-center">
@@ -1134,7 +1148,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1143,7 +1157,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div id="callout-26" class="callout-26-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>From the 3,606 contigs, MMSeqs2’s <em>taxonomy</em> workflow assigned 3,523 contigs to any taxonomy. For the rest, there was not enough information and they were discarded.</p>
 <p>From the 3,523 assigned contigs, 2,013 were assigned to the rank “species”, while 1,137 could only be assigned to the rank “genus”.</p>
@@ -1181,18 +1195,18 @@ Caution
 </div>
 <p>First, we need to install the GTDB database:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> refdbs/gtdbtk</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-O</span> refdbs/gtdbtk/gtdbtk_v2_data.tar.gz <span class="dt">\</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_v2_data.tar.gz</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> xvf refdbs/gtdbtk/gtdbtk_v2_data.tar.gz <span class="at">-C</span> refdbs/gtdbtk</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> refdbs/gtdbtk</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-O</span> refdbs/gtdbtk/gtdbtk_v2_data.tar.gz <span class="dt">\</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_v2_data.tar.gz</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> xvf refdbs/gtdbtk/gtdbtk_v2_data.tar.gz <span class="at">-C</span> refdbs/gtdbtk</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Afterwards, we can run GTDBTK’s <em>classify</em> workflow:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> gtdbtk</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="va">GTDBTK_DATA_PATH</span><span class="op">=</span><span class="st">"</span><span class="va">$PWD</span><span class="st">/refdbs/gtdbtk/gtdbtk_r207_v2"</span> <span class="dt">\</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">gtdbtk</span> classify_wf <span class="at">--cpu</span> 14 <span class="at">--extension</span> fa <span class="dt">\</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--genome_dir</span> metawrap/BIN_REFINEMENT/2612/metawrap_50_10_bins <span class="dt">\</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--out_dir</span> gtdbtk</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> gtdbtk</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="va">GTDBTK_DATA_PATH</span><span class="op">=</span><span class="st">"</span><span class="va">$PWD</span><span class="st">/refdbs/gtdbtk/gtdbtk_r207_v2"</span> <span class="dt">\</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">gtdbtk</span> classify_wf <span class="at">--cpu</span> 14 <span class="at">--extension</span> fa <span class="dt">\</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--genome_dir</span> metawrap/BIN_REFINEMENT/2612/metawrap_50_10_bins <span class="dt">\</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--out_dir</span> gtdbtk</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Question" data-appearence="simple">
 <div class="callout-header d-flex align-content-center">
@@ -1209,7 +1223,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-29-contents" aria-controls="callout-29" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1218,7 +1232,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-28" class="callout-28-contents callout-collapse collapse">
+<div id="callout-29" class="callout-29-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The five MAGs reconstructed from the sample 2612 were assigned to the taxa:</p>
 <ul>
@@ -1247,7 +1261,7 @@ Answer
 <p>Instead, we will use the program pyDamage <span class="citation" data-cites="Borry2021">(<a href="introduction-to-ngs-sequencing.html#ref-Borry2021" role="doc-biblioref">Borry et al. 2021</a>)</span> that was written with the particular use-case of metagenome-assembled contigs in mind. Although pyDamage can visualise the amount of C-to-T substitutions at the 5’ end of reads, it goes a step further and fits two models upon the substitution frequency (<a href="#fig-denovoassembly-pydamage">Figure&nbsp;<span>12.11</span></a>). The null hypothesis is that the observed distribution of C-to-T substitutions at the 5’ end of reads reflects a flat line, i.e.&nbsp;a case when no ancient DNA damage is present. The alternative model assumes that the distribution resembles an exponential decay, i.e.&nbsp;a case when ancient DNA damage is present. By comparing the fit of these two models to the observed data for each contig, pyDamage can quickly identify contigs that are likely of ancient origin without requiring the user to inspect the plots visually.</p>
 <p>We can run pyDamage directly on the alignment data in BAM format:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pydamage</span> analyze <span class="at">-w</span> 30 <span class="at">-p</span> 14 alignment/2612.sorted.calmd.bam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pydamage</span> analyze <span class="at">-w</span> 30 <span class="at">-p</span> 14 alignment/2612.sorted.calmd.bam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Question" data-appearence="simple">
 <div class="callout-header d-flex align-content-center">
@@ -1264,7 +1278,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-30-contents" aria-controls="callout-30" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-31-contents" aria-controls="callout-31" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1273,7 +1287,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-30" class="callout-30-contents callout-collapse collapse">
+<div id="callout-31" class="callout-31-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>From the 3,606 contigs, pyDamage inferred a q-value, i.e.&nbsp;a p-value corrected for multiple testing, of &lt; 0.5 to 26 contigs. This is partially due to a high fraction of the contigs with no sufficient information to discriminate between the models (predicted accuracy of &lt; 0.5). However, the majority of the contigs with a prediction accuracy of &gt; 0.5 still had q-values of 0.05 and higher. This suggests that overall the sample did not show large evidence of ancient DNA damage.</p>
 <p>This reflects also on the MAGs. Although four of the five MAGs were human gut microbiome taxa, they did not show strong evidence of ancient DNA damage. This suggests that the sample is too young and is well preserved.</p>
@@ -1291,10 +1305,10 @@ Answer
 <p>Next to returning information on the protein-coding genes, Prokka also returns the annotation of RNA genes (tRNAs and rRNAs), which will help us to evaluate the quality of MAGs regarding the MIMAG criteria.</p>
 <p>For this practical course, we will use Prokka and we will focus on annotating the MAG <code>bin.3.fa</code> that we reconstructed from the sample 2612.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">prokka</span> <span class="at">--outdir</span> prokka <span class="dt">\</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--prefix</span> 2612_003 <span class="dt">\</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--compliant</span> <span class="at">--metagenome</span> <span class="at">--cpus</span> 14 <span class="dt">\</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    metawrap_50_10_bins/bin.3.fa</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">prokka</span> <span class="at">--outdir</span> prokka <span class="dt">\</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--prefix</span> 2612_003 <span class="dt">\</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--compliant</span> <span class="at">--metagenome</span> <span class="at">--cpus</span> 14 <span class="dt">\</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    metawrap_50_10_bins/bin.3.fa</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Question" data-appearence="simple">
 <div class="callout-header d-flex align-content-center">
@@ -1311,7 +1325,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-32-contents" aria-controls="callout-32" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-33-contents" aria-controls="callout-33" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1320,7 +1334,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-32" class="callout-32-contents callout-collapse collapse">
+<div id="callout-33" class="callout-33-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Prokka returns the following files:</p>
 <ul>
@@ -1355,10 +1369,10 @@ Pro Tip
 <p>Always be VERY careful when using <code>rm -r</code>. Check 3x that the path you are specifying is exactly what you want to delete and nothing more before pressing ENTER!</p>
 </div>
 </div>
-<div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-r</span> /<span class="op">&lt;</span>PATH<span class="op">&gt;</span>/<span class="op">&lt;</span>TO<span class="op">&gt;</span>/denovo-assembly</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-r</span> /<span class="op">&lt;</span>PATH<span class="op">&gt;</span>/<span class="op">&lt;</span>TO<span class="op">&gt;</span>/denovo-assembly</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once deleted you can move elsewhere (e.g.&nbsp;<code>cd ~</code>).</p>
 <p>We can also get out of the <code>conda</code> environment with</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="summary" class="level3" data-number="12.3.1">
 <h3 data-number="12.3.1" class="anchored" data-anchor-id="summary"><span class="header-section-number">12.3.1</span> Summary</h3>
 <p>In this practical course you have gone through all the important steps that are necessary for <em>de novo</em> assembling ancient metagenomic sequencing data to obtain contiguous DNA sequences with little error. Furthermore, you have learned how to cluster these sequences into bins without using any references and how to refine them based on lineage-specific marker genes. For these refined bins, you have evaluated their quality regarding common standards set by the scientific community and assigned the MAGs to its most likely taxon. Finally, we learned how to infer the presence of ancient DNA damage and annotate them for RNA genes and protein-coding sequences.</p>
