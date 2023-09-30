@@ -25,6 +25,8 @@ wget -O denovo-assembly.tar.gz https://www.dropbox.com/scl/fi/a2ax5retqrhci51gg8
 tar -xzf denovo-assembly.tar.gz
 cd denovo-assembly
 ```
+:::
+
 ::: {.callout-warning}
 There are additional software requirements for this chapter
 
@@ -332,7 +334,12 @@ Each of these three binners employs a slightly different strategy. While metaBAT
 
 The easiest way to run all these three programs is the program metaWRAP [@Uritskiy2018]. metaWRAP is in fact a pipeline that allows you to assemble your contigs, bin them, and subsequently refine the resulting MAGs. However, the pipeline is not very well written and does not contain any strategies to deal with ancient metagenomic sequencing data. Therefore, I prefer to use different pipelines, such as nf-core/mag for the assembly, and only use metaWRAP for binning and bin refinement.
 
+::: {.callout-warning}
+Make sure you have followed the instructions for setting up the additional software requirements for this chapter already! See the beginning of the chapter for more information.
+:::
+
 To skip the first steps of metaWRAP and start straight with the binning, we need to create the folder structure and files that metaWRAP expects:
+
 
 <!-- UP TI HERRE -->
 
@@ -354,7 +361,6 @@ metawrap binning -o metawrap/INITIAL_BINNING/2612 \
     -a alignment/2612.fa \
     --metabat2 --maxbin2 --universal \
     metawrap/faux_reads/2612_1.fastq metawrap/faux_reads/2612_2.fastq
-conda deactivate
 ```
 
 ::: {.callout-caution}
@@ -421,6 +427,12 @@ metawrap bin_refinement -o metawrap/BIN_REFINEMENT/2612 \
     -x 10 \
     -A metawrap/INITIAL_BINNING/2612/maxbin2_bins \
     -B metawrap/INITIAL_BINNING/2612/metabat2_bins
+```
+
+Once finished you can deactivate the metawrap conda environment.
+
+```bash 
+conda deactivate
 ```
 
 The latter step will produce a summary file, `metawrap_50_10_bins.stats`, that lists all retained bins and some key characteristics, such as the genome size, the completeness estimate, and the contamination estimate. The latter two can be used to assign a quality score according to the Minimum Information for MAG (MIMAG; see info box).
