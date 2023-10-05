@@ -16,7 +16,7 @@ To download the data for this chapter, please download following archive with, e
 For example
 
 ```bash
-wget -O ancient-metagenomic-pipelines.tar.gz https://www.dropbox.com/scl/fi/jyz9n3h8yt8jeovviizf4/phylogenomics.tar.gz?rlkey=1aowh0grdvphht2h8h6qox0fa&dl=0 -P /<PATH>/<TO>/<SOMEWHERE_TO_STORE>/ 
+wget -O ancient-metagenomic-pipelines.tar.gz https://www.dropbox.com/scl/fi/oxd4ag5haygpihg30grh8/ancient-metagenomic-pipelines.tar.gz?rlkey=p40jtcf6fofs2ak1wfbc1cyg9&dl=0 -P /<PATH>/<TO>/<SOMEWHERE_TO_STORE>/ 
 tar -xzf ancient-metagenomic-pipelines.tar.gz
 cd ancient-metagenomic-pipelines
 ```
@@ -83,23 +83,11 @@ Our aims in the following tutorial are to:
 
 Let's get started!
 
-First, activate the conda environment that we downloaded during setup:
-
-```bash
-conda activate activate ancient-metagenomic-pipelines
-```
-
-And change into our practical session directory:
-
-```bash
-cd /<path>/<to>/ancient-metagenomic-pipelines
-```
-
 ::: {.callout-warning}
 nf-core/eager v2 requires an older version of Nextflow - if installing manually, ensure you do not have Nextflow version any greater than v22.10.6!
 :::
 
-Next, download the latest version of the nf-core/eager repo (or check for updates if you have a previously-installed version):
+First, download the latest version of the nf-core/eager repo (or check for updates if you have a previously-installed version):
 
 ```bash
 nextflow pull nf-core/eager
@@ -111,12 +99,14 @@ Next we can re-visit AMDirT (see [Accessing Ancient Metagenomic Data](accessing-
 2. Filter the `sample_name` column to just show KZL002 and GLZ002, and select these two rows
     - Press the burger icon on the column
     - Press the filter tab and deselect everything
-    - Search GLZ002 and select in filter menu 
-    - Search KLZ002 and select in filter menu
+    - Search **GLZ002** and select in filter menu 
+    - Search **KZL002** and select in filter menu
     - Close filter menu and select the two rows
 3. Press the Validate Selection button
 4. Press the 'Download Curl sample download script', 'Download nf-core/eager input TSV',  and 'Download Citations as BibTex' buttons
-5. Move the follows into `eager/` of this tutorial's directory
+5. Move the downloaded files into `eager/` of this tutorial's directory 
+   - i.e., if the files were downloaded to you `Downloads/` folder rather than the chapters directory,
+   - e.g., assuming you've got no other previous downloads you can run `mv ~/Downloads/AncientMetagenomeDir_* eager/`
 
 ::: {.callout-tip} 
 We won't actually use the BibTex citations file for anything in this tutorial, but it is good habit to _always_ to record and save all citations of any software or data you use!
@@ -142,7 +132,9 @@ KZL002	ERR8958769	0	4	PE	Homo sapiens	double	half	ERR8958769_1.fastq.gz	ERR89587
 
 Here we see 10 columns, all pre-filled. The first two columns correspond to sample/library IDs that will be used for data provenance and grouping. When you have sequencing multiple lanes you can speed up preprocessing these independently before merging, so lane can specify this (although not used in this case as we have independent libraries per sample. You can indicate the colour chemistry to indicate whether your data requires additional pre-processing to remove poly-G tails, and then also strandedness and UDG damage treatment status of the libraries if you require further damage manipulation. Finally you provide paths to the FASTQ files or BAM files
 
-Other than the raw FASTQ files, we will need a reference genome and annotation coordinates of genes present on the genome. In this case you will use a _Yersinia pestis_ (accession: GCF_001293415.1) reference genome (`.fna`) and gene feature file (`.gff`) from [NCBI Genome](https://www.ncbi.nlm.nih.gov/genome). This is placed in the `reference/` directory.
+Other than the raw FASTQ files, we will need a reference genome and annotation coordinates of genes present on the genome. In this case you will use a _Yersinia pestis_ (accession: GCF_001293415.1) reference genome (`.fna`) and gene feature file (`.gff`) from [NCBI Genome](https://www.ncbi.nlm.nih.gov/genome). 
+
+These have already been placed in the `reference/` directory for you.
 
 ::: {.callout-note title="Self guided: reference download and preparation" collapse="true"}
 
@@ -163,7 +155,7 @@ gffread genomic.gff GCF_001293415.1_ASM129341v1_genomic.gff
 
 With all of these, we can run the pipeline!
 
-First lets enter a screen session
+First lets enter a screen session to make sure we can leave the pipeline running in the background and continue using our terminal.
 
 ```bash
 screen -R eager
@@ -184,9 +176,16 @@ nextflow run nf-core/eager -r 2.4.7 \
 --run_bcftools_stats --run_bedtools_coverage
 ```
 
+When the run starts, you see a long list of `process` lines with progress bars slowly appearing over time. If you press <kbd>ctrl</kbd> + <kbd>a</kbd> and then <kbd>[</kbd> to access a 'navigation' (called 'copy') mode, then use your arrow keys on your keyboard to scroll up and down. To quit this mode just press `q`.
+
 ::: {.callout-tip} 
 We don't normally recommend running analyses in the directory your data is in! It is better to keep data and analysis results in separate directories. Here we are just running eager alongside the data for convenience (i.e., you don't have to modify the downloaded input TSV)
 :::
+
+::: {.callout-warning}
+This run will take between 20m-40m to run on a standard laptop! Time for a break, or you can continue reading this chapter as the critical output data has already been provided for you in the data directory.
+:::
+
 
 So what is this command doing? The different parameters do the following:
 
@@ -242,7 +241,7 @@ Specifically for ancient (meta)genomic data, the following parameters and option
 
 1. Screen sessions
 
-    Depending on your input data, infrastructure, and analyses, running nf-core/eager can take hours or even days. To avoid crashed due to loss of power or network connectivity, try running nf-core/eager in a `screen` or `tmux` session:
+    Depending on the size of your input data, infrastructure, and analyses, running nf-core/eager can take hours or even days (e.g. the example command above will likely take around 20 minutes!). To avoid crashes due to loss of power or network connectivity, try running nf-core/eager in a `screen` or `tmux` session:
 
     ```bash
     screen -R eager
@@ -252,13 +251,15 @@ Specifically for ancient (meta)genomic data, the following parameters and option
 
     In this tutorial, a tsv file to specify our input data files and formats. This is a powerful approach that allows nf-core eager to intelligently apply analyses to certain files only (e.g. merging for paired-end but not single-end libraries). However inputs can also be specified using wildcards, which can be useful for fast analyses with simple input data types (e.g. same sequencing configuration, file location, etc.).
 
-    ```bash
-    nextflow run nf-core/eager -r 2.4.7 -profile docker --fasta ../reference/GCF_001293415.1_ASM129341v1_genomic.fna \
-    --input "data/*_{1,2}.fastq.gz" <...> \
-    --udg_type half
-    ```
-
     See the online [nf-core/eager documentation](https://nf-co.re/eager/usage) for more details.
+
+::: {.callout-warning title="Exampl commands - do not run!"}
+```bash
+nextflow run nf-core/eager -r 2.4.7 -profile docker --fasta ../reference/GCF_001293415.1_ASM129341v1_genomic.fna \
+--input "data/*_{1,2}.fastq.gz" <...> \
+--udg_type half
+```
+:::
 
 3. Get your MultiQC report via email
 
@@ -272,7 +273,9 @@ Specifically for ancient (meta)genomic data, the following parameters and option
 
 5. When something fails, all is not lost!
 
-    When individual jobs fail, nf-core/eager will try to automatically resubmit that job with increased memory and CPUs (up to two times per job). When the whole pipeline crashes, you can save time and computational resources by resubmitting with the `-resume` flag. nf-core/eager will retrieve cached results from previous steps as long as the input is the same.
+    When individual jobs fail, nf-core/eager will _try_ to automatically resubmit that job with increased memory and CPUs (up to two times per job).
+    
+    When the whole pipeline crashes, you can save time and computational resources by resubmitting with the `-resume` flag. nf-core/eager will retrieve cached results from previous steps as long as the input is the same.
 
 6. Monitor your pipeline in real time with the Nextflow Tower
 
@@ -282,7 +285,7 @@ Specifically for ancient (meta)genomic data, the following parameters and option
 
 #### Results files
 
-In the `results/` directory of your nf-core/eager run, you will find a range of directories that will contain output files and tool log of all the steps of the pipeline. nf-core/eager tries to only save the 'useful' files. 
+Once completed, the `results/` directory of your nf-core/eager run will contain a range of directories that will have output files and tool logs of all the steps of the pipeline. nf-core/eager tries to only save the 'useful' files. 
 
 Everyday useful files for ancient (microbial) (meta)genomics typically are in folders such as:
 
@@ -315,7 +318,7 @@ cd multiqc/
 ```
 
 ::: {.callout-note}
-If you're impatient, and your nf-core/eager run hasn't finished yet, you can cancel the run with <kbd>ctrl</kbd> + <kbd>c</kbd> (possibly a couple of times), then you can open a premade file in `ancient-metagenomic-pipelines/multiqc_report.html`
+If you're impatient, and your nf-core/eager run hasn't finished yet, you can cancel the run with <kbd>ctrl</kbd> + <kbd>c</kbd> (possibly a couple of times), and you can open a premade file in the data directory under `ancient-metagenomic-pipelines/multiqc_report.html`
 :::
 
 In here you should see a bunch of files, but you should open the `multiqc_report.html` file in your browser. You can either do this via the commandline (e.g. for firefox `firefox multiqc_report.html`) or navigate to the file using your file browser and double clicking on the HTML file.
@@ -406,7 +409,9 @@ Before continuing onto the next section of this chapter, you will need to deacti
 conda deactivate 
 ```
 
-You may also need to delete the contents of the eager directory
+If the nf-core/eager run is still not finished, you should enter the screen session with `screen -r eager`, press <kbd>ctrl</kbd> + <kbd>c</kbd> until you drop to the prompt, and type `exit`.
+
+Then may also need to delete the contents of the eager directory if you are low on harddrive space.
 
 ```bash
 cd /<path>/<to>/ancient-metagenomic-pipelines/eager
