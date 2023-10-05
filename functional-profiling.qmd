@@ -13,25 +13,41 @@ For this chapter's exercises, if not already performed, you will need to create 
 ```bash
 conda activate functional-profiling
 ```
+
+To download the data for this chapter, please download following archive with, extract the tar, and change into the directory.
+
+For example
+
+```bash
+wget  -P . -O functional-profiling.tar.gz https://zenodo.org/record/6983189/files/5c-functional-genomics.tar.gz
+tar -xzf functional-profiling.tar.gz
+cd functional-profiling/
+```
+:::
+
+:::{.callout-note}
+The above conda environment _does not_ include HUMAnN3 due to conflicts with the R packages in the environment.
+
+This chapter does not require the execute of any HUMAnN3 commands due to very large database requirements.
+
+However if you wanted to try the example commands out, you could install HUMANn3 with conda in a separate environment with the following command.
+
+```bash
+conda create -n humann3 -c bioconda humann
+```
 :::
 
 ## Preparation
 
-The data and conda environment `.yaml` file for this practical session can be downloaded from here: [https://doi.org/10.5281/zenodo.6983188](https://doi.org/10.5281/zenodo.6983188). See instructions on page.
 
-Change into the session directory
 
-```bash
-cd /<path>/<to>/functional-genomics/
-```
-
-Load the conda environment.
+Open R Studio from within the conda environment
 
 ```bash
-conda activate phylogenomics-functional
+rstudio
 ```
 
-Open R Studio from within the conda environment, and we can load the required libraries for this walkthrough.
+Open a new script file we can load the required libraries for this walkthrough.
 
 ```r
 library(mixOmics) ## For PCA generation
@@ -48,12 +64,16 @@ library(patchwork)
 
 ## HUMAnN3 Pathways
 
-First, we need to run HUMMAn3 to align reads against gene databases and convert to gene family names counts.
+First, we would run HUMAnN3 to align reads against gene databases and convert to gene family names counts.
 
-::: {.callout-warning}
-We will not run HUMANn3 here as it requires very large databases and takes a long time to run, so we will give you the commands
-you normally would run but we provide with you pre-made results files before you (see below).
+::: {.callout-caution}
+Running HUMAnN3  module requires about 72 GB of memory because it has to load a larger reference database containing the lineage-specific marker genes of checkM.
 
+If you have sufficient computational memory resources, you can run the following steps to run the bin refinement yourself.
+
+We will not run HUMANn3 here as it requires very large databases and takes a long time to run, we have already prepared output for you.
+
+::: {.callout-warning title="Example commands - do not run!" collapse="true"}
 
 ```bash
 ## DO NOT RUN!
@@ -337,7 +357,7 @@ plot_pca_bi <- function(df, pc1, pc2, metadata_group, columntitle) {
 
 As we are dealing with aDNA, and we often have bad samples, its sometimes interesting to see differences between well/badly preserved samples at all stages of analysis.
 
-Therefore we may generate results for all samples. However for actual analysis where we want to intepret biological differences, should exclude outliers (in this case highly contaminated samples - as identified by the `decontam` package - see [Velsko et al. 2022 \_PNAS Nexus](https://doi.org/10.1093/pnasnexus/pgac148) for more details).
+Therefore we may generate results for all samples. However for actual analysis where we want to interpret biological differences, should exclude outliers (in this case highly contaminated samples - as identified by the `decontam` package - see [Velsko et al. 2022 \_PNAS Nexus](https://doi.org/10.1093/pnasnexus/pgac148) for more details).
 
 We can make a list the outliers from the previous authentication analyses.
 
@@ -675,4 +695,35 @@ system(paste0('firefox "h3_paths_biplots.pdf"'))
 
 This allows us to evaluate all the information together.
 
-From this point onwards, we would have to do manual research/literature reviews into each of the pathways, see if they make 'sense' to the sample type and associated groups of samples, and evaluate whether they are interesting or not..
+From this point onwards, we would have to do manual research/literature reviews into each of the pathways, see if they make 'sense' to the sample type and associated groups of samples, and evaluate whether they are interesting or not.
+
+## (Optional) clean-up
+
+Let's clean up your working directory by removing all the data and output from this chapter.
+
+The command below will remove the `/<PATH>/<TO>/functional-profiling` directory **as well as all of its contents**. 
+
+::: {.callout-tip}
+## Pro Tip
+Always be VERY careful when using `rm -r`. Check 3x that the path you are
+specifying is exactly what you want to delete and nothing more before pressing
+ENTER!
+:::
+
+```bash
+rm -rf /<PATH>/<TO>/functional-profiling*
+```
+
+Once deleted you can move elsewhere (e.g. `cd ~`).
+
+We can also get out of the `conda` environment with
+
+```bash
+conda deactivate
+```
+
+To delete the conda environment
+
+```bash
+conda remove --name functional-profiling --all -y
+```

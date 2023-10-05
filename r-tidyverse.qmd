@@ -127,18 +127,18 @@ To open a help file for a specific function run `?<function_name>` (e.g. `?readr
 
 ```{r eval=FALSE}
 read_csv(
-  file,                      # The path to the file we want to read
-  col_names = TRUE,          # Are there column names?
-  col_types = NULL,          # Which types do the columns have? NULL -> auto
-  locale = default_locale(), # How is information encoded in this file?
-  na = c("", "NA"),          # Which values mean "no data"
-  trim_ws = TRUE,            # Should superfluous white-spaces be removed?
-  skip = 0,                  # Skip X lines at the beginning of the file
-  n_max = Inf,               # Only read X lines
-  skip_empty_rows = TRUE,    # Should empty lines be ignored? 
-  comment = "",              # Should comment lines be ignored?
-  name_repair = "unique",    # How should "broken" column names be fixed
-  ...
+    file, # The path to the file we want to read
+    col_names = TRUE, # Are there column names?
+    col_types = NULL, # Which types do the columns have? NULL -> auto
+    locale = default_locale(), # How is information encoded in this file?
+    na = c("", "NA"), # Which values mean "no data"
+    trim_ws = TRUE, # Should superfluous white-spaces be removed?
+    skip = 0, # Skip X lines at the beginning of the file
+    n_max = Inf, # Only read X lines
+    skip_empty_rows = TRUE, # Should empty lines be ignored?
+    comment = "", # Should comment lines be ignored?
+    name_repair = "unique", # How should "broken" column names be fixed
+    ...
 )
 ```
 
@@ -161,16 +161,16 @@ It automatically detects column types -- but you can also define them manually.
 
 ```{r, eval=FALSE}
 peng <- readr::read_csv(
-  "penguins.csv",
-  col_types = "iccddcc" # this string encodes the desired types for each column
+    "penguins.csv",
+    col_types = "iccddcc" # this string encodes the desired types for each column
 )
 ```
 
 ```{r, echo=FALSE}
 # this version is only for the website!
 peng <- readr::read_csv(
-  "assets/data/r-tidyverse/penguins.csv",
-  col_types = "iccddcc" # this string encodes the desired types for each column
+    "assets/data/r-tidyverse/penguins.csv",
+    col_types = "iccddcc" # this string encodes the desired types for each column
 )
 ```
 
@@ -331,8 +331,8 @@ With `forcats::fct_reorder` we can transform an input vector to a `factor`, orde
 ```{r}
 peng2 <- peng
 peng2$species_ordered <- forcats::fct_reorder(
-  peng2$species,
-  peng2$species, length
+    peng2$species,
+    peng2$species, length
 )
 ```
 
@@ -385,9 +385,9 @@ ggplot(mtcars) +
 ```{r, echo=FALSE}
 # technical adjustments for rendering
 old_options <- options(
-  pillar.print_max = 5,
-  pillar.print_min = 5,
-  pillar.advice = FALSE
+    pillar.print_max = 5,
+    pillar.print_min = 5,
+    pillar.advice = FALSE
 )
 ```
 
@@ -603,18 +603,18 @@ peng %>%
 
 ```{r}
 peng %>%
-  dplyr::transmute(
-    id = paste("Penguin Nr.", id), # overwrite this column
-    flipper_length_mm               # select this column
-)
+    dplyr::transmute(
+        id = paste("Penguin Nr.", id), # overwrite this column
+        flipper_length_mm # select this column
+    )
 ```
 
 `tibble::add_column` behaves as `dplyr::mutate`, but gives more control over column position.
 
 ```{r}
 peng %>% tibble::add_column(
-  flipper_length_cm = .$flipper_length_mm/10, # not the . representing the LHS of the pipe
-  .after = "flipper_length_mm"
+    flipper_length_cm = .$flipper_length_mm / 10, # not the . representing the LHS of the pipe
+    .after = "flipper_length_mm"
 )
 ```
 
@@ -639,11 +639,11 @@ peng %>%
 
 ```{r}
 peng %>% dplyr::mutate(
-  weight = ifelse(
-    test = body_mass_g >= 4200, # is weight below or above mean weight?
-    yes = "above mean",
-    no = "below mean"
-  )
+    weight = ifelse(
+        test = body_mass_g >= 4200, # is weight below or above mean weight?
+        yes = "above mean",
+        no = "below mean"
+    )
 )
 ```
 
@@ -651,11 +651,11 @@ peng %>% dplyr::mutate(
 
 ```{r}
 peng %>% dplyr::mutate(
-  weight = dplyr::case_when(
-    body_mass_g >= 4200 ~ "above mean", # the number of conditions is arbitrary
-    body_mass_g < 4200  ~ "below mean",
-    TRUE                ~ "unknown"     # TRUE catches all remaining cases
-  )
+    weight = dplyr::case_when(
+        body_mass_g >= 4200 ~ "above mean", # the number of conditions is arbitrary
+        body_mass_g < 4200 ~ "below mean",
+        TRUE ~ "unknown" # TRUE catches all remaining cases
+    )
 )
 ```
 
@@ -825,9 +825,9 @@ Take observations from x and add fitting information from y (@fig-rtidyverse-lef
 
 ```{r}
 dplyr::left_join(
-  x = peng,  # 300 observations
-  y = bills, # 300 observations
-  by = "id"  # the key column by which to join
+    x = peng, # 300 observations
+    y = bills, # 300 observations
+    by = "id" # the key column by which to join
 )
 ```
 
@@ -858,9 +858,9 @@ Join the overlapping observations from x and y (@fig-rtidyverse-innerjoin).
 
 ```{r}
 dplyr::inner_join(
-  x = peng,  # 300 observations
-  y = bills, # 300 observations
-  by = "id"
+    x = peng, # 300 observations
+    y = bills, # 300 observations
+    by = "id"
 )
 ```
 
@@ -890,9 +890,9 @@ Keep every observation in x that is in y (@fig-rtidyverse-semijoin).
 
 ```{r}
 dplyr::semi_join(
-  x = peng,  # 300 observations
-  y = bills, # 300 observations
-  by = "id"
+    x = peng, # 300 observations
+    y = bills, # 300 observations
+    by = "id"
 )
 ```
 
@@ -907,9 +907,9 @@ Keep every observation in x that is not in y (@fig-rtidyverse-antijoin).
 
 ```{r}
 dplyr::anti_join(
-  x = peng,  # 300 observations
-  y = bills, # 300 observations
-  by = "id"
+    x = peng, # 300 observations
+    y = bills, # 300 observations
+    by = "id"
 )
 ```
 
@@ -921,8 +921,8 @@ Consider the following additional dataset with my opinions on cars with a specif
 
 ```{r}
 gear_opinions <- tibble::tibble(
-  gear = c(3, 5),
-  opinion = c("boring", "wow")
+    gear = c(3, 5),
+    opinion = c("boring", "wow")
 )
 ```
 
@@ -977,6 +977,12 @@ We can also get out of the `conda` environment with
 
 ```bash
 conda deactivate
+```
+
+To delete the conda environment
+
+```bash
+conda remove --name r-tidyverse --all -y
 ```
 
 ## References

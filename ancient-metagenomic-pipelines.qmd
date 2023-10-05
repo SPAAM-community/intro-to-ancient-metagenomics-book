@@ -1,7 +1,8 @@
 ---
 title: Ancient Metagenomic Pipelines
 author: "James A. Fellows Yates, Megan Michel, Nikolay Oskolkov"
-bibliography: assets/references/chapters/ancient-metagenomic-pipelines/references.bibtex
+bibliography: assets/references/chapters/ancient-metagenomic-pipelines/references.bib
+csl: american-journal-of-physical-anthropology.csl
 ---
 
 ::: {.callout-tip}
@@ -16,7 +17,7 @@ To download the data for this chapter, please download following archive with, e
 For example
 
 ```bash
-wget -O ancient-metagenomic-pipelines.tar.gz https://www.dropbox.com/scl/fi/jyz9n3h8yt8jeovviizf4/phylogenomics.tar.gz?rlkey=1aowh0grdvphht2h8h6qox0fa&dl=0 -P /<PATH>/<TO>/<SOMEWHERE_TO_STORE>/ 
+wget -O ancient-metagenomic-pipelines.tar.gz https://www.dropbox.com/scl/fi/oxd4ag5haygpihg30grh8/ancient-metagenomic-pipelines.tar.gz?rlkey=p40jtcf6fofs2ak1wfbc1cyg9&dl=0 -P /<PATH>/<TO>/<SOMEWHERE_TO_STORE>/ 
 tar -xzf ancient-metagenomic-pipelines.tar.gz
 cd ancient-metagenomic-pipelines
 ```
@@ -83,23 +84,11 @@ Our aims in the following tutorial are to:
 
 Let's get started!
 
-First, activate the conda environment that we downloaded during setup:
-
-```bash
-conda activate activate ancient-metagenomic-pipelines
-```
-
-And change into our practical session directory:
-
-```bash
-cd /<path>/<to>/ancient-metagenomic-pipelines
-```
-
 ::: {.callout-warning}
 nf-core/eager v2 requires an older version of Nextflow - if installing manually, ensure you do not have Nextflow version any greater than v22.10.6!
 :::
 
-Next, download the latest version of the nf-core/eager repo (or check for updates if you have a previously-installed version):
+First, download the latest version of the nf-core/eager repo (or check for updates if you have a previously-installed version):
 
 ```bash
 nextflow pull nf-core/eager
@@ -111,12 +100,14 @@ Next we can re-visit AMDirT (see [Accessing Ancient Metagenomic Data](accessing-
 2. Filter the `sample_name` column to just show KZL002 and GLZ002, and select these two rows
     - Press the burger icon on the column
     - Press the filter tab and deselect everything
-    - Search GLZ002 and select in filter menu 
-    - Search KLZ002 and select in filter menu
+    - Search **GLZ002** and select in filter menu 
+    - Search **KZL002** and select in filter menu
     - Close filter menu and select the two rows
 3. Press the Validate Selection button
 4. Press the 'Download Curl sample download script', 'Download nf-core/eager input TSV',  and 'Download Citations as BibTex' buttons
-5. Move the follows into `eager/` of this tutorial's directory
+5. Move the downloaded files into `eager/` of this tutorial's directory 
+   - i.e., if the files were downloaded to you `Downloads/` folder rather than the chapters directory,
+   - e.g., assuming you've got no other previous downloads you can run `mv ~/Downloads/AncientMetagenomeDir_* eager/`
 
 ::: {.callout-tip} 
 We won't actually use the BibTex citations file for anything in this tutorial, but it is good habit to _always_ to record and save all citations of any software or data you use!
@@ -142,7 +133,9 @@ KZL002	ERR8958769	0	4	PE	Homo sapiens	double	half	ERR8958769_1.fastq.gz	ERR89587
 
 Here we see 10 columns, all pre-filled. The first two columns correspond to sample/library IDs that will be used for data provenance and grouping. When you have sequencing multiple lanes you can speed up preprocessing these independently before merging, so lane can specify this (although not used in this case as we have independent libraries per sample. You can indicate the colour chemistry to indicate whether your data requires additional pre-processing to remove poly-G tails, and then also strandedness and UDG damage treatment status of the libraries if you require further damage manipulation. Finally you provide paths to the FASTQ files or BAM files
 
-Other than the raw FASTQ files, we will need a reference genome and annotation coordinates of genes present on the genome. In this case you will use a _Yersinia pestis_ (accession: GCF_001293415.1) reference genome (`.fna`) and gene feature file (`.gff`) from [NCBI Genome](https://www.ncbi.nlm.nih.gov/genome). This is placed in the `reference/` directory.
+Other than the raw FASTQ files, we will need a reference genome and annotation coordinates of genes present on the genome. In this case you will use a _Yersinia pestis_ (accession: GCF_001293415.1) reference genome (`.fna`) and gene feature file (`.gff`) from [NCBI Genome](https://www.ncbi.nlm.nih.gov/genome). 
+
+These have already been placed in the `reference/` directory for you.
 
 ::: {.callout-note title="Self guided: reference download and preparation" collapse="true"}
 
@@ -163,7 +156,7 @@ gffread genomic.gff GCF_001293415.1_ASM129341v1_genomic.gff
 
 With all of these, we can run the pipeline!
 
-First lets enter a screen session
+First lets enter a screen session to make sure we can leave the pipeline running in the background and continue using our terminal.
 
 ```bash
 screen -R eager
@@ -184,9 +177,16 @@ nextflow run nf-core/eager -r 2.4.7 \
 --run_bcftools_stats --run_bedtools_coverage
 ```
 
+When the run starts, you see a long list of `process` lines with progress bars slowly appearing over time. If you press <kbd>ctrl</kbd> + <kbd>a</kbd> and then <kbd>[</kbd> to access a 'navigation' (called 'copy') mode, then use your arrow keys on your keyboard to scroll up and down. To quit this mode just press `q`.
+
 ::: {.callout-tip} 
 We don't normally recommend running analyses in the directory your data is in! It is better to keep data and analysis results in separate directories. Here we are just running eager alongside the data for convenience (i.e., you don't have to modify the downloaded input TSV)
 :::
+
+::: {.callout-warning}
+This run will take between 20m-40m to run on a standard laptop! Time for a break, or you can continue reading this chapter as the critical output data has already been provided for you in the data directory.
+:::
+
 
 So what is this command doing? The different parameters do the following:
 
@@ -242,7 +242,7 @@ Specifically for ancient (meta)genomic data, the following parameters and option
 
 1. Screen sessions
 
-    Depending on your input data, infrastructure, and analyses, running nf-core/eager can take hours or even days. To avoid crashed due to loss of power or network connectivity, try running nf-core/eager in a `screen` or `tmux` session:
+    Depending on the size of your input data, infrastructure, and analyses, running nf-core/eager can take hours or even days (e.g. the example command above will likely take around 20 minutes!). To avoid crashes due to loss of power or network connectivity, try running nf-core/eager in a `screen` or `tmux` session:
 
     ```bash
     screen -R eager
@@ -252,13 +252,15 @@ Specifically for ancient (meta)genomic data, the following parameters and option
 
     In this tutorial, a tsv file to specify our input data files and formats. This is a powerful approach that allows nf-core eager to intelligently apply analyses to certain files only (e.g. merging for paired-end but not single-end libraries). However inputs can also be specified using wildcards, which can be useful for fast analyses with simple input data types (e.g. same sequencing configuration, file location, etc.).
 
-    ```bash
-    nextflow run nf-core/eager -r 2.4.7 -profile docker --fasta ../reference/GCF_001293415.1_ASM129341v1_genomic.fna \
-    --input "data/*_{1,2}.fastq.gz" <...> \
-    --udg_type half
-    ```
-
     See the online [nf-core/eager documentation](https://nf-co.re/eager/usage) for more details.
+
+::: {.callout-warning title="Exampl commands - do not run!"}
+```bash
+nextflow run nf-core/eager -r 2.4.7 -profile docker --fasta ../reference/GCF_001293415.1_ASM129341v1_genomic.fna \
+--input "data/*_{1,2}.fastq.gz" <...> \
+--udg_type half
+```
+:::
 
 3. Get your MultiQC report via email
 
@@ -272,7 +274,9 @@ Specifically for ancient (meta)genomic data, the following parameters and option
 
 5. When something fails, all is not lost!
 
-    When individual jobs fail, nf-core/eager will try to automatically resubmit that job with increased memory and CPUs (up to two times per job). When the whole pipeline crashes, you can save time and computational resources by resubmitting with the `-resume` flag. nf-core/eager will retrieve cached results from previous steps as long as the input is the same.
+    When individual jobs fail, nf-core/eager will _try_ to automatically resubmit that job with increased memory and CPUs (up to two times per job).
+    
+    When the whole pipeline crashes, you can save time and computational resources by resubmitting with the `-resume` flag. nf-core/eager will retrieve cached results from previous steps as long as the input is the same.
 
 6. Monitor your pipeline in real time with the Nextflow Tower
 
@@ -282,7 +286,7 @@ Specifically for ancient (meta)genomic data, the following parameters and option
 
 #### Results files
 
-In the `results/` directory of your nf-core/eager run, you will find a range of directories that will contain output files and tool log of all the steps of the pipeline. nf-core/eager tries to only save the 'useful' files. 
+Once completed, the `results/` directory of your nf-core/eager run will contain a range of directories that will have output files and tool logs of all the steps of the pipeline. nf-core/eager tries to only save the 'useful' files. 
 
 Everyday useful files for ancient (microbial) (meta)genomics typically are in folders such as:
 
@@ -315,7 +319,7 @@ cd multiqc/
 ```
 
 ::: {.callout-note}
-If you're impatient, and your nf-core/eager run hasn't finished yet, you can cancel the run with <kbd>ctrl</kbd> + <kbd>c</kbd> (possibly a couple of times), then you can open a premade file in `ancient-metagenomic-pipelines/multiqc_report.html`
+If you're impatient, and your nf-core/eager run hasn't finished yet, you can cancel the run with <kbd>ctrl</kbd> + <kbd>c</kbd> (possibly a couple of times), and you can open a premade file in the data directory under `ancient-metagenomic-pipelines/multiqc_report.html`
 :::
 
 In here you should see a bunch of files, but you should open the `multiqc_report.html` file in your browser. You can either do this via the commandline (e.g. for firefox `firefox multiqc_report.html`) or navigate to the file using your file browser and double clicking on the HTML file.
@@ -406,7 +410,9 @@ Before continuing onto the next section of this chapter, you will need to deacti
 conda deactivate 
 ```
 
-You may also need to delete the contents of the eager directory
+If the nf-core/eager run is still not finished, you should enter the screen session with `screen -r eager`, press <kbd>ctrl</kbd> + <kbd>c</kbd> until you drop to the prompt, and type `exit`.
+
+Then may also need to delete the contents of the eager directory if you are low on harddrive space.
 
 ```bash
 cd /<path>/<to>/ancient-metagenomic-pipelines/eager
@@ -436,29 +442,45 @@ In this tutorial we will try running the small test data that comes with aMeta.
 aMeta has been written in Snakemake, which means running the pipeline has to be installed in a slightly different manner to the `nextflow pull` command that can be used for nf-core/eager.
 
 ```bash
-cd ancient-metagenomic-pipelines/aMeta
+cd /<path>/<to>/ancient-metagenomic-pipelines/aMeta
 ```
 
-::: {.callout-note}
-The code repository, conda environment and database construction has already been performed for you. If you are running this manually you'll need to run the steps in the note block below
+As aMeta also includes tools that normally require very large computational resources that cannot fit on a standard laptop, we will instead try to re-use the internal very small 'fake' data the aMeta developers use to test the pipeline. 
+
+You don't have to worry about trying to understand what the following commands are doing, they will not be important for the rest of the chapter. However generally the commands try to pull all the relevant software (via conda), make a fake database and download other required files, and then reconstruct the basic directory and file structure required for running the pipeline.
+
+:::{.callout-warning}
+The next steps, particularly the `set up conda envs` will take a very long time! 
+
+If you are impatient, you can speed this process up by using `mamba` rather than conda.
+
+```bash
+## Download installation script and run
+wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
+bash Miniforge3-Linux-x86_64.sh
+
+## When asked: Accept the license
+## When asked: Press 'y' to run conda init
+
+## Turn off base
+conda config --set auto_activate_base false
+
+## Re-add original conda environments to be recognised by mamba
+conda config --append envs_dirs /home/ubuntu/bin/miniconda3/envs/
+```
 :::
 
-:::{.callout-note title="Self guided: setting up aMeta for tutorial" collapse="true"}
-### Setting up aMeta manually
 ```bash
-<!-- TODO: replace with link to before-you-start -->
-git clone https://github.com/NBISweden/aMeta
-cd aMeta
-conda env create -f workflow/envs/environment.yaml
-conda activate aMeta
-cd ancient-metagenomic-pipelines/aMeta
-
 ## Change into ~/.test to set up all the required test resources (Databases etc.)
 cd ~/.test
 
 ## Set up conda envs
+## If you can an error about a 'non-default solver backend' the run `conda config --set solver classic` and re-start the command
+## If you have installed the standalone mamba, change --conda-frontend to mamba
 snakemake --use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs cache --conda-create-envs-only -s ../workflow/Snakefile --conda-frontend conda
 source $(dirname $(dirname $CONDA_EXE))/etc/profile.d/conda.sh
+
+## If you had to change the solver back to classic, you can switch to libmamba with `conda config --set solver libmamba`
 
 ## Build dummy KrakenUniq database
 env=$(grep krakenuniq .snakemake/conda/*yaml | awk '{print $1}' | sed -e "s/.yaml://g")
@@ -498,19 +520,29 @@ cd resources/
 ln -s ../.test/resources/* .
 cd ../config
 mv config.yaml config.yaml.bkp
+mv samples.tsv samplest.tsv.bkp
 cd ../
 ln -s .test/data/ .
+
+## Again get hte taxonomy tax dump for Krona, but this time for a real run
+env=$(grep krona .snakemake/conda/*yaml | awk '{print $1}' | sed -e "s/.yaml://g" | head -1)
+conda activate $env
+cd $env/opt/krona
+./updateTaxonomy.sh taxonomy
+cd -
+conda deactivate
 ```
-:::
+
+OK now aMeta is all set up, we can now simulate running a 'real' pipeline job!
 
 ### aMeta configuration
 
-First, we will need to configure the workflow. First, we need to create a tab-delimited `samples.tsv` file inside `aMeta/config/` and provide the names of the input fastq-files. In a text editor (e.g. `nano`), write the following names paths in TSV format:
+First, we will need to configure the workflow. First, we need to create a tab-delimited `samples.tsv` file inside `aMeta/config/` and provide the names of the input fastq-files. In a text editor (e.g. `nano`), write the following names paths in TSV format.
 
 ```bash
-sample  fastq
-foo data/bar.fq.gz
-bar data/foo.fq.gz
+sample	fastq
+foo	data/bar.fq.gz
+bar	data/foo.fq.gz
 ```
 
 :::{.callout-warning}
@@ -519,7 +551,7 @@ Make sure when copy pasting into your test editor, tabs are not replaced with sp
 
 Then we need to write a config file. This tells aMeta where to find things such as database files and other settings.
 
-These go inside a `config.yaml` file inside `aMeta/config/`. A minimal example `config.yaml` files can look like this:
+These paths and settings go inside a `config.yaml` file inside `aMeta/config/`. A minimal example `config.yaml` files can look like this.
 
 ```bash
 samplesheet: "config/samples.tsv"
@@ -547,15 +579,7 @@ As this is only a dummy run (due to the large-ish computational resources requir
 
 ### Prepare and run aMeta
 
-<!-- TODO: still necessary to document? "Next, we need to create conda sub-environments of aMeta, then manually tune a few memory related parameters of tools (Krona and Malt) included in aMeta:"" -->
-
-Make sure you're in the `aMeta` conda environment,
-
-```bash
-conda activate aMeta
-```
-
-and in the main aMeta directory with
+Make sure you're still in the `aMeta` conda environment, and in the main aMeta directory with
 
 ```bash
 cd /<path/<to>/ancient-metagenomic-pipelines/ameta/aMeta/
@@ -564,20 +588,40 @@ cd /<path/<to>/ancient-metagenomic-pipelines/ameta/aMeta/
 And, finally, we are ready to run aMeta!
 
 ```bash 
+## change conda-frontend to mamba if you set this up earlier!
 snakemake --snakefile workflow/Snakefile --use-conda -j 10 --conda-frontend conda
 ```
 
 :::{.callout-note}
 You can modify `-j` to represent the number of available CPUs you have on your machine.
+
+If you are using `conda` is the frontend this could be quite slow!
 :::
+
+Firstly you'll have displayed on the console a bunch of messages about JSON schemas, building DAG of jobs and downloading installing of conda environments.
+You will know the pipeline has started when you get green messages saying things like 'Checkpoint' and 'Finished job XX'.
+
+You'll know the job is completed once you get the following messages
+
+```default
+Finished job 0.
+31 of 31 steps (100%) done
+Complete log: .snakemake/log/2023-10-05T155051.524987.snakemake.log
+```
 
 ### aMeta output
 
-All output files of the workflow are located in *aMeta/results* directory. To get a quick overview of ancient microbes present in your samples you should check a heatmap in *results/overview_heatmap_scores.pdf*.
+All output files of the workflow are located in `aMeta/results` directory. To get a quick overview of ancient microbes present in your samples you should check a heatmap in `results/overview_heatmap_scores.pdf`.
 
 ![Example microbiome profiling summary heatmap from aMeta. The columns represent different samples, and the rows of different species. The cells of the heatmap are coloured from blue, to yellow, to red, representing aMeta authentication scores from 0 to 10, with the higher the number the more confident of the hit being both the correct taxonomic assignment and that it is ancient. Numbers in the coloured cells also provide the direct score number.](assets/images/chapters/ancient-metagenomic-pipelines/overview_heatmap_scores.png){#fig-ancientmetagenomicpipelines-ametadiagram}
 
-The heatmap demonstrates microbial species (in rows) authenticated for each sample (in columns) ([@fig-ancientmetagenomicpipelines-ametadiagram]). The colors and the numbers in the heatmap represent authentications scores, i.e. numeric quantification of seven quality metrics that provide information about microbial presence and ancient status. The authentication scores can vary from 0 to 10, the higher is the score the more likely that a microbe is present in a sample and is ancient. Typically, scores from 8 to 10 (red color in the heatmap) provide good confidence of ancient microbial presence in a sample. Scores from 5 to 7 (yellow and orange colors in the heatmap) can imply that either: a) a microbe is present but not ancient, i.e. modern contaminant, or b) a microbe is ancient (the reads are damaged) but was perhaps aligned to a wrong reference, i.e. it is not the microbe you think about. The former is a more common case scenario. The latter often happens when an ancient microbe is correctly detected on a genus level but we are not confident about the exact species, and might be aligning the damaged reads to a non-optimal reference which leads to a lot of mismatches or poor evennes of coverage. Scores from 0 to 4 (blue color in the heatmap) typically mean that we have very little statistical evedence (very few reads) to claim presence of a microbe in a sample.
+The heatmap demonstrates microbial species (in rows) authenticated for each sample (in columns) ([@fig-ancientmetagenomicpipelines-ametadiagram]). 
+The colors and the numbers in the heatmap represent authentications scores, i.e. numeric quantification of seven quality metrics that provide information about microbial presence and ancient status. 
+The authentication scores can vary from 0 to 10, the higher is the score the more likely that a microbe is present in a sample and is ancient. 
+
+Typically, scores from 8 to 10 (red color in the heatmap) provide good confidence of ancient microbial presence in a sample. Scores from 5 to 7 (yellow and orange colors in the heatmap) can imply that either: a) a microbe is present but not ancient, i.e. modern contaminant, or b) a microbe is ancient (the reads are damaged) but was perhaps aligned to a wrong reference, i.e. it is not the microbe you think about. 
+The former is a more common case scenario. 
+The latter often happens when an ancient microbe is correctly detected on a genus level but we are not confident about the exact species, and might be aligning the damaged reads to a non-optimal reference which leads to a lot of mismatches or poor evennes of coverage. Scores from 0 to 4 (blue color in the heatmap) typically mean that we have very little statistical evidence (very few reads) to claim presence of a microbe in a sample.
 
 To visually examine the seven quality metrics
 
@@ -613,32 +657,22 @@ nf-core/mag covers the same major steps as you will have run if you followed the
 
 ### Running nf-core/mag
 
+First re-activate the chapter's conda environment.
+
+```bash
+conda activate ancient-metagenomic-pipelines
+```
+
 In this tutorial, we will use the same data and aim to replicate the steps taken in the [De Novo assembly](denovo-assembly.qmd) chapter. It is important to note that generally, _de novo_ assembly, is very computational intensive. In many cases it will not be able to run a _de novo_ assembly on a standard laptop, therefore some of the parameters used here have been tweaked to get the pipeline runable on powerful laptop level machines.
 
 ::: {.callout-note title="Self guided: reference download and preparation" collapse="true"}
 
-This tutorial will re-use the data from the _de novo_ assembly chapter. If you have not-run that practical, or deleted the data, you can retrieve these with
+This tutorial will re-use the data from the _de novo_ assembly chapter. If you have not-run that practical, or deleted the data, pleas follow the instructions at the top of the [de novo assembly](denovo-assembly.qmd) page to download the `denovo-assembly.tar.gz` file and unpack it into the `denovo-assembly directory`.
+
+Make sure once you've finished, change back into this chapter's directory with
 
 ```bash
-
-## IF YOU'VE INTO RUN/DELETE DENOVO ASSEMBLY THEN RUN THIS
-cd /<path>/<to>/denovo-assembly/
-wget https://share.eva.mpg.de/index.php/s/CtLq2R9iqEcAFyg/download/2612_R1.fastq.gz
-wget https://share.eva.mpg.de/index.php/s/mc5JrpDWdL4rC24/download/2612_R2.fastq.gz
-wget https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_2015_01_16.tar.gz
-```
-
-Once you have done this, we will need to download the single copy marker gene reference database for CheckM, which is used to assess completeness of genome bins.
-
-```bash
-cd /<path>/<to>/ancient-metagenomic-pipelines/
-mkdir -p mag/data
-cd mag/data
-
-mkdir checkm_data_2015_01_16
-tar --directory checkm_data_2015_01_16/ -xzvf checkm_data_2015_01_16.tar.gz
-
-cd ..
+cd /<path>/<to>/ancient-metagenomic-pipelines
 ```
 :::
 
@@ -658,7 +692,7 @@ So, what command would we use to recreate these?
 ## 🛑 Don't run this yet! 🛑
 nextflow run nf-core/mag -r 2.3.2 \
 -profile test,docker \
---input '../../denovo-assembly/*{R1,R2}.fastq.gz' --outdir ./results #-c custom.config \
+--input '../../denovo-assembly/seqdata_files/*{R1,R2}.fastq.gz' --outdir ./results \
 --ancient_dna  --binning_map_mode own \
 --binqc_tool checkm --checkm_db data/checkm_data_2015_01_16/ \
 --centrifuge_db false --kraken2_db false --skip_krona --skip_spades --skip_spadeshybrid --skip_maxbin2 --skip_concoct --skip_prodigal --gtdb false  --busco_reference false 
@@ -710,7 +744,6 @@ For Nextflow, we must make a special 'config' that defines the names of each ste
 For this our nf-core/mag run you will need to open your text editor an empty file called `custom.config`, and copy and paste the contents of the next code block.
 
 ```groovy
-
 process {
 
   withName: FASTP { 
@@ -748,19 +781,31 @@ process {
 
 Here we set the number of CPUs for most tools to a maximum of `8`, and then we limit the amount of memory for CheckM to 24 GB (down from the [default](https://github.com/nf-core/mag/blob/66cf53aff834d2a254b78b94fc54cd656b8b7b57/conf/base.config#L37-L41) of 36 GB - which exceeds most laptop memory). We also give a specifc `CheckM` flag command to use a smaller database.
 
-We can save this `custom.config` file, and supply this to the Nextflow command with the nextflow parameter (`-c`). And with that, you can run your nf-core/mag pipeline!
+
+We can save this `custom.config` file, and supply this to the Nextflow command with the nextflow parameter (`-c`).
+The good thing about the config file, is you can re-use across runs on the same machine! So set once, and never think about it again.
+
+And with that, you can run your nf-core/mag pipeline!
+
+As recommended in the nf-core/eager section above, start a screen session.
+
+```bash
+screen -R mag
+```
+
+Then execute the command.
 
 ```bash
 nextflow run nf-core/mag -r 2.3.2 \
 -profile test,docker \
---input '../../denovo-assembly/*{R1,R2}.fastq.gz' --outdir ./results
+--input '../../denovo-assembly/seqdata_files/*{R1,R2}.fastq.gz' --outdir ./results \
 --ancient_dna  --binning_map_mode own \
 --binqc_tool checkm --checkm_db data/checkm_data_2015_01_16/ \
 --centrifuge_db false --kraken2_db false --skip_krona --skip_spades --skip_spadeshybrid --skip_maxbin2 --skip_concoct --skip_prodigal --gtdb false  --busco_reference false \
 -c custom.config
 ```
 
-The good thing about the config file, is you can re-use across runs on the same machine! So set once, and never think about it again.
+Again as with nf-coire/eager when the run starts, you see a long list of `process` lines with progress bars slowly appearing over time. If in a screen session, you can press <kbd>ctrl</kbd> + <kbd>a</kbd> and then <kbd>[</kbd> to access a 'navigation' (called 'copy') mode, then use your arrow keys on your keyboard to scroll up and down. To quit this mode just press `q`.
 
 The pipeline run above should take around 20 minutes or so to complete.
 
@@ -814,19 +859,35 @@ In this file you woud typically want to assess the following columns:
 -  `fastani` and `closest_placement_taxonomy` - these can tell you if your particular bin has a genome very similar to existing species in taxonomic databases
 -  `warnings` - for specific comments on each assignment
 
-### Clean up
+## (Optional) clean-up
 
-Before continuing onto the next section of this chapter, you will need to deactivate from the conda environment
+Let's clean up your working directory by removing all the data and output from this chapter.
+
+The command below will remove the `/<PATH>/<TO>/ancient-metagenomic-pipelines` directory **as well as all of its contents**. 
+
+::: {.callout-tip}
+## Pro Tip
+Always be VERY careful when using `rm -r`. Check 3x that the path you are
+specifying is exactly what you want to delete and nothing more before pressing
+ENTER!
+:::
 
 ```bash
-conda deactivate 
+rm -rf /<PATH>/<TO>/ancient-metagenomic-pipelines*
 ```
 
-You may also need to delete the contents of the mag directory
+Once deleted you can move elsewhere (e.g. `cd ~`).
+
+We can also get out of the `conda` environment with
 
 ```bash
-cd /<path>/<to>/ancient-metagenomic-pipelines/mag
-rm -r *
+conda deactivate
+```
+
+To delete the conda environment
+
+```bash
+conda remove --name ancient-metagenomic-data --all -y
 ```
 
 ## Questions to think about
@@ -835,4 +896,7 @@ rm -r *
 2. How can the design of pipelines such as nf-core/eager pipeline help researchers comply with the FAIR principles for management of scientific data?
 3. What metrics do you use to evaluate the success/failure of ancient DNA sequencing experiments? How can these measures be evaluated when using nf-core/eager for data preprocessing and analysis?
 
-## References
+### References
+
+::: {#refs}
+:::
