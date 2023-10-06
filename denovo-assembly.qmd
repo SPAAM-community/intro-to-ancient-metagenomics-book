@@ -72,9 +72,7 @@ Around 2015, a technical revolution started when the first programs, e.g. MEGAHI
 
 The technical advancement of being able to perform *de novo* assembly on metagenomic samples led to an explosion of studies that analysed samples that were considered almost impossible to study beforehand. For researchers that are exposed to ancient DNA, the imminent question arises: can we apply the same methods to ancient DNA data? In this practical course, we will walk through all required steps that are necessary to successfully perform _de novo_ assembly from ancient DNA metagenomic sequencing data and show you what you can do once you have obtained the data.
 
-## Practical course
-
-### Sample overview
+## Sample overview
 
 For this practical course, I selected a palaeofaeces sample from the study by @Maixner2021, who generated deep metagenomic sequencing data for four palaeofaeces samples that were excavated from an Austrian salt mine in Hallstatt and were associated with the Celtic Iron Age. We will focus on the youngest sample, **2612**, which was dated to be just a few hundred years old (@fig-denovoassembly-maixner).
 
@@ -113,7 +111,7 @@ to find this out.
 There are about 3.25 million paired-end sequences in these files.
 :::
 
-### Preparing the sequencing data for _de novo_ assembly
+## Preparing the sequencing data for _de novo_ assembly
 
 Before running the actual assembly, we need to pre-process our sequencing data. Typical pre-processing steps include the trimming of adapter sequences and barcodes from the sequencing data and the removal of host or contaminant sequences, such as the bacteriophage PhiX, which is commonly sequenced as a quality control.
 
@@ -162,7 +160,7 @@ The sequencing data for the sample **2612** were generated across eight differen
 Overall, we have almost no short DNA molecules (< 50 bp) but most DNA molecules are longer than 80 bp. Additionally, there were > 200,000 read pairs that could not be overlapped. Therefore, we can conclude that the sample **2612** is moderately degraded ancient DNA sample and has many long DNA molecules.
 :::
 
-### _De novo_ assembly
+## _De novo_ assembly
 
 Now, we will actual perform the _de novo_ assembly on the sequencing data. For this, we will use the program MEGAHIT [@LiMegahit2015], a _de Bruijn_-graph assembler. 
 
@@ -258,7 +256,7 @@ We standardised this approach and added it to the Nextflow pipeline nf-core/mag 
 While MEGAHIT is able to assemble ancient metagenomic sequencing data with high amounts of ancient DNA damage, it tends to introduce damage-derived T and A alleles into the contig sequences instead of the true C and G alleles. This can lead to a higher number of nonsense mutations in coding sequences. We strongly advise you to correct such mutations, e.g. by using the ancient DNA workflow of the Nextflow pipeline [nf-core/mag](https://nf-co.re/mag).
 :::
 
-### Aligning the short-read data against the contigs
+## Aligning the short-read data against the contigs
 
 After the assembly, the next detrimental step that is required for many subsequent analyses is the alignment of the short-read sequencing data back to assembled contigs.
 
@@ -303,7 +301,7 @@ samtools index alignment/2612.sorted.calmd.bam
 ```
 :::
 
-### Reconstructing metagenome-assembled genomes
+## Reconstructing metagenome-assembled genomes
 
 There are typically two major approaches on how to study biological diversity of samples using the results obtained from the _de novo_ assembly. The first one is to reconstruct metagenome-assembled genomes (MAGs) and to study the species diversity.
 
@@ -339,9 +337,6 @@ Make sure you have followed the instructions for setting up the additional softw
 :::
 
 To skip the first steps of metaWRAP and start straight with the binning, we need to create the folder structure and files that metaWRAP expects:
-
-
-<!-- UP TI HERRE -->
 
 ```{bash, eval = F}
 mkdir -p metawrap/INITIAL_BINNING/2612/work_files
@@ -420,7 +415,6 @@ tar xvf checkM/checkm_data_2015_01_16.tar.gz -C checkM
 echo checkM | checkm data setRoot checkM
 ```
 
-
 Afterwards, we can execute metaWRAP's bin refinement module:
 
 ```{bash, eval = F}
@@ -444,9 +438,7 @@ conda deactivate
 The latter step will produce a summary file, `metawrap_50_10_bins.stats`, that lists all retained bins and some key characteristics, such as the genome size, the completeness estimate, and the contamination estimate. The latter two can be used to assign a quality score according to the Minimum Information for MAG (MIMAG; see info box).
 :::
 
-
 ::: {.callout-note title="The Minimum Information for MAG (MIMAG)"}
-
 The two most common metrics to evaluate the quality of MAGs are:
 
   - the **completeness**: how many of the expected lineage-specific single-copy marker genes were present in the MAG?
@@ -455,13 +447,11 @@ The two most common metrics to evaluate the quality of MAGs are:
 These metric is usually calculated using the marker-gene catalogue of checkM [@Parks2015], also if there are other estimates from other tools such as BUSCO [@Manni2021], GUNC [@Orakov2021] or checkM2 [@Chklovski2022].
 
 Depending on the estimates on completeness and contamination plus the presence of RNA genes, MAGs are assigned to the quality category following the Minimum Information for MAG criteria [@Bowers2017] You can find the overview [here](https://www.nature.com/articles/nbt.3893/tables/1).
-
 :::
 
 As these two steps will run rather long and need a large amount of memory and disk space, I have provided the results of metaWRAP's bin refinement. You can find the file here: `/<PATH>/<TO>/denovo-assembly/metawrap_50_10_bins.stats`. Be aware that these results are based on the bin refinement of the results of three binning tools and include CONCOCT.
 
 ::: {.callout-tip title="Question" appearence="simple"}
-
 **How many bins were retained after the refinement with metaWRAP? How many high-quality and medium-quality MAGs did the refinement yield following the MIMAG criteria?**
 
 Hint: You can more easily visualise tables on the terminal using the Python program `visidata`. You can open a table using `vd -f tsv /<PATH>/<TO>/denovo-assembly/metawrap_50_10_bins.stats`.  (press <kdb>ctrl</kbd>+<kbd>q</kbd> to exit). Next to separating the columns nicely, it allows you to perform a lot of operations like sorting conveniently. Check the cheat sheet [here](https://jsvine.github.io/visidata-cheat-sheet/en/).
@@ -474,7 +464,7 @@ In total, metaWRAP retained five bins, similarly to MaxBin2. Of these five bins,
 
 :::
 
-### Taxonomic assignment of contigs
+## Taxonomic assignment of contigs
 
 What should we do when we simply want to know to which taxon a certain contig most likely belongs to?
 
@@ -494,7 +484,7 @@ For each tool, we can either use pre-computed reference databases or compute our
 
 As for any task that involves the alignment of sequences against a reference database, the chosen reference database should fit the sequences you are searching for. If your reference database does not capture the diversity of your samples, you will not be able to assign a subset of the contigs. There is also a trade-off between a large reference database that contains all sequences and its memory requirement. @Wright2023 elaborated on this quite extensively when comparing Kraken2 against MetaPhlAn.
 
-While all of these tools can do the job, I typically prefer to use the program MMSeqs2 [@Steinegger2017] because it comes along with a very fast algorithm based on aminoacid sequence alignment and implements a lowest common ancestor (LCA) algorithm (@fig-denovoassembly-mmseqs2). Recently, they implemented a _taxonomy_ workflow [@Mirdita2021] that allows to efficiently assign contigs to taxons. Luckily, it comes with multiple pre-computed reference databases, such as the GTDB v207 reference database [@Parks2020], and therefore it is even more accessible for users.
+While all of these tools can do the job, I typically prefer to use the program MMSeqs2 [@Steinegger2017] because it comes along with a very fast algorithm based on amino acid sequence alignment and implements a lowest common ancestor (LCA) algorithm (@fig-denovoassembly-mmseqs2). Recently, they implemented a _taxonomy_ workflow [@Mirdita2021] that allows to efficiently assign contigs to taxons. Luckily, it comes with multiple pre-computed reference databases, such as the GTDB v207 reference database [@Parks2020], and therefore it is even more accessible for users.
 
 ![Scheme of the _taxonomy_ workflow implemented into MMSeqs2. Adapted from @Mirdita2021, Fig. 1.](assets/images/chapters/denovo-assembly/MMSeqs2_classify_Fig1.jpeg){#fig-denovoassembly-mmseqs2}
 
@@ -557,7 +547,7 @@ From the 3,523 assigned contigs, 2,013 were assigned to the rank "species", whil
 The most contigs were assigned the archael species _Halococcus morrhuae_ (n=386), followed by the bacterial species _Olsenella E sp003150175_ (n=298) and _Collinsella sp900768795_ (n=186).
 :::
 
-### Taxonomic assignment of MAGs
+## Taxonomic assignment of MAGs
 
 MMSeqs2's _taxonomy_ workflow is very useful to classify all contigs taxonomically. However, how would we determine which species we reconstructed by binning our contigs?
 
@@ -633,7 +623,7 @@ We would expect all five species to be present in our sample. All MAGs but `bin.
 
 :::
 
-### Evaluating the amount of ancient DNA damage
+## Evaluating the amount of ancient DNA damage
 
 One of the common questions that remain at this point of our analysis is whether the contigs that we assembled show evidence for the presence of ancient DNA damage. If yes, we could argue that these microbes are indeed ancient, particularly when their DNA fragment length distribution is rather short, too. 
 
@@ -667,7 +657,7 @@ From the 3,606 contigs, pyDamage inferred a q-value, i.e. a p-value corrected fo
 This reflects also on the MAGs. Although four of the five MAGs were human gut microbiome taxa, they did not show strong evidence of ancient DNA damage. This suggests that the sample is too young and is well preserved.
 :::
 
-### Annotating genomes for function
+## Annotating genomes for function
 
 The second approach on how to study biological diversity of samples using the assembly results is to compare the reconstructed genes and their functions with each other.
 
@@ -753,7 +743,7 @@ To delete the conda environment
 conda remove --name denovo-assembly --all -y
 ```
 
-### Summary
+## Summary
 
 In this practical course you have gone through all the important steps that are necessary for _de novo_ assembling ancient metagenomic sequencing data to obtain contiguous DNA sequences with little error. Furthermore, you have learned how to cluster these sequences into bins without using any references and how to refine them based on lineage-specific marker genes. For these refined bins, you have evaluated their quality regarding common standards set by the scientific community and assigned the MAGs to its most likely taxon. Finally, we learned how to infer the presence of ancient DNA damage and annotate them for RNA genes and protein-coding sequences.
 

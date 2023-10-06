@@ -27,9 +27,7 @@ There are additional software requirements for this chapter
 Please see the relevant chapter section in [Before you start](/before-you-start.qmd) before continuing with this chapter.
 :::
 
-## Practical
-
-### Preparation
+## Preparation
 
 The data and conda environment `.yaml` file for this practical session can be downloaded from here: [https://doi.org/10.5281/zenodo.6983184](https://doi.org/10.5281/zenodo.6983184). See instructions on page.
 
@@ -47,7 +45,7 @@ Load the conda environment.
 conda activate phylogenomics
 ```
 
-### Visualize the sequence alignment
+## Visualize the sequence alignment
 
 In this practical session, we will be working with an alignment produced as you learned in the practical _Genome mapping_.
 
@@ -116,7 +114,7 @@ Once you know this, can you already tell by looking at the alignment which seque
 We can easily see that the last sequence in the alignment (Y. pseudotuberculosis) contains more disagreements to the consensus. This is normal since this is the only genome not belonging to the _Y. pestis_ species: we will use it as an outgroup
 :::
 
-### Distance-based phylogeny: Neighbour Joining
+## Distance-based phylogeny: Neighbour Joining
 
 The Neighbour Joining (NJ) method is an agglomerative algorithm which can be used to derive a phylogenetic tree from a pairwise distance matrix. In essence, this method will be grouping taxa that have the shortest distance together first, and will be doing this iteratively until all the taxa/sequences included in your alignment have been placed in a tree.
 
@@ -147,7 +145,6 @@ To do that you will click on _File_, then _Export current tree (Newick)_ and cli
 As said above, we will explore own NJ tree in _FigTree_. Open the software by typing ```figtree &``` in the terminal (if you use the same terminal window as the one in which you ran mega, you might have to press ```enter``` first). Then, open the NJ tree by clicking on _File_ -> _Open_ and selecting the file with the NJ tree _NJ_tree.nwk_
 
 ![](assets/images/chapters/phylogenomics/11.png)
-
 
 Note that even though a root is displayed by default in _FigTree_, NJ trees are actually **unrooted**. We know that _Yersinia pseudotuberculosis_ (labelled here as _Y. pseudotuberculosis_) is an outgroup to _Yersinia pestis_. You can reroot the tree by selecting _Y.pseudotuberculosis_ and pressing _Reroot_.
 
@@ -181,7 +178,7 @@ Do they form a monophyletic group (a clade)?
 Yes, they form a monophyletic group. We can also say that this group of prehistoric strains form their own lineage.
 :::
 
-### Probabilistic methods: Maximum Likelihood and Bayesian inference
+## Probabilistic methods: Maximum Likelihood and Bayesian inference
 
 These are the most commonly used approach today. In general, probabilistic methods are statistical techniques that are based on models under which the observed data is generated through a stochastic process depending on a set of parameters which we want to estimate. The probability of the data given the model parameters is called the likelihood.
 
@@ -199,7 +196,7 @@ In a phylogenetic probabilistic model, the data is the sequence alignment and th
 ![](assets/images/chapters/phylogenomics/20.png)
 :::
 
-#### Maximum likelihood estimation and bootstrapping
+## Maximum likelihood estimation and bootstrapping
 
 One way we can make inferences from a probabilistic model is by finding the combination of parameters which maximises the likelihood. These parameter values are called maximum likelihood (ML) estimates. We are usually not able to compute the likelihood value for all possible combinations of parameters and have to rely on heuristic algorithms to find the maximum likelihood estimates.
 
@@ -260,7 +257,7 @@ Lastly, we will export the rooted tree from figtree: File -> Export trees -> sel
 
 ![](assets/images/chapters/phylogenomics/export_tree.png)
 
-#### Estimating a time-tree using Bayesian phylogenetics (_BEAST2_)
+## Estimating a time-tree using Bayesian phylogenetics (_BEAST2_)
 
 Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of substitutions but instead represent the time of evolution. To do so, we will use the dates of ancient genomes (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.
 
@@ -283,8 +280,6 @@ Therefore, for Bayesian inference, we need to complement our probabilistic model
 To characterize the full posterior distribution of each parameter, we would need in theory to compute the posterior probability for each possible combination of parameters. This is impossible, and we will instead use an algorithm called Markov chain Monte Carlo (MCMC) to approximate the posterior distribution. The MCMC is an algorithm which iteratively samples values of the parameters from the posterior distribution. Therefore, if the MCMC has run long enough, the (marginal) posterior distribution of the parameters can be approximated by a histogram of the sampled values.
 
 ![](assets/images/chapters/phylogenomics/25.png)
-
-##### Set up a _BEAST2_ analysis
 
 ::: {.callout-tip}
 The ["taming the beast" website](https://taming-the-beast.org/tutorials/) has great tutorials to learn setting a _BEAST2_ analysis. In particular, the "Introduction to BEAST2", "Prior selection" and "Time-stamped data" are good starts.
@@ -347,7 +342,7 @@ Once the analysis is running two files should have been created and are continuo
 
 While the analysis is running, you can start reading the next section!
 
-##### Assessing _BEAST2_ results
+### Assessing _BEAST2_ results
 
 ::: {.callout-note title="Reminder"}
 We are using an MCMC algorithm to sample the posterior distribution of parameters. If the MCMC has run long enough, we can use the sampled parameters to approximate the posterior distribution itself. Therefore, we have to check first that the MCMC chain has run long enough.
@@ -407,7 +402,7 @@ What is your mean estimate of the clock rate (ucld mean)?
 ![](assets/images/chapters/phylogenomics/beast_results_ucldMean.png)
 :::
 
-##### MCC tree
+### MCC tree
 
 Since we are working in a Bayesian framework, we do not obtain a single phylogenetic tree as with Maximum likelihood, but a large set of trees which should be representative of the posterior distribution. In contrast with mono-dimensional parameters, a tree distribution cannot be easily summarized with mean or median estimates. Instead, we need to use specific tree-summarizing techniques. One of the most popular is the maximum clade credibility (MCC) tree, which works as follow:
 
@@ -445,7 +440,7 @@ What is your estimate for the age of the most recent common ancestor of all Y. p
 ~5800 years BP (HPD 95%: ~8000-4500 years BP)
 :::
 
-#### Bonus: Temporal signal assessment
+### Bonus: Temporal signal assessment
 
 It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree (i.e. we should have done this before the actual _BEAST2_ analysis). A classic way to assess the temporal signal of a dataset is the root-to-tip regression. The rationale of the root-to-tip regression is to verify that the oldest a sequence is, the closer it should be to the root in a (rooted) substitution tree because there was less time for substitution to accumulate. In other words, their should be a correlation between sample age and distance to the root, which we can assess using a linear regression (root-to-tip regression). This can be done using the program _TempEst_:
 

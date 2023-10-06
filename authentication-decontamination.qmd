@@ -28,7 +28,7 @@ There are additional software requirements for this chapter
 Please see the relevant chapter section in [Before you start](/before-you-start.qmd) before continuing with this chapter.
 :::
 
-# Introduction
+## Introduction
 
 In ancient metagenomics we typically try to answer two questions: "Who is there?" and "How ancient?", meaning we would like to detect an organism and investigate whether this organism is ancient. There are three typical ways to identify the presence of an organism in a metagenomic sample:
 
@@ -74,7 +74,7 @@ The chapter has the following outline:
   - Similarity to expected microbiome source (microbial source tracking)
 
 
-# Simulated ancient metagenomic data
+## Simulated ancient metagenomic data
 
 In this chapter, we will use 10 pre-simulated metagenomics with [gargammel](https://academic.oup.com/bioinformatics/article/33/4/577/2608651) ancient metagenomic samples from @Pochon2022-hj. \
 
@@ -106,11 +106,11 @@ Now, after the basic data pre-processing has been done, we can proceed with vali
 
 In here you will see a range of directories, each representing different parts of this tutorial. One set of trimmed 'simulated' reads from @Pochon2022-hj in `rawdata/`.
 
-# Genomic hit confirmation
+## Genomic hit confirmation
 
 Once an organism has been detected in a sample (via alignment, classification or *de-novo* assembly), one needs to take a closer look at multiple quality metrics in order to reliably confirm that the organism is not a false-positive detection and is of ancient origin. The methods used for this purpose can be divided into modern validation and ancient-specific validation criteria. Below, we will cover both of them.
 
-## Modern validation criteria
+## Modern genomic hit validation criteria
 
 The modern validation methods aim at confirming organism presence regardless of its ancient status. The main approaches include evenness / breadth of coverage computation, assessing alignment quality, and monitoring affinity of the DNA reads to the reference genome of the potential host.
 
@@ -159,8 +159,6 @@ done
 ```
 
 :::
-
-
 
 Taxonomic k-mer-based classification of the ancient metagenomic reads can be done via KrakenUniq. However as this requires a very large database file, the results from running KrakenUniq on the 10 simulated genomes can be found in.
 
@@ -359,11 +357,11 @@ Another important way to detect reads that cross-map between related species is 
 
 In contrast, a large number of multi-allelic sites indicates that the assigned reads originate from more than one species or strain, which can result in symmetric allele frequency distributions (e.g., if two species or strains are present in equal abundance) (panel g) or asymmetric distributions (e.g., if two species or strains are present in unequal abundance) (panel h). A large number of mis-assigned reads from closely related species can result in a large number of multi-allelic sites with low frequencies of the derived allele (panel i). The situations (g-i) correspond to incorrect assignment of the reads to the reference. Please also check the corresponding "Bad alignments" IGV visualization to the right in the figure above.
 
-## Ancient-specific validation criteria
+## Ancient-specific genomic hit validation criteria
 
 In contrast to modern genomic hit validation criteria, the ancient-specific validation methods concentrate on DNA degradation and damage pattern as ultimate signs of ancient DNA. Below, we will discuss deamination profile, read length distribution and post mortem damage (PMD) scores metrics that provide good confirmation of ancient origin of the detected organism.
 
-### Ancient status
+### Degradation patterns
 
 Checking evenness of coverage and alignment quality can help us to make sure that the organism we are thinking about is really present in the metagenomic sample. However, we still need to address the question "How ancinet?". For this purpose we need to compute **deamination profile** and **read length distribution** of the aligned reads in order to prove that they demonstrate damage pattern and are sufficiently fragmented, which would be a good evidence of ancient origin of the detected organisms. 
 
@@ -437,7 +435,7 @@ pydamage analyze -w 30 -p 14 filtered.sorted.bam
 ```
 :::
 
-# Microbiome contamination correction
+## Microbiome contamination correction
 
 Modern contamination can severely bias ancient metagenomic analysis. Also, ancient contamination, i.e. entered *post-mortem*, can potentially lead to false biological interpretations. Therefore, a lot of efforts in the ancient metagenomics field are directed on establishing methodology for identification of contaminants. Among them, the use of negative (blank) control samples is perhaps the most reliable and straightforward method. Additionally, one often performs microbial source tracking for predicting environment (including contamination environment) of origin for ancient metagenomic samples.
 
