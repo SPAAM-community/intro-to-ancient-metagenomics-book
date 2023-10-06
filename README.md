@@ -1,5 +1,7 @@
 # Introduction to Ancient Metagenomics Book
 
+<img src="assets/images/cover.png" width="20%">
+
 [![DOI](https://zenodo.org/badge/637310118.svg)](https://zenodo.org/badge/latestdoi/637310118)
 
 This is the source material for the [Introduction to Ancient Metagenomics text book](https://spaam-community.github.io/intro-to-ancient-metagenomics-book/) developed for the [SPAAM Summer School: Introduction to Ancient Metagenomics](https://spaam-community.github.io/wss-summer-school/).
