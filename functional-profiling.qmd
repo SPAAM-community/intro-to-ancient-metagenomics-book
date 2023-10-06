@@ -3,28 +3,27 @@ title: Functional Profiling
 author: Irina Velsko, James A. Fellows Yates
 ---
 
-::: {.callout-warning}
+::: {.callout-important}
 This chapter has not been updated since the 2022 edition of this book.
 :::
 
 ::: {.callout-tip}
-For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the `yml` file in the following [link](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/raw/main/assets/envs/functional-profiling.yml) (right click and save as to download), and once created, activate the environment with:
+For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
+
+Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.6983188](https://doi.org/10.5281/zenodo.6983188), and unpack
 
 ```bash
-conda activate functional-profiling
+tar xvf 5c-functional-genomics.tar.gz 
+cd 5c-functional-genomics/
 ```
 
-To download the data for this chapter, please download following archive with, extract the tar, and change into the directory.
-
-For example
+You can then create the subsequently activate environment with
 
 ```bash
-wget  -P . -O functional-profiling.tar.gz https://zenodo.org/record/6983189/files/5c-functional-genomics.tar.gz
-tar -xzf functional-profiling.tar.gz
-cd functional-profiling/
+conda env create -f day5.yml
+conda activate phylogenomics-functional
 ```
 :::
-
 :::{.callout-note}
 The above conda environment _does not_ include HUMAnN3 due to conflicts with the R packages in the environment.
 
@@ -38,8 +37,6 @@ conda create -n humann3 -c bioconda humann
 :::
 
 ## Preparation
-
-
 
 Open R Studio from within the conda environment
 
@@ -72,7 +69,7 @@ Running HUMAnN3  module requires about 72 GB of memory because it has to load a 
 If you have sufficient computational memory resources, you can run the following steps to run the bin refinement yourself.
 
 We will not run HUMANn3 here as it requires very large databases and takes a long time to run, we have already prepared output for you.
-
+:::
 ::: {.callout-warning title="Example commands - do not run!" collapse="true"}
 
 ```bash
