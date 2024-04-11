@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -23,7 +23,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -85,7 +85,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -94,6 +100,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -103,25 +110,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <meta property="og:title" content="Introduction to Ancient Metagenomics - 8&nbsp; Introduction to Python and Pandas">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://www.spaam-community.org/assets/media/SPAAM-Logo-Full-Colour_ShortName.svg">
-<meta property="og:site-name" content="Introduction to Ancient Metagenomics">
+<meta property="og:site_name" content="Introduction to Ancient Metagenomics">
 </head>
 
 <body class="nav-sidebar floating">
-
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./section-useful-skills.html">Useful Skills</a></li><li class="breadcrumb-item"><a href="./python-pandas.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Introduction to Python and Pandas</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./section-useful-skills.html">Useful Skills</a></li><li class="breadcrumb-item"><a href="./python-pandas.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Introduction to Python and Pandas</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -131,7 +163,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Introduction to Ancient Metagenomics</a> 
@@ -365,7 +397,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -411,7 +443,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./section-useful-skills.html">Useful Skills</a></li><li class="breadcrumb-item"><a href="./python-pandas.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Introduction to Python and Pandas</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Introduction to Python and Pandas</span></h1>
 </div>
@@ -432,7 +464,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
+
 
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -613,7 +647,6 @@ Note
 5,6
 8,4</code></pre>
 <em>out -</em>
-
 <table class="dataframe table table-sm table-striped small" style="width:10%;margin-left:auto;margin-right:auto;dataframe">
 <tbody><tr>
 <th>
@@ -647,7 +680,6 @@ B
 4
 </td>
 </tr>
-
 </tbody></table>
 <p>Another common tabular separator are <strong>tsv</strong>, where each value is separated by a <strong>tab</strong> <code>\t</code></p>
 <pre class="{text}"><code>A\tB
@@ -671,7 +703,6 @@ Pandas function
 </div>
 <div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"../all_data.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -1737,7 +1768,6 @@ Together
 
 </tbody>
 
-
 </table>
 
 <p>
@@ -1807,7 +1837,6 @@ dtype: object</code></pre>
 <p>It has <strong>1754</strong> rows and <strong>20</strong> columns.</p>
 <p>Let’s look at the first 5 rows:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -2345,7 +2374,6 @@ Together
 
 </tbody>
 
-
 </table>
 <p>What we can see it that, unlike <strong>R</strong>, <strong>Python</strong> and in extension <strong>Pandas</strong> is 0-indexed instead of 1-indexed.</p>
 <details>
@@ -2353,7 +2381,6 @@ Together
 Question: Can you show how to do the same using bash?
 </summary>
 <div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span> head all_data.tsv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -3331,7 +3358,6 @@ Divorced
 
 </tbody>
 
-
 </table>
 </details>
 </section>
@@ -3364,7 +3390,6 @@ Z_Revenue                      11
 Name: 1, dtype: object</code></pre>
 <p>And this will take the second and third row, producing another <code>DataFrame</code>:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df.loc[<span class="dv">1</span>:<span class="dv">2</span>, :]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -3638,14 +3663,12 @@ Together
 
 </tbody>
 
-
 </table>
 <p>It’s important to understand that almost all operations on <code>DataFrames</code> are not in-place, meaning that we don’t modify the original object and would have to save the results to the same or a new variable to keep the changes.</p>
 <p>This, for example will create a new <code>DataFrame</code> of only the “Education” and “Marital_Status” columns.</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>new_df <span class="op">=</span> df.loc[:, [<span class="st">"Education"</span>, <span class="st">"Marital_Status"</span>]]</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>new_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 ’
-
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -3847,7 +3870,6 @@ Together
 
 </tbody>
 
-
 </table>
 
 <p>
@@ -3908,7 +3930,6 @@ Name: Education, Length: 1754, dtype: bool</code></pre>
 Length: 1754, dtype: bool</code></pre>
 <p>This will create a <code>Series</code> of booleans, which can then be used to subset the data to rows where the condition(s) are <strong>True</strong>:</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df[two_at_once]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -4974,7 +4995,6 @@ Single
 
 </tbody>
 
-
 </table>
 
 <p>
@@ -4982,7 +5002,6 @@ Single
 </p>
 <p>The syntax that seems more complicated and does it in one step without the extra <code>Series</code> is this:</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>df[(df[<span class="st">"Education"</span>] <span class="op">==</span> <span class="st">"Master"</span>) <span class="op">&amp;</span> (df[<span class="st">"Marital_Status"</span>] <span class="op">==</span> <span class="st">"Single"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -6048,7 +6067,6 @@ Single
 
 </tbody>
 
-
 </table>
 
 <p>
@@ -6060,7 +6078,6 @@ Single
 <h2 data-number="8.6" class="anchored" data-anchor-id="describing-a-dataframe"><span class="header-section-number">8.6</span> Describing a DataFrame</h2>
 <p>Pandas can easily create overview statistics for all numeric columns:</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -6790,7 +6807,6 @@ max
 
 </tbody>
 
-
 </table>
 
 <p>
@@ -6965,7 +6981,6 @@ Extra Task
 <h2 data-number="8.7" class="anchored" data-anchor-id="dealing-with-missing-data"><span class="header-section-number">8.7</span> Dealing with missing data</h2>
 <p>We can check for missing data for each cell like this:</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>df.isna()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -8031,7 +8046,6 @@ False
 
 </tbody>
 
-
 </table>
 
 <p>
@@ -8127,7 +8141,6 @@ Answer
 <div class="callout-body-container callout-body">
 <div class="sourceCode" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>concat_df <span class="op">=</span> pd.concat([df, df2])</span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>concat_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -9193,7 +9206,6 @@ Married
 
 </tbody>
 
-
 </table>
 
 <p>
@@ -9222,7 +9234,6 @@ Answer
 <div class="sourceCode" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>concat_df <span class="op">=</span> concat_df.drop(<span class="st">"Z_CostContact"</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>concat_df <span class="op">=</span> concat_df.drop(<span class="st">"Z_Revenue"</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>concat_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -10192,7 +10203,6 @@ Married
 
 </tbody>
 
-
 </table>
 
 <p>
@@ -10250,7 +10260,6 @@ Name: count, dtype: int64</code></pre>
 <p>We can now convert this <code>Dictionary</code> to a <code>DataFrame</code>:</p>
 <div class="sourceCode" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>education_df <span class="op">=</span> pd.DataFrame.from_dict(education_dictionary, orient<span class="op">=</span><span class="st">"index"</span>)</span>
 <span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>education_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -10332,13 +10341,11 @@ PhD
 
 </tbody>
 
-
 </table>
 <p>The resulting <code>DataFrame</code> has the Education level as index and the column 0 has the level information.</p>
 <p>We can rename the column to “Level”.</p>
 <div class="sourceCode" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>education_df <span class="op">=</span> education_df.rename(columns<span class="op">=</span>{<span class="dv">0</span>: <span class="st">"Level"</span>})</span>
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>education_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -10420,14 +10427,12 @@ PhD
 
 </tbody>
 
-
 </table>
 <p>We can now <strong>merge</strong> this new <code>education_df</code> with our previous <code>concat_df</code>.</p>
 <p>The left <code>DataFrame</code> is <code>concat_df</code> and we merge on “Education” because that’s where the Eduction information is.</p>
 <p>The right one is <code>education_df</code> and the information is in the index.</p>
 <div class="sourceCode" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>merged_df <span class="op">=</span> pd.merge(left<span class="op">=</span>concat_df, right<span class="op">=</span>education_df, left_on<span class="op">=</span><span class="st">"Education"</span>, right_index<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>merged_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 <table class="dataframe table table-sm table-striped small">
 
 <thead>
@@ -11445,7 +11450,6 @@ Married
 
 </tbody>
 
-
 </table>
 
 <p>
@@ -11470,7 +11474,7 @@ Married
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://github.com/Kevinnota/teaching_stuff/blob/main/histogram.png?raw=true" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">png</figcaption>
+<figcaption>png</figcaption>
 </figure>
 </div>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Task">
@@ -11527,7 +11531,7 @@ Answer
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://github.com/Kevinnota/teaching_stuff/blob/main/fixed_histogram.png?raw=true" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">png</figcaption>
+<figcaption>png</figcaption>
 </figure>
 </div>
 </div>
@@ -11557,7 +11561,7 @@ Name: Income, dtype: float64</code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://github.com/Kevinnota/teaching_stuff/blob/main/bar_plot.png?raw=true" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">png</figcaption>
+<figcaption>png</figcaption>
 </figure>
 </div>
 </section>
@@ -11570,7 +11574,7 @@ Name: Income, dtype: float64</code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_01.png?raw=true" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">png</figcaption>
+<figcaption>png</figcaption>
 </figure>
 </div>
 <p>You can also specify whether the axes should be on the log scale or not.</p>
@@ -11580,7 +11584,7 @@ Name: Income, dtype: float64</code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_02.png?raw=true" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">png</figcaption>
+<figcaption>png</figcaption>
 </figure>
 </div>
 </section>
@@ -11594,7 +11598,7 @@ Name: Income, dtype: float64</code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://github.com/Kevinnota/teaching_stuff/blob/main/boxplot.png?raw=true" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">png</figcaption>
+<figcaption>png</figcaption>
 </figure>
 </div>
 <div class="sourceCode" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>(ggplot(merged_df[(merged_df[<span class="st">"Year_Birth"</span>]<span class="op">&gt;</span><span class="dv">1900</span>) <span class="op">&amp;</span> (merged_df[<span class="st">"Income"</span>]<span class="op">!=</span><span class="dv">666666</span>)],</span>
@@ -11604,7 +11608,7 @@ Name: Income, dtype: float64</code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://github.com/Kevinnota/teaching_stuff/blob/main/facet_scatter.png?raw=true" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">png</figcaption>
+<figcaption>png</figcaption>
 </figure>
 </div>
 <p><strong>task</strong></p>
@@ -11685,6 +11689,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
     }
   }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
   const toggleColorMode = (alternate) => {
     // Switch the stylesheets
     const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
@@ -11751,13 +11782,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -11836,10 +11869,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/spaam-community\.github\.org\/intro-to-ancient-metagenomics-book");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -11849,8 +11899,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -11862,7 +11921,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -11906,6 +12088,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -11931,6 +12114,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -11992,12 +12201,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./r-tidyverse.html" class="pagination-link">
+      <a href="./r-tidyverse.html" class="pagination-link" aria-label="Introduction to R and the Tidyverse">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Introduction to R and the Tidyverse</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./git-github.html" class="pagination-link">
+      <a href="./git-github.html" class="pagination-link" aria-label="Introduction to Git(Hub)">
         <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introduction to Git(Hub)</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
@@ -12008,12 +12217,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">© 2023 SPAAM Community &amp; Authors with ❤️. Available under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY 4.0</a>. Source material <a href="https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book">here</a>.</div>
+    <div class="nav-footer-center">
+<p>© 2023 SPAAM Community &amp; Authors with ❤️. Available under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY 4.0</a>. Source material <a href="https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book">here</a>.</p>
+</div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

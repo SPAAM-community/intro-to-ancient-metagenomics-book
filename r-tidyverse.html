@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -23,7 +23,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -59,6 +59,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -104,7 +105,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -113,6 +120,7 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -122,25 +130,21 @@ div.csl-indent {
 
 <meta property="og:title" content="Introduction to Ancient Metagenomics - 7&nbsp; Introduction to R and the Tidyverse">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://spaam-community.github.org/intro-to-ancient-metagenomics-book/r-tidyverse_files/figure-html/unnamed-chunk-12-1.png">
-<meta property="og:site-name" content="Introduction to Ancient Metagenomics">
-<meta property="og:image:height" content="960">
-<meta property="og:image:width" content="1344">
+<meta property="og:site_name" content="Introduction to Ancient Metagenomics">
 </head>
 
 <body class="nav-sidebar floating">
-
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./section-useful-skills.html">Useful Skills</a></li><li class="breadcrumb-item"><a href="./r-tidyverse.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Introduction to R and the Tidyverse</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./section-useful-skills.html">Useful Skills</a></li><li class="breadcrumb-item"><a href="./r-tidyverse.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Introduction to R and the Tidyverse</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -150,7 +154,7 @@ div.csl-indent {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Introduction to Ancient Metagenomics</a> 
@@ -384,7 +388,7 @@ div.csl-indent {
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -447,7 +451,7 @@ div.csl-indent {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./section-useful-skills.html">Useful Skills</a></li><li class="breadcrumb-item"><a href="./r-tidyverse.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Introduction to R and the Tidyverse</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Introduction to R and the Tidyverse</span></h1>
 </div>
@@ -468,7 +472,9 @@ div.csl-indent {
   </div>
   
 
+
 </header>
+
 
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -681,7 +687,11 @@ dbl (4): id, flipper_length_mm, body_mass_g, year
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        )</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>A <code>geom_*</code> combines data (here <code>peng</code>), a geometry (here vertical, stacked bars) and a statistical transformation (here counting the number of penguins per island and species). <code>ggplot2</code> features many such geoms: A good overview is provided by this cheatsheet: <a href="https://rstudio.github.io/cheatsheets/html/data-visualization.html">https://rstudio.github.io/cheatsheets/html/data-visualization.html</a>.</p>
@@ -694,7 +704,11 @@ dbl (4): id, flipper_length_mm, body_mass_g, year
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(peng) <span class="sc">+</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> body_mass_g))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Let’s assume we had some extreme outliers in this dataset. To simulate this, we replace some random weights with extreme values.</p>
@@ -708,7 +722,11 @@ dbl (4): id, flipper_length_mm, body_mass_g, year
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(peng_out) <span class="sc">+</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> body_mass_g))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>This is not well readable, because the extreme outliers dictate the scale of the y-axis. A 50+kg penguin is a scary thought and we would probably remove these outliers, but let’s assume they are valid observation we want to include in the plot.</p>
@@ -718,7 +736,11 @@ dbl (4): id, flipper_length_mm, body_mass_g, year
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> body_mass_g)) <span class="sc">+</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_log10</span>() <span class="co"># adding the log-scale improves readability</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We will now go back to the normal dataset without the artificial outliers.</p>
@@ -731,7 +753,11 @@ dbl (4): id, flipper_length_mm, body_mass_g, year
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> body_mass_g, <span class="at">fill =</span> species)) <span class="sc">+</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">"C"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We use the <code>scale_*</code> function to select one of the visually appealing (and robust to colourblindness) viridis colour palettes (<a href="https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html">https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html</a>).</p>
@@ -744,7 +770,11 @@ dbl (4): id, flipper_length_mm, body_mass_g, year
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(peng) <span class="sc">+</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> body_mass_g, <span class="at">fill =</span> sex))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Another way to visualize more variables in one plot is to split the plot by categories into <strong>facets</strong>, so sub-plots per category.</p>
@@ -754,7 +784,11 @@ dbl (4): id, flipper_length_mm, body_mass_g, year
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> body_mass_g, <span class="at">fill =</span> sex)) <span class="sc">+</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The fill colour is therefore free again to show yet another variable, for example the year a given penguin was examined.</p>
@@ -763,7 +797,11 @@ dbl (4): id, flipper_length_mm, body_mass_g, year
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> body_mass_g, <span class="at">fill =</span> year)) <span class="sc">+</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -777,7 +815,11 @@ dbl (4): id, flipper_length_mm, body_mass_g, year
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>sex) <span class="sc">+</span></span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -790,7 +832,11 @@ dbl (4): id, flipper_length_mm, body_mass_g, year
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(peng) <span class="sc">+</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> species)) <span class="co"># bars are alphabetically ordered</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>With <code>forcats::fct_reorder</code> we can transform an input vector to a <code>factor</code>, ordered by a summary statistic (even based on another vector).</p>
@@ -806,7 +852,11 @@ dbl (4): id, flipper_length_mm, body_mass_g, year
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(peng2) <span class="sc">+</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> species_ordered)) <span class="co"># bars are ordered by size</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -838,14 +888,22 @@ Possible solutions
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars) <span class="sc">+</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> hp, <span class="at">y =</span> qsec))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars) <span class="sc">+</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> hp, <span class="at">y =</span> qsec, <span class="at">color =</span> <span class="fu">as.factor</span>(cyl)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="r-tidyverse_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -1400,11 +1458,15 @@ Possible solutions
 </section>
 <section id="switching-between-long-and-wide-data-with-pivot_longer-and-pivot_wider" class="level3" data-number="7.5.3">
 <h3 data-number="7.5.3" class="anchored" data-anchor-id="switching-between-long-and-wide-data-with-pivot_longer-and-pivot_wider"><span class="header-section-number">7.5.3</span> Switching between long and wide data with <code>pivot_longer</code> and <code>pivot_wider</code></h3>
-<p>To simplify certain analysis or plotting operations data often has to be transformed from a <strong>wide</strong> to a <strong>long</strong> format or vice versa (<a href="#fig-rtidyverse-longtowide">Figure&nbsp;<span>7.1</span></a>).</p>
-<div id="fig-rtidyverse-longtowide" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="assets/images/chapters/r-tidyverse/pivot_longer_wider.png" height="150" class="figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;7.1: Graphical representation of converting a table from a wide format (first column are categories, e.g.&nbsp;species, first row are also categories e.g., samples, and counts are in cells after first row/column. Conversion from wide to long makes the long-format so that the first columnn still has categories, but the second column becomes the column-categories from the first row, and third column has values. Converting long format back to wider shows again first row and column as categories and cells as values).</figcaption>
+<p>To simplify certain analysis or plotting operations data often has to be transformed from a <strong>wide</strong> to a <strong>long</strong> format or vice versa (<a href="#fig-rtidyverse-longtowide" class="quarto-xref">Figure&nbsp;<span>7.1</span></a>).</p>
+<div id="fig-rtidyverse-longtowide" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rtidyverse-longtowide-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/r-tidyverse/pivot_longer_wider.png" height="150" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rtidyverse-longtowide-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.1: Graphical representation of converting a table from a wide format (first column are categories, e.g.&nbsp;species, first row are also categories e.g., samples, and counts are in cells after first row/column. Conversion from wide to long makes the long-format so that the first columnn still has categories, but the second column becomes the column-categories from the first row, and third column has values. Converting long format back to wider shows again first row and column as categories and cells as values).
+</figcaption>
 </figure>
 </div>
 <ul>
@@ -1596,11 +1658,15 @@ Possible solutions
 </section>
 <section id="left-join-with-left_join" class="level3" data-number="7.6.2">
 <h3 data-number="7.6.2" class="anchored" data-anchor-id="left-join-with-left_join"><span class="header-section-number">7.6.2</span> Left join with <code>left_join</code></h3>
-<p>Take observations from x and add fitting information from y (<a href="#fig-rtidyverse-leftjoin">Figure&nbsp;<span>7.2</span></a>).</p>
-<div id="fig-rtidyverse-leftjoin" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="assets/images/chapters/r-tidyverse/left_join.png" height="150" class="figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;7.2: Graphical representation of left join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have columns A B C D. As A and B have a one to one match of values, this remains the same in the joined table. The B column between the two have a different value on the third row, and thus is lost from the second table, retaining row 3 of the first table. Column D (from the second table) has an empty value on row three, as this row was not in row 3 of the second table that column D was derived from.</figcaption>
+<p>Take observations from x and add fitting information from y (<a href="#fig-rtidyverse-leftjoin" class="quarto-xref">Figure&nbsp;<span>7.2</span></a>).</p>
+<div id="fig-rtidyverse-leftjoin" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rtidyverse-leftjoin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/r-tidyverse/left_join.png" height="150" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rtidyverse-leftjoin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.2: Graphical representation of left join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have columns A B C D. As A and B have a one to one match of values, this remains the same in the joined table. The B column between the two have a different value on the third row, and thus is lost from the second table, retaining row 3 of the first table. Column D (from the second table) has an empty value on row three, as this row was not in row 3 of the second table that column D was derived from.
+</figcaption>
 </figure>
 </div>
 <div class="cell">
@@ -1626,11 +1692,15 @@ Possible solutions
 </section>
 <section id="right-join-with-right_join" class="level3" data-number="7.6.3">
 <h3 data-number="7.6.3" class="anchored" data-anchor-id="right-join-with-right_join"><span class="header-section-number">7.6.3</span> Right join with <code>right_join</code></h3>
-<p>Take observations from y and add fitting information from x (<a href="#fig-rtidyverse-rightjoin">Figure&nbsp;<span>7.3</span></a>).</p>
-<div id="fig-rtidyverse-rightjoin" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="assets/images/chapters/r-tidyverse/right_join.png" height="150" class="figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;7.3: Graphical representation of right join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have columns A B C D. As A and B have a one to one match of values, this remains the same in the joined table. The B column between the two have a different value on the third row, and thus is lost from the first table, retaining row 3 of the second table. Column C (from the first table) has an empty value on row three, as this row was not in row 3 of the first table that column C was derived from.</figcaption>
+<p>Take observations from y and add fitting information from x (<a href="#fig-rtidyverse-rightjoin" class="quarto-xref">Figure&nbsp;<span>7.3</span></a>).</p>
+<div id="fig-rtidyverse-rightjoin" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rtidyverse-rightjoin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/r-tidyverse/right_join.png" height="150" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rtidyverse-rightjoin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.3: Graphical representation of right join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have columns A B C D. As A and B have a one to one match of values, this remains the same in the joined table. The B column between the two have a different value on the third row, and thus is lost from the first table, retaining row 3 of the second table. Column C (from the first table) has an empty value on row three, as this row was not in row 3 of the first table that column C was derived from.
+</figcaption>
 </figure>
 </div>
 <div class="cell">
@@ -1657,11 +1727,15 @@ Possible solutions
 </section>
 <section id="inner-join-with-inner_join" class="level3" data-number="7.6.4">
 <h3 data-number="7.6.4" class="anchored" data-anchor-id="inner-join-with-inner_join"><span class="header-section-number">7.6.4</span> Inner join with <code>inner_join</code></h3>
-<p>Join the overlapping observations from x and y (<a href="#fig-rtidyverse-innerjoin">Figure&nbsp;<span>7.4</span></a>).</p>
-<div id="fig-rtidyverse-innerjoin" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="assets/images/chapters/r-tidyverse/inner_join.png" height="150" class="figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;7.4: Graphical representation of inner join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have columns A B C D. Only rows from both table that have exact matches on columns A and B are retained. The third rows from both tables that had a different value in column B are lost.</figcaption>
+<p>Join the overlapping observations from x and y (<a href="#fig-rtidyverse-innerjoin" class="quarto-xref">Figure&nbsp;<span>7.4</span></a>).</p>
+<div id="fig-rtidyverse-innerjoin" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rtidyverse-innerjoin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/r-tidyverse/inner_join.png" height="150" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rtidyverse-innerjoin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.4: Graphical representation of inner join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have columns A B C D. Only rows from both table that have exact matches on columns A and B are retained. The third rows from both tables that had a different value in column B are lost.
+</figcaption>
 </figure>
 </div>
 <div class="cell">
@@ -1687,11 +1761,15 @@ Possible solutions
 </section>
 <section id="full-join-with-full_join" class="level3" data-number="7.6.5">
 <h3 data-number="7.6.5" class="anchored" data-anchor-id="full-join-with-full_join"><span class="header-section-number">7.6.5</span> Full join with <code>full_join</code></h3>
-<p>Join all observations from x and y, even if information is missing (<a href="#fig-rtidyverse-fulljoin">Figure&nbsp;<span>7.5</span></a>).</p>
-<div id="fig-rtidyverse-fulljoin" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="assets/images/chapters/r-tidyverse/inner_join.png" height="150" class="figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;7.5: Graphical representation of full join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have columns A B C D. All rows from both tables are retained, even though they do not share the same value on column B on both tables. The missing values for the two third rows (i.e., column C from the second table, and column D from the first table) are are filled with an empty cell indicated with <code>-</code>.</figcaption>
+<p>Join all observations from x and y, even if information is missing (<a href="#fig-rtidyverse-fulljoin" class="quarto-xref">Figure&nbsp;<span>7.5</span></a>).</p>
+<div id="fig-rtidyverse-fulljoin" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rtidyverse-fulljoin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/r-tidyverse/inner_join.png" height="150" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rtidyverse-fulljoin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.5: Graphical representation of full join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have columns A B C D. All rows from both tables are retained, even though they do not share the same value on column B on both tables. The missing values for the two third rows (i.e., column C from the second table, and column D from the first table) are are filled with an empty cell indicated with <code>-</code>.
+</figcaption>
 </figure>
 </div>
 <div class="cell">
@@ -1717,11 +1795,15 @@ Possible solutions
 </section>
 <section id="semi-join-with-semi_join" class="level3" data-number="7.6.6">
 <h3 data-number="7.6.6" class="anchored" data-anchor-id="semi-join-with-semi_join"><span class="header-section-number">7.6.6</span> Semi join with <code>semi_join</code></h3>
-<p>Keep every observation in x that is in y (<a href="#fig-rtidyverse-semijoin">Figure&nbsp;<span>7.6</span></a>).</p>
-<div id="fig-rtidyverse-semijoin" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="assets/images/chapters/r-tidyverse/semi_join.png" height="150" class="figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;7.6: Graphical representation of semi join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have only columns A B C. Only columns A B and C are retained in the joined table. Row three of both tables are not included as the column values in columns A and B do not match.</figcaption>
+<p>Keep every observation in x that is in y (<a href="#fig-rtidyverse-semijoin" class="quarto-xref">Figure&nbsp;<span>7.6</span></a>).</p>
+<div id="fig-rtidyverse-semijoin" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rtidyverse-semijoin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/r-tidyverse/semi_join.png" height="150" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rtidyverse-semijoin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.6: Graphical representation of semi join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have only columns A B C. Only columns A B and C are retained in the joined table. Row three of both tables are not included as the column values in columns A and B do not match.
+</figcaption>
 </figure>
 </div>
 <div class="cell">
@@ -1746,11 +1828,15 @@ Possible solutions
 </section>
 <section id="anti-join-with-anti_join" class="level3" data-number="7.6.7">
 <h3 data-number="7.6.7" class="anchored" data-anchor-id="anti-join-with-anti_join"><span class="header-section-number">7.6.7</span> Anti join with <code>anti_join</code></h3>
-<p>Keep every observation in x that is not in y (<a href="#fig-rtidyverse-antijoin">Figure&nbsp;<span>7.7</span></a>).</p>
-<div id="fig-rtidyverse-antijoin" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="assets/images/chapters/r-tidyverse/anti_join.png" height="150" class="figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;7.7: Graphical representation of anti join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have only columns A B C, and of that only row 3 of the first table. Only row three is retained from the first table as this is the only unique row present only in the first table.</figcaption>
+<p>Keep every observation in x that is not in y (<a href="#fig-rtidyverse-antijoin" class="quarto-xref">Figure&nbsp;<span>7.7</span></a>).</p>
+<div id="fig-rtidyverse-antijoin" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rtidyverse-antijoin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/r-tidyverse/anti_join.png" height="150" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rtidyverse-antijoin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.7: Graphical representation of anti join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have only columns A B C, and of that only row 3 of the first table. Only row three is retained from the first table as this is the only unique row present only in the first table.
+</figcaption>
 </figure>
 </div>
 <div class="cell">
@@ -1862,7 +1948,7 @@ Pro Tip
 </section>
 <section id="references" class="level2" data-number="7.8">
 <h2 data-number="7.8" class="anchored" data-anchor-id="references"><span class="header-section-number">7.8</span> References</h2>
-<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
 <div id="ref-Horst2020" class="csl-entry" role="listitem">
 Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data</em>. <a href="https://doi.org/10.5281/zenodo.3960218">https://doi.org/10.5281/zenodo.3960218</a>.
 </div>
@@ -1925,6 +2011,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -1993,13 +2106,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -2078,10 +2193,34 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/spaam-community\.github\.org\/intro-to-ancient-metagenomics-book");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -2091,8 +2230,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -2104,7 +2252,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -2148,6 +2419,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -2173,6 +2445,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -2230,32 +2528,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp("https:\/\/spaam-community\.github\.org\/intro-to-ancient-metagenomics-book");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // target, if specified
-          link.setAttribute("target", "_blank");
-          // default icon
-          link.classList.add("external");
-      }
-    }
 });
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./bare-bones-bash.html" class="pagination-link">
+      <a href="./bare-bones-bash.html" class="pagination-link" aria-label="Introduction to the Command Line">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Introduction to the Command Line</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./python-pandas.html" class="pagination-link">
+      <a href="./python-pandas.html" class="pagination-link" aria-label="Introduction to Python and Pandas">
         <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Introduction to Python and Pandas</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
@@ -2266,12 +2548,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">© 2023 SPAAM Community &amp; Authors with ❤️. Available under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY 4.0</a>. Source material <a href="https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book">here</a>.</div>
+    <div class="nav-footer-center">
+<p>© 2023 SPAAM Community &amp; Authors with ❤️. Available under <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC-BY 4.0</a>. Source material <a href="https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book">here</a>.</p>
+</div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 
