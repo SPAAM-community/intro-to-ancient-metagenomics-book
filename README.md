@@ -10,13 +10,42 @@ This is the source material for the [Introduction to Ancient Metagenomics text b
 
 This text book has been developed as a [Quarto](https://quarto.org/) Book, allowing for both website and PDF formats.
 
-I highly recommend installing [VS Code](https://code.visualstudio.com/) (or your [preferred text editor/IDE](https://quarto.org/docs/get-started/)) and the corresponding [Quarto extension](https://quarto.org/docs/getting-started/installation.html#vs-code-extension) for development. This allows rendering prior to pushing to GitHub, and debugging of any issues of the website view.
+It is highly recommend to use the [Gitpod environment](#gitpod) to develop new material for the textbook, as it provides a fully set up writing environment.
 
-## Locally
+If running [locally](#locally), I highly recommend installing [VS Code](https://code.visualstudio.com/) (or your [preferred text editor/IDE](https://quarto.org/docs/get-started/)) and the corresponding [Quarto extension](https://quarto.org/docs/getting-started/installation.html#vs-code-extension) for development. This allows rendering prior to pushing to GitHub, and debugging of any issues of the website view. Make sure you also install all the dependincy requirements as described in the `.gitpod.Dockerfile`
+
+### GitPod
+
+1. Fork this repository
+2. Open on [https://gitpod.io](https://gitpod.io) [^1]
+   - This may take a little bit of time to pull the docker container
+   - Once loaded, wait a minute or so until the preview of the textbook is loaded (you will see lots of text being printed in the console)
+   - To load the preview, press the 'open preview' button in the bottom right
+       ![image](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/assets/17950287/cc47d264-eb4e-4fff-94c8-a8da21e9494b)
+   - If you miss the message above, press 'Ports' in the bottom right toolbar, and click the running URL to open in a new tab
+3. Make a new branch e.g. `git switch -c new-chapter`
+4. If adding a new chapter, make a new `.qmd` file in the root directory, else edit the existing `.qmd` file of your choice
+5. Images for the chapter should go into `assets/images/chapters/`
+   - Do not place in `docs/assets/images/chapters/`!
+6. References in BibTex for the chapter should go a `references.bib` file into `assets/references/<chapter_name>.bib`
+7. Conda environment files go in `docs/assets/envs/<chapter_name>.bib`
+8. If adding a new chapter, add the `.qmd` file to the `_quarto.yml` config file in the `chapters:` scope
+9. Refresh the preview tab to check your chapter renders correctly
+8. Commit, push to GitHub, and open a PR against the `main` branch [^2]
+
+> ![WARNING]
+> Only push `.qmd`, images, `.bib` files etc! Do not push `html` `json` files etc., from the rendering!
+
+General tips:
+
+- Use the native markdown syntax for images (`![](assets/images/chapters/<your_image>.png)`)
+- For note blocks see the [Quarto docs](https://quarto.org/docs/authoring/callouts.html#callout-types)
+
+### Locally
 
 If adding a new section chapter:
 
-1. Clone this repository or open on [https://gitpod.io](https://gitpod.io) [^1]
+1. Clone this repository 
 2. Make a new branch e.g. `git switch -c new-chapter`
 3. Make a new `.qmd` file in the root directory
 4. Images for the chapter should go into `assets/images/chapters/`
@@ -30,6 +59,9 @@ If adding a new section chapter:
    ```
 
 8. Commit, push to GitHub, and open a PR against the `main` branch [^2]
+
+> ![WARNING]
+> Only push `.qmd`, images, `.bib` files etc! Do not push `html` `json` files etc., from the rendering!
 
 General tips:
 
