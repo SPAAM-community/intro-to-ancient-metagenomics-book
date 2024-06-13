@@ -4,6 +4,17 @@ author: Alexander Herbig, Alina Hiß, and Teresa Zeibig
 bibliography: assets/references/genome-mapping.bib
 ---
 
+
+One way of reconstructing genomic information from DNA sequencing reads is mapping/aligning them to a reference genome. This allows for identification of differences between the genome from your sample and the reference genome. This information can be used for example for comparative analyses such as in phylogenetics. For a detailed explanation of the read alignment problem and an overview of concepts for solving it, please see [https://doi.org/10.1146/annurev-genom-090413-025358](https://doi.org/10.1146/annurev-genom-090413-025358).
+
+In this session we will map two samples to the _Yersinia pestis_ (plague) genome using different parameter sets. We will do this "manually" in the sense that we will use all necessary commands one by one in the terminal. These commands usually run in the background when you apply DNA sequencing data processing pipelines.
+
+We will be using the Burrows-Wheeler Aligner
+(Li et al. 2009 – [http://bio-bwa.sourceforge.net](http://bio-bwa.sourceforge.net)). There are
+different algorithms implemented for different types of data (e.g. different read lengths).
+Here, we use BWA backtrack (_bwa aln_), which is suitable for Illumina sequences up to 100bp.
+Other algorithms are _bwa mem_ and _bwa sw_ for longer reads.
+
 ::: {.callout-tip}
 For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
 
@@ -21,19 +32,6 @@ conda env create -f genome-mapping.yml
 conda activate genome-mapping
 ```
 :::
-
-## Introduction 
-
-One way of reconstructing genomic information from DNA sequencing reads is mapping/aligning them to a reference genome. This allows for identification of differences between the genome from your sample and the reference genome. This information can be used for example for comparative analyses such as in phylogenetics. For a detailed explanation of the read alignment problem and an overview of concepts for solving it, please see [https://doi.org/10.1146/annurev-genom-090413-025358](https://doi.org/10.1146/annurev-genom-090413-025358).
-
-In this session we will map two samples to the _Yersinia pestis_ (plague) genome using different parameter sets. We will do this "manually" in the sense that we will use all necessary commands one by one in the terminal. These commands usually run in the background when you apply DNA sequencing data processing pipelines.
-
-We will be using the Burrows-Wheeler Aligner
-(Li et al. 2009 – [http://bio-bwa.sourceforge.net](http://bio-bwa.sourceforge.net)). There are
-different algorithms implemented for different types of data (e.g. different read lengths).
-Here, we use BWA backtrack (_bwa aln_), which is suitable for Illumina sequences up to 100bp.
-Other algorithms are _bwa mem_ and _bwa sw_ for longer reads.
-
 ## Reference Genome
 
 For mapping we need a reference genome in FASTA format. Ideally we use a genome from the same species that our data relates to or, if not available, a closely related species. The selection of the correct reference genome is highly relevant. E.g. if the chosen genome differs too much from the organism the data relates to, it might not be possible to map most of the reads.
