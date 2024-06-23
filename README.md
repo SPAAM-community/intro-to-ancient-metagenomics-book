@@ -60,7 +60,7 @@ If adding a new section chapter:
 
 8. Commit, push to GitHub, and open a PR against the `main` branch [^2]
 
-> ![WARNING]
+> [!WARNING]
 > Only push `.qmd`, images, `.bib` files etc! Do not push `html` `json` files etc., from the rendering!
 
 General tips:
