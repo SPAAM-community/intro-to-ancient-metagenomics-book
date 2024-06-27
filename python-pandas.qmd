@@ -3,13 +3,24 @@ title: Introduction to Python and Pandas
 author: Kevin Nota, Robin Warner, and Maxime Borry
 ---
 
-Over the last few years, _Python_ has gained popularity thanks to the numerous libraries (packages with pre-written functions) in the field of bioinformatics, statistical data analysis and machine learning. While a few years ago, it was often necessary to go to _R_ for performing routine data manipulation and analysis tasks, nowadays _Python_ has a vast ecosystem of libraries. Libraries exist for many different file formats that you might encounter in metagenomics, such as fasta, fastq, sam, bam, etc.
+Over the last few years, _Python_ has gained popularity thanks to the numerous libraries (packages with pre-written functions) in bioinformatics, statistical data analysis, and machine learning.
+While a few years ago, it was often necessary to go to _R_ for performing routine data manipulation and analysis tasks, nowadays _Python_ has a vast ecosystem of useful libraries for working on metagenomic data.
+Existing libraries exist for many different file formats encountered in metagenomics, such as fasta, fastq, sam, bam, etc.
+Furthermore, python is fast and extremely useful for writing programs that can be easily called from the command line like many existing tools.
 
-This tutorial/walkthrough will provide a short introduction to the a popular libraries for data analysis [pandas](https://pandas.pydata.org/). This library has functions for reading and manipulating _tabular data_ similar to the _`data.frame()`_ in _R_ together with some basic data plotting codes.
+This tutorial/walkthrough will provide a short introduction to the 
+popular libraries for data analysis [pandas](https://pandas.pydata.org/).
+This library has functions for reading and manipulating _tabular data_ similar to the _`data.frame()`_ in _R_ together with some basic data plotting.
+This will set the base for learning Python and use it for data analysis.
+
+There are many IDEs in which Python code can be written.
+For data analysis, Jupiter is powerful and popular which looks and functions similar to R markdown, where code is written in code blocks with space in text blocks for annotations.
+In this tutorial/walkthrough, we will use these notebooks for running and visualizing Python code.
 
 learning objectives:
-- Get familiar with the Python code syntax and use Jupiter Notebook for executing codes
-- Get a kickstart to utilising the endless possibilities of data analysis in Python that can be applied to your data
+
+- Get familiar with the Python code syntax and use Jupiter Notebook for executing codes.
+- Get a kickstart to utilising the endless possibilities of data analysis in Python that can be applied to your data.
 
 :::  {.callout-note} 
 This session is typically ran held in parallel to the Introduction to R and Tidyverse. Participants of the summer schools chose which to attend based on their prior experience. We recommend the [introduction to R session](r-tidyverse.qmd) if you have no experience with neither R nor Python.
@@ -36,25 +47,36 @@ conda activate python-pandas
 
 ## Working in a jupyter environment
 
-This tutorial run-through is using a [Jupyter Notebook](https://jupyter.org) for writing & executing Python code and for annotating.
+This tutorial/walkthrough is using a [Jupyter Notebook](https://jupyter.org) for writing & executing Python code and for annotating.
 
-Jupyter notebooks are convenient and have two types of cells: **Markdown** and **Code**. The **markup cell** syntax is very similar to **R markdown**. The markdown cells are used for annotating, which is important for sharing code with collaborators, reproducibility, and documentation.
+Jupyter notebooks are convenient and have two types of cells: **Markdown** and **Code**. 
+The **Markdown cell** syntax is very similar to **R markdown**. 
+The markdown cells are used for annotating, which is important for sharing code with collaborators, reproducibility, and documentation.
 
-To load, please run the following command from within the chapter's directory.
+Change the directory to the the working directory of this tutorial/walkthrough.
 
-```bash
+```{.bash eval=False}
+cd /vol/volume/python-pandas/python-pandas_lecture
+```
+
+To launch running jupyter, run the following command. This will open a browser window with jupyter running. 
+
+```{.bash eval=False}
 jupyter notebook
 ```
 
-The in the folder tree, navigate to the `python-pandas_lecture` directory, and then open the `student-notebook.ipynb`. 
+Jupyter Notebook should have a file structure with all the files from the working directory. 
+Open the `student-notebook.ipynb` notebook by clicking on it. 
+This notebook has exactly the same code as written in this book chapter and is only a support so that it's not necessary to copy and paste everything. 
+It is also possible to copy the code from this chapter into a fresh notebook file by clicking on `File` > `New` > `Notebook`. 
 
-You can then follow that notebook, which should mirror the contents of this chapter! Otherwise try making a new notebook within Jupyter `File > New > Notebook`!
-
-::: {.callout-tip}
-If you get stuck on solutions to the tasks in the Jupyter notebook, the answers should be in the corresponding 'Solutions' chapter on this page.
+::: {.callout-caution}
+If `student-notebook.ipynb` is not there, it is possible the working directory is not correct. Make sure that `pwd` returns `/vol/volume/python-pandas/python-pandas_lecture`.
 :::
 
-A few examples are shown below. For a full list of possible syntax [click here](https://www.ibm.com/docs/en/watson-studio-local/1.2.3?topic=notebooks-markdown-jupyter-cheatsheet) for a Jupyter Notebook cheat-sheet.  
+### Markdown cell syntax
+
+Here a few examples of the syntax for Markdown cells are shown, such as making words __bold__, or _itelics. For a full list of possible syntax [click here](https://www.ibm.com/docs/en/watson-studio-local/1.2.3?topic=notebooks-markdown-jupyter-cheatsheet) for a Jupyter Notebook cheat-sheet.  
 
 list of **markdown cell** examples:
 
@@ -83,18 +105,20 @@ Images
 
 - `![](https://www.spaam-community.org/assets/media/SPAAM-Logo-Full-Colour_ShortName.svg)` ![](https://www.spaam-community.org/assets/media/SPAAM-Logo-Full-Colour_ShortName.svg)
 
-\
-The **code cells** can interpret many different coding languages including Python and Bash. The syntax of the code cells is the same as the syntax of the coding languages, in our case python. 
+### code cell syntax
+
+The **code cells** can interpret many different coding languages including __Python__ and __Bash__. The syntax of the code cells is the same as the syntax of the coding languages, in our case __python__. 
 
 Below are some examples of Python **code cells** with some useful basic python functions:
 
 ::: {.callout-tip}
 ## Python function
 `print()` is a python function for printing lines in the terminal
-`print() == echo ` in bash
+
+`print()` is the same as `echo` in bash
 :::
 
-```python
+```{.python eval=False}
 print("Hello World from Python!")
 ```
 *out -* `Hello World from Python!`
@@ -161,6 +185,10 @@ A single row or column (1 dimensional data) is a `Series`.
 
 ::: {.callout-note}
 For a more in detail pandas getting started tutorial [click here](https://pandas.pydata.org/docs/getting_started/index.html#)
+:::
+
+::: {.callout-tip}
+If you get stuck on solutions to the tasks in the Jupyter notebook, the answers should be in the corresponding 'Solutions' chapter on this page.
 :::
 
 ## Reading data with Pandas
