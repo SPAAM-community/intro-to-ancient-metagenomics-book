@@ -70,19 +70,17 @@ Open the `student-notebook.ipynb` notebook by clicking on it.
 This notebook has exactly the same code as written in this book chapter and is only a support so that it's not necessary to copy and paste everything. 
 It is also possible to copy the code from this chapter into a fresh notebook file by clicking on `File` > `New` > `Notebook`. 
 
-::: {.callout-caution}
-If `student-notebook.ipynb` is not there, it is possible the working directory is not correct. Make sure that `pwd` returns `/vol/volume/python-pandas/python-pandas_lecture`.
+::: {.callout-note}
+**But  `student-notebook.ipynb` is not there**
+
+If you cannot find `student-notebook.ipynb`, it is possible the working directory is not correct. Make sure that `pwd` returns `/vol/volume/python-pandas/python-pandas_lecture`.
 :::
 
 ### Markdown cell syntax
 
-Here a few examples of the syntax for Markdown cells are shown, such as making words __bold__, or _itelics. For a full list of possible syntax [click here](https://www.ibm.com/docs/en/watson-studio-local/1.2.3?topic=notebooks-markdown-jupyter-cheatsheet) for a Jupyter Notebook cheat-sheet.  
+Here a few examples of the syntax for the Markdown cells are shown, such as making words __bold__, or _itelics_. For a more comprehensive list with syntax check out this [Jupyter Notebook cheat-sheet](https://www.ibm.com/docs/en/watson-studio-local/1.2.3?topic=notebooks-markdown-jupyter-cheatsheet).  
 
 list of **markdown cell** examples:
-
-::: {.callout-note}
-In many cases, there are multiple possible syntaxes which give the same result. We present only one way in this run-through.
-:::
 
 Text
 
@@ -99,15 +97,20 @@ Code
 
 url links
 
-- `[link](https://www.python.org/)`[link](https://www.python.org/)
+- `[link](https://www.python.org/)` : [link](https://www.python.org/)
 
 Images
 
 - `![](https://www.spaam-community.org/assets/media/SPAAM-Logo-Full-Colour_ShortName.svg)` ![](https://www.spaam-community.org/assets/media/SPAAM-Logo-Full-Colour_ShortName.svg)
 
+::: {.callout-note}
+In many cases, there are multiple syntaxes, or 'ways of doing things,' that will give the same results. For each section in this tutorial/walkthrough, one way is presented..
+:::
+
 ### code cell syntax
 
-The **code cells** can interpret many different coding languages including __Python__ and __Bash__. The syntax of the code cells is the same as the syntax of the coding languages, in our case __python__. 
+The **code cells** can interpret many different coding languages including __Python__ and __Bash__. 
+The syntax of the code cells is the same as the syntax of the coding languages, in our case __python__. 
 
 Below are some examples of Python **code cells** with some useful basic python functions:
 
@@ -118,35 +121,33 @@ Below are some examples of Python **code cells** with some useful basic python f
 `print()` is the same as `echo` in bash
 :::
 
+
+
 ```{.python eval=False}
 print("Hello World from Python!")
 ```
-*out -* `Hello World from Python!`
-
 But it can also, for example, run bash commands by adding a *!* at the start of the line.
 
-```python
+```{.python eval=False}
 ! echo "Hello World from bash!"
 ```
-*out -* `Hello World from bash!`
 
-Stings or numbers can be stored as a variable by using the *=* sign
+Stings or numbers can be stored as a variable by using the *=* sign.
 
 ```python
 i = 0
 ```
 Ones a variable is set in one **code cell** they are stored and can be accessed in other downstream **code cells**.
 
-```python
+```{.python eval=False}
 print(i)
 ```
 
 You can also print multiple things together in one `print` statement such as a number and a string:
 
-```python
+```{.python eval=True}
 print("The number is", i, "Wow!")
 ```
-*out -* `The number is 0 Wow!`
 
 ## Pandas
 ### Getting started
@@ -154,7 +155,7 @@ Pandas is a Python library used for data manipulation and analysis.
 
 We can import the library like this:
 
-```python
+```{.python eval=False}
 import pandas as pd
 ```
 
@@ -164,10 +165,9 @@ We set "pandas" to the alias "pd" because we are lazy and don't want to write th
 
 Now, we can print the current version:
 
-```python
+```{.python eval=False}
 pd.__version__
 ```
-*out -* `'2.0.1'`
 
 ### Pandas data structures
 The primary data structures in Pandas are `Series` and `DataFrame`.
@@ -175,7 +175,6 @@ The primary data structures in Pandas are `Series` and `DataFrame`.
 A `DataFrame` is a table with **columns** and **rows**. 
 
 Each **column** has a *column name* and each **row** has an *index*.
-
 
 ![](assets/images/chapters/python-pandas/01_table_dataframe.svg)
 
@@ -185,10 +184,6 @@ A single row or column (1 dimensional data) is a `Series`.
 
 ::: {.callout-note}
 For a more in detail pandas getting started tutorial [click here](https://pandas.pydata.org/docs/getting_started/index.html#)
-:::
-
-::: {.callout-tip}
-If you get stuck on solutions to the tasks in the Jupyter notebook, the answers should be in the corresponding 'Solutions' chapter on this page.
 :::
 
 ## Reading data with Pandas
@@ -203,25 +198,6 @@ A,B
 8,4
 ```
 
-*out -* 
-<table border="1" class="dataframe" style="width:10%;margin-left:auto;margin-right:auto;dataframe">
-  <tr>
-    <th></th>
-    <th>A</th>
-    <th>B</th>
-  </tr>
-  <tr>
-    <td>1</td>
-    <td>2</td>
-    <td>3</td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>3</td>
-    <td>4</td>
-  </tr>
-</table>
-
 Another common tabular separator are **tsv**, where each value is separated by a **tab** `\t`
 
 ```{text}
@@ -230,7 +206,7 @@ A\tB
 8\t4
 ```
 
->Our dataset `"all_data.tsv"` is tab separated, which Pandas can handle using the `sep` argument.
+The dataset that is used in this tutorial/walkthrough is called `"all_data.tsv"`, and is tab-separated. Pandas by default assume that the file is comma delimited, but we can change this by using the `sep` argument.
 
 ::: {.callout-tip}
 ## Pandas function
@@ -242,11 +218,26 @@ df = pd.read_csv("../all_data.tsv", sep="\t")
 df
 ```
 
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1749</th>\n      <td>9432</td>\n      <td>1977</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>666666.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>9</td>\n      <td>14</td>\n      <td>18</td>\n      <td>8</td>\n      <td>1</td>\n      <td>12</td>\n      <td>3</td>\n      <td>1</td>\n      <td>3</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1750</th>\n      <td>8372</td>\n      <td>1974</td>\n      <td>Graduation</td>\n      <td>Married</td>\n      <td>34421.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>3</td>\n      <td>7</td>\n      <td>6</td>\n      <td>2</td>\n      <td>9</td>\n      <td>1</td>\n      <td>0</td>\n      <td>2</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1751</th>\n      <td>10870</td>\n      <td>1967</td>\n      <td>Graduation</td>\n      <td>Married</td>\n      <td>61223.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>709</td>\n      <td>43</td>\n      <td>182</td>\n      <td>42</td>\n      <td>118</td>\n      <td>247</td>\n      <td>9</td>\n      <td>3</td>\n      <td>4</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1752</th>\n      <td>7270</td>\n      <td>1981</td>\n      <td>Graduation</td>\n      <td>Divorced</td>\n      <td>56981.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>908</td>\n      <td>48</td>\n      <td>217</td>\n      <td>32</td>\n      <td>12</td>\n      <td>24</td>\n      <td>2</td>\n      <td>3</td>\n      <td>13</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1753</th>\n      <td>8235</td>\n      <td>1956</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>69245.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>428</td>\n      <td>30</td>\n      <td>214</td>\n      <td>80</td>\n      <td>30</td>\n      <td>61</td>\n      <td>6</td>\n      <td>5</td>\n      <td>10</td>\n      <td>3</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>1754 rows × 20 columns</p>
+ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
+-|----|----|----------|------|-------|-|-|--|--|---|---|--|--|-|--|-|-|-|-|--
+0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|11
+1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11
+2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|3|11
+3|6182|1984|Graduation|Together|26646.0|1|0|11|4|20|10|3|5|2|0|4|6|0|3|11
+4|7446|1967|Master|Together|62513.0|0|1|520|42|98|0|42|14|6|4|10|6|0|3|11
+…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…
+1749|9432|1977|Graduation|Together|666666.0|1|0|9|14|18|8|1|12|3|1|3|6|0|3|11
+1750|8372|1974|Graduation|Married|34421.0|1|0|3|3|7|6|2|9|1|0|2|7|0|3|11
+1751|10870|1967|Graduation|Married|61223.0|0|1|709|43|182|42|118|247|9|3|4|5|0|3|11
+1752|7270|1981|Graduation|Divorced|56981.0|0|0|908|48|217|32|12|24|2|3|13|6|0|3|11
+1753|8235|1956|Master|Together|69245.0|0|1|428|30|214|80|30|61|6|5|10|3|0|3|11
+1754 rows × 20 columns
+
 
 ::: {.callout-tip}
 When you are unsure what arguments a function can take, it is possible to get a *help documentation* using `help(pd.read_csv)`
 :::
+
 
 ## Data exploration
 
@@ -526,6 +517,11 @@ Alone         2
 Absurd        2
 Name: count, dtype: int64
 ```
+
+
+::: {.callout-tip}
+If you get stuck on solutions to the tasks in the Jupyter notebook, the answers should be in the corresponding 'Solutions' chapter on this page.
+:::
 
 ::: {.callout-tip title="Task" appearance="simple"}
 
