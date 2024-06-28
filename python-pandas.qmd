@@ -47,11 +47,11 @@ conda activate python-pandas
 
 ## Working in a jupyter environment
 
-This tutorial/walkthrough is using a [Jupyter Notebook](https://jupyter.org) for writing & executing Python code and for annotating.
+This tutorial/walkthrough is using a [Jupyter Notebook](https://jupyter.org) for writing and executing Python code and for annotating.
 
-Jupyter notebooks are convenient and have two types of cells: **Markdown** and **Code**. 
+Jupyter notebooks have two types of cells: **Markdown** and **Code**. 
 The **Markdown cell** syntax is very similar to **R markdown**. 
-The markdown cells are used for annotating, which is important for sharing code with collaborators, reproducibility, and documentation.
+The markdown cells are used for annotating code, which is important for sharing work with collaborators, reproducibility, and documentation.
 
 Change the directory to the the working directory of this tutorial/walkthrough.
 
@@ -59,7 +59,7 @@ Change the directory to the the working directory of this tutorial/walkthrough.
 cd /vol/volume/python-pandas/python-pandas_lecture
 ```
 
-To launch running jupyter, run the following command. This will open a browser window with jupyter running. 
+To launch jupyter, run the following command in the terminal. This will open a browser window with jupyter running. 
 
 ```{.bash eval=False}
 jupyter notebook
@@ -67,34 +67,26 @@ jupyter notebook
 
 Jupyter Notebook should have a file structure with all the files from the working directory. 
 Open the `student-notebook.ipynb` notebook by clicking on it. 
-This notebook has exactly the same code as written in this book chapter and is only a support so that it's not necessary to copy and paste everything. 
+This notebook has exactly the same code as written in this book chapter and is only a support so that it is not necessary to copy and paste the code. It is off course also possible to copy the code from this chapter into a fresh notebook file by clicking on:
+ `File` > `New` > `Notebook`. 
+
+::: {.callout-note collapse="true" title="**Note If the notebook is not there**"}
+If you cannot find `student-notebook.ipynb`, it is possible the working directory is not correct. Make sure that `pwd` returns `/vol/volume/python-pandas/python-pandas_lecture`.
+:::
 
 ### Creating and running cells
 
-There are multiple ways of making a new cell, such as typing the letter `b`, or using the cursor on the bottom of the page that says `click to add cell`. 
-The cells can be assigned to `code` or `markdown`.
-
-Code cells are always in edit mode.
+There are multiple ways of making a new cells in jupyter, such as typing the letter `b`, or using the cursor on the bottom of the page that says _`click to add cell`_. 
+The cells can be assigned to `code` or `markdown` using the drop down menu at the top.
+Code cells are always in edit mode. 
+Code can be run with pressing `Shift + Enter` or click on the `▶` botton.
 To make an markdown cell active, double-click on a markdown cell, it switches from display mode to edit mode. 
-To leave the editing mode by running the cell `Shift + Enter` or press the `▶` botton.
+To leave the editing mode by running the cell.
 
-
-::: {.callout-note}
-**Clear your code cells**
-
+::: {.callout-tip collapse="true" title="**Clear your code cells**"}
 Before starting it might be nice to clear the output of all code cells, by clicking on:
 
  `edit` > `Clear outputs of All Cells`
-:::
-
-It is also possible to copy the code from this chapter into a fresh notebook file by clicking on:
-
- `File` > `New` > `Notebook`. 
-
-::: {.callout-note}
-**Notebook is not there**
-
-If you cannot find `student-notebook.ipynb`, it is possible the working directory is not correct. Make sure that `pwd` returns `/vol/volume/python-pandas/python-pandas_lecture`.
 :::
 
 ### Markdown cell syntax
@@ -122,9 +114,7 @@ Images
 
 - `![](https://www.spaam-community.org/assets/media/SPAAM-Logo-Full-Colour_ShortName.svg)` ![](https://www.spaam-community.org/assets/media/SPAAM-Logo-Full-Colour_ShortName.svg)
 
-::: {.callout-note}
-**All roads lead to Rome**
-
+::: {.callout-note collapse="true" title="**All roads lead to Rome**"}
 In many cases, there are multiple syntaxes, or 'ways of doing things,' that will give the same results. For each section in this tutorial/walkthrough, one way is presented.
 :::
 
@@ -135,14 +125,11 @@ The syntax of the code cells is the same as the syntax of the coding languages, 
 
 Below are some examples of Python **code cells** with some useful basic python functions:
 
-::: {.callout-tip}
-## Python function
+::: {.callout-tip collapse="true" title="**Python function print()**"}
 `print()` is a python function for printing lines in the terminal
 
 `print()` is the same as `echo` in bash
 :::
-
-
 
 ```{.python eval=False}
 print("Hello World from Python!")
@@ -150,8 +137,8 @@ print("Hello World from Python!")
 ```
 Hello World from Python!
 ```
-
-But it can also, for example, run bash commands by adding a *!* at the start of the line.
+::: {.callout-note collapse="true" title="**Running bash code in Jupyter**"}
+It is also possible to run bash commands in Jupyter, by adding a *!* at the start of the line.
 
 ```{.python eval=False}
 ! echo "Hello World from bash!"
@@ -159,6 +146,8 @@ But it can also, for example, run bash commands by adding a *!* at the start of 
 ```
 Hello World from bash!
 ```
+:::
+
 
 Stings or numbers can be stored as a variable by using the *=* sign.
 
@@ -193,8 +182,8 @@ We can import the library like this:
 import pandas as pd
 ```
 
-::: {.callout-note}
-We set "pandas" to the alias "pd" because we are lazy and don't want to write the full word too many times.
+::: {.callout-note collapse="true" title="**why import as pd**"}
+We set "pandas" to the alias "pd" because we are lazy and do not want to write the full word too many times.
 :::
 
 Now, we can print the current version:
@@ -216,7 +205,7 @@ A single row or column (1 dimensional data) is a `Series`.
 
 ![](assets/images/chapters/python-pandas/01_table_series.svg)
 
-::: {.callout-note}
+::: {.callout-note collapse="true" title="**More details on pandas**"}
 For a more in detail pandas getting started tutorial [click here](https://pandas.pydata.org/docs/getting_started/index.html#)
 :::
 
@@ -242,12 +231,11 @@ A\tB
 
 The dataset that is used in this tutorial/walkthrough is called `"all_data.tsv"`, and is tab-separated. Pandas by default assume that the file is comma delimited, but we can change this by using the `sep= ` argument.
 
-::: {.callout-tip}
-## Pandas function
+::: {.callout-tip collapse="true" title="**Pandas function pd.read_csv()**"}}
 `pd.read_csv()` is the pandas function to read in tabular tables. The `sep=` can be specified argument, `sep=,` is the default.
 :::
 
-```python
+```{.python eval=False}
 df = pd.read_csv("../all_data.tsv", sep="\t")
 df
 ```
@@ -267,21 +255,39 @@ ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruit
 1753|8235|1956|Master|Together|69245.0|0|1|428|30|214|80|30|61|6|5|10|3|0|3|11
 1754 rows × 20 columns
 
-
-::: {.callout-tip}
-**Help**
+::: {.callout-tip collapse="true" title="**Help**}
 When you are unsure what arguments a function can take, it is possible to get a *help documentation* using `help(pd.read_csv)`
 :::
 
+In most cases, data will be read in with the `pd.read_csv()` function, however, internal Python data structures can also be transformed into a pandas data frame. 
+For example using a nested list, were each row in the datafram is a list `[]`.
+
+```{.python eval=False}
+df = pd.Dataframe([[5,6], [8,4]], colums=["A", "B"])
+df
+```
+Another usful transformation is from a [dictionary](https://docs.python.org/3/tutorial/datastructures.html#dictionaries) to pd.Dataframe. 
+
+```{.python eval=False}
+table_data = {'A' : [5, 6]
+              'B' : [8, 4] }
+
+df = pd.DataFrame(data)
+df
+```
+
+There are many ways to [turn a DataFrame back into a dictonary](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_dict.html#pandas.DataFrame.to_dict), which might be very handy for certain purposes.
+
 ## Data exploration
 
-The data for this tutorial/walkthrough is from a customer personality analysis of a company trying to better understand how to modify their product catalogue. Here is the [link to the original source](https://www.kaggle.com/datasets/imakash3011/customer-personality-analysis) for more information. 
+The data for this tutorial/walkthrough is from a customer personality analysis of a company trying to better understand how to modify their product catalogue. 
+Here is the [link to the original source](https://www.kaggle.com/datasets/imakash3011/customer-personality-analysis) for more information. 
 
 ### Columns
 
 The command below prints all the column names.
 
-```python
+```python{.python eval=False}
 df.columns
 ```
 ```
@@ -299,7 +305,7 @@ We can also list their respective data types.
 - `float64` are floating point numbers, also called `double` in other languages
 - `object` are Python objects, which are strings in this case
 
-```python
+```{.python eval=False}
 df.dtypes
 ```
 ```
@@ -329,7 +335,7 @@ dtype: object
 
 What is the size of our `DataFrame`
 
-```python
+```{.python eval=False}
 df.shape
 ```
 ```
@@ -339,7 +345,7 @@ It has **1754** rows and **20** columns.
 
 Let's look at the first 5 rows:
 
-```python
+```{.python eval=False}
 df.head()
 ```
 
@@ -353,16 +359,6 @@ ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruit
 
 What we can see it that, unlike **R**, **Python** and in extension **Pandas** is 0-indexed instead of 1-indexed.
 
-<details>
-  <summary markdown="span">Question: Can you show how to do the same using bash?</summary>
-
-```python
-! head all_data.tsv
-```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>5</th>\n      <td>965</td>\n      <td>1971</td>\n      <td>Graduation</td>\n      <td>Divorced</td>\n      <td>55635.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>235</td>\n      <td>65</td>\n      <td>164</td>\n      <td>50</td>\n      <td>49</td>\n      <td>27</td>\n      <td>7</td>\n      <td>3</td>\n      <td>7</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>6</th>\n      <td>1994</td>\n      <td>1983</td>\n      <td>Graduation</td>\n      <td>Married</td>\n      <td>NaN</td>\n      <td>1</td>\n      <td>0</td>\n      <td>5</td>\n      <td>5</td>\n      <td>6</td>\n      <td>0</td>\n      <td>2</td>\n      <td>1</td>\n      <td>1</td>\n      <td>0</td>\n      <td>2</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>7</th>\n      <td>387</td>\n      <td>1976</td>\n      <td>Basic</td>\n      <td>Married</td>\n      <td>7500.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>6</td>\n      <td>16</td>\n      <td>11</td>\n      <td>11</td>\n      <td>1</td>\n      <td>16</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>8</th>\n      <td>2125</td>\n      <td>1959</td>\n      <td>Graduation</td>\n      <td>Divorced</td>\n      <td>63033.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>194</td>\n      <td>61</td>\n      <td>480</td>\n      <td>225</td>\n      <td>112</td>\n      <td>30</td>\n      <td>3</td>\n      <td>4</td>\n      <td>8</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>9</th>\n      <td>8180</td>\n      <td>1952</td>\n      <td>Master</td>\n      <td>Divorced</td>\n      <td>59354.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>233</td>\n      <td>2</td>\n      <td>53</td>\n      <td>3</td>\n      <td>5</td>\n      <td>14</td>\n      <td>6</td>\n      <td>1</td>\n      <td>5</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>
-
-</details>
-
 ### Accessing rows and columns
 
 We can access parts of the data in `DataFrames` in different ways.
@@ -371,7 +367,8 @@ The first method is sub-setting the rows using the index.
 
 This will take only the second row and all columns, producing a `Series`:
 
-```python
+```{.python eval=False}
+df.head()
 df.loc[1, :]
 ```
 ```
@@ -400,25 +397,45 @@ Name: 1, dtype: object
 
 And this will take the second and third row, producing another `DataFrame`:
 
-```python
+```{.python eval=False}
+df.head()
 df.loc[1:2, :]
 ```
 
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>
+ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
+-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-
+1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11
+2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|3|11
 
-It's important to understand that almost all operations on `DataFrames` are not in-place, meaning that we don't modify the original object and would have to save the results to the same or a new variable to keep the changes.
+It is important to understand that almost all operations on `DataFrames` are not in place, meaning that the dataframe is not modified.
+To keep the changes, the dataframe has to be actively stored using the same name or a new variable.
 
-This, for example will create a new `DataFrame` of only the "Education" and "Marital_Status" columns.
+This, for example, will create a new `DataFrame` of only the "Education" and "Marital_Status" columns.
 
-```python
+```{.python eval=False}
+df.head()
 new_df = df.loc[:, ["Education", "Marital_Status"]]
 new_df
 ```
-'<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>Graduation</td>\n      <td>Single</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>Graduation</td>\n      <td>Single</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>Graduation</td>\n      <td>Together</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>Graduation</td>\n      <td>Together</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>Master</td>\n      <td>Together</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1749</th>\n      <td>Graduation</td>\n      <td>Together</td>\n    </tr>\n    <tr>\n      <th>1750</th>\n      <td>Graduation</td>\n      <td>Married</td>\n    </tr>\n    <tr>\n      <th>1751</th>\n      <td>Graduation</td>\n      <td>Married</td>\n    </tr>\n    <tr>\n      <th>1752</th>\n      <td>Graduation</td>\n      <td>Divorced</td>\n    </tr>\n    <tr>\n      <th>1753</th>\n      <td>Master</td>\n      <td>Together</td>\n    </tr>\n  </tbody>\n</table>\n<p>1754 rows × 2 columns</p>'
+
+|Education|Marital_Status
+-|-|-
+0|Graduation|Single
+1|Graduation|Single
+2|Graduation|Together
+3|Graduation|Together
+4|Master|Together
+…|…|…
+1749|Graduation|Together
+1750|Graduation|Married
+1751|Graduation|Married
+1752|Graduation|Divorced
+1753|Master|Together
+1754 rows × 2 columns
 
 Selecting only one column by name:
 
-```python
+```{.python eval=False}
 df["Year_Birth"]
 ```
 ```
@@ -439,21 +456,20 @@ We can also remove columns from the `DataFrame`.
 
 In this case, we want to remove the columns `Z_CostContact` and `Z_Revenue` and keep those changes.
 
-```python
+```{.python eval=False}
 df = df.drop("Z_CostContact", axis=1)
 df = df.drop("Z_Revenue", axis=1)
 ```
 
 ### Conditional subsetting
 
-We can more specifically look at subsets of the data we might be interested in.
+To look more specifically at a subset of the data we can set certain conditions.
 
-This subsetting is a bit weird in the syntax at first but hopefully makes more sense when we go through it step by step.
+This subsetting syntax is at first glance complicated but hopefully makes sense when going through it step by step.
 
-We can, for example, test each string in the column `Education` if it is equal to `PhD`:
+If interested only in the individuals in the table that graduated, we can test each string in the column `Education` if it is equal to `Graduation` which will return `series` with Booleans values `True` or `false`:
 
-
-```python
+```{.python eval=False}
 education_is_grad = (df["Education"] == "Graduation")
 education_is_grad
 ```
@@ -472,9 +488,25 @@ education_is_grad
 Name: Education, Length: 1754, dtype: bool
 ```
 
-We can also check for multiple conditions at once:
+Can you imagine an easy way to count the number of True's in this series?
+::: {.callout-tip collapse="true" title="Answer"}
+False is assigned a count value of 0, and True 1.
+The python fuction sum() can sum up integers.
+:::
+::: {.callout-note collapse="true" title="Answer"}
 
-```python
+```{.python eval=False} 
+sum(education_is_grad)
+```
+```
+1127
+```
+:::
+
+In many cases, there are multiple conditions that can be if interest.
+This can be done by combining multiple statements with `&`
+
+```{.python eval=False}
 two_at_once = (df["Education"] == "Graduation") & (df["Marital_Status"] == "Single")
 two_at_once
 ```
@@ -492,41 +524,92 @@ two_at_once
 1753    False
 Length: 1754, dtype: bool
 ```
+How many Single people are there in the table that also greduated? And how many are single?
+::: {.callout-note collapse="true" title="Answer"}
 
-This will create a `Series` of booleans, which can then be used to subset the data to rows where the condition(s) are **True**:
+```{.python eval=False} 
+sum(two_at_once)
+```
+```
+252
+```
+```{.python eval=False} 
+sum(df["Marital_Status"] == "Single")
+```
+```
+382
+```
+:::
 
-```python
+These `Series` of Booleans can be used to subset the dataframe to rows where the condition(s) are **True**:
+
+```{.python eval=False} 
 df[two_at_once]
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>18</th>\n      <td>7892</td>\n      <td>1969</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>18589.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>6</td>\n      <td>4</td>\n      <td>25</td>\n      <td>15</td>\n      <td>12</td>\n      <td>13</td>\n      <td>2</td>\n      <td>1</td>\n      <td>3</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>20</th>\n      <td>5255</td>\n      <td>1986</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>NaN</td>\n      <td>1</td>\n      <td>0</td>\n      <td>5</td>\n      <td>1</td>\n      <td>3</td>\n      <td>3</td>\n      <td>263</td>\n      <td>362</td>\n      <td>27</td>\n      <td>0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>33</th>\n      <td>1371</td>\n      <td>1976</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>79941.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>123</td>\n      <td>164</td>\n      <td>266</td>\n      <td>227</td>\n      <td>30</td>\n      <td>174</td>\n      <td>2</td>\n      <td>4</td>\n      <td>9</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1720</th>\n      <td>10968</td>\n      <td>1969</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>57731.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>266</td>\n      <td>21</td>\n      <td>300</td>\n      <td>65</td>\n      <td>8</td>\n      <td>44</td>\n      <td>8</td>\n      <td>8</td>\n      <td>6</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1723</th>\n      <td>5959</td>\n      <td>1968</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>35893.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>158</td>\n      <td>0</td>\n      <td>23</td>\n      <td>0</td>\n      <td>0</td>\n      <td>18</td>\n      <td>3</td>\n      <td>1</td>\n      <td>5</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1743</th>\n      <td>4201</td>\n      <td>1962</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>57967.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>229</td>\n      <td>7</td>\n      <td>137</td>\n      <td>4</td>\n      <td>0</td>\n      <td>91</td>\n      <td>4</td>\n      <td>2</td>\n      <td>8</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1746</th>\n      <td>7004</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>11012.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>24</td>\n      <td>3</td>\n      <td>26</td>\n      <td>7</td>\n      <td>1</td>\n      <td>23</td>\n      <td>3</td>\n      <td>1</td>\n      <td>2</td>\n      <td>9</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1748</th>\n      <td>8080</td>\n      <td>1986</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>26816.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>5</td>\n      <td>1</td>\n      <td>6</td>\n      <td>3</td>\n      <td>4</td>\n      <td>3</td>\n      <td>0</td>\n      <td>0</td>\n      <td>3</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>252 rows × 20 columns</p>
 
-The syntax that seems more complicated and does it in one step without the extra `Series` is this:
+ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
+-|----|----|----------|------|-------|-|-|---|--|---|---|--|--|-|--|-|-|-|-|--
+0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|11
+1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11
+18|7892|1969|Graduation|Single|18589.0|0|0|6|4|25|15|12|13|2|1|3|7|0|3|11
+20|5255|1986|Graduation|Single|NaN|1|0|5|1|3|3|263|362|27|0|0|1|0|3|11
+33|1371|1976|Graduation|Single|79941.0|0|0|123|164|266|227|30|174|2|4|9|1|0|3|11
+…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…
+1720|10968|1969|Graduation|Single|57731.0|0|1|266|21|300|65|8|44|8|8|6|6|0|3|11
+1723|5959|1968|Graduation|Single|35893.0|1|1|158|0|23|0|0|18|3|1|5|8|0|3|11
+1743|4201|1962|Graduation|Single|57967.0|0|1|229|7|137|4|0|91|4|2|8|5|0|3|11
+1746|7004|1984|Graduation|Single|11012.0|1|0|24|3|26|7|1|23|3|1|2|9|0|3|11
+1748|8080|1986|Graduation|Single|26816.0|0|0|5|1|6|3|4|3|0|0|3|4|0|3|11
+252 rows × 20 columns
+
+It is not actually necessary to create a `series` every time for subsetting the table and it can be done in one go by combining the conditions within _`df[]`_.
 
 ```python
 df[(df["Education"] == "Master") & (df["Marital_Status"] == "Single")]
 ```
-
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>26</th>\n      <td>10738</td>\n      <td>1951</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>49389.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>40</td>\n      <td>0</td>\n      <td>19</td>\n      <td>2</td>\n      <td>1</td>\n      <td>3</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>46</th>\n      <td>6853</td>\n      <td>1982</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>75777.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>712</td>\n      <td>26</td>\n      <td>538</td>\n      <td>69</td>\n      <td>13</td>\n      <td>80</td>\n      <td>3</td>\n      <td>6</td>\n      <td>11</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>76</th>\n      <td>11178</td>\n      <td>1972</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>42394.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>15</td>\n      <td>2</td>\n      <td>10</td>\n      <td>0</td>\n      <td>1</td>\n      <td>4</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>98</th>\n      <td>6205</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>32557.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>34</td>\n      <td>3</td>\n      <td>29</td>\n      <td>0</td>\n      <td>4</td>\n      <td>10</td>\n      <td>2</td>\n      <td>1</td>\n      <td>3</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>110</th>\n      <td>821</td>\n      <td>1992</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>92859.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>962</td>\n      <td>61</td>\n      <td>921</td>\n      <td>52</td>\n      <td>61</td>\n      <td>20</td>\n      <td>5</td>\n      <td>4</td>\n      <td>12</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1690</th>\n      <td>3520</td>\n      <td>1990</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>91172.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>162</td>\n      <td>28</td>\n      <td>818</td>\n      <td>0</td>\n      <td>28</td>\n      <td>56</td>\n      <td>4</td>\n      <td>3</td>\n      <td>7</td>\n      <td>3</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1709</th>\n      <td>4418</td>\n      <td>1983</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>89616.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>671</td>\n      <td>47</td>\n      <td>655</td>\n      <td>145</td>\n      <td>111</td>\n      <td>15</td>\n      <td>7</td>\n      <td>5</td>\n      <td>12</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1714</th>\n      <td>2980</td>\n      <td>1952</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>8820.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>12</td>\n      <td>0</td>\n      <td>13</td>\n      <td>4</td>\n      <td>2</td>\n      <td>4</td>\n      <td>3</td>\n      <td>0</td>\n      <td>3</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1738</th>\n      <td>7366</td>\n      <td>1982</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>75777.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>712</td>\n      <td>26</td>\n      <td>538</td>\n      <td>69</td>\n      <td>13</td>\n      <td>80</td>\n      <td>3</td>\n      <td>6</td>\n      <td>11</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1747</th>\n      <td>9817</td>\n      <td>1970</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>44802.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>853</td>\n      <td>10</td>\n      <td>143</td>\n      <td>13</td>\n      <td>10</td>\n      <td>20</td>\n      <td>9</td>\n      <td>4</td>\n      <td>12</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>75 rows × 20 columns</p>
-
+|ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
+-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-
+26|10738|1951|Master|Single|49389.0|1|1|40|0|19|2|1|3|2|0|3|7|0|3|11
+46|6853|1982|Master|Single|75777.0|0|0|712|26|538|69|13|80|3|6|11|1|0|3|11
+76|11178|1972|Master|Single|42394.0|1|0|15|2|10|0|1|4|1|0|3|7|0|3|11
+98|6205|1967|Master|Single|32557.0|1|0|34|3|29|0|4|10|2|1|3|5|0|3|11
+110|821|1992|Master|Single|92859.0|0|0|962|61|921|52|61|20|5|4|12|2|0|3|11
+…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…
+1690|3520|1990|Master|Single|91172.0|0|0|162|28|818|0|28|56|4|3|7|3|0|3|11
+1709|4418|1983|Master|Single|89616.0|0|0|671|47|655|145|111|15|7|5|12|2|0|3|11
+1714|2980|1952|Master|Single|8820.0|1|1|12|0|13|4|2|4|3|0|3|8|0|3|11
+1738|7366|1982|Master|Single|75777.0|0|0|712|26|538|69|13|80|3|6|11|1|0|3|11
+1747|9817|1970|Master|Single|44802.0|0|0|853|10|143|13|10|20|9|4|12|8|0|3|11
+75 rows × 20 columns
 
 ## Describing a DataFrame
 
-Pandas can easily create overview statistics for all numeric columns:
+Sometimes is is nice to get a quick overview of the data in a table, such as `means` and `counts`. Pandas has a native function to do just that, it will output a `count`, `mean`, `standard deviation`, `minimum`, `25th percentile (Q1)`, `median (50th percentile or Q2)`, `75th percentile (Q3)`, and `maximum` for each numeric columns.
 
-```python
+```{.python eval=False} 
 df.describe()
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>count</th>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1735.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.0</td>\n      <td>1754.0</td>\n    </tr>\n    <tr>\n      <th>mean</th>\n      <td>5584.696123</td>\n      <td>1969.571266</td>\n      <td>51166.578098</td>\n      <td>0.456100</td>\n      <td>0.480616</td>\n      <td>276.072406</td>\n      <td>28.034778</td>\n      <td>166.492018</td>\n      <td>40.517104</td>\n      <td>28.958381</td>\n      <td>47.266819</td>\n      <td>3.990878</td>\n      <td>2.576967</td>\n      <td>5.714937</td>\n      <td>5.332383</td>\n      <td>0.011403</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>std</th>\n      <td>3254.655979</td>\n      <td>11.876614</td>\n      <td>26200.419179</td>\n      <td>0.537854</td>\n      <td>0.536112</td>\n      <td>314.604735</td>\n      <td>41.348883</td>\n      <td>225.561694</td>\n      <td>57.412986</td>\n      <td>42.830660</td>\n      <td>53.885647</td>\n      <td>2.708278</td>\n      <td>2.848335</td>\n      <td>3.231465</td>\n      <td>2.380183</td>\n      <td>0.106202</td>\n      <td>0.0</td>\n      <td>0.0</td>\n    </tr>\n    <tr>\n      <th>min</th>\n      <td>0.000000</td>\n      <td>1893.000000</td>\n      <td>1730.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>25%</th>\n      <td>2802.500000</td>\n      <td>1960.000000</td>\n      <td>33574.500000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>19.000000</td>\n      <td>2.000000</td>\n      <td>15.000000</td>\n      <td>3.000000</td>\n      <td>2.000000</td>\n      <td>10.000000</td>\n      <td>2.000000</td>\n      <td>0.000000</td>\n      <td>3.000000</td>\n      <td>3.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>50%</th>\n      <td>5468.000000</td>\n      <td>1971.000000</td>\n      <td>49912.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>160.500000</td>\n      <td>9.000000</td>\n      <td>66.000000</td>\n      <td>13.000000</td>\n      <td>9.000000</td>\n      <td>27.000000</td>\n      <td>3.000000</td>\n      <td>1.000000</td>\n      <td>5.000000</td>\n      <td>6.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>75%</th>\n      <td>8441.250000</td>\n      <td>1978.000000</td>\n      <td>68130.000000</td>\n      <td>1.000000</td>\n      <td>1.000000</td>\n      <td>454.000000</td>\n      <td>35.000000</td>\n      <td>232.000000</td>\n      <td>53.500000</td>\n      <td>35.000000</td>\n      <td>63.000000</td>\n      <td>6.000000</td>\n      <td>4.000000</td>\n      <td>8.000000</td>\n      <td>7.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>max</th>\n      <td>11191.000000</td>\n      <td>1996.000000</td>\n      <td>666666.000000</td>\n      <td>2.000000</td>\n      <td>2.000000</td>\n      <td>1492.000000</td>\n      <td>199.000000</td>\n      <td>1725.000000</td>\n      <td>259.000000</td>\n      <td>263.000000</td>\n      <td>362.000000</td>\n      <td>27.000000</td>\n      <td>28.000000</td>\n      <td>13.000000</td>\n      <td>20.000000</td>\n      <td>1.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n  </tbody>\n</table>\n<p>8 rows × 18 columns</p>
+|ID|Year_Birth|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
+-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-
+count|1754.000000|1754.000000|1735.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.0|1754.0
+mean|5584.696123|1969.571266|51166.578098|0.456100|0.480616|276.072406|28.034778|166.492018|40.517104|28.958381|47.266819|3.990878|2.576967|5.714937|5.332383|0.011403|3.0|11.0
+std|3254.655979|11.876614|26200.419179|0.537854|0.536112|314.604735|41.348883|225.561694|57.412986|42.830660|53.885647|2.708278|2.848335|3.231465|2.380183|0.106202|0.0|0.0
+min|0.000000|1893.000000|1730.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|3.0|11.0
+25%|2802.500000|1960.000000|33574.500000|0.000000|0.000000|19.000000|2.000000|15.000000|3.000000|2.000000|10.000000|2.000000|0.000000|3.000000|3.000000|0.000000|3.0|11.0
+50%|5468.000000|1971.000000|49912.000000|0.000000|0.000000|160.500000|9.000000|66.000000|13.000000|9.000000|27.000000|3.000000|1.000000|5.000000|6.000000|0.000000|3.0|11.0
+75%|8441.250000|1978.000000|68130.000000|1.000000|1.000000|454.000000|35.000000|232.000000|53.500000|35.000000|63.000000|6.000000|4.000000|8.000000|7.000000|0.000000|3.0|11.0
+max|11191.000000|1996.000000|666666.000000|2.000000|2.000000|1492.000000|199.000000|1725.000000|259.000000|263.000000|362.000000|27.000000|28.000000|13.000000|20.000000|1.000000|3.0|11.0
+8 rows × 18 columns
 
-You can also directly calculate the relevant statistics on columns you are interested in:
+You can also directly calculate the relevant statistics on columns you are interested in
 
-```python
+```{.python eval=False} 
 df["MntWines"].max()
 ```
 ```
 1492
 ```
-```python
+```{.python eval=False} 
 df[["Kidhome", "Teenhome"]].mean()
 ```
 ```
@@ -537,14 +620,14 @@ dtype: float64
 
 For non-numeric columns, you can get the represented values or their counts:
 
-```python
+```{.python eval=False} 
 df["Education"].unique()
 ```
 ```
 array(['Graduation', 'Master', 'Basic', '2n Cycle'], dtype=object)
 ```
 
-```python
+```{.python eval=False} 
 df["Marital_Status"].value_counts()
 ```
 ```
