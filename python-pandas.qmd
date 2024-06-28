@@ -68,10 +68,31 @@ jupyter notebook
 Jupyter Notebook should have a file structure with all the files from the working directory. 
 Open the `student-notebook.ipynb` notebook by clicking on it. 
 This notebook has exactly the same code as written in this book chapter and is only a support so that it's not necessary to copy and paste everything. 
-It is also possible to copy the code from this chapter into a fresh notebook file by clicking on `File` > `New` > `Notebook`. 
+
+### Creating and running cells
+
+There are multiple ways of making a new cell, such as typing the letter `b`, or using the cursor on the bottom of the page that says `click to add cell`. 
+The cells can be assigned to `code` or `markdown`.
+
+Code cells are always in edit mode.
+To make an markdown cell active, double-click on a markdown cell, it switches from display mode to edit mode. 
+To leave the editing mode by running the cell `Shift + Enter` or press the `▶` botton.
+
 
 ::: {.callout-note}
-**But  `student-notebook.ipynb` is not there**
+**Clear your code cells**
+
+Before starting it might be nice to clear the output of all code cells, by clicking on:
+
+ `edit` > `Clear outputs of All Cells`
+:::
+
+It is also possible to copy the code from this chapter into a fresh notebook file by clicking on:
+
+ `File` > `New` > `Notebook`. 
+
+::: {.callout-note}
+**Notebook is not there**
 
 If you cannot find `student-notebook.ipynb`, it is possible the working directory is not correct. Make sure that `pwd` returns `/vol/volume/python-pandas/python-pandas_lecture`.
 :::
@@ -81,8 +102,6 @@ If you cannot find `student-notebook.ipynb`, it is possible the working director
 Here a few examples of the syntax for the Markdown cells are shown, such as making words __bold__, or _itelics_. For a more comprehensive list with syntax check out this [Jupyter Notebook cheat-sheet](https://www.ibm.com/docs/en/watson-studio-local/1.2.3?topic=notebooks-markdown-jupyter-cheatsheet).  
 
 list of **markdown cell** examples:
-
-Text
 
 - `**bold**` : **bold**
 - `*italics*` : *italics*
@@ -104,7 +123,9 @@ Images
 - `![](https://www.spaam-community.org/assets/media/SPAAM-Logo-Full-Colour_ShortName.svg)` ![](https://www.spaam-community.org/assets/media/SPAAM-Logo-Full-Colour_ShortName.svg)
 
 ::: {.callout-note}
-In many cases, there are multiple syntaxes, or 'ways of doing things,' that will give the same results. For each section in this tutorial/walkthrough, one way is presented..
+**All roads lead to Rome**
+
+In many cases, there are multiple syntaxes, or 'ways of doing things,' that will give the same results. For each section in this tutorial/walkthrough, one way is presented.
 :::
 
 ### code cell syntax
@@ -126,15 +147,22 @@ Below are some examples of Python **code cells** with some useful basic python f
 ```{.python eval=False}
 print("Hello World from Python!")
 ```
+```
+Hello World from Python!
+```
+
 But it can also, for example, run bash commands by adding a *!* at the start of the line.
 
 ```{.python eval=False}
 ! echo "Hello World from bash!"
 ```
+```
+Hello World from bash!
+```
 
 Stings or numbers can be stored as a variable by using the *=* sign.
 
-```python
+```{.python eval=False}
 i = 0
 ```
 Ones a variable is set in one **code cell** they are stored and can be accessed in other downstream **code cells**.
@@ -142,11 +170,17 @@ Ones a variable is set in one **code cell** they are stored and can be accessed 
 ```{.python eval=False}
 print(i)
 ```
+```
+0
+```
 
 You can also print multiple things together in one `print` statement such as a number and a string:
 
 ```{.python eval=True}
 print("The number is", i, "Wow!")
+```
+```
+The number is, i, Wow!
 ```
 
 ## Pandas
@@ -206,7 +240,7 @@ A\tB
 8\t4
 ```
 
-The dataset that is used in this tutorial/walkthrough is called `"all_data.tsv"`, and is tab-separated. Pandas by default assume that the file is comma delimited, but we can change this by using the `sep` argument.
+The dataset that is used in this tutorial/walkthrough is called `"all_data.tsv"`, and is tab-separated. Pandas by default assume that the file is comma delimited, but we can change this by using the `sep= ` argument.
 
 ::: {.callout-tip}
 ## Pandas function
@@ -235,13 +269,13 @@ ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruit
 
 
 ::: {.callout-tip}
+**Help**
 When you are unsure what arguments a function can take, it is possible to get a *help documentation* using `help(pd.read_csv)`
 :::
 
-
 ## Data exploration
 
-The data is from a customer personality analysis of a company trying to better understand how to modify their product catalogue. Here is the [link to the original source](https://www.kaggle.com/datasets/imakash3011/customer-personality-analysis) for more information. 
+The data for this tutorial/walkthrough is from a customer personality analysis of a company trying to better understand how to modify their product catalogue. Here is the [link to the original source](https://www.kaggle.com/datasets/imakash3011/customer-personality-analysis) for more information. 
 
 ### Columns
 
@@ -308,7 +342,14 @@ Let's look at the first 5 rows:
 ```python
 df.head()
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>
+
+ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
+-|----|----|----------|------|-------|-|-|---|--|---|---|--|--|-|--|-|-|-|-|--
+0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|11
+1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11
+2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|3|11
+3|6182|1984|Graduation|Together|26646.0|1|0|11|4|20|10|3|5|2|0|4|6|0|3|11
+4|7446|1967|Master|Together|62513.0|0|1|520|42|98|0|42|14|6|4|10|6|0|3|11
 
 What we can see it that, unlike **R**, **Python** and in extension **Pandas** is 0-indexed instead of 1-indexed.
 
