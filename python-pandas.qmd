@@ -70,7 +70,8 @@ Open the `student-notebook.ipynb` notebook by clicking on it.
 This notebook has exactly the same code as written in this book chapter and is only a support so that it is not necessary to copy and paste the code. It is off course also possible to copy the code from this chapter into a fresh notebook file by clicking on:
  `File` > `New` > `Notebook`. 
 
-::: {.callout-note collapse="true" title="**Note If the notebook is not there**"}
+::: {.callout-note collapse="true"}
+## **Note If the notebook is not there**
 If you cannot find `student-notebook.ipynb`, it is possible the working directory is not correct. Make sure that `pwd` returns `/vol/volume/python-pandas/python-pandas_lecture`.
 :::
 
@@ -134,6 +135,7 @@ Below are some examples of Python **code cells** with some useful basic python f
 ```{.python eval=False}
 print("Hello World from Python!")
 ```
+
 ::: {.callout-note collapse="true"}
 ## Expand see output
 ```
@@ -159,6 +161,8 @@ i = 0
 ```
 Ones a variable is set in one **code cell** they are stored and can be accessed in other downstream **code cells**.
 
+To see what value a variable contains, the `print()` function can be used.
+
 ```{.python eval=False}
 print(i)
 ```
@@ -171,12 +175,12 @@ print(i)
 You can also print multiple things together in one `print` statement such as a number and a string:
 
 ```{.python eval=True}
-print("The number is", 0, "Wow!")
+print("The number is", i, "Wow!")
 ```
 ::: {.callout-note collapse="true"}
 ## Expand see output
 ```
-The number is, i, Wow!
+The number is, 0, Wow!
 ```
 :::
 ## Pandas
@@ -189,7 +193,8 @@ We can import the library like this:
 import pandas as pd
 ```
 
-::: {.callout-tip collapse="true" title="**why import as pd**"}
+::: {.callout-tip collapse="true"}
+## **Why import as pd?**
 We set "pandas" to the alias "pd" because we are lazy and do not want to write the full word too many times.
 :::
 
@@ -240,7 +245,7 @@ A\tB
 ```
 
 The dataset that is used in this tutorial/walkthrough is called `"all_data.tsv"`, and is tab-separated. 
-Pandas by default assume that the file is comma delimited, but we can change this by using the `sep= ` argument.
+Pandas by default assume that the file is comma delimited, but this can be change by using the `sep= ` argument.
 
 ::: {.callout-tip collapse="true" title="**Pandas function pd.read_csv()**"}
 `pd.read_csv()` is the pandas function to read in tabular tables. The `sep=` can be specified argument, `sep=,` is the default.
@@ -252,22 +257,23 @@ df
 ```
 ::: {.callout-note collapse="true"}
 ## Expand see output
-ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
--|----|----|----------|------|-------|-|-|--|--|---|---|--|--|-|--|-|-|-|-|--
-0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|11
-1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11
-2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|3|11
-3|6182|1984|Graduation|Together|26646.0|1|0|11|4|20|10|3|5|2|0|4|6|0|3|11
-4|7446|1967|Master|Together|62513.0|0|1|520|42|98|0|42|14|6|4|10|6|0|3|11
-…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…
-1749|9432|1977|Graduation|Together|666666.0|1|0|9|14|18|8|1|12|3|1|3|6|0|3|11
-1750|8372|1974|Graduation|Married|34421.0|1|0|3|3|7|6|2|9|1|0|2|7|0|3|11
-1751|10870|1967|Graduation|Married|61223.0|0|1|709|43|182|42|118|247|9|3|4|5|0|3|11
-1752|7270|1981|Graduation|Divorced|56981.0|0|0|908|48|217|32|12|24|2|3|13|6|0|3|11
-1753|8235|1956|Master|Together|69245.0|0|1|428|30|214|80|30|61|6|5|10|3|0|3|11
+|ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
+|-|----|----|----------|------|-------|-|-|--|--|---|---|--|--|-|--|-|-|-|-|--|
+|0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|11|
+|1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11|
+|2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|3|11|
+|3|6182|1984|Graduation|Together|26646.0|1|0|11|4|20|10|3|5|2|0|4|6|0|3|11|
+|4|7446|1967|Master|Together|62513.0|0|1|520|42|98|0|42|14|6|4|10|6|0|3|11|
+|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|
+|1749|9432|1977|Graduation|Together|666666.0|1|0|9|14|18|8|1|12|3|1|3|6|0|3|11|
+|1750|8372|1974|Graduation|Married|34421.0|1|0|3|3|7|6|2|9|1|0|2|7|0|3|11|
+|1751|10870|1967|Graduation|Married|61223.0|0|1|709|43|182|42|118|247|9|3|4|5|0|3|11|
+|1752|7270|1981|Graduation|Divorced|56981.0|0|0|908|48|217|32|12|24|2|3|13|6|0|3|11|
+|1753|8235|1956|Master|Together|69245.0|0|1|428|30|214|80|30|61|6|5|10|3|0|3|11|
 1754 rows × 20 columns
 :::
-::: {.callout-tip collapse="true" title="**Help**"}
+::: {.callout-tip collapse="true"}
+## **Help**
 When you are unsure what arguments a function can take, it is possible to get a *help documentation* using `help(pd.read_csv)`
 :::
 
@@ -281,10 +287,10 @@ df
 ::: {.callout-note collapse="true"}
 ## Expand see output
 
--|A|B
--|-|-
-0|5|6
-1|8|4
+| |A|B|
+|-|-|-|
+|0|5|6|
+|1|8|4|
 :::
 
 Another usful transformation is from a [dictionary](https://docs.python.org/3/tutorial/datastructures.html#dictionaries) to pd.Dataframe. 
@@ -298,14 +304,14 @@ df
 ```
 ::: {.callout-note collapse="true"}
 ## Expand see output
--|A|B
--|-|-
-0|5|6
-1|8|4
+| |A|B|
+|-|-|-|
+|0|5|6|
+|1|8|4|
 
 :::
 
-There are many ways to [turn a DataFrame back into a dictonary](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_dict.html#pandas.DataFrame.to_dict), which might be very handy for certain purposes.
+There are many ways to turn a [`DataFrame` back into a dictonary](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_dict.html#pandas.DataFrame.to_dict), which might be very handy for certain purposes.
 
 ## Data exploration
 
@@ -314,7 +320,7 @@ Here is the [link to the original source](https://www.kaggle.com/datasets/imakas
 
 ### Columns
 
-The command below prints all the column names.
+To display all the column names from the imported `DataFrame`, the attribute `columns` can be called. 
 
 ```python{.python eval=False}
 df.columns
@@ -331,12 +337,18 @@ Index(['ID', 'Year_Birth', 'Education', 'Marital_Status', 'Income', 'Kidhome',
 ```
 :::
 
-We can also list their respective data types.
+Each column has its own data types which are highly optimised. 
+A column with only integers has the data type `int64`. 
+Columns with decimal numbers are called `float64`. 
+A column with only strings, or a combination of strings and `integers` or `floats` is called an `object`.
 
-- `int64` are integers
-- `float64` are floating point numbers, also called `double` in other languages
-- `object` are Python objects, which are strings in this case
-
+::: {.callout-tip collapse="true"}
+## **What does 64 stand for?**
+The 64 indicates the number of bits the integers are stored in.
+64 bits is the largest pandas handels. 
+When it is known that a value is in a certain range, it is possible to change the bits to 8, 16, or 32. 
+This might reduce memory usage. 
+:::
 ```{.python eval=False}
 df.dtypes
 ```
@@ -381,7 +393,7 @@ df.shape
 This shows that the `DataFrame` has **1754** rows and **20** columns.
 :::
 
-It is often useful to have a quick look at the first rows, to get, for example an idea of the data was read incorrectly. 
+It is often useful to have a quick look at the first rows, to get, for example, an idea of the data was read correctly. 
 This can be done with the `head()` function.
 
 ```{.python eval=False}
