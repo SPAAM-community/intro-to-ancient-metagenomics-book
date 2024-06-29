@@ -134,10 +134,13 @@ Below are some examples of Python **code cells** with some useful basic python f
 ```{.python eval=False}
 print("Hello World from Python!")
 ```
+::: {.callout-note collapse="true"}
+## Expand see output
 ```
 Hello World from Python!
 ```
-::: {.callout-note collapse="true" title="**Running bash code in Jupyter**"}
+:::
+::: {.callout-tip collapse="true" title="**Running bash code in Jupyter**"}
 It is also possible to run bash commands in Jupyter, by adding a *!* at the start of the line.
 
 ```{.python eval=False}
@@ -159,19 +162,23 @@ Ones a variable is set in one **code cell** they are stored and can be accessed 
 ```{.python eval=False}
 print(i)
 ```
+::: {.callout-note collapse="true"}
+## Expand see output
 ```
 0
 ```
-
+:::
 You can also print multiple things together in one `print` statement such as a number and a string:
 
 ```{.python eval=True}
-print("The number is", i, "Wow!")
+print("The number is", 0, "Wow!")
 ```
+::: {.callout-note collapse="true"}
+## Expand see output
 ```
 The number is, i, Wow!
 ```
-
+:::
 ## Pandas
 ### Getting started
 Pandas is a Python library used for data manipulation and analysis.
@@ -182,7 +189,7 @@ We can import the library like this:
 import pandas as pd
 ```
 
-::: {.callout-note collapse="true" title="**why import as pd**"}
+::: {.callout-tip collapse="true" title="**why import as pd**"}
 We set "pandas" to the alias "pd" because we are lazy and do not want to write the full word too many times.
 :::
 
@@ -191,7 +198,10 @@ Now, we can print the current version:
 ```{.python eval=False}
 pd.__version__
 ```
-
+::: {.callout-note collapse="true"}
+## Expand see output
+'2.2.2'
+:::
 ### Pandas data structures
 The primary data structures in Pandas are `Series` and `DataFrame`.
 
@@ -205,7 +215,7 @@ A single row or column (1 dimensional data) is a `Series`.
 
 ![](assets/images/chapters/python-pandas/01_table_series.svg)
 
-::: {.callout-note collapse="true" title="**More details on pandas**"}
+::: {.callout-tip collapse="true" title="**More details on pandas**"}
 For a more in detail pandas getting started tutorial [click here](https://pandas.pydata.org/docs/getting_started/index.html#)
 :::
 
@@ -213,7 +223,7 @@ For a more in detail pandas getting started tutorial [click here](https://pandas
 
 Pandas can read in **csv** (comma separated values) files, which are tables in text format.
 
-It's called **c**sv because each value is separated from the others via a comma, like this:
+It is called **c**sv because each value is separated from the others through a comma.
 
 ```{text}
 A,B
@@ -221,7 +231,7 @@ A,B
 8,4
 ```
 
-Another common tabular separator are **tsv**, where each value is separated by a **tab** `\t`
+Another common tabular separator are **tsv**, where each value is separated by a **tab** `\t`.
 
 ```{text}
 A\tB
@@ -229,9 +239,10 @@ A\tB
 8\t4
 ```
 
-The dataset that is used in this tutorial/walkthrough is called `"all_data.tsv"`, and is tab-separated. Pandas by default assume that the file is comma delimited, but we can change this by using the `sep= ` argument.
+The dataset that is used in this tutorial/walkthrough is called `"all_data.tsv"`, and is tab-separated. 
+Pandas by default assume that the file is comma delimited, but we can change this by using the `sep= ` argument.
 
-::: {.callout-tip collapse="true" title="**Pandas function pd.read_csv()**"}}
+::: {.callout-tip collapse="true" title="**Pandas function pd.read_csv()**"}
 `pd.read_csv()` is the pandas function to read in tabular tables. The `sep=` can be specified argument, `sep=,` is the default.
 :::
 
@@ -239,7 +250,8 @@ The dataset that is used in this tutorial/walkthrough is called `"all_data.tsv"`
 df = pd.read_csv("../all_data.tsv", sep="\t")
 df
 ```
-
+::: {.callout-note collapse="true"}
+## Expand see output
 ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
 -|----|----|----------|------|-------|-|-|--|--|---|---|--|--|-|--|-|-|-|-|--
 0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|11
@@ -254,8 +266,8 @@ ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruit
 1752|7270|1981|Graduation|Divorced|56981.0|0|0|908|48|217|32|12|24|2|3|13|6|0|3|11
 1753|8235|1956|Master|Together|69245.0|0|1|428|30|214|80|30|61|6|5|10|3|0|3|11
 1754 rows × 20 columns
-
-::: {.callout-tip collapse="true" title="**Help**}
+:::
+::: {.callout-tip collapse="true" title="**Help**"}
 When you are unsure what arguments a function can take, it is possible to get a *help documentation* using `help(pd.read_csv)`
 :::
 
@@ -266,15 +278,32 @@ For example using a nested list, were each row in the datafram is a list `[]`.
 df = pd.Dataframe([[5,6], [8,4]], colums=["A", "B"])
 df
 ```
+::: {.callout-note collapse="true"}
+## Expand see output
+
+-|A|B
+-|-|-
+0|5|6
+1|8|4
+:::
+
 Another usful transformation is from a [dictionary](https://docs.python.org/3/tutorial/datastructures.html#dictionaries) to pd.Dataframe. 
 
 ```{.python eval=False}
 table_data = {'A' : [5, 6]
-              'B' : [8, 4] }
+              'B' : [8, 4]}
 
 df = pd.DataFrame(data)
 df
 ```
+::: {.callout-note collapse="true"}
+## Expand see output
+-|A|B
+-|-|-
+0|5|6
+1|8|4
+
+:::
 
 There are many ways to [turn a DataFrame back into a dictonary](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_dict.html#pandas.DataFrame.to_dict), which might be very handy for certain purposes.
 
@@ -290,6 +319,8 @@ The command below prints all the column names.
 ```python{.python eval=False}
 df.columns
 ```
+::: {.callout-note collapse="true"}
+## Expand see output
 ```
 Index(['ID', 'Year_Birth', 'Education', 'Marital_Status', 'Income', 'Kidhome',
        'Teenhome', 'MntWines', 'MntFruits', 'MntMeatProducts',
@@ -298,6 +329,7 @@ Index(['ID', 'Year_Birth', 'Education', 'Marital_Status', 'Income', 'Kidhome',
        'NumWebVisitsMonth', 'Complain', 'Z_CostContact', 'Z_Revenue'],
       dtype='object')
 ```
+:::
 
 We can also list their respective data types.
 
@@ -308,6 +340,8 @@ We can also list their respective data types.
 ```{.python eval=False}
 df.dtypes
 ```
+::: {.callout-note collapse="true"}
+## Expand see output
 ```
 ID                       int64
 Year_Birth               int64
@@ -331,23 +365,30 @@ Z_CostContact            int64
 Z_Revenue                int64
 dtype: object
 ```
+:::
 ### Inspecting the DataFrame
 
-What is the size of our `DataFrame`
+To quikly check how many rows and columns the `DataFrame` has, you can access the `shape` attribute.
 
 ```{.python eval=False}
 df.shape
 ```
+::: {.callout-note collapse="true"}
+## Expand see output
 ```
 (1754, 20)
 ```
-It has **1754** rows and **20** columns.
+This shows that the `DataFrame` has **1754** rows and **20** columns.
+:::
 
-Let's look at the first 5 rows:
+It is often useful to have a quick look at the first rows, to get, for example an idea of the data was read incorrectly. 
+This can be done with the `head()` function.
 
 ```{.python eval=False}
 df.head()
 ```
+::: {.callout-note collapse="true"}
+## Expand see output
 
 ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
 -|----|----|----------|------|-------|-|-|---|--|---|---|--|--|-|--|-|-|-|-|--
@@ -356,6 +397,14 @@ ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruit
 2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|3|11
 3|6182|1984|Graduation|Together|26646.0|1|0|11|4|20|10|3|5|2|0|4|6|0|3|11
 4|7446|1967|Master|Together|62513.0|0|1|520|42|98|0|42|14|6|4|10|6|0|3|11
+:::
+
+:::{.callout-tip collapse="true"}
+## **Fuctions and attributes**
+The difference between calling a function and an atribute is the `()`. 
+`.head()` is a function and will perform an action. 
+While `.shape` is an attribute and will return a value that is already stored in the `DataFrame`
+:::
 
 What we can see it that, unlike **R**, **Python** and in extension **Pandas** is 0-indexed instead of 1-indexed.
 
@@ -371,7 +420,8 @@ This will take only the second row and all columns, producing a `Series`:
 df.head()
 df.loc[1, :]
 ```
-```
+::: {.callout-note collapse="true"}
+## Expand see output
 ID                           2174
 Year_Birth                   1954
 Education              Graduation
@@ -393,7 +443,7 @@ Complain                        0
 Z_CostContact                   3
 Z_Revenue                      11
 Name: 1, dtype: object
-```
+:::
 
 And this will take the second and third row, producing another `DataFrame`:
 
@@ -401,11 +451,13 @@ And this will take the second and third row, producing another `DataFrame`:
 df.head()
 df.loc[1:2, :]
 ```
-
+::: {.callout-note collapse="true"}
+## Expand see output
 ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
 -|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-
 1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11
 2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|3|11
+:::
 
 It is important to understand that almost all operations on `DataFrames` are not in place, meaning that the dataframe is not modified.
 To keep the changes, the dataframe has to be actively stored using the same name or a new variable.
@@ -417,7 +469,8 @@ df.head()
 new_df = df.loc[:, ["Education", "Marital_Status"]]
 new_df
 ```
-
+::: {.callout-note collapse="true"}
+## Expand see output
 |Education|Marital_Status
 -|-|-
 0|Graduation|Single
@@ -432,12 +485,15 @@ new_df
 1752|Graduation|Divorced
 1753|Master|Together
 1754 rows × 2 columns
+:::
 
-Selecting only one column by name:
+Selecting only one column by name.
 
 ```{.python eval=False}
 df["Year_Birth"]
 ```
+::: {.callout-note collapse="true"}
+## Expand see output
 ```
 0       1957
 1       1954
@@ -451,7 +507,7 @@ df["Year_Birth"]
 1752    1981
 1753    1956
 ```
-
+:::
 We can also remove columns from the `DataFrame`.
 
 In this case, we want to remove the columns `Z_CostContact` and `Z_Revenue` and keep those changes.
@@ -582,9 +638,10 @@ df[(df["Education"] == "Master") & (df["Marital_Status"] == "Single")]
 1747|9817|1970|Master|Single|44802.0|0|0|853|10|143|13|10|20|9|4|12|8|0|3|11
 75 rows × 20 columns
 
-## Describing a DataFrame
+### Describing a DataFrame
 
-Sometimes is is nice to get a quick overview of the data in a table, such as `means` and `counts`. Pandas has a native function to do just that, it will output a `count`, `mean`, `standard deviation`, `minimum`, `25th percentile (Q1)`, `median (50th percentile or Q2)`, `75th percentile (Q3)`, and `maximum` for each numeric columns.
+Sometimes is is nice to get a quick overview of the data in a table, such as `means` and `counts`.
+Pandas has a native function to do just that, it will output a `count`, `mean`, `standard deviation`, `minimum`, `25th percentile (Q1)`, `median (50th percentile or Q2)`, `75th percentile (Q3)`, and `maximum` for each numeric columns.
 
 ```{.python eval=False} 
 df.describe()
