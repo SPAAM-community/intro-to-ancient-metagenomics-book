@@ -607,6 +607,8 @@ This can be done by combining multiple statements with `&`.
 two_at_once = (df["Education"] == "Graduation") & (df["Marital_Status"] == "Single")
 two_at_once
 ```
+::: {.callout-note collapse="true"}
+## Expand see output
 ```
 0        True
 1        True
@@ -621,21 +623,29 @@ two_at_once
 1753    False
 Length: 1754, dtype: bool
 ```
+:::
+
 How many Single people are there in the table that also greduated? And how many are single?
 ::: {.callout-note collapse="true" title="Answer"}
 
 ```{.python eval=False} 
 sum(two_at_once)
 ```
+::: {.callout-note collapse="true"}
+## Expand see output
 ```
 252
 ```
+:::
 ```{.python eval=False} 
 sum(df["Marital_Status"] == "Single")
 ```
+::: {.callout-note collapse="true"}
+## Expand see output
 ```
 382
 ```
+:::
 :::
 
 These `Series` of Booleans can be used to subset the dataframe to rows where the condition(s) are **True**:
@@ -687,7 +697,7 @@ df[(df["Education"] == "Master") & (df["Marital_Status"] == "Single")]
 ### Describing a DataFrame
 
 Sometimes is is nice to get a quick overview of the data in a table, such as `means` and `counts`.
-Pandas has a native function to do just that, it will output a `count`, `mean`, `standard deviation`, `minimum`, `25th percentile (Q1)`, `median (50th percentile or Q2)`, `75th percentile (Q3)`, and `maximum` for each numeric columns.
+`Pandas` has a native function to do just that, it will output a `count`, `mean`, `standard deviation`, `minimum`, `25th percentile (Q1)`, `median (50th percentile or Q2)`, `75th percentile (Q3)`, and `maximum` for each numeric columns.
 
 ```{.python eval=False} 
 df.describe()
@@ -787,11 +797,13 @@ df_after = df[df["Year_Birth"] >= 1970]
 print("n(before)   =", df_before.shape[0])
 print("n(after)   =", df_after.shape[0])
 ```
+::: {.callout-note collapse="true"}
+## Expand see output
 ```
 n(before)   = 804
 n(after)   = 950
 ```
-
+:::
 :::
 
 - Do the total number of people sum up to the original `DataFrame` total?
@@ -825,7 +837,8 @@ n(expected) = 1754
 ```{.python eval=False} 
   print("income(before) =", df_before["Income"].mean())
   print("income(after)  =", df_after["Income"].mean())
-  ```
+  
+```
 :::{.callout-note collapse="true"}
 ## Expand see output
 income(before) = 55513.38113207547
@@ -928,14 +941,14 @@ The second course of action is filling the empty cells with a value, this can be
 
 ### Concatenation
 
+Data is very often present in multiple tables. 
+Think for example about a taxonomy table giving count data per sample.
 One way to combine multiple datasets is through **concatenation**, which either combines all columns or rows of multiple `DataFrames`.
-
-The command to combine two `DataFrames` by appending all rows is `pd.concat([first_dataframe, second_dataframe])`
+The function in `Pandas` that does just this is called `.concat`, This command combines two `DataFrames` by appending all rows. `.concat([first_dataframe, second_dataframe])`.
 
 ::: {.callout-tip title="Task" appearance="simple"}
 
-- Read the **tsv** "phd_data.tsv" as a new `DataFrame` and name the variable `df2`
-
+- Read the **tsv** "phd_data.tsv" as a new `DataFrame` and name the variable `df2`.
 
 ::: {.callout-note collapse="true" title="Answer"}
 ```{.python eval=False} 
@@ -943,15 +956,29 @@ df2 = pd.read_csv("../phd_data.tsv", sep="\t")
 ```
 :::
 
-- Concatenate the "old" `DataFrame` `df` and the new `df2` and name the concatenated one `concat_df`
+- Concatenate the "old" `DataFrame` `df` and the new `df2` and name the concatenated one `concat_df`.
 
 ::: {.callout-note collapse="true" title="Answer"}
 ```{.python eval=False}  
 concat_df = pd.concat([df, df2])
 concat_df
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>481</th>\n      <td>11133</td>\n      <td>1973</td>\n      <td>PhD</td>\n      <td>YOLO</td>\n      <td>48432.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>322</td>\n      <td>3</td>\n      <td>50</td>\n      <td>4</td>\n      <td>3</td>\n      <td>42</td>\n      <td>7</td>\n      <td>1</td>\n      <td>6</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>482</th>\n      <td>9589</td>\n      <td>1948</td>\n      <td>PhD</td>\n      <td>Widow</td>\n      <td>82032.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>332</td>\n      <td>194</td>\n      <td>377</td>\n      <td>149</td>\n      <td>125</td>\n      <td>57</td>\n      <td>4</td>\n      <td>6</td>\n      <td>7</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>483</th>\n      <td>4286</td>\n      <td>1970</td>\n      <td>PhD</td>\n      <td>Single</td>\n      <td>57642.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>580</td>\n      <td>6</td>\n      <td>58</td>\n      <td>8</td>\n      <td>0</td>\n      <td>27</td>\n      <td>7</td>\n      <td>6</td>\n      <td>6</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>484</th>\n      <td>4001</td>\n      <td>1946</td>\n      <td>PhD</td>\n      <td>Together</td>\n      <td>64014.0</td>\n      <td>2</td>\n      <td>1</td>\n      <td>406</td>\n      <td>0</td>\n      <td>30</td>\n      <td>0</td>\n      <td>0</td>\n      <td>8</td>\n      <td>8</td>\n      <td>2</td>\n      <td>5</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>485</th>\n      <td>9405</td>\n      <td>1954</td>\n      <td>PhD</td>\n      <td>Married</td>\n      <td>52869.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>84</td>\n      <td>3</td>\n      <td>61</td>\n      <td>2</td>\n      <td>1</td>\n      <td>21</td>\n      <td>3</td>\n      <td>1</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>2240 rows × 20 columns</p>
-
+:::{.callout-note collapse="true"}
+## Expand see output
+||ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue|
+|0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|11|
+|1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11|
+|2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|3|11|
+|3|6182|1984|Graduation|Together|26646.0|1|0|11|4|20|10|3|5|2|0|4|6|0|3|11|
+|4|7446|1967|Master|Together|62513.0|0|1|520|42|98|0|42|14|6|4|10|6|0|3|11|
+|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|
+|481|11133|1973|PhD|YOLO|48432.0|0|1|322|3|50|4|3|42|7|1|6|8|0|3|11|
+|482|9589|1948|PhD|Widow|82032.0|0|0|332|194|377|149|125|57|4|6|7|1|0|3|11|
+|483|4286|1970|PhD|Single|57642.0|0|1|580|6|58|8|0|27|7|6|6|4|0|3|11|
+|484|4001|1946|PhD|Together|64014.0|2|1|406|0|30|0|0|8|8|2|5|7|0|3|11|
+|485|9405|1954|PhD|Married|52869.0|1|1|84|3|61|2|1|21|3|1|4|7|0|3|11|
+2240 rows × 20 columns
+:::
 :::
 
 - Is there anything weird about the new `DataFrame` and can you fix that?
@@ -960,14 +987,29 @@ concat_df
 
 We previously removed the columns "Z_CostContact" and "Z_Revenue" but they are in the new data again.
 
-We can remove them like before:
+We can remove them like before.
 
 ```{.python eval=False} 
 concat_df = concat_df.drop("Z_CostContact", axis=1)
 concat_df = concat_df.drop("Z_Revenue", axis=1)
 concat_df
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>481</th>\n      <td>11133</td>\n      <td>1973</td>\n      <td>PhD</td>\n      <td>YOLO</td>\n      <td>48432.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>322</td>\n      <td>3</td>\n      <td>50</td>\n      <td>4</td>\n      <td>3</td>\n      <td>42</td>\n      <td>7</td>\n      <td>1</td>\n      <td>6</td>\n      <td>8</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>482</th>\n      <td>9589</td>\n      <td>1948</td>\n      <td>PhD</td>\n      <td>Widow</td>\n      <td>82032.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>332</td>\n      <td>194</td>\n      <td>377</td>\n      <td>149</td>\n      <td>125</td>\n      <td>57</td>\n      <td>4</td>\n      <td>6</td>\n      <td>7</td>\n      <td>1</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>483</th>\n      <td>4286</td>\n      <td>1970</td>\n      <td>PhD</td>\n      <td>Single</td>\n      <td>57642.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>580</td>\n      <td>6</td>\n      <td>58</td>\n      <td>8</td>\n      <td>0</td>\n      <td>27</td>\n      <td>7</td>\n      <td>6</td>\n      <td>6</td>\n      <td>4</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>484</th>\n      <td>4001</td>\n      <td>1946</td>\n      <td>PhD</td>\n      <td>Together</td>\n      <td>64014.0</td>\n      <td>2</td>\n      <td>1</td>\n      <td>406</td>\n      <td>0</td>\n      <td>30</td>\n      <td>0</td>\n      <td>0</td>\n      <td>8</td>\n      <td>8</td>\n      <td>2</td>\n      <td>5</td>\n      <td>7</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>485</th>\n      <td>9405</td>\n      <td>1954</td>\n      <td>PhD</td>\n      <td>Married</td>\n      <td>52869.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>84</td>\n      <td>3</td>\n      <td>61</td>\n      <td>2</td>\n      <td>1</td>\n      <td>21</td>\n      <td>3</td>\n      <td>1</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n    </tr>\n  </tbody>\n</table>\n<p>2240 rows × 18 columns</p>
+:::{.callout-note collapse="true"}
+## Expand see output
+||ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|
+|0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|
+|1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|
+|2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|
+|3|6182|1984|Graduation|Together|26646.0|1|0|11|4|20|10|3|5|2|0|4|6|0|
+|4|7446|1967|Master|Together|62513.0|0|1|520|42|98|0|42|14|6|4|10|6|0|
+|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|
+|481|11133|1973|PhD|YOLO|48432.0|0|1|322|3|50|4|3|42|7|1|6|8|0|
+|482|9589|1948|PhD|Widow|82032.0|0|0|332|194|377|149|125|57|4|6|7|1|0|
+|483|4286|1970|PhD|Single|57642.0|0|1|580|6|58|8|0|27|7|6|6|4|0|
+|484|4001|1946|PhD|Together|64014.0|2|1|406|0|30|0|0|8|8|2|5|7|0|
+|485|9405|1954|PhD|Married|52869.0|1|1|84|3|61|2|1|21|3|1|4|7|0|
+2240 rows × 18 columns
+:::
 :::
 
 - Is there something interesting about the marital status of some people that have a PhD?
@@ -978,6 +1020,8 @@ concat_df
 ```{.python eval=False} 
 concat_df[concat_df["Education"]=="PhD"]["Marital_Status"].value_counts()
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 ```
 Marital_Status
 Married     192
@@ -989,8 +1033,9 @@ YOLO          2
 Alone         1
 Name: count, dtype: int64
 ```
+:::
 
-There's two people that have "YOLO" as their Marital Status ...]
+There are two people that have "YOLO" as their Marital Status ...
 
 :::
 
@@ -998,13 +1043,18 @@ There's two people that have "YOLO" as their Marital Status ...]
 
 ### Merging
 
-Analysing numbers can be easier than analysing categorial values, like "PhD" and "Master".
+Besides concatenating two `DataFrames`, there is another powerful function for combining data from multiple sources: `.merge()`. 
+This function is especially useful when you have different types of related data in separate tables. 
+For example, you might have a taxonomy table with count data per sample and a metadata table in another `DataFrame`.
 
-To make our like easier, we might want to have a new column when the Education level is replaced with a number that "ranks" the Education levels by how long it takes.
+The pandas function `.merge()` allows you to combine these `DataFrames` based on a common column. 
+This column must exist in both `DataFrames` and contain similar values.
 
-This information could be stored in a Python `Dictionary` (Also called Hash Map in other languages), which stores **key** and **value** pairs.
+To illustrate the `.merge()` function, we will create a new `DataFrame` and merge it with the existing one. Let's rank the different education levels from 1 to 5 in a new `DataFrame` and merge this with the existing `DataFrame`.
 
-We could store the Education information like this.
+As shown before, there are multiple ways of making a new `DataFrame`. Here, we first create a dictionary and then use the from_dict() function to transform this into a `DataFrame`.
+
+The `from_dict()` function will by default use the `keys()` of the dictionary as column names. A dictionary is made up of `{'key':'value'}` pairs. To specify that we want the `keys()` as rows, the `orient=` argument has to be set to `index`. This means that the row names are the `dictionary` `keys()`.
 
 ```{.python eval=False} 
 education_dictionary = {
@@ -1014,28 +1064,42 @@ education_dictionary = {
     "Master": 4,
     "PhD": 5
 }
-```
-We can now convert this `Dictionary` to a `DataFrame`:
 
-```{.python eval=False} 
 education_df = pd.DataFrame.from_dict(education_dictionary, orient="index")
 education_df
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>0</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>Basic</th>\n      <td>1</td>\n    </tr>\n    <tr>\n      <th>2n Cycle</th>\n      <td>2</td>\n    </tr>\n    <tr>\n      <th>Graduation</th>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>Master</th>\n      <td>4</td>\n    </tr>\n    <tr>\n      <th>PhD</th>\n      <td>5</td>\n    </tr>\n  </tbody>\n</table>
+:::{.callout-note collapse="true"}
+## Expand see output
+||0|
+|-|-|
+|Basic	|1|
+|2n Cycle	|2|
+|Graduation	|3|
+|Master	|4|
+|PhD	|5|
+:::
 
-The resulting `DataFrame` has the Education level as index and the column 0 has the level information.
+The resulting `DataFrame` has the Education level as `index` "row names" and the column name is `0`.
 
-We can rename the column to "Level".
+The `0` is not a particular useful name for our new column, so we can use the `.rename()` function to change this.
 
 ```{.python eval=False} 
 education_df = education_df.rename(columns={0: "Level"})
 education_df
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Level</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>Basic</th>\n      <td>1</td>\n    </tr>\n    <tr>\n      <th>2n Cycle</th>\n      <td>2</td>\n    </tr>\n    <tr>\n      <th>Graduation</th>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>Master</th>\n      <td>4</td>\n    </tr>\n    <tr>\n      <th>PhD</th>\n      <td>5</td>\n    </tr>\n  </tbody>\n</table>
+:::{.callout-note collapse="true"}
+## Expand see output
+||Level|
+|-|-|
+|Basic	|1|
+|2n Cycle	|2|
+|Graduation	|3|
+|Master	|4|
+|PhD	|5|
 
-We can now **merge** this new `education_df` with our previous `concat_df`.
+:::
 
-The left `DataFrame` is `concat_df` and we merge on "Education" because that's where the Eduction information is.
+Now that there is a new `DataFrame` with all the needed information, we can `merge` it with our previous `concat_df` on the Education column. The `.merge()` function requires several arguments: left=, which is the DataFrame that will be on the left side of the merge, in our case concat_df; right=, which is the DataFrame that will be on the right side of the merge, which is `education_df`; left_on=, specifying the column to merge on from the left `DataFrame` `concat_df`, which is `Education`; and `right_index=True`, indicating that the right DataFrame `education_df` should be merged using its index. If the values were in a column instead of the index, we would use `right_on=` instead.
 
 The right one is `education_df` and the information is in the index.
 
@@ -1043,7 +1107,25 @@ The right one is `education_df` and the information is in the index.
 merged_df = pd.merge(left=concat_df, right=education_df, left_on="Education", right_index=True)
 merged_df
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Level</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>5</th>\n      <td>965</td>\n      <td>1971</td>\n      <td>Graduation</td>\n      <td>Divorced</td>\n      <td>55635.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>235</td>\n      <td>65</td>\n      <td>164</td>\n      <td>50</td>\n      <td>49</td>\n      <td>27</td>\n      <td>7</td>\n      <td>3</td>\n      <td>7</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>481</th>\n      <td>11133</td>\n      <td>1973</td>\n      <td>PhD</td>\n      <td>YOLO</td>\n      <td>48432.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>322</td>\n      <td>3</td>\n      <td>50</td>\n      <td>4</td>\n      <td>3</td>\n      <td>42</td>\n      <td>7</td>\n      <td>1</td>\n      <td>6</td>\n      <td>8</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>482</th>\n      <td>9589</td>\n      <td>1948</td>\n      <td>PhD</td>\n      <td>Widow</td>\n      <td>82032.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>332</td>\n      <td>194</td>\n      <td>377</td>\n      <td>149</td>\n      <td>125</td>\n      <td>57</td>\n      <td>4</td>\n      <td>6</td>\n      <td>7</td>\n      <td>1</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>483</th>\n      <td>4286</td>\n      <td>1970</td>\n      <td>PhD</td>\n      <td>Single</td>\n      <td>57642.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>580</td>\n      <td>6</td>\n      <td>58</td>\n      <td>8</td>\n      <td>0</td>\n      <td>27</td>\n      <td>7</td>\n      <td>6</td>\n      <td>6</td>\n      <td>4</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>484</th>\n      <td>4001</td>\n      <td>1946</td>\n      <td>PhD</td>\n      <td>Together</td>\n      <td>64014.0</td>\n      <td>2</td>\n      <td>1</td>\n      <td>406</td>\n      <td>0</td>\n      <td>30</td>\n      <td>0</td>\n      <td>0</td>\n      <td>8</td>\n      <td>8</td>\n      <td>2</td>\n      <td>5</td>\n      <td>7</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>485</th>\n      <td>9405</td>\n      <td>1954</td>\n      <td>PhD</td>\n      <td>Married</td>\n      <td>52869.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>84</td>\n      <td>3</td>\n      <td>61</td>\n      <td>2</td>\n      <td>1</td>\n      <td>21</td>\n      <td>3</td>\n      <td>1</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n  </tbody>\n</table>\n<p>2240 rows × 19 columns</p>
+:::{.callout-note collapse="true"}
+## Expand see output
+
+|ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Level|
+|-|----|----|----------|------|-------|-|-|---|--|---|---|--|--|-|--|-|-|-|-|
+|0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|
+|1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|
+|2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|3|
+|3|6182|1984|Graduation|Together|26646.0|1|0|11|4|20|10|3|5|2|0|4|6|0|3|
+|5|965|1971|Graduation|Divorced|55635.0|0|1|235|65|164|50|49|27|7|3|7|6|0|3|
+|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|
+|481|11133|1973|PhD|YOLO|48432.0|0|1|322|3|50|4|3|42|7|1|6|8|0|5|
+|482|9589|1948|PhD|Widow|82032.0|0|0|332|194|377|149|125|57|4|6|7|1|0|5|
+|483|4286|1970|PhD|Single|57642.0|0|1|580|6|58|8|0|27|7|6|6|4|0|5|
+|484|4001|1946|PhD|Together|64014.0|2|1|406|0|30|0|0|8|8|2|5|7|0|5|
+|485|9405|1954|PhD|Married|52869.0|1|1|84|3|61|2|1|21|3|1|4|7|0|5|
+2240 rows × 19 columns
+
+:::
 
 
 ## Data visualization
