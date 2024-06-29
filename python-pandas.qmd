@@ -342,13 +342,6 @@ A column with only integers has the data type `int64`.
 Columns with decimal numbers are called `float64`. 
 A column with only strings, or a combination of strings and `integers` or `floats` is called an `object`.
 
-::: {.callout-tip collapse="true"}
-## **What does 64 stand for?**
-The 64 indicates the number of bits the integers are stored in.
-64 bits is the largest pandas handels. 
-When it is known that a value is in a certain range, it is possible to change the bits to 8, 16, or 32. 
-This might reduce memory usage. 
-:::
 ```{.python eval=False}
 df.dtypes
 ```
@@ -378,6 +371,18 @@ Z_Revenue                int64
 dtype: object
 ```
 :::
+::: {.callout-tip collapse="true"}
+## **What does 64 stand for?**
+The 64 indicates the number of bits the integers are stored in.
+64 bits is the largest pandas handels. 
+When it is known that a value is in a certain range, it is possible to change the bits to 8, 16, or 32. 
+This chosing the correct range might reduce memory usage, to be save, 64 range is so large it will incorporate most user cases. 
+
+```python{.python eval=False}
+df['Kidhome'] = df['Kidhome'].astype('int8')
+```
+:::
+
 ### Inspecting the DataFrame
 
 To quikly check how many rows and columns the `DataFrame` has, you can access the `shape` attribute.
@@ -422,18 +427,19 @@ What we can see it that, unlike **R**, **Python** and in extension **Pandas** is
 
 ### Accessing rows and columns
 
-We can access parts of the data in `DataFrames` in different ways.
-
-The first method is sub-setting the rows using the index.
-
-This will take only the second row and all columns, producing a `Series`:
+It is possible to access parts of the data in `DataFrames` in different ways.
+The first method is sub-setting rows using the row name and column name.
+This can be done with the `.loc`, which **loc**ates row(s) by providing the row name and column name `[row, column]`. 
+When the rows are not named, the row index can be used instead.
+To print the second row, this would be index 1 since the index in Python starts at 0.
+To print the all the columns, the `:` is used.
 
 ```{.python eval=False}
-df.head()
 df.loc[1, :]
 ```
 ::: {.callout-note collapse="true"}
 ## Expand see output
+```
 ID                           2174
 Year_Birth                   1954
 Education              Graduation
@@ -455,13 +461,13 @@ Complain                        0
 Z_CostContact                   3
 Z_Revenue                      11
 Name: 1, dtype: object
+```
 :::
 
-And this will take the second and third row, producing another `DataFrame`:
+To print a range of rows, the first and last index can be written with a `:`. To print the second and third row, this would be `[1:2, :]`
 
 ```{.python eval=False}
-df.head()
-df.loc[1:2, :]
+df.loc[1:2]
 ```
 ::: {.callout-note collapse="true"}
 ## Expand see output
@@ -471,38 +477,10 @@ ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruit
 2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|3|11
 :::
 
-It is important to understand that almost all operations on `DataFrames` are not in place, meaning that the dataframe is not modified.
-To keep the changes, the dataframe has to be actively stored using the same name or a new variable.
-
-This, for example, will create a new `DataFrame` of only the "Education" and "Marital_Status" columns.
+To print all the rows with a certain column name works the same as subsetting rows, but then adding the column name after the comma.
 
 ```{.python eval=False}
-df.head()
-new_df = df.loc[:, ["Education", "Marital_Status"]]
-new_df
-```
-::: {.callout-note collapse="true"}
-## Expand see output
-|Education|Marital_Status
--|-|-
-0|Graduation|Single
-1|Graduation|Single
-2|Graduation|Together
-3|Graduation|Together
-4|Master|Together
-…|…|…
-1749|Graduation|Together
-1750|Graduation|Married
-1751|Graduation|Married
-1752|Graduation|Divorced
-1753|Master|Together
-1754 rows × 2 columns
-:::
-
-Selecting only one column by name.
-
-```{.python eval=False}
-df["Year_Birth"]
+df[:, "Year_Birth"]
 ```
 ::: {.callout-note collapse="true"}
 ## Expand see output
@@ -520,27 +498,68 @@ df["Year_Birth"]
 1753    1956
 ```
 :::
-We can also remove columns from the `DataFrame`.
 
-In this case, we want to remove the columns `Z_CostContact` and `Z_Revenue` and keep those changes.
+It is important to notice that almost all operations on `DataFrames` are not in place, meaning that the `DataFrame` is not modified.
+To keep the changes, the `DataFrame` has to be actively stored using the same name or a new variable.
+
+To save the changes, a new `DataFrame` has to be created, or the existing `DataFrame` has to be overwritten. 
+This can be done by directing the output to a variable with `=`.
+To make a new `DataFrame` with only the "Education" and "Marital_Status" columns, the column names have to be placed in a list `['colname1', 'colname2']`.
+
+```{.python eval=False}
+df.head()
+new_df = df.loc[:, ["Education", "Marital_Status"]]
+new_df
+```
+
+::: {.callout-note collapse="true"}
+## Expand see output
+||Education|Marital_Status|
+|-|-|-|
+|0|Graduation|Single|
+|1|Graduation|Single|
+|2|Graduation|Together|
+|3|Graduation|Together|
+|4|Master|Together|
+|…|…|…|
+|1749|Graduation|Together|
+|1750|Graduation|Married|
+|1751|Graduation|Married|
+|1752|Graduation|Divorced|
+|1753|Master|Together|
+|1754 rows × 2 columns|
+:::
+
+It is also possible to remove rows and columns from a `DataFrame`.
+This can be done with the function `drop()`
+To remove the columns `Z_CostContact` and `Z_Revenue` and keep those changes, it is necessary to overwrite the `DataFrame`. To make sure `Pandas` understands that the its `columns` that need to be removed, the `axis` can be specified.
+Rows are called `axis=0`, and columns are called `axis=1`. 
+In most cases `Pandas` will guess correctly without specifying the axis, since in this case the no row is called `Z_CostContact` or `Z_Revenue`.
+It is however good practice to add the axis to make sure `Pandas` is operating as expected.
 
 ```{.python eval=False}
 df = df.drop("Z_CostContact", axis=1)
 df = df.drop("Z_Revenue", axis=1)
 ```
+::: {.callout-tip collapse="true"}
+## can be done in one go
+```
+df = df.drop(["Z_CostContact", "Z_Revenue"], axis=1)
+```
+:::
 
 ### Conditional subsetting
 
-To look more specifically at a subset of the data we can set certain conditions.
-
-This subsetting syntax is at first glance complicated but hopefully makes sense when going through it step by step.
-
-If interested only in the individuals in the table that graduated, we can test each string in the column `Education` if it is equal to `Graduation` which will return `series` with Booleans values `True` or `false`:
+So far, all the subsetting has been based on `row names` and column names. However, in many cases, it is more helpful to look only at data that contain certain items. This can be done using conditional subsetting, which is based on Boolean values `True` or `False`.
+pandas will interpret a series of True and `False` values by printing only the rows or columns where a `True` is present and ignoring all rows or columns with a `False`.
+For example, if we are only interested in individuals in the table who graduated, we can test each string in the column Education to see if it is equal (==) to Graduation. This will return a series with Boolean values `True` or `False`.
 
 ```{.python eval=False}
 education_is_grad = (df["Education"] == "Graduation")
 education_is_grad
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 ```
 0        True
 1        True
@@ -555,24 +574,34 @@ education_is_grad
 1753    False
 Name: Education, Length: 1754, dtype: bool
 ```
-
-Can you imagine an easy way to count the number of True's in this series?
-::: {.callout-tip collapse="true" title="Answer"}
-False is assigned a count value of 0, and True 1.
-The python fuction sum() can sum up integers.
-:::
-::: {.callout-note collapse="true" title="Answer"}
-
-```{.python eval=False} 
-sum(education_is_grad)
-```
-```
-1127
-```
 :::
 
-In many cases, there are multiple conditions that can be if interest.
-This can be done by combining multiple statements with `&`
+Is this series correct?
+
+```{.python eval=False}
+df["Education"]
+```
+
+:::{.callout-note collapse="true"}
+## Expand see output
+```
+0       Graduation
+1       Graduation
+2       Graduation
+3       Graduation
+4       Master
+…       …
+1749    Graduation
+1750    Graduation
+1751    Graduation
+1752    Graduation
+1753    Master
+Name: Education, length: 1754, dtype: object
+```
+:::
+
+It is possible to provide pandas with multiple conditions at the same time.
+This can be done by combining multiple statements with `&`.
 
 ```{.python eval=False}
 two_at_once = (df["Education"] == "Graduation") & (df["Marital_Status"] == "Single")
@@ -614,41 +643,46 @@ These `Series` of Booleans can be used to subset the dataframe to rows where the
 ```{.python eval=False} 
 df[two_at_once]
 ```
-
-ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
--|----|----|----------|------|-------|-|-|---|--|---|---|--|--|-|--|-|-|-|-|--
-0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|11
-1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11
-18|7892|1969|Graduation|Single|18589.0|0|0|6|4|25|15|12|13|2|1|3|7|0|3|11
-20|5255|1986|Graduation|Single|NaN|1|0|5|1|3|3|263|362|27|0|0|1|0|3|11
-33|1371|1976|Graduation|Single|79941.0|0|0|123|164|266|227|30|174|2|4|9|1|0|3|11
-…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…
-1720|10968|1969|Graduation|Single|57731.0|0|1|266|21|300|65|8|44|8|8|6|6|0|3|11
-1723|5959|1968|Graduation|Single|35893.0|1|1|158|0|23|0|0|18|3|1|5|8|0|3|11
-1743|4201|1962|Graduation|Single|57967.0|0|1|229|7|137|4|0|91|4|2|8|5|0|3|11
-1746|7004|1984|Graduation|Single|11012.0|1|0|24|3|26|7|1|23|3|1|2|9|0|3|11
-1748|8080|1986|Graduation|Single|26816.0|0|0|5|1|6|3|4|3|0|0|3|4|0|3|11
+:::{.callout-note collapse="true"}
+## Expand see output
+|ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue|
+|-|----|----|----------|------|-------|-|-|---|--|---|---|--|--|-|--|-|-|-|-|--|
+|0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|11|
+|1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11|
+|18|7892|1969|Graduation|Single|18589.0|0|0|6|4|25|15|12|13|2|1|3|7|0|3|11|
+|20|5255|1986|Graduation|Single|NaN|1|0|5|1|3|3|263|362|27|0|0|1|0|3|11|
+|33|1371|1976|Graduation|Single|79941.0|0|0|123|164|266|227|30|174|2|4|9|1|0|3|11|
+|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|
+|1720|10968|1969|Graduation|Single|57731.0|0|1|266|21|300|65|8|44|8|8|6|6|0|3|11|
+|1723|5959|1968|Graduation|Single|35893.0|1|1|158|0|23|0|0|18|3|1|5|8|0|3|11|
+|1743|4201|1962|Graduation|Single|57967.0|0|1|229|7|137|4|0|91|4|2|8|5|0|3|11|
+|1746|7004|1984|Graduation|Single|11012.0|1|0|24|3|26|7|1|23|3|1|2|9|0|3|11|
+|1748|8080|1986|Graduation|Single|26816.0|0|0|5|1|6|3|4|3|0|0|3|4|0|3|11|
 252 rows × 20 columns
+:::
 
-It is not actually necessary to create a `series` every time for subsetting the table and it can be done in one go by combining the conditions within _`df[]`_.
+It is not actually necessary to create a `series` every time for subsetting the table and it can be done in one go by combining the conditions within the _`df[]`_.
 
 ```python
 df[(df["Education"] == "Master") & (df["Marital_Status"] == "Single")]
 ```
-|ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
--|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-
-26|10738|1951|Master|Single|49389.0|1|1|40|0|19|2|1|3|2|0|3|7|0|3|11
-46|6853|1982|Master|Single|75777.0|0|0|712|26|538|69|13|80|3|6|11|1|0|3|11
-76|11178|1972|Master|Single|42394.0|1|0|15|2|10|0|1|4|1|0|3|7|0|3|11
-98|6205|1967|Master|Single|32557.0|1|0|34|3|29|0|4|10|2|1|3|5|0|3|11
-110|821|1992|Master|Single|92859.0|0|0|962|61|921|52|61|20|5|4|12|2|0|3|11
-…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…
-1690|3520|1990|Master|Single|91172.0|0|0|162|28|818|0|28|56|4|3|7|3|0|3|11
-1709|4418|1983|Master|Single|89616.0|0|0|671|47|655|145|111|15|7|5|12|2|0|3|11
-1714|2980|1952|Master|Single|8820.0|1|1|12|0|13|4|2|4|3|0|3|8|0|3|11
-1738|7366|1982|Master|Single|75777.0|0|0|712|26|538|69|13|80|3|6|11|1|0|3|11
-1747|9817|1970|Master|Single|44802.0|0|0|853|10|143|13|10|20|9|4|12|8|0|3|11
+:::{.callout-note collapse="true"}
+## Expand see output
+||ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue|
+|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
+|26|10738|1951|Master|Single|49389.0|1|1|40|0|19|2|1|3|2|0|3|7|0|3|11|
+|46|6853|1982|Master|Single|75777.0|0|0|712|26|538|69|13|80|3|6|11|1|0|3|11|
+|76|11178|1972|Master|Single|42394.0|1|0|15|2|10|0|1|4|1|0|3|7|0|3|11|
+|98|6205|1967|Master|Single|32557.0|1|0|34|3|29|0|4|10|2|1|3|5|0|3|11|
+|110|821|1992|Master|Single|92859.0|0|0|962|61|921|52|61|20|5|4|12|2|0|3|11|
+|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|
+|1690|3520|1990|Master|Single|91172.0|0|0|162|28|818|0|28|56|4|3|7|3|0|3|11|
+|1709|4418|1983|Master|Single|89616.0|0|0|671|47|655|145|111|15|7|5|12|2|0|3|11|
+|1714|2980|1952|Master|Single|8820.0|1|1|12|0|13|4|2|4|3|0|3|8|0|3|11|
+|1738|7366|1982|Master|Single|75777.0|0|0|712|26|538|69|13|80|3|6|11|1|0|3|11|
+|1747|9817|1970|Master|Single|44802.0|0|0|853|10|143|13|10|20|9|4|12|8|0|3|11|
 75 rows × 20 columns
+:::
 
 ### Describing a DataFrame
 
@@ -658,47 +692,65 @@ Pandas has a native function to do just that, it will output a `count`, `mean`, 
 ```{.python eval=False} 
 df.describe()
 ```
-|ID|Year_Birth|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
--|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-
-count|1754.000000|1754.000000|1735.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.0|1754.0
-mean|5584.696123|1969.571266|51166.578098|0.456100|0.480616|276.072406|28.034778|166.492018|40.517104|28.958381|47.266819|3.990878|2.576967|5.714937|5.332383|0.011403|3.0|11.0
-std|3254.655979|11.876614|26200.419179|0.537854|0.536112|314.604735|41.348883|225.561694|57.412986|42.830660|53.885647|2.708278|2.848335|3.231465|2.380183|0.106202|0.0|0.0
-min|0.000000|1893.000000|1730.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|3.0|11.0
-25%|2802.500000|1960.000000|33574.500000|0.000000|0.000000|19.000000|2.000000|15.000000|3.000000|2.000000|10.000000|2.000000|0.000000|3.000000|3.000000|0.000000|3.0|11.0
-50%|5468.000000|1971.000000|49912.000000|0.000000|0.000000|160.500000|9.000000|66.000000|13.000000|9.000000|27.000000|3.000000|1.000000|5.000000|6.000000|0.000000|3.0|11.0
-75%|8441.250000|1978.000000|68130.000000|1.000000|1.000000|454.000000|35.000000|232.000000|53.500000|35.000000|63.000000|6.000000|4.000000|8.000000|7.000000|0.000000|3.0|11.0
-max|11191.000000|1996.000000|666666.000000|2.000000|2.000000|1492.000000|199.000000|1725.000000|259.000000|263.000000|362.000000|27.000000|28.000000|13.000000|20.000000|1.000000|3.0|11.0
+:::{.callout-note collapse="true"}
+## Expand see output
+||ID|Year_Birth|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue|
+|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
+|count|1754.000000|1754.000000|1735.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.0|1754.0|
+|mean|5584.696123|1969.571266|51166.578098|0.456100|0.480616|276.072406|28.034778|166.492018|40.517104|28.958381|47.266819|3.990878|2.576967|5.714937|5.332383|0.011403|3.0|11.0|
+|std|3254.655979|11.876614|26200.419179|0.537854|0.536112|314.604735|41.348883|225.561694|57.412986|42.830660|53.885647|2.708278|2.848335|3.231465|2.380183|0.106202|0.0|0.0|
+|min|0.000000|1893.000000|1730.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|3.0|11.0|
+|25%|2802.500000|1960.000000|33574.500000|0.000000|0.000000|19.000000|2.000000|15.000000|3.000000|2.000000|10.000000|2.000000|0.000000|3.000000|3.000000|0.000000|3.0|11.0|
+|50%|5468.000000|1971.000000|49912.000000|0.000000|0.000000|160.500000|9.000000|66.000000|13.000000|9.000000|27.000000|3.000000|1.000000|5.000000|6.000000|0.000000|3.0|11.0|
+|75%|8441.250000|1978.000000|68130.000000|1.000000|1.000000|454.000000|35.000000|232.000000|53.500000|35.000000|63.000000|6.000000|4.000000|8.000000|7.000000|0.000000|3.0|11.0|
+|max|11191.000000|1996.000000|666666.000000|2.000000|2.000000|1492.000000|199.000000|1725.000000|259.000000|263.000000|362.000000|27.000000|28.000000|13.000000|20.000000|1.000000|3.0|11.0|
 8 rows × 18 columns
+:::
 
-You can also directly calculate the relevant statistics on columns you are interested in
+You can also directly calculate the relevant statistics on numberic columns or rows you are interested in using the functions `max()`, `min()`, `mean()`, `median()` etc,.
 
 ```{.python eval=False} 
 df["MntWines"].max()
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 ```
 1492
 ```
+:::
 ```{.python eval=False} 
 df[["Kidhome", "Teenhome"]].mean()
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 ```
 Kidhome     0.456100
 Teenhome    0.480616
 dtype: float64
 ```
+:::
 
-For non-numeric columns, you can get the represented values or their counts:
+There are also ceartin functions that are usfule for non-numeric columns.
+To know which stings are present in a `object`, the fuction `unique()` can be used, this will returns an `array` with the unique values in the column or row.
 
 ```{.python eval=False} 
 df["Education"].unique()
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 ```
 array(['Graduation', 'Master', 'Basic', '2n Cycle'], dtype=object)
 ```
+:::
+
+To know how often a value is present in a column or row, the function `value_counts()` can be used. 
+This will print a `series` for all the unique values and print a count.
 
 ```{.python eval=False} 
 df["Marital_Status"].value_counts()
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 ```
 Marital_Status
 Married     672
@@ -710,36 +762,20 @@ Alone         2
 Absurd        2
 Name: count, dtype: int64
 ```
-
-
-::: {.callout-tip}
-If you get stuck on solutions to the tasks in the Jupyter notebook, the answers should be in the corresponding 'Solutions' chapter on this page.
 :::
 
-::: {.callout-tip title="Task" appearance="simple"}
+## subsetting exercises
 
-Subset the `DataFrame` in two different ways:
+Here there are several exercises to try conditional subsetting. 
+Try to first before seeing the awnsers.
 
-::: {.callout-tip}
-Just like with the "PhD" string before, you can subset using integers and $<$, $>$, $<=$ and $>=$.
-:::
-
-
-- One where everybody is born before 1970
+- Subset the `DataFrame` with people born before 1970 and after 1970 and store both `DataFrames`
 
 ::: {.callout-note collapse="true" title="Answer"}
 
-```python 
+```{.python eval=False} 
 df_before = df[df["Year_Birth"] < 1970]
-```
-:::
-
-- One where everybody is born in or after 1970
-
-::: {.callout-note collapse="true" title="Answer"}
-
-```python 
-df_before = df[df["Year_Birth"] >= 1970]
+df_after = df[df["Year_Birth"] >= 1970]
 ```
 :::
 
@@ -747,9 +783,9 @@ df_before = df[df["Year_Birth"] >= 1970]
 
 ::: {.callout-note collapse="true" title="Answer"}
 
-```python 
+```{.python eval=False} 
 print("n(before)   =", df_before.shape[0])
-print("n(after)   =", df_before.shape[0])
+print("n(after)   =", df_after.shape[0])
 ```
 ```
 n(before)   = 804
@@ -762,57 +798,102 @@ n(after)   = 950
 
 ::: {.callout-note collapse="true" title="Answer"}
 
-```python
+```{.python eval=False} 
  df_before.shape[0] + df_after.shape[0] == df.shape[0]
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 True
-
-```python 
+:::
+```{.python eval=False} 
 print("n(sum)      =", df_before.shape[0] + df_after.shape[0])
 print("n(expected) =", df.shape[0])
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 ```
 n(sum)      = 1754
 n(expected) = 1754
 ```
-
+:::
 :::
 
 - How does the mean income of the two groups differ?
 
 ::: {.callout-note collapse="true" title="Answer"}
 
-  ```python 
+```{.python eval=False} 
   print("income(before) =", df_before["Income"].mean())
   print("income(after)  =", df_after["Income"].mean())
   ```
- income(before) = 55513.38113207547
-  income(after)  = 47490.29255319149  
-
+:::{.callout-note collapse="true"}
+## Expand see output
+income(before) = 55513.38113207547
+income(after)  = 47490.29255319149  
+:::     
 :::
 
+- BONUS: Can you find something else that differs a lot between the two groups?
+
+::: {.callout-note collapse="true" title="Answer"}
+This is an open ended question:)
 :::
 
-::: {.callout-tip title="Extra Task" appearance="simple"}
-Can you find something else that differs a lot between the two groups?
+### Getting summary statistics on grouped data
+
+`Pandas` is equipped with lots of useful functions which make complicated tasks very easy and fast.
+One of these functions is `.groupby()` with the arguments `by=...`, which will group a `DataFrame` using a categorical column (for example `Education` or `Marital_Status`).
+This makes it possible to perform operations on a group directly without the need for subsetting.
+For example, to get a mean income value for the different Education levels in the `DataFrame` can be done by specifying the column name for the grouping variable by `.groupby(by='Education')` and specifying the column name to perform this action on `[Income]` followed by the `sum()` function.
+
+```{.python eval=False} 
+df.groupby(by="Education")["Income"].mean()
+```
+## Expand see output
+```
+Education
+2n Cycle      47633.190000
+Basic         20306.259259
+Graduation    52720.373656
+Master        52917.534247
+Name: Income, dtype: float6
+```
 :::
 
 ## Dealing with missing data
 
-We can check for missing data for each cell like this:
+In large tables, it is often important to check if there are columns or rows that have missing data. `pandas` represents missing data with NA (Not Available). To identify these missing values, pandas provides the .isna() function. This function checks every cell in the `DataFrame` and returns a `DataFrame` of the same shape, where each cell contains a Boolean value: `True` if the original cell contains `NA`, and `False` otherwise.
 
 ```python
 df.isna()
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1749</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1750</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1751</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1752</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1753</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n  </tbody>\n</table>\n<p>1754 rows × 20 columns</p>
+:::{.callout-note collapse="true"}
+## Expand see output
+||ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue|
+|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
+|0|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
+|1|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
+|2|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
+|3|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
+|4|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
+|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|
+|1749|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
+|1750|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
+|1751|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
+|1752|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
+|1753|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
+1754 rows × 20 columns
+:::
 
-By summing over each row, we see how many missing values are in each column.
+It is very hard to see if there are any 'True' values in this new Boolean table. 
+To investigate how many missing values are present in the table, the `sum()` function can be used.
+In `Python`, `True` has the `1` assigned to it and `False` `0`.
 
-`True` is treated as `1` and `False` as `0`.
-
-```python
+```{.python eval=False} 
 df.isna().sum()
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 ```
 ID                      0
 Year_Birth              0
@@ -834,30 +915,14 @@ NumWebVisitsMonth       0
 Complain                0
 dtype: int64
 ```
+:::
 
-We don't really know what a missing value means so we are just going to keep them in the data.
+In this case is it not clear what a missing value represents, are these individuals who did not want to state their income, or did not have an income? 
+For the tutorial, we are going to keep them in the data.
 
-However, we could remove them using `df.dropna()`
-
-### Grouping data
-
-We can group a `DataFrame` using a categorical column (for example `Education` or `Marital_Status`).
-
-This allows us to do perform operations on each group individually.
-
-For example, we could group by `Education` and calculate the mean `Income`:
-
-```python
-df.groupby(by="Education")["Income"].mean()
-```
-```
-Education
-2n Cycle      47633.190000
-Basic         20306.259259
-Graduation    52720.373656
-Master        52917.534247
-Name: Income, dtype: float6
-```
+Two possible actions that can be taken to deal with missing data. One is to remove the row or column using the `.dropna()` function.
+This function will by default remove the row with the `NA` but with specficing the `axis=1` the column will be dropped.
+The second course of action is filling the empty cells with a value, this can be done with the `.fillna()` function, which will substitute the missing value with a set value, such as `0`.
 
 ##  Combining data
 
@@ -873,7 +938,7 @@ The command to combine two `DataFrames` by appending all rows is `pd.concat([fir
 
 
 ::: {.callout-note collapse="true" title="Answer"}
-```python 
+```{.python eval=False} 
 df2 = pd.read_csv("../phd_data.tsv", sep="\t")
 ```
 :::
@@ -881,8 +946,7 @@ df2 = pd.read_csv("../phd_data.tsv", sep="\t")
 - Concatenate the "old" `DataFrame` `df` and the new `df2` and name the concatenated one `concat_df`
 
 ::: {.callout-note collapse="true" title="Answer"}
-
-```python 
+```{.python eval=False}  
 concat_df = pd.concat([df, df2])
 concat_df
 ```
@@ -898,7 +962,7 @@ We previously removed the columns "Z_CostContact" and "Z_Revenue" but they are i
 
 We can remove them like before:
 
-```python 
+```{.python eval=False} 
 concat_df = concat_df.drop("Z_CostContact", axis=1)
 concat_df = concat_df.drop("Z_Revenue", axis=1)
 concat_df
@@ -910,8 +974,8 @@ concat_df
 
 ::: {.callout-note collapse="true" title="Answer"}
 
-[
-```python 
+
+```{.python eval=False} 
 concat_df[concat_df["Education"]=="PhD"]["Marital_Status"].value_counts()
 ```
 ```
@@ -940,9 +1004,9 @@ To make our like easier, we might want to have a new column when the Education l
 
 This information could be stored in a Python `Dictionary` (Also called Hash Map in other languages), which stores **key** and **value** pairs.
 
-We could store the Education information like this:
+We could store the Education information like this.
 
-```python
+```{.python eval=False} 
 education_dictionary = {
     "Basic": 1,
     "2n Cycle": 2,
@@ -953,7 +1017,7 @@ education_dictionary = {
 ```
 We can now convert this `Dictionary` to a `DataFrame`:
 
-```python
+```{.python eval=False} 
 education_df = pd.DataFrame.from_dict(education_dictionary, orient="index")
 education_df
 ```
@@ -963,7 +1027,7 @@ The resulting `DataFrame` has the Education level as index and the column 0 has 
 
 We can rename the column to "Level".
 
-```python
+```{.python eval=False} 
 education_df = education_df.rename(columns={0: "Level"})
 education_df
 ```
@@ -975,7 +1039,7 @@ The left `DataFrame` is `concat_df` and we merge on "Education" because that's w
 
 The right one is `education_df` and the information is in the index.
 
-```python
+```{.python eval=False} 
 merged_df = pd.merge(left=concat_df, right=education_df, left_on="Education", right_index=True)
 merged_df
 ```
@@ -998,7 +1062,7 @@ We can plot the data from a `DataFrame` like this:
 
 We usually specify the columns from which the `x` and `y` components should be taken, but for a histogram we only need to specify one.
 
-```python
+```{.python eval=False} 
 ax = merged_df.plot(kind="hist", y="Income")
 ax.set_xlabel("Income")
 ax.set_title("Histogram of income")
@@ -1026,7 +1090,7 @@ In either way, we can redo the plot with that datapoint removed.
 
 ::: {.callout-note collapse="true" title="Answer"}
 
-```python
+```{.python eval=False} 
 ax = merged_df[merged_df["Income"] != 666666].plot(kind="hist",y="Income")
 ax.set_xlabel("Income")
 ax.set_title("Fixed Histogram of income")
@@ -1045,7 +1109,7 @@ Another visualization we could do is a bar plot.
 
 Using the `groupby` and `mean` methods, we can calculate the mean Income like we've learned before.
 
-```python
+```{.python eval=False} 
 grouped_by_education = merged_df.groupby(by="Education")["Income"].mean()
 grouped_by_education
 
@@ -1061,7 +1125,7 @@ Name: Income, dtype: float64
 ```
 Now, this data can be shown:
 
-```python
+```{.python eval=False} 
 ax = grouped_by_education.plot(kind="bar")
 ax.set_ylabel("Mean income")
 ax.set_title("Mean income for each education level")
@@ -1074,7 +1138,7 @@ Text(0.5, 1.0, 'Mean income for each education level')
 
 Another kind of plot is the scatter plot, which needs two columns for the **x** and **y** axis.
 
-```python
+```{.python eval=False} 
 ax = df.plot(kind="scatter", x="MntWines", y="MntFruits")
 ax.set_title("Wine purchases and Fruit purchases")
 ```
@@ -1084,7 +1148,7 @@ Text(0.5, 1.0, 'Wine purchases and Fruit purchases')
 
 You can also specify whether the axes should be on the log scale or not.
 
-```python
+```{.python eval=False} 
 ax = df.plot(kind="scatter", x="MntWines", y="MntFruits", logy=True, logx=True)
 ax.set_title("Wine purchases and Fruit purchases, on log scale")
 ```
@@ -1097,17 +1161,17 @@ Text(0.5, 1.0, 'Wine purchases and Fruit purchases, on log scale')
 
 Plotnine is the Python clone of ggplot2, which is very powerful and is great if you are already familiar with the ggplot2 syntax!
 
-```python
+```{.python eval=False} 
 from plotnine import *
 ```
-```python
+```{.python eval=False} 
 (ggplot(merged_df, aes("Education", "MntWines", fill="Education"))
  + geom_boxplot(alpha=0.8))
 ```
 ![png](https://github.com/Kevinnota/teaching_stuff/blob/main/boxplot.png?raw=true)
 
 
-```python
+```{.python eval=False} 
 (ggplot(merged_df[(merged_df["Year_Birth"]>1900) & (merged_df["Income"]!=666666)],
         aes("Year_Birth", "Income", fill="Education"))
  + geom_point(alpha=0.5, stroke=0)
