@@ -272,7 +272,8 @@ R
 
 Note the following may take a minute or so to run.
 
-```R
+```{r, eval = F}
+
 # Read output of samtools depth commans
 df <- read.delim("Y.pestis_sample10.sorted.boc", header = FALSE, sep = "\t")
 names(df) <- c("Ref", "Pos", "N_reads")
@@ -330,7 +331,8 @@ R
 
 And generate the histogram with.
 
-```R
+```{r, eval = F}
+
 hist(as.numeric(readLines("mapq.txt")), col = "darkred", breaks = 100)
 ```
 
@@ -343,7 +345,8 @@ Note that MAPQ scores are computed slightly differently for Bowtie and BWA, so t
 
 Edit distance can be extracted by gathering information in the NM-tag inside BAM-alignments, which reports the number of mismatches for each aligned read. This can be done either in bash / awk, or using handy functions from *Rsamtools* R package:
 
-```R
+```{r, eval = F}
+
 library("Rsamtools")
 param <- ScanBamParam(tag = "NM")
 bam <- scanBam("Y.pestis_sample10.sorted.bam", param = param)
@@ -404,13 +407,15 @@ The distribution of PMD scores can be visualized via a histogram in R as follows
 
 Load R.
 
-```
+```{r, eval = F}
+
 R
 ```
 
 Then generate the histogram.
 
-```R
+```{r, eval = F}
+
 pmd_scores <- read.delim("PMDscores.txt", header = FALSE, sep = "\t")
 hist(pmd_scores$V4, breaks = 1000, xlab = "PMDscores")
 ```
