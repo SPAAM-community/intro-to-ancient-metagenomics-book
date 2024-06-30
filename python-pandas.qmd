@@ -395,9 +395,35 @@ df.shape
 ```
 (1754, 20)
 ```
-This shows that the `DataFrame` has **1754** rows and **20** columns.
 :::
 
+The .shape attribute of a DataFrame provides a tuple representing its dimensions. 
+A tuple is a Python data structure that is used to store ordered items.
+In the case of shape, the first item is always the row, and the second item is the columns.
+To print, or access the rows or columns the index can be used.
+ `.shape[0]` gives the number of rows, and `.shape[1]` gives the number of columns.
+
+```{.python eval=False}
+df.shape[0]
+```
+::: {.callout-note collapse="true"}
+## Expand see output
+```
+1754
+```
+:::
+
+```{.python eval=False}
+df.shape[1]
+```
+::: {.callout-note collapse="true"}
+## Expand see output
+```
+20
+```
+:::
+
+:::
 It is often useful to have a quick look at the first rows, to get, for example, an idea of the data was read correctly. 
 This can be done with the `head()` function.
 
@@ -420,7 +446,7 @@ ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruit
 ## **Fuctions and attributes**
 The difference between calling a function and an atribute is the `()`. 
 `.head()` is a function and will perform an action. 
-While `.shape` is an attribute and will return a value that is already stored in the `DataFrame`
+While `.shape` is an attribute and will return a value that is already stored in the `DataFrame`.
 :::
 
 What we can see it that, unlike **R**, **Python** and in extension **Pandas** is 0-indexed instead of 1-indexed.
@@ -464,7 +490,7 @@ Name: 1, dtype: object
 ```
 :::
 
-To print a range of rows, the first and last index can be written with a `:`. To print the second and third row, this would be `[1:2, :]`
+To print a range of rows, the first and last index can be written with a `:`. To print the second and third row, this would be `[1:2, :]`.
 
 ```{.python eval=False}
 df.loc[1:2]
@@ -552,6 +578,7 @@ df = df.drop(["Z_CostContact", "Z_Revenue"], axis=1)
 
 So far, all the subsetting has been based on `row names` and column names. However, in many cases, it is more helpful to look only at data that contain certain items. This can be done using conditional subsetting, which is based on Boolean values `True` or `False`.
 pandas will interpret a series of True and `False` values by printing only the rows or columns where a `True` is present and ignoring all rows or columns with a `False`.
+
 For example, if we are only interested in individuals in the table who graduated, we can test each string in the column Education to see if it is equal (==) to Graduation. This will return a series with Boolean values `True` or `False`.
 
 ```{.python eval=False}
@@ -576,7 +603,7 @@ Name: Education, Length: 1754, dtype: bool
 ```
 :::
 
-Is this series correct?
+To quicky check if the `True` and `False` values are correct, it can be useful to print out this column.
 
 ```{.python eval=False}
 df["Education"]
@@ -625,27 +652,17 @@ Length: 1754, dtype: bool
 ```
 :::
 
-How many Single people are there in the table that also greduated? And how many are single?
-::: {.callout-note collapse="true" title="Answer"}
+To find out the total number of Graduated singles, the `.sum()` can be used.
 
 ```{.python eval=False} 
 sum(two_at_once)
 ```
+
 ::: {.callout-note collapse="true"}
 ## Expand see output
 ```
 252
 ```
-:::
-```{.python eval=False} 
-sum(df["Marital_Status"] == "Single")
-```
-::: {.callout-note collapse="true"}
-## Expand see output
-```
-382
-```
-:::
 :::
 
 These `Series` of Booleans can be used to subset the dataframe to rows where the condition(s) are **True**:
@@ -774,13 +791,54 @@ Name: count, dtype: int64
 ```
 :::
 
-## subsetting exercises
+### Getting summary statistics on grouped data
+
+`Pandas` is equipped with lots of useful functions which make complicated tasks very easy and fast.
+One of these functions is `.groupby()` with the arguments `by=...`, which will group a `DataFrame` using a categorical column (for example `Education` or `Marital_Status`).
+This makes it possible to perform operations on a group directly without the need for subsetting.
+For example, to get a mean income value for the different Education levels in the `DataFrame` can be done by specifying the column name for the grouping variable by `.groupby(by='Education')` and specifying the column name to perform this action on `[Income]` followed by the `sum()` function.
+
+```{.python eval=False} 
+df.groupby(by="Education")["Income"].mean()
+```
+:::{.callout-note collapse="true"}
+## Expand see output
+```
+Education
+2n Cycle      47633.190000
+Basic         20306.259259
+Graduation    52720.373656
+Master        52917.534247
+Name: Income, dtype: float6
+```
+:::
+
+
+### Subsetting Questions and Exercises
 
 Here there are several exercises to try conditional subsetting. 
 Try to first before seeing the awnsers.
 
-- Subset the `DataFrame` with people born before 1970 and after 1970 and store both `DataFrames`
+::: {.callout-tip title="Question" appearance="simple"}
+How many Single people are there in the table that also greduated? And how many are single?
+:::
+::: {.callout-note collapse="true" title="Answer"}
+```{.python eval=False} 
+sum(df["Marital_Status"] == "Single")
+```
 
+::: {.callout-note collapse="true"}
+## Expand see output
+```
+382
+```
+:::
+:::
+
+
+::: {.callout-tip title="Question" appearance="simple"}
+Subset the `DataFrame` with people born before 1970 and after 1970 and store both `DataFrames`
+:::
 ::: {.callout-note collapse="true" title="Answer"}
 
 ```{.python eval=False} 
@@ -789,8 +847,9 @@ df_after = df[df["Year_Birth"] >= 1970]
 ```
 :::
 
-- How many people are in the two `DataFrames`? 
-
+::: {.callout-tip title="Question" appearance="simple"}
+How many people are in the two `DataFrames`? 
+:::
 ::: {.callout-note collapse="true" title="Answer"}
 
 ```{.python eval=False} 
@@ -806,8 +865,9 @@ n(after)   = 950
 :::
 :::
 
-- Do the total number of people sum up to the original `DataFrame` total?
-
+::: {.callout-tip title="Question" appearance="simple"}
+Do the total number of people sum up to the original `DataFrame` total?
+:::
 ::: {.callout-note collapse="true" title="Answer"}
 
 ```{.python eval=False} 
@@ -830,7 +890,9 @@ n(expected) = 1754
 :::
 :::
 
-- How does the mean income of the two groups differ?
+::: {.callout-tip title="Question" appearance="simple"}
+How does the mean income of the two groups differ?
+:::
 
 ::: {.callout-note collapse="true" title="Answer"}
 
@@ -842,35 +904,17 @@ n(expected) = 1754
 :::{.callout-note collapse="true"}
 ## Expand see output
 income(before) = 55513.38113207547
+
 income(after)  = 47490.29255319149  
 :::     
 :::
 
-- BONUS: Can you find something else that differs a lot between the two groups?
-
-::: {.callout-note collapse="true" title="Answer"}
-This is an open ended question:)
+::: {.callout-tip title="Question" appearance="simple"}
+BONUS: Can you find something else that differs a lot between the two groups?
 :::
 
-### Getting summary statistics on grouped data
-
-`Pandas` is equipped with lots of useful functions which make complicated tasks very easy and fast.
-One of these functions is `.groupby()` with the arguments `by=...`, which will group a `DataFrame` using a categorical column (for example `Education` or `Marital_Status`).
-This makes it possible to perform operations on a group directly without the need for subsetting.
-For example, to get a mean income value for the different Education levels in the `DataFrame` can be done by specifying the column name for the grouping variable by `.groupby(by='Education')` and specifying the column name to perform this action on `[Income]` followed by the `sum()` function.
-
-```{.python eval=False} 
-df.groupby(by="Education")["Income"].mean()
-```
-## Expand see output
-```
-Education
-2n Cycle      47633.190000
-Basic         20306.259259
-Graduation    52720.373656
-Master        52917.534247
-Name: Income, dtype: float6
-```
+::: {.callout-note collapse="true" title="Answer"}
+This is an open ended question.
 :::
 
 ## Dealing with missing data
@@ -937,18 +981,22 @@ Two possible actions that can be taken to deal with missing data. One is to remo
 This function will by default remove the row with the `NA` but with specficing the `axis=1` the column will be dropped.
 The second course of action is filling the empty cells with a value, this can be done with the `.fillna()` function, which will substitute the missing value with a set value, such as `0`.
 
+
 ##  Combining data
 
-### Concatenation
+### Concatenation exercises
 
-Data is very often present in multiple tables. 
-Think for example about a taxonomy table giving count data per sample.
-One way to combine multiple datasets is through **concatenation**, which either combines all columns or rows of multiple `DataFrames`.
-The function in `Pandas` that does just this is called `.concat`, This command combines two `DataFrames` by appending all rows. `.concat([first_dataframe, second_dataframe])`.
+Data is very often present in multiple tables. Think, for example, about a taxonomy table giving count data per sample. 
+One way to combine multiple datasets is through concatenation, which either combines all columns or rows of multiple `DataFrames`. 
+The function in Pandas that does just that is called .concat. This command combines two `DataFrames` by appending all rows or columns: `.concat([first_dataframe, second_dataframe])`.
 
-::: {.callout-tip title="Task" appearance="simple"}
+In the `DataFrame`, there are individuals with the education levels Graduation, Master, Basic, and 2n Cycle. PhD is missing; however, there is data on people with the education level PhD in another table called phd_data.tsv.
 
-- Read the **tsv** "phd_data.tsv" as a new `DataFrame` and name the variable `df2`.
+With everything learned so far, and basic information on the `.concat() `function, try to read in the data from `../phd_data.tsv` and concatenate it to the existing `df`.
+
+::: {.callout-tip title="Question" appearance="simple"}
+Read the **tsv** "phd_data.tsv" as a new `DataFrame` and name the variable `df2`.
+:::
 
 ::: {.callout-note collapse="true" title="Answer"}
 ```{.python eval=False} 
@@ -956,8 +1004,9 @@ df2 = pd.read_csv("../phd_data.tsv", sep="\t")
 ```
 :::
 
-- Concatenate the "old" `DataFrame` `df` and the new `df2` and name the concatenated one `concat_df`.
-
+::: {.callout-tip title="Question" appearance="simple"}
+Concatenate the "old" `DataFrame` `df` and the new `df2` and name the concatenated one `concat_df`.
+:::
 ::: {.callout-note collapse="true" title="Answer"}
 ```{.python eval=False}  
 concat_df = pd.concat([df, df2])
@@ -980,9 +1029,9 @@ concat_df
 2240 rows × 20 columns
 :::
 :::
-
-- Is there anything weird about the new `DataFrame` and can you fix that?
-
+::: {.callout-tip title="Question" appearance="simple"}
+Is there anything weird about the new `DataFrame` and can you fix that?
+:::
 ::: {.callout-note collapse="true" title="Answer"}
 
 We previously removed the columns "Z_CostContact" and "Z_Revenue" but they are in the new data again.
@@ -1012,10 +1061,10 @@ concat_df
 :::
 :::
 
-- Is there something interesting about the marital status of some people that have a PhD?
-
+::: {.callout-tip title="Question" appearance="simple"}
+Is there something interesting about the marital status of some people that have a PhD?
+:::
 ::: {.callout-note collapse="true" title="Answer"}
-
 
 ```{.python eval=False} 
 concat_df[concat_df["Education"]=="PhD"]["Marital_Status"].value_counts()
@@ -1036,8 +1085,6 @@ Name: count, dtype: int64
 :::
 
 There are two people that have "YOLO" as their Marital Status ...
-
-:::
 
 :::
 
@@ -1127,48 +1174,68 @@ merged_df
 
 :::
 
-
 ## Data visualization
 
-We can easily create simple graphs using `DataFrame.plot()`.
+Just looking at `DataFrames` is nice and useful, but in many cases, it is easier to look at data in graphs.
+The function that can create plots directly from `DataFrames` is `.plot()`.
+The `.plot()` function uses the plotting library `matplotlib` by default in the background.
+There are other plotting libraries such as `Plotnine` which will be shown further in the tutorial.
 
-This uses the package **matplotlib** in the background, which is a very powerful and popular plotting library but is not the most user friendly.
-
-Using this **Pandas** method is very easy and can be a good way to do some initial exploratory plots and later refine them using either pure **matplobib** or another library.
+The only arguments `.plot()` requires are `kind=...`, and the plot axis `x=...` and `y=....` The `kind` argument specifies the type of plot, such as `hist` for histogram, `bar` for bar plot, and `scatter` for scatter plot.
+Check out the [`Pandas` documentation](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.html) for more plot `kind`s and useful syntax.
+There are many aesthetic functions that can help to create beautiful plots.
+These functions such as `.set_xlabel()` or `,set_title()` are added to the plot, as shown in the examples below.
 
 ### Histogram
-
-We can plot the data from a `DataFrame` like this:
-
-`kind` specifies the kind of plot (for example *hist* for histogram, *bar* for bar graph or *scatter* for scatter plot).
-
-We usually specify the columns from which the `x` and `y` components should be taken, but for a histogram we only need to specify one.
 
 ```{.python eval=False} 
 ax = merged_df.plot(kind="hist", y="Income")
 ax.set_xlabel("Income")
 ax.set_title("Histogram of income")
 ```
+
+:::{.callout-note collapse="true"}
+## Expand see output
 Text(0.5, 1.0, 'Histogram of income')
 
 ![png](https://github.com/Kevinnota/teaching_stuff/blob/main/histogram.png?raw=true)
+:::
 
-::: {.callout-tip title="Task" appearance="simple"}
-
-This doesn't look very good because the x-axis extends so much!
-
-- Looking at the data, can you figure out what might cause this?
-
+::: {.callout-tip title="Question" appearance="simple"}
+This does not look very good because the x-axis extends so much!
+Looking at the data, can you figure out what might cause this?
+:::
 ::: {.callout-note collapse="true" title="Answer"}
 
 When we look at the highest earners, we see that somebody put *666666* as their income.
+This is much higher than any other income, which makes the histogram very draged out to include this person.
 
-We can assume that this was put as a joke or is an outlier.
-
-In either way, we can redo the plot with that datapoint removed.
+```{.python eval=False} 
+merged_df[merged_df["Income"].sort_values(ascending=False)]
+```
+:::{.callout-note collapse="true"}
+## Expand see output
+```
+1749    666666.0
+1006    157733.0
+1290    157146.0
+512     153924.0
+504     105471.0
+        ...
+1615    NaN
+1616    NaN
+1616    NaN
+1621    NaN
+1744    NaN
+Name : Income, Length: 1754, dtype: float63
+```
 :::
 
-- Can you "fix" the plot?
+:::
+
+::: {.callout-tip title="Question" appearance="simple"}
+Use conditional subsetting to make the histogram look nicer.
+:::
 
 ::: {.callout-note collapse="true" title="Answer"}
 
@@ -1177,25 +1244,25 @@ ax = merged_df[merged_df["Income"] != 666666].plot(kind="hist",y="Income")
 ax.set_xlabel("Income")
 ax.set_title("Fixed Histogram of income")
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 Text(0.5, 1.0, 'Fixed Histogram of income')
 
 ![png](https://github.com/Kevinnota/teaching_stuff/blob/main/fixed_histogram.png?raw=true)
-
 :::
-
 :::
 
 ### Bar plot
 
-Another visualization we could do is a bar plot.
-
-Using the `groupby` and `mean` methods, we can calculate the mean Income like we've learned before.
+Instead of making a plot from the original `DataFrame` we can use the `groupby` and `mean` methods to make a plot with summary statistics. 
 
 ```{.python eval=False} 
 grouped_by_education = merged_df.groupby(by="Education")["Income"].mean()
 grouped_by_education
 
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 ```
 Education
 2n Cycle      47633.190000
@@ -1205,17 +1272,19 @@ Master        52917.534247
 PhD           56145.313929
 Name: Income, dtype: float64
 ```
-Now, this data can be shown:
+:::
 
 ```{.python eval=False} 
 ax = grouped_by_education.plot(kind="bar")
 ax.set_ylabel("Mean income")
 ax.set_title("Mean income for each education level")
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 Text(0.5, 1.0, 'Mean income for each education level')
 
 ![png](https://github.com/Kevinnota/teaching_stuff/blob/main/bar_plot.png?raw=true)
-
+:::
 ### Scatter plot
 
 Another kind of plot is the scatter plot, which needs two columns for the **x** and **y** axis.
@@ -1224,9 +1293,12 @@ Another kind of plot is the scatter plot, which needs two columns for the **x** 
 ax = df.plot(kind="scatter", x="MntWines", y="MntFruits")
 ax.set_title("Wine purchases and Fruit purchases")
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 Text(0.5, 1.0, 'Wine purchases and Fruit purchases')
 
 ![png](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_01.png?raw=true)
+:::
 
 You can also specify whether the axes should be on the log scale or not.
 
@@ -1234,10 +1306,12 @@ You can also specify whether the axes should be on the log scale or not.
 ax = df.plot(kind="scatter", x="MntWines", y="MntFruits", logy=True, logx=True)
 ax.set_title("Wine purchases and Fruit purchases, on log scale")
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 Text(0.5, 1.0, 'Wine purchases and Fruit purchases, on log scale')
 
 ![png](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_02.png?raw=true)
-
+:::
 
 ## Plotnine
 
@@ -1250,8 +1324,10 @@ from plotnine import *
 (ggplot(merged_df, aes("Education", "MntWines", fill="Education"))
  + geom_boxplot(alpha=0.8))
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 ![png](https://github.com/Kevinnota/teaching_stuff/blob/main/boxplot.png?raw=true)
-
+:::
 
 ```{.python eval=False} 
 (ggplot(merged_df[(merged_df["Year_Birth"]>1900) & (merged_df["Income"]!=666666)],
@@ -1259,12 +1335,16 @@ from plotnine import *
  + geom_point(alpha=0.5, stroke=0)
  + facet_wrap("Marital_Status"))
 ```
+:::{.callout-note collapse="true"}
+## Expand see output
 ![png](https://github.com/Kevinnota/teaching_stuff/blob/main/facet_scatter.png?raw=true)
+:::
 
 
-**task**
+### Advanced Questions and Exercises
 
-Now that you are familiar with python, pandas, and plotting. There are two data.tables from **AncientMetagenomeDir** which contains metadata from metagenomes. You should, by using the code in the tutorial be able to explore the datasets and make some fancy plots.
+Now that you are familiar with python, pandas, and plotting. There are two data.tables from **AncientMetagenomeDir** which contains metadata from metagenomes. 
+You should, by using the code in the tutorial be able to explore the datasets and make some fancy plots.
 
 ```
 file names:
@@ -1291,7 +1371,6 @@ ENTER!
 ```bash
 rm -r /<PATH>/<TO>/python-pandas*
 ```
-
 Once deleted you can move elsewhere (e.g. `cd ~`).
 
 We can also get out of the `conda` environment with
