@@ -479,9 +479,8 @@ In our exploration into ancient DNA, a central question we aim to address is:
 To answer this question, we focus on specific validation methods that are tailored for ancient samples. These methods allow us to assess the degree of DNA fragmentation and damage as definitive indicators of ancientness. 
 Ancient DNA fragments are short (30-70 bp) and exhibit a higher proportion of C > T misincorporations at the strand termini compared to the other single nucleotide substitutions (LINK TO Figure 1).
 
-INSERT FIGURE assets/images/chapters/authentication/Fig_9_deamination.png
+![Damage plots of reads assigned to Homo sapiens with post-mortem damage pattern increasing at read termini [from metagenomic samples, adapted from @Michelsen2022]. The figure shows the damage rate f (x) = k(x)∕N(x) as a function of position x for both forward (C→T) and reverse (G→A).](assets/images/chapters/authentication/Fig_9_deamination.png)
 
-Figure 1. Damage plots of reads assigned to Homo sapiens with post-mortem damage pattern increasing at read termini [from metagenomic samples, adapted from @Michelsen2022]. The figure shows the damage rate f (x) = k(x)∕N(x) as a function of position x for both forward (C→T) and reverse (G→A). 
 
 Different tools can be utilised to assess the level of deamination at the strand termini and the most popular are [mapDamage2.0](https://academic.oup.com/bioinformatics/article/29/13/1682/184965) and [PMDtools](https://github.com/pontussk/PMDtools). However, applying these to a metagenomic dataset can be computationally demanding and time-consuming due to the tens of thousands of different taxonomic entities it can include. 
 
@@ -539,8 +538,36 @@ We report an example of the bdamage.gz file output printed using the command **m
 ./metaDMG-cpp print file.bdamage.gz -names names.dmp > bdamage_table.tsv
 ```
 
-INSERT TABLE /assets/tables/bdamage_table.tsv
-Table 1. Example of the bdamage.gz mismatch matrix table for beech (Fagus sylvatica) of sample VM-14 provided in the exercise.
+#| label: tbl-chapterwritingguidelines-examplecodetable2
+#| echo: false
+#| results: 'asis'
+#| tbl-cap: "Example of the bdamage.gz mismatch matrix table for beech (Fagus sylvatica) of sample VM-14 provided in the exercise."
+#| tbl-cap-location: top
+library(tidyverse)
+library(pander)
+tibble(
+  FunkyName = rep("Fagus sylvatica", 16),
+  Nalignments = rep(196960, 16),
+  Direction = rep("5'", 16),
+  Pos = 0:15,
+  AA = c(0.989742, 0.989488, 0.993037, 0.981054, 0.994413, 0.988985, 0.989806, 0.987598, 0.983646, 0.995312, 0.991643, 0.992977, 0.986903, 0.991904, 0.990775, 0.988845),
+  AC = c(0.00279, 0.003044, 0.000288, 0.005307, 0.000076, 0.000061, 0.000239, 0.007473, 0.001314, 0.000119, 0.003135, 0.002227, 0.002606, 0.001482, 0.000005, 0.002256),
+  AG = c(0.006384, 0.004779, 0.005555, 0.009159, 0.005455, 0.009803, 0.004127, 0.004898, 0.013659, 0.003117, 0.004654, 0.004369, 0.006447, 0.001852, 0.00906, 0.004008),
+  AT = c(0.001085, 0.002689, 0.001121, 0.00448, 0.000056, 0.001151, 0.005828, 0.000031, 0.00138, 0.001452, 0.000568, 0.000427, 0.004044, 0.004761, 0.000159, 0.004892),
+  CA = c(0.001337, 0.000085, 0.003679, 0.004385, 0.000403, 0.000032, 0.003278, 0.009555, 0.001187, 0.001707, 0.000132, 0.00001, 0.008512, 0.005883, 0.002901, 0.013058),
+  CC = c(0.901014, 0.943479, 0.9804, 0.978382, 0.971447, 0.977904, 0.975862, 0.974281, 0.971496, 0.982706, 0.980449, 0.978681, 0.972589, 0.971748, 0.976768, 0.96068),
+  CG = c(0.00323, 0.0052, 0.000069, 0.00091, 0.003505, 0.005916, 0.002776, 0.002914, 0.000207, 0.00237, 0, 0.000303, 0.000003, 0.000493, 0.00028, 0.000246),
+  CT = c(0.094419, 0.051235, 0.015852, 0.016323, 0.024645, 0.016148, 0.018084, 0.01325, 0.02711, 0.013217, 0.019419, 0.021006, 0.018896, 0.021876, 0.020051, 0.026015),
+  GA = c(0.029968, 0.018523, 0.0162, 0.017552, 0.007117, 0.025535, 0.015836, 0.01545, 0.01101, 0.018666, 0.015322, 0.019069, 0.003895, 0.021197, 0.013583, 0.016849),
+  GC = c(0.00409, 0.004122, 0.002869, 0.005319, 0.002939, 0.000138, 0.004876, 0.000015, 0.003486, 0.003942, 0.002766, 0.003154, 0.002801, 0.000126, 0.00069, 0.000012),
+  GG = c(0.963388, 0.9748, 0.97514, 0.971735, 0.989472, 0.974234, 0.977987, 0.978637, 0.985432, 0.972469, 0.979047, 0.976644, 0.992522, 0.978637, 0.980013, 0.982107),
+  GT = c(0.002554, 0.002556, 0.00579, 0.005394, 0.000472, 0.000094, 0.001301, 0.005898, 0.000072, 0.004922, 0.002864, 0.001134, 0.000781, 0.00004, 0.005714, 0.001032),
+  TA = c(0.0034, 0.002407, 0.005933, 0.003053, 0.000247, 0.001613, 0.000418, 0.002356, 0.000006, 0.004357, 0.000164, 0.003626, 0.002139, 0.000438, 0.00093, 0.003212),
+  TC = c(0.013838, 0.00883, 0.014151, 0.006302, 0.008299, 0.009086, 0.015145, 0.005547, 0.00779, 0.002576, 0.010653, 0.003529, 0.00853, 0.003696, 0.006973, 0.008099),
+  TG = c(0.001919, 0.000764, 0.004898, 0.000173, 0.000152, 0.000482, 0.002972, 0.000231, 0.001605, 0.002286, 0.000005, 0.002571, 0.000036, 0.000058, 0.000307, 0.000052),
+  TT = c(0.980843, 0.987998, 0.975018, 0.990472, 0.991301, 0.98882, 0.981465, 0.991865, 0.990598, 0.990781, 0.989178, 0.990274, 0.989295, 0.995809, 0.991789, 0.988638)
+) %>%
+  pandoc.table(., split.tables = Inf)
 
 ### 13.4.2 Deamination patterns
 
@@ -559,30 +586,25 @@ Table 1. Example of the bdamage.gz mismatch matrix table for beech (Fagus sylvat
 
 Another important parameter is the **Zfit** or significance, which represents the number of standard deviations (“sigmas”) away from zero, or in other words, the certainty of the damage being positive.
 
-INSERT FIGURE assets/images/chapters/authentication/F1._MichelsenB.png
-
-Figure 2. The damage model. The figure shows the misincorporations as circles and the damage as a solid line. The fit parameters are reported: A,c,q,ϕ. The uncertainty for a binomial model is in dark grey, while the uncertainty for a beta-binomial model is in light grey. (from Michelsen et al. 2022)
+![The damage model. The figure shows the misincorporations as circles and the damage as a solid line. The fit parameters are reported: A,c,q,ϕ. The uncertainty for a binomial model is in dark grey, while the uncertainty for a beta-binomial model is in light grey. (from Michelsen et al. 2022)](assets/images/chapters/authentication/F1._MichelsenB.png)
 
 Accurate damage estimates are crucial for the authentication of the metagenomic dataset. The **number of reads** and the **significance (Zfit)** are additional parameters that can impact the accuracy and reliability of ancient DNA analysis.
 
 Tests on a single-genome have shown how the accuracy of metaDMG dfit increases depending on the number of reads ([Figure 3](/)).
 
-INSERT FIGURE 3 assets/images/chapters/authentication/F3._Michelsen.png
-
-Figure 3. The single-genome simulations on the *Homo Sapiens* genome with a mean fragment length of 60 and 10% damage. The known damage (Dknown) is shown as a dashed line. A) Estimated damage and its standard deviation (error bars) for 20 replicates (100 reads each). B) Average damage as a function of the number of reads (with the average of the standard deviations as errors). *Adapted from Michelsen et al. 2022*.  
+![The single-genome simulations on the *Homo Sapiens* genome with a mean fragment length of 60 and 10% damage. The known damage (Dknown) is shown as a dashed line. A. Estimated damage and its standard deviation (error bars) for 20 replicates (100 reads each). B. Average damage as a function of the number of reads (with the average of the standard deviations as errors). *Adapted from Michelsen et al. 2022*.](assets/images/chapters/authentication/F3._Michelsen.png)
 
 The simulation on the *Homo Sapiens* genome, illustrated in [Figure 3, A](/) demonstrates the individual metaDMG damage estimates for 20 selected replications (iterations 60 to 79). When damage estimates are minimal, the distribution of Dfit is limited to positive values. This limitation can result in error bars extending into negative damage values, thus producing unrealistic estimates. As shown in [Figure 3, B](/), the damage tends to converge towards the known values as the number of reads increases.
 
 In addition, the simulation reports a relationship between the amount of damage in taxa and the number of reads[Figure 4](/). 
 As shown in (*Figure 4*), low expected damage (~5 %) requires about 1000 reads to be 95% certain about its estimation, while higher levels of damage (~15-30%) require fewer reads (100-500) to reach the same level of certainty. When increasing the significance threshold (Zfit) more reads are also required.
 
-INSERT FIGURE 4 assets/images/chapters/authentication/F4._Michelsen.png
-Figure 4. Relationship between the damage and the number of reads for the simulated single-genome data. The lines represent the number of reads needed to correctly infer the amount of damage: the solid line shows a certainty of 95%, and the dashed line, a certainty of 50%. Colors represent the significance (Zfit) cuts at 2 (blue), 3 (red), and 4 (green). *Michelsen et al. 2022*.
+![Relationship between the damage and the number of reads for the simulated single-genome data. The lines represent the number of reads needed to correctly infer the amount of damage: the solid line shows a certainty of 95%, and the dashed line, a certainty of 50%. Colors represent the significance (Zfit) cuts at 2 (blue), 3 (red), and 4 (green). *Michelsen et al. 2022*.](assets/images/chapters/authentication/F4._Michelsen.png)
+
 
 Simulations using metagenomic datasets have also evaluated the relationship between the amount of damage and its significance (([Figure 5] (/)).
 
-INSERT FIGURE 5 assets/images/chapters/authentication/F5._Michelsen.png
-Figure 5. The amount of damage as a function of significance (metagenomic simulations). A. damage of the ancient taxa; B. damage of the non-ancient taxa. A larger dot size indicates a higher number of reads. *Adapted from Michelsen et al. 2022.*
+![The amount of damage as a function of significance (metagenomic simulations). A. damage of the ancient taxa; B. damage of the non-ancient taxa. A larger dot size indicates a higher number of reads. *Adapted from Michelsen et al. 2022.*](assets/images/chapters/authentication/F5._Michelsen.png)
 
 As shown in ([Figure 5](/)), there is a difference in the damage estimates between the ancient and the non-ancient taxa of simulated metagenomic datasets. The non-ancient taxa (*Figure 5, A*) report significance values below 2, in contrast to the ancient taxa (*Figure 5, B*) which reach a significance of 20.
 A relaxed significance threshold (Zfit > 2) and a minimum of 100 reads increase the accuracy of damage estimates to 90% of the dataset (Michelsen et al., 2022).
