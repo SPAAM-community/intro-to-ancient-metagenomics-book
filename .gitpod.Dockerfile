@@ -23,6 +23,7 @@ RUN sudo Rscript -e 'install.packages("pander", repos="https://cloud.r-project.o
 RUN sudo Rscript -e 'install.packages("ggrepel", repos="https://cloud.r-project.org")'
 RUN sudo Rscript -e 'install.packages("tidyverse", repos="https://cloud.r-project.org")'
 RUN sudo Rscript -e 'install.packages("ggpubr", repos="https://cloud.r-project.org")'
+RUN sudo Rscript -e 'install.packages("gt", repos="https://cloud.r-project.org")'
 
 ## Install jupyter for python code sections
 RUN python3 -m pip install jupyter
