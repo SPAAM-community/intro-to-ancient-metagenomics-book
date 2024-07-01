@@ -195,10 +195,10 @@ import pandas as pd
 
 ::: {.callout-tip collapse="true"}
 ## **Why import as pd?**
-We set "pandas" to the alias "pd" because we are lazy and do not want to write the full word too many times.
+We set `pandas` to the alias `pd` because we are lazy and do not want to write the full word too many times.
 :::
 
-Now, we can print the current version:
+Now that `Pandas` is imported, we can check if it worked correctly, and check which version is running by runing `.__version__`.
 
 ```{.python eval=False}
 pd.__version__
@@ -208,17 +208,18 @@ pd.__version__
 '2.2.2'
 :::
 ### Pandas data structures
-The primary data structures in Pandas are `Series` and `DataFrame`.
 
-A `DataFrame` is a table with **columns** and **rows**. 
+The primary data structures in `Pandas` are the `Series` and the `DataFrame`. 
+A Series is a one-dimensional array-like object containing a value of the same type and can be imagined as one column in a table @fig-pythonpandas-figpandasseries.
+Each element in the `series` is associated with an index from 0 to the number of elements, but these can be changed to labels.
+A `DataFrame` is two-dimensional, and can change in size after it is created by adding and removing rows and columns, which can hold different types of data such as numbers and strings  @fig-pythonpandas-figpandasdataframe.
+The columns and rows are labelled. By default, rows are unnamed and are indexed similarly to a `series`.
 
-Each **column** has a *column name* and each **row** has an *index*.
+![A single row or column (1-dimensional data) is a `Series`. The dark grey squares are the index or row names, and the light grey squares are the elements.](assets/images/chapters/python-pandas/01_table_series.svg){#fig-pythonpandas-figpandasseries}
 
-![](assets/images/chapters/python-pandas/01_table_dataframe.svg)
 
-A single row or column (1 dimensional data) is a `Series`.
+![A dataframe with columns and rows. The dark grey squares are the index/row names and the column names. The light grey squares are the values.](assets/images/chapters/python-pandas/01_table_dataframe.svg){#fig-pythonpandas-figpandasdataframe}
 
-![](assets/images/chapters/python-pandas/01_table_series.svg)
 
 ::: {.callout-tip collapse="true" title="**More details on pandas**"}
 For a more in detail pandas getting started tutorial [click here](https://pandas.pydata.org/docs/getting_started/index.html#)
@@ -226,9 +227,7 @@ For a more in detail pandas getting started tutorial [click here](https://pandas
 
 ## Reading data with Pandas
 
-Pandas can read in **csv** (comma separated values) files, which are tables in text format.
-
-It is called **c**sv because each value is separated from the others through a comma.
+Pandas can read in **csv** (comma separated values) files, which are tables in text format.It is called **c**sv because each value is separated from the others through a comma.
 
 ```{text}
 A,B
