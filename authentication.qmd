@@ -447,7 +447,7 @@ In our exploration into ancient DNA, a central question we aim to address is:
 :::
 
 To answer this question, we focus on specific validation methods that are tailored for ancient samples. These methods allow us to assess the degree of DNA fragmentation and damage as definitive indicators of ancientness. 
-Ancient DNA fragments are short (30-70 bp) and exhibit a higher proportion of C > T misincorporations at the strand termini compared to the other single nucleotide substitutions (LINK TO Figure 1).
+Ancient DNA fragments are short (30-70 bp) and exhibit a higher proportion of C -> T misincorporations at the strand termini compared to the other single nucleotide substitutions (LINK TO Figure 1).
 
 ![Damage plots of reads assigned to Homo sapiens with post-mortem damage pattern increasing at read termini [from metagenomic samples, adapted from @Michelsen2022]. The figure shows the damage rate f (x) = k(x)∕N(x) as a function of position x for both forward (C→T) and reverse (G→A).](assets/images/chapters/authentication/Fig_9_deamination.png)
 
@@ -573,17 +573,6 @@ A relaxed significance threshold (Zfit > 2) and a minimum of 100 reads increase 
 
 We also observe how the oldest samples (Cave-100 and Cave-102) which are 100 and 102 thousand years BP, show the highest amount of damage of all the metagenomes. While Pitch-6 and Cave-22 samples, which are 6 and 22 thousand years old and thus younger have almost similar levels of damage.
 
-::: {.callout-question} 
-So a question pops up... (ADD EMOJI 🤔 🧐 🤔)
-**What is the relation between post-mortem DNA damage and time?** 
-:::
-
-No definitive answer has been found yet [@Pedersen2015;@Kistler2017], since other elements such as temperature, pH, salinity, oxygen, and bacteria play an essential role in DNA preservation. 
-However, the combination of **damage estimates** from a metagenomic dataset with a solid **geological evaluation** and an **age-depth model** can help our understanding of DNA degradation through time and depth ([Figure 6](/)).
-
-INSERT FIGURE 6 /
-FROM A PUBLISHED DATASET? (not added yet)
-
 ### 13.5 Ancient metagenomic dataset
 
 In this section, we will use 6 metagenomic libraries downsampled with eukaryotes reads from the study by [@Zampirolo2023.12.01.569562]. The libraries originate from sediment samples of the Velký Mamut'ák rock shelter located in Northern Bohemia (Czech Republic) and covering the period between the Late Neolithic (~6100-5300 cal. BP) to more recent times (800 cal BP). 
@@ -620,33 +609,33 @@ The best documentation is currently found in the –help function.
 We run the metaDMG-cpp lca to get the mismatch matrix file "bdamage.gz" that we need to estimate the dfit. 
 
 ```{bash, eval = F}
-metaDMG-cpp/metaDMG-cpp lca --names small_taxonomy/names.dmp --nodes small_taxonomy/nodes.dmp --acc2tax small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 16 --bam VM-3_800.merged.sam.gz --out_prefix VM-3_800.merged.sam
+metaDMG-cpp lca --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --acc2tax authentication/metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam authentication/metadmg/VM-3_800.merged.sort.bam --out_prefix authentication/metadmg/VM-3_800.merged.bam
 
-metaDMG-cpp/metaDMG-cpp lca --names small_taxonomy/names.dmp --nodes small_taxonomy/nodes.dmp --acc2tax small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 16 --bam VM-11_3000.merged.sam.gz --out_prefix VM-11_3000.merged.sam
+metaDMG-cpp lca --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --acc2tax authentication/metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam authentication/metadmg/VM-11_3000.merged.sort.bam --out_prefix authentication/metadmg/VM-11_3000.merged.bam
 
-metaDMG-cpp/metaDMG-cpp lca --names small_taxonomy/names.dmp --nodes small_taxonomy/nodes.dmp --acc2tax small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 16 --bam VM-14_3900.merged.sam --out_prefix VM-14_3900.merged.sam 
+metaDMG-cpp lca --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --acc2tax authentication/metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam authentication/metadmg/VM-14_3900.merged.sort.bam --out_prefix authentication/metadmg/VM-14_3900.merged.bam 
 
-metaDMG-cpp/metaDMG-cpp lca --names small_taxonomy/names.dmp --nodes small_taxonomy/nodes.dmp --acc2tax small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 16 --bam VM-15_4100.merged.sam.gz --out_prefix VM-15_4100.merged.sam 
+metaDMG-cpp lca --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --acc2tax authentication/metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam authentication/metadmg/VM-15_4100.merged.sort.bam --out_prefix authentication/metadmg/VM-15_4100.merged.bam 
 
-metaDMG-cpp/metaDMG-cpp lca --names small_taxonomy/names.dmp --nodes small_taxonomy/nodes.dmp --acc2tax small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 16 --bam VM-17_5300.merged.sam.gz --out_prefix VM-17_5300.merged.sam 
+metaDMG-cpp lca --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --acc2tax authentication/metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam authentication/metadmg/VM-17_5300.merged.sort.bam --out_prefix authentication/metadmg/VM-17_5300.merged.bam 
 
-metaDMG-cpp/metaDMG-cpp lca --names small_taxonomy/names.dmp --nodes small_taxonomy/nodes.dmp --acc2tax small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 16 --bam VM-19_6100.merged.sam.gz --out_prefix VM-19_6100.merged.sam
+metaDMG-cpp lca --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --acc2tax authentication/metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam authentication/metadmg/VM-19_6100.merged.sort.bam --out_prefix authentication/metadmg/VM-19_6100.merged.bam
 ```
 
 We use the file generated from the previous command (bdamage.gz), containing the misincorporation matrix to calculate the deamination pattern. We use metaDMG-cpp dfit function to obtain a quick computation of a beta-binomial model. 
 
 ```{bash, eval = F}
-metaDMG-cpp/metaDMG-cpp dfit VM-3_800.merged.sam.bdamage.gz --names small_taxonomy/names.dmp --nodes  small_taxonomy/nodes.dmp --showfits 2  --lib ds --out VM-3_800.merged.sam 
+metaDMG-cpp dfit authentication/metadmg/VM-3_800.merged.bam.bdamage.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes  authentication/metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out authentication/metadmg/VM-3_800.merged.bam 
 
-metaDMG-cpp/metaDMG-cpp dfit VM-11_3000.merged.sam.bdamage.gz --names small_taxonomy/names.dmp --nodes  small_taxonomy/nodes.dmp --showfits 2  --lib ds --out VM-11_3000.merged.sam 
+metaDMG-cpp dfit authentication/metadmg/VM-11_3000.merged.bam.bdamage.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes  authentication/metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out authentication/metadmg/VM-11_3000.merged.bam 
 
-metaDMG-cpp/metaDMG-cpp dfit VM-14_3900.merged.sam.bdamage.gz --names small_taxonomy/names.dmp --nodes  small_taxonomy/nodes.dmp --showfits 2  --lib ds --out VM-14_3900.merged.sam
+metaDMG-cpp dfit authentication/metadmg/VM-14_3900.merged.bam.bdamage.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes  authentication/metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out authentication/metadmg/VM-14_3900.merged.bam
 
-metaDMG-cpp/metaDMG-cpp dfit VM-15_4100.merged.sam.bdamage.gz --names small_taxonomy/names.dmp --nodes  small_taxonomy/nodes.dmp --showfits 2  --lib ds --out VM-15_4100.merged.sam 
+metaDMG-cpp dfit authentication/metadmg/VM-15_4100.merged.bam.bdamage.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes  authentication/metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out authentication/metadmg/VM-15_4100.merged.bam 
 
-metaDMG-cpp/metaDMG-cpp dfit VM-17_5300.merged.sam.bdamage.gz --names small_taxonomy/names.dmp --nodes  small_taxonomy/nodes.dmp --showfits 2  --lib ds --out VM-17_5300.merged.sam 
+metaDMG-cpp dfit authentication/metadmg/VM-17_5300.merged.bam.bdamage.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes  authentication/metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out authentication/metadmg/VM-17_5300.merged.bam 
 
-metaDMG-cpp/metaDMG-cpp dfit VM-19_6100.merged.sam.bdamage.gz --names small_taxonomy/names.dmp --nodes  small_taxonomy/nodes.dmp --showfits 2  --lib ds --out VM-19_6100.merged.sam
+metaDMG-cpp dfit authentication/metadmg/VM-19_6100.merged.bam.bdamage.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes  authentication/metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out authentication/metadmg/VM-19_6100.merged.bam
 
 ```
 
@@ -654,24 +643,24 @@ metaDMG-cpp/metaDMG-cpp dfit VM-19_6100.merged.sam.bdamage.gz --names small_taxo
 The metaDMG-cpp dfit function also allows for the computation of a binomial model, which includes additional statistics (such as bootstrap estimated parameters). For the exercise, we only run the quick statistics, but we provide an example of the codes for full stat:
 
 ```{bash, eval = F}
-metaDMG-cpp/metaDMG-cpp dfit VM-11_3000.merged.sam.bdamage.gz --names small_taxonomy/names.dmp --nodes  small_taxonomy/nodes.dmp --showfits 2 --nopt 10 --nbootstrap 20 --doboot 1 --seed 1234  --lib ds --out VM-11_3000.merged.sam
+metaDMG-cpp dfit authentication/metadmg/VM-11_3000.merged.bam.bdamage.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes  authentication/metadmg/small_taxonomy/nodes.dmp --showfits 2 --nopt 10 --nbootstrap 20 --doboot 1 --seed 1234  --lib ds --out authentication/metadmg/VM-11_3000.merged.bam
 ```
 :::
 
 We run the "metaDMG-cpp aggregate" function to merge the statistics from the previous two steps and obtain a file for each sample.
 
 ```{bash, eval = F}
-metaDMG-cpp/metaDMG-cpp aggregate VM-3_800.merged.sam.bdamage.gz -lcastat VM-3_800.merged.sam.stat.gz --names small_taxonomy/names.dmp --nodes small_taxonomy/nodes.dmp --dfit VM-3_800.merged.sam.dfit.gz --out VM-3_aggregated_results
+metaDMG-cpp aggregate authentication/metadmg/VM-3_800.merged.bam.bdamage.gz -lcastat authentication/metadmg/VM-3_800.merged.bam.stat.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --dfit authentication/metadmg/VM-3_800.merged.bam.dfit.gz --out authentication/metadmg/VM-3_aggregated_results
 
-metaDMG-cpp/metaDMG-cpp aggregate VM-11_3000.merged.sam.bdamage.gz -lcastat VM-11_3000.merged.sam.stat.gz --names small_taxonomy/names.dmp --nodes small_taxonomy/nodes.dmp --dfit VM-11_3000.merged.sam.dfit.gz --out VM-11_aggregated_results
+metaDMG-cpp aggregate authentication/metadmg/VM-11_3000.merged.bam.bdamage.gz -lcastat authentication/metadmg/VM-11_3000.merged.bam.stat.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --dfit authentication/metadmg/VM-11_3000.merged.bam.dfit.gz --out authentication/metadmg/VM-11_aggregated_results
 
-metaDMG-cpp/metaDMG-cpp aggregate VM-14_3900.merged.sam.bdamage.gz -lcastat VM-14_3900.merged.sam.stat.gz --names small_taxonomy/names.dmp --nodes small_taxonomy/nodes.dmp --dfit VM-14_3900.merged.sam.dfit.gz --out VM-14_aggregated_results
+metaDMG-cpp aggregate authentication/metadmg/VM-14_3900.merged.bam.bdamage.gz -lcastat authentication/metadmg/VM-14_3900.merged.bam.stat.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --dfit authentication/metadmg/VM-14_3900.merged.bam.dfit.gz --out authentication/metadmg/VM-14_aggregated_results
 
-metaDMG-cpp/metaDMG-cpp aggregate VM-15_4100.merged.sam.bdamage.gz -lcastat VM-15_4100.merged.sam.stat.gz --names small_taxonomy/names.dmp --nodes small_taxonomy/nodes.dmp --dfit VM-15_4100.merged.sam.dfit.gz --out VM-15_aggregated_results
+metaDMG-cpp aggregate authentication/metadmg/VM-15_4100.merged.bam.bdamage.gz -lcastat authentication/metadmg/VM-15_4100.merged.bam.stat.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --dfit authentication/metadmg/VM-15_4100.merged.bam.dfit.gz --out authentication/metadmg/VM-15_aggregated_results
 
-metaDMG-cpp/metaDMG-cpp aggregate VM-17_5300.merged.sam.bdamage.gz -lcastat VM-17_5300.merged.sam.stat.gz --names small_taxonomy/names.dmp --nodes small_taxonomy/nodes.dmp --dfit VM-17_5300.merged.sam.dfit.gz --out VM-17_aggregated_results
+metaDMG-cpp aggregate authentication/metadmg/VM-17_5300.merged.bam.bdamage.gz -lcastat authentication/metadmg/VM-17_5300.merged.bam.stat.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --dfit authentication/metadmg/VM-17_5300.merged.bam.dfit.gz --out authentication/metadmg/VM-17_aggregated_results
 
-metaDMG-cpp/metaDMG-cpp aggregate VM-19_6100.merged.sam.bdamage.gz -lcastat VM-19_6100.merged.sam.stat.gz --names small_taxonomy/names.dmp --nodes small_taxonomy/nodes.dmp --dfit VM-19_6100.merged.sam.dfit.gz --out VM-19_aggregated_results
+metaDMG-cpp aggregate authentication/metadmg/VM-19_6100.merged.bam.bdamage.gz -lcastat authentication/metadmg/VM-19_6100.merged.bam.stat.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --dfit authentication/metadmg/VM-19_6100.merged.bam.dfit.gz --out authentication/metadmg/VM-19_aggregated_results
 ```
 
 In the last step we merge the header and the filenames in a unique tab-separated file (tsv).
@@ -684,7 +673,7 @@ gunzip *_aggregated_results.stat.gz
 Then we extract the header and we concatenate the content of all the output files in a unique tsv file.
 ```{bash, eval = F}
 #Define header for final output table
-header_file="VM11_aggregated_results.bdamage.gz.stat"
+header_file="VM-11_aggregated_results.stat"
 
 # Get the header
 header=$(head -n 1 "$header_file")
@@ -695,12 +684,12 @@ output_file="concatenated_metaDMGfinal.tsv"
 # Add the header to the concatenated file
 echo -e "filename\t$header" > "$output_file"
 
-for file in VM11_aggregated_results.bdamage.gz.stat \
-	    VM14_aggregated_results.bdamage.gz.stat \
-            VM15_aggregated_results.bdamage.gz.stat \
-            VM17_aggregated_results.bdamage.gz.stat \
-            VM19_aggregated_results.bdamage.gz.stat \
-            VM3_aggregated_results.bdamage.gz.stat
+for file in VM-11_aggregated_results.stat \
+	    VM-14_aggregated_results.stat \
+            VM-15_aggregated_results.stat \
+            VM-17_aggregated_results.stat \
+            VM-19_aggregated_results.stat \
+            VM-3_aggregated_results.stat
 do
     tail -n +2 "$file" | while read -r line; do
         echo -e "$file\t$line" >> "$output_file"
@@ -709,57 +698,59 @@ done
 ```
 
 ## 13.7 Investigating the final output with R
+We first visualise our metaDMG output manually navigating to the folder home/ubuntu/Desktop/volume/authentication/metadmg/ and clicking on "Open folder".
+We can double-click on the tsv file "concatenated_metaDMGfinal.tsv" and visualise it.
+
 We will now investigate the tsv table produced by metaDMG to authenticate damage patterns, visualise the relationship between the damage and the significance, and the degree of damage through depth and time.
 
 ::: {.callout-tip}
 R packages for this exercise are located in the conda environment "authentication".
 
 We deactivate the current conda environment and we open the environment "authentication"
-```{bash, eval = F}
+```{bash}
 conda deactivate metaDMG
 conda activate authentication
 ```
-We make a new directory in which we will save our plots:
 
-```{bash, eval = F}
-cd authentication_ptII
-mkdir figures
+We navigate to the working directory:
+
+```{bash}
+cd authentication/metadmg/figures
 ```
+
 We load R by running `R` in your terminal
 
-```{bash, eval = F}
+```{bash}
 R
-``` 
+```
+
 We load the libraries 
 
-```{r eval=F}
-library(tidyverse)
+```{r}
+library(tidyr)
 library(dplyr)
+library(forcats)
 library(scales)
 library(gridExtra)
 library(ggplot2)
 library(purrr)
 library(ggpubr)
 ``` 
-We set-up our working directory
-
-```{r eval=F}
-setwd('authentication_ptII/figures/')
-``` 
-
-And we load the file produced with metaDMG:
-
-```{r eval=F}
-df <- read_delim("concatenated_metaDMGfinal.tsv", 
-                 delim = "\t", escape_double = FALSE, 
-                 trim_ws = TRUE)
-``` 
 :::
 
-### 13.7.1 Deamination patterns
 
-We first run the function "get damage" to visualise the deamination patterns of our reads per tax name. 
+#### 13.7.1 Deamination patterns
 
+We run the damage plot to visualise the deamination patterns along forward and reverse strands, and we save the results per each taxon detected in the samples.
+
+We will use the function "get_dmg_decay_fit" to visualise damage pattern. The function is saved in authentication/metadmg/script/, so we only need to run the following command to recall it:
+
+```{r}
+source("authentication/metadmg/scripts/get_dmg_decay_fit.R")
+```
+
+
+But if you are curious and want to know how it works, here is the function itself:
 ```{r eval=F}
 get_dmg_decay_fit <- function(df, orient = "fwd", pos = 30, p_breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7), y_max = 0.7, y_min = -0.01) {
   df_dx_fwd <- df %>%
@@ -864,31 +855,30 @@ get_dmg_decay_fit <- function(df, orient = "fwd", pos = 30, p_breaks = c(0, 0.1,
   }
 }
 ```
-We then run the damage plot to visualise the deamination patterns along forward and reverse strands, and we save the results per each taxon detected in the samples.
 
-```{r eval=F}
-df <- read_delim("/authentication_ptII/concatenated_metaDMGdata.tsv", 
-                     delim = "\t", escape_double = FALSE, 
-                     trim_ws = TRUE)
+We load our metaDMG output data (tsv file) and generate the damage plots using the function "get-damage".
+
+```{r}
+df <- read.csv("authentication/metadmg/concatenated_metaDMGfinal.tsv",  sep = "\t")
 
 #Rename sample column
 colnames(df)[colnames(df) == 'filename'] <- 'sample'
 
 #Modify sample name with short names
-df$sample[df$sample == "VM11_aggregated_results.bdamage.gz.stat"] <- "VM-11"
-df$sample[df$sample == "VM14_aggregated_results.bdamage.gz.stat"] <- "VM-14"
-df$sample[df$sample == "VM15_aggregated_results.bdamage.gz.stat"] <- "VM-15"
-df$sample[df$sample == "VM17_aggregated_results.bdamage.gz.stat"] <- "VM-17"
-df$sample[df$sample == "VM19_aggregated_results.bdamage.gz.stat"] <- "VM-19"
-df$sample[df$sample == "VM3_aggregated_results.bdamage.gz.stat"] <- "VM-3"
+df$sample[df$sample == "VM-11_aggregated_results.stat"] <- "VM-11"
+df$sample[df$sample == "VM-14_aggregated_results.stat"] <- "VM-14"
+df$sample[df$sample == "VM-15_aggregated_results.stat"] <- "VM-15"
+df$sample[df$sample == "VM-17_aggregated_results.stat"] <- "VM-17"
+df$sample[df$sample == "VM-19_aggregated_results.stat"] <- "VM-19"
+df$sample[df$sample == "VM-3_aggregated_results.stat"] <- "VM-3"
 
 #Setting filtering theshold for ancient reads
 minDMG = 0.02 # filter criteria, plot only taxa above set value
-zfit = 2 # minimum sigificance, the higher the better, 2 would mean that we estimante the damage with 95% confidence. 
+zfit = 2 # minimum significance, the higher the better, 2 would mean that we estimante the damage with 95% confidence. 
 MinLength = 35 # minimum mean readlength, while we set a hard filter initially while trimming, we would like the mean readlength to be 35 or higher. 
 reads = 200 # number of reads required depends on the amount of damage and the significance
 
-#Subsetting only animals and plants, at genus level, number of reads > 100.
+#Subsetting only animals and plants, at the genus level, number of reads > 200.
 dt1 <- df %>% filter(A > minDMG, nreads >= reads, mean_rlen >= MinLength, Zfit  > zfit, grepl("\\bgenus\\b", rank), !grepl("Bacteria",taxa_path))
 
 #deamination plot with facet wrap per each taxon in a sample
@@ -917,7 +907,7 @@ purrr::map(tax_g_list, function(X, nrank) {
       get_dmg_decay_fit(df = dt1 %>% rename(label = sample)  %>% inner_join(sel_tax) %>% filter(rank == rank), orient = "rev", y_max = 0.70) +
         ggtitle(paste0(X, " nreads=", n_readsa, " Reverse"))
     ), align = "hv")
-    ggsave(paste0("figures2/", X, "-dmg.pdf"), plot = last_plot(), width = 8, height = 4)
+    ggsave(paste0(X, "-dmg.pdf"), plot = last_plot(), width = 8, height = 4)
   }
 })
 ``` 
@@ -927,86 +917,58 @@ We provide an R script to investigate the main statistics.
 Here we visualise the amplitude of damage (A) and its significance (Zfit), for the full dataset but filtering it to a minimum of 100 reads and at the genus level. 
 
 ```{r eval=F}
-#Subset dataset at genus level, nreads > 100
-df1 <- df %>% filter(nreads > 100, grepl("\\bgenus\\b", rank))
+#Subset dataset at genus level
+dt2 <- df %>% filter(grepl("\\bgenus\\b", rank))
 
 #plotting  amplitude of damage vs its significance 
-p1 <- ggplot(df_genus, aes(y=A, x=Zfit)) + 
+p1 <- ggplot(dt2, aes(y=A, x=Zfit)) + 
   geom_point(aes(size=nreads), col ="dark green") +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust =1)) +
   scale_size_continuous(labels = function(x) format(x, scientific = FALSE)) +
   xlab("significance") + ylab("damage") + theme_minimal()
+p1
 
 #Plotting only animals and plants at genus level
 #subset dataset
-df2 <- df_genus %>% filter(nreads > 100, grepl("\\bgenus\\b", rank), grepl("Metazoa", taxa_path) | grepl("Viridiplant", taxa_path))
+dt3 <- dt2 %>% filter(nreads > 100, grepl("\\bgenus\\b", rank), grepl("Metazoa", taxa_path) | grepl("Viridiplant", taxa_path))
 
 #Adding factor column for Kingdom
-df2 <- df2 %>% 
+dt3 <- dt3 %>% 
   mutate(Kingdom =   # creating our new column
            case_when(grepl("Viridiplant", taxa_path) ~ "Viridiplantae",
                      grepl("Metazoa",taxa_path) ~ "Metazoa"))
 
 #Plotting  amplitude of damage vs its significance 
-p2 <- ggplot(df2, aes(y=A, x=Zfit)) + 
+p2 <- ggplot(dt3, aes(y=A, x=Zfit)) + 
   geom_point(aes(size=nreads, col=Kingdom)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust =1)) +
   scale_color_manual(values = c("#8B1A1A", "#458B00"))+
   scale_size_continuous(labels = function(x) format(x, scientific = FALSE)) +
   xlab("significance") + ylab("damage") + theme_minimal()
+p2
 
 #Save the plots as a PDF file
-ggsave("figures2/p1.pdf", plot = p1, width = 8, height = 6)
-ggsave("figures2/p2.pdf", plot = p2, width = 8, height = 6)
+ggsave("p1.pdf", plot = p1, width = 8, height = 6)
+ggsave("p2.pdf", plot = p2, width = 8, height = 6)
 ``` 
+
 ### 13.7.3 Degree of damage and mean fragment length through depth and time
 Here we visualise the amplitude of damage (A) and the mean length of the fragments (mean_rlen) by depth and by date (BP) for the full dataset but filtering it to a minimum of 100 reads and at the genus level.
 
 ```{r eval=F}
-#Depth metadata added 
-depth_data <- read.csv ("/authentication_ptII/depth_data.csv", sep = ";")
-
-#Merge context_data and depth_data with dataframe (adding new column for depth)
-df$new <- depth_data$Depth_cm[match(df$sample, depth_data$Sample_ID)]
-names(df)[names(df) == 'new'] <- 'Depth'
+#Import the metadata 
+depth_data <- read.csv ("authentication/metadmg/figures/depth_data.csv", sep = ",")
+View (depth_data)
 
 #Merge context_data and depth_data with dataframe (adding new column for dates BP)
 df$new <- depth_data$Date_BP[match(df$sample, depth_data$Sample_ID)]
 names(df)[names(df) == 'new'] <- 'Date_BP'
 
-# Convert the Depth and Date_BP columns to factors (categorical variable) 
-df$Depth <- as.factor(df$Depth)
+# Convert Date_BP columns to factors (categorical variable) 
 df$Date_BP <- as.factor(df$Date_BP)
 
-#Subset dataset at genus level, nreads > 100
-df1 <- df %>% filter(nreads > 100, grepl("\\bgenus\\b", rank))
-
-#Plotting damage and mean length by Depth 
-p3a<- df1 %>%
-  mutate(Depth = fct_relevel(Depth,
-                             "151","134","116","107","64", "26")) %>%
-  ggplot(aes(x=A, y=Depth))+ 
-  geom_boxplot(aes(x=A, y=Depth, fill = sample))+
-  geom_point(aes(fill = sample), size = 3, shape = 21, color = "black", stroke = .5) +
-  scale_x_continuous(limits = c(0, 0.20), breaks = seq(0, 0.20, by = 0.05)) +
-  theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-
-p3b<- df1 %>%
-  mutate(Depth = fct_relevel(Depth,
-                             "151","134","116","107","64", "26")) %>%
-  ggplot(aes(x=mean_rlen, y=Depth))+ 
-  geom_boxplot(aes(x=mean_rlen, y=Depth, fill = sample)) +
-  geom_point(aes(fill = sample), size = 3, shape = 21, color = "black", stroke = .5) +
-  scale_x_continuous(limits = c(30, 80), breaks = seq(30, 80, by = 10)) +
-  theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-
-p3 <- grid.arrange(p3a, p3b,
-                    ncol = 2, nrow = 1)
-#Save plot
-ggsave("figures2/p3.pdf", plot = p3, width = 10, height = 8)
-
-#Plotting damage and mean length by period (dates BP)
-p4a<- df_genus %>%
+#Plotting damage (A) by period (dates BP)
+p3a<- dt4 %>%
   mutate(Date_BP = fct_relevel(Date_BP,
                              "6100","5300","4100","3900","3000", "800")) %>%
   ggplot(aes(x=A, y=Date_BP))+ 
@@ -1014,9 +976,10 @@ p4a<- df_genus %>%
   geom_point(aes(fill = sample), size = 3, shape = 21, color = "black", stroke = .5) +
   scale_x_continuous(limits = c(0, 0.20), breaks = seq(0, 0.20, by = 0.05)) +
   theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-p4a
+p3a
 
-p4b<- df_genus %>%
+#Plotting mean length (mean_rlen) by period (dates BP)
+p3b<- dt4 %>%
   mutate(Date_BP = fct_relevel(Date_BP,
                              "6100","5300","4100","3900","3000", "800")) %>%
   ggplot(aes(x=mean_rlen, y=Date_BP))+ 
@@ -1024,12 +987,15 @@ p4b<- df_genus %>%
   geom_point(aes(fill = sample), size = 3, shape = 21, color = "black", stroke = .5) +
   scale_x_continuous(limits = c(30, 80), breaks = seq(30, 80, by = 10)) +
   theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-p4b
+p3b
 
-p4 <- grid.arrange(p4a, p4b,
+#Combining the plots
+p3 <- grid.arrange(p3a, p3b,
                    ncol = 2, nrow = 1)
+p3
+
 #Save plot
-ggsave("figures2/p4.pdf", plot = p4, width = 10, height = 8)
+ggsave("p3.pdf", plot = p4, width = 10, height = 8)
 ``` 
 
 ::: {.callout-tip}
@@ -1038,6 +1004,12 @@ Once finished examining the plots you can quit R
 ## Press 'n' when asked if you want to save your workspace image.
 quit()
 ```
+:::
+
+::: {.callout-tip}
+You can manually navigate to the folder home/ubuntu/Desktop/volume/authentication/metadmg/figures/
+And click “Open folder”
+You can double-click on the pdf files to visualise them.
 :::
 
 ### 13.7.4 Additional plot (optional)
@@ -1083,9 +1055,11 @@ p5
 ggsave("figures2/p5.pdf", plot = p5, width = 10, height = 8)
 ```
 
-ADD FIGURES OF THE PLOTs!! 
+
 <!-- ![](assets/images/chapters/authentication/Rplots) -->
 
+## Aknowlegements
+We thank Mikkel Winther Pedersen and Antonio Fernandez Guerra for their contribution to the development of this chapter.
 
 ## Recommended Reading
 
