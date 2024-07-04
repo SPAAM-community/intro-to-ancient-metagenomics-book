@@ -38,13 +38,15 @@ These instructions have been tested on Ubuntu 22.04, but should apply to most Li
 - Change directory to somewhere suitable for installing a few gigabytes of software, e.g. `mkdir ~/bin/ && cd ~/bin/`
 - Download miniconda
 
-    ```bash
+    ```{bash}
+#| eval: false
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
     ```
 
 - Run the install script
 
-    ```bash
+    ```{bash}
+#| eval: false
     bash bash Miniconda3-latest-Linux-x86_64.sh
     ```
 
@@ -59,14 +61,16 @@ These instructions have been tested on Ubuntu 22.04, but should apply to most Li
     - Type `conda --version` to check conda is installed and working
     - Install `libsolver-mamba` for faster software installation
 
-        ```bash
+        ```{bash}
+#| eval: false
         conda install -n base conda-libmamba-solver
         conda config --set solver libmamba
         ```
 
     - Set up bioconda
 
-        ```bash
+        ```{bash}
+#| eval: false
         conda config --add channels defaults
         conda config --add channels bioconda
         conda config --add channels conda-forge
@@ -79,7 +83,8 @@ Once `conda` is installed and `bioconda` configured, at the beginning of each ch
 
 2. Then you can run the following conda command to install the software into it's dedicated environment 
 
-    ```bash
+    ```{bash}
+#| eval: false
     conda env create -f /<PATH/<TO>/<DOWNLOADED_FILE>.yml
     ```
 
@@ -89,19 +94,22 @@ You only have to run the environment creation once!
 
 3. Follow the instructions as prompted. Once created, you can see a list of installed environments with
 
-    ```bash
+    ```{bash}
+#| eval: false
     conda env list
     ```
 
 4. To load the relevant environment, you can run
 
-    ```bash
+    ```{bash}
+#| eval: false
     conda activate <NAME_OF_ENVIRONMENT>
     ```
 
 3. Once finished with the chapter, you can deactivate the environment with 
 
-    ```bash
+    ```{bash}
+#| eval: false
     conda deactivate
     ```
 
@@ -119,7 +127,8 @@ For some chapters you may need the following software/and or data manually insta
 
 - [rename](https://www.gnu.org/software/libc/manual/html_node/Renaming-Files.html) (if not already installed, e.g. on OSX)
 
-    ```bash
+    ```{bash}
+#| eval: false
     sudo apt install rename
     ```
 
@@ -127,7 +136,8 @@ For some chapters you may need the following software/and or data manually insta
 
 - [MetaWRAP](https://github.com/bxlab/metaWRAP)
 
-    ```bash
+    ```{bash}
+#| eval: false
     conda create -n metawrap-env python=2.7
     conda activate metawrap-env
     conda install -c bioconda biopython=1.68 bwa=0.7.17 maxbin2=2.2.7 metabat2 samtools=1.9 checkm-genome=1.0.12
@@ -142,7 +152,8 @@ For some chapters you may need the following software/and or data manually insta
 
 - [HUMAnN3](https://github.com/biobakery/humann) UniRef database (where the functional providing conda environment is already activated - see the Functional Profiling chapter for more details)
 
-    ```bash
+    ```{bash}
+#| eval: false
     humann3_databases --download uniref uniref90_ec_filtered_diamond /<path>/<to>/functional-profiling/humann3_db
     ```
 
@@ -151,7 +162,8 @@ For some chapters you may need the following software/and or data manually insta
 <!--
 - [Sourcetracker](https://github.com/danknights/sourcetracker)
 
-    ```bash
+    ```{bash}
+#| eval: false
     cd /<path>/<to>/authentication-decontamination/sourcetracker/
     git clone https://github.com/danknights/sourcetracker.git
 
@@ -164,7 +176,8 @@ For some chapters you may need the following software/and or data manually insta
 <!--
 - [decOM](https://github.com/CamilaDuitama/decOM) 
 
-    ```bash
+    ```{bash}
+#| eval: false
     cd /<path>/<to>/authentication-decontamination/decom
     git clone https://github.com/CamilaDuitama/decOM.git  
     cd decOM  
@@ -181,7 +194,8 @@ For some chapters you may need the following software/and or data manually insta
 - [Tempest](http://tree.bio.ed.ac.uk/download.html?name=tempest&id=102&num=3) (v1.5.3)
     - It is also recommended to assign the following `bash` variable so you can access the tool without the full path
 
-        ```bash
+        ```{bash}
+#| eval: false
         tar -xvf TempEst_v1.5.3.tgz
         cd TempEst_V1.5.3
         export tempest='bash /<PATH>/<TO>/TempEst_v1.5.3/bin/tempest'
@@ -189,7 +203,8 @@ For some chapters you may need the following software/and or data manually insta
 
     - If you get an error like `Exception in thread "main" java.lang.UnsatisfiedLinkError: Can't load library: /usr/lib/jvm/java-11-openjdk-amd64/lib/libawt_xawt.so`, make sure you have Java installed e.g. 
 
-        ```bash
+        ```{bash}
+#| eval: false
         sudo apt install openjdk-11-jdk
         ```
 
@@ -201,7 +216,8 @@ For some chapters you may need the following software/and or data manually insta
     - [Standard install](https://docs.docker.com/engine/install/ubuntu/)
     - Linux-nerd install
 
-    ```bash
+    ```{bash}
+#| eval: false
     sudo install -m 0755 -d /etc/apt/keyrings
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
     sudo chmod a+r /etc/apt/keyrings/docker.gpg
@@ -220,7 +236,8 @@ For some chapters you may need the following software/and or data manually insta
 
 - [aMeta](https://github.com/NBISweden/aMeta) (make sure you've already downloaded the data directory as per the [chapter instructions](ancient-metagenomic-pipelines.qmd))
 
-    ```bash
+    ```{bash}
+#| eval: false
     cd /<path>/<to>/ancient-metagenomic-pipelines/
     git clone https://github.com/NBISweden/aMeta
     cd aMeta
