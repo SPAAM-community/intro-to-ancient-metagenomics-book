@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -459,11 +493,11 @@ Tip
 <div class="callout-body-container callout-body">
 <p>For this chapter’s exercises, if not already performed, you will need to download the chapter’s dataset, decompress the archive, and create and activate the conda environment.</p>
 <p>Do this, use <code>wget</code> or right click and save to download this Zenodo archive: <a href="https://doi.org/10.5281/zenodo.8413100">10.5281/zenodo.8413100</a>, and unpack.</p>
-<pre class="{bash}"><code>tar xvf git-github.tar.gz 
-cd git-github/</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> xvf git-github.tar.gz </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> git-github/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>We can then create the subsequently activate environment with.</p>
-<pre class="{bash}"><code>conda env create -f git-github.yml
-conda activate git-github</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-f</span> git-github.yml</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate git-github</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <p>In this walkthrough, we will introduce the version control system <em>Git</em> as well as <em>Github</em>, a remote hosting service for version controlled repositories. Git and Github are increasingly popular tools for tracking data, collaborating on research projects, and sharing data and code, and learning to use them will help in many aspects of your own research. For more information on the benefits of using version control systems, see the slides.</p>
@@ -553,7 +587,7 @@ Answer
 <section id="creating-ssh-keys" class="level3" data-number="9.4.1">
 <h3 data-number="9.4.1" class="anchored" data-anchor-id="creating-ssh-keys"><span class="header-section-number">9.4.1</span> Creating SSH keys</h3>
 <p>First, we can generate our own ssh key pair, replacing the email below with our own email address.</p>
-<pre class="{bash}"><code>ssh-keygen -t ed25519 -C "&lt;YOUR_EMAIL&gt;@&lt;EXAMPLE&gt;.com"</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"&lt;YOUR_EMAIL&gt;@&lt;EXAMPLE&gt;.com"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -575,20 +609,20 @@ Note
 </ol>
 <p>We should now (hopefully!) have generated an ssh key. This is normally indicated by a ‘randomart image’ being pasted to console.</p>
 <p>A random art image normally looks like something like:</p>
-<pre class="{bash}"><code>+--[ RSA 2048]----+
-|       o=.       |
-|    o  o++E      |
-|   + . Ooo.      |
-|    + O B..      |
-|     = *S.       |
-|      o          |
-|                 |
-|                 |
-|                 |
-+-----------------+</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">+--[</span> RSA 2048]----+</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span>       <span class="va">o</span><span class="op">=</span>.       <span class="kw">|</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span>    <span class="ex">o</span>  o++E      <span class="kw">|</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span>   <span class="ex">+</span> . Ooo.      <span class="kw">|</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span>    <span class="ex">+</span> O B..      <span class="kw">|</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span>     <span class="ex">=</span> <span class="pp">*</span>S.       <span class="kw">|</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span>      <span class="ex">o</span>          <span class="kw">|</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span>                 <span class="kw">|</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span>                 <span class="kw">|</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span>                 <span class="kw">|</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="ex">+-----------------+</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To check that it worked, we can change into the default directory where keys are stored. By default on UNIX operating system this is in our home directory under a folder called <code>.ssh</code>. Lets change into that directory, and check the contents.</p>
-<pre class="{bash}"><code>cd ~/.ssh/
-ls id*</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/.ssh/</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> id<span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>We should now see two files: <code>id_ed25519</code>, and <code>id_ed25519.pub</code>.</p>
 <p>The first is a <em>private</em> key. This we should not share this any one, and should always stay on our local machine.</p>
 <p>The second file (ending in <code>.pub</code>), is a <em>public</em> key. This we can give to others, on remote servers, or websites, to allow those places to know it is us.</p>
@@ -597,14 +631,14 @@ ls id*</code></pre>
 <section id="logging-the-keys" class="level3" data-number="9.4.2">
 <h3 data-number="9.4.2" class="anchored" data-anchor-id="logging-the-keys"><span class="header-section-number">9.4.2</span> Logging the keys</h3>
 <p>First, we need to tell our computer that the keys exist and should be used for validation to remote locations. The tool that does that is called <code>ssh-agent</code>. We can check if it is running with the following command.</p>
-<pre class="{bash}"><code>eval "$(ssh-agent -s)"</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span> <span class="st">"</span><span class="va">$(</span><span class="fu">ssh-agent</span> <span class="at">-s</span><span class="va">)</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If it’s running, we should get a text such as <code>Agent pid &lt;NUMBERS&gt;</code>.</p>
 <p>If it’s not running, see the <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent">GitHub documentation</a> for more information.</p>
 <div class="callout-information">
 <p>An operating system assigns each running program a unique number ID. If a program isn’t running, it won’t have a process ID!</p>
 </div>
 <p>When the agent is running, we need to give the path to the <em>private</em> key file as follows.</p>
-<pre class="{bash}"><code>ssh-add ~/.ssh/id_ed25519</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-add</span> ~/.ssh/id_ed25519</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="registering-keys-on-github" class="level3" data-number="9.4.3">
 <h3 data-number="9.4.3" class="anchored" data-anchor-id="registering-keys-on-github"><span class="header-section-number">9.4.3</span> Registering keys on GitHub</h3>
@@ -631,7 +665,7 @@ Figure&nbsp;9.3: Screenshot of the top of the Github SSH and GPG keys page (as o
 </figure>
 </div>
 <p>When in the ‘new SHH key’ page, we can give key a title (e.g.&nbsp;the local machine the key was generated on). Leave the ‘Key type’ as ‘Authentication Key’ Then paste the entire contents of <em>public</em> key into the main text box that we just generated on our local machine.</p>
-<pre class="{bash}"><code>cat ~/.ssh/id_ed25519.pub</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/.ssh/id_ed25519.pub</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -646,9 +680,9 @@ Warning
 </div>
 </div>
 <p>Finally, press the Add SSH key. To check that it worked, we run the following command on our local machine.</p>
-<pre class="{bash}"><code>ssh -T git@github.com</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="at">-T</span> git@github.com</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>We should see a message along the lines of the following</p>
-<pre class="{bash}"><code>Hi &lt;YOUR_USERNAME&gt;! you that you've successfully authenticated.</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Hi</span> <span class="op">&lt;</span>YOUR_USERNAME<span class="op">&gt;</span>! you that you<span class="st">'ve successfully authenticated.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -660,7 +694,7 @@ Note
 </div>
 <div class="callout-body-container callout-body">
 <p>If we get a message saying something such as.</p>
-<pre class="{bash}"><code>The authenticity of host 'github.com (140.82.121.3)' can't be established.</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">The</span> authenticity of host <span class="st">'github.com (140.82.121.3)'</span> can<span class="st">'t be established.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Type <code>yes</code> on the keyboard and press enter.</p>
 </div>
 </div>
@@ -743,7 +777,7 @@ Warning
 <p>We have set all our authentication keys for GitHub, and created a new repository. We can now run through the some of the concepts we learnt in the <a href="#basic-workflow">Basic Workflow</a> section.</p>
 <p>This can be boiled down to just <em>six</em> that we really need to work with for Git(Hub) for basic version control of all our software, scripts, and (small) data!</p>
 <p>To start, create and change into the chapter’s data directory with.</p>
-<pre class="{bash}"><code>mkdir /&lt;path&gt;/&lt;to&gt;/git-github</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/git-github</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="git-clone" class="level3" data-number="9.6.1">
 <h3 data-number="9.6.1" class="anchored" data-anchor-id="git-clone"><span class="header-section-number">9.6.1</span> git clone</h3>
 <p>First, we will learn to <em>clone</em> a remote repository onto our local machine.</p>
@@ -760,7 +794,7 @@ Figure&nbsp;9.5: Screenshot of the GitHub repository interface with the green �
 </figure>
 </div>
 <p>Back at our command line, clone the repo as follows.</p>
-<pre class="{bash}"><code>git clone git@github.com:&lt;YOUR_USERNAME&gt;/&lt;YOUR_REPO_NAME&gt;.git</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone git@github.com:<span class="op">&lt;</span>YOUR_USERNAME<span class="op">&gt;</span>/<span class="op">&lt;</span>YOUR_REPO_NAME<span class="op">&gt;</span>.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -775,10 +809,10 @@ Warning
 </div>
 </div>
 <p>Once cloned, we can run <code>ls</code> to see there is now a directory with the same name as repository.</p>
-<pre class="{bash}"><code>ls</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>If we change into it and run <code>ls</code> again, we should see the <code>README.md</code> file we specified to be generated on GitHub.</p>
-<pre class="{bash}"><code>cd &lt;NAME_OF_REPO&gt;
-ls</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="op">&lt;</span>NAME_OF_REPO<span class="op">&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="git-add" class="level3" data-number="9.6.2">
 <h3 data-number="9.6.2" class="anchored" data-anchor-id="git-add"><span class="header-section-number">9.6.2</span> git add</h3>
@@ -801,26 +835,26 @@ Figure&nbsp;9.6: Overview of basic operations when using git (following <a href=
 </div>
 <p>First we will make a new file called <code>file_A.txt</code>, and also add some extra text to the end of the <code>README.md</code> file (i.e., just modify).</p>
 <p>Once we’ve made those both, lets first only stage the new file.</p>
-<pre class="{bash}"><code>echo "test_file" &gt; file_A.txt
-echo "Just an example repo" &gt;&gt; README.md
-git add file_A.txt</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"test_file"</span> <span class="op">&gt;</span> file_A.txt</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Just an example repo"</span> <span class="op">&gt;&gt;</span> README.md</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add file_A.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="git-status" class="level3" data-number="9.6.3">
 <h3 data-number="9.6.3" class="anchored" data-anchor-id="git-status"><span class="header-section-number">9.6.3</span> git status</h3>
 <p>So hopefully we’ve staged at least one file, but how do we know exactly what the status is of the modified and unmodified files in the repository?</p>
 <p>At any point we can use the command <code>git status</code> to give a summary of any files present in the repository directory that changed status since the last commit (i.e., the last preserved entry in the git history).</p>
-<pre class="{bash}"><code>git status</code></pre>
-<pre class="{bash}"><code>On branch main
-Your branch is up to date with 'origin/main'.
-
-Changes to be committed:
-  (use "git restore --staged &lt;file&gt;..." to unstage)
-    new file:   file_A.txt
-
-Changes not staged for commit:
-  (use "git add &lt;file&gt;..." to update what will be committed)
-  (use "git restore &lt;file&gt;..." to discard changes in working directory)
-    modified:   README.md</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">On</span> branch main</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Your</span> branch is up to date with <span class="st">'origin/main'</span>.</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Changes</span> to be committed:</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">(</span><span class="ex">use</span> <span class="st">"git restore --staged &lt;file&gt;..."</span> to unstage<span class="kw">)</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">new</span> file:   file_A.txt</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Changes</span> not staged for commit:</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">(</span><span class="ex">use</span> <span class="st">"git add &lt;file&gt;..."</span> to update what will be committed<span class="kw">)</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">(</span><span class="ex">use</span> <span class="st">"git restore &lt;file&gt;..."</span> to discard changes in working directory<span class="kw">)</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">modified:</span>   README.md</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>We should see that <code>file_A.txt</code> is staged and ‘ready to be committed’ but <code>README.md</code> is NOT staged - thus the changes would not be preserved to the git history. Comparing to our diagram in <a href="#fig-github-workflowdiagram-staging" class="quarto-xref">Figure&nbsp;<span>9.6</span></a>, we have performed the ‘red’ arrow, but for the blue arrow, we’ve only carried out the ‘Edit file’ arrow, the second ‘Stage edited file’ is not yet carried out.</p>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Task">
 <div class="callout-header d-flex align-content-center">
@@ -847,9 +881,9 @@ Answer
 </div>
 <div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<pre class="{bash}"><code>git add README.md
-git status</code></pre>
-<pre class="{default}"><code>On branch main
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add README.md</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="{verbatim}"><code>On branch main
 Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
@@ -874,7 +908,7 @@ Figure&nbsp;9.7: Overview of basic operations when using git (following <a href=
 </figcaption>
 </figure>
 </div>
-<pre class="{bash}"><code>git commit -m "Add new file and modify README"</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Add new file and modify README"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -917,7 +951,7 @@ Answer
 </div>
 <div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<pre class="{default}"><code>On branch main
+<pre class="{verbatim}"><code>On branch main
 Your branch is ahead of 'origin/main' by 1 commit.
   (use "git push" to publish your local commits)
 
@@ -942,8 +976,8 @@ Figure&nbsp;9.8: Overview of basic operations when using git (following <a href=
 </figure>
 </div>
 <p>We can run this as follows.</p>
-<pre class="{bash}"><code>git push</code></pre>
-<pre class="{default}"><code>Enumerating objects: 6, done.
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="{verbatim}"><code>Enumerating objects: 6, done.
 Counting objects: 100% (6/6), done.
 Delta compression using up to 14 threads
 Compressing objects: 100% (2/2), done.
@@ -978,7 +1012,7 @@ Answer
 <div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The hash line is:</p>
-<pre class="{default}"><code>   536183b..2d252b5  main -&gt; main</code></pre>
+<pre class="{verbatim}"><code>   536183b..2d252b5  main -&gt; main</code></pre>
 <p>The two hashes represent the previous (536183b) entry in the git history, and the new one (2d252b5) of the one we just made when we ran <code>git commit</code>.</p>
 <p>Tip: try typing <code>git log</code>!</p>
 <p>The <code>main</code> bit of the string represents the branch we pushed to. We will learn more about this later in this chapter.</p>
@@ -1001,7 +1035,7 @@ Figure&nbsp;9.9: Overview of basic operations when using git (following <a href=
 </figure>
 </div>
 <p>We carry this out with the counterpart of <code>push</code>, <code>pull</code> (<a href="#fig-github-workflowdiagram-pull" class="quarto-xref">Figure&nbsp;<span>9.9</span></a>)! Try running the command now!</p>
-<pre class="{bash}"><code>git pull</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Question">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1107,8 +1141,8 @@ Figure&nbsp;9.11: Three panel screenshot of GitHub interface for switching and c
 <p>The instructions in <a href="#fig-github-githubbranch" class="quarto-xref">Figure&nbsp;<span>9.11</span></a> would result in the branch existing on the <em>remote</em> copy of our repository i.e., on GitHub. To get this branch on our local copy, we can simply run <code>git pull</code> in our terminal!</p>
 <p>We can also create branches via command line.</p>
 <p>From our terminal, we can create a new branch as follows.</p>
-<pre class="{bash}"><code>git switch -c test-branch</code></pre>
-<pre class="{default}"><code>Switched to a new branch 'test-branch'</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> switch <span class="at">-c</span> test-branch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="{verbatim}"><code>Switched to a new branch 'test-branch'</code></pre>
 <p>The <code>-c</code> flag indicates to <em>create</em> the new branch with the name we provide, in the example above this is <code>test-branch</code>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1124,7 +1158,7 @@ Note
 </div>
 </div>
 <p>To switch back to the original main branch we were on, run the same command but without the <code>-c</code> flag and with the name of the branch we switch to.</p>
-<pre class="{bash}"><code>git switch main</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> switch main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1150,7 +1184,7 @@ Bonus Question
 </div>
 <div class="callout-body-container callout-body">
 <p>What command could we run to see which branches already exist in the local repository we are on? This command has not been introduced in this tutorial! Try running</p>
-<pre class="{bash}"><code>git --help</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">--help</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>or Google it to find the answer!</p>
 </div>
 </div>
@@ -1166,8 +1200,8 @@ Answer
 </div>
 <div id="callout-25" class="callout-25-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<pre class="{bash}"><code>git branch</code></pre>
-<pre class="{default}"><code>  main
+<div class="sourceCode" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="{verbatim}"><code>  main
 * test-branch</code></pre>
 <p>Where the green colour and the star indicates the branch we are currently on.</p>
 </div>
@@ -1220,28 +1254,27 @@ Answer
 <div id="callout-28" class="callout-28-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>First change to the branch.</p>
-<pre class="{bash}"><code>git switch test-branch</code></pre>
-<pre class="{default}"><code>Switched to branch 'test-branch'</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> switch test-branch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="{verbatim}"><code>Switched to branch 'test-branch'</code></pre>
 <p>Make the edit.</p>
-<pre class="{bash}"><code>echo 'We love SPAAM!' &gt;&gt; README.md
-git status</code></pre>
-<pre class="{default}"><code>Switched to branch 'test-branch'</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'We love SPAAM!'</span> <span class="op">&gt;&gt;</span> README.md</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="{verbatim}"><code>Switched to branch 'test-branch'</code></pre>
 <p>Add and commit the change to git history.</p>
-<pre class="{bash}"><code>git add README.md
-git commit -m 'Update README'
-</code></pre>
-<pre class="{default}"><code>[test-branch 99c4266] Update README
+<div class="sourceCode" id="cb38"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add README.md</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">'Update README'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="{verbatim}"><code>[test-branch 99c4266] Update README
  1 file changed, 1 insertion(+)</code></pre>
 <p>Push the changes to the remote version of the repository.</p>
-<pre class="{bash}"><code>git push</code></pre>
-<pre class="{default}"><code>fatal: The current branch test-branch has no upstream branch.
+<div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="{verbatim}"><code>fatal: The current branch test-branch has no upstream branch.
 To push the current branch and set the remote as upstream, use
 
     git push --set-upstream origin test-branch
 </code></pre>
 <p>In this case, our remote copy of the repository does not have the branch. Therefore the first time we push, we tell Git to tell GitHub to create the branch on the remote as well by using the command it suggests.</p>
-<pre class="{bash}"><code>git push --set-upstream origin test-branch</code></pre>
-<pre class="{default}"><code>Enumerating objects: 5, done.
+<div class="sourceCode" id="cb42"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">--set-upstream</span> origin test-branch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="{verbatim}"><code>Enumerating objects: 5, done.
 Counting objects: 100% (5/5), done.
 Delta compression using up to 14 threads
 Compressing objects: 100% (3/3), done.
@@ -1350,11 +1383,11 @@ Answer
 </div>
 <div id="callout-30" class="callout-30-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<pre class="{bash}"><code>git switch main</code></pre>
-<pre class="{default}"><code>Switched to branch 'main'
+<div class="sourceCode" id="cb44"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> switch main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="{verbatim}"><code>Switched to branch 'main'
 Your branch is up to date with 'origin/main'.</code></pre>
-<pre class="{bash}"><code>git merge test-branch</code></pre>
-<pre class="{default}"><code>Updating 0ad9bb3..99c4266
+<div class="sourceCode" id="cb46"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> merge test-branch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="{verbatim}"><code>Updating 0ad9bb3..99c4266
 Fast-forward
  README.md | 1 +
  1 file changed, 1 insertion(+)</code></pre>
@@ -1380,12 +1413,12 @@ Pro Tip
 <p>Always be VERY careful when using <code>rm -r</code>. Check 3x that the path you are specifying is exactly what you want to delete and nothing more before pressing ENTER!</p>
 </div>
 </div>
-<pre class="{bash}"><code>rm -r /&lt;PATH&gt;/&lt;TO&gt;/git-github*</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-r</span> /<span class="op">&lt;</span>PATH<span class="op">&gt;</span>/<span class="op">&lt;</span>TO<span class="op">&gt;</span>/git-github<span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once deleted we can move elsewhere (e.g.&nbsp;<code>cd ~</code>).</p>
 <p>We can also get out of the <code>conda</code> environment with.</p>
-<pre class="{bash}"><code>conda deactivate</code></pre>
+<div class="sourceCode" id="cb49"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then to delete the conda environment.</p>
-<pre class="{bash}"><code>conda remove --name git-github --all -y</code></pre>
+<div class="sourceCode" id="cb50"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> remove <span class="at">--name</span> git-github <span class="at">--all</span> <span class="at">-y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="summary-1" class="level2" data-number="9.9">
 <h2 data-number="9.9" class="anchored" data-anchor-id="summary-1"><span class="header-section-number">9.9</span> Summary</h2>
