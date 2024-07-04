@@ -75,7 +75,9 @@ For this tutorial, we will be using the ERR5766177 library from the sample 2612 
 
 ### Subsampling the sequencing files to make the analysis quicker for this tutorial
 
-This Python code defines a function called subsample that takes in a FASTQ file name, an output directory, and a depth value (defaulting to 1000000). The function uses the seqtk command-line tool to subsample the input FASTQ file to the desired depth and saves the output to a new file in the specified output directory. The function prints the constructed command string to the console for debugging purposes.
+This Python code defines a function called subsample that takes in a FASTQ file name, an output directory, and a depth value (defaulting to 1000000).
+The function uses the seqtk command-line tool to subsample the input FASTQ file to the desired depth and saves the output to a new file in the specified output directory.
+The function prints the constructed command string to the console for debugging purposes.
 
 ```python
 def subsample(filename, outdir, depth=1000000):
@@ -112,7 +114,9 @@ gzip -f ../data/subsampled/*.fastq
 
 This tutorial run-through is using a [Jupyter Notebook](https://jupyter.org) for writing & executing Python code and for annotating.
 
-Jupyter notebooks are convenient and have two types of cells: **Markdown** and **Code**. The **markup cell** syntax is very similar to **R markdown**. The markdown cells are used for annotating, which is important for sharing code with collaborators, reproducibility, and documentation.
+Jupyter notebooks are convenient and have two types of cells: **Markdown** and **Code**.
+The **markup cell** syntax is very similar to **R markdown**.
+The markdown cells are used for annotating, which is important for sharing code with collaborators, reproducibility, and documentation.
 
 To load, please run the following command from within the chapter's directory.
 
@@ -131,7 +135,7 @@ If you wish to run all commands manually (i.e., without the notebook), you must 
 
 Before starting to analyze our data, we will need to pre-process them to remove reads mapping to the host genome, here, _Homo sapiens_.
 
-To do so, I've used the first steps of the [nf-core/eager](https://github.com/nf-core/eager) pipeline, more information of which can be found in the [Ancient Metagenomic Pipelines](ancient-metagenomic-pipelines.qmd) chapter. 
+To do so, I've used the first steps of the [nf-core/eager](https://github.com/nf-core/eager) pipeline, more information of which can be found in the [Ancient Metagenomic Pipelines](ancient-metagenomic-pipelines.qmd) chapter.
 
 I've already done some pre-processed the data, and the resulting cleaned files are available in the `data/eager_cleaned/`.
 
@@ -153,9 +157,9 @@ nextflow run nf-core/eager \
 ## Adapter sequence trimming and low-quality bases trimming
 
 Sequencing adapters are small DNA sequences adding prior to DNA sequencing to allow the DNA fragments to attach to the
-sequencing flow cells (see [Introduction to NGS Sequencing](introduction-to-ngs-sequencing.qmd)). Because these adapters could interfere with downstream analyses, we need to remove them before
-proceeding any further. Furthermore, because the quality of the sequencing is not always optimal, we need to remove bases
-of lower sequencing quality to might lead to spurious results in downstream analyses.
+sequencing flow cells (see [Introduction to NGS Sequencing](introduction-to-ngs-sequencing.qmd)).
+Because these adapters could interfere with downstream analyses, we need to remove them before proceeding any further.
+Furthermore, because the quality of the sequencing is not always optimal, we need to remove bases of lower sequencing quality to might lead to spurious results in downstream analyses.
 
 To perform both of these tasks, we'll use the program [fastp](https://github.com/OpenGene/fastp).
 
@@ -288,7 +292,9 @@ fastp -h
       -?, --help                           print this message
 :::
 
-Here we use fastp to preprocess a pair of FASTQ files. The code specifies the input files, merges the paired-end reads on their overlaps, removes duplicate reads, and generates JSON and HTML reports. The output files are saved in the `../results/fastp/ directory`.
+Here we use fastp to preprocess a pair of FASTQ files.
+The code specifies the input files, merges the paired-end reads on their overlaps, removes duplicate reads, and generates JSON and HTML reports.
+The output files are saved in the `../results/fastp/ directory`.
 
 ```bash
 fastp \
@@ -354,12 +360,14 @@ What do you think of the number of read pairs that were merged ?
 :::
 
 ::: {.callout-note collapse="true" title="Answer"}
-Here, only 228 read pairs were merged. This is due to the length of the reads of 100bp, and length of the DNA fragments. If you would use fewer cycles, and have shorter DNA fragments, you would expect this number to go up.
+Here, only 228 read pairs were merged.
+This is due to the length of the reads of 100bp, and length of the DNA fragments.
+If you would use fewer cycles, and have shorter DNA fragments, you would expect this number to go up.
 :::
 
 ## Taxonomic profiling with Metaphlan
 
-MetaPhlAn is a computational tool for profiling the composition of microbial communities from metagenomic shotgun sequencing data. 
+MetaPhlAn is a computational tool for profiling the composition of microbial communities from metagenomic shotgun sequencing data.
 
 ```bash
 metaphlan  --help
@@ -608,7 +616,9 @@ metaphlan  --help
       -h, --help            show this help message and exit
 :::
 
-The following command uses MetaPhlAn to profile the taxonomic composition of the ERR5766177 metagenomic sample. The input file is specified as a merged FASTQ file, and the output is saved as a text file containing the taxonomic profile. The `--bowtie2out` option is used to specify the output file for the Bowtie2 alignment, and the --nproc option is used to specify the number of CPUs to use for the analysis.
+The following command uses MetaPhlAn to profile the taxonomic composition of the ERR5766177 metagenomic sample.
+The input file is specified as a merged FASTQ file, and the output is saved as a text file containing the taxonomic profile.
+The `--bowtie2out` option is used to specify the output file for the Bowtie2 alignment, and the --nproc option is used to specify the number of CPUs to use for the analysis.
 
 ```bash
 metaphlan ../results/fastp/ERR5766177.merged.fastq.gz  \
@@ -658,7 +668,8 @@ This letter corresponds to the rank of the clade.
 
 ### Visualizing metaphlan taxonomic profile with Pavian
 
-[Pavian](https://github.com/fbreitwieser/pavian) is a web-based tool for interactive visualization and analysis of metagenomics data. It provides a user-friendly interface for exploring taxonomic and functional profiles of microbial communities, and allows users to generate interactive plots and tables that can be customised and shared (@fig-pavian-interface).
+[Pavian](https://github.com/fbreitwieser/pavian) is a web-based tool for interactive visualization and analysis of metagenomics data.
+It provides a user-friendly interface for exploring taxonomic and functional profiles of microbial communities, and allows users to generate interactive plots and tables that can be customised and shared (@fig-pavian-interface).
 
 You can open Pavian in your browser by visiting [fbreitwieser.shinyapps.io/pavian](https://fbreitwieser.shinyapps.io/pavian/.).
 
@@ -694,14 +705,18 @@ What is the relative abundance of the phylum Firmicutes ?
 :::
 
 ::: {.callout-note collapse="true" title="Answer"}
-In this example, the relative abundance of the Firmicutes (officially renamed Bacillota since 2021) is 33.5%. You can verify this number either in the Sankey plot (section "Sample"), or in the comparison table (section "Comparison") by selecting the Phylum tab.
+In this example, the relative abundance of the Firmicutes (officially renamed Bacillota since 2021) is 33.5%.
+You can verify this number either in the Sankey plot (section "Sample"), or in the comparison table (section "Comparison") by selecting the Phylum tab.
 :::
 
 ### Visualizing metaphlan taxonomic profile with Krona
 
-[Krona](https://github.com/marbl/Krona/wiki) is a software tool for interactive visualization of hierarchical data, such as taxonomic profiles generated by metagenomics tools like MetaPhlAn. Krona allows users to explore the taxonomic composition of microbial communities in a hierarchical manner, from the highest taxonomic level down to the species level.
+[Krona](https://github.com/marbl/Krona/wiki) is a software tool for interactive visualization of hierarchical data, such as taxonomic profiles generated by metagenomics tools like MetaPhlAn.
+Krona allows users to explore the taxonomic composition of microbial communities in a hierarchical manner, from the highest taxonomic level down to the species level.
 
-The `metaphlan2krona.py` script is used to convert the MetaPhlAn taxonomic profile output to a format that can be visualised by Krona. The output of the script is a text file that contains the taxonomic profile in a hierarchical format that can be read by Krona. The `ktImportText` command is then used to generate an interactive HTML file that displays the taxonomic profile in a hierarchical manner using Krona.
+The `metaphlan2krona.py` script is used to convert the MetaPhlAn taxonomic profile output to a format that can be visualised by Krona.
+The output of the script is a text file that contains the taxonomic profile in a hierarchical format that can be read by Krona.
+The `ktImportText` command is then used to generate an interactive HTML file that displays the taxonomic profile in a hierarchical manner using Krona.
 
 ```bash
 python ../scripts/metaphlan2krona.py -p ../results/metaphlan/ERR5766177.metaphlan_profile.txt -k ../results/krona/ERR5766177_krona.out
@@ -716,7 +731,8 @@ Which proportion of the Firmicutes is made of Clostridiales ?
 :::
 
 ::: {.callout-note collapse="true" title="Answer"}
-The Clostridiales represent 63% of the Firmicutes in this sample. You can verify this by clicking in the Clostridiales and looking at the pie chart for Firmicutes on the top right of the screen.
+The Clostridiales represent 63% of the Firmicutes in this sample.
+You can verify this by clicking in the Clostridiales and looking at the pie chart for Firmicutes on the top right of the screen.
 :::
 
 
@@ -769,7 +785,7 @@ for (r in names(data_ranks)) {
 
 ## Loading the ancient sample taxonomic profile
 
-This is the moment where we will use the [Pandas](https://pandas.pydata.org) library [Python](https://www.python.org/) to perform some data manipulation.  
+This is the moment where we will use the [Pandas](https://pandas.pydata.org) library [Python](https://www.python.org/) to perform some data manipulation.
 We will also use the [Taxopy](https://github.com/apcamargo/taxopy) library to work with taxonomic information.
 
 In python we need to import necessary libraries, i.e. pandas and taxopy, and a couple of other utility libraries.
@@ -781,13 +797,15 @@ import pickle
 import gzip
 ```
 
-And we then create an instance of the taxopy taxonomy database. This will take a few seconds/minutes, as it needs to download the entire NCBI taxonomy before storing in a local database.
+And we then create an instance of the taxopy taxonomy database.
+This will take a few seconds/minutes, as it needs to download the entire NCBI taxonomy before storing in a local database.
 
 ```python
 taxdb = taxopy.TaxDb()
 ```
 
-Let's read the metaphlan profile table with pandas (a python package with a similar concept to tidyverse dyplyr, tidyr packa). It's a tab separated file, so we need to specify the delimiter as `\t`, and skip the comment lines of the files that start with `#`.
+Let's read the metaphlan profile table with pandas (a python package with a similar concept to tidyverse dyplyr, tidyr packa).
+It's a tab separated file, so we need to specify the delimiter as `\t`, and skip the comment lines of the files that start with `#`.
 
 ```python
 ancient_data = pd.read_csv("../results/metaphlan/ERR5766177.metaphlan_profile.txt",
@@ -1088,7 +1106,7 @@ modern_species.sample()
 
 ### Time to merge !
 
-Now, let's merge our ancient sample with the modern data in one single table.  
+Now, let's merge our ancient sample with the modern data in one single table.
 For that, we'll use the pandas `merge` function which will merge the two tables together, using the index as the merge key.
 
 ```python
@@ -1119,7 +1137,9 @@ Why did we use an "outer" join when merging the ancient and modern taxonomic pro
 :::
 
 ::: {.callout-note collapse="true" title="Answer"}
-An outer join will include entries from both left (ancient) and right (modern) table, even if they're not present in both. This ensures that taxons present in the ancient sample are not excluded when merging with the modern samples, and vice versa. Missing entries in one table will be replaced with `NaN` which we then replaced by zeros (with `.fillna(0)`).
+An outer join will include entries from both left (ancient) and right (modern) table, even if they're not present in both.
+This ensures that taxons present in the ancient sample are not excluded when merging with the modern samples, and vice versa.
+Missing entries in one table will be replaced with `NaN` which we then replaced by zeros (with `.fillna(0)`).
 :::
 
 ## Comparing ancient and modern samples
@@ -1175,7 +1195,7 @@ group_info
 : Table of samples and their group {#tbl-sample-groups}
 
 We need transform our data in [tidy](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) format to
-plot with [plotnine](https://plotnine.readthedocs.io/en/stable/), a python clone of [ggplot](https://ggplot2.tidyverse.org/index.html).  
+plot with [plotnine](https://plotnine.readthedocs.io/en/stable/), a python clone of [ggplot](https://ggplot2.tidyverse.org/index.html).
 
 |     | Actinobacteria | Apicomplexa | Ascomycota | Bacteroidetes | Basidiomycota | Candidatus Melainabacteria | Chlamydiae | Chloroflexi | Cyanobacteria | Deferribacteres | ... | Fusobacteria | Lentisphaerae | Planctomycetes | Proteobacteria | Spirochaetes | Synergistetes | Tenericutes | Verrucomicrobia | sample_id                            | group           |
 |-----|----------------|-------------|------------|---------------|---------------|----------------------------|------------|-------------|---------------|-----------------|-----|--------------|---------------|----------------|----------------|--------------|---------------|-------------|-----------------|--------------------------------------|-----------------|
@@ -1205,7 +1225,8 @@ tidy_phylums = (
 )
 ```
 
-Finally, we only want to keep the mean relative abundance for each phylum. To do so, we will compute the mean relative abundance, for each phylum, for each group (`ancient`, `westernized`, and `non_westernized`).
+Finally, we only want to keep the mean relative abundance for each phylum.
+To do so, we will compute the mean relative abundance, for each phylum, for each group (`ancient`, `westernized`, and `non_westernized`).
 
 ```python
 tidy_phylums = tidy_phylums.groupby(['group', 'Phylum']).mean().reset_index()
@@ -1231,7 +1252,7 @@ We first import plotnine
 from plotnine import *
 ```
 
-And then run plotnine to a barplot of the mean abundance per group (@fig-plotnine-phylum-abundance). 
+And then run plotnine to a barplot of the mean abundance per group (@fig-plotnine-phylum-abundance).
 
 ```python
 ggplot(tidy_phylums, aes(x='group', y='relative_abundance', fill='Phylum')) \
@@ -1255,7 +1276,8 @@ Whether ancient, non westernised, or westernised gut microbiome sample, the phyl
 
 ### Alpha diversity
 
-Alpha diversity is the measure of diversity withing each sample. It is used to estimate how many species are present in a sample, and how diverse they are.  
+Alpha diversity is the measure of diversity withing each sample.
+It is used to estimate how many species are present in a sample, and how diverse they are.
 We'll use the python library [scikit-bio](http://scikit-bio.org/) to compute it, and the [plotnine](https://plotnine.readthedocs.io/) library
 (a python port of [ggplot2](https://ggplot2.tidyverse.org/reference/ggplot.html) to visualise the results).
 
@@ -1292,7 +1314,8 @@ alpha_diversity
 
 : Table of the shannon, simpson, and richness alpha diversity indicies for a subset of samples {#tbl-alpha-div}
 
-Let's load the group information from the metadata. To do so, we merge the alpha diversity dataframe that we compute previously, with the metadata dataframe, using the `sample_id` as a merge key.
+Let's load the group information from the metadata.
+To do so, we merge the alpha diversity dataframe that we compute previously, with the metadata dataframe, using the `sample_id` as a merge key.
 Finally, we do a bit of renaming to re-encode `yes`/`no` as `non_westernized`/`westernized`.
 
 ```python
@@ -1380,7 +1403,8 @@ There are different possibilies:
 
 ### Beta diversity
 
-The Beta diversity is the measure of diversity between a pair of samples. It is used to compare the diversity between samples and see how they relate.
+The Beta diversity is the measure of diversity between a pair of samples.
+It is used to compare the diversity between samples and see how they relate.
 
 We will compute the beta diversity using the [bray-curtis](https://en.wikipedia.org/wiki/Bray%E2%80%93Curtis_dissimilarity) dissimilarity
 
@@ -1460,7 +1484,8 @@ ggplot(var_explained, aes(x='PC', y='variance explained', group=1)) \
 
 ![Scree plot describing the variance explained (Y-axis), for each Principal Componanent (X-axis), with a curved line from PC1 having highest variance to lowest on PC9.](assets/images/chapters/taxonomic-profiling/analysis_102_0.png){#fig-scree-plot}
 
-In this scree plot, we're looking for the "elbow", where there is a drop in the slope. Here, it seems that most of the variance is captures by the 3 first principal components
+In this scree plot, we're looking for the "elbow", where there is a drop in the slope.
+Here, it seems that most of the variance is captures by the 3 first principal components
 
 ```python
 pcoa_embed = pcoa.samples[['PC1','PC2','PC3']].rename_axis('sample').reset_index()
@@ -1543,16 +1568,23 @@ Based on the PCoA and heatmap, how you think our ancient sample relates to moder
 :::
 
 ::: {.callout-note collapse="true" title="Answer"}
-The sample we looked at in this tutorial is actually coming from the [@maixner2021hallstatt] article, looking at a human gut microbiome found in a salt mine in nowadays Austria. This sample is actually for the Baroque period (150 years BP). Reassuringly for our analysis, the title of this article is *Hallstatt miners consumed blue cheese and beer during the Iron Age and retained a non-Westernized gut microbiome until the Baroque period*.
+The sample we looked at in this tutorial is actually coming from the [@maixner2021hallstatt] article, looking at a human gut microbiome found in a salt mine in nowadays Austria.
+This sample is actually for the Baroque period (150 years BP).
+Reassuringly for our analysis, the title of this article is *Hallstatt miners consumed blue cheese and beer during the Iron Age and retained a non-Westernized gut microbiome until the Baroque period*.
 :::
 
 ## Summary
 
-In this practical session, we first looked at how to process the raw sequencing data to focus only on the non-human reads. We then profiled these reads with the Metaphlan3 taxonomic profiler, and looked at phylum composition, and alpha, and beta diversity with the help of PCoA and abundance heatmaps.
+In this practical session, we first looked at how to process the raw sequencing data to focus only on the non-human reads.
+We then profiled these reads with the Metaphlan3 taxonomic profiler, and looked at phylum composition, and alpha, and beta diversity with the help of PCoA and abundance heatmaps.
 
 ::: {.callout-caution title="Cautionary note - sequencing depth"}
 
-We worked on relative abundances provided by metaphlan. But beware that not all taxonomic profilers will output relative abundances. To perform quantitative analysis of taxonomic profiles, sequencind data need to be normalised for sequencing depth. There are many different ways to normalise sequencing data, but this out of the scope of this session. Just to name a few, the most commonly used are RLE, TSS, rarefaction, CLR, or GMPR.
+We worked on relative abundances provided by metaphlan.
+But beware that not all taxonomic profilers will output relative abundances.
+To perform quantitative analysis of taxonomic profiles, sequencind data need to be normalised for sequencing depth.
+There are many different ways to normalise sequencing data, but this out of the scope of this session.
+Just to name a few, the most commonly used are RLE, TSS, rarefaction, CLR, or GMPR.
 :::
 
 ## (Optional) clean-up
@@ -1561,14 +1593,13 @@ Let's clean up your working directory by removing all the data and output from t
 
 When closing your `jupyter` notebook(s), say no to saving any additional files.
 
-Press <kbd>ctrl</kbd> + <kbd>c</kbd> on your terminal, and type <kbd>y</kbd> when requested. 
-Once completed, the command below will remove the `/<PATH>/<TO>/taxonomic-profiling` directory **as well as all of its contents**. 
+Press <kbd>ctrl</kbd> + <kbd>c</kbd> on your terminal, and type <kbd>y</kbd> when requested.
+Once completed, the command below will remove the `/<PATH>/<TO>/taxonomic-profiling` directory **as well as all of its contents**.
 
 ::: {.callout-tip}
 ## Pro Tip
-Always be VERY careful when using `rm -r`. Check 3x that the path you are
-specifying is exactly what you want to delete and nothing more before pressing
-ENTER!
+Always be VERY careful when using `rm -r`.
+Check 3x that the path you are specifying is exactly what you want to delete and nothing more before pressing ENTER!
 :::
 
 ```bash
