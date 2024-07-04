@@ -8,7 +8,7 @@ For this chapter's exercises, if not already performed, you will need to downloa
 
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413204](https://doi.org/10.5281/zenodo.8413204), and unpack
 
-```{bash}
+```bash
 #| eval: false
 tar xvf genome-mapping.tar.gz 
 cd genome-mapping/
@@ -16,7 +16,7 @@ cd genome-mapping/
 
 You can then create the subsequently activate environment with
 
-```{bash}
+```bash
 #| eval: false
 conda env create -f genome-mapping.yml
 conda activate genome-mapping
@@ -45,21 +45,21 @@ As a first step we will index our reference genome (make sure you are inside you
 
 The first index we will generate is for _bwa_.
 
-```{bash}
+```bash
 #| eval: false
 bwa index YpestisCO92.fa
 ```
 
 The second index will be used by the genome browser we will apply to our results later on:
 
-```{bash}
+```bash
 #| eval: false
 samtools faidx YpestisCO92.fa
 ```
 
 We need to build a third index that is necessary for the genotyping step, which comes later after mapping:
 
-```{bash}
+```bash
 #| eval: false
 picard CreateSequenceDictionary R=YpestisCO92.fa
 ```
@@ -92,7 +92,7 @@ We will be working with pre-processed files (`sample1.fastq.gz`, `sample2.fastq.
 We will map each file once with lenient and once with strict parameters.
 For this, we will make 4 separate directories, to avoid mixing up files:
 
-```{bash}
+```bash
 #| eval: false
 mkdir sample1_lenient sample2_lenient sample1_strict sample2_strict
 ```
@@ -103,21 +103,21 @@ Let’s begin with a lenient mapping of sample1.
 
 Go into the corresponding folder:
 
-```{bash}
+```bash
 #| eval: false
 cd sample1_lenient
 ```
 
 Perform the _bwa_ alignment, here for sample1, and specify lenient mapping parameters:
 
-```{bash}
+```bash
 #| eval: false
 bwa aln -n 0.01 -l 16 ../YpestisCO92.fa ../sample1.fastq.gz > reads_file.sai
 ```
 
 Proceed with writing the mapping in _sam_ format ([https://en.wikipedia.org/wiki/SAM\_(file_format)](<https://en.wikipedia.org/wiki/SAM_(file_format)>)):
 
-```{bash}
+```bash
 #| eval: false
 bwa samse -r '@RG\tID:all\tLB:NA\tPL:illumina\tPU:NA\tSM:NA' ../YpestisCO92.fa reads_file.sai ../sample1.fastq.gz > reads_mapped.sam
 ```
@@ -127,7 +127,7 @@ This information is used later during the genotyping step.
 
 Convert SAM file to binary format (BAM file):
 
-```{bash}
+```bash
 #| eval: false
 samtools view -b -S reads_mapped.sam > reads_mapped.bam
 ```
@@ -139,26 +139,26 @@ For processing of _sam_ and _bam_ files we use _SAMtools_ (Li et al. 2009 – [h
 
 Now we sort the _bam_ file → Sort alignments by leftmost coordinates:
 
-```{bash}
+```bash
 #| eval: false
 samtools sort reads_mapped.bam > reads_mapped_sorted.bam
 ```
 
 The sorted bam file needs to be indexed → more efficient for further processing:
 
-```{bash}
+```bash
 #| eval: false
 samtools index reads_mapped_sorted.bam
 ```
 
 Deduplication → Removal of reads from duplicated fragments:
 
-```{bash}
+```bash
 #| eval: false
 samtools rmdup -s reads_mapped_sorted.bam reads_mapped_sorted_dedup.bam
 ```
 
-```{bash}
+```bash
 #| eval: false
 samtools index reads_mapped_sorted_dedup.bam
 ```
@@ -168,7 +168,7 @@ Duplicated reads are usually a consequence of amplification of the DNA fragments
 We have now completed the mapping procedure.
 Let's have a look at our mapping results:
 
-```{bash}
+```bash
 #| eval: false
 samtools view reads_mapped_sorted_dedup.bam | less -S
 ```
@@ -177,7 +177,7 @@ samtools view reads_mapped_sorted_dedup.bam | less -S
 
 We can also get a summary about the number of mapped reads. For this we use the _samtools idxstats_ command ([http://www.htslib.org/doc/samtools-idxstats.html](http://www.htslib.org/doc/samtools-idxstats.html)):
 
-```{bash}
+```bash
 #| eval: false
 samtools idxstats reads_mapped_sorted_dedup.bam
 ```
@@ -191,14 +191,14 @@ It uses the reference genome and the mapping as input and produces an output in 
 
 Perform genotyping on the mapping file:
 
-```{bash}
+```bash
 #| eval: false
 gatk3 -T UnifiedGenotyper -R ../YpestisCO92.fa -I reads_mapped_sorted_dedup.bam --output_mode EMIT_ALL_SITES -o mysnps.vcf
 ```
 
 Let’s have a look…
 
-```{bash}
+```bash
 #| eval: false
 cat mysnps.vcf | less -S
 ```
@@ -215,7 +215,7 @@ Let's now continue with mapping and genotyping for the other samples and paramet
 This is a larger file and lenient mapping takes longer so this file will likely take a few minutes. If you are short on time, proceed with the other sample/parameter settings first and come back to this later if there is time.
 :::
 
-```{bash}
+```bash
 #| eval: false
 cd ..
 cd sample2_lenient
@@ -239,7 +239,7 @@ gatk3 -T UnifiedGenotyper -R ../YpestisCO92.fa -I reads_mapped_sorted_dedup.bam 
 
 ### Sample1 Strict
 
-```{bash}
+```bash
 #| eval: false
 cd ..
 cd sample1_strict
@@ -263,7 +263,7 @@ gatk3 -T UnifiedGenotyper -R ../YpestisCO92.fa -I reads_mapped_sorted_dedup.bam 
 
 ### Sample2 Strict
 
-```{bash}
+```bash
 #| eval: false
 cd ..
 cd sample2_strict
@@ -296,35 +296,35 @@ It produces various output files and summary statistics and can integrate gene a
 Run _MultiVCFAnalyzer_ on all 4 files at once.
 First `cd` one level up (if you type `ls` you should see your 4 directories, reference, etc.):
 
-```{bash}
+```bash
 #| eval: false
 cd ..
 ```
 
 Then make a new directory…
 
-```{bash}
+```bash
 #| eval: false
 mkdir vcf_out
 ```
 
 …and run the programme:
 
-```{bash}
+```bash
 #| eval: false
 multivcfanalyzer NA YpestisCO92.fa NA vcf_out F 30 3 0.9 0.9 NA sample1_lenient/mysnps.vcf sample1_strict/mysnps.vcf sample2_lenient/mysnps.vcf sample2_strict/mysnps.vcf
 ```
 
 Let’s have a look in the ‘vcf_out’ directory (`cd` into it):
 
-```{bash}
+```bash
 #| eval: false
 cd vcf_out
 ```
 
 Check the parameters we set earlier:
 
-```{bash}
+```bash
 #| eval: false
 less -S info.txt
 ```
@@ -333,7 +333,7 @@ less -S info.txt
 
 Check results:
 
-```{bash}
+```bash
 #| eval: false
 less -S snpStatistics.tsv
 ```
@@ -342,7 +342,7 @@ less -S snpStatistics.tsv
 
 The file content should look like this:
 
-```{bash}
+```bash
 #| eval: false
 SNP statistics for 4 samples.
 Quality Threshold: 30.0
@@ -370,7 +370,7 @@ Here we will use the _Integrative Genomics Viewer (IGV)_ ([https://software.broa
 
 To open IGV, simply type the following command and the app will open:
 
-```{bash}
+```bash
 #| eval: false
 igv
 ```
@@ -463,7 +463,7 @@ specifying is exactly what you want to delete and nothing more before pressing
 ENTER!
 :::
 
-```{bash}
+```bash
 #| eval: false
 rm -r /<PATH>/<TO>/genome-mapping*
 ```
@@ -472,14 +472,14 @@ Once deleted you can move elsewhere (e.g. `cd ~`).
 
 We can also get out of the `conda` environment with
 
-```{bash}
+```bash
 #| eval: false
 conda deactivate
 ```
 
 To delete the conda environment
 
-```{bash}
+```bash
 #| eval: false
 conda remove --name genome-mapping --all -y
 ```

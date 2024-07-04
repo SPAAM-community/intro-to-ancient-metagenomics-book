@@ -54,7 +54,7 @@ If adding a new section chapter:
 6. Add the `.qmd` file to the `_quarto.yml` config file in the `chapters:` scope
 7. Render the book the extensions' `Quarto: Render Book` command, or run the following
 
-   ```{bash}
+   ```bash
    #| eval: false
    quarto preview intro-to-ancient-metagenomics-book --render all --no-browser --no-watch-inputs
    ```
