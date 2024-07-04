@@ -432,9 +432,21 @@ pydamage analyze -w 30 -p 14 filtered.sorted.bam
 ```
 :::
 
-## metaDMG
+## Authentication - part II - Ancient DNA authentication using metaDMG: Taxonomic profiling and DNA Damage Estimation
 
-In this section we will will cover:
+This section has the following outline:
+
+13.4 Introduction
+  13.4.1 Taxonomic profiling: metaDMG-cpp lca
+  13.4.2 Deamination patterns: metaDMG-cpp dfit
+13.5 Ancient metagenomic dataset
+13.6 Ancient metagenomics with metaDMG-cpp: the workflow
+13.7 Investigating the final output with R
+  13.7.1 Deamination patterns
+  13.7.2 Amplitude of damage vs Significance
+  13.7.3 Amplitude of damage and mean fragment length through time
+
+We will cover:
 
 - Introduction to metaDMG parameters and recommendations
 - How to analyse deamination from a metagenomic dataset with metaDMG
@@ -447,10 +459,9 @@ In our exploration into ancient DNA, a central question we aim to address is:
 :::
 
 To answer this question, we focus on specific validation methods that are tailored for ancient samples. These methods allow us to assess the degree of DNA fragmentation and damage as definitive indicators of ancientness. 
-Ancient DNA fragments are short (30-70 bp) and exhibit a higher proportion of C -> T misincorporations at the strand termini compared to the other single nucleotide substitutions (LINK TO Figure 1).
+Ancient DNA fragments are short (30-70 bp) and exhibit a higher proportion of C -> T misincorporations at the strand termini compared to the other single nucleotide substitutions (Figure 1).
 
-![Damage plots of reads assigned to Homo sapiens with post-mortem damage pattern increasing at read termini [from metagenomic samples, adapted from @Michelsen2022]. The figure shows the damage rate f (x) = k(x)∕N(x) as a function of position x for both forward (C→T) and reverse (G→A).](assets/images/chapters/authentication/Fig_9_deamination.png)
-
+![Figure 1. Damage plots of reads assigned to Homo sapiens with post-mortem damage pattern increasing at read termini [from metagenomic samples, adapted from @Michelsen2022]. The figure shows the damage rate f (x) = k(x)∕N(x) as a function of position x for both forward (C→T) and reverse (G→A).](assets/images/chapters/authentication/Fig_9_deamination.png)
 
 Different tools can be utilised to assess the level of deamination at the strand termini and the most popular are [mapDamage2.0](https://academic.oup.com/bioinformatics/article/29/13/1682/184965) and [PMDtools](https://github.com/pontussk/PMDtools). However, applying these to a metagenomic dataset can be computationally demanding and time-consuming due to the tens of thousands of different taxonomic entities it can include. 
 
@@ -477,13 +488,12 @@ In particular, three different settings can be run:
 In this section we will utilise **metaDMG-cpp lca**, since we are interested in a more comprehensive analsysis that includes the taxonomic classification of our alignments. For those interested in exploring other functionalities of metaDMG, I encourage you to visit the tool’s official [github page](https://github.com/metaDMG-dev/metaDMG-cpp) and the ngsLCA official [github page](https://github.com/miwipe/ngsLCA).
 
 
-
 ### 13.4.1 Taxonomic profiling: metaDMG-cpp lca
 
 ```{bash, eval = F}
 ./metaDMG-cpp lca
 ```
-The **metaDMG-cpp lca** function is based on the ngsLCA (next-generation sequence Lowest Common Ancestor) algorithm to collect mismatch information for all reads and generate a taxonomic profile (link ref. Wang et al. 2022). It counts substitutions between read and reference on internal nodes within a taxonomy (e.g. species, genus and family level). It is built upon the [NCBI taxonomy](https://www.ncbi.nlm.nih.gov/taxonomy) and requires three files: 
+The **metaDMG-cpp lca** function is based on the ngsLCA (next-generation sequence Lowest Common Ancestor) algorithm to collect mismatch information for all reads and generate a taxonomic profile (Wang et al. 2022). It counts substitutions between read and reference on internal nodes within a taxonomy (e.g. species, genus and family level). It is built upon the [NCBI taxonomy](https://www.ncbi.nlm.nih.gov/taxonomy) and requires three files: 
 
 nodes.dmp: taxonomic nodes and the relationships between different taxa in the tree 
 
@@ -497,7 +507,7 @@ For custom reference genomes not covered by NCBI, their accession IDs and the co
 
 The ngsLCA program considers a chosen similarity interval between each read and its reference in the generated bam/sam file. The similarity can be set as an edit distance [-editdist[min/max]], i.e., number of mismatches between the read to reference genome, or as a similarity distance [-simscore[low/high]], i.e., percentage of mismatches between the read to reference genome. 
 
-The main files produced by this command have the extensions “.bdamage.gz” and “lca.gz”. The first consists of a nucleotide misincorporation matrix (also called “mismatch matrix”) which represents the nucleotide substitution counts across the reads (LINK TO Table 1). The lca file reports the sequence analysed and its taxonomic path, as well as other statistics (gc content, fragment length).
+The main files produced by this command have the extensions “.bdamage.gz” and “lca.gz”. The first consists of a nucleotide misincorporation matrix (also called “mismatch matrix”) which represents the nucleotide substitution counts across the reads (Table 1). The lca file reports the sequence analysed and its taxonomic path, as well as other statistics (gc content, fragment length).
 
 We report an example of the bdamage.gz file output printed using the command **metaDMG-cpp print**:
 
@@ -540,7 +550,7 @@ data %>%
 ./metaDMG-cpp dfit 
 ```
 
-**metaDMG-cpp dfit** allows us to estimate the four fit parameters of the damage model (LINK TO Figure 2):
+**metaDMG-cpp dfit** allows us to estimate the four fit parameters of the damage model (Figure 2):
 **A**: the amplitude of damage on position one;
 **q**: the constant deamination background;
 **c**: relative decrease of damage per position;
@@ -548,27 +558,27 @@ data %>%
 
 Another important parameter is the **Zfit** or significance, which represents the number of standard deviations (“sigmas”) away from zero, or in other words, the certainty of the damage being positive.
 
-![The damage model. The figure shows the misincorporations as circles and the damage as a solid line. The fit parameters are reported: A,c,q,ϕ. The uncertainty for a binomial model is in dark grey, while the uncertainty for a beta-binomial model is in light grey. (from Michelsen et al. 2022)](assets/images/chapters/authentication/F1._MichelsenB.png)
+![Figure 2. The damage model. The figure shows the misincorporations as circles and the damage as a solid line. The fit parameters are reported: A,c,q,ϕ. The uncertainty for a binomial model is in dark grey, while the uncertainty for a beta-binomial model is in light grey. (from Michelsen et al. 2022)](assets/images/chapters/authentication/F1._MichelsenB.png)
 
 Accurate damage estimates are crucial for the authentication of the metagenomic dataset. The **number of reads** and the **significance (Zfit)** are additional parameters that can impact the accuracy and reliability of ancient DNA analysis.
 
-Tests on a single-genome have shown how the accuracy of metaDMG dfit increases depending on the number of reads ([Figure 3](/)).
+Tests on a single-genome have shown how the accuracy of metaDMG dfit increases depending on the number of reads [Figure 3].
 
-![The single-genome simulations on the *Homo Sapiens* genome with a mean fragment length of 60 and 10% damage. The known damage (Dknown) is shown as a dashed line. A. Estimated damage and its standard deviation (error bars) for 20 replicates (100 reads each). B. Average damage as a function of the number of reads (with the average of the standard deviations as errors). *Adapted from Michelsen et al. 2022*.](assets/images/chapters/authentication/F3_Michelsen.png)
+![Figure 3. The single-genome simulations on the *Homo Sapiens* genome with a mean fragment length of 60 and 10% damage. The known damage (Dknown) is shown as a dashed line. A. Estimated damage and its standard deviation (error bars) for 20 replicates (100 reads each). B. Average damage as a function of the number of reads (with the average of the standard deviations as errors). *Adapted from Michelsen et al. 2022*.](assets/images/chapters/authentication/F3_Michelsen.png)
 
-The simulation on the *Homo Sapiens* genome, illustrated in [Figure 3, A](/) demonstrates the individual metaDMG damage estimates for 20 selected replications (iterations 60 to 79). When damage estimates are minimal, the distribution of Dfit is limited to positive values. This limitation can result in error bars extending into negative damage values, thus producing unrealistic estimates. As shown in [Figure 3, B](/), the damage tends to converge towards the known values as the number of reads increases.
+The simulation on the *Homo Sapiens* genome, illustrated in [Figure 3, A] demonstrates the individual metaDMG damage estimates for 20 selected replications (iterations 60 to 79). When damage estimates are minimal, the distribution of Dfit is limited to positive values. This limitation can result in error bars extending into negative damage values, thus producing unrealistic estimates. As shown in [Figure 3, B], the damage tends to converge towards the known values as the number of reads increases.
 
 In addition, the simulation reports a relationship between the amount of damage in taxa and the number of reads[Figure 4](/). 
 As shown in (*Figure 4*), low expected damage (~5 %) requires about 1000 reads to be 95% certain about its estimation, while higher levels of damage (~15-30%) require fewer reads (100-500) to reach the same level of certainty. When increasing the significance threshold (Zfit) more reads are also required.
 
-![Relationship between the damage and the number of reads for the simulated single-genome data. The lines represent the number of reads needed to correctly infer the amount of damage: the solid line shows a certainty of 95%, and the dashed line, a certainty of 50%. Colors represent the significance (Zfit) cuts at 2 (blue), 3 (red), and 4 (green). *Michelsen et al. 2022*.](assets/images/chapters/authentication/F4_Michelsen.png)
+![Figure 4. Relationship between the damage and the number of reads for the simulated single-genome data. The lines represent the number of reads needed to correctly infer the amount of damage: the solid line shows a certainty of 95%, and the dashed line, a certainty of 50%. Colors represent the significance (Zfit) cuts at 2 (blue), 3 (red), and 4 (green). *Michelsen et al. 2022*.](assets/images/chapters/authentication/F4_Michelsen.png)
 
 
-Simulations using metagenomic datasets have also evaluated the relationship between the amount of damage and its significance (([Figure 5] (/)).
+Simulations using metagenomic datasets have also evaluated the relationship between the amount of damage and its significance [Figure 5].
 
-![The amount of damage as a function of significance (metagenomic simulations). A. damage of the ancient taxa; B. damage of the non-ancient taxa. A larger dot size indicates a higher number of reads. *Adapted from Michelsen et al. 2022.*](assets/images/chapters/authentication/F5._Michelsen.png)
+![Figure 5. The amount of damage as a function of significance (metagenomic simulations). A. damage of the ancient taxa; B. damage of the non-ancient taxa. A larger dot size indicates a higher number of reads. *Adapted from Michelsen et al. 2022.*](assets/images/chapters/authentication/F5._Michelsen.png)
 
-As shown in ([Figure 5](/)), there is a difference in the damage estimates between the ancient and the non-ancient taxa of simulated metagenomic datasets. The non-ancient taxa (*Figure 5, A*) report significance values below 2, in contrast to the ancient taxa (*Figure 5, B*) which reach a significance of 20.
+As shown in [Figure 5], there is a difference in the damage estimates between the ancient and the non-ancient taxa of simulated metagenomic datasets. The non-ancient taxa (*Figure 5, A*) report significance values below 2, in contrast to the ancient taxa (*Figure 5, B*) which reach a significance of 20.
 A relaxed significance threshold (Zfit > 2) and a minimum of 100 reads increase the accuracy of damage estimates to 90% of the dataset (Michelsen et al., 2022).
 
 We also observe how the oldest samples (Cave-100 and Cave-102) which are 100 and 102 thousand years BP, show the highest amount of damage of all the metagenomes. While Pitch-6 and Cave-22 samples, which are 6 and 22 thousand years old and thus younger have almost similar levels of damage.
@@ -577,16 +587,16 @@ We also observe how the oldest samples (Cave-100 and Cave-102) which are 100 and
 
 In this section, we will use 6 metagenomic libraries downsampled with eukaryotes reads from the study by [@Zampirolo2023.12.01.569562]. The libraries originate from sediment samples of the Velký Mamut'ák rock shelter located in Northern Bohemia (Czech Republic) and covering the period between the Late Neolithic (~6100-5300 cal. BP) to more recent times (800 cal BP). 
 
-![Screenshot of preprint of the source dataset by Zampirolo et al. 2023](assets/images/chapters/authentication/aMeta.png){#fig-authenticationdecontamination-ameta}
+![Figure 6. Screenshot of preprint of the source dataset by Zampirolo et al. 2023](assets/images/chapters/authentication/BioxRiv_paper.png)
 
 ### 13.6 Ancient metagenomics with metaDMG-cpp: the workflow
 
 This section will cover the metaDMG analysis which involve taxonomic classification of the reads starting from sorted SAM files, the damage estimation and compilation of the final metaDMG output.
 
 ::: {.callout-tip}
-The raw sam files we will use for the exercise are stored in `authentication_ptII/rawdata/`.
+The raw sam files we will use for the exercise are stored in `authentication/metadmg`.
 
-We also need the taxonomy files, which are in the folder authentication_ptII/small_taxonomy/, these include names.dmp, nodes.dmp and small_accession2taxid.txt.gz. 
+We also need the taxonomy files, which are in the folder authentication/metadmg/small_taxonomy/, these include names.dmp, nodes.dmp and small_accession2taxid.txt.gz. 
 
 Before we can initiate a new conda environment, we need to deactivate the current one:
 
@@ -746,7 +756,7 @@ We run the damage plot to visualise the deamination patterns along forward and r
 We will use the function "get_dmg_decay_fit" to visualise damage pattern. The function is saved in authentication/metadmg/script/, so we only need to run the following command to recall it:
 
 ```{r}
-source("authentication/metadmg/scripts/get_dmg_decay_fit.R")
+source("authentication/metadmg/script/get_dmg_decay_fit.R")
 ```
 
 
@@ -911,6 +921,7 @@ purrr::map(tax_g_list, function(X, nrank) {
   }
 })
 ``` 
+![Figure 7. Deamination patterns for sheep (*Ovis*) and beech (*Fagus*) reads.](assets/images/chapters/authentication/Fagus_Ovis-dmg.png)
 
 ### 13.7.2 Amplitude of damage vs Significance
 We provide an R script to investigate the main statistics. 
@@ -952,7 +963,9 @@ ggsave("p1.pdf", plot = p1, width = 8, height = 6)
 ggsave("p2.pdf", plot = p2, width = 8, height = 6)
 ``` 
 
-### 13.7.3 Degree of damage and mean fragment length through depth and time
+![Figure 8. Amplitude of damage (A) vs significance (Zfit) for animals and plants.](assets/images/chapters/authentication/p2.png)
+
+### 13.7.3 Amplitude of damage and mean fragment length through time
 Here we visualise the amplitude of damage (A) and the mean length of the fragments (mean_rlen) by depth and by date (BP) for the full dataset but filtering it to a minimum of 100 reads and at the genus level.
 
 ```{r eval=F}
@@ -998,6 +1011,8 @@ p3
 ggsave("p3.pdf", plot = p4, width = 10, height = 8)
 ``` 
 
+![Figure 9. Amplitude of damage (A) and mean fragment length (mean_rlen) through time.](assets/images/chapters/authentication/p3.png)
+
 ::: {.callout-tip}
 Once finished examining the plots you can quit R
 ```{bash, eval = F}
@@ -1012,54 +1027,8 @@ And click “Open folder”
 You can double-click on the pdf files to visualise them.
 :::
 
-### 13.7.4 Additional plot (optional)
-
-::: {.callout-warning title="This is an optional plot - for more fun"}
-:::
-
-We provide an R script to generate a barplot presenting the abundance of number of reads per each taxon detected in the different samples.
-We will filter the metaDMG output to visualise only animals in our dataset at the genus level. 
-
-```{r eval=F}
-#import dataset
-df <- read_delim("concatenated_metaDMGfinal.tsv", 
-                 delim = "\t", escape_double = FALSE, 
-                 trim_ws = TRUE)
-
-# Set variable for filtering ancent reads
-# Minimum amount of damage
-A_Min = 0.02
-#Lambda Likelihood Ratio
-Significance = 2.0
-# Minimum reads for parsing taxa
-MinRead = 200
-# Minimum mean read length
-MeanLength = 35
-
-#Subsetting the table using grepl and filter, primary parameters to look at animals only
-df1m <- df %>% filter(A > A_Min, nreads > MinRead, mean_rlen >= MeanLength, Zfit > Significance,  grepl("Metazoa", taxa_path), grepl("\\bgenus\\b", rank))
-
-#Taxonomic profiles - abundance barplot
-p5 <- df1m %>%
-  mutate(Date_BP = fct_relevel(Date_BP, "6100","5300","4100","3900","3000", "800")) %>%
-  ggplot(aes(x = nreads, y = Date_BP, label = nreads)) + 
-  facet_wrap(~rank, scales = "free", ncol = 3) +
-  geom_bar(stat = "identity", aes(fill = name), position = "fill", width = 0.4) +
-  scale_fill_manual(values = c("#8A2BE2", "#009ACD", "#66CD00", "#458B74", "#79CDCD")) +
-  scale_x_continuous(labels = percent_format()) +
-  ggtitle("Metazoa - Taxonomic abundance") +
-  theme_minimal()
-p5
-
-#Save the plot as pdf
-ggsave("figures2/p5.pdf", plot = p5, width = 10, height = 8)
-```
-
-
-<!-- ![](assets/images/chapters/authentication/Rplots) -->
-
-## Aknowlegements
-We thank Mikkel Winther Pedersen and Antonio Fernandez Guerra for their contribution to the development of this chapter.
+## Aknowledgments
+We thank Mikkel Winther Pedersen and Antonio Fernandez Guerra for their contribution to the development of this section (*Authentication - part II - Ancient DNA authentication using metaDMG*).
 
 ## Recommended Reading
 
@@ -1079,9 +1048,8 @@ We thank Mikkel Winther Pedersen and Antonio Fernandez Guerra for their contribu
 
 4. **pyDamage**: Borry M, Hübner A, Rohrlach AB, Warinner C. PyDamage: automated ancient damage identification and estimation for contigs in ancient DNA de novo assembly. PeerJ. 2021 Jul 27;9:e11845. doi: 10.7717/peerj.11845. PMID: 34395085; PMCID: PMC8323603.
 
-11. **metaDMG-cpp**: https://github.com/metaDMG-dev/metaDMG-cpp
+5. **metaDMG-cpp**: https://github.com/metaDMG-dev/metaDMG-cpp
 
-2. **ngsLCA**: Wang, Y., Korneliussen, T. S., Holman, L. E., Manica, A., & Pedersen, M. W. (2022). ngs LCA—A toolkit for fast and flexible lowest common ancestor inference and taxonomic profiling of metagenomic data. Methods in Ecology and Evolution, 13(12), 2699-2708. (https://github.com/miwipe/ngsLCA)
+6. **ngsLCA**: Wang, Y., Korneliussen, T. S., Holman, L. E., Manica, A., & Pedersen, M. W. (2022). ngs LCA—A toolkit for fast and flexible lowest common ancestor inference and taxonomic profiling of metagenomic data. Methods in Ecology and Evolution, 13(12), 2699-2708. (https://github.com/miwipe/ngsLCA)
 
 ## References
-
