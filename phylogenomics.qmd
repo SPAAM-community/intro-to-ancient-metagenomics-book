@@ -9,6 +9,7 @@ For this chapter's exercises, if not already performed, you will need to downloa
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413215](https://doi.org/10.5281/zenodo.8413215), and unpack
 
 ```bash
+#| eval: false
 tar xvf phylogenomics.tar.gz 
 cd phylogenomics/
 ```
@@ -16,6 +17,7 @@ cd phylogenomics/
 You can then create the subsequently activate environment with
 
 ```bash
+#| eval: false
 conda env create -f phylogenomics.yml
 conda activate phylogenomics
 ```
@@ -34,6 +36,7 @@ The data and conda environment `.yaml` file for this practical session can be do
 Change into the session directory
 
 ```bash
+#| eval: false
 cd /<path>/<to>/phylogenomics/
 ```
 
@@ -42,6 +45,7 @@ The data in this folder should contain an alignment (snpAlignment_session5.fasta
 Load the conda environment.
 
 ```bash
+#| eval: false
 conda activate phylogenomics
 ```
 
@@ -217,6 +221,7 @@ Bootstrapping can be used to measure uncertainty with any type of inference meth
 Here is a command to estimate an ML phylogenetic tree together with bootstraps using _RAxML_ (you may find the list of parameters in the _RAxML_ manual):
 
 ```bash
+#| eval: false
 raxmlHPC-PTHREADS -m GTRGAMMA -T 3 -f a -x 12345 -p 12345 -N autoMRE -s snpAlignment_session5.fasta -n full_dataset.tre
 ```
 
@@ -332,6 +337,7 @@ Open BEAUTi by typing ```beauti &``` in the terminal (if asked to update, press 
 Now that the analysis is setup, we can run it using BEAST:
 
 ```bash
+#| eval: false
 beast beast_analysis_Y_pestis.xml
 ```
 
@@ -415,6 +421,7 @@ Since we are working in a Bayesian framework, we do not obtain a single phylogen
 Let's generate an MCC tree from our tree sample. We can do this using the _TreeAnnotator_ software, which has both a command line and graphical interface. Let's use the command line here and run the following (using a burn-in of 10%):
 
 ```bash
+#| eval: false
  treeannotator -burnin 10 intermediateFiles/snpAlignment_without_outgroup.trees snpAlignment_without_outgroup.MCC.tree
 ```
 
@@ -467,6 +474,7 @@ ENTER!
 :::
 
 ```bash
+#| eval: false
 rm -r /<PATH>/<TO>/phylogenomics*
 ```
 
@@ -475,11 +483,13 @@ Once deleted you can move elsewhere (e.g. `cd ~`).
 We can also get out of the `conda` environment with
 
 ```bash
+#| eval: false
 conda deactivate
 ```
 
 To delete the conda environment
 
 ```bash
+#| eval: false
 conda remove --name phylogenomics --all -y
 ```
