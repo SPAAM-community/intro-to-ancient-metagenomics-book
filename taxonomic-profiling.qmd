@@ -10,7 +10,6 @@ For this chapter's exercises, if not already performed, you will need to downloa
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413138](https://doi.org/10.5281/zenodo.8413138), and unpack
 
 ```bash
-#| eval: false
 tar xvf taxonomic-profiling.tar.gz 
 cd taxonomic-profiling/
 ```
@@ -18,7 +17,6 @@ cd taxonomic-profiling/
 You can then create the subsequently activate environment with
 
 ```bash
-#| eval: false
 conda env create -f taxonomic-profiling.yml
 conda activate taxonomic-profiling
 ```
@@ -112,7 +110,6 @@ seqtk sample -s42 ../data/raw/ERR5766177_PE.mapped.hostremoved.rev.fq.gz 1000000
 Finally, we compress all files to gzip format
 
 ```bash
-#| eval: false
 gzip -f ../data/subsampled/*.fastq
 ```
 :::
@@ -128,7 +125,6 @@ The markdown cells are used for annotating, which is important for sharing code 
 To load, please run the following command from within the chapter's directory.
 
 ```bash
-#| eval: false
 cd notebooks/
 jupyter notebook analysis.ipynb
 ```
@@ -153,7 +149,6 @@ I've already done some pre-processed the data, and the resulting cleaned files a
 If you wish to re-pre-prepare the data yourself, the basic eager command to do so is below, running on the output of the previous block in [chapter overview](#chapter-overview).
 
 ```bash
-#| eval: false
 nextflow run nf-core/eager \
 -r 2.4.7 \
 -profile <docker/singularity/podman/conda/institute> \
@@ -175,7 +170,6 @@ To perform both of these tasks, we'll use the program fastp ([https://github.com
 The following command gets you the help of fastp (the `--help` option is a common option in command-line tools that displays a list of available options and their descriptions).
 
 ```bash
-#| eval: false
 fastp -h
 ```
 ::: {.callout-tip collapse="true" title='Expand to see command output'}
@@ -307,7 +301,6 @@ The code specifies the input files, merges the paired-end reads on their overlap
 The output files are saved in the `../results/fastp/ directory`.
 
 ```bash
-#| eval: false
 fastp \
     --in1 ../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq.gz \
     --in2 ../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq.gz \
@@ -381,7 +374,6 @@ If you would use fewer cycles, and have shorter DNA fragments, you would expect 
 MetaPhlAn is a computational tool for profiling the composition of microbial communities from metagenomic shotgun sequencing data.
 
 ```bash
-#| eval: false
 metaphlan  --help
 ```
 ::: {.callout-tip collapse="true" title='Expand to see command output'}
@@ -633,7 +625,6 @@ The input file is specified as a merged FASTQ file, and the output is saved as a
 The `--bowtie2out` option is used to specify the output file for the Bowtie2 alignment, and the --nproc option is used to specify the number of CPUs to use for the analysis.
 
 ```bash
-#| eval: false
 metaphlan ../results/fastp/ERR5766177.merged.fastq.gz  \
     --input_type fastq \
     --bowtie2out ../results/metaphlan/ERR5766177.bt2.out  \
@@ -647,7 +638,6 @@ The main results files that we're interested in is located at
 It's a tab separated file, with taxons in rows, with their relative abundance in the sample
 
 ```bash
-#| eval: false
 head ../results/metaphlan/ERR5766177.metaphlan_profile.txt
 ```
 ::: {.callout-tip collapse="true" title='Expand to see command output'}
@@ -737,7 +727,6 @@ The output of the script is a text file that contains the taxonomic profile in a
 The `ktImportText` command is then used to generate an interactive HTML file that displays the taxonomic profile in a hierarchical manner using Krona.
 
 ```bash
-#| eval: false
 
 python ../scripts/metaphlan2krona.py -p ../results/metaphlan/ERR5766177.metaphlan_profile.txt -k ../results/krona/ERR5766177_krona.out
 ktImportText -o ../results/krona/ERR5766177_krona.html ../results/krona/ERR5766177_krona.out
@@ -1722,7 +1711,6 @@ Check 3x that the path you are specifying is exactly what you want to delete and
 :::
 
 ```bash
-#| eval: false
 rm -r /<PATH>/<TO>/taxonomic-profiling*
 ```
 
@@ -1731,14 +1719,12 @@ Once deleted you can move elsewhere (e.g. `cd ~`).
 We can also get out of the `conda` environment with
 
 ```bash
-#| eval: false
 conda deactivate
 ```
 
 To delete the conda environment
 
 ```bash
-#| eval: false
 conda remove --name taxonomic-profiling --all -y
 ```
 

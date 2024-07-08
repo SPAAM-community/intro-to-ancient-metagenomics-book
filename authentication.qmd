@@ -10,7 +10,6 @@ For this chapter's exercises, if not already performed, you will need to downloa
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413184](https://doi.org/10.5281/zenodo.8413184), and unpack
 
 ```bash
-#| eval: false
 tar xvf authentication.tar.gz 
 cd authentication/
 ```
@@ -18,7 +17,6 @@ cd authentication/
 You can then create the subsequently activate environment with
 
 ```bash
-#| eval: false
 conda env create -f authentication.yml
 conda activate authentication
 ```
@@ -50,28 +48,18 @@ Therefore, additional analysis is needed to follow-up each hit and demonstrate i
 
 In this chapter, we will cover:
 
-- how to recognize that a detected organism was mis-identified based on breadth / evenness of coverage
-- how to validate findings by breadth of coverage filters via k-mer based taxonomic classification with KrakenUniq
-- how to validate findings using alignments and assess mapping quality, edit distance and evenness of coverage profile
-- how to detect modern contaminants via deamination profile, DNA fragmentation and post-mortem damage (PMD) scores
-- how negative (blank) controls can help disentangle ancient organisms from modern contaminants
-- how microbial source tracking can facilitate separating endogenous and exogenous microbial communities
+- How to recognise that a detected organism was mis-identified based on breadth / evenness of coverage
+- How to validate findings by breadth of coverage filters via k-mer based taxonomic classification with KrakenUniq
+- How to validate findings using alignments and assess mapping quality, edit distance and evenness of coverage profile
+- How to detect modern contaminants via deamination profile, DNA fragmentation and post-mortem damage (PMD) scores
+- How negative (blank) controls can help disentangle ancient organisms from modern contaminants
+- How microbial source tracking can facilitate separating endogenous and exogenous microbial communities
 
-The chapter has the following outline:
+We will also cover
 
-- Introduction
-- Simulated ancient metagenomic data
-- Genomic hit confirmation (how we see a true-positive hit)
-  - Modern validation criteria
-    - evenness and breadth of coverage
-    - alignment quality (edit distance, mapq)
-    - affinity to reference (percent identity, multi-allelic SNPs)
-  - Ancient-specific validation
-    - deamination profile (PMD scores)
-    - DNA fragmentation
-    - demination profiles at scale and with LCA adjustment (metaDMG and NGSLCA)
-
-
+- Introduction to combining authentication with taxonomic profiling
+- How to analyse deamination from a metagenomic dataset with metaDMG
+- How to investigate the main metaDMG statistics with R
 
 ## Simulated ancient metagenomic data
 
@@ -86,7 +74,6 @@ The raw simulated data can be accessed via [https://doi.org/10.17044/scilifelab.
 To download the simulated ancient metagenomic data please use the following command lines:
 
 ```bash
-#| eval: false
 mkdir ameta/ && cd ameta/
 wget https://figshare.scilifelab.se/ndownloader/articles/21261405/versions/1 \
 && unzip 1 && rm 1
@@ -94,7 +81,6 @@ wget https://figshare.scilifelab.se/ndownloader/articles/21261405/versions/1 \
 The DNA reads were simulated with damage, sequencing errors and Illumina adapters, therefore one will have to trim the adapters first:
 
 ```bash
-#| eval: false
 for i in $(ls *.fastq.gz)
 do
 sample_name=$(basename $i .fastq.gz)
@@ -117,7 +103,7 @@ The modern validation methods aim at confirming organism presence regardless of 
 
 ### Depth vs breadth and evenness of coverage
 
-Concluding organism presence by relying solely on the numbers of assigned sequenced reads (aka depth of coverage metric) turns out to be not optimal and too permissive, which may result in a large amount of false-positive discoveries. For example, when using alignment to a reference genome, the mapped reads may demonstrate non-uniform coverage as visualized in the [Integrative Genomics Viewer (IGV)](https://software.broadinstitute.org/software/igv/) below.
+Concluding organism presence by relying solely on the numbers of assigned sequenced reads (aka depth of coverage metric) turns out to be not optimal and too permissive, which may result in a large amount of false-positive discoveries. For example, when using alignment to a reference genome, the mapped reads may demonstrate non-uniform coverage as visualised in the [Integrative Genomics Viewer (IGV)](https://software.broadinstitute.org/software/igv/) below.
 
 ![Screenshot of the IGV software. The reference genome bar is shown at the top, and in the main panel tall isolated 'towers' of reads with lots of coloured bases representing read 'stacking' i.e., un-uniform distribution of reads across the whole genome (as expected of the correct reference genome), but accumulation of all reads in the same isolated places on the reference genome, with the many variants on the reads suggesting they are from different species and aligning to conserved regions.](assets/images/chapters/authentication/IGV_uneven_coverage_Y.pestis.png){#fig-authenticationdecontamination-igv}
 
@@ -140,7 +126,6 @@ To profile the data with KrakenUniq one needs a database, a pre-built complete m
 Please use the following command line to download the database:
 
 ```bash
-#| eval: false
 cd krakenuniq/ ## If you've left it...
 
 wget https://figshare.scilifelab.se/ndownloader/articles/21299541/versions/1 \
@@ -150,7 +135,6 @@ wget https://figshare.scilifelab.se/ndownloader/articles/21299541/versions/1 \
 The following example command is how you would execute KrakenUniq.
 
 ```bash
-#| eval: false
 for i in $(ls *.trimmed.fastq.gz)
 do
 krakenuniq --db KRAKENUNIQ_DB --fastq-input $i --threads 20 \
@@ -165,7 +149,6 @@ done
 Taxonomic k-mer-based classification of the ancient metagenomic reads can be done via KrakenUniq. However as this requires a very large database file, the results from running KrakenUniq on the 10 simulated genomes can be found in.
 
 ```bash
-#| eval: false
 cd krakenuniq/
 ```
 
@@ -178,7 +161,6 @@ We can filter the KrakenUniq output with respect to both depth (*taxReads*) and 
 Run this from within the `krakenuniq/` directory.
 
 ```bash
-#| eval: false
 for i in $(ls *.krakenuniq.output)
 do
 ../scripts/filter_krakenuniq.py $i 1000 200 ../scripts/pathogensfound.very_inclusive.tab
@@ -191,7 +173,6 @@ done
 We can also easily produce a KrakenUniq taxonomic abundance table *krakenuniq_abundance_matrix.txt* using the custom R script below, which takes as argument the contents of the `krakenuniq/` folder containing the KrakenUniq output files. 
 
 ```bash
-#| eval: false
 Rscript ../scripts/krakenuniq_abundance_matrix.R . krakenuniq_abundance_matrix/ 1000 200
 ```
 
@@ -206,7 +187,6 @@ For this one has to use a special flag *--report-minimizer-data* when running Kr
 ::: {.callout-warning title="Example only -, do not run!"}
 
 ```bash
-#| eval: false
 DBNAME=Kraken2_DB_directory
 KRAKEN_INPUT=sample.fastq.gz
 KRAKEN_OUTPUT=Kraken2_output_directory
@@ -227,7 +207,6 @@ Now, after we have detected an interesting *Y. pestis* hit, we would like to fol
 
 ::: {.callout-note title="Self guided: data preparation" collapse=true}
 ```bash
-#| eval: false
 cd /<path/<to>/authentication/bowtie2
 
 ## Download reference genome
@@ -237,7 +216,6 @@ wget $NCBI/genomes/all/GCF/000/222/975/${ID}/${ID}_genomic.fna.gz
 :::
 
 ```bash
-#| eval: false
 cd /<path/<to>/authentication/bowtie2
 
 ## Prepare reference genome and build Bowtie2 index
@@ -258,15 +236,13 @@ samtools index Y.pestis_sample10.sorted.bam
 Next, the breadth / evenness of coverage can be computed from the BAM-alignments via *samtools depth* as follows:
 
 ```bash
-#| eval: false
 samtools depth -a Y.pestis_sample10.sorted.bam > Y.pestis_sample10.sorted.boc
 ```
-and visualized using for example the following R code snippet (alternatively [aDNA-BAMPlotter](https://github.com/MeriamGuellil/aDNA-BAMPlotter) can be used).
+and visualised using for example the following R code snippet (alternatively [aDNA-BAMPlotter](https://github.com/MeriamGuellil/aDNA-BAMPlotter) can be used).
 
 Load R by running `R` in your terminal
 
 ```bash
-#| eval: false
 R
 ``` 
 
@@ -298,14 +274,13 @@ mtext(paste0(round((sum(df$N_reads > 0) / length(df$N_reads)) * 100, 2),
 Once finished examining the plot you can quit R
 
 ```bash
-#| eval: false
 ## Press 'n' when asked if you want to save your workspace image.
 quit()
 ```
 
 ![](assets/images/chapters/authentication/Evenness_of_coverage.png)
 
-In the R script above, we simply split the reference genome into *N_tiles* tiles and compute the breadth of coverage (number of reference nucleotides covered by at least one read normalized by the total length) locally in each tile. By visualizing how the local breadth of coverage changes from tile to tile, we can monitor the distribution of the reads across the reference genome. In the evenness of coverage figure above, the reads seem to cover all parts of the reference genome uniformly, which is a good evidence of true-positive detection, even though the total mean breadth of coverage is low due to the low total number of reads.
+In the R script above, we simply split the reference genome into *N_tiles* tiles and compute the breadth of coverage (number of reference nucleotides covered by at least one read normalised by the total length) locally in each tile. By visualising how the local breadth of coverage changes from tile to tile, we can monitor the distribution of the reads across the reference genome. In the evenness of coverage figure above, the reads seem to cover all parts of the reference genome uniformly, which is a good evidence of true-positive detection, even though the total mean breadth of coverage is low due to the low total number of reads.
 
 
 ### Alignment quality
@@ -315,16 +290,14 @@ In addition to evenness and breadth of coverage, it is very informative to monit
 Mapping quality (MAPQ) can be extracted from the 5th column of BAM-alignments using Samtools and *cut* command in bash.
 
 ```bash
-#| eval: false
 samtools view Y.pestis_sample10.sorted.bam | cut -f5 > mapq.txt
 ```
 
-Then the 5th column of the filtered BAM-alignment can be visualized via a simple histogram in R as below for two random metagenomic samples.
+Then the 5th column of the filtered BAM-alignment can be visualised via a simple histogram in R as below for two random metagenomic samples.
 
 Load R
 
 ```bash
-#| eval: false
 R
 ```
 
@@ -353,7 +326,6 @@ barplot(table(bam[[1]]$tag$NM), ylab="Number of reads", xlab="Number of mismatch
 Once finished examining the plot you can quit R.
 
 ```bash
-#| eval: false
 ## Press 'n' when asked if you want to save your workspace image.
 quit()
 ```
@@ -368,9 +340,9 @@ Very related to edit distance is another alignment validation metric which is ca
 
 ![](assets/images/chapters/authentication/multialleleicSNPs.png)
 
-Another important way to detect reads that cross-map between related species is **haploidy** or checking the amount of **multi-allelic SNPs**. Because bacteria are haploid organisms, only one allele is expected for each genomic position. Only a small number of multi-allelic sites are expected, which can result from a few mis-assigned or incorrectly aligned reads. In the figure above, panels (f–i) demonstrate histograms of SNP allele frequency distributions. Panel f demonstrates the situation when we have only a few multi-allelic sites originating from a misaligned reads. This is a preferable case scenario corresponding to correct assignment of the reads to the reference. Please also check the corresponding "Good alignments" IGV visualization to the right in the figure above.
+Another important way to detect reads that cross-map between related species is **haploidy** or checking the amount of **multi-allelic SNPs**. Because bacteria are haploid organisms, only one allele is expected for each genomic position. Only a small number of multi-allelic sites are expected, which can result from a few mis-assigned or incorrectly aligned reads. In the figure above, panels (f–i) demonstrate histograms of SNP allele frequency distributions. Panel f demonstrates the situation when we have only a few multi-allelic sites originating from a misaligned reads. This is a preferable case scenario corresponding to correct assignment of the reads to the reference. Please also check the corresponding "Good alignments" IGV visualisation to the right in the figure above.
 
-In contrast, a large number of multi-allelic sites indicates that the assigned reads originate from more than one species or strain, which can result in symmetric allele frequency distributions (e.g., if two species or strains are present in equal abundance) (panel g) or asymmetric distributions (e.g., if two species or strains are present in unequal abundance) (panel h). A large number of mis-assigned reads from closely related species can result in a large number of multi-allelic sites with low frequencies of the derived allele (panel i). The situations (g-i) correspond to incorrect assignment of the reads to the reference. Please also check the corresponding "Bad alignments" IGV visualization to the right in the figure above.
+In contrast, a large number of multi-allelic sites indicates that the assigned reads originate from more than one species or strain, which can result in symmetric allele frequency distributions (e.g., if two species or strains are present in equal abundance) (panel g) or asymmetric distributions (e.g., if two species or strains are present in unequal abundance) (panel h). A large number of mis-assigned reads from closely related species can result in a large number of multi-allelic sites with low frequencies of the derived allele (panel i). The situations (g-i) correspond to incorrect assignment of the reads to the reference. Please also check the corresponding "Bad alignments" IGV visualisation to the right in the figure above.
 
 ## Ancient-specific genomic hit validation criteria
 
@@ -383,7 +355,6 @@ Checking evenness of coverage and alignment quality can help us to make sure tha
 Deamination profile of a damaged DNA demonstrate an enrichment of C / T polymorphisms at the ends of the reads compared to all other single nucleotide substitutions. There are several tools for computing deamination profile, but perhaps the most popular is [mapDamage](https://academic.oup.com/bioinformatics/article/29/13/1682/184965). The tool can be run using the following command line, still in the `authentication/bowtie2/` directory:
 
 ```bash
-#| eval: false
 mapDamage -i Y.pestis_sample10.sorted.bam -r NC_017168.1.fasta -d mapDamage_results/ --merge-reference-sequences --no-stats
 ```
 
@@ -396,11 +367,10 @@ maDamage delivers a bunch of useful statistics, among other read length distribu
 Another useful tool that can be applied to assess how DNA is damaged is [PMDtools](https://github.com/pontussk/PMDtools) which is a maximum-likelihood probabilistic model that calculates an ancient score, **PMD score**, for each read. The ability of PMDtools to infer ancient status with a single read resolution is quite unique and different from mapDamage that can only assess deamination based on a number of reads. PMD scores can be computed using the following command line, please note that Python2 is needed for this purpose.
 
 ```bash
-#| eval: false
 samtools view -h Y.pestis_sample10.bam | pmdtools --printDS > PMDscores.txt
 ```
 
-The distribution of PMD scores can be visualized via a histogram in R as follows.
+The distribution of PMD scores can be visualised via a histogram in R as follows.
 
 Load R.
 
@@ -418,7 +388,6 @@ hist(pmd_scores$V4, breaks = 1000, xlab = "PMDscores")
 Once finished examining the plot you can quit R
 
 ```bash
-#| eval: false
 ## Press 'n' when asked if you want to save your workspace image.
 quit()
 ```
@@ -430,14 +399,12 @@ Typically, reads with PMD scores greater than 3 are considered to be reliably an
 As mapDamage, PMDtools can also compute deamination profile. However, the advantage of PMDtools that it can compute deamination profile for UDG / USER treated samples (with the flag *--CpG*). For this purpose, PMDtools uses only CpG sites which escape the treatment, so deamination is not gone completely and there is a chance to authenticate treated samples. Computing deamination pattern with PMDtools can be achieved with the following command line (please note that the scripts *pmdtools.0.60.py* and *plotPMD.v2.R* can be downloaded from the github repository here https://github.com/pontussk/PMDtools):
 
 ```bash
-#| eval: false
 samtools view Y.pestis_sample10.bam | pmdtools --platypus > PMDtemp.txt
 ```
 
 We can then run simple R commands directly from the terminal (without loading R itself with) the following.
 
 ```bash
-#| eval: false
 R CMD BATCH plotPMD
 ```
 
@@ -451,98 +418,79 @@ pyDamage can be run on a sorted BAM-alignments of the microbial reads to the **d
 
 ::: {.callout-warning title="Example command - do not run!"}
 ```bash
-#| eval: false
 pydamage analyze -w 30 -p 14 filtered.sorted.bam
 ```
 :::
 
-## Authentication - part II - Ancient DNA authentication using metaDMG: Taxonomic profiling and DNA Damage Estimation
+## Authentication with taxonomic information
 
-This section has the following outline:
+Different tools can be utilised to assess the level of deamination at the strand termini and the most popular are mapDamage2.0 ([https://academic.oup.com/bioinformatics/article/29/13/1682/184965](https://academic.oup.com/bioinformatics/article/29/13/1682/184965)) and PMDtools ([https://github.com/pontussk/PMDtools](https://github.com/pontussk/PMDtools)).
 
-13.4 Introduction
-  13.4.1 Taxonomic profiling: metaDMG-cpp lca
-  13.4.2 Deamination patterns: metaDMG-cpp dfit
-13.5 Ancient metagenomic dataset
-13.6 Ancient metagenomics with metaDMG-cpp: the workflow
-13.7 Investigating the final output with R
-  13.7.1 Deamination patterns
-  13.7.2 Amplitude of damage vs Significance
-  13.7.3 Amplitude of damage and mean fragment length through time
+However, applying these to a metagenomic dataset can be computationally demanding and time-consuming due to the tens of thousands of different taxonomic entities it can include. 
 
-We will cover:
-
-- Introduction to metaDMG parameters and recommendations
-- How to analyse deamination from a metagenomic dataset with metaDMG
-- How to investigate the main metaDMG statistics with R
-
-In our exploration into ancient DNA, a central question we aim to address is: 
-
-::: {.callout-question} 
-__How ancient is an organism?__
-:::
-
-To answer this question, we focus on specific validation methods that are tailored for ancient samples. These methods allow us to assess the degree of DNA fragmentation and damage as definitive indicators of ancientness. 
-Ancient DNA fragments are short (30-70 bp) and exhibit a higher proportion of C -> T misincorporations at the strand termini compared to the other single nucleotide substitutions (@fig-authentication-fig1).
-
-![Damage plots of reads assigned to Homo sapiens with post-mortem damage pattern increasing at read termini [from metagenomic samples, adapted from @Michelsen2022]. The figure shows the damage rate f (x) = k(x)∕N(x) as a function of position x for both forward (C→T) and reverse (G→A).](assets/images/chapters/authentication/Fig_9_deamination.png){#fig-authentication-fig1}
-
-Different tools can be utilised to assess the level of deamination at the strand termini and the most popular are [mapDamage2.0](https://academic.oup.com/bioinformatics/article/29/13/1682/184965) and [PMDtools](https://github.com/pontussk/PMDtools). However, applying these to a metagenomic dataset can be computationally demanding and time-consuming due to the tens of thousands of different taxonomic entities it can include. 
-
-__metaDMG__ is currently under development and it represents a fast, flexible, and efficient tool for performing __taxonomic profiling__ (with the integrated ngsLCA algorithm) and quantifying __post-mortem DNA damage__. 
+**metaDMG** is currently under development and it represents a fast, flexible, and efficient tool for performing **taxonomic profiling** (with the integrated ngsLCA algorithm) and quantifying **post-mortem DNA damage**. 
 It is specially optimised for ancient metagenomic datasets where raw fastq files have been mapped against large sets of reference genomes.
-metaDMG should be run on a read coordinate sorted BAM/SAM-alignment file and can calculate the degree of damage from read data mapped against single and multiple genomes by analysing mismatches and deletions contained in the MD:Z tag of the input alignment file. This reference-free approach allows for a faster processing of the deamination patterns. 
+metaDMG should be run on a read coordinate sorted BAM/SAM-alignment file and can calculate the degree of damage from read data mapped against single and multiple genomes by analysing mismatches and deletions contained in the MD:Z tag of the input alignment file.
+This reference-free approach allows for a faster processing of the deamination patterns (@fig-authentication-fig1). 
 
-In particular, three different settings can be run: 
-1. Single genome analysis with one overall global estimate of the damage patterns. Similar to [mapDamage2.0](https://academic.oup.com/bioinformatics/article/29/13/1682/184965).
+![Damage plots of reads assigned to Homo sapiens with post-mortem damage pattern increasing at read termini [from metagenomic samples, adapted from [@Michelsen2022]]. The figure shows the damage rate f (x) = k(x)∕N(x) as a function of position x for both forward (C→T) and reverse (G→A).](assets/images/chapters/authentication/Fig_9_deamination.png){#fig-authentication-fig1}
 
-```{bash, eval = F}
-./metaDMG-cpp getdamage --run_mode 0
-```
+In particular, three different settings can be run:
+
+1. Single genome analysis with one overall global estimate of the damage patterns. Similar to mapDamage2.0 ([https://academic.oup.com/bioinformatics/article/29/13/1682/184965](https://academic.oup.com/bioinformatics/article/29/13/1682/184965)).
+
+  ```bash
+  metaDMG-cpp getdamage --run_mode 0
+  ```
+
 2. Metagenomic (e.g. multiple genome alignments) analyses. This mode provides a damage estimate per reference, taxonomic name or accession number, including all alignments without any taxonomical classification 
 
-```{bash, eval = F}
-./metaDMG-cpp getdamage --run_mode 1
-```
-3.	Metagenomic analyses with the integration of the taxonomy: Least Common Ancestor algorithm (ngsLCA). This allows the computation of damage estimates for alignments classified to given taxonomic levels.
+  ```bash
+  metaDMG-cpp getdamage --run_mode 1
+  ```
 
-```{bash, eval = F}
-./metaDMG-cpp lca
-```
-In this section we will utilise __metaDMG-cpp lca__ since we are interested in a more comprehensive analsysis that includes the taxonomic classification of our alignments. For those interested in exploring other functionalities of metaDMG, I encourage you to visit the tool’s official [github page](https://github.com/metaDMG-dev/metaDMG-cpp) and the ngsLCA official [github page](https://github.com/miwipe/ngsLCA).
+3.	Metagenomic analyses with the integration of the taxonomy: Least Common Ancestor algorithm (`ngsLCA`). This allows the computation of damage estimates for alignments classified to given taxonomic levels.
+
+  ```bash
+  metaDMG-cpp lca
+  ```
+
+In this section we will utilise `metaDMG-cpp lca` since we are interested in a more comprehensive analsysis that includes the taxonomic classification of our alignments.
+For those interested in exploring other functionalities of metaDMG, I encourage you to visit the tool’s official GitHub ([https://github.com/metaDMG-dev/metaDMG-cpp](https://github.com/metaDMG-dev/metaDMG-cpp)) and the ngsLCA official GitHub ([https://github.com/miwipe/ngsLCA](https://github.com/miwipe/ngsLCA)).
 
 
-### 13.4.1 Taxonomic profiling: metaDMG-cpp lca
+### Taxonomic profiling: metaDMG-cpp lca
 
-```{bash, eval = F}
-./metaDMG-cpp lca
-```
-The __metaDMG-cpp lca__ function is based on the ngsLCA (next-generation sequence Lowest Common Ancestor) algorithm to collect mismatch information for all reads and generate a taxonomic profile (Wang et al. 2022). It counts substitutions between read and reference on internal nodes within a taxonomy (e.g. species, genus and family level). It is built upon the [NCBI taxonomy](https://www.ncbi.nlm.nih.gov/taxonomy) and requires three files: 
+The `metaDMG-cpp lca` function is based on the `ngsLCA` (next-generation sequence Lowest Common Ancestor) algorithm to collect mismatch information for all reads and generate a taxonomic profile (Wang et al. 2022).
+It counts substitutions between read and reference on internal nodes within a taxonomy (e.g. species, genus and family level).
+It is built upon the NCBI taxonomy ([https://www.ncbi.nlm.nih.gov/taxonomy](https://www.ncbi.nlm.nih.gov/taxonomy)) and requires three files: 
 
-nodes.dmp: taxonomic nodes and the relationships between different taxa in the tree 
-
-access2taxID: the “taxonomy file”, sequence accession numbers, and the corresponding taxonomic IDs. 
-
-names.dmp: scientific names of the taxa are associated with each taxon contained in nodes.dmp file.
+- **nodes.dmp**: taxonomic nodes and the relationships between different taxa in the tree 
+- **access2taxID**: the "taxonomy file", sequence accession numbers, and the corresponding taxonomic IDs. 
+- **names.dmp**: scientific names of the taxa are associated with each taxon contained in nodes.dmp file.
 
 ::: {.callout-tip}
 For custom reference genomes not covered by NCBI, their accession IDs and the corresponded NCBI taxonomic IDs need to be manually attached to the NCBI access2taxID file.
 :::
 
-The ngsLCA program considers a chosen similarity interval between each read and its reference in the generated bam/sam file. The similarity can be set as an edit distance [-editdist[min/max]], i.e., number of mismatches between the read to reference genome, or as a similarity distance [-simscore[low/high]], i.e., percentage of mismatches between the read to reference genome. 
+The `ngsLCA` program considers a chosen similarity interval between each read and its reference in the generated bam/sam file.
+The similarity can be set as an edit distance `[-editdist[min/max]]`, i.e., number of mismatches between the read to reference genome, or as a similarity distance `[-simscore[low/high]]`, i.e., percentage of mismatches between the read to reference genome. 
 
-The main files produced by this command have the extensions “.bdamage.gz” and “lca.gz”. The first consists of a nucleotide misincorporation matrix (also called “mismatch matrix”) which represents the nucleotide substitution counts across the reads (@tbl-authentication-examplecodetable2). The lca file reports the sequence analysed and its taxonomic path, as well as other statistics (gc content, fragment length).
+The main files produced by this command have the extensions `.bdamage.gz` and `lca.gz`.
+The first consists of a nucleotide misincorporation matrix (also called **mismatch matrix**) which represents the nucleotide substitution counts across the reads (@tbl-authentication-examplecodetable2).
+The lca file reports the sequence analysed and its taxonomic path, as well as other statistics (gc content, fragment length).
 
-We report an example of the bdamage.gz file output printed using the command __metaDMG-cpp print__:
+We report an example of the bdamage.gz file output printed using the command `metaDMG-cpp print`:
 
-```{bash, eval = F}
-./metaDMG-cpp print file.bdamage.gz -names names.dmp > bdamage_table.tsv
+```bash
+metaDMG-cpp print file.bdamage.gz -names names.dmp > bdamage_table.tsv
 ```
 
 ```{r}
 #| label: tbl-authentication-examplecodetable2
 #| echo: false
 #| results: 'asis'
+#| warning: false
 #| tbl-cap: "Table 1. Example of the bdamage.gz mismatch matrix table for beech (Fagus sylvatica) of sample VM-14 provided in the exercise."
 #| tbl-cap-location: top
 
@@ -565,147 +513,161 @@ data %>%
   )
 ```
 
-### 13.4.2 Deamination patterns
+### Deamination patterns
 
-__metaDMG__ can perform a numerical optimisation of the deamination frequencies (C→T, G→A) using the binomial or beta-binomial likelihood models, where the latter can deal with a large amount of variance (overdispersion). This function is called the __metaDMG-cpp dfit__ or damage estimates function.
+**metaDMG** can perform a numerical optimisation of the deamination frequencies (C→T, G→A) using the binomial or beta-binomial likelihood models, where the latter can deal with a large amount of variance (overdispersion).
+This function is called the `metaDMG-cpp dfit` or damage estimates function.
 
 
-```{bash, eval = F}
-./metaDMG-cpp dfit 
+```bash
+metaDMG-cpp dfit 
 ```
 
-__metaDMG-cpp dfit__ allows us to estimate the four fit parameters of the damage model (Figure 2):
-__A__: the amplitude of damage on position one;
-__q__: the constant deamination background;
-__c__: relative decrease of damage per position;
-__ϕ__: the uncertainty of the likelihood model used (binomial or beta-binomial). 
+`metaDMG-cpp dfit` allows us to estimate the four fit parameters of the damage model (@fig-authentication-fig2):
 
-Another important parameter is the __Zfit__ or significance, which represents the number of standard deviations (“sigmas”) away from zero, or in other words, the certainty of the damage being positive.
+- **A**: the amplitude of damage on position one;
+- **q**: the constant deamination background;
+- **c**: relative decrease of damage per position;
+- **ϕ**: the uncertainty of the likelihood model used (binomial or beta-binomial). 
 
-![The damage model. The figure shows the misincorporations as circles and the damage as a solid line. The fit parameters are reported: A,c,q,ϕ. The uncertainty for a binomial model is in dark grey, while the uncertainty for a beta-binomial model is in light grey. (from Michelsen et al. 2022)](assets/images/chapters/authentication/F1._MichelsenB.png){#fig-authentication-fig2}
+Another important parameter is the **Zfit** or significance, which represents the number of standard deviations ("sigmas") away from zero, or in other words, the certainty of the damage being positive.
 
-Accurate damage estimates are crucial for the authentication of the metagenomic dataset. The __number of reads__ and the __significance (Zfit)__ are additional parameters that can impact the accuracy and reliability of ancient DNA analysis.
+![The damage model. The figure shows the misincorporations as circles and the damage as a solid line. The fit parameters are reported: A,c,q,ϕ. The uncertainty for a binomial model is in dark grey, while the uncertainty for a beta-binomial model is in light grey [from @Michelsen2022]](assets/images/chapters/authentication/F1._MichelsenB.png){#fig-authentication-fig2}
+
+Accurate damage estimates are crucial for the authentication of the metagenomic dataset.
+The _number of reads_ and the _significance (Zfit)_ are additional parameters that can impact the accuracy and reliability of ancient DNA analysis.
 
 Tests on a single-genome have shown how the accuracy of metaDMG dfit increases depending on the number of reads (@fig-authentication-fig3).
 
-![The single-genome simulations on the *Homo Sapiens* genome with a mean fragment length of 60 and 10% damage. The known damage (Dknown) is shown as a dashed line. A. Estimated damage and its standard deviation (error bars) for 20 replicates (100 reads each). B. Average damage as a function of the number of reads (with the average of the standard deviations as errors). *Adapted from Michelsen et al. 2022*.](assets/images/chapters/authentication/F3_Michelsen.png){#fig-authentication-fig3}
+![The single-genome simulations on the *Homo Sapiens* genome with a mean fragment length of 60 and 10% damage. The known damage (Dknown) is shown as a dashed line. A. Estimated damage and its standard deviation (error bars) for 20 replicates (100 reads each). B. Average damage as a function of the number of reads (with the average of the standard deviations as errors) [Adapted from @Michelsen2022].](assets/images/chapters/authentication/F3_Michelsen.png){#fig-authentication-fig3}
 
-The simulation on the *Homo Sapiens* genome, illustrated in [@fig-authentication-fig3] demonstrates the individual metaDMG damage estimates for 20 selected replications (iterations 60 to 79). When damage estimates are minimal, the distribution of Dfit is limited to positive values. This limitation can result in error bars extending into negative damage values, thus producing unrealistic estimates. As shown in @fig-authentication-fig3, the damage tends to converge towards the known values as the number of reads increases.
+The simulation on the *Homo Sapiens* genome, illustrated in [@fig-authentication-fig3] demonstrates the individual metaDMG damage estimates for 20 selected replications (iterations 60 to 79).
+When damage estimates are minimal, the distribution of Dfit is limited to positive values.
+This limitation can result in error bars extending into negative damage values, thus producing unrealistic estimates.
+As shown in @fig-authentication-fig3, the damage tends to converge towards the known values as the number of reads increases.
 
-In addition, the simulation reports a relationship between the amount of damage in taxa and the number of reads (@fig-authentication-fig4)(/). 
+In addition, the simulation reports a relationship between the amount of damage in taxa and the number of reads (@fig-authentication-fig4). 
 As shown in @fig-authentication-fig4, low expected damage (~5 %) requires about 1000 reads to be 95% certain about its estimation, while higher levels of damage (~15-30%) require fewer reads (100-500) to reach the same level of certainty. When increasing the significance threshold (Zfit) more reads are also required.
 
-![Relationship between the damage and the number of reads for the simulated single-genome data. The lines represent the number of reads needed to correctly infer the amount of damage: the solid line shows a certainty of 95%, and the dashed line, a certainty of 50%. Colors represent the significance (Zfit) cuts at 2 (blue), 3 (red), and 4 (green). *Michelsen et al. 2022*.](assets/images/chapters/authentication/F4_Michelsen.png){#fig-authentication-fig4}
-
+![Relationship between the damage and the number of reads for the simulated single-genome data. The lines represent the number of reads needed to correctly infer the amount of damage: the solid line shows a certainty of 95%, and the dashed line, a certainty of 50%. Colors represent the significance (Zfit) cuts at 2 (blue), 3 (red), and 4 (green). [from @Michelsen2022]](assets/images/chapters/authentication/F4_Michelsen.png){#fig-authentication-fig4}
 
 Simulations using metagenomic datasets have also evaluated the relationship between the amount of damage and its significance (@fig-authentication-fig5).
 
-![The amount of damage as a function of significance (metagenomic simulations). A. damage of the ancient taxa; B. damage of the non-ancient taxa. A larger dot size indicates a higher number of reads. *Adapted from Michelsen et al. 2022.*](assets/images/chapters/authentication/F5._Michelsen.png){#fig-authentication-fig5}
+![The amount of damage as a function of significance (metagenomic simulations). A. damage of the ancient taxa; B. damage of the non-ancient taxa. A larger dot size indicates a higher number of reads. [Adapted from @Michelsen2022]](assets/images/chapters/authentication/F5._Michelsen.png){#fig-authentication-fig5}
 
-As shown in @fig-authentication-fig5, there is a difference in the damage estimates between the ancient and the non-ancient taxa of simulated metagenomic datasets. The non-ancient taxa (@fig-authentication-fig5) report significance values below 2, in contrast to the ancient taxa (@fig-authentication-fig5) which reach a significance of 20.
-A relaxed significance threshold (Zfit > 2) and a minimum of 100 reads increase the accuracy of damage estimates to 90% of the dataset (Michelsen et al., 2022).
+As shown in @fig-authentication-fig5, there is a difference in the damage estimates between the ancient and the non-ancient taxa of simulated metagenomic datasets.
+The non-ancient taxa (@fig-authentication-fig5) report significance values below 2, in contrast to the ancient taxa (@fig-authentication-fig5) which reach a significance of 20.
+A relaxed significance threshold (Zfit > 2) and a minimum of 100 reads increase the accuracy of damage estimates to 90% of the dataset [@Michelsen2022].
 
-We also observe how the oldest samples (Cave-100 and Cave-102) which are 100 and 102 thousand years BP, show the highest amount of damage of all the metagenomes. While Pitch-6 and Cave-22 samples, which are 6 and 22 thousand years old and thus younger have almost similar levels of damage.
+We also observe how the oldest samples (Cave-100 and Cave-102) which are 100 and 102 thousand years BP, show the highest amount of damage of all the metagenomes.
+While Pitch-6 and Cave-22 samples, which are 6 and 22 thousand years old and thus younger have almost similar levels of damage.
 
-### 13.5 Ancient metagenomic dataset
+### Ancient metagenomic dataset
 
-In this section, we will use 6 metagenomic libraries downsampled with eukaryotes reads from the study by [@Zampirolo2023.12.01.569562]. The libraries originate from sediment samples of the Velký Mamut'ák rock shelter located in Northern Bohemia (Czech Republic) and covering the period between the Late Neolithic (~6100-5300 cal. BP) to more recent times (800 cal BP). 
+In this section, we will use 6 metagenomic libraries downsampled with eukaryotes reads from the study by [@Zampirolo2023.12.01.569562] (@fig-authentication-fig6).
+The libraries originate from sediment samples of the Velký Mamut'ák rock shelter located in Northern Bohemia (Czech Republic) and covering the period between the Late Neolithic (~6100-5300 cal. BP) to more recent times (800 cal BP). 
 
-![Screenshot of preprint of the source dataset by Zampirolo et al. 2023](assets/images/chapters/authentication/BioxRiv_paper.png){#fig-authentication-fig6}
+![Screenshot of preprint of the source dataset by [@Zampirolo2023.12.01.569562]](assets/images/chapters/authentication/BioxRiv_paper.png){#fig-authentication-fig6}
 
-### 13.6 Ancient metagenomics with metaDMG-cpp: the workflow
+### Ancient metagenomics with metaDMG-cpp: the workflow
 
 This section will cover the metaDMG analysis which involve taxonomic classification of the reads starting from sorted SAM files, the damage estimation and compilation of the final metaDMG output.
 
-::: {.callout-tip}
-The raw sam files we will use for the exercise are stored in `authentication/metadmg`.
+To begin, we can find raw SAM files used as input to `metaDMG` we will use for the exercise are stored in `metadmg`.
 
-We also need the taxonomy files, which are in the folder authentication/metadmg/small_taxonomy/, these include names.dmp, nodes.dmp and small_accession2taxid.txt.gz. 
-
-Before we can initiate a new conda environment, we need to deactivate the current one:
-
-```{bash, eval = F}
-conda deactivate 
-```
-
-We work with metaDMG activating the environment with
-
-```{bash, eval = F}
-conda activate metaDMG
-```
-:::
+We also need the taxonomy files, which are in the folder `metadmg/small_taxonomy/`, these include `names.dmp`, `nodes.dmp` and `small_accession2taxid.txt.gz`. 
 
 ::: {.callout-warning}
-__metaDMG__ is currently under development and it is therefore important to keep it updated. 
+**metaDMG** is currently under development and it is therefore important to keep it updated. 
 The best documentation is currently found in the –help function.
 :::
 
-We run the metaDMG-cpp lca to get the mismatch matrix file "bdamage.gz" that we need to estimate the dfit. 
+We need to activate a dedicated environment for `metaDMG` as it is still under development. We candeactivate the current one with
 
-```{bash, eval = F}
-metaDMG-cpp lca --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --acc2tax authentication/metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam authentication/metadmg/VM-3_800.merged.sort.bam --out_prefix authentication/metadmg/VM-3_800.merged.bam
-
-metaDMG-cpp lca --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --acc2tax authentication/metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam authentication/metadmg/VM-11_3000.merged.sort.bam --out_prefix authentication/metadmg/VM-11_3000.merged.bam
-
-metaDMG-cpp lca --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --acc2tax authentication/metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam authentication/metadmg/VM-14_3900.merged.sort.bam --out_prefix authentication/metadmg/VM-14_3900.merged.bam 
-
-metaDMG-cpp lca --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --acc2tax authentication/metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam authentication/metadmg/VM-15_4100.merged.sort.bam --out_prefix authentication/metadmg/VM-15_4100.merged.bam 
-
-metaDMG-cpp lca --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --acc2tax authentication/metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam authentication/metadmg/VM-17_5300.merged.sort.bam --out_prefix authentication/metadmg/VM-17_5300.merged.bam 
-
-metaDMG-cpp lca --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --acc2tax authentication/metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam authentication/metadmg/VM-19_6100.merged.sort.bam --out_prefix authentication/metadmg/VM-19_6100.merged.bam
+```bash
+conda deactivate 
 ```
 
-We use the file generated from the previous command (bdamage.gz), containing the misincorporation matrix to calculate the deamination pattern. We use metaDMG-cpp dfit function to obtain a quick computation of a beta-binomial model. 
+And we will work with metaDMG activating the environment with
 
-```{bash, eval = F}
-metaDMG-cpp dfit authentication/metadmg/VM-3_800.merged.bam.bdamage.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes  authentication/metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out authentication/metadmg/VM-3_800.merged.bam 
+```bash
+conda activate metaDMG
+```
 
-metaDMG-cpp dfit authentication/metadmg/VM-11_3000.merged.bam.bdamage.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes  authentication/metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out authentication/metadmg/VM-11_3000.merged.bam 
+:::{.callout-warning}
+Before you continue, make sure you're within the `authentication/` directory!
+:::
 
-metaDMG-cpp dfit authentication/metadmg/VM-14_3900.merged.bam.bdamage.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes  authentication/metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out authentication/metadmg/VM-14_3900.merged.bam
+First we will run `metaDMG-cpp lca` to get the mismatch matrix file `bdamage.gz` that we need to estimate the dfit. 
 
-metaDMG-cpp dfit authentication/metadmg/VM-15_4100.merged.bam.bdamage.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes  authentication/metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out authentication/metadmg/VM-15_4100.merged.bam 
+```bash
+metaDMG-cpp lca --names metadmg/small_taxonomy/names.dmp --nodes metadmg/small_taxonomy/nodes.dmp --acc2tax metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam metadmg/VM-3_800.merged.sort.bam --out_prefix metadmg/VM-3_800.merged.bam
 
-metaDMG-cpp dfit authentication/metadmg/VM-17_5300.merged.bam.bdamage.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes  authentication/metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out authentication/metadmg/VM-17_5300.merged.bam 
+metaDMG-cpp lca --names metadmg/small_taxonomy/names.dmp --nodes metadmg/small_taxonomy/nodes.dmp --acc2tax metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam metadmg/VM-11_3000.merged.sort.bam --out_prefix metadmg/VM-11_3000.merged.bam
 
-metaDMG-cpp dfit authentication/metadmg/VM-19_6100.merged.bam.bdamage.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes  authentication/metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out authentication/metadmg/VM-19_6100.merged.bam
+metaDMG-cpp lca --names metadmg/small_taxonomy/names.dmp --nodes metadmg/small_taxonomy/nodes.dmp --acc2tax metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam metadmg/VM-14_3900.merged.sort.bam --out_prefix metadmg/VM-14_3900.merged.bam 
+
+metaDMG-cpp lca --names metadmg/small_taxonomy/names.dmp --nodes metadmg/small_taxonomy/nodes.dmp --acc2tax metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam metadmg/VM-15_4100.merged.sort.bam --out_prefix metadmg/VM-15_4100.merged.bam 
+
+metaDMG-cpp lca --names metadmg/small_taxonomy/names.dmp --nodes metadmg/small_taxonomy/nodes.dmp --acc2tax metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam metadmg/VM-17_5300.merged.sort.bam --out_prefix metadmg/VM-17_5300.merged.bam 
+
+metaDMG-cpp lca --names metadmg/small_taxonomy/names.dmp --nodes metadmg/small_taxonomy/nodes.dmp --acc2tax metadmg/small_taxonomy/small_accession2taxid.txt.gz --sim_score_low 0.95 --sim_score_high 1.0 --how_many 30 --weight_type 1 --threads 12 --bam metadmg/VM-19_6100.merged.sort.bam --out_prefix metadmg/VM-19_6100.merged.bam
+```
+
+We use the file generated from the previous command (`bdamage.gz`), containing the misincorporation matrix to calculate the deamination pattern.
+We use metaDMG-cpp dfit function to obtain a quick computation of a beta-binomial model. 
+
+```bash
+metaDMG-cpp dfit metadmg/VM-3_800.merged.bam.bdamage.gz --names metadmg/small_taxonomy/names.dmp --nodes  metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out metadmg/VM-3_800.merged.bam 
+
+metaDMG-cpp dfit metadmg/VM-11_3000.merged.bam.bdamage.gz --names metadmg/small_taxonomy/names.dmp --nodes  metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out metadmg/VM-11_3000.merged.bam 
+
+metaDMG-cpp dfit metadmg/VM-14_3900.merged.bam.bdamage.gz --names metadmg/small_taxonomy/names.dmp --nodes  metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out metadmg/VM-14_3900.merged.bam
+
+metaDMG-cpp dfit metadmg/VM-15_4100.merged.bam.bdamage.gz --names metadmg/small_taxonomy/names.dmp --nodes  metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out metadmg/VM-15_4100.merged.bam 
+
+metaDMG-cpp dfit metadmg/VM-17_5300.merged.bam.bdamage.gz --names metadmg/small_taxonomy/names.dmp --nodes  metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out metadmg/VM-17_5300.merged.bam 
+
+metaDMG-cpp dfit metadmg/VM-19_6100.merged.bam.bdamage.gz --names metadmg/small_taxonomy/names.dmp --nodes  metadmg/small_taxonomy/nodes.dmp --showfits 2  --lib ds --out metadmg/VM-19_6100.merged.bam
 
 ```
 
 ::: {.callout-warning title="Example only -, do not run!"}
-The metaDMG-cpp dfit function also allows for the computation of a binomial model, which includes additional statistics (such as bootstrap estimated parameters). For the exercise, we only run the quick statistics, but we provide an example of the codes for full stat:
+The `metaDMG-cpp dfit` function also allows for the computation of a binomial model, which includes additional statistics (such as bootstrap estimated parameters).
+For the exercise, we only run the quick statistics, but we provide an example of the codes for full stat:
 
-```{bash, eval = F}
-metaDMG-cpp dfit authentication/metadmg/VM-11_3000.merged.bam.bdamage.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes  authentication/metadmg/small_taxonomy/nodes.dmp --showfits 2 --nopt 10 --nbootstrap 20 --doboot 1 --seed 1234  --lib ds --out authentication/metadmg/VM-11_3000.merged.bam
+```bash
+metaDMG-cpp dfit metadmg/VM-11_3000.merged.bam.bdamage.gz --names metadmg/small_taxonomy/names.dmp --nodes  metadmg/small_taxonomy/nodes.dmp --showfits 2 --nopt 10 --nbootstrap 20 --doboot 1 --seed 1234  --lib ds --out metadmg/VM-11_3000.merged.bam
 ```
 :::
 
-We run the "metaDMG-cpp aggregate" function to merge the statistics from the previous two steps and obtain a file for each sample.
+We run the `metaDMG-cpp aggregate` function to merge the statistics from the previous two steps and obtain a file for each sample.
 
-```{bash, eval = F}
-metaDMG-cpp aggregate authentication/metadmg/VM-3_800.merged.bam.bdamage.gz -lcastat authentication/metadmg/VM-3_800.merged.bam.stat.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --dfit authentication/metadmg/VM-3_800.merged.bam.dfit.gz --out authentication/metadmg/VM-3_aggregated_results
+```bash
+metaDMG-cpp aggregate metadmg/VM-3_800.merged.bam.bdamage.gz -lcastat metadmg/VM-3_800.merged.bam.stat.gz --names metadmg/small_taxonomy/names.dmp --nodes metadmg/small_taxonomy/nodes.dmp --dfit metadmg/VM-3_800.merged.bam.dfit.gz --out metadmg/VM-3_aggregated_results
 
-metaDMG-cpp aggregate authentication/metadmg/VM-11_3000.merged.bam.bdamage.gz -lcastat authentication/metadmg/VM-11_3000.merged.bam.stat.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --dfit authentication/metadmg/VM-11_3000.merged.bam.dfit.gz --out authentication/metadmg/VM-11_aggregated_results
+metaDMG-cpp aggregate metadmg/VM-11_3000.merged.bam.bdamage.gz -lcastat metadmg/VM-11_3000.merged.bam.stat.gz --names metadmg/small_taxonomy/names.dmp --nodes metadmg/small_taxonomy/nodes.dmp --dfit metadmg/VM-11_3000.merged.bam.dfit.gz --out metadmg/VM-11_aggregated_results
 
-metaDMG-cpp aggregate authentication/metadmg/VM-14_3900.merged.bam.bdamage.gz -lcastat authentication/metadmg/VM-14_3900.merged.bam.stat.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --dfit authentication/metadmg/VM-14_3900.merged.bam.dfit.gz --out authentication/metadmg/VM-14_aggregated_results
+metaDMG-cpp aggregate metadmg/VM-14_3900.merged.bam.bdamage.gz -lcastat metadmg/VM-14_3900.merged.bam.stat.gz --names metadmg/small_taxonomy/names.dmp --nodes metadmg/small_taxonomy/nodes.dmp --dfit metadmg/VM-14_3900.merged.bam.dfit.gz --out metadmg/VM-14_aggregated_results
 
-metaDMG-cpp aggregate authentication/metadmg/VM-15_4100.merged.bam.bdamage.gz -lcastat authentication/metadmg/VM-15_4100.merged.bam.stat.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --dfit authentication/metadmg/VM-15_4100.merged.bam.dfit.gz --out authentication/metadmg/VM-15_aggregated_results
+metaDMG-cpp aggregate metadmg/VM-15_4100.merged.bam.bdamage.gz -lcastat metadmg/VM-15_4100.merged.bam.stat.gz --names metadmg/small_taxonomy/names.dmp --nodes metadmg/small_taxonomy/nodes.dmp --dfit metadmg/VM-15_4100.merged.bam.dfit.gz --out metadmg/VM-15_aggregated_results
 
-metaDMG-cpp aggregate authentication/metadmg/VM-17_5300.merged.bam.bdamage.gz -lcastat authentication/metadmg/VM-17_5300.merged.bam.stat.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --dfit authentication/metadmg/VM-17_5300.merged.bam.dfit.gz --out authentication/metadmg/VM-17_aggregated_results
+metaDMG-cpp aggregate metadmg/VM-17_5300.merged.bam.bdamage.gz -lcastat metadmg/VM-17_5300.merged.bam.stat.gz --names metadmg/small_taxonomy/names.dmp --nodes metadmg/small_taxonomy/nodes.dmp --dfit metadmg/VM-17_5300.merged.bam.dfit.gz --out metadmg/VM-17_aggregated_results
 
-metaDMG-cpp aggregate authentication/metadmg/VM-19_6100.merged.bam.bdamage.gz -lcastat authentication/metadmg/VM-19_6100.merged.bam.stat.gz --names authentication/metadmg/small_taxonomy/names.dmp --nodes authentication/metadmg/small_taxonomy/nodes.dmp --dfit authentication/metadmg/VM-19_6100.merged.bam.dfit.gz --out authentication/metadmg/VM-19_aggregated_results
+metaDMG-cpp aggregate metadmg/VM-19_6100.merged.bam.bdamage.gz -lcastat metadmg/VM-19_6100.merged.bam.stat.gz --names metadmg/small_taxonomy/names.dmp --nodes metadmg/small_taxonomy/nodes.dmp --dfit metadmg/VM-19_6100.merged.bam.dfit.gz --out metadmg/VM-19_aggregated_results
 ```
 
 In the last step we merge the header and the filenames in a unique tab-separated file (tsv).
 
 We first unzip the output files
-```{bash, eval = F}
+
+```bash
 gunzip *_aggregated_results.stat.gz
 ```
 
 Then we extract the header and we concatenate the content of all the output files in a unique tsv file.
-```{bash, eval = F}
+
+```bash
 #Define header for final output table
 header_file="VM-11_aggregated_results.stat"
 
@@ -731,36 +693,37 @@ do
 done
 ```
 
-## 13.7 Investigating the final output with R
-We first visualise our metaDMG output manually navigating to the folder home/ubuntu/Desktop/volume/authentication/metadmg/ and clicking on "Open folder".
-We can double-click on the tsv file "concatenated_metaDMGfinal.tsv" and visualise it.
+### Investigating the final output with R
+
+We first visualise our metaDMG output manually navigating to the folder `metadmg/` and clicking on "Open folder".
+We can double-click on the tsv file `concatenated_metaDMGfinal.tsv` and visualise it.
 
 We will now investigate the tsv table produced by metaDMG to authenticate damage patterns, visualise the relationship between the damage and the significance, and the degree of damage through depth and time.
 
-::: {.callout-tip}
-R packages for this exercise are located in the conda environment "authentication".
+R packages for this exercise are located in our original conda environment `authentication`.
 
-We deactivate the current conda environment and we open the environment "authentication"
-```{bash}
-conda deactivate metaDMG
+We deactivate the current conda environment and we re-activate the environment `authentication`
+
+```bash
+conda deactivate
 conda activate authentication
 ```
 
 We navigate to the working directory:
 
-```{bash}
-cd authentication/metadmg/figures
+```bash
+cd metadmg/figures
 ```
 
 We load R by running `R` in your terminal
 
-```{bash}
+```bash
 R
 ```
 
 We load the libraries 
 
-```{r}
+```{r eval=F}
 library(tidyr)
 library(dplyr)
 library(forcats)
@@ -770,21 +733,21 @@ library(ggplot2)
 library(purrr)
 library(ggpubr)
 ``` 
-:::
 
 
-#### 13.7.1 Deamination patterns
+#### Deamination patterns
 
 We run the damage plot to visualise the deamination patterns along forward and reverse strands, and we save the results per each taxon detected in the samples.
 
-We will use the function "get_dmg_decay_fit" to visualise damage pattern. The function is saved in authentication/metadmg/script/, so we only need to run the following command to recall it:
+We will use the function `get_dmg_decay_fit` to visualise damage pattern (@fig-authentication-fagusovisdmg).
+The function is saved in `metadmg/script/`, so we only need to run the following command to recall it:
 
-```{r}
-source("authentication/metadmg/script/get_dmg_decay_fit.R")
+```{r eval=F}
+source("metadmg/script/get_dmg_decay_fit.R")
 ```
 
-
 But if you are curious and want to know how it works, here is the function itself:
+
 ```{r eval=F}
 get_dmg_decay_fit <- function(df, orient = "fwd", pos = 30, p_breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7), y_max = 0.7, y_min = -0.01) {
   df_dx_fwd <- df %>%
@@ -890,10 +853,10 @@ get_dmg_decay_fit <- function(df, orient = "fwd", pos = 30, p_breaks = c(0, 0.1,
 }
 ```
 
-We load our metaDMG output data (tsv file) and generate the damage plots using the function "get-damage".
+We load our metaDMG output data (tsv file) and generate the damage plots as seen in @fig-authentication-fagusovisdmg using the function `get-damage`.
 
-```{r}
-df <- read.csv("authentication/metadmg/concatenated_metaDMGfinal.tsv",  sep = "\t")
+```{r eval=F}
+df <- read.csv("metadmg/concatenated_metaDMGfinal.tsv",  sep = "\t")
 
 #Rename sample column
 colnames(df)[colnames(df) == 'filename'] <- 'sample'
@@ -945,11 +908,13 @@ purrr::map(tax_g_list, function(X, nrank) {
   }
 })
 ``` 
-![Figure 7. Deamination patterns for sheep (*Ovis*) and beech (*Fagus*) reads.](assets/images/chapters/authentication/Fagus_Ovis-dmg.png)
+![Deamination patterns for sheep (*Ovis*) and beech (*Fagus*) reads.](assets/images/chapters/authentication/Fagus_Ovis-dmg.png){#fig-authentication-fagusovisdmg}
 
-### 13.7.2 Amplitude of damage vs Significance
+### Amplitude of damage vs Significance
+
 We provide an R script to investigate the main statistics. 
-Here we visualise the amplitude of damage (A) and its significance (Zfit), for the full dataset but filtering it to a minimum of 100 reads and at the genus level. 
+
+Here we visualise the amplitude of damage (A) and its significance (Zfit), for the full dataset but filtering it to a minimum of 100 reads and at the genus level (@fig-authentication-fig8). 
 
 ```{r eval=F}
 #Subset dataset at genus level
@@ -987,14 +952,15 @@ ggsave("p1.pdf", plot = p1, width = 8, height = 6)
 ggsave("p2.pdf", plot = p2, width = 8, height = 6)
 ``` 
 
-![Figure 8. Amplitude of damage (A) vs significance (Zfit) for animals and plants.](assets/images/chapters/authentication/p2.png){#fig-authentication-fig8}
+![Amplitude of damage (A) vs significance (Zfit) for animals and plants.](assets/images/chapters/authentication/p2.png){#fig-authentication-fig8}
 
-### 13.7.3 Amplitude of damage and mean fragment length through time
-Here we visualise the amplitude of damage (A) and the mean length of the fragments (mean_rlen) by depth and by date (BP) for the full dataset but filtering it to a minimum of 100 reads and at the genus level.
+### Amplitude of damage and mean fragment length through time
+
+Here we visualise the amplitude of damage (A) and the mean length of the fragments (mean_rlen) by depth and by date (BP) for the full dataset but filtering it to a minimum of 100 reads and at the genus level (@fig-authentication-fig9).
 
 ```{r eval=F}
 #Import the metadata 
-depth_data <- read.csv ("authentication/metadmg/figures/depth_data.csv", sep = ",")
+depth_data <- read.csv ("metadmg/figures/depth_data.csv", sep = ",")
 View (depth_data)
 
 #Merge context_data and depth_data with dataframe (adding new column for dates BP)
@@ -1035,24 +1001,28 @@ p3
 ggsave("p3.pdf", plot = p4, width = 10, height = 8)
 ``` 
 
-![Figure 9. Amplitude of damage (A) and mean fragment length (mean_rlen) through time.](assets/images/chapters/authentication/p3.png){#fig-authentication-fig9}
+![Amplitude of damage (A) and mean fragment length (mean_rlen) through time.](assets/images/chapters/authentication/p3.png){#fig-authentication-fig9}
 
 ::: {.callout-tip}
 Once finished examining the plots you can quit R
-```{bash, eval = F}
+```bash
 ## Press 'n' when asked if you want to save your workspace image.
 quit()
 ```
 :::
 
 ::: {.callout-tip}
-You can manually navigate to the folder home/ubuntu/Desktop/volume/authentication/metadmg/figures/
-And click “Open folder”
+You can manually navigate to the folder `metadmg/figures/`
+And click "Open folder"
 You can double-click on the pdf files to visualise them.
 :::
 
-## Aknowledgments
-We thank Mikkel Winther Pedersen and Antonio Fernandez Guerra for their contribution to the development of this section (*Authentication - part II - Ancient DNA authentication using metaDMG*).
+## Summary
+
+TODO
+
+## Acknowledgments
+We thank Mikkel Winther Pedersen and Antonio Fernandez Guerra for their contribution to the development of the `metaDMG` section.
 
 ## Recommended Reading
 
