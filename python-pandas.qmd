@@ -3,6 +3,28 @@ title: Introduction to Python and Pandas
 author: Kevin Nota, Robin Warner, and Maxime Borry
 ---
 
+:::  {.callout-note} 
+This session is typically ran held in parallel to the Introduction to R and Tidyverse. Participants of the summer schools chose which to attend based on their prior experience. We recommend the [introduction to R session](r-tidyverse.qmd) if you have no experience with neither R nor Python.
+:::
+
+::: {.callout-tip}
+For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
+
+Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413046](https://doi.org/10.5281/zenodo.8413046), and unpack
+
+```bash
+tar xvf python-pandas.tar.gz 
+cd python-pandas/
+```
+
+You can then create the subsequently activate environment with
+
+```bash
+conda env create -f python-pandas.yml
+conda activate python-pandas
+```
+:::
+
 Over the last few years, _Python_ has gained popularity thanks to the numerous libraries (packages with pre-written functions) in bioinformatics, statistical data analysis, and machine learning.
 While a few years ago, it was often necessary to go to _R_ for performing routine data manipulation and analysis tasks, nowadays _Python_ has a vast ecosystem of useful libraries for working on metagenomic data.
 Existing libraries exist for many different file formats encountered in metagenomics, such as fasta, fastq, sam, bam, etc.
@@ -22,32 +44,7 @@ learning objectives:
 - Get familiar with the Python code syntax and use Jupyter Notebook for executing code.
 - Get a kickstart to utilising the endless possibilities of data analysis in Python that can be applied to your data.
 
-:::  {.callout-note} 
-This session is typically ran held in parallel to the Introduction to R and Tidyverse. Participants of the summer schools chose which to attend based on their prior experience. We recommend the [introduction to R session](r-tidyverse.qmd) if you have no experience with neither R nor Python.
-:::
-
-::: {.callout-tip}
-For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
-
-Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413046](https://doi.org/10.5281/zenodo.8413046), and unpack
-
-```bash
-#| eval: false
-tar xvf python-pandas.tar.gz 
-cd python-pandas/
-```
-
-You can then create the subsequently activate environment with
-
-```bash
-#| eval: false
-conda env create -f python-pandas.yml
-conda activate python-pandas
-```
-:::
-
-
-## Working in a jupyter environment
+## Working in a Jupyter environment
 
 This tutorial/walkthrough is using a Jupyter Notebook ([https://jupyter.org](https://jupyter.org)) for writing and executing Python code and for annotating.
 
@@ -58,7 +55,7 @@ The markdown cells are used for annotating code, which is important for sharing 
 Change the directory to the the working directory of this tutorial/walkthrough.
 
 ```bash
-cd /vol/volume/python-pandas/python-pandas_lecture
+cd python-pandas_lecture/
 ```
 
 To launch jupyter, run the following command in the terminal.
@@ -144,7 +141,7 @@ print("Hello World from Python!")
 ```
 
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 Hello World from Python!
 ```
@@ -174,7 +171,7 @@ To see what value a variable contains, the `print()` function can be used.
 print(i)
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 0
 ```
@@ -185,7 +182,7 @@ You can also print multiple things together in one `print` statement such as a n
 print("The number is", i, "Wow!")
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 The number is, 0, Wow!
 ```
@@ -211,7 +208,7 @@ Now that `Pandas` is imported, we can check if it worked correctly, and check wh
 pd.__version__
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 '2.2.2'
 :::
 ### Pandas data structures
@@ -264,7 +261,7 @@ df = pd.read_csv("../all_data.tsv", sep="\t")
 df
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 |ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
 |-|----|----|----------|------|-------|-|-|--|--|---|---|--|--|-|--|-|-|-|-|--|
 |0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|11|
@@ -293,7 +290,7 @@ df = pd.Dataframe([[5,6], [8,4]], colums=["A", "B"])
 df
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 
 | |A|B|
 |-|-|-|
@@ -311,7 +308,7 @@ df = pd.DataFrame(data)
 df
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 | |A|B|
 |-|-|-|
 |0|5|6|
@@ -334,7 +331,7 @@ To display all the column names from the imported `DataFrame`, the attribute `co
 df.columns
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 Index(['ID', 'Year_Birth', 'Education', 'Marital_Status', 'Income', 'Kidhome',
        'Teenhome', 'MntWines', 'MntFruits', 'MntMeatProducts',
@@ -354,7 +351,7 @@ A column with only strings, or a combination of strings and `integers` or `float
 df.dtypes
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 ID                       int64
 Year_Birth               int64
@@ -399,7 +396,7 @@ To quikly check how many rows and columns the `DataFrame` has, you can access th
 df.shape
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 (1754, 20)
 ```
@@ -415,7 +412,7 @@ To print, or access the rows or columns the index can be used.
 df.shape[0]
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 1754
 ```
@@ -425,21 +422,22 @@ df.shape[0]
 df.shape[1]
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 20
 ```
 :::
 
-:::
+:::{.callout-tip}
 It is often useful to have a quick look at the first rows, to get, for example, an idea of the data was read correctly.
 This can be done with the `head()` function.
+:::
 
 ```{.python eval=False}
 df.head()
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 
 ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
 -|----|----|----------|------|-------|-|-|---|--|---|---|--|--|-|--|-|-|-|-|--
@@ -472,7 +470,7 @@ To print the all the columns, the `:` is used.
 df.loc[1, :]
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 ID                           2174
 Year_Birth                   1954
@@ -505,7 +503,7 @@ To print the second and third row, this would be `[1:2, :]`.
 df.loc[1:2]
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
 -|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-
 1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11
@@ -518,7 +516,7 @@ To print all the rows with a certain column name works the same as subsetting ro
 df[:, "Year_Birth"]
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 0       1957
 1       1954
@@ -548,7 +546,7 @@ new_df
 ```
 
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ||Education|Marital_Status|
 |-|-|-|
 |0|Graduation|Single|
@@ -578,7 +576,7 @@ df = df.drop("Z_CostContact", axis=1)
 df = df.drop("Z_Revenue", axis=1)
 ```
 ::: {.callout-tip collapse="true"}
-## can be done in one go
+## Can be done in one go
 ```
 df = df.drop(["Z_CostContact", "Z_Revenue"], axis=1)
 ```
@@ -599,7 +597,7 @@ education_is_grad = (df["Education"] == "Graduation")
 education_is_grad
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 0        True
 1        True
@@ -623,7 +621,7 @@ df["Education"]
 ```
 
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 0       Graduation
 1       Graduation
@@ -648,7 +646,7 @@ two_at_once = (df["Education"] == "Graduation") & (df["Marital_Status"] == "Sing
 two_at_once
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 0        True
 1        True
@@ -672,7 +670,7 @@ sum(two_at_once)
 ```
 
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 252
 ```
@@ -684,7 +682,7 @@ These `Series` of Booleans can be used to subset the dataframe to rows where the
 df[two_at_once]
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 |ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue|
 |-|----|----|----------|------|-------|-|-|---|--|---|---|--|--|-|--|-|-|-|-|--|
 |0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|11|
@@ -707,7 +705,7 @@ It is not actually necessary to create a `series` every time for subsetting the 
 df[(df["Education"] == "Master") & (df["Marital_Status"] == "Single")]
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ||ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue|
 |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
 |26|10738|1951|Master|Single|49389.0|1|1|40|0|19|2|1|3|2|0|3|7|0|3|11|
@@ -733,7 +731,7 @@ Sometimes is is nice to get a quick overview of the data in a table, such as `me
 df.describe()
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ||ID|Year_Birth|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue|
 |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
 |count|1754.000000|1754.000000|1735.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.0|1754.0|
@@ -753,7 +751,7 @@ You can also directly calculate the relevant statistics on numberic columns or r
 df["MntWines"].max()
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 1492
 ```
@@ -762,7 +760,7 @@ df["MntWines"].max()
 df[["Kidhome", "Teenhome"]].mean()
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 Kidhome     0.456100
 Teenhome    0.480616
@@ -777,7 +775,7 @@ To know which stings are present in a `object`, the fuction `unique()` can be us
 df["Education"].unique()
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 array(['Graduation', 'Master', 'Basic', '2n Cycle'], dtype=object)
 ```
@@ -790,7 +788,7 @@ This will print a `series` for all the unique values and print a count.
 df["Marital_Status"].value_counts()
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 Marital_Status
 Married     672
@@ -815,7 +813,7 @@ For example, to get a mean income value for the different Education levels in th
 df.groupby(by="Education")["Income"].mean()
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 Education
 2n Cycle      47633.190000
@@ -841,7 +839,7 @@ sum(df["Marital_Status"] == "Single")
 ```
 
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 382
 ```
@@ -870,7 +868,7 @@ print("n(before)   =", df_before.shape[0])
 print("n(after)   =", df_after.shape[0])
 ```
 ::: {.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 n(before)   = 804
 n(after)   = 950
@@ -887,7 +885,7 @@ Do the total number of people sum up to the original `DataFrame` total?
  df_before.shape[0] + df_after.shape[0] == df.shape[0]
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 True
 :::
 ```{.python eval=False} 
@@ -895,7 +893,7 @@ print("n(sum)      =", df_before.shape[0] + df_after.shape[0])
 print("n(expected) =", df.shape[0])
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 n(sum)      = 1754
 n(expected) = 1754
@@ -915,7 +913,7 @@ How does the mean income of the two groups differ?
   
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 income(before) = 55513.38113207547
 
 income(after)  = 47490.29255319149  
@@ -941,7 +939,7 @@ This function checks every cell in the `DataFrame` and returns a `DataFrame` of 
 df.isna()
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ||ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue|
 |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
 |0|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
@@ -966,7 +964,7 @@ In `Python`, `True` has the `1` assigned to it and `False` `0`.
 df.isna().sum()
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 ID                      0
 Year_Birth              0
@@ -1033,7 +1031,7 @@ concat_df = pd.concat([df, df2])
 concat_df
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ||ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue|
 |0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|11|
 |1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11|
@@ -1064,7 +1062,7 @@ concat_df = concat_df.drop("Z_Revenue", axis=1)
 concat_df
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ||ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|
 |0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|
 |1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|
@@ -1090,7 +1088,7 @@ Is there something interesting about the marital status of some people that have
 concat_df[concat_df["Education"]=="PhD"]["Marital_Status"].value_counts()
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 Marital_Status
 Married     192
@@ -1141,7 +1139,7 @@ education_df = pd.DataFrame.from_dict(education_dictionary, orient="index")
 education_df
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ||0|
 |-|-|
 |Basic	|1|
@@ -1160,7 +1158,7 @@ education_df = education_df.rename(columns={0: "Level"})
 education_df
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ||Level|
 |-|-|
 |Basic	|1|
@@ -1182,7 +1180,7 @@ merged_df = pd.merge(left=concat_df, right=education_df, left_on="Education", ri
 merged_df
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 
 |ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Level|
 |-|----|----|----------|------|-------|-|-|---|--|---|---|--|--|-|--|-|-|-|-|
@@ -1222,7 +1220,7 @@ ax.set_title("Histogram of income")
 ```
 
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 Text(0.5, 1.0, 'Histogram of income')
 
 ![png](https://github.com/Kevinnota/teaching_stuff/blob/main/histogram.png?raw=true)
@@ -1241,7 +1239,7 @@ This is much higher than any other income, which makes the histogram very draged
 merged_df[merged_df["Income"].sort_values(ascending=False)]
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 1749    666666.0
 1006    157733.0
@@ -1272,7 +1270,7 @@ ax.set_xlabel("Income")
 ax.set_title("Fixed Histogram of income")
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 Text(0.5, 1.0, 'Fixed Histogram of income')
 
 ![png](https://github.com/Kevinnota/teaching_stuff/blob/main/fixed_histogram.png?raw=true)
@@ -1289,7 +1287,7 @@ grouped_by_education
 
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ```
 Education
 2n Cycle      47633.190000
@@ -1307,7 +1305,7 @@ ax.set_ylabel("Mean income")
 ax.set_title("Mean income for each education level")
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 Text(0.5, 1.0, 'Mean income for each education level')
 
 ![png](https://github.com/Kevinnota/teaching_stuff/blob/main/bar_plot.png?raw=true)
@@ -1321,7 +1319,7 @@ ax = df.plot(kind="scatter", x="MntWines", y="MntFruits")
 ax.set_title("Wine purchases and Fruit purchases")
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 Text(0.5, 1.0, 'Wine purchases and Fruit purchases')
 
 ![png](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_01.png?raw=true)
@@ -1334,7 +1332,7 @@ ax = df.plot(kind="scatter", x="MntWines", y="MntFruits", logy=True, logx=True)
 ax.set_title("Wine purchases and Fruit purchases, on log scale")
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 Text(0.5, 1.0, 'Wine purchases and Fruit purchases, on log scale')
 
 ![png](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_02.png?raw=true)
@@ -1352,7 +1350,7 @@ from plotnine import *
  + geom_boxplot(alpha=0.8))
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ![png](https://github.com/Kevinnota/teaching_stuff/blob/main/boxplot.png?raw=true)
 :::
 
@@ -1363,7 +1361,7 @@ from plotnine import *
  + facet_wrap("Marital_Status"))
 ```
 :::{.callout-note collapse="true"}
-## Expand see output
+## Expand to see output
 ![png](https://github.com/Kevinnota/teaching_stuff/blob/main/facet_scatter.png?raw=true)
 :::
 
@@ -1407,7 +1405,6 @@ Check 3x that the path you are specifying is exactly what you want to delete and
 :::
 
 ```bash
-#| eval: false
 rm -r /<PATH>/<TO>/python-pandas*
 ```
 Once deleted you can move elsewhere (e.g. `cd ~`).
@@ -1415,15 +1412,15 @@ Once deleted you can move elsewhere (e.g. `cd ~`).
 We can also get out of the `conda` environment with
 
 ```bash
-#| eval: false
 conda deactivate
 ```
 
 To delete the conda environment
 
 ```bash
-#| eval: false
 conda remove --name python-pandas --all -y
 ```
 
+<!-- NO REFERENCES SO NOT NECESSARY
 ## References
+-->
