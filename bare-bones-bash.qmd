@@ -9,6 +9,7 @@ For this chapter's exercises, if not already performed, you will need to downloa
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8412661](https://doi.org/10.5281/zenodo.8412661), and unpack
 
 ```bash
+#| eval: false
 tar xvf bare-bones-bash.tar.gz 
 cd bare-bones-bash/
 ```
@@ -16,6 +17,7 @@ cd bare-bones-bash/
 You can then create the subsequently activate environment with
 
 ```bash
+#| eval: false
 conda env create -f bare-bones-bash.yml
 conda activate bare-bones-bash
 ```
@@ -125,6 +127,7 @@ username, the device name, a colon, a directory path and ends with a dollar
 symbol. Like so:
 
 ```bash
+#| eval: false
 <username>@<device_name>:~$
 ```
 
@@ -151,6 +154,7 @@ you can type in `pwd`, which stands for "**p**rint **w**orking **d**irectory".
 Your "working directory" is whichever directory you are currently in. 
 
 ```bash
+#| eval: false
 pwd
 ```
 
@@ -172,6 +176,7 @@ leading to your particular working directory.
 If you're not in your **home** directory (i.e., the output isn't exactly the same as the output above), please run the command
 
 ```bash
+#| eval: false
 cd $HOME
 ```
 
@@ -243,6 +248,7 @@ We will now explore some basic commands that you will use to explore folders and
 - **l**i**s**t directory contents:
 
 ```bash
+#| eval: false
 ls
 ```
 
@@ -259,45 +265,54 @@ We will use this format to show you commands and their corresponding output in t
 
 - **m**a**k**e a **dir**ectory:
 ```bash
+#| eval: false
 ## ⚠ this will be your working directory for the rest of this chapter! Do not move out of it unless asked to! ⚠
 mkdir barebonesbash
 ```
 
 - **m**o**v**e (or rename) files and directories
 ```bash
+#| eval: false
 mv barebonesbash BareBonesBash
 ```
 
 - **c**hange **d**irectories
 ```bash
+#| eval: false
 cd BareBonesBash
 ```
 
 - Download (**w**ww **get**) a remote file to your computer
 ```bash
+#| eval: false
 wget git.io/Boosted-BBB-meta
 ```
 
 - **c**o**p**y a file or directory to a new location
 ```bash
+#| eval: false
 cp Boosted-BBB-meta Boosted-BBB-meta.tsv
 ```
 
 - **r**e**m**ove (delete) files
 ```bash
+#| eval: false
 rm Boosted-BBB-meta
 ```
 
 - Con**cat**enate file contents to screen
 ```bash
+#| eval: false
 cat Boosted-BBB-meta.tsv
 ```
 
 - See only the **first**/**last** 10 lines of a file
 ```bash
+#| eval: false
 head -n 10 Boosted-BBB-meta.tsv
 ```
 ```bash
+#| eval: false
 tail -n 10 Boosted-BBB-meta.tsv
 ```
 ::: {.callout-note}
@@ -307,11 +322,13 @@ This is because the start of a cat is its head and the end of the cat is its tai
 
 - Look at the contents of a file interactively (**less** than the complete file, press `q` to quit)
 ```bash
+#| eval: false
 less Boosted-BBB-meta.tsv
 ```
 
 - **w**ord **c**ount the number of **l**ines (-l) in a file
 ```bash
+#| eval: false
 wc -l Boosted-BBB-meta.tsv
 ```
 ```
@@ -364,6 +381,7 @@ fail.
 
 Example:
 ```bash
+#| eval: false
 head -n 10 Boosted-BBB-meta.tsv | tail -n1
 ```
 
@@ -396,6 +414,7 @@ It is also possible to combine streams, but we won't get into that here.
 
 Example:
 ```bash
+#| eval: false
 head -n 10 Boosted-BBB-meta.tsv | tail -n1 > line10.txt
 ```
 
@@ -405,6 +424,7 @@ Using `cat` on this file will BLOW YOUR MIND - (GONE WRONG)!
 > (Don't forget to like and subscribe!)
 
 ```bash
+#| eval: false
 cat line10.txt
 ```
 
@@ -422,6 +442,7 @@ or access to online manuals right from your terminal!
 - You can get a __one sentence summary__ of what a tool does with `whatis`
 
     ```bash
+#| eval: false
     whatis cat
     ```
 
@@ -433,6 +454,7 @@ or access to online manuals right from your terminal!
 - While `man` gives you __access to online manuals__ for each tool (exit with `q`)
 
     ```bash
+#| eval: false
     man cat
     ```
 
@@ -446,6 +468,7 @@ with `=` and pull their contents with `$`
 
 The easiest way to see the contents of a variable is using `echo`!
 ```bash
+#| eval: false
 echo "This is my home directory: $HOME"
 ```
 ```
@@ -466,6 +489,7 @@ But as mentioned, you can store in a variable anything you want, so let's see a 
 First let's try to store a number:
 
 ```bash
+#| eval: false
 GreekFood=4            #Here, 'GreekFood' is a number.
 echo "Greek food is $GreekFood people who want to know what heaven tastes like."
 ```
@@ -480,6 +504,7 @@ The `#` is used to add comments to your code. Comments are annotations that you 
 Now let's store a word ("string"):
 
 ```bash
+#| eval: false
 GreekFood=delicious   #We overwrite that number with a word (i.e. a 'string').
 echo "Everyone says that Greek food is $GreekFood."
 ```
@@ -491,6 +516,7 @@ Everyone says that Greek food is delicious.
 You can also store more than a single word (that is still a "string"):
 
 ```bash
+#| eval: false
 GreekFood="Greek wine" #We can overwrite 'GreekFood' again, 
 ## but when there is a space in our string, we need quotations.
 echo "The only thing better than Greek food is $GreekFood!"
@@ -503,6 +529,7 @@ The only thing better than Greek food is Greek wine!
 Since variables can be reset to whatever you want, you can also store a number again:
 
 ```bash
+#| eval: false
 GreekFood=7 #And, of course, we can overwrite with a number again too.
 echo "I have been to Greece $GreekFood times already this year, for the food and wine!"
 ```
@@ -526,6 +553,7 @@ In bash, there is a big difference between a single quote `'` and a double quote
 In some cases the difference doesn't matter:
 
 ```bash
+#| eval: false
 echo "I like Greek Food"
 echo 'I like Greek Food'
 ```
@@ -537,6 +565,7 @@ I like Greek Food
 In other cases it makes all the difference:
 
 ```bash
+#| eval: false
 Arr="Banana"
 echo 'Pirates say $Arr'
 echo "Minions say $Arr"
@@ -558,6 +587,7 @@ You can also ask your computer where you have put your files, in case you forgot
 The `find` command has the following syntax:
 
 ```bash
+#| eval: false
 ## ⚠ Don't run! Fake example ⚠
 find /<PATH>/<TO>/ -type f -name 'your_file.txt'
 ```
@@ -584,17 +614,20 @@ Now let's put into practise what you have learnt about `find`.
 For that you will download a messy folder from a collaborator, remember to check you are in the BareBonesBash folder!:
 
 ```bash
+#| eval: false
 wget git.io/Boosted-BBB-images -O Boosted-BBB.zip
 ```
 
 We realise that this is a compressed file, and more precisely is a zip file (extension `.zip`). In order to access to its content we will need to "unzip" it first. For that we can use the command **unzip**: 
 
 ```bash
+#| eval: false
 unzip Boosted-BBB.zip
 ```
 We know that our collaborator has shared with us some pictures from animals that we need to use for our research, and according to your collaborator they are marked with `JPG`. We first try to check the contents of the directory to find them quickly.
 
 ```bash
+#| eval: false
 ls Boosted-BBB
 ```
 ```
@@ -607,6 +640,7 @@ Wow, what a mess! How would you retrieve all the files?
 Thanks to your wonderful teachers you have learnt how to use find and can simply run:
 
 ```bash
+#| eval: false
 find Boosted-BBB -type f -name '*JPG*' 
 ```
 ```
@@ -645,6 +679,7 @@ A **for** loop allows us to go through a list of things and perform some actions
 Let's see an example:
 
 ```bash
+#| eval: false
 Variable=Yes
 for i in Greece Spain Britain; do
   echo "Does $i have lovely food? $Variable"
@@ -660,6 +695,7 @@ Does Britain have lovely food? Yes
 The for loop went through the list `Greece Spain Britain` and printed a statement with each item in the list. What happens if we change the order of the list to `Britain Greece Spain`?
 
 ```bash
+#| eval: false
 Variable=Yes
 for i in Britain Greece Spain; do
   echo "Does $i have lovely food? $Variable"
@@ -729,6 +765,7 @@ ENTER!
 :::
 
 ```bash
+#| eval: false
 cd ~     ## We shouldn't delete a directory while we are still in it. (It is possible though).
 rm -r /<PATH>/<TO>/BareBonesBash*
 ```
@@ -736,12 +773,14 @@ rm -r /<PATH>/<TO>/BareBonesBash*
 We can also get out of the `conda` environment with
 
 ```bash
+#| eval: false
 conda deactivate
 ```
 
 To delete the conda environment
 
 ```bash
+#| eval: false
 conda remove --name bare-bones-bash --all -y
 ```
 
