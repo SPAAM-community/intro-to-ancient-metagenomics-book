@@ -561,16 +561,126 @@ In life, uracils are an essential component of RNA, where they are one of the fo
 Its counterpart in DNA is thymine, a chemically similar base that differs only in a single methyl group (@fig-introductiontoancientdna-10deamination). 
 Although not typical of DNA, uracil can spontaneously form in DNA through various enzymatic errors and chemical damage, but such uracils are rapidly removed by cellular repair enzymes, including uracil-DNA glycosylases (UDG) [@Kavli2007-nq; @Krokan2002-bb; @Visnes2009-yr]. 
 
+Because of the close chemical similarity between uracil and thymine, most DNA polymerases are unable to distinguish between the two bases, treating both as a thymine. 
+Such DNA polymerases are called **non-proofreading enzymes**. 
+T4 polymerase is one such non-proofreading enzyme, and this is why T4 polymerase incorporates a complementary adenine for each uracil it encounters when repairing 5’ overhangs, thus preserving the C to T damage signal. 
+However, not all DNA polymerases treat thymines and uracils as equivalent. 
+Some DNA polymerases simply stall at uracil positions, either stopping or disengaging from the DNA strand. 
+Such enzymes belong to a group known as **proofreading enzymes**. 
+Proofreading enzymes are characterized by their ability to recognize misincorporated nucleotides during DNA replication. 
+Only archaea produce the proofreading DNA polymerases capable of recognizing uracil [@Wardle2008-zq], and most proofreading enzymes used in molecular biology are derived from the archaeal species _Pyrococcus furiosus_ (the source of Pfu and Phusion enzymes). 
 
+It is important to know that many commercial library preparation kits developed for modern DNA cannot be used for ancient DNA because they incorporate proofreading enzymes that stall at uracil sites [@Kapp2021-uf], causing ancient DNA libraries to become depleted in damaged sequences and resulting in library failure, skewed damage profiles, or a bias towards undamaged contaminant sequences. 
+It is essential to ensure that only non-proofreading DNA polymerases are used during the end-repair and subsequent PCR steps of ancient DNA library preparation, and it is only after the damage signal has been “locked in” by placing complementary adenines opposite each uracil during these repair/replication steps that proofreading enzymes can be used for subsequent steps. 
+USER-treated ancient DNA represents a special case; if uracils are fully removed during USER treatment, USER-treated ancient DNA is compatible with the use of proofreading DNA polymerases during all stages of library preparation. 
+Knowing how different DNA polymerases react to uracil and choosing the appropriate enzyme to use at each step of DNA library preparation is critical for the successful recovery and sequencing of ancient DNA. 
 
---
+After learning of the dangers in using proofreading enzymes during ancient DNA library preparation, one might wonder why proofreading enzymes are used at all. 
+The reason is because they are more accurate, and when used judiciously they can improve the sequence fidelity of your DNA datasets. 
+In a typical ancient DNA workflow, end-repair is performed using the non-proofreading enzyme T4 polymerase, and the indexing PCR is performed using a non-proofreading DNA polymerase, such as Platinum Taq or Pfu Turbo Cx (an archaeal enzyme that has been modified to remove its uracil recognition domain). 
+Once these steps are complete, the resulting DNA library can be subsequently treated like modern DNA and high fidelity proofreading enzymes, such as Herculase II Fusion or Phusion HS II, can be used for all subsequent amplifications, reamplifications, and reconditioning steps in preparation for downstream analyses, such as DNA-capture enrichment or DNA sequencing. 
 
-[@Hoss1993-sm]
-@fig-introductiontoancientdna-02sangerhorse
-![caption](assets/images/chapters/introduction-to-ancient-dna/fig-introductiontoancientdna-13Vindja_depurination.png){#fig-introductiontoancientdna-13Vindja_depurination}
+## Ancient microbes: a 60,000 piece jigsaw puzzle
+Earlier, we discussed how ancient DNA is like the world’s worst jigsaw puzzle and that reconstructing human chromosome 1 from ancient DNA is like trying to assemble a puzzle from 5 million pieces. 
+The problem is not quite so immense for microbes because their genomes are much smaller. 
+So rather than having a 5-million-piece puzzle, reconstructing a typical bacterial genome is more like working with a 60,000-piece puzzle. 
+However, this is admittedly somewhat misleading because ancient microbial species are almost never found in isolation; instead ancient microbes are usually found communities comprising tens to thousands of distinct species, so a more realistic metaphor would be one in which you attempt to reconstruct a hundred mixed-up 60,000-piece puzzles simultaneously. 
+And, making things even worse, some of these puzzles are present ten times in the mix, while others only once. 
 
-**bold**
-_italics_
+Taking a step back, let’s examine the important role of DNA damage in studies of ancient DNA. 
+Why does DNA damage matter? DNA damage is useful because it allows for the authentication of ancient DNA at the level of species [@Jonsson2013-my], contigs [@Borry2021-ud], and even individual sequences [@Skoglund2014-ji]. 
+In studies of plague, for example, DNA damage has been used to support the ancient origin and authenticity of reconstructed Yersinia pestis genomes [@Andrades_Valtuena2022-ea; @Rascovan2019-wx; @Rasmussen2015-pd; @Spyrou2018-es]. 
+Likewise, DNA damage has been used to support the metagenomic assemblies of fecal bacteria in ancient paleofeces [@Borry2020-my; @Maixner2021-nt; @Wibowo2021-sl], and to authenticate atypical taxa of Pleistocene origin in ancient dental calculus [@Klapper2023-rr]. 
+DNA damage can also aid in the correct identification of low abundance pathogens by confirming that damaged sequences show appropriate edit distance profiles for the taxon of interest [@Hubler2019-cc].
+
+Nevertheless, DNA damage also poses taxonomic challenges for studies of ancient microbes, especially as it relates to the correct identification of specific taxa, the accurate mapping of microbial genomes, and successful reconstruction of metagenomically assembled genomes (MAGs). 
+However, it has become apparent that the greatest challenge for reconstructing ancient microbes and their communities is not cytosine deamination, but rather DNA fragmentation. 
+Cytosine deamination has been shown to only minimally impact taxonomic assignment [@Velsko2018-yw], and some de novo assemblers (e.g., MEGAHIT) are relatively robust to substitution errors [@Klapper2023-rr]. 
+Moreover, cytosine deamination can be removed or mitigated through USER-treatment, or identified and corrected bioinformatically through deeper sequencing and high coverage genome generation. 
+DNA fragmentation, however, remains a serious and insoluble problem. 
+Ancient DNA is simply very short, and this makes ancient metagenomics more difficult. 
+
+Very short sequences often cannot be uniquely assigned to specific strains or species, leading to ambiguous or false taxonomic assignments in read-based analyses, and sequences less than 250 bp typically produce complex assembly graphs with short contigs and a low **N50** (length of the shortest contig needed to account for at least 50% of the total assembly). 
+DNA sequence length is also one of the most important factors affecting ancient DNA assembly success. 
+While some sources of ancient microbial DNA, such as paleofeces in very dry caves, have been found to have long median DNA fragment lengths of ~175 bp [@Wibowo2021-sl], most ancient microbial DNA is very short and similar to other sources of ancient DNA. 
+The tipping point for ancient DNA studies occurs when DNA fragments become shorter than 30 bp. 
+Such ultrashort fragments lack sufficient specificity for taxonomic or even genetic placement as they align to too many genomes with no phylogenetic coherence. Thus, DNA degradation imposes some hard limits on the study of ancient microbial DNA. 
+
+### The limits of ancient DNA
+
+What are the theoretical limits of ancient DNA? 
+DNA decay modeling has predicted an approximately 3-million-year limit for ancient DNA studies – not because DNA does not survive beyond 3 million years, but rather because it is unlikely to survive in fragments of >30 bp beyond 3 million years, even under ideal conditions. 
+In a study of DNA decay rates, Morten Allentoft and colleagues estimated the half-life of a 30 bp DNA fragment to be 158,000 years at -5˚C [@Allentoft2012-vr]. 
+For a genetic sample with a starting amount of 1 million DNA molecules, this would mean that no DNA fragments of this length would be left after a period of ca. 3.3 million years. 
+Moreover, they estimate that after 6.8 million years, the average length of ancient DNA would be 1 bp. 
+Such models place deep time paleobiology outside the realm of paleogenomics, at least using current in-solution methods in which any spatial information still retained by DNA molecules in its parent substrate is lost during extraction, library preparation, and sequencing. 
+
+Three recent ancient DNA studies, each focusing on remains in permafrost, seem to confirm these estimates. 
+The first, a study of mammoths dating to the Early and Middle Pleistocene [@Van_der_Valk2021-mj], reported that the recovered DNA was exceptionally short (mostly <35 bp) and nearly saturated with cytosine deamination at the terminal 5’ position. 
+The two oldest mammoths in the study, dating to ca. 1.1 Mya, are the currently oldest eukaryotic genomes to be successfully reconstructed using ancient DNA. 
+The two other studies focused on ca. 2 Mya eDNA recovered from deep subsurface permafrost sediments in Greenland, and they identified diverse ancient plant and animal [@Kjaer2022-ij] and microbial and viral [@Fernandez-Guerra2023-nr] DNA sequences. 
+Analysis of the ancient plant and animal DNA has allowed the reconstruction of Late Pliocene and Early Pleistocene environments in Greenland, while the recovered microbial and viral DNA provides insights into the soil microbial ecology of this period. 
+As with the mammoth study, eukaryotic DNA from the sediment cores was found to be mostly <35 bp in length and nearly saturated with cytosine deamination at the terminal 5’ position, suggesting the ancient DNA in these samples falls near the limit of sufficient DNA preservation for paleogenomic analysis. 
+The microbial DNA was slightly more intact, likely reflecting an extended period of microbial survival in subsurface habitats, as is expected for environmental microbes in geological contexts.
+
+## Ancient DNA wrap-up
+The study of ancient DNA has changed enormously since its beginnings in the 1980s. 
+Gone are the days of electrophoretic gels and rulers for ancient DNA sequencing. 
+Today we have instruments capable of churning out more than 50 billion ancient DNA sequences in a single 48-hour run. 
+This means that aspiring archeogeneticists need to have a solid foundation in computer science and a proficiency in coding and scripting in languages such as R and Python. 
+During life, genomes are large high molecular weight molecules, but they fragment into thousands or millions of pieces once an organism dies. 
+The very short and ultrashort fragment lengths of ancient DNA makes taxonomic identification, genome mapping, and metagenomic assembly more challenging than for modern DNA, and ancient DNA analysis generally requires the use of specialized software or parameter modifications to account for these differences. 
+Robust and powerful tools now exist to characterize the chemical damage that accumulates in ancient DNA, and factors such as fragment length and cytosine deamination can be used to authenticate ancient DNA, but not provide a precise age estimate. 
+Studies of ancient DNA require specialized laboratories and library protocols in order to appropriately manipulate and handle ancient DNA, and we now have options to remove or mitigate some forms of DNA damage through USER-treatment, or we can choose to maximize recovery of DNA damage through the use of single-stranded DNA library protocols. 
+DNA fragmentation remains the biggest challenge in ancient metagenomics, but tremendous strides in ancient DNA laboratory and bioinformatics methods, in parallel with massive gains in sequencing technology, have broadened the scope of paleogenomics studies to an enormous diversity of sample types, environments, and applications over the past 3 million years. 
+
+## Glossary
+
+Ancient DNA
+Blunt end ligation
+Chloroplast genome
+Chromosome
+Contig
+Coprolites
+CpG island
+Cytosine deamination
+Dental calculus
+Dentine
+Depurination
+Diploid
+Double-stranded library preparation
+End-repair
+Endonuclease-VIII
+Environmental eDNA
+Formalin-fixed and paraffin embedded (FFPE)
+Gene silencing
+Hydrolytic damage
+Lambda (𝝺)
+Melting
+Mitochondrial genome
+N50
+Next generation sequencing (NGS)
+Nicking
+Non-proofreading enzyme
+Nuclear genome
+Oxidative damage
+Paleofeces
+Paleogenomics
+Partial-USER treatment
+Plasmids
+Polymerase chain reaction (PCR)
+Polynucleotide kinase (PNK)
+Polyploid
+Proofreading enzyme
+Pulp chamber
+Pyrosequencing
+Single-stranded library preparation
+Single-stranded overhangs
+T/A ligation
+T4 ligation
+Ultrashort DNA sequences
+USER (uracil-specific excision reagent)
+
 
 ## References
 
