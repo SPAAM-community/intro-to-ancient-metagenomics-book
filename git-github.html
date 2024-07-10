@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.53">
+<meta name="generator" content="quarto-1.5.54">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -481,15 +481,17 @@ div.csl-indent {
 </header>
 
 
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-default callout-note callout-titled" title="Self guided: chapter environment setup">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tip
+Self guided: chapter environment setup
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>For this chapter’s exercises, if not already performed, you will need to download the chapter’s dataset, decompress the archive, and create and activate the conda environment.</p>
 <p>Do this, use <code>wget</code> or right click and save to download this Zenodo archive: <a href="https://doi.org/10.5281/zenodo.8413100">10.5281/zenodo.8413100</a>, and unpack.</p>
@@ -498,6 +500,7 @@ Tip
 <p>We can then create the subsequently activate environment with.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-f</span> git-github.yml</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate git-github</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </div>
 <p>In this walkthrough, we will introduce the version control system <em>Git</em> as well as <em>Github</em>, a remote hosting service for version controlled repositories. Git and Github are increasingly popular tools for tracking data, collaborating on research projects, and sharing data and code, and learning to use them will help in many aspects of your own research. For more information on the benefits of using version control systems, see the slides.</p>
@@ -579,7 +582,9 @@ Answer
 <h2 data-number="9.3" class="anchored" data-anchor-id="preparation"><span class="header-section-number">9.3</span> Preparation</h2>
 <p>We will now practise some of the git operations described above.</p>
 <p>However, before we do this, we need to set up a GitHub account so that we can communicate via the command line.</p>
-<p>GitHub does not allow pushing and pulling with normal passwords, but rather with a concept called ‘ssh keys’. These are special cryptographic strings of characters and numbers. When generating a pair, we get both a ‘private’ and ‘public’ key. The former we keep privately, whereas the other we upload to other servers/people. When we want to ‘prove’ that it’s us sending changes to the repository, we securely send the private key and this gets compared with the corresponding public key that we uploaded on the remote server. If after some cryptographic maths magic they match, the server will trust us and will accept our changes.</p>
+<p>GitHub does not allow pushing and pulling with normal passwords, but rather with a concept called <strong>ssh keys</strong>.</p>
+<p><strong>ssh keys</strong> are special cryptographic strings of characters and numbers. When generating a pair, we get both a ‘private’ and ‘public’ key. The former we keep privately, whereas the other we upload to other servers/people.</p>
+<p>When we want to ‘prove’ that it’s us sending changes to the repository, we securely send the private key and this gets compared with the corresponding public key that we uploaded on the remote server. If after some cryptographic maths magic they match, the server will trust us and will accept our changes.</p>
 </section>
 <section id="using-ssh-keys-for-passwordless-interaction-with-github" class="level2" data-number="9.4">
 <h2 data-number="9.4" class="anchored" data-anchor-id="using-ssh-keys-for-passwordless-interaction-with-github"><span class="header-section-number">9.4</span> Using ssh keys for passwordless interaction with GitHub</h2>
@@ -601,13 +606,32 @@ Note
 <p>The <code>-t</code> flag tells the command which cryptographic algorithm to use.</p>
 </div>
 </div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Check for typos!</p>
+<p>Common errors include:</p>
+<ul>
+<li><code>ssh-keygen</code> is a single word (no spaces)</li>
+<li>Check the numbers in the <code>-t</code></li>
+<li>The <code>-C</code> flag is a capital <code>C</code>!</li>
+</ul>
+</div>
+</div>
 <p>When we type this command, we will be asked a range of questions:</p>
 <ol type="1">
 <li>Enter file which to save key: here we suggest keep as default</li>
-<li>Enter passphrase: _don’t specify one here (unless we want to be <em>ultra</em> secure), just press enter</li>
-<li>Enter same passphrase again: same as 2 (i.e., recommended - just press enter without any password)</li>
+<li>Enter passphrase: <em>don’t</em> specify one here (unless we want to be <em>ultra</em> secure), just press enter</li>
+<li>Press enter without any passphrase to confirm</li>
 </ol>
-<p>We should now (hopefully!) have generated an ssh key. This is normally indicated by a ‘randomart image’ being pasted to console.</p>
+<p>We should now (hopefully!) have generated an ssh key. This is normally indicated by a ‘random art image’ being pasted to console.</p>
 <p>A random art image normally looks like something like:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">+--[</span> RSA 2048]----+</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span>       <span class="va">o</span><span class="op">=</span>.       <span class="kw">|</span></span>
@@ -621,9 +645,8 @@ Note
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span>                 <span class="kw">|</span></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="ex">+-----------------+</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To check that it worked, we can change into the default directory where keys are stored. By default on UNIX operating system this is in our home directory under a folder called <code>.ssh</code>. Lets change into that directory, and check the contents.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/.ssh/</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> id<span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>We should now see two files: <code>id_ed25519</code>, and <code>id_ed25519.pub</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ~/.ssh/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We should now see two files: <code>id_ed25519</code>, and <code>id_ed25519.pub</code>, amongst others.</p>
 <p>The first is a <em>private</em> key. This we should not share this any one, and should always stay on our local machine.</p>
 <p>The second file (ending in <code>.pub</code>), is a <em>public</em> key. This we can give to others, on remote servers, or websites, to allow those places to know it is us.</p>
 <p>So lets try this out on GitHub!</p>
@@ -664,7 +687,12 @@ Figure&nbsp;9.3: Screenshot of the top of the Github SSH and GPG keys page (as o
 </figcaption>
 </figure>
 </div>
-<p>When in the ‘new SHH key’ page, we can give key a title (e.g.&nbsp;the local machine the key was generated on). Leave the ‘Key type’ as ‘Authentication Key’ Then paste the entire contents of <em>public</em> key into the main text box that we just generated on our local machine.</p>
+<p>When in the ‘new SHH key’ page:</p>
+<ul>
+<li>we can give key a title (e.g.&nbsp;the local machine the key was generated on).</li>
+<li>Leave the ‘Key type’ as ‘Authentication Key’</li>
+<li>Paste the entire contents of <em>public</em> key into the main text box that we just generated on our local machine.</li>
+</ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/.ssh/id_ed25519.pub</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -713,7 +741,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -722,7 +750,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li>We don’t have to remember our password every time we push or pull from GitHub</li>
@@ -737,7 +765,7 @@ Answer
 <section id="creating-a-github-repository" class="level2" data-number="9.5">
 <h2 data-number="9.5" class="anchored" data-anchor-id="creating-a-github-repository"><span class="header-section-number">9.5</span> Creating a GitHub repository</h2>
 <p>Now that we have set up our own SSH key, we can begin working on some version controlled data!</p>
-<p>Navigate to your GitHub homepage (<a href="https://github.com">https://github.com</a>) and create a new repository. We can normally do this by pressing the green ‘New’ repository button, or the ➕ icon on the homepage (typically in sidebars or top bars).</p>
+<p>Navigate to your GitHub homepage (<a href="https://github.com">https://github.com</a>) and create a new repository. We can normally do this by pressing the ➕ icon on the homepage (typically in right hand side of the top tool bar).</p>
 <p>For this tutorial, on the new repository page (<a href="#fig-github-createnewrepo" class="quarto-xref">Figure&nbsp;<span>9.4</span></a>):</p>
 <ul>
 <li>Choose any name for our new repo (including the auto-generated ‘inspired ones’)</li>
@@ -776,13 +804,19 @@ Warning
 <h2 data-number="9.6" class="anchored" data-anchor-id="the-only-6-commands-you-only-need-to-really-know"><span class="header-section-number">9.6</span> The only 6 commands you only need to really know</h2>
 <p>We have set all our authentication keys for GitHub, and created a new repository. We can now run through the some of the concepts we learnt in the <a href="#basic-workflow">Basic Workflow</a> section.</p>
 <p>This can be boiled down to just <em>six</em> that we really need to work with for Git(Hub) for basic version control of all our software, scripts, and (small) data!</p>
-<p>To start, create and change into the chapter’s data directory with.</p>
+<p>To start, make sure you’re in this session directory</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/git-github</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="git-clone" class="level3" data-number="9.6.1">
 <h3 data-number="9.6.1" class="anchored" data-anchor-id="git-clone"><span class="header-section-number">9.6.1</span> git clone</h3>
 <p>First, we will learn to <em>clone</em> a remote repository onto our local machine.</p>
-<p>This is actually <em>not</em> in our basic workflow diagram in <a href="#fig-github-workflowdiagram" class="quarto-xref">Figure&nbsp;<span>9.1</span></a>, however we only need to do it once, and is only needed when we work with a remote server. With <code>clone</code> we are making a copy of the remote repository, and linking it so we can transmit data between the copy on the ‘local’ machine with the ‘remote’ repository on the server.</p>
-<p>To make the ‘copy’, navigate to our new repo, select the green code dropdown button (<a href="#fig-github-clonebutton" class="quarto-xref">Figure&nbsp;<span>9.5</span></a>), select SSH, and copy the address as shown below.</p>
+<p>This is actually <em>not</em> in our basic workflow diagram in <a href="#fig-github-workflowdiagram" class="quarto-xref">Figure&nbsp;<span>9.1</span></a>, however we only need to do it once, and is only needed when we work with a remote server.</p>
+<p>With <code>clone</code> we are making a copy of the <em>remote</em> repository, and linking it so we can transmit data between the copy on the <em>local</em> machine with the <em>remote</em> repository on the server.</p>
+<p>To make the ‘copy’, navigate to our new repo:</p>
+<ol type="1">
+<li>Select the green code dropdown button (<a href="#fig-github-clonebutton" class="quarto-xref">Figure&nbsp;<span>9.5</span></a>)</li>
+<li>Make sure to select SSH</li>
+<li>Copy the full address <code>git@github.com&lt;...&gt;</code> as shown below in <a href="#fig-github-clonebutton" class="quarto-xref">Figure&nbsp;<span>9.5</span></a>.</li>
+</ol>
 <div id="fig-github-clonebutton" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-github-clonebutton-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -870,7 +904,7 @@ Task
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -879,7 +913,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add README.md</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -940,7 +974,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -949,7 +983,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <pre class="{verbatim}"><code>On branch main
 Your branch is ahead of 'origin/main' by 1 commit.
@@ -1000,7 +1034,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1009,7 +1043,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The hash line is:</p>
 <pre class="{verbatim}"><code>   536183b..2d252b5  main -&gt; main</code></pre>
@@ -1050,7 +1084,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1059,7 +1093,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We should get a message of <code>Already up to date</code>. This is because we have made no further changes to the remote version of the repository since we pushed!</p>
 </div>
@@ -1095,7 +1129,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1104,7 +1138,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The number represents the number of lines with changes on them. The green plus and red minus symbol represents number lines with ‘additions’ modifications, and deletion modifications accordingly!</p>
 <p>A description of the changes is seen in the last line of the <code>git pull</code> output.</p>
@@ -1189,7 +1223,7 @@ Bonus Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1198,7 +1232,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div id="callout-26" class="callout-26-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="sourceCode" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="{verbatim}"><code>  main
@@ -1242,7 +1276,7 @@ Task
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-29-contents" aria-controls="callout-29" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1251,7 +1285,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-28" class="callout-28-contents callout-collapse collapse">
+<div id="callout-29" class="callout-29-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>First change to the branch.</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> switch test-branch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1372,7 +1406,7 @@ Task
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-30-contents" aria-controls="callout-30" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-31-contents" aria-controls="callout-31" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1381,7 +1415,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-30" class="callout-30-contents callout-collapse collapse">
+<div id="callout-31" class="callout-31-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="sourceCode" id="cb44"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> switch main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="{verbatim}"><code>Switched to branch 'main'
