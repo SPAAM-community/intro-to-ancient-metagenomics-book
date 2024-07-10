@@ -4,7 +4,7 @@ author: Megan Michel, James Fellows Yates
 bibliography: assets/references/git-github.bib
 ---
 
-::: {.callout-tip}
+::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
 For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
 
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413100](https://doi.org/10.5281/zenodo.8413100), and unpack.
@@ -98,10 +98,12 @@ We will now practise some of the git operations described above.
 
 However, before we do this, we need to set up a GitHub account so that we can communicate via the command line.
 
-GitHub does not allow pushing and pulling with normal passwords, but rather with a concept called 'ssh keys'.
-These are special cryptographic strings of characters and numbers.
+GitHub does not allow pushing and pulling with normal passwords, but rather with a concept called **ssh keys**.
+
+**ssh keys** are special cryptographic strings of characters and numbers.
 When generating a pair, we get both a 'private' and 'public' key.
 The former we keep privately, whereas the other we upload to other servers/people.
+
 When we want to 'prove' that it's us sending changes to the repository, we securely send the private key and this gets compared with the corresponding public key that we uploaded on the remote server.
 If after some cryptographic maths magic they match, the server will trust us and will accept our changes.
 
@@ -122,14 +124,24 @@ ssh-keygen -t ed25519 -C "<YOUR_EMAIL>@<EXAMPLE>.com"
 The `-t` flag tells the command which cryptographic algorithm to use.
 :::
 
+::: {.callout-warning}
+Check for typos!
+
+Common errors include:
+
+- `ssh-keygen` is a single word (no spaces)
+- Check the numbers in the `-t`
+- The `-C` flag is a capital `C`!
+:::
+
 When we type this command, we will be asked a range of questions:
 
 1. Enter file which to save key: here we suggest keep as default
-2. Enter passphrase: _don't specify one here (unless we want to be _ultra_ secure), just press enter
-3. Enter same passphrase again: same as 2 (i.e., recommended - just press enter without any password)
+2. Enter passphrase: _don't_ specify one here (unless we want to be _ultra_ secure), just press enter
+3. Press enter without any passphrase to confirm
 
 We should now (hopefully!) have generated an ssh key.
-This is normally indicated by a 'randomart image' being pasted to console.
+This is normally indicated by a 'random art image' being pasted to console.
 
 A random art image normally looks like something like:
 
@@ -152,11 +164,10 @@ By default on UNIX operating system this is in our home directory under a folder
 Lets change into that directory, and check the contents.
 
 ```bash
-cd ~/.ssh/
-ls id*
+ls ~/.ssh/
 ```
 
-We should now see two files: `id_ed25519`, and `id_ed25519.pub`.
+We should now see two files: `id_ed25519`, and `id_ed25519.pub`, amongst others.
 
 The first is a _private_ key.
 This we should not share this any one, and should always stay on our local machine.
@@ -201,9 +212,11 @@ Then, under settings, in the side bar go to _SSH & GPG Keys_ (@fig-github-settin
 
 ![Screenshot of the top of the Github SSH and GPG keys page (as of August 2023), with a green 'New SSH Key' button.](assets/images/chapters/git-github/github-settings-2.png){#fig-github-settings-newkey}
 
-When in the 'new SHH key' page, we can give key a title (e.g. the local machine the key was generated on).
-Leave the 'Key type' as 'Authentication Key' 
-Then paste the entire contents of _public_ key into the main text box that we just generated on our local machine.
+When in the 'new SHH key' page:
+
+- we can give key a title (e.g. the local machine the key was generated on).
+- Leave the 'Key type' as 'Authentication Key' 
+- Paste the entire contents of _public_ key into the main text box that we just generated on our local machine.
 
 ```bash
 cat ~/.ssh/id_ed25519.pub
@@ -256,7 +269,7 @@ What are the benefits of using SSH keys for authentication with GitHub?
 Now that we have set up our own SSH key, we can begin working on some version controlled data!
 
 Navigate to your GitHub homepage ([https://github.com](https://github.com)) and create a new repository.
-We can normally do this by pressing the green 'New' repository button, or the ➕ icon on the homepage (typically in sidebars or top bars).
+We can normally do this by pressing the ➕ icon on the homepage (typically in right hand side of the top tool bar).
 
 For this tutorial, on the new repository page (@fig-github-createnewrepo):
 
@@ -283,7 +296,7 @@ We can now run through the some of the concepts we learnt in the [Basic Workflow
 
 This can be boiled down to just _six_ that we really need to work with for Git(Hub) for basic version control of all our software, scripts, and (small) data!
 
-To start, create and change into the chapter's data directory with.
+To start, make sure you're in this session directory
 
 ```bash
 mkdir /<path>/<to>/git-github
@@ -294,9 +307,14 @@ mkdir /<path>/<to>/git-github
 First, we will learn to _clone_ a remote repository onto our local machine.
 
 This is actually _not_ in our basic workflow diagram in @fig-github-workflowdiagram, however we only need to do it once, and is only needed when we work with a remote server.
-With `clone` we are making a copy of the remote repository, and linking it so we can transmit data between the copy on the 'local' machine with the 'remote' repository on the server.  
 
-To make the 'copy', navigate to our new repo, select the green code dropdown button (@fig-github-clonebutton), select SSH, and copy the address as shown below.
+With `clone` we are making a copy of the _remote_ repository, and linking it so we can transmit data between the copy on the _local_ machine with the _remote_ repository on the server.  
+
+To make the 'copy', navigate to our new repo:
+
+1. Select the green code dropdown button (@fig-github-clonebutton)
+2. Make sure to select SSH
+3. Copy the full address `git@github.com<...>` as shown below in @fig-github-clonebutton.
 
 ![Screenshot of the GitHub repository interface with the green 'code' drop down button pressed, and the menu showing the 'clone' information for SSH cloning (i.e., the copyable SSH address)](assets/images/chapters/git-github/git_clone.png){#fig-github-clonebutton}
 
