@@ -416,6 +416,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#optional-clean-up" id="toc-optional-clean-up" class="nav-link" data-scroll-target="#optional-clean-up"><span class="header-section-number">13.3</span> (Optional) clean-up</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">13.4</span> Summary</a></li>
   <li><a href="#questions-to-think-about" id="toc-questions-to-think-about" class="nav-link" data-scroll-target="#questions-to-think-about"><span class="header-section-number">13.5</span> Questions to think about</a></li>
+  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources"><span class="header-section-number">13.6</span> Resources</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">13.7</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -461,13 +463,11 @@ Self guided: chapter environment setup
 <div class="callout-body-container callout-body">
 <p>For this chapter’s exercises, if not already performed, you will need to download the chapter’s dataset, decompress the archive, and create and activate the conda environment.</p>
 <p>Do this, use <code>wget</code> or right click and save to download this Zenodo archive: <a href="https://doi.org/10.5281/zenodo.8413184">10.5281/zenodo.8413184</a>, and unpack</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> xvf contamination.tar.gz</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> contamination/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> xvf contamination.tar.gz</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> contamination/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You can then create the subsequently activate environment with</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-f</span> contamination.yml</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate contamination</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-f</span> contamination.yml</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate contamination</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -498,9 +498,8 @@ Self guided: chapter environment setup
 <p>It is typically assumed that an organism found on a blank has a lower confidence to be endogenous to the studied metagenomic sample, and sometimes it is even excluded from the downstream analysis as an unreliable hit. Despite there are attempts to automate filtering out modern contaminants (we will discuss them below), decontamination process still remains to be a tedious manual work where each candidate should be carefully investigated from different contexts in order to prove its ancient and endogenous origin.</p>
 <p>If negative control samples (blanks) are available, contaminating organisms can be detected by comparing their abundances in the negative controls with true samples. In this case, contaminant organisms stand out by their high prevalence in both types of samples if one simply plots mean across samples abundance of each detected organism in true samples and negative controls against each other as in the figure below.</p>
 <p>First move back into the KrakenUniq folder and load R.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/contamination/krakenuniq</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/contamination/krakenuniq</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then in here we can compare between true samples and negative controls</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>samples<span class="ot">&lt;-</span><span class="fu">read.delim</span>(<span class="st">"krakenuniq_abundance_matrix/krakenuniq_abundance_matrix.txt"</span>,<span class="at">header=</span><span class="cn">TRUE</span>,</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">row.names =</span> <span class="dv">1</span>, <span class="at">check.names =</span> <span class="cn">FALSE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span>
@@ -531,9 +530,8 @@ Self guided: chapter environment setup
 <span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="at">labels =</span> <span class="fu">rownames</span>(true_sample)[(<span class="fu">log10</span>(<span class="fu">rowMeans</span>(true_sample)<span class="sc">+</span><span class="dv">1</span>) <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">&amp;</span></span>
 <span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>(<span class="fu">log10</span>(<span class="fu">rowMeans</span>(negative_control)<span class="sc">+</span><span class="dv">1</span>) <span class="sc">&gt;</span> <span class="dv">1</span>)], <span class="at">pos =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once finished examining the plot you can quit R</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">## Press 'n' when asked if you want to save your workspace image.</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">quit()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Press 'n' when asked if you want to save your workspace image.</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">quit()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><img src="assets/images/chapters/contamination/blank_decontam.png" class="img-fluid"></p>
 <p>In the figure above, one point indicates an organism detected in a group of metagenomic samples. The points highlighted by red have high abundance in negative control samples, and therefore they are likely contamiannts.</p>
 <p>In addition to PCR reagents and lab contaminants, reference databses can also be contaminanted by various, often microbial, organisms. A typical example that when screening environmental or sedimentary ancient DNA samples, a fish <em>Cyprinos carpio</em> can pop up if adapter trimming procedure was not successful for some reason.</p>
@@ -552,12 +550,10 @@ Self guided: chapter environment setup
 <h3 data-number="13.1.3" class="anchored" data-anchor-id="cuperdec"><span class="header-section-number">13.1.3</span> cuperdec</h3>
 <p>If one wants to assess the degree of contamination for each sample, there is a handy tool <a href="https://github.com/jfy133/cuperdec">cuperdec</a>, which is an R package that allows a quick comparison of microbial profiles in a query metagenomic sample against a database. The idea of <em>cuperdec</em> is to rank organisms in each sample by their abundance and then using an “expanding window” approach to compute their enrichment in a reference database that contains a comprehensive list of microbial organisms which are specific to a tissue / environment in question. The tool produces so-called <em>Cumulative Percent Decay</em> curves that aim to represent the level of endogenous content of microbiome samples, such as ancient dental calculus, to help to identify samples with low levels of preservation that should be discarded for downstream analysis.</p>
 <p>First change into the cuperdec directory, and load R</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/contamination/cuperdec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/contamination/cuperdec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then we can load the files, generate the decay curves, set a preservation threshold cut-off, and plot the result.</p>
 <p>Load R as usual.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then load the libraries and run the typical cuperdec workflow.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"cuperdec"</span>); <span class="fu">library</span>(<span class="st">"magrittr"</span>); <span class="fu">library</span>(<span class="st">"dplyr"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -576,9 +572,8 @@ Self guided: chapter environment setup
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>filter_result <span class="ot">&lt;-</span> <span class="fu">simple_filter</span>(curves, <span class="at">percent_threshold =</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span> <span class="fu">print</span>()</span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_cuperdec</span>(curves, <span class="at">metadata =</span> metadata, filter_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once finished examining the plot you can quit R</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">## Press 'n' when asked if you want to save your workspace image.</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">quit()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Press 'n' when asked if you want to save your workspace image.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">quit()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><img src="assets/images/chapters/contamination/cuperdec2.png" class="img-fluid"></p>
 <p>In the figure above, one curve represents one sample, and the red curves have a very high amount of contamination and very low amount of endogenous DNA. These samples might be considered to be dropped from the downstream analysis.</p>
 </section>
@@ -605,9 +600,8 @@ Self guided: data preparation
 <div class="callout-body-container callout-body">
 <p>In addition to the input files (already prepared for you), you will also need to clone the Sourcetracker 1 R code repository (unfortunately it’s not available as a package)</p>
 <!-- TODO: replace with link to before-you-start -->
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/contamination/sourcetracker/</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/danknights/sourcetracker.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/contamination/sourcetracker/</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/danknights/sourcetracker.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-warning callout-titled" title="Patching sourcetracker for newer R versions">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -622,19 +616,17 @@ Patching sourcetracker for newer R versions
 <p>If using a more recent version of R (such as in this chapter’s conda environment), you will need to perform the following ‘patching’ of the code, to prevent an error.</p>
 <p>Run the following command to <a href="https://github.com/danknights/sourcetracker/issues/15">comment out the offending lines</a> (538, 539), where R’s behaviour in later versions of a fundamental validation function has changed.</p>
 <!-- TODO: replace with link to before-you-start -->
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">'538,539s/^/#/'</span> sourcetracker/src/SourceTracker.r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">'538,539s/^/#/'</span> sourcetracker/src/SourceTracker.r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
 <p>Sourcetracker expects two input data frames: metadata with at least sample name, environment and source / sink labels, and abundance matrix. Note that source and sink metadata and abundances have to be merged together prior to using SourceTracker. Here we are going to use data from the <a href="https://hmpdacc.org/">Human Microbiome Project (HMP)</a> as sources, and we are going to merge the HMP data with the sink samples into single OTU table and meta-data table.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/contamination/sourcetracker/</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Load R</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/contamination/sourcetracker/</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">## Load R</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then in R we can load the HMP source files, and our ‘sink samples’ from the KrakenUniq matrix we made earlier, and clean them up to make them compatible for Sourcetracker.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -697,9 +689,8 @@ Note
 <span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">size=</span><span class="dv">5</span>, <span class="at">hjust=</span><span class="dv">1</span>, <span class="at">vjust=</span><span class="fl">0.5</span>)) <span class="sc">+</span></span>
 <span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="fu">xlab</span>(<span class="st">"Sample"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Fraction"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once finished examining the plot you can quit R</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">## Press 'n' when asked if you want to save your workspace image.</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">quit()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Press 'n' when asked if you want to save your workspace image.</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">quit()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div id="fig-authenticationdecontamination-sourcetrackeroutput" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-authenticationdecontamination-sourcetrackeroutput-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -730,22 +721,21 @@ Self guided: data preparation
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>If doing a self-guided tutorial, you will need to download a rather large pre-built database.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">## In the directory</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">## Note that decOM does not like dots in names so make symlinks</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> ../rawdata/<span class="pp">*</span>trimmed.fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ln</span> <span class="at">-s</span> <span class="st">"</span><span class="va">$i</span><span class="st">"</span> <span class="st">"</span><span class="va">${i</span><span class="op">/</span><span class="ss">.trimmed</span><span class="op">/</span>_trimmed<span class="va">}</span><span class="st">"</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare input fof-files that have a key - value format</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="dt">{</span><span class="dv">1</span><span class="dt">..</span><span class="dv">10</span><span class="dt">}</span><span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"sample</span><span class="va">${i}</span><span class="st">_trimmed : sample</span><span class="va">${i}</span><span class="st">_trimmed.fastq.gz"</span> <span class="op">&gt;</span> sample<span class="va">${i}</span>_trimmed.fof</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> sample<span class="va">${i}</span>_trimmed <span class="op">&gt;&gt;</span> FASTQ_NAMES_LIST.txt<span class="kw">;</span></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Download pre-built kmer-matrix of sources (aOral, mOral, Sediment/Soil, Skin)</span></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://zenodo.org/record/6513520/files/decOM_sources.tar.gz</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xf</span> decOM_sources.tar.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">## In the directory</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">## Note that decOM does not like dots in names so make symlinks</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> ../rawdata/<span class="pp">*</span>trimmed.fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ln</span> <span class="at">-s</span> <span class="st">"</span><span class="va">$i</span><span class="st">"</span> <span class="st">"</span><span class="va">${i</span><span class="op">/</span><span class="ss">.trimmed</span><span class="op">/</span>_trimmed<span class="va">}</span><span class="st">"</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare input fof-files that have a key - value format</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="dt">{</span><span class="dv">1</span><span class="dt">..</span><span class="dv">10</span><span class="dt">}</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"sample</span><span class="va">${i}</span><span class="st">_trimmed : sample</span><span class="va">${i}</span><span class="st">_trimmed.fastq.gz"</span> <span class="op">&gt;</span> sample<span class="va">${i}</span>_trimmed.fof</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> sample<span class="va">${i}</span>_trimmed <span class="op">&gt;&gt;</span> FASTQ_NAMES_LIST.txt<span class="kw">;</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Download pre-built kmer-matrix of sources (aOral, mOral, Sediment/Soil, Skin)</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://zenodo.org/record/6513520/files/decOM_sources.tar.gz</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xf</span> decOM_sources.tar.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -760,14 +750,12 @@ Example command - do not run!
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># DO NOT RUN!: Run decOM predictions</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">decOM</span> <span class="at">-p_sources</span> decOM_sources/ <span class="at">-p_sinks</span> FASTQ_NAMES_LIST.txt <span class="at">-p_keys</span> decOM/FASTQ <span class="at">-mem</span> 900GB <span class="at">-t</span> 15</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># DO NOT RUN!: Run decOM predictions</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">decOM</span> <span class="at">-p_sources</span> decOM_sources/ <span class="at">-p_sinks</span> FASTQ_NAMES_LIST.txt <span class="at">-p_keys</span> decOM/FASTQ <span class="at">-mem</span> 900GB <span class="at">-t</span> 15</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <p>You can find the <em>relevant</em> output files for the rest of this chapter in the following directory already prepared for you i.e.the output of deCOM with our simulated data from the command above.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/contamination/decom</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/contamination/decom</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -784,8 +772,7 @@ Note
 <p>In the example command line used to generate, the <em>-p_sinks</em> parameter provides a list of sink samples, for example <em>SRR13355807</em>.</p>
 <p>The sink fastq-files are placed together with <em>keys</em> fof-files containing the mapping between fastq file names and locations of the fastq-files, for example <code>SRR13355807 : SRR13355807.fastq.gz</code>. The contributions from the sources to the sink samples, which are recorded in the <code>decOM_output.csv</code> output file (which is in the <code>contamination/decom</code> directory already for you), can then be processed and plotted as follows:</p>
 <p>Load R</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then we can make a plot</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"decOM_output.csv"</span>, <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -806,9 +793,8 @@ Note
 <span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
 <span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Sample"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Fraction"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once finished examining the plot you can quit R</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co">## Press 'n' when asked if you want to save your workspace image.</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">quit()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Press 'n' when asked if you want to save your workspace image.</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">quit()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><img src="assets/images/chapters/contamination/decOM1.png" class="img-fluid"></p>
 <p><em>decOM</em> has certain advantages compared to <em>SourceTracker</em> as its is a taxonomic classification / database free approach. However, it also appears to be very sensitive to the particular training / source data set. In the example above it can be seen that the microbial source tracking of sink samples is very much dominated by the Oral community, which was the training / source data set.</p>
 </section>
@@ -830,15 +816,12 @@ Pro Tip
 <p>Always be VERY careful when using <code>rm -r</code>. Check 3x that the path you are specifying is exactly what you want to delete and nothing more before pressing ENTER!</p>
 </div>
 </div>
-<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> /<span class="op">&lt;</span>PATH<span class="op">&gt;</span>/<span class="op">&lt;</span>TO<span class="op">&gt;</span>/contamination<span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> /<span class="op">&lt;</span>PATH<span class="op">&gt;</span>/<span class="op">&lt;</span>TO<span class="op">&gt;</span>/contamination<span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once deleted you can move elsewhere (e.g.&nbsp;<code>cd ~</code>).</p>
 <p>We can also get out of the <code>conda</code> environment with</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To delete the conda environment</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> remove <span class="at">--name</span> contamination <span class="at">--all</span> <span class="at">-y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> remove <span class="at">--name</span> contamination <span class="at">--all</span> <span class="at">-y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="summary" class="level2" data-number="13.4">
 <h2 data-number="13.4" class="anchored" data-anchor-id="summary"><span class="header-section-number">13.4</span> Summary</h2>
@@ -856,6 +839,20 @@ Pro Tip
 <li>What is a negative (blank) control sample and why is it useful to have?</li>
 <li>What is microbial source tracking and how can it help with decontamination?</li>
 </ol>
+</section>
+<section id="resources" class="level2" data-number="13.6">
+<h2 data-number="13.6" class="anchored" data-anchor-id="resources"><span class="header-section-number">13.6</span> Resources</h2>
+<ol type="1">
+<li><p><strong>SourceTracker</strong>: Knights D, Kuczynski J, Charlson ES, Zaneveld J, Mozer MC, Collman RG, Bushman FD, Knight R, Kelley ST. Bayesian community-wide culture-independent microbial source tracking. Nat Methods. 2011 Jul 17;8(9):761-3. doi: 10.1038/nmeth.1650. PMID: 21765408; PMCID: PMC3791591.</p></li>
+<li><p><strong>deCOM</strong>: https://www.biorxiv.org/content/10.1101/2023.01.26.525439v1, doi: https://doi.org/10.1101/2023.01.26.525439</p></li>
+<li><p><strong>aMeta</strong>: https://www.biorxiv.org/content/10.1101/2022.10.03.510579v1, doi: https://doi.org/10.1101/2022.10.03.510579</p></li>
+<li><p><strong>Bowtie2</strong>: Langmead, B., Salzberg, S. Fast gapped-read alignment with Bowtie 2. Nat Methods 9, 357–359 (2012). https://doi.org/10.1038/nmeth.1923</p></li>
+<li><p><strong>cuperdec</strong>: https://cran.r-project.org/web/packages/cuperdec/index.html</p></li>
+<li><p><strong>decontam</strong>: https://www.bioconductor.org/packages/release/bioc/html/decontam.html</p></li>
+</ol>
+</section>
+<section id="references" class="level2" data-number="13.7">
+<h2 data-number="13.7" class="anchored" data-anchor-id="references"><span class="header-section-number">13.7</span> References</h2>
 
 
 </section>
