@@ -4,19 +4,19 @@ author: Megan Michel, James Fellows Yates
 bibliography: assets/references/git-github.bib
 ---
 
-::: {.callout-tip}
+::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
 For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
 
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413100](https://doi.org/10.5281/zenodo.8413100), and unpack.
 
-```{bash}
+```bash
 tar xvf git-github.tar.gz 
 cd git-github/
 ```
 
 We can then create the subsequently activate environment with.
 
-```{bash}
+```bash
 conda env create -f git-github.yml
 conda activate git-github
 ```
@@ -98,10 +98,12 @@ We will now practise some of the git operations described above.
 
 However, before we do this, we need to set up a GitHub account so that we can communicate via the command line.
 
-GitHub does not allow pushing and pulling with normal passwords, but rather with a concept called 'ssh keys'.
-These are special cryptographic strings of characters and numbers.
+GitHub does not allow pushing and pulling with normal passwords, but rather with a concept called **ssh keys**.
+
+**ssh keys** are special cryptographic strings of characters and numbers.
 When generating a pair, we get both a 'private' and 'public' key.
 The former we keep privately, whereas the other we upload to other servers/people.
+
 When we want to 'prove' that it's us sending changes to the repository, we securely send the private key and this gets compared with the corresponding public key that we uploaded on the remote server.
 If after some cryptographic maths magic they match, the server will trust us and will accept our changes.
 
@@ -114,7 +116,7 @@ In other words, follow this section of the tutorial so that we never have to typ
 
 First, we can generate our own ssh key pair, replacing the email below with our own email address.
 
-```{bash}
+```bash
 ssh-keygen -t ed25519 -C "<YOUR_EMAIL>@<EXAMPLE>.com"
 ```
 
@@ -122,18 +124,28 @@ ssh-keygen -t ed25519 -C "<YOUR_EMAIL>@<EXAMPLE>.com"
 The `-t` flag tells the command which cryptographic algorithm to use.
 :::
 
+::: {.callout-warning}
+Check for typos!
+
+Common errors include:
+
+- `ssh-keygen` is a single word (no spaces)
+- Check the numbers in the `-t`
+- The `-C` flag is a capital `C`!
+:::
+
 When we type this command, we will be asked a range of questions:
 
 1. Enter file which to save key: here we suggest keep as default
-2. Enter passphrase: _don't specify one here (unless we want to be _ultra_ secure), just press enter
-3. Enter same passphrase again: same as 2 (i.e., recommended - just press enter without any password)
+2. Enter passphrase: _don't_ specify one here (unless we want to be _ultra_ secure), just press enter
+3. Press enter without any passphrase to confirm
 
 We should now (hopefully!) have generated an ssh key.
-This is normally indicated by a 'randomart image' being pasted to console.
+This is normally indicated by a 'random art image' being pasted to console.
 
 A random art image normally looks like something like:
 
-```{bash}
+```bash
 +--[ RSA 2048]----+
 |       o=.       |
 |    o  o++E      |
@@ -151,12 +163,11 @@ To check that it worked, we can change into the default directory where keys are
 By default on UNIX operating system this is in our home directory under a folder called `.ssh`.
 Lets change into that directory, and check the contents.
 
-```{bash}
-cd ~/.ssh/
-ls id*
+```bash
+ls ~/.ssh/
 ```
 
-We should now see two files: `id_ed25519`, and `id_ed25519.pub`.
+We should now see two files: `id_ed25519`, and `id_ed25519.pub`, amongst others.
 
 The first is a _private_ key.
 This we should not share this any one, and should always stay on our local machine.
@@ -172,7 +183,7 @@ First, we need to tell our computer that the keys exist and should be used for v
 The tool that does that is called `ssh-agent`. 
 We can check if it is running with the following command.
 
-```{bash}
+```bash
 eval "$(ssh-agent -s)"
 ```
 
@@ -186,7 +197,7 @@ An operating system assigns each running program a unique number ID. If a progra
 
 When the agent is running, we need to give the path to the _private_ key file as follows.
 
-```{bash}
+```bash
 ssh-add ~/.ssh/id_ed25519
 ```
 
@@ -201,11 +212,13 @@ Then, under settings, in the side bar go to _SSH & GPG Keys_ (@fig-github-settin
 
 ![Screenshot of the top of the Github SSH and GPG keys page (as of August 2023), with a green 'New SSH Key' button.](assets/images/chapters/git-github/github-settings-2.png){#fig-github-settings-newkey}
 
-When in the 'new SHH key' page, we can give key a title (e.g. the local machine the key was generated on).
-Leave the 'Key type' as 'Authentication Key' 
-Then paste the entire contents of _public_ key into the main text box that we just generated on our local machine.
+When in the 'new SHH key' page:
 
-```{bash}
+- we can give key a title (e.g. the local machine the key was generated on).
+- Leave the 'Key type' as 'Authentication Key' 
+- Paste the entire contents of _public_ key into the main text box that we just generated on our local machine.
+
+```bash
 cat ~/.ssh/id_ed25519.pub
 ```
 
@@ -218,20 +231,20 @@ This starts with `ssh-ed` (or whatever algorithm used) and ending in our email a
 Finally, press the Add SSH key.
 To check that it worked, we run the following command on our local machine. 
 
-```{bash}
+```bash
 ssh -T git@github.com
 ```
 
 We should see a message along the lines of the following
 
-```{bash}
+```bash
 Hi <YOUR_USERNAME>! you that you've successfully authenticated.
 ```
 
 ::: {.callout-note}
 If we get a message saying something such as.
 
-```{bash}
+```bash
 The authenticity of host 'github.com (140.82.121.3)' can't be established.
 ```
 
@@ -256,7 +269,7 @@ What are the benefits of using SSH keys for authentication with GitHub?
 Now that we have set up our own SSH key, we can begin working on some version controlled data!
 
 Navigate to your GitHub homepage ([https://github.com](https://github.com)) and create a new repository.
-We can normally do this by pressing the green 'New' repository button, or the ➕ icon on the homepage (typically in sidebars or top bars).
+We can normally do this by pressing the ➕ icon on the homepage (typically in right hand side of the top tool bar).
 
 For this tutorial, on the new repository page (@fig-github-createnewrepo):
 
@@ -283,9 +296,9 @@ We can now run through the some of the concepts we learnt in the [Basic Workflow
 
 This can be boiled down to just _six_ that we really need to work with for Git(Hub) for basic version control of all our software, scripts, and (small) data!
 
-To start, create and change into the chapter's data directory with.
+To start, make sure you're in this session directory
 
-```{bash}
+```bash
 mkdir /<path>/<to>/git-github
 ```
 
@@ -294,15 +307,20 @@ mkdir /<path>/<to>/git-github
 First, we will learn to _clone_ a remote repository onto our local machine.
 
 This is actually _not_ in our basic workflow diagram in @fig-github-workflowdiagram, however we only need to do it once, and is only needed when we work with a remote server.
-With `clone` we are making a copy of the remote repository, and linking it so we can transmit data between the copy on the 'local' machine with the 'remote' repository on the server.  
 
-To make the 'copy', navigate to our new repo, select the green code dropdown button (@fig-github-clonebutton), select SSH, and copy the address as shown below.
+With `clone` we are making a copy of the _remote_ repository, and linking it so we can transmit data between the copy on the _local_ machine with the _remote_ repository on the server.  
+
+To make the 'copy', navigate to our new repo:
+
+1. Select the green code dropdown button (@fig-github-clonebutton)
+2. Make sure to select SSH
+3. Copy the full address `git@github.com<...>` as shown below in @fig-github-clonebutton.
 
 ![Screenshot of the GitHub repository interface with the green 'code' drop down button pressed, and the menu showing the 'clone' information for SSH cloning (i.e., the copyable SSH address)](assets/images/chapters/git-github/git_clone.png){#fig-github-clonebutton}
 
 Back at our command line, clone the repo as follows.
 
-```{bash}
+```bash
 git clone git@github.com:<YOUR_USERNAME>/<YOUR_REPO_NAME>.git
 ```
 
@@ -314,13 +332,13 @@ Press <kbd>ctrl</kbd> + <kbd>c</kbd>, to cancel, and try the command again but w
 
 Once cloned, we can run `ls` to see there is now a directory with the same name as repository.
 
-```{bash}
+```bash
 ls
 ```
 
 If we change into it and run `ls` again, we should see the `README.md` file we specified to be generated on GitHub.
 
-```{bash}
+```bash
 cd <NAME_OF_REPO>
 ls
 ```
@@ -342,7 +360,7 @@ First we will make a new file called `file_A.txt`, and also add some extra text 
 
 Once we've made those both, lets first only stage the new file.
 
-```{bash}
+```bash
 echo "test_file" > file_A.txt
 echo "Just an example repo" >> README.md
 git add file_A.txt
@@ -354,10 +372,10 @@ So hopefully we've staged at least one file, but how do we know exactly what the
 
 At any point we can use the command `git status` to give a summary of any files present in the repository directory that changed status since the last commit (i.e., the last preserved entry in the git history). 
 
-```{bash}
+```bash
 git status
 ```
-```{bash}
+```bash
 On branch main
 Your branch is up to date with 'origin/main'.
 
@@ -379,11 +397,11 @@ Stage the modified `README.md` file and check the status again.
 :::
 
 ::: {.callout-note collapse="true" title="Answer"}
-```{bash}
+```bash
 git add README.md
 git status
 ```
-```{default}
+```{verbatim}
 On branch main
 Your branch is up to date with 'origin/main'.
 
@@ -406,7 +424,7 @@ Committing corresponds to the read arrow taking all _staged_ modified or newly a
 
 ![Overview of basic operations when using git (following @fig-github-workflowdiagram) but with the command `git commit` operations highlighted. The red arrow shows committing the changes to history, i.e., taking a tracked file in the staging error, writing the modifications in the file to the git history and placing the file back into the 'unmodified' status column. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-commit.png){#fig-github-workflowdiagram-commit}
 
-```{bash}
+```bash
 git commit -m "Add new file and modify README"
 ```
 
@@ -430,7 +448,7 @@ What happens if we run `git status` again?
 
 ::: {.callout-note title="Answer" collapse="true"}
 
-```{default}
+```{verbatim}
 On branch main
 Your branch is ahead of 'origin/main' by 1 commit.
   (use "git push" to publish your local commits)
@@ -453,10 +471,10 @@ This is the red dashed arrow in (@fig-github-workflowdiagram-push).
 
 We can run this as follows.
 
-```{bash}
+```bash
 git push
 ```
-```{default}
+```{verbatim}
 Enumerating objects: 6, done.
 Counting objects: 100% (6/6), done.
 Delta compression using up to 14 threads
@@ -480,7 +498,7 @@ What do you think the two hashes represent?
 ::: {.callout-note title="Answer" collapse="true"}
 The hash line is:
 
-```{default}
+```{verbatim}
    536183b..2d252b5  main -> main
 ```
 
@@ -503,7 +521,7 @@ How do we the download new commits from our remote to our local repository?
 We carry this out with the counterpart of `push`, `pull` (@fig-github-workflowdiagram-pull)!
 Try running the command now!
 
-```{bash}
+```bash
 git pull
 ```
 
@@ -581,10 +599,10 @@ We can also create branches via command line.
 
 From our terminal, we can create a new branch as follows.
 
-```{bash}
+```bash
 git switch -c test-branch
 ```
-```{default}
+```{verbatim}
 Switched to a new branch 'test-branch'
 ```
 
@@ -599,7 +617,7 @@ However `git switch` was created as a simpler and more intuitive command.
 
 To switch back to the original main branch we were on, run the same command but without the `-c` flag and with the name of the branch we switch to.
 
-```{bash}
+```bash
 git switch main
 ```
 ::: {.callout-warning}
@@ -612,7 +630,7 @@ Uncommitted changes will 'follow' we to which ever branch we are on _until_ make
 What command could we run to see which branches already exist in the local repository we are on? This command has not been introduced in this tutorial!
 Try running 
 
-```{bash}
+```bash
 git --help
 ``` 
 
@@ -620,10 +638,10 @@ or Google it to find the answer!
 :::
 
 ::: {.callout-note title="Answer" collapse="true"}
-```{bash}
+```bash
 git branch
 ```
-```{default}
+```{verbatim}
   main
 * test-branch
 ```
@@ -655,41 +673,41 @@ On our local repository, in our terminal, switch back to our `test-branch`, and 
 ::: {.callout-note collapse="true" title="Answer"}
 First change to the branch.
 
-```{bash}
+```bash
 git switch test-branch
 ```
-```{default}
+```{verbatim}
 Switched to branch 'test-branch'
 ```
 
 Make the edit.
 
-```{bash}
+```bash
 echo 'We love SPAAM!' >> README.md
 git status
 ```
-```{default}
+```{verbatim}
 Switched to branch 'test-branch'
 ```
 
 Add and commit the change to git history.
 
-```{bash}
+```bash
 git add README.md
 git commit -m 'Update README'
 
 ```
-```{default}
+```{verbatim}
 [test-branch 99c4266] Update README
  1 file changed, 1 insertion(+)
 ```
 
 Push the changes to the remote version of the repository.
 
-```{bash}
+```bash
 git push
 ```
-```{default}
+```{verbatim}
 fatal: The current branch test-branch has no upstream branch.
 To push the current branch and set the remote as upstream, use
 
@@ -700,10 +718,10 @@ To push the current branch and set the remote as upstream, use
 In this case, our remote copy of the repository does not have the branch.
 Therefore the first time we push, we tell Git to tell GitHub to create the branch on the remote as well by using the command it suggests.
 
-```{bash}
+```bash
 git push --set-upstream origin test-branch
 ```
-```{default}
+```{verbatim}
 Enumerating objects: 5, done.
 Counting objects: 100% (5/5), done.
 Delta compression using up to 14 threads
@@ -753,17 +771,17 @@ Tip: you are working with yourself when you work on your local repository. In th
 :::
 
 ::: {.callout-note collapse="true" title="Answer"}
-```{bash}
+```bash
 git switch main
 ```
-```{default}
+```{verbatim}
 Switched to branch 'main'
 Your branch is up to date with 'origin/main'.
 ```
-```{bash}
+```bash
 git merge test-branch
 ```
-```{default}
+```{verbatim}
 Updating 0ad9bb3..99c4266
 Fast-forward
  README.md | 1 +
@@ -783,7 +801,7 @@ Always be VERY careful when using `rm -r`.
 Check 3x that the path you are specifying is exactly what you want to delete and nothing more before pressing ENTER!
 :::
 
-```{bash}
+```bash
 rm -r /<PATH>/<TO>/git-github*
 ```
 
@@ -791,13 +809,13 @@ Once deleted we can move elsewhere (e.g. `cd ~`).
 
 We can also get out of the `conda` environment with.
 
-```{bash}
+```bash
 conda deactivate
 ```
 
 Then to delete the conda environment.
 
-```{bash}
+```bash
 conda remove --name git-github --all -y
 ```
 

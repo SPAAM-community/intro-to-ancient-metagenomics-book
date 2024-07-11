@@ -4,14 +4,13 @@ author: "James A. Fellows Yates, Megan Michel, Nikolay Oskolkov"
 bibliography: assets/references/ancient-metagenomic-pipelines.bib
 ---
 
-
-
-::: {.callout-tip}
+::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
 For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
 
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413239](https://doi.org/10.5281/zenodo.8413239), and unpack
 
 ```bash
+#| eval: false
 tar xvf ancient-metagenomic-pipelines.tar.gz 
 cd ancient-metagenomic-pipelines/
 ```
@@ -19,6 +18,7 @@ cd ancient-metagenomic-pipelines/
 You can then create the subsequently activate environment with
 
 ```bash
+#| eval: false
 conda env create -f ancient-metagenomic-pipelines.yml
 conda activate ancient-metagenomic-pipelines
 ```
@@ -91,6 +91,7 @@ nf-core/eager v2 requires an older version of Nextflow - if installing manually,
 First, download the latest version of the nf-core/eager repo (or check for updates if you have a previously-installed version):
 
 ```bash
+#| eval: false
 nextflow pull nf-core/eager
 ```
 
@@ -121,6 +122,7 @@ To download the FASTQ files
 Next we now inspect the AMDirT generated input TSV file for nf-core/eager!
 
 ```bash
+#| eval: false
 cat AncientMetagenomeDir_nf_core_eager_input_table.tsv
 ```
 ````
@@ -142,6 +144,7 @@ These have already been placed in the `reference/` directory for you.
 To download the required reference genome and annotation file run the following command to download from the NCBI Genome database.
 
 ```bash
+#| eval: false
 ## Download from NCBI
 curl -OJX GET "https://api.ncbi.nlm.nih.gov/datasets/v2alpha/genome/accession/GCF_001293415.1/download?include_annotation_type=GENOME_FASTA,GENOME_GFF,RNA_FASTA,CDS_FASTA,PROT_FASTA,SEQUENCE_REPORT&filename=GCF_001293415.1.zip" -H "Accept: application/zip"
 
@@ -159,6 +162,7 @@ With all of these, we can run the pipeline!
 First lets enter a screen session to make sure we can leave the pipeline running in the background and continue using our terminal.
 
 ```bash
+#| eval: false
 screen -R eager
 conda activate ancient-metagenomic-pipelines
 ```
@@ -166,6 +170,7 @@ conda activate ancient-metagenomic-pipelines
 Now we can construct an eager command from within the `data/` directory so that it looks like this:
 
 ```bash
+#| eval: false
 nextflow run nf-core/eager -r 2.4.7 \
 -profile docker \
 --fasta ../reference/GCF_001293415.1_ASM129341v1_genomic.fna \
@@ -245,6 +250,7 @@ Specifically for ancient (meta)genomic data, the following parameters and option
     Depending on the size of your input data, infrastructure, and analyses, running nf-core/eager can take hours or even days (e.g. the example command above will likely take around 20 minutes!). To avoid crashes due to loss of power or network connectivity, try running nf-core/eager in a `screen` or `tmux` session:
 
     ```bash
+#| eval: false
     screen -R eager
     ```
 
@@ -256,6 +262,7 @@ Specifically for ancient (meta)genomic data, the following parameters and option
 
 ::: {.callout-warning title="Exampl commands - do not run!"}
 ```bash
+#| eval: false
 nextflow run nf-core/eager -r 2.4.7 -profile docker --fasta ../reference/GCF_001293415.1_ASM129341v1_genomic.fna \
 --input "data/*_{1,2}.fastq.gz" <...> \
 --udg_type half
@@ -315,6 +322,7 @@ So, before you delve into these folders, it's normally a good idea to do a 'qual
 #### MultiQC General Statistics
 
 ```bash
+#| eval: false
 cd multiqc/
 ```
 
@@ -407,6 +415,7 @@ As above evaluating these outputs will vary depending on the data and or pipelin
 Before continuing onto the next section of this chapter, you will need to deactivate from the conda environment
 
 ```bash
+#| eval: false
 conda deactivate 
 ```
 
@@ -415,16 +424,18 @@ If the nf-core/eager run is still not finished, you should enter the screen sess
 Then may also need to delete the contents of the eager directory if you are low on harddrive space.
 
 ```bash
+#| eval: false
 cd /<path>/<to>/ancient-metagenomic-pipelines/eager
 rm -r *
 ```
 
 ## What is aMeta?
 
-::: {.callout-tip}
+::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
 For this chapter's exercises, if not already performed, you will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the following [`yml` file](https://github.com/NBISweden/aMeta/blob/main/workflow/envs/environment.yaml), and activate the environment:
 
 ```bash
+#| eval: false
 conda activate aMeta
 ```
 :::
@@ -442,6 +453,7 @@ In this tutorial we will try running the small test data that comes with aMeta.
 aMeta has been written in Snakemake, which means running the pipeline has to be installed in a slightly different manner to the `nextflow pull` command that can be used for nf-core/eager.
 
 ```bash
+#| eval: false
 cd /<path>/<to>/ancient-metagenomic-pipelines/aMeta
 ```
 
@@ -455,6 +467,7 @@ The next steps, particularly the `set up conda envs` will take a very long time!
 If you are impatient, you can speed this process up by using `mamba` rather than conda.
 
 ```bash
+#| eval: false
 ## Download installation script and run
 wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
 bash Miniforge3-Linux-x86_64.sh
@@ -471,6 +484,7 @@ conda config --append envs_dirs /home/ubuntu/bin/miniconda3/envs/
 :::
 
 ```bash
+#| eval: false
 ## Change into ~/.test to set up all the required test resources (Databases etc.)
 cd ~/.test
 
@@ -540,6 +554,7 @@ OK now aMeta is all set up, we can now simulate running a 'real' pipeline job!
 First, we will need to configure the workflow. First, we need to create a tab-delimited `samples.tsv` file inside `aMeta/config/` and provide the names of the input fastq-files. In a text editor (e.g. `nano`), write the following names paths in TSV format.
 
 ```bash
+#| eval: false
 sample	fastq
 foo	data/bar.fq.gz
 bar	data/foo.fq.gz
@@ -554,6 +569,7 @@ Then we need to write a config file. This tells aMeta where to find things such 
 These paths and settings go inside a `config.yaml` file inside `aMeta/config/`. A minimal example `config.yaml` files can look like this.
 
 ```bash
+#| eval: false
 samplesheet: "config/samples.tsv"
 
 krakenuniq_db: resources/KrakenUniq_DB
@@ -582,12 +598,14 @@ As this is only a dummy run (due to the large-ish computational resources requir
 Make sure you're still in the `aMeta` conda environment, and in the main aMeta directory with
 
 ```bash
+#| eval: false
 cd /<path/<to>/ancient-metagenomic-pipelines/ameta/aMeta/
 ```
 
 And, finally, we are ready to run aMeta!
 
 ```bash 
+#| eval: false
 ## change conda-frontend to mamba if you set this up earlier!
 snakemake --snakefile workflow/Snakefile --use-conda -j 10 --conda-frontend conda
 ```
@@ -603,7 +621,7 @@ You will know the pipeline has started when you get green messages saying things
 
 You'll know the job is completed once you get the following messages
 
-```default
+```{verbatim}
 Finished job 0.
 31 of 31 steps (100%) done
 Complete log: .snakemake/log/2023-10-05T155051.524987.snakemake.log
@@ -642,6 +660,7 @@ Corresponding to the numbers and colors of the heatmap, one can find them in `re
 Before continuing onto the next section of this chapter, you will need to deactivate from the conda environment
 
 ```bash
+#| eval: false
 conda deactivate 
 ```
 
@@ -660,6 +679,7 @@ nf-core/mag covers the same major steps as you will have run if you followed the
 First re-activate the chapter's conda environment.
 
 ```bash
+#| eval: false
 conda activate ancient-metagenomic-pipelines
 ```
 
@@ -672,6 +692,7 @@ This tutorial will re-use the data from the _de novo_ assembly chapter. If you h
 Make sure once you've finished, change back into this chapter's directory with
 
 ```bash
+#| eval: false
 cd /<path>/<to>/ancient-metagenomic-pipelines
 ```
 :::
@@ -689,6 +710,7 @@ The manual steps of the previous chapter included:
 So, what command would we use to recreate these?
 
 ```bash
+#| eval: false
 ## 🛑 Don't run this yet! 🛑
 nextflow run nf-core/mag -r 2.3.2 \
 -profile test,docker \
@@ -790,12 +812,14 @@ And with that, you can run your nf-core/mag pipeline!
 As recommended in the nf-core/eager section above, start a screen session.
 
 ```bash
+#| eval: false
 screen -R mag
 ```
 
 Then execute the command.
 
 ```bash
+#| eval: false
 nextflow run nf-core/mag -r 2.3.2 \
 -profile test,docker \
 --input '../../denovo-assembly/seqdata_files/*{R1,R2}.fastq.gz' --outdir ./results \
@@ -873,6 +897,7 @@ ENTER!
 :::
 
 ```bash
+#| eval: false
 rm -rf /<PATH>/<TO>/ancient-metagenomic-pipelines*
 ```
 
@@ -881,12 +906,14 @@ Once deleted you can move elsewhere (e.g. `cd ~`).
 We can also get out of the `conda` environment with
 
 ```bash
+#| eval: false
 conda deactivate
 ```
 
 To delete the conda environment
 
 ```bash
+#| eval: false
 conda remove --name ancient-metagenomic-data --all -y
 ```
 
