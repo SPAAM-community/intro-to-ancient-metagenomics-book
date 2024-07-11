@@ -169,7 +169,6 @@ done
 
 ![](assets/images/chapters/authentication/filtered_krakenuniq_output.png)
 
-
 We can also easily produce a KrakenUniq taxonomic abundance table *krakenuniq_abundance_matrix.txt* using the custom R script below, which takes as argument the contents of the `krakenuniq/` folder containing the KrakenUniq output files. 
 
 ```bash
@@ -282,7 +281,6 @@ quit()
 
 In the R script above, we simply split the reference genome into *N_tiles* tiles and compute the breadth of coverage (number of reference nucleotides covered by at least one read normalised by the total length) locally in each tile. By visualising how the local breadth of coverage changes from tile to tile, we can monitor the distribution of the reads across the reference genome. In the evenness of coverage figure above, the reads seem to cover all parts of the reference genome uniformly, which is a good evidence of true-positive detection, even though the total mean breadth of coverage is low due to the low total number of reads.
 
-
 ### Alignment quality
 
 In addition to evenness and breadth of coverage, it is very informative to monitor how well the metagenomic reads map to a reference genome. Here one can control for **mapping quality** ([MAPQ](https://samtools.github.io/hts-specs/SAMv1.pdf) field in the BAM-alignments) and the number of mismatches for each read, i.e. **edit distance**.
@@ -312,7 +310,6 @@ hist(as.numeric(readLines("mapq.txt")), col = "darkred", breaks = 100)
 Note that MAPQ scores are computed slightly differently for Bowtie and BWA, so they are not directly comparable, however, for both MAPQ ~ 10-30, as in the histograms below, indicates good affinity of the DNA reads to the reference genome. here we provide some examples of how typical MAPQ histograms for Bowtie2 and BWA alignments can look like:
 
 ![](assets/images/chapters/authentication/mapq.png)
-
 
 Edit distance can be extracted by gathering information in the NM-tag inside BAM-alignments, which reports the number of mismatches for each aligned read. This can be done either in bash / awk, or using handy functions from *Rsamtools* R package:
 
@@ -455,9 +452,8 @@ In particular, three different settings can be run:
   metaDMG-cpp lca
   ```
 
-In this section we will utilise `metaDMG-cpp lca` since we are interested in a more comprehensive analsysis that includes the taxonomic classification of our alignments.
+In this section we will utilise `metaDMG-cpp lca` since we are interested in a more comprehensive analysis that includes the taxonomic classification of our alignments.
 For those interested in exploring other functionalities of metaDMG, I encourage you to visit the tool’s official GitHub ([https://github.com/metaDMG-dev/metaDMG-cpp](https://github.com/metaDMG-dev/metaDMG-cpp)) and the ngsLCA official GitHub ([https://github.com/miwipe/ngsLCA](https://github.com/miwipe/ngsLCA)).
-
 
 ### Taxonomic profiling: metaDMG-cpp lca
 
@@ -517,7 +513,6 @@ data %>%
 
 **metaDMG** can perform a numerical optimisation of the deamination frequencies (C→T, G→A) using the binomial or beta-binomial likelihood models, where the latter can deal with a large amount of variance (overdispersion).
 This function is called the `metaDMG-cpp dfit` or damage estimates function.
-
 
 ```bash
 metaDMG-cpp dfit 
@@ -733,7 +728,6 @@ library(ggplot2)
 library(purrr)
 library(ggpubr)
 ``` 
-
 
 #### Deamination patterns
 
