@@ -13,7 +13,6 @@ For this chapter's exercises, if not already performed, you will need to downloa
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413229](https://doi.org/10.5281/zenodo.8413229), and unpack
 
 ```bash
-#| eval: false
 tar xvf accessing-ancient-metagenomic-data.tar.gz 
 cd accessing-ancient-metagenomic-data/
 ```
@@ -21,7 +20,6 @@ cd accessing-ancient-metagenomic-data/
 You can then create the subsequently activate environment with
 
 ```bash
-#| eval: false
 conda env create -f accessing-ancient-metagenomic-data.yml
 conda activate accessing-ancient-metagenomic-data
 ```
@@ -130,7 +128,6 @@ First, we will need to activate a conda environment, and then install the latest
 While in the `accessing-ancient-metagenomic-data` conda environment, run the following command to load the GUI into your web-browser. If the browser doesn't automatically load, copy the IP address and paste it in your browser's URL bar.
 
 ```bash
-#| eval: false
 AMDirT viewer
 ```
 
@@ -235,7 +232,6 @@ First we should `mv` our files from the directory that your web browser download
 To start, we make sure we're still in the chapter's data directory (`/<path>/<to>/accessing-ancient-metagenomic-data/`), and move move the files into it.
 
 ```bash
-#| eval: false
 mv ~/Downloads/AncientMetagenomeDir_* .
 ```
 
@@ -247,7 +243,6 @@ Then we can look inside the chapter's directory.
 We should see at least the following four files.
 
 ```bash
-#| eval: false
 ls
 ```
 ```{verbatim}
@@ -261,7 +256,6 @@ We can simply run `cat` of the four files downloaded by AMDirT to look inside (t
 If you run `cat` on the curl download script, you should see a series of `curl` commands with the correct ENA links for you for each of the samples you wish to download.
 
 ```bash
-#| eval: false
 cat AncientMetagenomeDir_curl_download_script.sh
 ```
 
@@ -277,7 +271,6 @@ curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR409/008/ERR4093838/ERR4093838.fast
 By providing this script for you, AMDirT facilitates fast download of files of interest by replacing the one-by-one download commands for each sample with a _single_ command!
 
 ```bash
-#| eval: false
 bash AncientMetagenomeDir_curl_download_script.sh
 ```
 ```{verbatim}
@@ -309,7 +302,6 @@ Once the four samples are downloaded, AMDirT then facilitates fast processing of
 Importantly by including the library metadata (mentioned above), researchers can leverage the complex automated processing that nf-core/eager can perform when given such relevant metadata.
 
 ```bash
-#| eval: false
 cat AncientMetagenomeDir_nf_core_eager_input_table.tsv
 ```
 ```{verbatim}
@@ -328,7 +320,6 @@ In some cases not all citations will be present (as per the warning), so this sh
 :::
 
 ```bash
-#| eval: false
 cat AncientMetagenomeDir_bibliography.bib
 ```
 ```{verbatim}
@@ -351,7 +342,6 @@ If you're less of a GUI person and consider yourself a command-line wizard, you 
 Make a new directory called `cli`, and change into it.
 
 ```bash
-#| eval: false
 mkdir cli && cd cli/
 ```
 
@@ -396,14 +386,12 @@ awk -F "\t" 'NR==1 || $14 == "Targeted-Capture"' AncientMetagenomeDir_filtered_l
 Then with these two filtered files, one for samples,and one for libraries, we can supply them to the `convert` command to generate the same download scripts, eager input samplesheet, and citation `.bib` file as we did before!
 
 ```bash
-#| eval: false
 AMDirT convert -o . --bibliography --curl --eager --libraries AncientMetagenomeDir_filtered_libraries_capturedonly.tsv ancientsinglegenome-hostassociated_samples_v24.03.0_filtered.tsv ancientsinglegenome-hostassociated
 ```
 
 You should see a few messages saying `Writing <XYZ>`, and then if we run `ls`, you should see the same resulting files starting with `AncientMetagenomeDir_` as before with the GUI!
 
 ```bash
-#| eval: false
 ls
 ```
 
@@ -496,7 +484,6 @@ We are forking a personal fork of the main repository to ensure we don't acciden
 2. **Clone** the copied repo to your local machine
 
 	```bash
-#| eval: false
 	git clone git@github.com:<YOUR_USERNAME>/AncientMetagenomeDir.Git
 	cd AncientMetagenomeDir
 	```
@@ -504,21 +491,19 @@ We are forking a personal fork of the main repository to ensure we don't acciden
 3. **Switch** to a new branch called `dev`
 
 	```bash
-#| eval: false
+
 	git switch -c dev
 	```
 
 4. Modify `ancientsinglegenome-hostassociated_samples.tsv`
 
 	```bash
-#| eval: false
 	echo "Long2022	2022	10.1038/s42003-022-03527-1	Basilica of St. Domenico Maggiore	40.848	14.254	Italy	NASD1	Homo sapiens	400	10.1038/s42003-022-03527-1	bacteria	Escherichia coli	calcified nodule	chromosome	SRA	raw	PRJNA810725	SRS12115743" >> ancientsinglegenome-hostassociated/samples/ancientsinglegenome-hostassociated_samples.tsv
 	```
 
 5. **Add**, **Commit** and **Push** back to your **Fork** on Git(Hub)
 
 	```bash
-#| eval: false
 	git add ancientsinglegenome-hostassociated/samples/ancientsinglegenome-hostassociated_samples.tsv
 	git commit -m 'Add Long2022'
 	git push
@@ -548,7 +533,6 @@ Check 3x that the path you are specifying is exactly what you want to delete and
 :::
 
 ```bash
-#| eval: false
 rm -r /<PATH>/<TO>/accessing-metagenomic-data*
 ```
 
@@ -557,14 +541,12 @@ Once deleted you can move elsewhere (e.g. `cd ~`).
 We can also get out of the `conda` environment with
 
 ```bash
-#| eval: false
 conda deactivate
 ```
 
 To delete the conda environment
 
 ```bash
-#| eval: false
 conda remove --name accessing-ancient-metagenomic-data --all -y
 ```
 
