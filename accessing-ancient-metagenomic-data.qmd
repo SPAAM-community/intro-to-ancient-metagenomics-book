@@ -144,7 +144,7 @@ You will not be asked again when in the same conda environment.
 
 Your web browser should now load, and you should see a two panel page.
 
-Under __Select a table__ use the dropdown menu to select 'ancientsinglegenome-hostassociated'.
+Under _Select a table_ use the dropdown menu to select 'ancientsinglegenome-hostassociated'.
 
 You should then see a table (@fig-accessingdata-firstpage), pretty similar what you are familiar with with spreadsheet tools such as Microsoft Excel or LibreOffice calc.
 
@@ -156,22 +156,22 @@ You can reorder columns by clicking on the column name, and also filter by press
 
 As an exercise, we will try filtering to a particular set of samples, then generate some download scripts, and download the files.
 
-First, filter the __project_name__ column to 'Muhlemann2020' from [@M_hlemann_2020, @fig-accessingdata-projectfilter].
+First, filter the _project_name_ column to 'Muhlemann2020' from [@M_hlemann_2020, @fig-accessingdata-projectfilter].
 
 ![The AMDirT viewer with a filter menu coming out of the project name column, with an example search of the project 'Muhlemann2020' in the search bar.](assets/images/chapters/accessing-ancient-metagenomic-data/fig-accessingdata-projectfilter.png){#fig-accessingdata-projectfilter fig-align="center"}
 
-Then scroll to the right, and filter the __geo_loc_name_ to 'Norway'  (@fig-accessingdata-geofilter).
+Then scroll to the right, and filter the _geo\_loc\_name_ to 'Norway'  (@fig-accessingdata-geofilter).
 
 ![The AMDirT viewer with a filter menu coming out of the geo location column, with an example search of the country 'Norway' written in the search bar and the entry ticked in the results.](assets/images/chapters/accessing-ancient-metagenomic-data/fig-accessingdata-geofilter.png){#fig-accessingdata-geofilter fig-align="center"}
 
 You should be left with 2 rows.
 
-Finally, scroll back to the first column and tick the boxes of these four samples (@fig-accessingdata-tickbox).
+Finally, scroll back to the first column and tick the boxes of these two samples (@fig-accessingdata-tickbox).
 
 ![The AMDirT viewer with just two rows with samples from Muhlemann2020 that are located in the Norway being displayed, and the tickboxes next to each one selected](assets/images/chapters/accessing-ancient-metagenomic-data/fig-accessingdata-tickbox.png){#fig-accessingdata-tickbox fig-align="center"}
 
 Once you've selected the samples you want, you can press _Validate selection_ below the table box.
-You should then see a series loading-spinner, and then a new table will appear (@fig-accessingdata-librarytable).
+You should then see a series loading-spinner, and then a new table will appear below (@fig-accessingdata-librarytable).
 
 ![The AMDirT viewer with the library table loaded, with a range of libraries listed corresponding to the samples selected in the previous table with their AncientMetagenomeDir metadata. The tickboxes are unticked, and a has a red 'validate library selection' button below it.](assets/images/chapters/accessing-ancient-metagenomic-data/fig-accessingdata-librarytable.png){#fig-accessingdata-librarytable fig-align="center"}
 
@@ -195,14 +195,15 @@ You should have four categories of buttons:
 
 - Download AncientMetagenomeDir Library Table
 - Download Curl sample download script
-- Download __\<tool/pipeline name\>__ input TSV
+- Download _\<tool/pipeline name\>_ input TSV
 - Download Citations as BibText
 
-The first button is to download a table containing all the AncientMetagenomeDir metadata of the selected samples.
-The second is for generating a download script that will allow you to immediately download all sequencing data of the samples you selected.
-The third set of buttons generate (partially!) pre-configured input files for use in dedicated ancient DNA pipeline such as nf-core/eager [@Fellows_Yates2021-jl], PALAEOMIX [@Schubert2014-ps], and/or and aMeta [@Pochon2022-hj].
-Finally, the fourth button generates a text file with (in most cases) all the citations of the data you downloaded, in a format accepted by most reference/citation managers.
-In this case the reference metadata for that particular publication isn't publicly available so there is a warning.
+The purposes of the buttons are as follows:
+
+- The first button is to download a table containing all the AncientMetagenomeDir metadata of the selected samples.
+- The second is for generating a download script that will allow you to immediately download all sequencing data of the samples you selected.
+- The third set of buttons generate (partially!) pre-configured input files for use in dedicated ancient DNA pipeline such as nf-core/eager [@Fellows_Yates2021-jl], PALAEOMIX [@Schubert2014-ps], and/or and aMeta [@Pochon2022-hj].
+- Finally, the fourth button generates a text file with (in most cases) all the citations of the data you downloaded, in a format accepted by most reference/citation managers.
 
 It's important to note you are not necessarily restricted to `Curl` ([https://curl.se/](https://curl.se/)) for downloading the data.
 AMDirT aims to add support for whatever tools or pipelines requested by the community.
@@ -218,11 +219,12 @@ For the next step of this tutorial, we will press the following buttons:
 
 Your browser should then download two `.tsv` files, one `.sh` file and one `.bib` file into it's default location.
 
+Once everything is downloaded, you can close the tab of the web browser, and in the terminal you can press <kbd>ctrl</kbd> + <kbd>c</kbd> to shutdown the tool.
+
+
 :::{.callout-note}
 Do not worry if you get a 'Citation information could not be resolved' warning! This is occasionally expected for some publications due to a CrossRef metadata information problem when requesting reference information about a DOI.
 :::
-
-Once this is done, you can close the tab of the web browser, and in the terminal you can press <kbd>ctrl</kbd> + <kbd>c</kbd> to shutdown the tool.
 
 ### Inspecting AMDirT viewer Output
 
@@ -230,19 +232,19 @@ Lets look at the files that AMDirT has generated for you.
 
 First we should `mv` our files from the directory that your web browser downloaded the files into into somewhere safer.
 
-To start, we make sure we're still in the chapter's data directory, and move move the files into it.
+To start, we make sure we're still in the chapter's data directory (`/<path>/<to>/accessing-ancient-metagenomic-data/`), and move move the files into it.
 
 ```bash
 #| eval: false
-mv ~/Downloads/AncientMetagenomeDir_* /<path>/<to>/accessing-ancient-metagenomic-data/
+mv ~/Downloads/AncientMetagenomeDir_* .
 ```
 
 :::{.callout-warning}
-The default download directory normally something like `~/Downloads/`, however may vary on your machine!
+The default download directory on most Unix desktops is normally something like `~/Downloads/`, however may vary on your machine!
 :::
 
 Then we can look inside the chapter's directory.
-We should see the following five files.
+We should see at least the following four files.
 
 ```bash
 #| eval: false
@@ -265,11 +267,11 @@ cat AncientMetagenomeDir_curl_download_script.sh
 
 ```{verbatim}
 #!/usr/bin/env bash
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR409/000/ERR4093860/ERR4093860_1.fastq.gz -o ERR4093860_1.fastq.gz
 curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR409/000/ERR4093860/ERR4093860_2.fastq.gz -o ERR4093860_2.fastq.gz
 curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR409/006/ERR4093846/ERR4093846.fastq.gz -o ERR4093846.fastq.gz
-curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR409/008/ERR4093838/ERR4093838.fastq.gz -o ERR4093838.fastq.gz
-curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR409/000/ERR4093860/ERR4093860_1.fastq.gz -o ERR4093860_1.fastq.gz
 curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR409/005/ERR4093845/ERR4093845.fastq.gz -o ERR4093845.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR409/008/ERR4093838/ERR4093838.fastq.gz -o ERR4093838.fastq.gz
 ```
 
 By providing this script for you, AMDirT facilitates fast download of files of interest by replacing the one-by-one download commands for each sample with a _single_ command!
@@ -373,22 +375,32 @@ ancientsinglegenome-hostassociated_samples_v24.03.0.tsv
 ```
 
 Then we can use a bit of bash to filter the table in the same way as we did in the GUI.
-
-<!-- TODO -->
+In this command, we tell `awk` that the column separator is a tab, print the row if either it's the first record (line of the file), or if column one matches `Muhlemann2020` and column seven matches `Norway`.
 
 ```bash
-
+awk -F "\t" 'NR==1 || $1 == "Muhlemann2020" && $7 == "Norway"' ancientsinglegenome-hostassociated_samples_v24.03.0.tsv > ancientsinglegenome-hostassociated_samples_v24.03.0_filtered.tsv
 ```
 
-For example, lets say you used R to make the 'extra' file in our chapter directory (`ancientsinglegenome-hostassociated_samples_Muhlemann2020_Norway.tsv` - basically the same Muhlemann2020 et al. samples from Norway, as filtered in the GUI part of this tutorial).
-You would supply this to `AMDirT convert` as with the next command.
+Then, we can pass this filtered table to the `AMDirT convert` command to firstly retrieve the library-level metadata.
+
+```bash
+AMDirT convert --librarymetadata ancientsinglegenome-hostassociated_samples_v24.03.0_filtered.tsv ancientsinglegenome-hostassociated
+```
+
+This has downloaded a new file called `AncientMetagenomeDir_filtered_libraries.tsv`, which we can then further filter in the same away to match the desired libraries as we picked during the GUI section of the tutorial!
+
+```bash
+awk -F "\t" 'NR==1 || $14 == "Targeted-Capture"' AncientMetagenomeDir_filtered_libraries.tsv > AncientMetagenomeDir_filtered_libraries_capturedonly.tsv
+```
+
+Then with these two filtered files, one for samples,and one for libraries, we can supply them to the `convert` command to generate the same download scripts, eager input samplesheet, and citation `.bib` file as we did before!
 
 ```bash
 #| eval: false
-AMDirT convert -o . --bibliography --librarymetadata --curl --eager ../ancientsinglegenome-hostassociated_samples_Muhlemann2020_Norway.tsv ancientsinglegenome-hostassociated
+AMDirT convert -o . --bibliography --curl --eager --libraries AncientMetagenomeDir_filtered_libraries_capturedonly.tsv ancientsinglegenome-hostassociated_samples_v24.03.0_filtered.tsv ancientsinglegenome-hostassociated
 ```
 
-You should see a few messages saying `Writing <XYZ>`, and then if we run `ls`, you should see the same resulting files as before with the GUI!
+You should see a few messages saying `Writing <XYZ>`, and then if we run `ls`, you should see the same resulting files starting with `AncientMetagenomeDir_` as before with the GUI!
 
 ```bash
 #| eval: false
@@ -399,21 +411,41 @@ ls
 AncientMetagenomeDir_bibliography.bib
 AncientMetagenomeDir_curl_download_script.sh
 AncientMetagenomeDir_filtered_libraries.tsv
+AncientMetagenomeDir_filtered_libraries_capturedonly.tsv
 AncientMetagenomeDir_nf_core_eager_input_table.tsv
+ancientsinglegenome-hostassociated_samples_v24.03.0.tsv
+ancientsinglegenome-hostassociated_samples_v24.03.0_filtered.tsv
 ```
-
-The convert command allowed you to say where to save the output files, use different flags to specify which scripts, bib, and configuration files you wish to generate, and finally your filtered AncientMetagenomeDir TSV file and which table it's derived from.
 
 Therefore the `convert` command route of AMDirT allows you to include AMDirT in more programmatic workflows to make downloading data more efficiently.
 
 ### AMDirT Practise
 
 ::: {.callout-tip title="Question" appearance="simple"}
-Try to use your preferred AMDirT interface (GUI or CLI) to find the number of all single-stranded libraries of dental calculus metagenomes, published since 2018
+Try to use your preferred AMDirT interface (GUI or CLI) to find the number of all single-stranded libraries of dental calculus _metagenomes_, published since 2021
 :::
 
 ::: {.callout-note collapse="true" title="Answer"}
 The answer is 16 libraries across 2 publications: Klapper et al. [-@Klapper2023-nv] and Fotani et al. [-@Fontani2023-io]
+
+You can calculate this with the CLI method as follows.
+
+```bash
+## Download the ancient metagenome table
+AMDirT download -t ancientmetagenome-hostassociated -y samples
+
+## Filter to just dental calculus since 2021
+awk -F "\t" 'NR==1 || $2 >= 2021 && $13 == "dental calculus"' ancientmetagenome-hostassociated_samples_v24.03.0.tsv > ancientmetagenome-hostassociated_samples_v24.03.0_filtered.tsv
+
+## Get the library metadata of the dental calculus (might take a little bit of time)
+AMDirT convert --librarymetadata ancientmetagenome-hostassociated_samples_v24.03.0_filtered.tsv ancientmetagenome-hostassociated
+
+## Filter to just single stranded libraries
+awk -F "\t" 'NR==1 || $9 == "single"' AncientMetagenomeDir_filtered_libraries.tsv > AncientMetagenomeDir_filtered_libraries_singlestranded.tsv
+
+## Count the number of libraries, starting from row 2 to skip the header
+tail -n +2 AncientMetagenomeDir_filtered_libraries_singlestranded.tsv | wc -l
+```
 :::
 
 ## Git Practise
@@ -431,17 +463,18 @@ As AncientMetagenomeDir is on GitHub, the means we can also use this repository 
 
 ::: {.callout-tip title="Question" appearance="simple"}
 
-Your task is to complete the following steps however with `git` terms removed (indicated by quotes).
-You should be able to complete the steps and also note down what the _correct_ Git terminology:
+Your task is to complete the following steps.
+However, we've replaced the correct Git terminology with generic verbs, indicated with words in quotes.
+Recreate the following, but also note down what the _correct_ Git terminology is.
 
-1. Make a 'copy' the `jfy133/AncientMetagenomeDir` ([https://github.com/jfy133/AncientMetagenomeDir)](https://github.com/jfy133/AncientMetagenomeDir)) GitHub repository to your account
+1. Make a 'copy' the `jfy133/AncientMetagenomeDir` ([https://github.com/jfy133/AncientMetagenomeDir](https://github.com/jfy133/AncientMetagenomeDir)) GitHub repository to your account
 
 :::{.callout-note}
 We are forking a personal fork of the main repository to ensure we don't accidentally edit the main AncientMetagenomeDir repository!
 :::
 
-2. 'Download' the 'copied' repo to your local machine
-3. 'Change' to the `dev` branch
+2. 'Download' the copied repo to your local machine
+3. 'Change' into a new branch called `dev`
 4. Modify the file `ancientsinglegenome-hostassociated_samples.tsv`. Add the following line to the end of the TSV
 	
 	Make sure your text editor doesn't replace tabs with spaces!
@@ -450,13 +483,13 @@ We are forking a personal fork of the main repository to ensure we don't acciden
 	Long2022	2022	10.1038/s42003-022-03527-1	Basilica of St. Domenico Maggiore	40.848	14.254	Italy	NASD1	Homo sapiens	400	10.1038/s42003-022-03527-1	bacteria	Escherichia coli	calcified nodule	chromosome	SRA	raw	PRJNA810725	SRS12115743
 	```
 
-5. 'Send' back to Git(Hub)
-6. Open a 'request' adding the changes to the original `jfy133/AncientMetagenomeDir` repo
+5. 'Save', 'Record', and 'Send' back to Git(Hub)
+6. Open a 'merge suggestion' proposing the changes to the original `jfy133/AncientMetagenomeDir` repo
     - Make sure to put 'Summer school' in the title of the 'Request'
 :::
 
 ::: {.callout-note collapse="true" title="Answer"}
-1. **Fork** the `jfy133/AncientMetagenomeDir` ([https://github.com/jfy133/AncientMetagenomeDir)](https://github.com/jfy133/AncientMetagenomeDir)) repository to your account (@fig-acessingancientmetagenomicdata-githubclone)
+1. **Fork** the `jfy133/AncientMetagenomeDir` ([https://github.com/jfy133/AncientMetagenomeDir](https://github.com/jfy133/AncientMetagenomeDir)) repository to your account (@fig-acessingancientmetagenomicdata-githubclone)
 
 ![Screenshot of the top of the jfy133/AncientMetagenomeDir github repository, with the green Code button pressed and the SSH tab open](assets/images/chapters/accessing-ancient-metagenomic-data/fig-acessingdata-githubclone.png){#fig-acessingancientmetagenomicdata-githubclone}
 
@@ -468,11 +501,11 @@ We are forking a personal fork of the main repository to ensure we don't acciden
 	cd AncientMetagenomeDir
 	```
 
-3. **Switch** to the `dev` branch
+3. **Switch** to a new branch called `dev`
 
 	```bash
 #| eval: false
-	git switch dev
+	git switch -c dev
 	```
 
 4. Modify `ancientsinglegenome-hostassociated_samples.tsv`
@@ -482,7 +515,7 @@ We are forking a personal fork of the main repository to ensure we don't acciden
 	echo "Long2022	2022	10.1038/s42003-022-03527-1	Basilica of St. Domenico Maggiore	40.848	14.254	Italy	NASD1	Homo sapiens	400	10.1038/s42003-022-03527-1	bacteria	Escherichia coli	calcified nodule	chromosome	SRA	raw	PRJNA810725	SRS12115743" >> ancientsinglegenome-hostassociated/samples/ancientsinglegenome-hostassociated_samples.tsv
 	```
 
-5. **Commit** and **Push** back to your **Fork** on Git(Hub)
+5. **Add**, **Commit** and **Push** back to your **Fork** on Git(Hub)
 
 	```bash
 #| eval: false
@@ -534,7 +567,6 @@ To delete the conda environment
 #| eval: false
 conda remove --name accessing-ancient-metagenomic-data --all -y
 ```
-
 
 ## Summary
 
