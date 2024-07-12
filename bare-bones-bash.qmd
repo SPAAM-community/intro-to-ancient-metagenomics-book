@@ -8,14 +8,14 @@ For this chapter's exercises, if not already performed, you will need to downloa
 
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8412661](https://doi.org/10.5281/zenodo.8412661), and unpack
 
-```bash
+```{bash}
 tar xvf bare-bones-bash.tar.gz 
 cd bare-bones-bash/
 ```
 
 You can then create the subsequently activate environment with
 
-```bash
+```{bash}
 conda env create -f bare-bones-bash.yml
 conda activate bare-bones-bash
 ```
@@ -142,7 +142,7 @@ username, the device name, a colon, a directory path and ends with a dollar
 symbol.
 Like so:
 
-```bash
+```{bash}
 <username>@<device_name>:~$
 ```
 
@@ -175,7 +175,7 @@ we can type in `pwd`, which stands for "**p**rint **w**orking **d**irectory".
 
 Our "working directory" is whichever directory we are currently in.
 
-```bash
+```{bash}
 pwd
 ```
 
@@ -197,7 +197,7 @@ leading to our particular working directory.
 ::: {.callout-note}
 If you're not in your **home** directory (i.e., the output isn't exactly the same as the output above), please run the command
 
-```bash
+```{bash}
 cd $HOME
 ```
 
@@ -277,7 +277,7 @@ We will now explore some basic commands that we will use to explore folders and 
 
 - **l**i**s**t directory contents:
 
-```bash
+```{bash}
 ls
 ```
 
@@ -293,46 +293,46 @@ We will use this format to show you commands and their corresponding output in t
 :::
 
 - **m**a**k**e a **dir**ectory:
-```bash
+```{bash}
 ## ⚠ this will be our working directory for the rest of this chapter! Do not move out of it unless asked to! ⚠
 mkdir barebonesbash
 ```
 
 - **m**o**v**e (or rename) files and directories
-```bash
+```{bash}
 mv barebonesbash BareBonesBash
 ```
 
 - **c**hange **d**irectories
-```bash
+```{bash}
 cd BareBonesBash
 ```
 
 - Download (**w**ww **get**) a remote file to our computer
-```bash
+```{bash}
 wget git.io/Boosted-BBB-meta
 ```
 
 - **c**o**p**y a file or directory to a new location
-```bash
+```{bash}
 cp Boosted-BBB-meta Boosted-BBB-meta.tsv
 ```
 
 - **r**e**m**ove (delete) files
-```bash
+```{bash}
 rm Boosted-BBB-meta
 ```
 
 - Con**cat**enate file contents to screen
-```bash
+```{bash}
 cat Boosted-BBB-meta.tsv
 ```
 
 - See only the **first**/**last** 10 lines of a file
-```bash
+```{bash}
 head -n 10 Boosted-BBB-meta.tsv
 ```
-```bash
+```{bash}
 tail -n 10 Boosted-BBB-meta.tsv
 ```
 ::: {.callout-note}
@@ -341,12 +341,12 @@ This is because the start of a cat is its head and the end of the cat is its tai
 
 
 - Look at the contents of a file interactively (**less** than the complete file, press `q` to quit)
-```bash
+```{bash}
 less Boosted-BBB-meta.tsv
 ```
 
 - **w**ord **c**ount the number of **l**ines (-l) in a file
-```bash
+```{bash}
 wc -l Boosted-BBB-meta.tsv
 ```
 ```
@@ -403,7 +403,7 @@ fail.
 ![Diagram showing stdin going into the program, and two output streams from the program: stderr and stdout, with the stdout becoming the stdin of a second program.](assets/images/chapters/bare-bones-bash/Piping.png){#fig-Piping width=80% fig-align="center"}
 
 Example:
-```bash
+```{bash}
 head -n 10 Boosted-BBB-meta.tsv | tail -n1
 ```
 
@@ -436,7 +436,7 @@ It is also possible to combine streams, but we won't get into that here.
 :::
 
 Example:
-```bash
+```{bash}
 head -n 10 Boosted-BBB-meta.tsv | tail -n1 > line10.txt
 ```
 
@@ -445,7 +445,7 @@ Using `cat` on this file will BLOW YOUR MIND - (GONE WRONG)!
 
 > (Don't forget to like and subscribe!)
 
-```bash
+```{bash}
 cat line10.txt
 ```
 
@@ -463,7 +463,7 @@ or access to online manuals right from our terminal!
 
 - We can get a **one sentence summary** of what a tool does with `whatis`
 
-    ```bash
+    ```{bash}
     whatis cat
     ```
 
@@ -474,7 +474,7 @@ or access to online manuals right from our terminal!
 
 - While `man` gives us **access to online manuals** for each tool (exit with `q`)
 
-    ```bash
+    ```{bash}
     man cat
     ```
 
@@ -488,7 +488,7 @@ We can assign variables (tell the computer what do we want it to contain)
 with `=` and pull their contents with `$`
 
 The easiest way to see the contents of a variable is using `echo`!
-```bash
+```{bash}
 echo "This is my home directory: $HOME"
 ```
 ```
@@ -509,7 +509,7 @@ But as mentioned, we can store in a variable anything we want, so let's see a fe
 
 First let's try to store a number:
 
-```bash
+```{bash}
 GreekFood=4            #Here, 'GreekFood' is a number.
 echo "Greek food is $GreekFood people who want to know what heaven tastes like."
 ```
@@ -525,7 +525,7 @@ Very useful for when your future self or another person looks at your code
 
 Now let's store a word ("string"):
 
-```bash
+```{bash}
 GreekFood=delicious   #We overwrite that number with a word (i.e. a 'string').
 echo "Everyone says that Greek food is $GreekFood."
 ```
@@ -536,7 +536,7 @@ Everyone says that Greek food is delicious.
 
 We can also store more than a single word (that is still a "string"):
 
-```bash
+```{bash}
 GreekFood="Greek wine" #We can overwrite 'GreekFood' again, 
 ## but when there is a space in our string, we need quotations.
 echo "The only thing better than Greek food is $GreekFood!"
@@ -548,7 +548,7 @@ The only thing better than Greek food is Greek wine!
 
 Since variables can be reset to whatever we want, we can also store a number again:
 
-```bash
+```{bash}
 GreekFood=7 #And, of course, we can overwrite with a number again too.
 echo "I have been to Greece $GreekFood times already this year, for the food and wine!"
 ```
@@ -572,7 +572,7 @@ In bash, there is a big difference between a single quote `'` and a double quote
 
 In some cases the difference doesn't matter:
 
-```bash
+```{bash}
 echo "I like Greek Food"
 echo 'I like Greek Food'
 ```
@@ -583,7 +583,7 @@ I like Greek Food
 
 In other cases it makes all the difference:
 
-```bash
+```{bash}
 Arr="Banana"
 echo 'Pirates say $Arr'
 echo "Minions say $Arr"
@@ -607,7 +607,7 @@ We can also ask our computer where we have put our files, in case we forgot.
 To do this we can use `find`!
 The `find` command has the following syntax:
 
-```bash
+```{bash}
 ## ⚠ Don't run! Fake example ⚠
 find /<PATH>/<TO>/ -type f -name 'your_file.txt'
 ```
@@ -633,7 +633,7 @@ Now let's put into practise what we have learnt about `find`.
 
 For that we will download a messy folder from a collaborator, remember to check we are in the BareBonesBash folder!:
 
-```bash
+```{bash}
 wget git.io/Boosted-BBB-images -O Boosted-BBB.zip
 ```
 
@@ -641,13 +641,13 @@ We realise that this is a compressed file, and more precisely is a zip file (ext
 In order to access to its content we will need to "unzip" it first.
 For that we can use the command **unzip**: 
 
-```bash
+```{bash}
 unzip Boosted-BBB.zip
 ```
 We know that our collaborator has shared with us some pictures from animals that we need to use for our research, and according to our collaborator they are marked with `JPG`.
 We first try to check the contents of the directory to find them quickly.
 
-```bash
+```{bash}
 ls Boosted-BBB
 ```
 ```
@@ -660,7 +660,7 @@ Wow, what a mess!
 How would we retrieve all the files?
 Thanks to our wonderful teachers we have learnt how to use find and can simply run:
 
-```bash
+```{bash}
 find Boosted-BBB -type f -name '*JPG*' 
 ```
 ```
@@ -702,7 +702,7 @@ loop.
 A **for** loop allows us to go through a list of things and perform some actions.
 Let's see an example:
 
-```bash
+```{bash}
 Variable=Yes
 for i in Greece Spain Britain; do
   echo "Does $i have lovely food? $Variable"
@@ -718,7 +718,7 @@ Does Britain have lovely food? Yes
 The for loop went through the list `Greece Spain Britain` and printed a statement with each item in the list.
 What happens if we change the order of the list to `Britain Greece Spain`?
 
-```bash
+```{bash}
 Variable=Yes
 for i in Britain Greece Spain; do
   echo "Does $i have lovely food? $Variable"
@@ -791,20 +791,20 @@ specifying is exactly what we want to delete and nothing more before pressing
 ENTER!
 :::
 
-```bash
+```{bash}
 cd ~     ## We shouldn't delete a directory while we are still in it. (It is possible though).
 rm -r /<PATH>/<TO>/BareBonesBash*
 ```
 
 We can also get out of the `conda` environment with
 
-```bash
+```{bash}
 conda deactivate
 ```
 
 To delete the conda environment
 
-```bash
+```{bash}
 conda remove --name bare-bones-bash --all -y
 ```
 
