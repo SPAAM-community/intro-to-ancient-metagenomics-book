@@ -347,7 +347,8 @@ To execute the alignment step ourselves we could theoretically run the following
 
 ```{.bash eval=false}
 mkdir alignment
-bowtie2-build -f megahit/final.contigs.fa alignment/2612
+ln -s $PWD/megahit/final.contigs.fa alignment/2612.fa
+bowtie2-build -f alignment/2612.fa alignment/2612
 bowtie2 -p 14 --very-sensitive -N 1 -x alignment/2612 -1 2612_R1.fastq.gz -2 2612_R2.fastq.gz | \
 samtools view -Sb - | \
 samtools calmd -u /dev/stdin megahit/final.contigs.fa | \
