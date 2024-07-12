@@ -23,7 +23,8 @@ conda activate bare-bones-bash
 
 ## Preamble
 
-This chapter is a condensed version of the both 'Basic' and 'Boosted' Bare Bones Bash courses that can be found in the [Bare Bones Bash website](https://barebonesbash.github.io/#/). The material is displayed here under a [CC-BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/) license.
+This chapter is a condensed version of the both 'Basic' and 'Boosted' Bare Bones Bash courses that can be found in the [Bare Bones Bash website](https://barebonesbash.github.io/#/).
+The material is displayed here under a [CC-BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/) license.
 
 ![Logo of BareBonesBash, a computer monitor with a command prompt dollar symbol, BBB and a bone on the screen.](assets/images/chapters/bare-bones-bash/BareBonesBash_Icon.png){width=15% fig-align="center"}
 
@@ -78,10 +79,13 @@ consider following the full Bare Bones Bash walkthroughs [here](https://barebone
 ## Introduction
 
 The aim of this tutorial is to make you familiar with using bash everyday... 
-for the rest of your life! More specifically, we want 
-to do this in the context of bioinformatics. We will start with how to navigate 
+for the rest of your life!
+More specifically, we want 
+to do this in the context of bioinformatics.
+We will start with how to navigate 
 around a filesystem in the terminal, download sequencing files, and then to
-manipulate these. Within these sections we will also show you simple tips and
+manipulate these.
+Within these sections we will also show you simple tips and
 tricks to make your life generally easier.
 
 This tutorial is designed so you follow along on any machine with a UNIX
@@ -125,43 +129,51 @@ interface of a computer or server (@fig-Command_line_screenshot).
 The command-line itself is how we can work on the computer with just text.
 
 `bash` (**b**ourne **a**gain **sh**ell) is one of the most popular languages
-used in the
-terminal.
+used in the terminal.
 
 ## Understanding the command prompt
 
 ![An example command prompt](assets/images/chapters/bare-bones-bash/Command_line_screenshot.png){#fig-Command_line_screenshot width=100%}
 
 After opening the terminal what we will normally see is a blank screen with a
-'command prompt', like the one shown above. This typically consists of our
+'command prompt', like the one shown above.
+This typically consists of our
 username, the device name, a colon, a directory path and ends with a dollar
-symbol. Like so:
+symbol.
+Like so:
 
 ```bash
 <username>@<device_name>:~$
 ```
 
 The command prompt is **never** involved in any command, it is just there
-to ensure we know who and where we are. When copying a 
+to ensure we know who and where we are.
+When copying a 
 command we should **NOT** copy the command prompt.
 
 Often times, when looking for commands online, the commands ran will be prefaced
-with a `$`. This is a stand-in for the command prompt. When adding multi-line
-commands, it is also common to preface the additional lines with a `>`. When
+with a `$`.
+This is a stand-in for the command prompt.
+When adding multi-line
+commands, it is also common to preface the additional lines with a `>`.
+When
 copying such commands it is therefore important to remove these characters from
 the start of each line (if present).
 
 Finally, in this tutorial, the symbols`<>` are used to show things that
-will/should be replaced by another value. For example, in Thiseas' command
+will/should be replaced by another value.
+For example, in Thiseas' command
 prompt `<username>` will be replaced by `lamnidis`, as that is his username.
 
 Now back to our prompt: It tells us that we are in the directory `~`.
-The directory `~`, stands for our **home** directory. Note that this shorthand 
+The directory `~`, stands for our **home** directory.
+Note that this shorthand 
 will point to a different place, depending on the machine and the user.
 
 If we want to know what the shorthand means, (here comes our first command!)
-we can type in `pwd`, which stands for "**p**rint **w**orking **d**irectory". 
-Our "working directory" is whichever directory we are currently in. 
+we can type in `pwd`, which stands for "**p**rint **w**orking **d**irectory".
+
+Our "working directory" is whichever directory we are currently in.
 
 ```bash
 pwd
@@ -174,7 +186,8 @@ pwd
 ::: {.callout-warning}
 In programming _documentation_, it is very common to use `<ALL_CAPS>` notation to indicate something that doesn't exist, or will vary depending on the user.
 
-Whenever you see such a notation (i.e., triangular brackets and all caps), you must _always_ replace that whole section (including the `<>`) with whatever is on your system! You should never copy and paste this blindly!
+Whenever you see such a notation (i.e., triangular brackets and all caps), you must _always_ replace that whole section (including the `<>`) with whatever is on your system!
+You should never copy and paste this blindly!
 :::
 
 This prints the entire "filepath" of the directory i.e. the route from the
@@ -193,23 +206,30 @@ You'll learn about this commands in a bit!
 
 ## Absolute vs Relative paths
 
-Filepaths (a.k.a. "paths"), come in two flavours. Let's talk a bit about them!
+Filepaths (a.k.a. "paths"), come in two flavours.
+Let's talk a bit about them!
 
 * An **absolute** path will start with the deepest directory in the machine
-  shown as a `/`. Paths starting with `~` are also absolute paths, since `~` 
-  translates to an absolute path of our specific home directory. That is the 
+  shown as a `/`.
+  Paths starting with `~` are also absolute paths, since `~` 
+  translates to an absolute path of our specific home directory.
+  That is the 
   directory path we see in the output of the `pwd` command we just ran.
 * Alternatively a **relative** path always begins from our working directory
-  (i.e.   our current directory). Often this type of path will begin with one
-  (`./`) or two (`../`) dots followed by a forward slash, **but not always**. In
+  (i.e.   our current directory).
+  Often this type of path will begin with one
+  (`./`) or two (`../`) dots followed by a forward slash, **but not always**.
+  In
   the syntax of relative pathways `.` means "the current directory" and `..` 
-  means "the parent directory" (or the 'one above'). 
+  means "the parent directory" (or the 'one above').
 
 ### A real life analogy for paths
 
 We have just arrived to Leipzig for a summer school that is taking place at
-MPI-EVA. After some questionable navigation, we find ourselves at the Bayerische
-Bahnhof. Tired and disheartened, we decide to ask for help.
+MPI-EVA.
+After some questionable navigation, we find ourselves at the Bayerische
+Bahnhof.
+Tired and disheartened, we decide to ask for help.
 
 We see a friendly-looking metalhead (@fig-bbb_james), and decide to ask them for directions!
 
@@ -239,11 +259,13 @@ Lucky for us, a friendly looking local is passing by (@fig-bbb_aida)!
 
 ![A friendly-looking local.](assets/images/chapters/bare-bones-bash/bbb_aida.png){#fig-bbb_aida width=20% fig-align="center"}
 
-> You're currently on Str. des 18 Oktober. Walk straight that way, past the tram tracks, and you will find Deutscher Platz. You will see MPI-EVA to your right!
+> You're currently on Str. des 18 Oktober. Walk straight that way, past the tram tracks, and you will find Deutscher Platz.
+You will see MPI-EVA to your right!
 
 :::{.callout-tip}
 ## Relative paths
-These directions are equivalent to a relative path! They are easy to follow, but only work when we happen to start at the position we were in when we first got the directions!
+These directions are equivalent to a relative path!
+They are easy to follow, but only work when we happen to start at the position we were in when we first got the directions!
 
 Examples of relative paths:  
 `./<PATH>/<TO>/my_file.txt`  
@@ -334,15 +356,16 @@ wc -l Boosted-BBB-meta.tsv
 ## Datastreams, piping, and redirects
 
 Each of the commands we learned above is a small program with a very
-specialised functionality. Programs come in many forms and can be written
+specialised functionality.
+Programs come in many forms and can be written
 in various programming languages, but most of them share some features.
 Specifically, most programs take some data in and spit some data out!
 Here's how that works, conceptually:
 
 ### Datastreams
 
-Computer programs can take in and spit out data from different _streams_ (@fig-Datastreams). By
-default there are 3 such data streams.
+Computer programs can take in and spit out data from different _streams_ (@fig-Datastreams).
+By default there are 3 such data streams.
 
 - `stdin` : the **st**an**d**ard **in**put
 - `stdout`: the **st**an**d**ard **out**put
@@ -353,14 +376,17 @@ default there are 3 such data streams.
 :::{.callout-tip}
 ## Pro Tip
 Each programme also has an 'exit code', which can tell you if execution
-completed with/without errors. You will rarely see these in the wild.
+completed with/without errors.
+You will rarely see these in the wild.
 :::
 
 Typically, the `stdin` is where the input data comes in.  
-The `stdout` is the actual output of the command. In some cases this gets
+The `stdout` is the actual output of the command.
+In some cases this gets
 printed to the screen, but most often this is the information that needs to be
 saved in an output file.  
-The `stderr` is the datastream where errors and warnings go. This gets printed
+The `stderr` is the datastream where errors and warnings go.
+This gets printed
 to our terminal to let us know when something is not going according to plan (@fig-Datastream_showcase)!
 
 ![This program (in the form of a bash script executed in the terminal) takes no input, and prints one line to the stdout and one line to the stderr.](assets/images/chapters/bare-bones-bash/Datastream_showcase.png){#fig-Datastream_showcase width=100%}
@@ -368,7 +394,8 @@ to our terminal to let us know when something is not going according to plan (@f
 ### Piping
 
 A "pipe" (`|`) is a really useful feature of `bash` that lets us chain together
-multiple commands! When two commands are chained together with a pipe, the
+multiple commands!
+When two commands are chained together with a pipe, the
 `stdout` of the first command becomes the `stdin` of the second (@fig-Piping)!
 The `stderr` is still printed on our screen, so we can always know when things
 fail.
@@ -385,7 +412,8 @@ netsukeJapan    C       Artwork
 ```
 
 The above command will only show the 10th line of `Boosted-BBB-meta.tsv`.
-The way it works is that `head` will take the first 10 lines of the file. These
+The way it works is that `head` will take the first 10 lines of the file.
+These
 lines are then passed on to `tail` which will keep only the last of those lines.
 
 ### Redirects
@@ -429,7 +457,8 @@ netsukeJapan    C       Artwork
 
 ## Help text
 
-We don't always have to google for documentation! Many programs come with in-built help text,
+We don't always have to google for documentation!
+Many programs come with in-built help text,
 or access to online manuals right from our terminal!
 
 - We can get a __one sentence summary__ of what a tool does with `whatis`
@@ -451,7 +480,8 @@ or access to online manuals right from our terminal!
 
 ## Variables
 
-Variables are a central concept of all programming. In short, a variable
+Variables are a central concept of all programming.
+In short, a variable
 is a named container whose contents we can expand at will or change.
 
 We can assign variables (tell the computer what do we want it to contain)
@@ -465,11 +495,12 @@ echo "This is my home directory: $HOME"
 This is my home directory: /home/ubuntu
 ```
 
-`$HOME` is a variable of the type called **environment variables**, which are set the moment we open our terminal or log into a server, they ensure the system works as intended and should not be change unless we are **very** sure of why. 
+`$HOME` is a variable of the type called **environment variables**, which are set the moment we open our terminal or log into a server, they ensure the system works as intended and should not be change unless we are **very** sure of why.
 
 :::{.callout-warning}
 # Environment Variables
-Environment variables in bash are typically named in all capital letters. It is a good
+Environment variables in bash are typically named in all capital letters.
+It is a good
 idea to avoid using only capital letters for your variable names, so you avoid
 accidentally overwriting any environment variables.
 :::
@@ -486,7 +517,9 @@ echo "Greek food is $GreekFood people who want to know what heaven tastes like."
 Greek food is 4 people who want to know what heaven tastes like.
 ```
 ::: {.callout-note}
-The `#` is used to add comments to your code. Comments are annotations that you write in your code to understand what it is doing but that the computer does not run. Very useful for when your future self or another person looks at your code
+The `#` is used to add comments to your code.
+Comments are annotations that you write in your code to understand what it is doing but that the computer does not run.
+Very useful for when your future self or another person looks at your code
 :::
 
 
@@ -526,7 +559,8 @@ I have been to Greece 7 times already this year, for the food and wine!
 
 ::: {.callout-warning}
 # Overwriting variables
-In these examples we have seen how the same variable has been overwritten, this means that we can only access the last content that we stored in the variable. All the previous contents that a variable may have had are inaccessible as soon as the same variable is given a new value.
+In these examples we have seen how the same variable has been overwritten, this means that we can only access the last content that we stored in the variable.
+All the previous contents that a variable may have had are inaccessible as soon as the same variable is given a new value.
 :::
 
 ## Quotes matter!
@@ -561,13 +595,16 @@ Minions say Banana
 
 **Why does it make a difference in the second example?** 
 
-This is because in the second example we are using a variable. We have assigned `Banana` to the variable `$Arr`. As mentioned above, when single (`'`) quotes are used the computer just prints what it receives without caring that `$Arr` is a variable.
+This is because in the second example we are using a variable.
+We have assigned `Banana` to the variable `$Arr`.
+As mentioned above, when single (`'`) quotes are used the computer just prints what it receives without caring that `$Arr` is a variable.
 
  In the `echo` with the double (`"`) quotes we are telling the computer to extract the value from the variable `$Arr` and that is why we see the store value (`Banana`) in the printed output in the terminal.
 
 ## Find
 
-We can also ask our computer where we have put our files, in case we forgot. To do this we can use `find`! 
+We can also ask our computer where we have put our files, in case we forgot.
+To do this we can use `find`!
 The `find` command has the following syntax:
 
 ```bash
@@ -592,7 +629,7 @@ find /<PATH>/<TO>/ -type f -name 'your_file.txt'
   - Use wildcards (`*`) for maximum laziness!
 
 
-Now let's put into practise what we have learnt about `find`. 
+Now let's put into practise what we have learnt about `find`.
 
 For that we will download a messy folder from a collaborator, remember to check we are in the BareBonesBash folder!:
 
@@ -600,12 +637,15 @@ For that we will download a messy folder from a collaborator, remember to check 
 wget git.io/Boosted-BBB-images -O Boosted-BBB.zip
 ```
 
-We realise that this is a compressed file, and more precisely is a zip file (extension `.zip`). In order to access to its content we will need to "unzip" it first. For that we can use the command **unzip**: 
+We realise that this is a compressed file, and more precisely is a zip file (extension `.zip`).
+In order to access to its content we will need to "unzip" it first.
+For that we can use the command **unzip**: 
 
 ```bash
 unzip Boosted-BBB.zip
 ```
-We know that our collaborator has shared with us some pictures from animals that we need to use for our research, and according to our collaborator they are marked with `JPG`. We first try to check the contents of the directory to find them quickly.
+We know that our collaborator has shared with us some pictures from animals that we need to use for our research, and according to our collaborator they are marked with `JPG`.
+We first try to check the contents of the directory to find them quickly.
 
 ```bash
 ls Boosted-BBB
@@ -616,7 +656,8 @@ Anybody    Everything    Getting    Looking    Ooh      With     Youre
 Dancing    Feel          Having     Night      Watch    You
 ```
 
-Wow, what a mess! How would we retrieve all the files?
+Wow, what a mess!
+How would we retrieve all the files?
 Thanks to our wonderful teachers we have learnt how to use find and can simply run:
 
 ```bash
@@ -640,18 +681,22 @@ Boosted-BBB/Night/is/young/and/the/musics/high/bydgoszczForest.JPG.MP3.TXT
 Boosted-BBB/Ooh/see/that/girl/pompeii.JPG.MP3.TXT
 ```
 
-After `-name` we have written `'*JPG*'`, this tells to `find` to search for any file that contains `JPG` in any part of its name, indicated by the `*`. The `*` are what are known as __wildcards__. To learn more on how to use them, please refer to the more complete material for this [tutorial](https://barebonesbash.github.io/#/).  
+After `-name` we have written `'*JPG*'`, this tells to `find` to search for any file that contains `JPG` in any part of its name, indicated by the `*`.
+The `*` are what are known as __wildcards__.
+To learn more on how to use them, please refer to the more complete material for this [tutorial](https://barebonesbash.github.io/#/).  
 
 Now we have all the paths of the files that we will need!
 
 ## For loops
 
-Until now we have seen how to run single commands on a file. But, what about when
+Until now we have seen how to run single commands on a file.
+But, what about when
 we need to **repeat** a command multiple times on a list of things, for example
 a list of files? 
 
 To repeat an action (command) for a set of things (list, e.g. files) one needs to
-employ the concept of a loop. One of the most commonly used loops, is the **for**
+employ the concept of a loop.
+One of the most commonly used loops, is the **for**
 loop.
 
 A **for** loop allows us to go through a list of things and perform some actions.
@@ -670,7 +715,8 @@ Does Spain have lovely food? Yes
 Does Britain have lovely food? Yes
 ```
 
-The for loop went through the list `Greece Spain Britain` and printed a statement with each item in the list. What happens if we change the order of the list to `Britain Greece Spain`?
+The for loop went through the list `Greece Spain Britain` and printed a statement with each item in the list.
+What happens if we change the order of the list to `Britain Greece Spain`?
 
 ```bash
 Variable=Yes
@@ -684,7 +730,7 @@ Does Britain have lovely food? Yes
 Does Greece have lovely food? Yes
 Does Spain have lovely food? Yes
 ```
-We see that changing the order of the list will affect the output, this is because the **for** loop will go through the list in a sequential manner. 
+We see that changing the order of the list will affect the output, this is because the **for** loop will go through the list in a sequential manner.
 
 We can also add more elements to the list, and the **for** loop will continue until it reaches the end of the list.
 
@@ -692,7 +738,7 @@ We can also add more elements to the list, and the **for** loop will continue un
 
 One of the most important skills we develop when coding and/or using the
 command line is __how to phrase our questions__ so we can get relevant
-answers out of our search engine. 
+answers out of our search engine.
 
 As Deep Thought put it in the Hitchhiker's Guide to the Galaxy:
 
@@ -728,15 +774,19 @@ you know what you are talking about.
 ## (Optional) clean-up
 
 It is extremely important to ALWAYS keep our directories clean from random
-clutter. This lowers the chances we will get lost in our  directories, but
+clutter.
+This lowers the chances we will get lost in our  directories, but
 also ensures we can stay lazy, since <kbd>tab</kbd> completion will not keep finding
-similarly named files. So let's clean up our working directory by removing all
-the clutter we downloaded and worked with today. The command below will remove
+similarly named files.
+So let's clean up our working directory by removing all
+the clutter we downloaded and worked with today.
+The command below will remove
 the `/<PATH>/<TO>/BareBonesBash` directory **as well as all of its contents**.
 
 :::{.callout-tip}
 ## Pro Tip
-Always be VERY careful when using `rm -r`. Check 3x that the path we are
+Always be VERY careful when using `rm -r`.
+Check 3x that the path we are
 specifying is exactly what we want to delete and nothing more before pressing
 ENTER!
 :::
