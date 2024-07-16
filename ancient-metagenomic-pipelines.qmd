@@ -50,7 +50,7 @@ Other examples of other ancient DNA genomic pipelines include **Paleomix** [[htt
 ## Workflow managers
 
 All the pipelines introduced in this chapter utilise _workflow managers_.
-These are software that allows users to 'chain' together the inputs and outputs distinct 'atomic' steps of a bioinformatics analysis - e.g. separate terminal commands of different bioinformatic tools, so that 'we don't have to'.
+These are software that allows users to 'chain' together the inputs and outputs distinct 'atomic' steps of a bioinformatics analysis - e.g., separate terminal commands of different bioinformatic tools, so that 'we don't have to'.
 we have already seen very basic workflows or 'pipelines' when using the bash 'pipe' (`|`) in the [Introduction to the Command Line](bare-bones-bash.qmd) chapter, where the each row of text the output of one command was 'streamed' into the next command.
 
 However in the case of bioinformatics, we are often dealing with non-row based text files, meaning that 'classic' command line pipelines don't really work.
@@ -66,9 +66,7 @@ However this needs to be able to be **Scalable** that it the workflow is still e
 Finally, as workflows get bigger and longer, **re-entrancy** has become more important, i.e., the ability to re-start a pipeline run that got stuck halfway through due to an error.
 
 
-All workflow managers have different ways of implementing the concepts above, and these can be very simple (e.g.
-**Makefiles**, [https://en.wikipedia.org/wiki/Make_(software)](https://en.wikipedia.org/wiki/Make_(software)))) to very powerful and abstract (e.g.
-**Workflow Description Language**, [https://github.com/openwdl/wdl](https://github.com/openwdl/wdl)).
+All workflow managers have different ways of implementing the concepts above, and these can be very simple (e.g.,  **Makefiles**, [https://en.wikipedia.org/wiki/Make_(software)](https://en.wikipedia.org/wiki/Make_(software)))) to very powerful and abstract (e.g. **Workflow Description Language**, [https://github.com/openwdl/wdl](https://github.com/openwdl/wdl)).
 In this chapter we will use pipelines that use two popular workflow managers in bioinformatics, **Nextflow** ([https://nextflow.io](https://nextflow.io)) and **Snakemake** ([https://snakemake.github.io](https://snakemake.github.io)).
 
 This chapter will not cover how to write our _own_ workflow, as this would require a whole other textbook.
@@ -80,9 +78,7 @@ If you're interested in writing our own workflows using workflow managers, many 
 
 nf-core/eager is a computational pipeline specifically designed for preprocessing and analysis of ancient DNA data ([@fig-ancientmetagenomicpipelines-eagermetromap]).
 It is a reimplementation of the previously published EAGER (Efficient Ancient Genome Reconstruction) pipeline [@Peltzer2016-ov] written in the workflow manager Nextflow.
-In addition to reimplementing the original genome mapping and variant calling pipeline, in a more reproducible and portable manner the pipeline also included additional new functionality particularly for researchers interested in microbial sciences, namely a dedicated genotyper and consensus caller designed for low coverage genomes, the ability to get breadth and depth coverage statistics for particular genomic features (e.g.
-virulence genes), but also automated metagenomic screening and authentication of the off-target reads from mapping (e.g.
-against the host reference genome).
+In addition to reimplementing the original genome mapping and variant calling pipeline, in a more reproducible and portable manner the pipeline also included additional new functionality particularly for researchers interested in microbial sciences, namely a dedicated genotyper and consensus caller designed for low coverage genomes, the ability to get breadth and depth coverage statistics for particular genomic features (e.g. virulence genes), but also automated metagenomic screening and authentication of the off-target reads from mapping (e.g. against the host reference genome).
 
 ![nf-core/eager workflow summary in the form of a 'metro map' style diagram.
 FASTQ or BAM input for red and yellow lines (representing eukaryotic and prokaryotic workflows) goes through FastQC, Adapter Removal, alignment to a reference FASTA input with a range of alignments, before going through BAM filtering, deduplication, _in silico_ damage removal, and variant calling.
@@ -120,8 +116,7 @@ Our aims in the following tutorial are to:
 pestis_ reference and compute the endogenous DNA percentage
 3. Filter the aligned reads to remove host DNA
 4. Remove duplicate reads for accurate coverage estimation and genotyping
-5. Generate statistics on gene features (e.g.
-virulence factors)
+5. Generate statistics on gene features (e.g. virulence factors)
 6. Merge data by sample and perform genotyping on the combined dataset
 7. Review quality control data to evaluate the success of the previous steps
 
@@ -259,10 +254,8 @@ Specify which computing and software environment to use with `-profile`
 Provide the various paths to the input files (TSV with paths to FASTQ files, a reference fasta, and the reference fasta's annotations)
 4.
 Activate the various of the steps of the pipeline we're interested in
-    - We turn off preseq (e.g.
-when we know we can't sequence more) 
-    - We want to turn on BAM filtering, and specify to generate unmapped reads in FASTQ file (so we could check off target reads e.g.
-for other pathogens)
+    - We turn off preseq (e.g. when we know we can't sequence more) 
+    - We want to turn on BAM filtering, and specify to generate unmapped reads in FASTQ file (so we could check off target reads e.g. for other pathogens)
     - we turn on genotyping using GATK UnifiedGenotyper (preferred over HaplotypeCaller due to in compatibility with that method to low-coverage data)
     - We turn on variant statistics (from GATK) using bcftools, and coverage statistics of gene features using bedtools
 
@@ -278,19 +271,18 @@ To reattach `screen -r eager`
 
 Specifically for ancient (meta)genomic data, the following parameters and options may be useful to consider when running our own data:
 
-- `--mapper circularmapper`:
+- `--mapper circularmapper`
   - This aligner is a variant of `bwa aln` that allows even mapping across the end of linear references of circular genomes
   - Allows reads spanning the start/end of the sequence to be correctly placed, and this provides better coverage estimates across the entire genome
 - `--hostremoval_input_fastq`:
   - Allows re-generation of input FASTQ files but with any reads aligned to the reference genome removed
   - Can be useful when dealing with modern or ancient data where there are ethical restrictions on the publication of host DNA
   - The output can be used as 'raw data' upload to public data repositories
-- `--run_bam_filtering --bam_unmapped_type`:
+- `--run_bam_filtering --bam_unmapped_type`
   - A pre-requisite for performing the metagenomic analysis steps of nf-core/eager
   - Generates FASTQ files off the unmapped reads present in the reference mapping BAM file
 - `--run_bedtools_coverage --anno_file /<path>/<to>/<genefeature>.bed`
-  - Turns on calculating depth/breadth of annotations in the provided bed or GFF file, useful for generating e.g.
-virulence gene presence/absence plots
+  - Turns on calculating depth/breadth of annotations in the provided bed or GFF file, useful for generating e.g. virulence gene presence/absence plots
 - `--run_genotyping --genotyping_tool ug --gatk_ug_out_mode EMIT_ALL_SITES` 
   - Turns on genotyping with GATK UnifiedGenotyper
   - A pre-requisite for running MultiVCFAnalyzer for consensus sequencing creation
@@ -299,36 +291,32 @@ virulence gene presence/absence plots
 - `--run_multivcfanalyzer --write_allele_frequencies`
   - Turns on SNP table and FASTA consensus sequence generation with MultiVCFAnalyzer (see pre-requisites above)
   - By providing `--write_allele_frequencies`, the SNP table will also provide the percentage of reads at that position supporting the call.
-This can help we evaluate the level of cross-mapping from related (e.g.
-contaminating environmental) species and may question the reliability of any resulting downstream analyses.
+This can help we evaluate the level of cross-mapping from related (e.g. contaminating environmental) species and may question the reliability of any resulting downstream analyses.
 - `--metagenomic_complexity_filtering`
-  - An additional preprocessing step of raw reads before going into metagenomic screening to remove low-complexity reads (e.g.
-mono- or di-nucleotide repeats)
+  - An additional preprocessing step of raw reads before going into metagenomic screening to remove low-complexity reads (e.g. mono- or di-nucleotide repeats)
   - Removing these will speed up and lower computational requirements during classification, and will not bias profiles as these sequences provide no taxon-specific information (i.e., can be aligned against thousands to millions of genomes)
 - `--run_metagenomic_screening`
   - Turns on metagenomic screening with either MALT or Kraken2
-  - If running with MALT, can supply `--run_maltextract` to get authentication statistics and plots (damage, read lengths etc.) for evaluation.
+  - If running with MALT, can supply `--run_maltextract` to get authentication statistics and plots (damage, read lengths etc.) for evaluation
 
 ### Top Tips for nf-core/eager success
 
 1. Screen sessions
 
-    Depending on the size of our input data, infrastructure, and analyses, running nf-core/eager can take hours or even days (e.g.
-the example command above will likely take around 20 minutes!).
-To avoid crashes due to loss of power or network connectivity, try running nf-core/eager in a `screen` or `tmux` session:
+    Depending on the size of our input data, infrastructure, and analyses, running nf-core/eager can take hours or even days (e.g. the example command above will likely take around 20 minutes!).
+  
+    To avoid crashes due to loss of power or network connectivity, try running nf-core/eager in a `screen` or `tmux` session:
 
-    ```bash
-#| eval: false
-    screen -R eager
-    ```
+        ```bash
+    #| eval: false
+        screen -R eager
+        ```
 
 2. Multiple ways to supply input data
 
     In this tutorial, a tsv file to specify our input data files and formats.
-This is a powerful approach that allows nf-core eager to intelligently apply analyses to certain files only (e.g.
-merging for paired-end but not single-end libraries).
-However inputs can also be specified using wildcards, which can be useful for fast analyses with simple input data types (e.g.
-same sequencing configuration, file location, etc.).
+This is a powerful approach that allows nf-core eager to intelligently apply analyses to certain files only (e.g. merging for paired-end but not single-end libraries).
+However inputs can also be specified using wildcards, which can be useful for fast analyses with simple input data types (e.g. same sequencing configuration, file location, etc.).
 
     See the online nf-core/eager documentation ([https://nf-co.re/eager/usage](https://nf-co.re/eager/usage)) for more details.
 
@@ -376,18 +364,15 @@ Everyday useful files for ancient (microbial) (meta)genomics typically are in fo
   - `merged_bams/` 
     - This directory will contain BAMs where multiple libraries of one sample have been merged into one final BAM file, when these have been supplied
 - `damage_rescaling/` or `trimmed bam/`
-  - These contain the output BAM files from _in silico_ damage removal, if we have turned on e.g.
-BAM trimming or damage rescaling
+  - These contain the output BAM files from _in silico_ damage removal, if we have turned on e.g. BAM trimming or damage rescaling
   - If we have multiple libraries of one sample, the final BAMs we want will be in `merged_bams/`
 - `genotyping/`
-  - This directory will contain our final VCF files from the genotyping step, e.g.
-from the GATK or freeBayes tools
+  - This directory will contain our final VCF files from the genotyping step, e.g. from the GATK or freeBayes tools
 - `MultiVCFAnalyzer/`
   - This will contain consensus sequences and SNP tables from `MultiVCFAnalyzer`, which also allows generation of 'multi-allelic' SNP position statistics (useful for the evaluation of cross-mapping from contaminants or relatives)
 - `bedtools/`
   - This directory will contain the depth and breadth statistics of genomic features if a `gff` or `bed` file has been provided to the pipeline
-  - The files can be used to generate gene heatmaps, that can be used to visualise a comparative presence/absence of virulence factor across genomes (e.g.
-for microbial pathogens)
+  - The files can be used to generate gene heatmaps, that can be used to visualise a comparative presence/absence of virulence factor across genomes (e.g. for microbial pathogens)
 - `metagenomic_classification` or `malt_extract`
   - This directory contains the output RMA6 files from MALT, the profiles and taxon count tables from Kraken2, or the aDNA authentication output statistics from maltExtract.
 
@@ -409,8 +394,7 @@ If we're impatient, and our nf-core/eager run hasn't finished yet, we can cancel
 :::
 
 In here we should see a bunch of files, but we should open the `multiqc_report.html` file in our browser.
-we can either do this via the command-line (e.g.
-for firefox `firefox multiqc_report.html`) or navigate to the file using our file browser and double clicking on the HTML file.
+we can either do this via the command-line (e.g. for firefox `firefox multiqc_report.html`) or navigate to the file using our file browser and double clicking on the HTML file.
 
 Once opened we will see a table, and below it many figures and other tables ([@fig-ancientmetagenomicpipelines-multiqcscreenshot]).
 All of these statistics can help we evaluate the quality of our data, pipeline run, and also possibly some initial results! 
@@ -422,16 +406,13 @@ Input reads, length of input reads, %trimmed, etc.
 Each numeric column contains a coloured bar chart to help readers to quickly evaluate the number of a given sample against all others in the table](assets/images/chapters/ancient-metagenomic-pipelines/multiqc-screenshot.png){#fig-ancientmetagenomicpipelines-multiqcscreenshot}
 
 Typically we will look at the General Statistics table to get a rough overview of the pipeline run.
-If we hover our cursor over the column headers, we can see which tool the column's numbers came from, however generally the columns go in order of left to right, where the left most columns are from earlier in the pipeline run (e.g.
-removing adapters), to variant calling statistics (e.g.
-number of variants called).
+If we hover our cursor over the column headers, we can see which tool the column's numbers came from, however generally the columns go in order of left to right, where the left most columns are from earlier in the pipeline run (e.g. removing adapters), to variant calling statistics (e.g. number of variants called).
 we can also configure which columns to display using the `Configure columns` button.
 It's important to note that in MultiQC tables, we may have duplicate rows from the same library or sample.
 This is due to MultiQC trying to squish in as many statistics from as many steps of the pipeline as possible (for example, statistics on each of a pair of FASTQ files, and then statistics on the single merged and mapped BAM file), so we should play around with the column configuration to help we visualise the best way to initially evaluate our data.
 
-The bulk of the MultiQC report is made up of per-tool summary plots (e.g., barcharts, linecharts etc).
-Most of these will be interactive, i.e.
-we can hover over lines and bars to get more specific numbers of each plot.
+The bulk of the MultiQC report is made up of per-tool summary plots (e.g., barcharts, linecharts etc.).
+Most of these will be interactive, we can hover over lines and bars to get more specific numbers of each plot.
 However the visualisations are aimed at helping we identify possible outliers that may represent failed samples or libraries.
 
 Evaluating how good the data is and how well the run went will vary depending on the dataset and the options selected.
@@ -449,9 +430,7 @@ However they can act as a good framework for thinking critically about our own r
 - Do we see the expected number of raw sequencing reads (summed across each set of FASTQ files per library) that was requested for sequencing?
 - Does the percentage of trimmed reads look normal for aDNA, and do lengths after trimming look short as expected of aDNA?
 - Does the Endogenous DNA (%) columns look reasonable (high enough to indicate we have received enough coverage for downstream, and/or do we lose an unusually high reads after filtering )
-- Does ClusterFactor or '% Dups' look high (e.g.
->2 or >10% respectively -  high values suggesting over-amplified or badly preserved samples i.e.
-low complexity; note that genome-enrichment libraries may by their nature look higher).
+- Does ClusterFactor or '% Dups' look high (e.g. >2 or >10% respectively -  high values suggesting over-amplified or badly preserved samples i.e. low complexity; note that genome-enrichment libraries may by their nature look higher)
 - Do we see an increased frequency of C>Ts on the 5' end of molecules in the mapped reads?
 - Do median read lengths look relatively low (normally <= 100 bp) indicating typically fragmented aDNA?
 - Does the % coverage decrease relatively gradually at each depth coverage, and does not drop extremely drastically
@@ -475,8 +454,7 @@ low complexity; note that genome-enrichment libraries may by their nature look h
 
 **Samtools Flagstat (pre/post Filter)**
 
-- Do we see outliers, e.g.
-with unusually low levels of mapped reads, (indicative of badly preserved samples) that require downstream closer assessment?
+- Do we see outliers, e.g. with unusually low levels of mapped reads, (indicative of badly preserved samples) that require downstream closer assessment?
 
 **DeDup/Picard MarkDuplicates**
 
@@ -487,22 +465,20 @@ with unusually low levels of mapped reads, (indicative of badly preserved sample
 - Do we have a reasonable level of mappability?
   - Somewhere between 10-30% can be pretty normal for aDNA, whereas e.g. <1% requires careful manual assessment
 - Do we have a reasonable taxonomic assignment success?
-  - we hope to have a large number of the mapped reads (from the mappability plot) that also have taxonomic assignment.
+  - we hope to have a large number of the mapped reads (from the mappability plot) that also have taxonomic assignment
 
 **PreSeq (genomics only)**
 
-- Do we see a large drop off of a sample's curve away from the theoretical complexity? If so, this may indicate it's not worth performing deeper sequencing as we will get few unique reads (vs.
-duplicates that are not any more informative than the reads you've already sequenced)
+- Do we see a large drop off of a sample's curve away from the theoretical complexity? If so, this may indicate it's not worth performing deeper sequencing as we will get few unique reads (vs. duplicates that are not any more informative than the reads you've already sequenced)
 
 **DamageProfiler (genomics only)**
 
 - Do we see evidence of damage on the microbial DNA (i.e.
-a % C>T of more than ~5% in the first few nucleotide positions?) ? If not, possibly our mapped reads are deriving from modern contamination.
+a % C>T of more than ~5% in the first few nucleotide positions?) ? If not, possibly our mapped reads are deriving from modern contamination
 
 **QualiMap (genomics only)**
 
-- Do we see a peak of coverage (X) at a good level, e.g.
->= 3x, indicating sufficient coverage for reliable SNP calls?
+- Do we see a peak of coverage (X) at a good level, e.g. >= 3x, indicating sufficient coverage for reliable SNP calls?
 
 **MultiVCFAnalyzer (genomics only)**
 
@@ -669,8 +645,7 @@ OK now aMeta is all set up, we can now simulate running a 'real' pipeline job!
 
 First, we will need to configure the workflow.
 First, we need to create a tab-delimited `samples.tsv` file inside `aMeta/config/` and provide the names of the input fastq-files.
-In a text editor (e.g.
-`nano`), write the following names paths in TSV format.
+In a text editor (e.g. `nano`), write the following names paths in TSV format.
 
 ```bash
 #| eval: false
@@ -780,13 +755,13 @@ Scores from 0 to 4 (blue color in the heatmap) typically mean that we have very 
 
 To visually examine the seven quality metrics
 
-- deamination profile,
-- evenness of coverage,
-- edit distance (amount of mismatches) for all reads,
-- edit distance (amount of mismatches) for damaged reads,
-- read length distribution,
-- PMD scores distribution,
-- number of assigned reads (depth of coverage),
+- Deamination profile
+- Evenness of coverage
+- Edit distance (amount of mismatches) for all reads
+- Edit distance (amount of mismatches) for damaged reads
+- Read length distribution
+- PMD scores distribution
+- Number of assigned reads (depth of coverage)
 
 Corresponding to the numbers and colors of the heatmap, one can find them in `results/AUTHENTICATION/sampleID/taxID/authentic_<Sample>_<sampleID>.trimmed.rma6_<TaxID>_<taxID>.pdf` for each sample sampleID and each authenticated microbe taxID.
 An example of such quality metrics is shown below in @fig-ancientmetagenomicpipelines-persampleplot.
@@ -908,9 +883,7 @@ Most nf-core pipelines will actually download reference databases, build referen
 These download and reference building steps are often very time consuming, so it's recommended that once we've let the database download it once, we should move the files somewhere safe and we can re-use in subsequent pipeline runs.
 :::
 
-6 . Skip a few steps that are either 'nice to have' (e.g.
-read taxonomic classification), or require large computational resources (e.g.
-`metaSPAdes`, `CONCOCT` or `BUSCO`)
+6 . Skip a few steps that are either 'nice to have' (e.g. read taxonomic classification), or require large computational resources (e.g.`metaSPAdes`, `CONCOCT` or `BUSCO`)
 
 :::{.callout-note title="Information on skipped tests" collapse="true"}
 The steps we are skipping are: host/arefact removal (`Bowtie2` removal of phiX), taxonomic classification of reads (`centrifuge`, `kraken2`, `krona`), the additional assemblers (`metaSPAdes` and `SPAdeshybrid`, as these require very large computational resources), additional binners (`MaxBin2` and `CONCOCT`, while they are used in the _de novo_ assembly chapter, they take a long time to run), ship raw contig annotation (with `Prodigal`, as we do this at the bin level), and contig taxonomic classification (with `GTDB` and `BUSCO` as they require very large databases).
@@ -1018,11 +991,10 @@ As with nf-core/eager, we will have a results directory containing many folders 
 Relevant directories for evaluting our assemblies are as follows:
 
 - `QC_shortreads/`
-  - Contains various folders from the sequencing QC and raw read processing (e.g., FastQC, fastp/AdapterRemoval, host-removal results etc)
+  - Contains various folders from the sequencing QC and raw read processing (e.g., FastQC, fastp/AdapterRemoval, host-removal results etc.)
 - `Taxonomy/`
   - If we have not already performed taxonomic classification of our reads, the output of the Kraken2 or Centrifuge integrated steps of nf-core/mag will be deposited here, including an optional Krona piechart
-  - If activated, the contig-level taxonomic assignments will be deposited here (e.g.
-from CAT or GTDB)
+  - If activated, the contig-level taxonomic assignments will be deposited here (e.g., from CAT or GTDB)
 - `Assembly/`
   - This directory will contain one directory per chosen assembler which will contain per-sample output files for each assembly.
   - Within each of the assembler sub directories, a QC folder will contain the QUAST output
@@ -1073,8 +1045,7 @@ ENTER!
 rm -rf /<PATH>/<TO>/ancient-metagenomic-pipelines*
 ```
 
-Once deleted we can move elsewhere (e.g.
-`cd ~`).
+Once deleted we can move elsewhere (e.g., `cd ~`).
 
 We can also get out of the `conda` environment with
 
