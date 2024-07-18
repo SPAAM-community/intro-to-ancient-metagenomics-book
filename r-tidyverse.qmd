@@ -825,21 +825,19 @@ mtcars2 %>%
 
 ### Types of joins
 
-Joins combine two datasets x and y based on overlapping key columns.
+Joins combine two datasets x and y based on overlapping key columns. We can generally distinguish two kinds of joins:
 
-Mutating joins add columns from one dataset to the other:
+1. Mutating joins add columns and rows of x and y:
 
-  - Left join: Take observations from x and add fitting information from y.
-  - Right join: Take observations from y and add fitting information from x.
-  - Inner join: Join the overlapping observations from x and y.
-  - Full join: Join all observations from x and y, even if information is missing.
+    - **Left join**: Take observations from x and add fitting information from y.
+    - **Right join**: Take observations from y and add fitting information from x.
+    - **Inner join**: Join the overlapping observations from x and y.
+    - **Full join**: Join all observations from x and y, even if information is missing.
 
-Filtering joins remove observations from x based on their presence in y.
+2. Filtering joins remove observations from x based on their presence in y.
 
-Types of filtering consist of: 
-
-  - Semi join: Keep every observation in x that is in y.
-  - Anti join: Keep every observation in x that is not in y.
+    - **Semi join**: Keep every observation in x that is in y.
+    - **Anti join**: Keep every observation in x that is not in y.
 
 The following sections will introduce each join with an example.
 
@@ -859,13 +857,13 @@ bills
 
 Take observations from x and add fitting information from y (@fig-rtidyverse-leftjoin).
 
-![Graphical representation of left join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have columns A B C D. As A and B have a one to one match of values, this remains the same in the joined table. The B column between the two have a different value on the third row, and thus is lost from the second table, retaining row 3 of the first table. Column D (from the second table) has an empty value on row three, as this row was not in row 3 of the second table that column D was derived from.](assets/images/chapters/r-tidyverse/left_join.png){height=150px #fig-rtidyverse-leftjoin} 
+![Graphical representation of a left join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to include the columns A B C D. As A and B have a one to one match of values, this remains the same in the joined table. The B column between the two have a different value on the third row, and thus is lost from the second table, retaining row three of the first table. Column D (from the second table) has an empty value on row three, as this row was not in row three of the second table.](assets/images/chapters/r-tidyverse/left_join.png){height=150px #fig-rtidyverse-leftjoin} 
 
 ```{r}
 dplyr::left_join(
-    x = peng, # 300 observations
+    x = peng,  # 300 observations
     y = bills, # 300 observations
-    by = "id" # the key column by which to join
+    by = "id"  # the key column by which to join
 )
 ```
 
@@ -875,15 +873,16 @@ Left joins are the most common join operation: Add information from y to the mai
 
 Take observations from y and add fitting information from x (@fig-rtidyverse-rightjoin).
 
-![Graphical representation of right join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have columns A B C D. As A and B have a one to one match of values, this remains the same in the joined table. The B column between the two have a different value on the third row, and thus is lost from the first table, retaining row 3 of the second table. Column C (from the first table) has an empty value on row three, as this row was not in row 3 of the first table that column C was derived from.](assets/images/chapters/r-tidyverse/right_join.png){height=150px #fig-rtidyverse-rightjoin} 
+![Graphical representation of a right join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have columns A B C D. As A and B have a one to one match of values, this remains the same in the joined table. The B column between the two have a different value on the third row, and thus is lost from the first table, retaining row three of the second table. Column C (from the first table) has an empty value on row three, as this row was not in row three of the first table.](assets/images/chapters/r-tidyverse/right_join.png){height=150px #fig-rtidyverse-rightjoin} 
 
 ```{r}
 dplyr::right_join(
-    x = peng, # 300 observations
+    x = peng,  # 300 observations
     y = bills, # 300 observations
     by = "id"
-) %>% # we arrange by id to highlight the missing
-    dplyr::arrange(id) # observation in the peng dataset
+) %>% 
+  # we arrange by id to highlight the missing observation in the peng dataset
+  dplyr::arrange(id)
 ```
 
 Right joins are almost identical to left joins -- only x and y have reversed roles.
@@ -892,23 +891,23 @@ Right joins are almost identical to left joins -- only x and y have reversed rol
 
 Join the overlapping observations from x and y (@fig-rtidyverse-innerjoin).
 
-![Graphical representation of inner join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have columns A B C D. Only rows from both table that have exact matches on columns A and B are retained. The third rows from both tables that had a different value in column B are lost.](assets/images/chapters/r-tidyverse/inner_join.png){height=150px #fig-rtidyverse-innerjoin} 
+![Graphical representation of an inner join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have columns A B C D. Only rows from both tables that have exact matches on columns A and B are retained. The third rows from both tables that had a different value in column B are lost.](assets/images/chapters/r-tidyverse/inner_join.png){height=150px #fig-rtidyverse-innerjoin} 
 
 ```{r}
 dplyr::inner_join(
-    x = peng, # 300 observations
+    x = peng,  # 300 observations
     y = bills, # 300 observations
     by = "id"
 )
 ```
 
-Inner joins are a fast and easy way to check, to which degree two dataset overlap.
+Inner joins are a fast and easy way to check to which degree two dataset overlap.
 
 ### Full join with `full_join`
 
 Join all observations from x and y, even if information is missing (@fig-rtidyverse-fulljoin).
 
-![Graphical representation of full join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have columns A B C D. All rows from both tables are retained, even though they do not share the same value on column B on both tables. The missing values for the two third rows (i.e., column C from the second table, and column D from the first table) are are filled with an empty cell indicated with `-`.](assets/images/chapters/r-tidyverse/full_join.png){height=170px #fig-rtidyverse-fulljoin}
+![Graphical representation of a full join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have columns A B C D. All rows from both tables are retained, even though they do not share the same value in column B on both tables. The missing values for the two third rows (i.e., column C from the second table, and column D from the first table) are are filled with an empty cell.](assets/images/chapters/r-tidyverse/full_join.png){height=190px #fig-rtidyverse-fulljoin}
 
 ```{r}
 dplyr::full_join(
@@ -924,7 +923,7 @@ Full joins allow to preserve every bit of information.
 
 Keep every observation in x that is in y (@fig-rtidyverse-semijoin).
 
-![Graphical representation of semi join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have only columns A B C. Only columns A B and C are retained in the joined table. Row three of both tables are not included as the column values in columns A and B do not match.](assets/images/chapters/r-tidyverse/semi_join.png){height=150px #fig-rtidyverse-semijoin} 
+![Graphical representation of a semi join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have only the columns A B C. Only columns A B and C are retained in the joined table. Row three of both tables are not included as the values in columns A and B do not match.](assets/images/chapters/r-tidyverse/semi_join.png){height=150px #fig-rtidyverse-semijoin} 
 
 ```{r}
 dplyr::semi_join(
@@ -938,9 +937,9 @@ Semi joins are underused (!) operations to filter datasets.
 
 ### Anti join with `anti_join`
 
-Keep every observation in x that is not in y (@fig-rtidyverse-antijoin).
+Keep every observation in x that is **not** in y (@fig-rtidyverse-antijoin).
 
-![Graphical representation of anti join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have only columns A B C, and of that only row 3 of the first table. Only row three is retained from the first table as this is the only unique row present only in the first table.](assets/images/chapters/r-tidyverse/anti_join.png){height=150px #fig-rtidyverse-antijoin} 
+![Graphical representation of an anti join operation. Two tables with a shared first column (A B C, and A B D respectively) are merged together to have only the columns A B C and only row three of the first table. Only row three is retained from the first table as this is the only row uniquely present in the first table.](assets/images/chapters/r-tidyverse/anti_join.png){height=150px #fig-rtidyverse-antijoin} 
 
 
 ```{r}
@@ -964,13 +963,13 @@ gear_opinions <- tibble::tibble(
 )
 ```
 
-1. Add my opinions about gears to the `mtcars` dataset
+1. Add my opinions about gears to the `mtcars` dataset.
 
 ```{r}
 
 ```
 
-2. Remove all cars from the dataset for which I do not have an opinion
+2. Remove all cars from the dataset for which I do not have an opinion.
 
 ```{r}
 
