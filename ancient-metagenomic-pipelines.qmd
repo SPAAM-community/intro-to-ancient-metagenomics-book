@@ -550,12 +550,7 @@ rm -r *
 ## What is aMeta?
 
 ::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
-For this chapter's exercises, if not already performed, we will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the following [`yml` file](https://github.com/NBISweden/aMeta/blob/main/workflow/envs/environment.yaml), and activate the environment.
-
-```bash
-#| eval: false
-conda activate aMeta
-```
+For this chapter's exercises, if not already performed, we will need to create the special aMeta [conda environment](before-you-start.qmd#creating-a-conda-environment) and activate the environment.
 :::
 
 While nf-core/eager is a solid pipeline for microbial genomics, and can also perform metagenomic screening via the integrated HOPS pipeline [@Hubler2019-qw] or `Kraken2` [@Wood2019-mf], in some cases we may wish to have a more accurate and resource efficient pipeline  In this section, we will demonstrate an example of using aMeta, a `Snakemake` workflow proposed by @Pochon2022-hj that aims to minimise resource usage by combining both low-resource requiring k-mer based taxonomic profiling as well as accurate read-alignment ([@fig-ancientmetagenomicpipelines-ametadiagram]).
@@ -577,43 +572,35 @@ In this tutorial we will try running the small test data that comes with aMeta.
 
 aMeta has been written in `Snakemake`, which means running the pipeline has to be installed in a slightly different manner to the `nextflow pull` command that can be used for nf-core/eager.
 
+Make sure you have followed the instructions in the [Before You Start Chapter](/before-you-start.qmd#ancient-metagenomic-pipelines) for cloning the aMeta GitHub repository to the `ancient-metagenomic-pipelines/` directory. Once we have done this, we can make sure we are in the aMeta directory, if not already.
+
 ```bash
 #| eval: false
 cd /<path>/<to>/ancient-metagenomic-pipelines/aMeta
 ```
 
+And activate the dedicated aMeta conda environment.
+
+```bash
+conda activate aMeta
+```
+
 As aMeta also includes tools that normally require very large computational resources that cannot fit on a standard laptop, we will instead try to re-use the internal very small 'fake' data the aMeta developers use to test the pipeline.
 
+:::{.callout-warning}
+The following steps are already performed up for Students in the summer schools as, particularly the `set up conda envs` will take a very long time! 
+
+If you are doing this chapter self-guided, it is critical to perform the following set up steps!
 
 We don't have to worry about trying to understand exactly what the following commands are doing, they will not be important for the rest of the chapter.
 However generally the commands try to pull all the relevant software (via conda), make a fake database and download other required files, and then reconstruct the basic directory and file structure required for running the pipeline.
 
-:::{.callout-warning}
-The next steps, particularly the `set up conda envs` will take a very long time! 
 
-If we are impatient, we can speed this process up by using `mamba` rather than conda.
-
-```bash
-#| eval: false
-## Download installation script and run
-wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
-bash Miniforge3-Linux-x86_64.sh
-
-## When asked: Accept the license
-## When asked: Press 'y' to run conda init
-
-## Turn off base
-conda config --set auto_activate_base false
-
-## Re-add original conda environments to be recognised by mamba
-conda config --append envs_dirs /home/ubuntu/bin/miniconda3/envs/
-```
-:::
-
+:::{.callout-note title="Self-guided: aMeta set up and configuration" collapse=true}
 ```bash
 #| eval: false
 ## Change into ~/.test to set up all the required test resources (Databases etc.)
-cd ~/.test
+cd .test/
 
 ## Set up conda envs
 ## If we can an error about a 'non-default solver backend' the run `conda config --set solver classic` and re-start the command
@@ -626,7 +613,7 @@ source $(dirname $(dirname $CONDA_EXE))/etc/profile.d/conda.sh
 ## Build dummy KrakenUniq database
 env=$(grep krakenuniq .snakemake/conda/*yaml | awk '{print $1}' | sed -e "s/.yaml://g")
 conda activate $env
-krakenuniq-build --db resources/KrakenUniq_DB --kmer-len 21 --minimiser-len 11 --jellyfish-bin $(pwd)/$env/bin/jellyfish
+krakenuniq-build --db resources/KrakenUniq_DB --kmer-len 21 --minimizer-len 11 --jellyfish-bin $(pwd)/$env/bin/jellyfish
 conda deactivate
 
 ## Get Krona taxonomy tax dump
@@ -649,13 +636,11 @@ conda deactivate
 
 touch .initdb
 
-## Run a quick test
-snakemake --use-conda --show-failed-logs --conda-cleanup-pkgs cache -s ../workflow/Snakefile $@ --conda-frontend conda
-
+## Run a quick test and generate the report (you can open this to check it looks like everythin was generated)
+snakemake --use-conda --show-failed-logs --conda-cleanup-pkgs cache -s ../workflow/Snakefile $@ --conda-frontend conda -j 4
 snakemake -s ../workflow/Snakefile --report --report-stylesheet ../workflow/report/custom.css --conda-frontend conda
 
 ## Now we move back into the main repository where we can symlink all the database files back to try running our 'own' test
-
 cd ../
 cd resources/
 ln -s ../.test/resources/* .
@@ -665,16 +650,24 @@ mv samples.tsv samplest.tsv.bkp
 cd ../
 ln -s .test/data/ .
 
-## Again get hte taxonomy tax dump for Krona, but this time for a real run
-env=$(grep krona .snakemake/conda/*yaml | awk '{print $1}' | sed -e "s/.yaml://g" | head -1)
+## Again get the taxonomy tax dump for Krona, but this time for a real run
+env=$(grep krona ../.test/.snakemake/conda/*yaml | awk '{print $1}' | sed -e "s/.yaml://g" | head -1)
 conda activate $env
 cd $env/opt/krona
 ./updateTaxonomy.sh taxonomy
 cd -
 conda deactivate
+
+## And back to the root of the repo for practising aMeta properly!
+cd ../
 ```
 
+Now hopefully we can forget all this, and imagine we are running data though aMeta as you would normally from scratch.
+:::
+
 OK now aMeta is all set up, we can now simulate running a 'real' pipeline job!
+:::
+
 
 ### aMeta configuration
 
@@ -696,8 +689,11 @@ Make sure when copy pasting into our test editor, tabs are not replaced with spa
 Then we need to write a config file.
 This tells aMeta where to find things such as database files and other settings.
 
-These paths and settings go inside a `config.yaml` file inside `aMeta/config/`.
 A minimal example `config.yaml` files can look like this.
+This includes specifying the location the main samplesheet, which points to a TSV file that contains all the FASTQs if the samples we want to analyse, and paths to all the required database files and reference genomes you may need.
+These paths and settings go inside the `config.yaml` file that must be placed inside inside `aMeta/config/`.
+
+Make a configuration file with your text editor of choice (e.g. `nano`).
 
 ```bash
 #| eval: false
@@ -717,25 +713,40 @@ ncbi_db: resources/ncbi
 
 n_unique_kmers: 1000
 n_tax_reads: 200
-
 ```
+
+And make a two column samplesheet file with the following content in a file called `samples.tsv`, also under `configs/`.
+
+```tsv
+sample	fastq
+foo	data/foo.fq.gz
+foo	data/bar.fq.gz
+```
+
+:::{.callout-warning}
+aMeta (v1.0.0) currently only supports single-end or pre-merged- data only!
+:::
+
+Once this config file is generated, we can start the run.
+
 
 :::{.callout-note}
 As this is only a dummy run (due to the large-ish computational resources required for KrakenUniq), we re-use some of the resource files here.
 While this will produce nonsense output, it is used here to demonstrate how we would execute the pipeline.
-
 :::
+
 
 ### Prepare and run aMeta
 
-Make sure we're still in the `aMeta` conda environment, and in the main aMeta directory with the following.
+Make sure we're still in the `aMeta` conda environment, and that we are still in the main aMeta directory with the following.
 
 ```bash
 #| eval: false
-cd /<path/<to>/ancient-metagenomic-pipelines/ameta/aMeta/
+conda activate aMeta
+cd /<path/<to>/ancient-metagenomic-pipelines/aMeta/
 ```
 
-And, finally, we are ready to run aMeta!
+Finally, we are ready to run aMeta, where it will automatically pick up our config and samplesheet file we placed in `config/`!
 
 ```bash 
 #| eval: false

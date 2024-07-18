@@ -228,9 +228,11 @@ For some chapters you may need the following software/and or data manually insta
 - [aMeta](https://github.com/NBISweden/aMeta) (make sure you've already downloaded the data directory as per the [chapter instructions](ancient-metagenomic-pipelines.qmd))
 
     ```bash
-#| eval: false
+    #| eval: false
     cd /<path>/<to>/ancient-metagenomic-pipelines/
     git clone https://github.com/NBISweden/aMeta
     cd aMeta
+    ## We have to patch the environment to use an old version of Snakemake as aMeta is not compatible with the latest version
+    sed -i 's/snakemake-minimal>=5.18/snakemake <=6.3.0/' workflow/envs/environment.yaml
     conda env create -f workflow/envs/environment.yaml
     ```
