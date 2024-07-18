@@ -39,7 +39,7 @@ knitr::opts_chunk$set(attr.output = "style='border: 1px; border-style: solid; ma
 
 ## R, RStudio, the tidyverse and penguins
 
-This chapter introduces the statistical programming environment R and how to use it with the RStudio editor. It is structured as self-study material with examples and little exercises to be completed in one to three hours. A larger exercise at the end pulls the individual units together.
+This chapter introduces the statistical programming environment R and how to use it with the RStudio editor. It is structured as self-study material with examples and little exercises to be completed in one to four hours. A larger exercise at the end pulls the individual units together.
 
 The didactic idea behind this tutorial is to get as fast as possible to tangible, useful output, namely data visualisation. So we will first learn about reading and plotting data, and only later go to some common operations like conditional queries, data structure transformation and joins. We will focus exclusively on tabular data and how to handle it with the packages in the tidyverse framework. The example data used here is an ecological dataset about penguins.
 
@@ -985,6 +985,290 @@ dplyr::left_join(mtcars, gear_opinions, by = "gear") %>%
 ```{r}
 dplyr::anti_join(mtcars, gear_opinions, by = "gear") %>%
     tibble::as_tibble()
+```
+
+:::
+
+## (Optional) Final exercise
+
+Here's the URL to the samples table of the ancient metagenome directory (learn more at https://github.com/SPAAM-community/AncientMetagenomeDir/tree/master):
+
+```{r}
+url_to_samples_table <- "https://raw.githubusercontent.com/SPAAM-community/AncientMetagenomeDir/master/ancientmetagenome-environmental/samples/ancientmetagenome-environmental_samples.tsv"
+```
+
+Load this dataset into R, into a variable "samples". The readr package can directly read data from URLs.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+samples <- readr::read_tsv(url_to_samples_table)
+```
+
+:::
+
+A naive assumption about this dataset might be that there is a correlation of depth and sample_age.
+
+- depth: "Depth of sample taken from top of sequence in centimeters. In case of ranges use midpoint"
+- sample_age: "Age of the sample in year before present (BP 1950), to the closest century"
+
+Of course we could only detect this for samples with both depth and age information. Filter the dataset to only include samples with it. And also remove samples without an archaeological site name (!= "Unknown").
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+library(magrittr)
+samples_with_depth_and_age <- samples %>%
+  dplyr::filter(
+    !is.na(depth) & !is.na(sample_age),
+    site_name != "Unknown"
+  )
+```
+
+:::
+
+Now plot depth against sample_age in a scatterplot to see if there is a potential signal.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+library(ggplot2)
+samples_with_depth_and_age %>%
+  ggplot() +
+  geom_point(aes(x = depth, y = sample_age))
+```
+
+:::
+
+We can't see much here, because samples with very large ages dominate the y-scale. Recreate this plot with a log-scaled y-axis.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+samples_with_depth_and_age %>%
+  ggplot() +
+  geom_point(aes(x = depth, y = sample_age)) +
+  scale_y_log10(labels = scales::label_comma()) +
+  geom_hline(yintercept = 20000, color = "red")
+```
+
+:::
+
+This is more interesting. There may be a signal for samples below a certain age, maybe 20000 years BP. Filter the dataset to remove all samples that are older than this threshold. Store the result in a variable "samples_young".
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+samples_young <- samples_with_depth_and_age %>%
+  dplyr::filter(
+    sample_age < 20000
+  )
+```
+
+:::
+
+Recreate the plot from above. The log-scaling can be turned off now.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+samples_young %>%
+  ggplot() +
+  geom_point(aes(x = depth, y = sample_age))
+```
+
+:::
+
+With the old samples removed, there indeed seems to be a signal. Pearson's correlation coefficient is not that strong though.
+
+```{r}
+cor(samples_young$depth, samples_young$sample_age, method = "pearson")
+```
+
+Maybe what we see is mostly driven by individual sites. How many sites are there actually? Determine the number of sites in the filtered dataset.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+samples_young$site_name %>% unique() %>% length()
+```
+
+:::
+
+Oh - that's not as much as I thought. How many samples are there per site? Calculate the number of samples per site with group_by and summarize. Sort the result table by the number of samples with arrange.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+sample_count_per_site <- samples_young %>%
+  dplyr::group_by(site_name) %>%
+  dplyr::summarise(n = dplyr::n()) %>%
+  dplyr::arrange(n)
+```
+
+:::
+
+Prepare a bar-plot that shows this information, with the sites on the x-axis and the number of samples per site on the y-axis. The bars should be ordered by the number of samples.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+sample_count_per_site$site_name <- forcats::fct_reorder(
+  sample_count_per_site$site_name,
+  sample_count_per_site$n
+)
+
+sample_count_per_site %>%
+  ggplot() +
+  geom_bar(aes(x = site_name, y = n), stat = "identity")
+```
+
+:::
+
+Oh no - the x-axis labels are not well readable in this version of the plot. Create a version where they are slightly rotated.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+sample_count_per_site %>%
+  ggplot() +
+  geom_bar(aes(x = site_name, y = n), stat = "identity") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
+```
+
+:::
+
+Interesting! I wonder what the oldest and youngest sample are for each site. Use group_by, arrange and dplyr::slice(1, dplyr::n()) to get the oldest and youngest sample for each site in the filtered dataset.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+sites_oldest_youngest <- samples_young %>%
+  dplyr::group_by(site_name) %>%
+  dplyr::arrange(sample_age) %>%
+  dplyr::slice(1, dplyr::n()) %>%
+  dplyr::ungroup()
+```
+
+:::
+
+The result is a bit hard to read. Select only the columns site_name and sample_age and show all rows with `print(n = Inf)`.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+sites_oldest_youngest <- sites_oldest_youngest %>%
+  dplyr::select(site_name, sample_age) %>%
+  print(n = Inf)
+```
+
+:::
+
+Further simplify this dataset to only one row per site (group_by) and add a column (summarize) that shows the distance between min and max age, so the age range per site.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+sites_age_range <- sites_oldest_youngest %>%
+  dplyr::group_by(site_name) %>%
+  dplyr::summarise(age_range = max(sample_age) - min(sample_age))
+```
+
+:::
+
+So some sites have a huge age range of thousands of years, and others don't. This information is not really meaningful without the number of samples per site, though. So join the sample count per site with the age range per site to get a table with both variables.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+sites_joined <- dplyr::left_join(
+  sites_age_range,
+  sample_count_per_site,
+  by = "site_name" 
+) %>% print(n = Inf)
+```
+
+:::
+
+Calculate the mean sampling interval by dividing the age range by the number of samples and add this information in a new column with mutate.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+sites_joined %>%
+  dplyr::mutate(
+    sampling_interval = age_range / n
+  ) %>% print(n = Inf)
+```
+
+:::
+
+After this never-ending digression we can go back to the initial question: Is there a global relationship between sample_age and depth? Take the "samples_young" dataset and recreate the simple scatter plot from above. But now map the site_name to the point color.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+samples_young %>%
+  ggplot() +
+  geom_point(aes(x = depth, y = sample_age, color = site_name))
+```
+
+:::
+
+There are a lot of samples, so the legend for the color space is annoyingly large. You can turn it off with `+ guides(color = guide_none())`.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+samples_young %>%
+  ggplot() +
+  geom_point(aes(x = depth, y = sample_age, color = site_name)) +
+  guides(color = guide_none())
+```
+
+:::
+
+It becomes very clear that we have to look at the sites separately to make sense of this data. Use faceting to split the plot into per-site subplots.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+samples_young %>%
+  ggplot() +
+  geom_point(aes(x = depth, y = sample_age, color = site_name)) +
+  guides(color = guide_none()) +
+  facet_wrap(~site_name)
+```
+
+:::
+
+It's not exactly surprising that the sites operate on different scales regarding age and depth. You can add the `scales = "free"` option to facet_wrap to dynamically adjust the scaling of the subplots.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+samples_young %>%
+  ggplot() +
+  geom_point(aes(x = depth, y = sample_age, color = site_name)) +
+  guides(color = guide_none()) +
+  facet_wrap(~site_name, scales = "free")
+```
+
+:::
+
+This looks neat for many sites, but some have too few samples. As a final exercise I suggest you remove these "single-dot" sites and recreate this plot. There are many possible ways to do this. The easiest may be to filter by the standard deviation (sd) along the age or the depth axis.
+
+::: {.callout-important title="Solution" collapse=true appearance="simple"}
+
+```{r}
+samples_young %>%
+  dplyr::group_by(site_name) %>%
+  dplyr::filter(sd(depth) > 5) %>%
+  dplyr::ungroup() %>%
+  ggplot() +
+  geom_point(aes(x = depth, y = sample_age, color = site_name)) +
+  guides(color = guide_none()) +
+  facet_wrap(~site_name, scales = "free")
 ```
 
 :::
