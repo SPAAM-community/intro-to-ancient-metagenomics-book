@@ -10,7 +10,6 @@ For this chapter's exercises, if not already performed, you will need to downloa
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413184](https://doi.org/10.5281/zenodo.8413184), and unpack
 
 ```bash
-#| eval: false
 tar xvf contamination.tar.gz
 cd contamination/
 ```
@@ -18,7 +17,6 @@ cd contamination/
 You can then create the subsequently activate environment with
 
 ```bash
-#| eval: false
 conda env create -f contamination.yml
 conda activate contamination
 ```
@@ -61,7 +59,6 @@ If negative control samples (blanks) are available, contaminating organisms can 
 First move back into the KrakenUniq folder and load R.
 
 ```bash
-#| eval: false
 cd /<path>/<to>/contamination/krakenuniq
 R
 ```
@@ -102,7 +99,6 @@ labels = rownames(true_sample)[(log10(rowMeans(true_sample)+1) > 1) &
 Once finished examining the plot you can quit R
 
 ```bash
-#| eval: false
 ## Press 'n' when asked if you want to save your workspace image.
 quit()
 ```
@@ -134,7 +130,6 @@ If one wants to assess the degree of contamination for each sample, there is a h
 First change into the cuperdec directory, and load R
 
 ```bash
-#| eval: false
 cd /<path>/<to>/contamination/cuperdec
 ```
 
@@ -143,7 +138,6 @@ Then we can load the files, generate the decay curves, set a preservation thresh
 Load R as usual.
 
 ```bash
-#| eval: false
 R
 ```
 
@@ -171,7 +165,6 @@ plot_cuperdec(curves, metadata = metadata, filter_result)
 Once finished examining the plot you can quit R
 
 ```bash
-#| eval: false
 ## Press 'n' when asked if you want to save your workspace image.
 quit()
 ```
@@ -199,7 +192,6 @@ In addition to the input files (already prepared for you), you will also need to
 <!-- TODO: replace with link to before-you-start -->
 
 ```bash
-#| eval: false
 cd /<path>/<to>/contamination/sourcetracker/
 git clone https://github.com/danknights/sourcetracker.git
 ```
@@ -215,7 +207,6 @@ Run the following command to [comment out the offending lines](https://github.co
 <!-- TODO: replace with link to before-you-start -->
 
 ```bash
-#| eval: false
 sed -i '538,539s/^/#/' sourcetracker/src/SourceTracker.r
 ```
 
@@ -225,7 +216,6 @@ sed -i '538,539s/^/#/' sourcetracker/src/SourceTracker.r
 Sourcetracker expects two input data frames: metadata with at least sample name, environment and source / sink labels, and abundance matrix. Note that source and sink metadata and abundances have to be merged together prior to using SourceTracker. Here we are going to use data from the [Human Microbiome Project (HMP)](https://hmpdacc.org/) as sources, and we are going to merge the HMP data with the sink samples into single OTU table and meta-data table.
 
 ```bash
-#| eval: false
 cd /<path>/<to>/contamination/sourcetracker/
 
 ## Load R
@@ -299,7 +289,6 @@ xlab("Sample") + ylab("Fraction")
 Once finished examining the plot you can quit R
 
 ```bash
-#| eval: false
 ## Press 'n' when asked if you want to save your workspace image.
 quit()
 ```
@@ -321,7 +310,6 @@ _decOM_ uses [kmtricks](https://academic.oup.com/bioinformaticsadvances/article/
 If doing a self-guided tutorial, you will need to download a rather large pre-built database.
 
 ```bash
-#| eval: false
 ## In the directory
 ## Note that decOM does not like dots in names so make symlinks
 for i in ../rawdata/*trimmed.fastq.gz; do
@@ -347,7 +335,6 @@ The following example command is how you would execute deCOM. However as this re
 ::: {.callout-warning title="Example command - do not run!"}
 
 ```bash
-#| eval: false
 # DO NOT RUN!: Run decOM predictions
 decOM -p_sources decOM_sources/ -p_sinks FASTQ_NAMES_LIST.txt -p_keys decOM/FASTQ -mem 900GB -t 15
 ```
@@ -356,7 +343,6 @@ decOM -p_sources decOM_sources/ -p_sinks FASTQ_NAMES_LIST.txt -p_keys decOM/FAST
 You can find the _relevant_ output files for the rest of this chapter in the following directory already prepared for you i.e.the output of deCOM with our simulated data from the command above.
 
 ```bash
-#| eval: false
 cd /<path>/<to>/contamination/decom
 ```
 
@@ -371,7 +357,6 @@ The sink fastq-files are placed together with _keys_ fof-files containing the ma
 Load R
 
 ```bash
-#| eval: false
 R
 ```
 
@@ -401,7 +386,6 @@ ggplot(data, aes(fill=condition, y=value, x=reorder(name,seq(1:length(name))))) 
 Once finished examining the plot you can quit R
 
 ```bash
-#| eval: false
 ## Press 'n' when asked if you want to save your workspace image.
 quit()
 ```
@@ -426,7 +410,6 @@ ENTER!
 :::
 
 ```bash
-#| eval: false
 rm -rf /<PATH>/<TO>/contamination*
 ```
 
@@ -435,14 +418,12 @@ Once deleted you can move elsewhere (e.g. `cd ~`).
 We can also get out of the `conda` environment with
 
 ```bash
-#| eval: false
 conda deactivate
 ```
 
 To delete the conda environment
 
 ```bash
-#| eval: false
 conda remove --name contamination --all -y
 ```
 
@@ -459,3 +440,19 @@ In this chapter we have learned that:
 2. What is contamination and how can it bias ancient metagenomic analysis?
 3. What is a negative (blank) control sample and why is it useful to have?
 4. What is microbial source tracking and how can it help with decontamination?
+
+## Resources
+
+1. **SourceTracker**: Knights D, Kuczynski J, Charlson ES, Zaneveld J, Mozer MC, Collman RG, Bushman FD, Knight R, Kelley ST. Bayesian community-wide culture-independent microbial source tracking. Nat Methods. 2011 Jul 17;8(9):761-3. doi: 10.1038/nmeth.1650. PMID: 21765408; PMCID: PMC3791591.
+
+2. **deCOM**: https://www.biorxiv.org/content/10.1101/2023.01.26.525439v1, doi: https://doi.org/10.1101/2023.01.26.525439
+
+3. **aMeta**: https://www.biorxiv.org/content/10.1101/2022.10.03.510579v1, doi: https://doi.org/10.1101/2022.10.03.510579
+
+4. **Bowtie2**: Langmead, B., Salzberg, S. Fast gapped-read alignment with Bowtie 2. Nat Methods 9, 357–359 (2012). https://doi.org/10.1038/nmeth.1923
+
+5. **cuperdec**: https://cran.r-project.org/web/packages/cuperdec/index.html
+
+6. **decontam**: https://www.bioconductor.org/packages/release/bioc/html/decontam.html
+
+## References
