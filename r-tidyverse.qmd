@@ -105,26 +105,22 @@ And the RStudio window will open.
 
 ## Loading data into tibbles
 
-### Reading data with readr
+### Reading tabular data with readr
 
-With R we usually operate on data in our computer's memory.
-The tidyverse provides the package `readr` to read data from text files into the memory.
-`readr` can read from our file system or the internet.
-It provides functions to read data in almost any (text) format:
+With R we usually operate on data in our computer's memory. The tidyverse provides the package `readr` to read data from text files into memory, both from our file system or the internet. It provides functions to read data in almost any (text) format:
 
 ```{r eval=FALSE}
-readr::read_csv() # .csv files -> see penguins.csv
-readr::read_tsv() # .tsv files
-readr::read_delim() # tabular files with an arbitrary separator
-readr::read_fwf() # fixed width files
-readr::read_lines() # read linewise to parse yourself
+readr::read_csv()   # .csv files (comma-separated) -> see penguins.csv
+readr::read_tsv()   # .tsv files (tab-separated)
+readr::read_delim() # tabular files with arbitrary separator
+readr::read_fwf()   # fixed width files (each column with a set number of tokens)
+readr::read_lines() # files with any content per line for self-parsing
 ```
 
 ### How does the interface of `read_csv` work?
 
-We can learn more about an R function with the `?` operator.
+We can learn more about any R function with the `?` operator: To open a help file for a specific function run `?<function_name>` (e.g. `?readr::read_csv`) in the R console.
 
-To open a help file for a specific function run `?<function_name>` (e.g. `?readr::read_csv`) in the R console.
 `readr::read_csv` has many options to specify how to read a text file.
 
 ```{r eval=FALSE}
@@ -146,7 +142,7 @@ read_csv(
 
 ### What does `readr` produce? The `tibble`!
 
-To read a .csv file (here `"penguins.csv"`) into a variable (here `peng_auto`) run.
+To read a .csv file (here `"penguins.csv"`) into a variable (here `peng_auto`) run
 
 ```{r, eval=FALSE}
 peng_auto <- readr::read_csv("penguins.csv")
@@ -157,7 +153,7 @@ peng_auto <- readr::read_csv("penguins.csv")
 peng_auto <- readr::read_csv("assets/data/r-tidyverse/penguins.csv")
 ```
 
-`readr` first prints some information on the number and type of rows and columns it discovered in the file.
+As a by-product of reading the file `readr` also prints some information on the number and type of rows and columns it discovered in the file.
 
 It automatically detects column types -- but you can also define them manually.
 
@@ -168,6 +164,8 @@ peng <- readr::read_csv(
 )
 ```
 
+The `col_types` argument takes a string with a list of characters, where each character denotes one columns types. Possible types are `c` = character, `i` = integer, `d` = double, `l` = logical, etc. Remember that you can check `?readr::read_csv` for more.
+
 ```{r, echo=FALSE}
 # this version is only for the website!
 peng <- readr::read_csv(
@@ -176,14 +174,11 @@ peng <- readr::read_csv(
 )
 ```
 
-It then returns an in-memory representation of this data, a `tibble`.
-
-A `tibble` is a "data frame", a tabular data structure with rows and columns.
-Unlike a simple array, each column can have another data type.
+`readr` finally returns an in-memory representation of the data in the file, a `tibble`. A `tibble` is a "data frame", a tabular data structure with rows and columns. Unlike a simple array, each column can have another data type.
 
 ### How to look at a `tibble`?
 
-Typing the name of any object into the R console will print an overview to the console.
+Typing the name of any object into the R console will print an overview of it to the console.
 
 ```{r}
 peng
@@ -192,9 +187,9 @@ peng
 But there are various other ways to inspect the content of a `tibble` 
 
 ```{r, eval=FALSE}
-str(peng) # a structural overview of an R object
-summary(peng) # a human-readable summary of an R object
-View(peng) # open RStudio's interactive data browser
+str(peng)     # A structural overview of an R object
+summary(peng) # A human-readable summary of an R object
+View(peng)    # Open RStudio's interactive data browser
 ```
 
 ## Plotting data in `tibble`s
@@ -203,7 +198,7 @@ View(peng) # open RStudio's interactive data browser
 
 To understand and present data, we usually have to visualize it.
 
-`ggplot2` is an R package that offers an unusual, but powerful and logical interface for this task [@Wickham2016]. The following example describes a stacked bar chart.
+`ggplot2` is an R package that offers a slightly unusual, but powerful and logical interface for this task [@Wickham2016]. The following example describes a stacked bar chart.
 
 ```{r}
 library(ggplot2) # Loading a library to use its functions without ::
@@ -211,11 +206,12 @@ library(ggplot2) # Loading a library to use its functions without ::
 
 ```{r}
 ggplot( # Every plot starts with a call to the ggplot() function
-    data = peng # This function can also take the input tibble
+    data = peng # This function can also take the input tibble in the data argument
 ) + # The plot consists of individual functions linked with "+"
-    geom_bar( # "geoms" define the plot layers we want to draw
+    geom_bar( # "geoms" define the plot layers we want to draw,
+              # so in this case a bar-chart
         mapping = aes( # The aes() function maps variables to visual properties
-            x = island, # publication_year -> x-axis
+            x = island,    # publication_year -> x-axis
             fill = species # community_type   -> fill color
         )
     )
@@ -223,7 +219,7 @@ ggplot( # Every plot starts with a call to the ggplot() function
 
 A `geom_*` combines data (here `peng`), a geometry (here vertical, stacked bars) and a statistical transformation (here counting the number of penguins per island and species). `ggplot2` features many such geoms: A good overview is provided by this cheatsheet: [https://rstudio.github.io/cheatsheets/html/data-visualization.html](https://rstudio.github.io/cheatsheets/html/data-visualization.html).
 
-Beyond `geom`s, a ggplot plot can be further specified with (among others) `scale`s, `facet`s and `theme`s.
+Beyond `geom`s, a ggplot2 plot can be further specified with (among others) `scale`s, `facet`s and `theme`s.
 
 ### `scale`s control the behaviour of visual elements
 
@@ -249,9 +245,9 @@ ggplot(peng_out) +
     geom_boxplot(aes(x = species, y = body_mass_g))
 ```
 
-This is not well readable, because the extreme outliers dictate the scale of the y-axis. A 50+kg penguin is a scary thought and we would probably remove these outliers, but let's assume they are valid observation we want to include in the plot.
+This is not well readable, because the extreme outliers dictate the scale of the y-axis. A 50+kg penguin is a scary thought and we would probably remove these outliers, but let's assume they were valid observation we want to include in the plot.
 
-To mitigate this issue we can change the **scale** of different visual elements - e.g. the y-axis.
+To mitigate the visualisation issue we can change the **scale** of different visual elements - e.g. the y-axis.
 
 ```{r}
 ggplot(peng_out) +
@@ -284,9 +280,9 @@ ggplot(peng) +
     geom_boxplot(aes(x = species, y = body_mass_g, fill = sex))
 ```
 
-Another way to visualize more variables in one plot is to split the plot by categories into **facets**, so sub-plots per category.
+Note how mapping another variable to the fill colour automatically splits the dataset and how this is reflected in the number of boxplots per species.
 
-Here we split by sex, which is already mapped to the fill colour.
+Another way to visualize more variables in one plot is to split the plot by categories into **facets**, so sub-plots per category. Here we split by sex, which is already mapped to the fill colour:
 
 ```{r}
 ggplot(peng) +
@@ -302,11 +298,13 @@ ggplot(peng) +
     facet_wrap(~sex)
 ```
 
+This plot already visualizes the relationship of four variables: species, body mass, sex and year of observation.
+
 ### Setting purely aesthetic settings with `theme`
 
 Aesthetic changes can be applied as part of the `theme`, which allows for very detailed configuration (see `?theme`).
 
-Here we rotate the x-axis labels by 45°, which often helps to resolve overplotting.
+Here we rotate the x-axis labels by 45°, which often helps to resolve over-plotting.
 
 ```{r}
 ggplot(peng) +
@@ -319,9 +317,9 @@ ggplot(peng) +
 
 R supports defining ordinal data with `factor`s. This can be used to set the order of elements in a plot, e.g. the order of bars in a bar chart. 
 
-We do not cover `factor`s beyond the following example here, although the tidyverse includes a package (`forcats`) specifically for that purpose.
+We do not cover `factor`s beyond the following example here, although the tidyverse includes a package (`forcats`) specifically for handling them.
 
-Elements based on `character` columns are generally ordered alphabetically.
+Elements based on `character` columns are by default ordered alphabetically.
 
 ```{r}
 ggplot(peng) +
@@ -347,15 +345,15 @@ ggplot(peng2) +
 
 ### Exercise
 
-1. Look at the `mtcars` dataset and read up on the meaning of its variables with the help operator `?`. `mtcars` is a test dataset integrated in R and can be accessed by typing `mtcars` in the console
+1. Look at the `mtcars` dataset and read up on the meaning of its variables with the help operator `?`. `mtcars` is a test dataset integrated in R and can always be accessed just by typing `mtcars` in the console.
 
-2. Visualize the relationship between *Gross horsepower* and *1/4 mile time*
+2. Visualize the relationship between *Gross horsepower* and *1/4 mile time*.
 
 ```{r}
 
 ```
 
-3. Integrate the *Number of cylinders* into your plot as an additional variable
+3. Integrate the *Number of cylinders* into your plot as an additional variable.
 
 ```{r}
 
@@ -366,6 +364,20 @@ ggplot(peng2) +
 
 ```{r, eval=FALSE}
 ?mtcars
+```
+
+```
+[, 1] mpg     Miles/(US) gallon
+[, 2] cyl     Number of cylinders
+[, 3] disp    Displacement (cu.in.)
+[, 4] hp      Gross horsepower
+[, 5] drat    Rear axle ratio
+[, 6] wt      Weight (1000 lbs)
+[, 7] qsec    1/4 mile time
+[, 8] vs      Engine (0 = V-shaped, 1 = straight)
+[, 9] am      Transmission (0 = automatic, 1 = manual)
+[,10] gear    Number of forward gears
+[,11] carb    Number of carburetors
 ```
 
 ```{r}
