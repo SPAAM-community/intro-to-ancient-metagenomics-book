@@ -57,11 +57,11 @@ So why should you use a version control system, such as GitHub?
 
 ## Basic workflow
 
-The basic concepts of using git and GitHub are as shown in (@fig-github-workflowdiagram)
+The basic concepts of using git and GitHub are as shown in (@fig-gitgithub-workflowdiagram)
 
-![Overview of basic operations when using git, and the pushing to a remote host such as GitHub. See chapter text for description of image. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow.png){#fig-github-workflowdiagram}
+![Overview of basic operations when using git, and the pushing to a remote host such as GitHub. See chapter text for description of image. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow.png){#fig-gitgithub-workflowdiagram}
 
-In the diagram of @fig-github-workflowdiagram, the two dark gray boxes represent a local machine (e.g. a laptop) and a remote server. 
+In the diagram of @fig-gitgithub-workflowdiagram, the two dark gray boxes represent a local machine (e.g. a laptop) and a remote server. 
 Within the local machine, an 'untracked' box represent files not indexed by the local git repository. 
 
 The arrow pointing into a light grey box (the local repository) in which three white boxes are present. 
@@ -206,11 +206,11 @@ ssh-add ~/.ssh/id_ed25519
 Next, GitHub needs to have our public key on record so it can compare between the public and private keys.
 Open our web browser and navigate to the github account settings page (typically: press the profile picture in the top bar menu, then settings). 
 
-Then, under settings, in the side bar go to _SSH & GPG Keys_ (@fig-github-settings-sidebar), then press _New SSH Key_ (@fig-github-settings-newkey). 
+Then, under settings, in the side bar go to _SSH & GPG Keys_ (@fig-gitgithub-settings-sidebar), then press _New SSH Key_ (@fig-gitgithub-settings-newkey). 
 
-![Screenshot of Github settings page sidebar (as of August 2023), with the 'SSH and GPG keys' section highlighted under the 'Access' section.](assets/images/chapters/git-github/github-settings-1.png){#fig-github-settings-sidebar}
+![Screenshot of Github settings page sidebar (as of August 2023), with the 'SSH and GPG keys' section highlighted under the 'Access' section.](assets/images/chapters/git-github/github-settings-1.png){#fig-gitgithub-settings-sidebar}
 
-![Screenshot of the top of the Github SSH and GPG keys page (as of August 2023), with a green 'New SSH Key' button.](assets/images/chapters/git-github/github-settings-2.png){#fig-github-settings-newkey}
+![Screenshot of the top of the Github SSH and GPG keys page (as of August 2023), with a green 'New SSH Key' button.](assets/images/chapters/git-github/github-settings-2.png){#fig-gitgithub-settings-newkey}
 
 When in the 'new SHH key' page:
 
@@ -271,7 +271,7 @@ Now that we have set up our own SSH key, we can begin working on some version co
 Navigate to your GitHub homepage ([https://github.com](https://github.com)) and create a new repository.
 We can normally do this by pressing the ➕ icon on the homepage (typically in right hand side of the top tool bar).
 
-For this tutorial, on the new repository page (@fig-github-createnewrepo):
+For this tutorial, on the new repository page (@fig-gitgithub-createnewrepo):
 
 - Choose any name for our new repo (including the auto-generated 'inspired ones')
 - Leave the description as empty
@@ -281,7 +281,7 @@ For this tutorial, on the new repository page (@fig-github-createnewrepo):
 
 Then press the green 'Create repository' button.
 
-![Screenshot of top half of GitHub's Create repository interface for creating a new repository, showing owner, empty repository name box, radio boxes indicating whether the repository should be Public or Private](assets/images/chapters/git-github/create_repo.png){#fig-github-createnewrepo}
+![Screenshot of top half of GitHub's Create repository interface for creating a new repository, showing owner, empty repository name box, radio boxes indicating whether the repository should be Public or Private](assets/images/chapters/git-github/create_repo.png){#fig-gitgithub-createnewrepo}
 
 :::  {.callout-warning}
 For the remainder of the session, replace the name of my repository (vigilant-octo-journey) with your own repo name.
@@ -306,17 +306,17 @@ mkdir /<path>/<to>/git-github
 
 First, we will learn to _clone_ a remote repository onto our local machine.
 
-This is actually _not_ in our basic workflow diagram in @fig-github-workflowdiagram, however we only need to do it once, and is only needed when we work with a remote server.
+This is actually _not_ in our basic workflow diagram in @fig-gitgithub-workflowdiagram, however we only need to do it once, and is only needed when we work with a remote server.
 
 With `clone` we are making a copy of the _remote_ repository, and linking it so we can transmit data between the copy on the _local_ machine with the _remote_ repository on the server.  
 
 To make the 'copy', navigate to our new repo:
 
-1. Select the green code dropdown button (@fig-github-clonebutton)
+1. Select the green code dropdown button (@fig-gitgithub-clonebutton)
 2. Make sure to select SSH
-3. Copy the full address `git@github.com<...>` as shown below in @fig-github-clonebutton.
+3. Copy the full address `git@github.com<...>` as shown below in @fig-gitgithub-clonebutton.
 
-![Screenshot of the GitHub repository interface with the green 'code' drop down button pressed, and the menu showing the 'clone' information for SSH cloning (i.e., the copyable SSH address)](assets/images/chapters/git-github/git_clone.png){#fig-github-clonebutton}
+![Screenshot of the GitHub repository interface with the green 'code' drop down button pressed, and the menu showing the 'clone' information for SSH cloning (i.e., the copyable SSH address)](assets/images/chapters/git-github/git_clone.png){#fig-gitgithub-clonebutton}
 
 Back at our command line, clone the repo as follows.
 
@@ -347,14 +347,14 @@ ls
 
 Next, let's _add_ a new and modified file to our 'staging area' on our local machine.
 
-This corresponds either to the red arrow or blue arrows in (@fig-github-workflowdiagram-staging).
+This corresponds either to the red arrow or blue arrows in (@fig-gitgithub-workflowdiagram-staging).
 
 We can do this in two ways
 
 1. Stage a previously untracked file
 2. Stage a tracked, but now modified file 
 
-![Overview of basic operations when using git (following @fig-github-workflowdiagram) but with the command `git add` operations highlighted . The arrows indicating the two 'staging' operations, carried out by the `git add` command, are coloured red for a staging a 'previously untracked', and blue for the editing of an already tracked file and staging of the edited file. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-staging.png){#fig-github-workflowdiagram-staging}
+![Overview of basic operations when using git (following @fig-gitgithub-workflowdiagram) but with the command `git add` operations highlighted . The arrows indicating the two 'staging' operations, carried out by the `git add` command, are coloured red for a staging a 'previously untracked', and blue for the editing of an already tracked file and staging of the edited file. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-staging.png){#fig-gitgithub-workflowdiagram-staging}
 
 First we will make a new file called `file_A.txt`, and also add some extra text to the end of the `README.md` file (i.e., just modify).
 
@@ -390,7 +390,7 @@ Changes not staged for commit:
 ```
 
 We should see that `file_A.txt` is staged and 'ready to be committed' but `README.md` is NOT staged - thus the changes would not be preserved to the git history. 
-Comparing to our diagram in @fig-github-workflowdiagram-staging, we have performed the 'red' arrow, but for the blue arrow, we've only carried out the 'Edit file' arrow, the second 'Stage edited file' is not yet carried out.
+Comparing to our diagram in @fig-gitgithub-workflowdiagram-staging, we have performed the 'red' arrow, but for the blue arrow, we've only carried out the 'Edit file' arrow, the second 'Stage edited file' is not yet carried out.
 
 ::: {.callout-tip title="Task" appearance="simple"}
 Stage the modified `README.md` file and check the status again.
@@ -420,9 +420,9 @@ We can also see the README is 'modified' whereas `file_A.txt` is a _new_ file, s
 
 Now we need to package or save the changes into a _commit_ with a message describing the changes we've just made. 
 Each commit (i.e., entry in the git history) comes with a unique hash ID and will be stored forever in git history.
-Committing corresponds to the read arrow taking all _staged_ modified or newly added files from  the 'Staged' to 'Unmodified state' in (@fig-github-workflowdiagram-commit).
+Committing corresponds to the read arrow taking all _staged_ modified or newly added files from  the 'Staged' to 'Unmodified state' in (@fig-gitgithub-workflowdiagram-commit).
 
-![Overview of basic operations when using git (following @fig-github-workflowdiagram) but with the command `git commit` operations highlighted. The red arrow shows committing the changes to history, i.e., taking a tracked file in the staging error, writing the modifications in the file to the git history and placing the file back into the 'unmodified' status column. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-commit.png){#fig-github-workflowdiagram-commit}
+![Overview of basic operations when using git (following @fig-gitgithub-workflowdiagram) but with the command `git commit` operations highlighted. The red arrow shows committing the changes to history, i.e., taking a tracked file in the staging error, writing the modifications in the file to the git history and placing the file back into the 'unmodified' status column. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-commit.png){#fig-gitgithub-workflowdiagram-commit}
 
 ```bash
 git commit -m "Add new file and modify README"
@@ -465,9 +465,9 @@ This means that our local copy has an extra entry in the git history, compared t
 How then do we 'backup' our local changes and the git history back up to the server?
 
 We do that with, yes you guessed it, the `git push` command!
-This is the red dashed arrow in (@fig-github-workflowdiagram-push).
+This is the red dashed arrow in (@fig-gitgithub-workflowdiagram-push).
 
-![Overview of basic operations when using git (following @fig-github-workflowdiagram) but with the command `git push` operations highlighted. The red dashed arrow between the local repository box of the local machine, to the remote repository on the server. This represents 'pushing' or sending the changes made on the local machine back up to remote repository, so both the local and remote repository have the same records of changes to the files. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-push.png){#fig-github-workflowdiagram-push}
+![Overview of basic operations when using git (following @fig-gitgithub-workflowdiagram) but with the command `git push` operations highlighted. The red dashed arrow between the local repository box of the local machine, to the remote repository on the server. This represents 'pushing' or sending the changes made on the local machine back up to remote repository, so both the local and remote repository have the same records of changes to the files. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-push.png){#fig-gitgithub-workflowdiagram-push}
 
 We can run this as follows.
 
@@ -516,9 +516,9 @@ If we go to our GitHub repository on the website, and refresh the page, we shoul
 But what if we worked on a different local machine, and pushed changes from there?
 How do we the download new commits from our remote to our local repository?
 
-![Overview of basic operations when using git (following @fig-github-workflowdiagram) but with the command `git pull` operations highlighted. The red dashed arrow going from the remote repository on the server back to the local repository represents copying changes pushed from _elsewhere_ back to our local copy of the repository. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-pull.png){#fig-github-workflowdiagram-pull}
+![Overview of basic operations when using git (following @fig-gitgithub-workflowdiagram) but with the command `git pull` operations highlighted. The red dashed arrow going from the remote repository on the server back to the local repository represents copying changes pushed from _elsewhere_ back to our local copy of the repository. Reconstructed and modified after @Chacon2014-jq.](assets/images/chapters/git-github/git-workflow-pull.png){#fig-gitgithub-workflowdiagram-pull}
 
-We carry this out with the counterpart of `push`, `pull` (@fig-github-workflowdiagram-pull)!
+We carry this out with the counterpart of `push`, `pull` (@fig-gitgithub-workflowdiagram-pull)!
 Try running the command now!
 
 ```bash
@@ -542,9 +542,9 @@ But that sounds rather convoluted, no 😉?
 
 Instead, another benefit of GitHub is we can actually make changes to our repository from our web browser!
 In our web browser, in the file browser, click on the `README.md`.
-If we're still logged into our GitHub account, we should see a small pencil icon in the top right of the file viewer (@fig-github-exampleeditgithub). 
+If we're still logged into our GitHub account, we should see a small pencil icon in the top right of the file viewer (@fig-gitgithub-exampleeditgithub). 
 
-![Screenshot of a GitHub file viewer of a README.md file, with the pen 'edit' icon in the top right hand corner](assets/images/chapters/git-github/github-edit-file.png){#fig-github-exampleeditgithub}
+![Screenshot of a GitHub file viewer of a README.md file, with the pen 'edit' icon in the top right hand corner](assets/images/chapters/git-github/github-edit-file.png){#fig-gitgithub-exampleeditgithub}
 
 After pressing the pencil icon, add some more contents to the `README.md` file, then press the green 'Commit changes' button in the top right, write a commit message (sounds familiar?), and press the next 'green 'Commit changes' button (we can ignore the extended description). 
 
@@ -564,7 +564,7 @@ The number represents the number of lines with changes on them. The green plus a
 A description of the changes is seen in the last line of the `git pull` output. 
 :::
 
-### Summary
+### Keep practising!
 
 And that's the basic 6 commands you need to know to work with Git and GitHub for our own work - repeat _ad nauseum_!
 
@@ -572,27 +572,30 @@ Git is supremely powerful, but can get extremely complicated because of this.
 If we stick with these 6 commands to begin, and as you slowly get more comfortable with the routine, we recommend to start step-by-step broadening our `git` knowledge as you come across other questions and problems with `git`.
 There is no one comprehensive course or documentation, so we recommend just keep practising!
 
-## Working in sandboxes and collaboratively
+## Working collaboratively
 
 Once we're comfortable with working Git for our own projects, it's time to learn a few more things to help us work both more safely, efficiently, and also eventually collaboratively!
 
-Git facilitates 'sandboxes' potential changes and also simultaneous work by small teams through branching and pull requests.
+Git facilitates 'sandboxes' potential changes and also simultaneous work by small teams through branching, forks, and pull requests.
 
-Branching generates an independent copy of the 'mainline' repository contents.
-When working on this branch, we can make as many changes and edits as we wish without breaking or modifying the 'master' version.
+Branching generates an independent copy of the 'mainline' repository _contents_.
+Forking generates an independent copy of an entire repository (with all of it's settings, but with it's own git history)
+When working on a branch, we can make as many changes and edits as we wish without breaking or modifying the 'master' version.
+When working on a fork, we can make even more changes and edits to the code but also the repository itself, without modifying the original repository (or it's codes).
 
-Once we're happy with the changes we've made in our branch acting as the 'sandbox', we can then incorporate these changes into our 'mainline' repository using a `pull request` and a `merge`.
+Once we're happy with the changes we've made in our branch or fork acting as the 'sandbox', we can then incorporate these changes into our 'mainline' repository using a `pull request` and a `merge`.
 
 We can make a branch from any point in our git history, and also make as many branches as we want!
+Forks you can only fork at the particular point of latest state of the history when you make the fork.
 
 ### Branches
 
 There are two ways we can make a branch.
-The first way is using the GitHub interface, as in @fig-github-githubbranch.
+The first way is using the GitHub interface, as in @fig-gitgithub-githubbranch.
 
-![Three panel screenshot of GitHub interface for switching and creating branches. Panel A: A dropdown menu appears when we press 'main' (or the name of the current branch). Panel B: A search bar in the dropdown allows us to search for existing branches which appears in the search results. If no branch with that name exists, the search results presents a button saying 'Create branch <name> from 'main'. Panel C: Once the new branch is made, we are returned to the repository file or file browser, but with the name on the dropdown listing the name of the new branch we made.](assets/images/chapters/git-github/git_switch.png){#fig-github-githubbranch}
+![Three panel screenshot of GitHub interface for switching and creating branches. Panel A: A dropdown menu appears when we press 'main' (or the name of the current branch). Panel B: A search bar in the dropdown allows us to search for existing branches which appears in the search results. If no branch with that name exists, the search results presents a button saying 'Create branch <name> from 'main'. Panel C: Once the new branch is made, we are returned to the repository file or file browser, but with the name on the dropdown listing the name of the new branch we made.](assets/images/chapters/git-github/git_switch.png){#fig-gitgithub-githubbranch}
 
-The instructions in @fig-github-githubbranch would result in the branch existing on the _remote_ copy of our repository i.e., on GitHub.
+The instructions in @fig-gitgithub-githubbranch would result in the branch existing on the _remote_ copy of our repository i.e., on GitHub.
 To get this branch on our local copy, we can simply run `git pull` in our terminal!
 
 We can also create branches via command line.
@@ -647,7 +650,6 @@ git branch
 ```
 Where the green colour and the star indicates the branch we are currently on.
 :::
-
 
 ### Pull requests
 
@@ -740,28 +742,28 @@ Branch 'test-branch' set up to track remote branch 'test-branch' from 'origin
 
 Once we've pushed our changes to our `test-branch` branch, go to the GitHub interface for the repository.
 
-Open the 'Pull requests tab' and press the green 'New pull request' button, or press the green 'Compare & pull request' button in the yellow box that _may_ appear if we recently pushed (@fig-github-newpullrequest).
+Open the 'Pull requests tab' and press the green 'New pull request' button, or press the green 'Compare & pull request' button in the yellow box that _may_ appear if we recently pushed (@fig-gitgithub-newpullrequest).
 
-![Screenshot of GitHub pull requests tab, with green button for 'New pull request' and a yellow message saying a branch had recent pushes and another green button next to it saying 'Compare & pull request'.](assets/images/chapters/git-github/github-new-pull-request.png){#fig-github-newpullrequest}
+![Screenshot of GitHub pull requests tab, with green button for 'New pull request' and a yellow message saying a branch had recent pushes and another green button next to it saying 'Compare & pull request'.](assets/images/chapters/git-github/github-new-pull-request.png){#fig-gitgithub-newpullrequest}
 
-Once opened, we can add a title and a description of the pull request (@fig-github-openingpullrequest).
+Once opened, we can add a title and a description of the pull request (@fig-gitgithub-openingpullrequest).
 
-![Screenshot of the opening a pull request page, with two text boxes for adding a title, a longer description, and a green 'Create pull request' button at the bottom.](assets/images/chapters/git-github/git-pullrequest-example.png){#fig-github-openingpullrequest}
+![Screenshot of the opening a pull request page, with two text boxes for adding a title, a longer description, and a green 'Create pull request' button at the bottom.](assets/images/chapters/git-github/git-pullrequest-example.png){#fig-gitgithub-openingpullrequest}
 
-Once we press the Create pull request button, it'll open the unique Pull request of this branch, in which others can leave comments and suggestions (@fig-github-pr-conversation).
-By pressing the 'Files changed' tab, we can see exactly what has changed (@fig-github-pr-files).
+Once we press the Create pull request button, it'll open the unique Pull request of this branch, in which others can leave comments and suggestions (@fig-gitgithub-pr-conversation).
+By pressing the 'Files changed' tab, we can see exactly what has changed (@fig-gitgithub-pr-files).
 
 ::: {layout-ncol=2}
-![Example screenshot of conversations tab of an open GitHub pull request, with the title, multiple tabs (Conversation, commits, checks, and file changed), an empty description box, and a comment box at the bottom.](assets/images/chapters/git-github/github-pr-conversation.png){#fig-github-pr-conversation}
+![Example screenshot of conversations tab of an open GitHub pull request, with the title, multiple tabs (Conversation, commits, checks, and file changed), an empty description box, and a comment box at the bottom.](assets/images/chapters/git-github/github-pr-conversation.png){#fig-gitgithub-pr-conversation}
 
-![Example screenshot of files tab of an open GitHub pull request with a text file of README.md being displayed. In the display a red line highlights the old state of a modified line, and a green line right below shows the changes (in this case, a number of empty spaces have been added to the end of the line).](assets/images/chapters/git-github/github-pr-files.png){#fig-github-pr-files}
+![Example screenshot of files tab of an open GitHub pull request with a text file of README.md being displayed. In the display a red line highlights the old state of a modified line, and a green line right below shows the changes (in this case, a number of empty spaces have been added to the end of the line).](assets/images/chapters/git-github/github-pr-files.png){#fig-gitgithub-pr-files}
 :::
 
 Once we and our collaborators are happy with the changes (a code or pull request 'review'), we can go back to the 'Conversation' tab of the unique pull request, and press the green 'Merge pull request' button, and confirm the merge.
 
-When back on the `main` branch of our repository, we should see our updated `README.md` in all it's glory (@fig-github-merged-changes)!
+When back on the `main` branch of our repository, we should see our updated `README.md` in all it's glory (@fig-gitgithub-merged-changes)!
 
-![Screenshot of GitHub repository `main` branch after a pull request merge, with the text changes that were originally written on the `test-branch` displayed in the `README.md` file.](assets/images/chapters/git-github/github-merged-changes.png){#fig-github-merged-changes}
+![Screenshot of GitHub repository `main` branch after a pull request merge, with the text changes that were originally written on the `test-branch` displayed in the `README.md` file.](assets/images/chapters/git-github/github-merged-changes.png){#fig-gitgithub-merged-changes}
 
 For more information on creating a pull request, see [GitHub's documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
 
@@ -788,6 +790,119 @@ Fast-forward
  1 file changed, 1 insertion(+)
 ```
 :::
+
+### Forks
+
+When working collaboratively (particularly in big teams), or you're not yet in the development team of a repository (but would like to be), it's often safer to work completely on our own _repository_, rather than just a branch.
+Furthermore, sometimes we want to 'diverge' entirely from the original code as we want to do something very different from the original authors of the tool we're forking from but with the same original code base.
+
+In these cases, instead of using branches, we can _completely_ isolate our sandbox using a `fork`.
+A `fork` is a complete copy of the entire repository into a new repository, but on our own GitHub account.
+This means that we can even completely mess up and destroy our entire 'copy' of the original repository - even deleting it - without effecting the original project.
+
+:::{.callout-tip}
+For most scientists, forks are probably not necessary as you are working on your own projects and scripts.
+Forks are normally useful for larger team-based projects that require stricter control over the stability of main code.
+:::
+
+To make a fork on GitHub, first go to the repository we wish to 'go our own way' with.
+For this tutorial, lets use [https://github.com/SPAAM-community/summerschool-github-practise](https://github.com/SPAAM-community/summerschool-github-practise)!
+Once there, press the 'Fork' button, which is in near the top right hand side of the repository, next to the 'pin', 'watch', and 'star' buttons (@fig-gitgithub-fork-button).
+
+![Screenshot of the buttons on a GitHub repository used for pinning, watching, forking, and starring the repository.](assets/images/chapters/git-github/github-fork-button.png){#fig-gitgithub-fork-button}
+
+Once we press 'Fork', we will get a new window with a variety of options for setting up our new _Fork_ (i.e., copy) of the entire original repository (@fig-gitgithub-fork-options). 
+These include things such as renaming the fork, setting a new description, and whether to copy the main branch only.
+Whether we want to change any of these depends entirely on what we plan to do with the fork.
+
+In this case, for the tutorial we will leave it up to you.
+
+![GitHub create Fork page, with a variety of options displayed such as setting the name of the fork, setting a new description, and whether to copy the main branch only.](assets/images/chapters/git-github/github-fork-options.png){#fig-gitgithub-fork-options}
+
+Once we press 'Create Fork', we will normally wait a moment or two for GitHub to do it's thing, and then we'll see a shiny new repository!
+
+Importantly, we will see at the top the name of new fork but next to your profile picture.
+Additionally, we will have an indication that indeed it is a fork with a message starting 'forked from' (@fig-gitgithub-fork-createdfork).
+
+![The top of a newly forked repository, with a message below the 'summerschool-github-practise' repository name saying 'forked from 'SPAAM-community/summerschool-github-practise'.](assets/images/chapters/git-github/github-fork-createdfork.png){#fig-gitgithub-fork-createdfork}
+
+Now we can once again practise doing a pull request!
+However, instead of doing this from a branch, we can can also do a pull request _across_ repositories, i.e., from a fork to the original repository (or even a fork to a fork!) - as long as they share the same git history!
+
+For our tutorial, we will add our name to the end of the list of people on the README of our fork of 'summerschool-github-practise', and then open a pull request.
+
+To make the edit, we will just the GitHub interface for doing so.
+Press the pencil icon on the top right of the rendered README.md file (@fig-gitgithub-fork-editpencil).
+
+![Screenshot of GitHub rendered repository README, with a pencil icon in the top right.](assets/images/chapters/git-github/github-fork-editpencil.png){#fig-gitgithub-fork-editpencil}
+
+Once the edit window is opened, add your name and GitHub user name to the list (@fig-gitgithub-fork-addname).
+
+![Screenshot of GitHub file edit window, with a name added to a bullet point list at the bottom.](assets/images/chapters/git-github/github-fork-addname.png){#fig-gitgithub-fork-addname}
+
+Make our commit to record the change to Git history (@fig-accessingdata-firstpagefig-gitgithub-fork-commitedit) and double check we've made the change ()
+
+![A commit message being written describing the addition of a new name in the GitHub commit interface.](assets/images/chapters/git-github/github-fork-commitedit.png){#fig-gitgithub-fork-commitedit}
+
+![The rendered README with the newly added name at the bottom of the list.](assets/images/chapters/git-github/github-fork-confirmedit.png){#fig-gitgithub-fork-confirmedit}
+
+Back on our forked repository, we can navigate back to the original repo by pressing the link below our Fork's name (@fig-gitgithub-fork-returntooriginalrepo).
+
+![Clicking on the link of the original repository below the name of the fork shows a mini-summary of the original repository's information.](assets/images/chapters/git-github/github-fork-returntooriginalrepo){#fig-gitgithub-fork-returntooriginalrepo}
+
+We can then go to the Pull Request Tab, and press the 'New Pull Request' button (@fig-gitgithub-fork-newprbutton)
+
+![Pressing the green 'new pull request' button on the original repository's Pull Request tab](assets/images/chapters/git-github/github-fork-newprbutton.png){#fig-gitgithub-fork-newprbutton}
+
+Once in the open pull request interface, we almost do the same thing as we did when opening pull requests from branches within the same repository.
+A critical difference when dealing with Forks, however, is we must specify _which_ fork our changes are coming from.
+We can do this by pressing 'compare across forks', and selecting our fork from the drop down menu (@fig-gitgithub-fork-compareacrossforks).
+
+![The Pull Request creation window, with the 'compare across forks' link pressed, and the name of the edited fork in the dropdown menu as the 'source of the changes' (head) being proposed to go into the 'main' branch of the name of the original repository (base).](assets/images/chapters/git-github/github-fork-compareacrossforks.png){#fig-gitgithub-fork-compareacrossforks}
+
+Once selected, as with branch pull requests, we can check the changes we are proposing, and if happy, press the 'Open Pull Request' to see our Pull Request being ready for review (@ig-gitgithub-fork-openedpr)
+
+![An opened Pull Request on the GitHub interface of the SPAAM-community/summerschool-github-practise repository](assets/images/chapters/git-github/github-fork-openedpr.png){#fig-gitgithub-fork-openedpr}
+
+With that you can request reviews from the curators of the original repository.
+Alternatively, if they don't like your changes - you can simply keep your repository and use the code there instead (assuming the original repository had an open source license, of course 😉).
+
+Remember that for most scientists, forks are likely not necessary when working on your own projects or very small teams.
+However if you branch further into bioinformatics, and want to contribute documentation, typo fixes, or even code into existing tools - forks are likely your best friend.
+
+::: {.callout-tip title="Task" appearance="simple"}
+Other than further 'sandboxing' your changes, why else would you want to fork a code repository?
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+Because you want to use the same original code base to make a new or changed tool for a different purpose outside that of the one of the original authors, and/or it doesn't make sense to include it in the original tool.
+:::
+
+## Summary
+
+In this chapter, we have gone over the fundamental concepts of Git.
+
+We've gone through setting up a GitHub account to allow passwordless interaction between the GitHub remote repository, and making a local copy on our machine with SSH keys.
+
+Through the GitHub website interface we made a new repository and gone through the 6 basic commands we need for using Git:
+
+1. git clone
+2. git add
+3. git status
+4. git commit
+5. git push
+6. git pull
+
+We finally covered how to work in collaboratively with:
+
+- Branches: code 'sandboxes' within the same repository to prevent editing the 'main' branch
+- Pull requests: how to propose changes from your branch (or fork) to your 'main' branch 
+- Forks: code 'sandbox' clones of entire repositories in a different user's space
+
+As you continue to use Git and GitHub, always keep in mind the two questions:
+
+- Why is using a version control software for tracking data and code important?
+- How can using Git(Hub) help me to collaborate on group projects?
 
 ## (Optional) clean-up
 
@@ -818,27 +933,5 @@ Then to delete the conda environment.
 ```bash
 conda remove --name git-github --all -y
 ```
-
-## Summary
-
-In this chapter, we have gone over the fundamental concepts of Git.
-
-We've gone through setting up a GitHub account to allow passwordless interaction between the GitHub remote repository, and making a local copy on our machine with SSH keys.
-
-Through the GitHub website interface we made a new repository and gone through the 6 basic commands we need for using Git
-
-1. git clone
-2. git add
-3. git status
-4. git commit
-5. git push
-6. git pull
-
-We finally covered how to work in sandboxes and collaboratively with branches and pull requests.
-
-As you continue to use Git and GitHub, always keep in mind the two questions:
-
-- Why is using a version control software for tracking data and code important?
-- How can using Git(Hub) help me to collaborate on group projects?
 
 ## References
