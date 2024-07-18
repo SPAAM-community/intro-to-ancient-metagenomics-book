@@ -614,14 +614,15 @@ And with `dplyr::relocate` they can be reordered.
 peng %>% dplyr::relocate(year, .before = species) # reorder columns
 ```
 
-Adding columns to tibbles with `mutate` and `transmute`.
+### Adding columns to tibbles with `mutate` and `transmute`.
 
 A common application of data manipulation is adding new, derived columns, that combine or modify the information in the already available columns. `dplyr` offers this core feature with the `mutate` function.
 
 ```{r}
 peng %>%
-    dplyr::mutate( # add a column that
-        kg = body_mass_g / 1000 # manipulates an existing column
+    dplyr::mutate(
+        # add a column as a modification of an existing column
+        kg = body_mass_g / 1000
     )
 ```
 
@@ -630,8 +631,9 @@ peng %>%
 ```{r}
 peng %>%
     dplyr::transmute(
-        id = paste("Penguin Nr.", id), # overwrite this column
-        flipper_length_mm # select this column
+        # overwrite the id column with a modified version
+        id = paste("Penguin Nr.", id), # paste() concatenates strings
+        flipper_length_mm # select this column without modifying it
     )
 ```
 
@@ -639,12 +641,17 @@ peng %>%
 
 ```{r}
 peng %>% tibble::add_column(
-    flipper_length_cm = .$flipper_length_mm / 10, # not the . representing the LHS of the pipe
+    # add a modified version of a column
+    # note the . representing the LHS of the pipe
+    flipper_length_cm = .$flipper_length_mm / 10,
+    # add the columns after this particular other columns
     .after = "flipper_length_mm"
 )
 ```
 
 `dplyr::mutate` can also be combined with `dplyr::group_by` (instead of `dplyr::summarise`) to add information on a group level. This is relevant, when a value for an individual entity should be put into context of a group-wise summary statistic.
+
+Here is a realistic sequence of operations that makes use of this feature:
 
 ```{r}
 peng %>%
@@ -654,8 +661,8 @@ peng %>%
         relation_to_mean = body_mass_g / mean_weight
     ) %>%
     dplyr::ungroup() %>%
-    dplyr::select(id, species, sex, year, relation_to_mean) %>%
     # mutate does not remove rows, unlike summarise, so we use select
+    dplyr::select(id, species, sex, year, relation_to_mean) %>%
     dplyr::arrange(dplyr::desc(relation_to_mean))
 ```
 
@@ -666,19 +673,21 @@ peng %>%
 ```{r}
 peng %>% dplyr::mutate(
     weight = ifelse(
-        test = body_mass_g >= 4200, # is weight below or above mean weight?
-        yes = "above mean",
-        no = "below mean"
+        # is weight below or above mean weight?
+        test = body_mass_g >= 4200,
+        yes  = "above mean",
+        no   = "below mean"
     )
 )
 ```
 
-`ifelse` gets cumbersome easily. `dplyr::case_when` is more readable and scales much better for this application.
+`ifelse` gets cumbersome for more than two cases. `dplyr::case_when` is more readable and scales much better for this application.
 
 ```{r}
 peng %>% dplyr::mutate(
     weight = dplyr::case_when(
-        body_mass_g >= 4200 ~ "above mean", # the number of conditions is arbitrary
+        # the number of conditions is arbitrary
+        body_mass_g >= 4200 ~ "above mean",
         body_mass_g < 4200 ~ "below mean",
         TRUE ~ "unknown" # TRUE catches all remaining cases
     )
@@ -704,9 +713,9 @@ peng %>%
 
 ### Switching between long and wide data with `pivot_longer` and `pivot_wider`
 
-To simplify certain analysis or plotting operations data often has to be transformed from a **wide** to a **long** format or vice versa (@fig-rtidyverse-longtowide).
+To simplify certain analysis or plotting operations data often has to be transformed from a **wide** to a **long** format or vice versa (@fig-rtidyverse-longtowide). Both data formats have useful applications and usually a given R function requires either, so we need to know how to convert between the two.
 
-![Graphical representation of converting a table from a wide format (first column are categories, e.g. species, first row are also categories e.g., samples, and counts are in cells after first row/column. Conversion from wide to long makes the long-format so that the first columnn still has categories, but the second column becomes the column-categories from the first row, and third column has values. Converting long format back to wider shows again first row and column as categories and cells as values).](assets/images/chapters/r-tidyverse/pivot_longer_wider.png){#fig-rtidyverse-longtowide height=150px}
+![Graphical representation of converting a table from a wide to a long and back to a wide format.](assets/images/chapters/r-tidyverse/pivot_longer_wider.png){#fig-rtidyverse-longtowide height=150px}
 
 - A table in **wide** format has N key columns and N value columns.
 - A table in **long** format has N key columns, one descriptor column and one value column.
@@ -722,52 +731,55 @@ carsales <- tibble::tribble(
 carsales
 ```
 
-Wide format data becomes a problem, when the columns are semantically identical. This dataset is in wide format and we can not easily plot it. We generally prefer data in long format, although it is more verbose with more duplication.
+In this wide format information is spread over many columns. Based on what we learned previously we can not easily plot it with `ggplot2`. Although it is often more verbose and includes more duplication, in the tidyverse we generally prefer data in long, "tidy" format -- well justified by @Wickham2014.
 
 To transform this dataset to a long format, we can apply `tidyr::pivot_longer`.
 
 ```{r}
 carsales_long <- carsales %>% tidyr::pivot_longer(
-    cols = tidyselect::num_range(
-        "",
-        range = 2014:2017
-    ), # define a set of columns to transform
-    names_to = "year", # the name of the descriptor column we want
-    names_transform = as.integer, # a transformation function to apply to the names
-    values_to = "sales" # the name of the value column we want
+    # define a set of columns to transform
+    cols = tidyselect::num_range("", range = 2014:2017),
+    # the name of the descriptor column we want
+    names_to = "year",
+    # a function transform names to values
+    names_transform = as.integer,
+    # the name of the value column we want
+    values_to = "sales"
 )
 carsales_long
 ```
 
-Wide datasets are not always the wrong choice, for example for adjacency matrices to represent graphs, covariance matrices or other pairwise statistics.
-When data gets big, then wide formats can be significantly more efficient (e.g. for spatial data).
+Wide datasets are not always the wrong choice. They are well suitable for example for adjacency matrices to represent graphs, covariance matrices or other pairwise statistics. When the data gets big, then wide formats can be significantly more efficient (e.g. for spatial data).
 
-So transform data from long to wide, we can use `tidyr::pivot_wider`
+To transform data from long to wide, we can use `tidyr::pivot_wider`
 
 ```{r}
 carsales_wide <- carsales_long %>% tidyr::pivot_wider(
-    id_cols = "brand", # the set of id columns that should not be changed
-    names_from = year, # the descriptor column with the names of the new columns
-    values_from = sales # the value column from which the values should be extracted
+    # the set of id columns that should not be changed
+    id_cols = "brand",
+    # the descriptor column with the names of the new columns
+    names_from = year,
+    # the value column from which the values should be extracted
+    values_from = sales
 )
 carsales_wide
 ```
 
 ### Exercise
 
-1. Move the column `gear` to the first position of the mtcars dataset
+1. Move the column `gear` to the first position of the `mtcars` dataset.
 
 ```{r}
 
 ```
 
-2. Make a new dataset `mtcars2` with the column `mpg` and an additional column `am_v`, which encodes the *transmission type* (`am`) as either `"manual"` or `"automatic"`
+2. Make a new dataset `mtcars2` from `mtcars` with the column `mpg` and an additional column `am_v`, which encodes the *transmission type* (`am`) as either `"manual"` or `"automatic"`.
 
 ```{r}
 
 ```
 
-3. Count the number of cars per *transmission type* (`am_v`) and *number of gears* (`gear`). Then transform the result to a wide format, with one column per *transmission type*.
+3. Count the number of cars per *transmission type* (`am_v`) and *number of gears* (`gear`) in `mtcars2`. Then transform the result to a wide format, with one column per *transmission type*.
 
 ```{r}
 
@@ -798,9 +810,9 @@ mtcars2
 ```{r}
 mtcars2 %>%
     dplyr::group_by(am_v, gear) %>%
-    dplyr::tally() %>% # dplyr::tally() is identical to
-    # dplyr::summarise(n = dplyr::n())
+    # dplyr::tally() is identical to dplyr::summarise(n = dplyr::n())
     # it counts the number of entities in a group
+    dplyr::tally() %>%
     tidyr::pivot_wider(
         names_from = am_v,
         values_from = n
