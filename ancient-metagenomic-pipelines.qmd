@@ -1,14 +1,13 @@
 ---
 title: Ancient Metagenomic Pipelines
-author: "James A.
-Fellows Yates, Megan Michel, Nikolay Oskolkov"
+author: "James A. Fellows Yates, Megan Michel, Nikolay Oskolkov"
 bibliography: assets/references/ancient-metagenomic-pipelines.bib
 ---
 
 ::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
 For this chapter's exercises, if not already performed, we will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
 
-Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413239](https://doi.org/10.5281/zenodo.8413239), and unpack
+Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413239](https://doi.org/10.5281/zenodo.8413239), and unpack.
 
 ```bash
 #| eval: false
@@ -16,7 +15,7 @@ tar xvf ancient-metagenomic-pipelines.tar.gz
 cd ancient-metagenomic-pipelines/
 ```
 
-We can then create the subsequently activate environment with
+We can then create the subsequently activate environment with the following commands.
 
 ```bash
 #| eval: false
@@ -58,16 +57,21 @@ Instead this is where bioinformatic _workflow managers_ come in: they handle the
 
 Modern computational bioinformatic workflow managers focus on a few main concepts.
 To summarise @Wratten2021-es, these areas are: data provenance, portability, scalability, re-entrancy - all together which contribute to ensuring reproducibility of bioinformatic analyses.
+
+
 **Data provenance** refers to the ability to track and visualise where each file goes and gets processed, as well as _metadata_ about each file and process (e.g., What version of a tool was used? What parameters were used in that step? How much computing resources were used).
-**Portability** follows from data provenance where it's not just can the entire execution of the pipeline be reconstructed - but can it also be run _with the same results_ on a different machine? This is important to ensure that we can install and test the pipeline on our laptop, but when we then need to do _heavy_ computation using real data, that it will still be able to execute on a high-performance computing cluster (HPC) or on the cloud - both that have very different configurations.
-This is normally achieved through the use of reusable software environments such as as conda ([https://docs.conda.io/en/latest/](https://docs.conda.io/en/latest/)) or container engines such as docker ([https://www.docker.com/](https://www.docker.com/)), and tight integration with HPC schedulers such as SLURM ([https://slurm.schedmd.com/documentation.html](https://slurm.schedmd.com/documentation.html)).
+
+
+**Portability** follows from data provenance where it's not just can the entire execution of the pipeline be reconstructed - but can it also be run _with the same results_ on a different machine? This is important to ensure that we can install and test the pipeline on our laptop, but when we then need to do _heavy_ computation using real data, that it will still be able to execute on a high-performance computing cluster (HPC) or on the cloud - both that have very different configurations. This is normally achieved through the use of reusable software environments such as as conda ([https://docs.conda.io/en/latest/](https://docs.conda.io/en/latest/)) or container engines such as docker ([https://www.docker.com/](https://www.docker.com/)), and tight integration with HPC schedulers such as SLURM ([https://slurm.schedmd.com/documentation.html](https://slurm.schedmd.com/documentation.html)).
+
 As mentioned earlier, not having to run each command manually can be a great speed up to our analysis.
 However this needs to be able to be **Scalable** that it the workflow is still efficient regardless whether we're running with one or ten thousands samples - modern workflow managers perform resource requirement optimisation and scheduling to ensure that all steps of the pipeline will be executed in the most resource efficient manner so it completes as fast as possible - but regardless of of the number of input data.
+
 Finally, as workflows get bigger and longer, **re-entrancy** has become more important, i.e., the ability to re-start a pipeline run that got stuck halfway through due to an error.
 
 
 All workflow managers have different ways of implementing the concepts above, and these can be very simple (e.g.,  **Makefiles**, [https://en.wikipedia.org/wiki/Make_(software)](https://en.wikipedia.org/wiki/Make_(software)))) to very powerful and abstract (e.g. **Workflow Description Language**, [https://github.com/openwdl/wdl](https://github.com/openwdl/wdl)).
-In this chapter we will use pipelines that use two popular workflow managers in bioinformatics, **Nextflow** ([https://nextflow.io](https://nextflow.io)) and **Snakemake** ([https://snakemake.github.io](https://snakemake.github.io)).
+In this chapter we will use pipelines that use two popular workflow managers in bioinformatics, **Nextflow** ([https://nextflow.io](https://nextflow.io), [@Di_Tommaso2017-xu]) and **Snakemake** ([https://snakemake.github.io](https://snakemake.github.io), [@Molder2021-et]).
 
 This chapter will not cover how to write our _own_ workflow, as this would require a whole other textbook.
 However it is recommended to learn and use workflow managers when carrying out repetitive or routine bioinformatic analysis (Nextflow and Snakemake being two popular ones in bioinformatics).
@@ -76,7 +80,7 @@ If you're interested in writing our own workflows using workflow managers, many 
 
 ## What is nf-core/eager?
 
-nf-core/eager is a computational pipeline specifically designed for preprocessing and analysis of ancient DNA data ([@fig-ancientmetagenomicpipelines-eagermetromap]).
+nf-core/eager is a computational pipeline specifically designed for preprocessing and analysis of ancient DNA data ([@fig-ancientmetagenomicpipelines-eagermetromap]) [@Fellows_Yates2021-jl].
 It is a reimplementation of the previously published EAGER (Efficient Ancient Genome Reconstruction) pipeline [@Peltzer2016-ov] written in the workflow manager Nextflow.
 In addition to reimplementing the original genome mapping and variant calling pipeline, in a more reproducible and portable manner the pipeline also included additional new functionality particularly for researchers interested in microbial sciences, namely a dedicated genotyper and consensus caller designed for low coverage genomes, the ability to get breadth and depth coverage statistics for particular genomic features (e.g. virulence genes), but also automated metagenomic screening and authentication of the off-target reads from mapping (e.g. against the host reference genome).
 
@@ -91,10 +95,10 @@ For more information, check out the usage documentation ([https://nf-co.re/eager
 Briefly, nf-core/eager takes at a minimum standard input file types that are shared across the genomics field, i.e., raw FASTQ files or aligned reads in bam format, and a reference fasta.
 nf-core/eager performs preprocessing of this raw data, including adapter clipping, read merging, and quality control of adapter-trimmed data.
 nf-core/eager then carries mapping using a variety of field-standard shot-read alignment tools with default parameters adapted for short and damaged aDNA sequences.
-The off-target reads from host DNA mapping can then go into metagenomic classification and authentication (in the case of MALT).
+The off-target reads from host DNA mapping can then go into metagenomic classification and authentication (in the case of MALT [@Vagene2018-px; @Herbig2016-rq]).
 After genomic mapping, BAM files go through deduplication of PCR duplicates, damage profiling and removal, and finally variant calling.
 A myriad of additional statistics can be generated depending on the users preference.
-Finally, nf-core eager uses MultiQC ([https://multiqc.info/](https://multiqc.info/)) to create an integrated html report that summarises the output/results from each of the pipeline steps.
+Finally, nf-core eager uses MultiQC ([https://multiqc.info/](https://multiqc.info/), [@Ewels2016-mv]) to create an integrated html report that summarises the output/results from each of the pipeline steps.
 
 ### Running nf-core/eager
 
@@ -126,14 +130,14 @@ Let's get started!
 nf-core/eager v2 requires an older version of Nextflow - if installing manually, ensure we do not have Nextflow version any greater than v22.10.6!
 :::
 
-First, download the latest version of the nf-core/eager repo (or check for updates if we have a previously-installed version):
+First, download the latest version of the nf-core/eager repo (or check for updates if we have a previously-installed version).
 
 ```bash
 #| eval: false
 nextflow pull nf-core/eager
 ```
 
-Next we can re-visit AMDirT (see [Accessing Ancient Metagenomic Data](accessing-ancient-metagenomic-data.qmd)) to download a pre-prepared configuration file for nf-core/eager
+Next we can re-visit AMDirT (see [Accessing Ancient Metagenomic Data](accessing-ancient-metagenomic-data.qmd), [@Borry2024-dz]) to download a pre-prepared configuration file for nf-core/eager
 
 1. Load AMDirt (`AMDirT viewer`), and select the latest release and the 'ancientsinglegenome-hostassociated' table
 2. Filter the `sample_name` column to just show KZL002 and GLZ002, and select these two rows
@@ -213,7 +217,7 @@ screen -R eager
 conda activate ancient-metagenomic-pipelines
 ```
 
-Now we can construct an eager command from within the `data/` directory so that it looks like this:
+Now we can construct an eager command from within the `data/` directory so that it looks like this.
 
 ```bash
 #| eval: false
@@ -244,20 +248,16 @@ This run will take between 20m-40m to run on a standard laptop! Time for a break
 
 So what is this command doing? The different parameters do the following:
 
-1.
-Tell nextflow to run the nf-core/eager pipeline with version 2.4.7
-2.
-Specify which computing and software environment to use with `-profile`
+1. Tell nextflow to run the nf-core/eager pipeline with version 2.4.7
+2. Specify which computing and software environment to use with `-profile`
     - In this case we are running locally so we don't specify a computing environment (such as a configuration for an institutional HPC) 
     - We use `docker` as our container engine, which downloads all the software and specific versions needed for nf-core/eager in immutable 'containers', to ensure nothing get broken and is as nf-core/eager expects
-3.
-Provide the various paths to the input files (TSV with paths to FASTQ files, a reference fasta, and the reference fasta's annotations)
-4.
-Activate the various of the steps of the pipeline we're interested in
+3. Provide the various paths to the input files (TSV with paths to FASTQ files, a reference fasta, and the reference fasta's annotations)
+4. Activate the various of the steps of the pipeline we're interested in
     - We turn off preseq (e.g. when we know we can't sequence more) 
     - We want to turn on BAM filtering, and specify to generate unmapped reads in FASTQ file (so we could check off target reads e.g. for other pathogens)
-    - we turn on genotyping using GATK UnifiedGenotyper (preferred over HaplotypeCaller due to in compatibility with that method to low-coverage data)
-    - We turn on variant statistics (from GATK) using bcftools, and coverage statistics of gene features using bedtools
+    - we turn on genotyping using GATK UnifiedGenotyper (preferred over HaplotypeCaller [@Poplin2018-yq] due to in compatibility with that method to low-coverage data)
+    - We turn on variant statistics (from GATK) using bcftools [@Danecek2021-gj], and coverage statistics of gene features using bedtools [@Quinlan2010-lf]
 
 For full parameter documentation, see the website ([https://nf-co.re/eager/2.5.2/parameters](https://nf-co.re/eager/2.5.2/parameters)).
 
@@ -305,12 +305,12 @@ This can help we evaluate the level of cross-mapping from related (e.g. contamin
 
     Depending on the size of our input data, infrastructure, and analyses, running nf-core/eager can take hours or even days (e.g. the example command above will likely take around 20 minutes!).
   
-    To avoid crashes due to loss of power or network connectivity, try running nf-core/eager in a `screen` or `tmux` session:
+    To avoid crashes due to loss of power or network connectivity, try running nf-core/eager in a `screen` or `tmux` session.
 
-        ```bash
+    ```bash
     #| eval: false
-        screen -R eager
-        ```
+    screen -R eager
+    ```
 
 2. Multiple ways to supply input data
 
@@ -335,7 +335,7 @@ nextflow run nf-core/eager -r 2.4.7 -profile docker --fasta ../reference/GCF_001
 
     `--email "your_address@something.com"`
 
-4. Check out the EAGER GUI
+4. Check out the nf-core/eager launch GUI
 
     For researchers who might be less comfortable with the command line, check out the nf-core/eager launch GUI ([https://nf-co.re/launch?pipeline=eager&release=2.5.2](https://nf-co.re/launch?pipeline=eager&release=2.5.2))! The GUI also provides a full list of all pipeline options with short explanations for those interested in learning more about what the pipeline can do.
 
@@ -349,7 +349,7 @@ nf-core/eager will retrieve cached results from previous steps as long as the in
 6. Monitor our pipeline in real time with the Seqera Platform
 
     Regular users may be interested in checking out the Seqera Platform (previously known as Nextflow Tower), a tool for monitoring the progress of Nextflow pipelines in real time.
-Check here ([https://tower.nf](https://tower.nf) for more information.
+Check the website ([https://tower.nf](https://tower.nf)) for more information.
 
 ### nf-core/eager output: results files
 
@@ -406,8 +406,10 @@ Input reads, length of input reads, %trimmed, etc.
 Each numeric column contains a coloured bar chart to help readers to quickly evaluate the number of a given sample against all others in the table](assets/images/chapters/ancient-metagenomic-pipelines/multiqc-screenshot.png){#fig-ancientmetagenomicpipelines-multiqcscreenshot}
 
 Typically we will look at the General Statistics table to get a rough overview of the pipeline run.
+
 If we hover our cursor over the column headers, we can see which tool the column's numbers came from, however generally the columns go in order of left to right, where the left most columns are from earlier in the pipeline run (e.g. removing adapters), to variant calling statistics (e.g. number of variants called).
 we can also configure which columns to display using the `Configure columns` button.
+
 It's important to note that in MultiQC tables, we may have duplicate rows from the same library or sample.
 This is due to MultiQC trying to squish in as many statistics from as many steps of the pipeline as possible (for example, statistics on each of a pair of FASTQ files, and then statistics on the single merged and mapped BAM file), so we should play around with the column configuration to help we visualise the best way to initially evaluate our data.
 
@@ -489,13 +491,13 @@ a % C>T of more than ~5% in the first few nucleotide positions?) ? If not, possi
 As above evaluating these outputs will vary depending on the data and or pipeline settings, and very much.
 However the extensive output documentation ([https://nf-co.re/eager/2.4.7/output](https://nf-co.re/eager/2.4.7/output)) of nf-core/eager can guide we through every single table and plot to assist we in continuing any type of ancient DNA project, assisted by fun little cartoony schematic diagrams ([@fig-ancient-metagenomic-pipelines-eageroutputexample])!
 
-![Example of cartoon schematic diagram of the output from DamageProfiler in different contexts.
+![Example of cartoon schematic diagram of the output from DamageProfiler [@Neukamm2021-ul] in different contexts.
 The six panels show different types of ancient DNA damage line-plots from having no damage (flat red/blue lines), however with a speech bubble noting that if the library was UDG treated, that the flat lines might be valid, all the way to the 'classic' ancient DNA damage plot with both red and blue lines showing an exponential decay from the ends of reads to the middle, with a motivational speech bubble.
 Source: Zandra Fagernäs, CC-BY 4.0 via nf-core/eager documentation ([https://nf-co.re/eager/output](https://nf-co.re/eager/output)).](assets/images/chapters/ancient-metagenomic-pipelines/damageprofiler_deaminationpatterns.png){#fig-ancient-metagenomic-pipelines-eageroutputexample}
 
 ### Clean up
 
-Before continuing onto the next section of this chapter, we will need to deactivate from the conda environment
+Before continuing onto the next section of this chapter, we will need to deactivate from the conda environment.
 
 ```bash
 #| eval: false
@@ -515,7 +517,7 @@ rm -r *
 ## What is aMeta?
 
 ::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
-For this chapter's exercises, if not already performed, we will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the following [`yml` file](https://github.com/NBISweden/aMeta/blob/main/workflow/envs/environment.yaml), and activate the environment:
+For this chapter's exercises, if not already performed, we will need to create the [conda environment](before-you-start.qmd#creating-a-conda-environment) from the following [`yml` file](https://github.com/NBISweden/aMeta/blob/main/workflow/envs/environment.yaml), and activate the environment.
 
 ```bash
 #| eval: false
@@ -523,14 +525,14 @@ conda activate aMeta
 ```
 :::
 
-While nf-core/eager is a solid pipeline for microbial genomics, and can also perform metagenomic screening via the integrated HOPS pipeline or Kraken2, in some cases we may wish to have a more accurate and resource efficient pipeline  In this section, we will demonstrate an example of using aMeta, a snakemake workflow proposed by @Pochon2022-hj that aims to minimise resource usage by combining both low-resource requiring k-mer based taxonomic profiling as well as accurate read-alignment ([@fig-ancientmetagenomicpipelines-ametadiagram]).
+While nf-core/eager is a solid pipeline for microbial genomics, and can also perform metagenomic screening via the integrated HOPS pipeline [@Hubler2019-qw] or Kraken2 [@Wood2019-mf], in some cases we may wish to have a more accurate and resource efficient pipeline  In this section, we will demonstrate an example of using aMeta, a snakemake workflow proposed by @Pochon2022-hj that aims to minimise resource usage by combining both low-resource requiring k-mer based taxonomic profiling as well as accurate read-alignment ([@fig-ancientmetagenomicpipelines-ametadiagram]).
 
 ![Schematic diagram of the aMeta pipeline.
 Input samples initially undergo generalised screening using the K-mer based KrakenUniq.
 For every hit that the reads match inside this database, then sees the genome of that hit then constructed into a MALT database where the reads undergo a mapping step to generate alignments, a lowest-common-ancestor (LCA) algorithm step to refine taxonomic assignments, and ancient DNA authentication statistics generation](assets/images/chapters/ancient-metagenomic-pipelines/ameta-workflow.jpg){#fig-ancientmetagenomicpipelines-ametadiagram}
 
 Rather than the very computationally heavy HOPS pipeline [@Hubler2019-qw], that requires extremely large computational nodes with large RAM (>1 TB) to load MALT databases into memory, aMeta does this via a two step approach.
-Firstly it uses KrakenUniq (a k-mer based and thus memory efficient method) to do a screening of sequencing reads against a broad generalised microbial database.
+Firstly it uses KrakenUniq [a k-mer based and thus memory efficient method, @Breitwieser2018-xg] to do a screening of sequencing reads against a broad generalised microbial database.
 Once all the possible taxa have been detected, aMeta will then make a new database of just the genomes of the taxa that were reported from KrakenUniq (i.e.
 a specific database) but using MALT.
 MALT on thus much reduced database is then used to perform computationally much heavier alignment against the reference genomes and LCA taxonomic reassignment.
@@ -550,7 +552,7 @@ cd /<path>/<to>/ancient-metagenomic-pipelines/aMeta
 As aMeta also includes tools that normally require very large computational resources that cannot fit on a standard laptop, we will instead try to re-use the internal very small 'fake' data the aMeta developers use to test the pipeline.
 
 
-we don't have to worry about trying to understand what the following commands are doing, they will not be important for the rest of the chapter.
+We don't have to worry about trying to understand exactly what the following commands are doing, they will not be important for the rest of the chapter.
 However generally the commands try to pull all the relevant software (via conda), make a fake database and download other required files, and then reconstruct the basic directory and file structure required for running the pipeline.
 
 :::{.callout-warning}
@@ -693,7 +695,7 @@ While this will produce nonsense output, it is used here to demonstrate how we w
 
 ### Prepare and run aMeta
 
-Make sure we're still in the `aMeta` conda environment, and in the main aMeta directory with
+Make sure we're still in the `aMeta` conda environment, and in the main aMeta directory with the following.
 
 ```bash
 #| eval: false
@@ -715,11 +717,11 @@ If we are using `conda` is the frontend this could be quite slow!
 :::
 
 Firstly we'll have displayed on the console a bunch of messages about JSON schemas, building DAG of jobs and downloading installing of conda environments.
-We will know the pipeline has started when we get green messages saying things like 'Checkpoint' and 'Finished job XX'.
+We will know the pipeline has started when we get green messages saying things like `Checkpoint` and `Finished job XX`.
 
 We'll know the job is completed once we get the following messages
 
-```{verbatim}
+```verbatim
 Finished job 0.
 31 of 31 steps (100%) done
 Complete log: .snakemake/log/2023-10-05T155051.524987.snakemake.log
@@ -733,9 +735,9 @@ To get a quick overview of ancient microbes present in our samples we should che
 ![Example microbiome profiling summary heatmap from aMeta.
 The columns represent different samples, and the rows of different species.
 The cells of the heatmap are coloured from blue, to yellow, to red, representing aMeta authentication scores from 0 to 10, with the higher the number the more confident of the hit being both the correct taxonomic assignment and that it is ancient.
-Numbers in the coloured cells also provide the direct score number.](assets/images/chapters/ancient-metagenomic-pipelines/overview_heatmap_scores.png){#fig-ancientmetagenomicpipelines-ametadiagram}
+Numbers in the coloured cells also provide the direct score number.](assets/images/chapters/ancient-metagenomic-pipelines/overview_heatmap_scores.png){#fig-ancientmetagenomicpipelines-ametaoutput}
 
-The heatmap demonstrates microbial species (in rows) authenticated for each sample (in columns) ([@fig-ancientmetagenomicpipelines-ametadiagram]).
+The heatmap demonstrates microbial species (in rows) authenticated for each sample (in columns) ([@fig-ancientmetagenomicpipelines-ametaoutput]).
 
 The colors and the numbers in the heatmap represent authentications scores, i.e.
 numeric quantification of seven quality metrics that provide information about microbial presence and ancient status.
@@ -767,20 +769,21 @@ Corresponding to the numbers and colors of the heatmap, one can find them in `re
 An example of such quality metrics is shown below in @fig-ancientmetagenomicpipelines-persampleplot.
 
 ![Example of sample/hit specific PDF output from aMeta, 9 panels represent different figures that are useful for evaluating the authenticitiy of an ancient metagenomic hit.
-From Left to Right, Top from bottom, the panels consist of: 1.
-Edit distance (all reads) bar plot, 2.
-Edit distance (ancient reads) bar plot, 3.
-Breadth of coverage line plot, 4.
-Deamination line plot, 5.
-Read length distribution bar plot, 6.
-PMD score histogram, 7.
-Percent identity bar plot, 8.
-table of similarity to hits from from closest hit to least closest, and 10.
-a general statistics table including the name of the taxonomic node, number of reads, duplicates, and mean read length etc.](assets/images/chapters/ancient-metagenomic-pipelines/aMeta_output.png){#fig-ancientmetagenomicpipelines-persampleplot}
+From Left to Right, Top from bottom, the panels consists of:
+1. Edit distance (all reads) bar plot
+2. Edit distance (ancient reads) bar plot
+3. Breadth of coverage line plot
+4. Deamination line plot
+5. Read length distribution bar plot
+6. PMD score histogram
+7. Percent identity bar plot, 
+8. A table of similarity to hits from from closest hit to least closest
+9. A general statistics table including the name of the taxonomic node, number of reads, duplicates, and mean read length etc.
+](assets/images/chapters/ancient-metagenomic-pipelines/aMeta_output.png){#fig-ancientmetagenomicpipelines-persampleplot}
 
 ### Clean up
 
-Before continuing onto the next section of this chapter, we will need to deactivate from the conda environment
+Before continuing onto the next section of this chapter, we will need to deactivate from the conda environment.
 
 ```bash
 #| eval: false
@@ -799,17 +802,16 @@ These reads can optionally go into taxonomic classification and visualisation, a
 Resulting contigs can be functionally annotated at the same time as optionally going through binning and binning refinement and evaluation (with statistics generation).
 Bins and refined bins can be taxonomically classified and annotated, with all final reports going into MultiQC.](assets/images/chapters/ancient-metagenomic-pipelines/mag_workflow.png){#fig-ancientmetagenomicpipelines-magworkflow}
 
-<!-- TODO: CITATIONS -->
-
 nf-core/mag covers the same major steps as we will have run if we followed the chapter on [De Novo assembly](denovo-assembly.qmd).
-Firstly, as with nf-core/eager, nf-core/mag do some initial sequencing QC and cleanup with `fastp` or `AdapterRemoval`, running FastQC before and after this step to make sure that adapters and overly short reads have been removed.
-It can then optionally do basic taxonomic classification of raw reads with `Kraken2` or `Centrifuge`.
-The processed reads then ungo assembly with MEGAHIT, SPAdes, or SPAdeshybrid (the latter being for combining short and long reads), with contig annotation with `Prodigal` to get gene prediction and assembly statistics with `QUAST`.
-A unique feature of nf-core/mag over other _de novo_ assembly pipelines is an aDNA validation and correction step: contigs under go 'reference free' damage profiling using `pyDamage`, and then remaining damage bases that are mistakenly incorporated by assemblies are corrected using `freebayes` and `BCFTools`.
-Contigs then optionally grouped into genomic 'bins' with a range of metagenomic binners (`MetaBAT2`, `MaxBin2`, and `CONCOCT`), as well as also optional binning refinement with `DAS Tool`.
-Bins are then re-annotated with Prokka, taxonomically classified with either `CAT` or `GTDB-Tk` Evaluation of the resulting bins is carried out with BUSCO, CheckM, GUNC and/or QUAST to assess the bin completeness.
+
+Firstly, as with nf-core/eager, nf-core/mag do some initial sequencing QC and cleanup with `fastp` [@Chen2018-vg] or `AdapterRemoval` [@Schubert2016-qv], running `FastQC` [@Andrews2010-pd] before and after this step to make sure that adapters and overly short reads have been removed.
+It can then optionally do basic taxonomic classification of raw reads with `Kraken2` [@Wood2019-mf] or `Centrifuge` [@Kim2016-qc].
+The processed reads then ungo assembly with `MEGAHIT` [@Li2015-lj], `metaSPAdes` [@Nurk2017-xh], or `SPAdeshybrid` [@Antipov2016-xw] (the latter being for combining short and long reads), with contig annotation with `Prodigal` [@Hyatt2010-yv] to get gene prediction and assembly statistics with `QUAST`.
+A unique feature of nf-core/mag over other _de novo_ assembly pipelines is an aDNA validation and correction step: contigs under go 'reference free' damage profiling using `pyDamage` [@Borry2021-lt], and then remaining damage bases that are mistakenly incorporated by assemblies are corrected using `freebayes` [@Garrison2012-pv] and `BCFTools`.
+Contigs then optionally grouped into genomic 'bins' with a range of metagenomic binners (`MetaBAT2` [@Kang2019-ld], `MaxBin2` [@Wu2015-bz], and `CONCOCT` [@Alneberg2014-mc]), as well as also optional binning refinement with `DAS Tool` [@Sieber2018-jt].
+Bins are then re-annotated with `Prokka` [@Seemann2014-ee], taxonomically classified with either `CAT` [@von-Meijenfeldt2019-qe] or `GTDB-Tk` [@Chaumeil2022-xx] Evaluation of the resulting bins is carried out with `BUSCO` [@Simao2015-bs], `CheckM` [@Parks2015-zg], `GUNC` [@Orakov2021-yq] and/or `QUAST` [@Gurevich2013-iq] to assess the bin completeness.
 And, as with all nf-core pipelines, all the results are wrapped up into a `MultiQC` report.
-Detailed documnetation can be see on the nf-core/mag parameters ([https://nf-co.re/mag/2.3.2/parameters](https://nf-co.re/mag/2.3.2/parameters)) and output ([https://nf-co.re/mag/2.3.2/docs/output](https://nf-co.re/mag/2.3.2/docs/output) pages.
+Detailed documentation can be see on the nf-core/mag parameters ([https://nf-co.re/mag/2.3.2/parameters](https://nf-co.re/mag/2.3.2/parameters)) and output ([https://nf-co.re/mag/2.3.2/docs/output](https://nf-co.re/mag/2.3.2/docs/output) pages.
 
 ### Running nf-core/mag
 
@@ -829,7 +831,7 @@ In many cases it will not be able to run a _de novo_ assembly on a standard lapt
 This tutorial will re-use the data from the _de novo_ assembly chapter.
 If we have not-run that practical, or deleted the data, pleas follow the instructions at the top of the [de novo assembly](denovo-assembly.qmd) page to download the `denovo-assembly.tar.gz` file and unpack it into the `denovo-assembly directory`.
 
-Make sure once we've finished, change back into this chapter's directory with
+Make sure once we've finished, change back into this chapter's directory with the following.
 
 ```bash
 #| eval: false
@@ -842,10 +844,10 @@ The manual steps of the previous chapter included:
 1. Read clean up with `fastp`, 
 2. Assembly with `MEGAHIT`, 
 3. Ancient DNA assessment and correction with `freebayes` and `pyDamage`
-4. Binning using `MetaBAT2` and `MaxBin2` (originally using the `MetaWRAP` pipeline), 
+4. Binning using `MetaBAT2` and `MaxBin2` (originally using the `MetaWRAP` pipeline [@Uritskiy2018-ut]), 
 5. Bin assessment with `CheckM`
-6. Contig taxonomic classification with `MMSeqs2` via the `GTDB` database
-7. Genome annotation with `prokka`
+6. Contig taxonomic classification with `MMSeqs2` [@Steinegger2017-qt] via the `GTDB` database
+7. Genome annotation with `Prokka`
 
 So, what command would we use to recreate these?
 
@@ -863,7 +865,7 @@ nextflow run nf-core/mag -r 2.3.2 \
 In fact, nf-core/mag will do most of the steps for us! In this case, we mostly just need to _deactivate_ most of the additional steps (the last line).
 Otherwise, as with eager we have done the following:
 
-1. Tell nextflow to run the nf-core/mag pipeline with version 2.3.2
+1. Tell Nextflow to run the nf-core/mag pipeline with version 2.3.2
 2. Specify which computing and software environment to use with `-profile`
     - In this case we are running locally so we don't specify a computing environment (such as a configuration for an institutional HPC) 
     - We use `docker` as our container engine, which downloads all the software and specific versions needed for nf-core/mag in immutable 'containers', to ensure nothing get broken and is as nf-core/mag expects
@@ -944,7 +946,7 @@ process {
 Here we set the number of CPUs for most tools to a maximum of `8`, and then we limit the amount of memory for CheckM to 24 GB (down from the default ([https://github.com/nf-core/mag/blob/66cf53aff834d2a254b78b94fc54cd656b8b7b57/conf/base.config#L37-L41](https://github.com/nf-core/mag/blob/66cf53aff834d2a254b78b94fc54cd656b8b7b57/conf/base.config#L37-L41)) of 36 GB - which exceeds most laptop memory).
 We also give a specifc `CheckM` flag command to use a smaller database.
 
-We can save this `custom.config` file, and supply this to the Nextflow command with the nextflow parameter (`-c`).
+We can save this `custom.config` file, and supply this to the Nextflow command with the Nextflow parameter (`-c`).
 The good thing about the config file, is we can re-use across runs on the same machine! So set once, and never think about it again.
 
 And with that, we can run our nf-core/mag pipeline!
@@ -969,7 +971,7 @@ nextflow run nf-core/mag -r 2.3.2 \
 -c custom.config
 ```
 
-Again as with nf-coire/eager when the run starts, we see a long list of `process` lines with progress bars slowly appearing over time.
+Again as with nf-core/eager when the run starts, we see a long list of `process` lines with progress bars slowly appearing over time.
 If in a screen session, we can press <kbd>ctrl</kbd> + <kbd>a</kbd> and then <kbd>[</kbd> to access a 'navigation' (called 'copy') mode, then use our arrow keys on our keyboard to scroll up and down.
 To quit this mode just press `q`.
 
@@ -1047,14 +1049,14 @@ rm -rf /<PATH>/<TO>/ancient-metagenomic-pipelines*
 
 Once deleted we can move elsewhere (e.g., `cd ~`).
 
-We can also get out of the `conda` environment with
+We can also get out of the `conda` environment with the following.
 
 ```bash
 #| eval: false
 conda deactivate
 ```
 
-To delete the conda environment
+To delete the conda environment we can use `conda remove`.
 
 ```bash
 #| eval: false
