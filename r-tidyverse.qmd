@@ -405,26 +405,28 @@ old_options <- options(
 )
 ```
 
-The `dplyr` package includes powerful functions to subset data in tibbles based on conditions. `dplyr::select` allows to select columns.
+Among the most basic tabular data transformation operations is the conditional selection of columns and rows. The `dplyr` package includes powerful functions to subset data in tibbles.
+
+`dplyr::select` allows to select columns:
 
 ```{r}
-dplyr::select(peng, id, flipper_length_mm) # reduce tibble to two columns
+dplyr::select(peng, id, flipper_length_mm) # select two columns
 dplyr::select(peng, -island, -flipper_length_mm) # remove two columns
 ```
 
-`dplyr::filter` allows for conditional filtering of rows.
+`dplyr::filter` allows for conditional filtering of rows:
 
 ```{r}
 dplyr::filter(peng, year == 2007) # penguins examined in 2007
-dplyr::filter(peng, year == 2007 |
-    year == 2009) # penguins examined in 2007 OR 2009
-dplyr::filter(
-    peng, # an alternative way to express
-    year %in% c(2007, 2009)
-) # OR with the match operator "%in%"
-dplyr::filter(peng, species == "Adelie" &
-    body_mass_g >= 4000) # Adelie penguins heavier than 4kg
+# penguins examined in 2007 OR 2009
+dplyr::filter(peng, year == 2007 | year == 2009)
+# an alternative way to express OR with the match operator "%in%"
+dplyr::filter(peng, year %in% c(2007, 2009))
+# Adelie penguins heavier than 4kg
+dplyr::filter(peng, species == "Adelie" & body_mass_g >= 4000) 
 ```
+
+Note how each function here takes `peng` as a first argument. This invites a more elegant syntax.
 
 ### Chaining functions together with the pipe `%>%`
 
@@ -435,7 +437,7 @@ library(magrittr)
 peng %>% dplyr::filter(year == 2007)
 ```
 
-It forwards the LHS (left-hand side) as the first argument of the function appearing on the RHS (right-hand side), which enables sequences of functions ("tidyverse style").
+It forwards the LHS (left-hand side) of `%>%` as the first argument of the function appearing on the RHS (right-hand side) to enable sequences of function calls ("tidyverse style").
 
 ```{r}
 peng %>%
@@ -444,25 +446,27 @@ peng %>%
     nrow() # count the resulting rows
 ```
 
-`magrittr` also offers some more operators, among which the extraction `%$%` is particularly useful to easily extract individual variables.
+`magrittr` also offers some more operators, among which the extraction operator `%$%` is particularly useful to easily extract individual variables from a tibble.
 
 ```{r}
 peng %>%
     dplyr::filter(island == "Biscoe") %$%
     species %>% # extract the species column as a vector
-    unique() # get the unique elements of said vector
+    unique()    # get the unique elements of said vector
 ```
 
 Here we already use the base R summary function `unique`.
 
 ### Summary statistics in `base` R
 
-Summarising and counting data is indispensable and R offers all basic operations you would expect in its `base` package.
+Summarising and counting data is indispensable and R offers a variety of basic operations in its `base` package. Many of them operate on `vector`s, so lists of values of one type. Individual columns are vectors.
 
 ```{r}
+# we extract a single variable as a vector of values
 chinstraps_weights <- peng %>%
     dplyr::filter(species == "Chinstrap") %$%
     body_mass_g
+chinstraps_weights
 
 length(chinstraps_weights) # length/size of a vector
 unique(chinstraps_weights) # unique elements of a vector
@@ -475,24 +479,29 @@ median(chinstraps_weights) # median
 
 var(chinstraps_weights) # variance
 sd(chinstraps_weights) # standard deviation
-quantile(chinstraps_weights, probs = 0.75) # quantiles for the given probabilities
+# quantiles for the given probabilities
+quantile(chinstraps_weights, probs = c(0.25, 0.75))
 ```
 
-Many of these functions can ignore missing values with an option `na.rm = TRUE`.
+Many of these functions can ignore missing values (so `NA` values) with the option `na.rm = TRUE`.
 
 ### Group-wise summaries with `group_by` and `summarise`
 
-These summary statistics are particular useful when applied to conditional subsets of a dataset.
+These vector summary statistics are particular useful when applied to conditional subsets of a dataset.
 
-`dplyr` allows such summary operations with a combination of the functions `group_by` and `summarise`, where the former tags a `tibble` with categories based on its variables and the latter reduces it to these groups while simultanously creating new columns.
+`dplyr` allows such summary operations with a combination of the functions `group_by` and `summarise`, where the former tags a `tibble` with categories based on its variables and the latter reduces it to these groups while simultaneously creating new columns.
 
 ```{r}
 peng %>%
-    dplyr::group_by(species) %>% # group the tibble by the material column
+    # group the tibble by the material column
+    dplyr::group_by(species) %>%
     dplyr::summarise(
-        min_weight = min(body_mass_g), # new col: min weight for each group
-        median_weight = median(body_mass_g), # new col: median weight for each group
-        max_weight = max(body_mass_g) # new col: max weight for each group
+        # new col: min weight for each group
+        min_weight = min(body_mass_g),
+        # new col: median weight for each group
+        median_weight = median(body_mass_g),
+        # new col: max weight for each group
+        max_weight = max(body_mass_g)
     )
 ```
 
@@ -500,10 +509,13 @@ Grouping can also be applied across multiple columns at once.
 
 ```{r}
 peng %>%
-    dplyr::group_by(species, year) %>% # group by species and year
+    # group by species and year
+    dplyr::group_by(species, year) %>%
     dplyr::summarise(
-        n = dplyr::n(), # a new column: number of penguins for each group
-        .groups = "drop" # drop the grouping after this summary operation
+        # new col: number of penguins for each group
+        n = dplyr::n(),
+        # drop the grouping after this summary operation
+        .groups = "drop"
     )
 ```
 
@@ -526,7 +538,7 @@ Here we extract the heaviest individuals per species.
 ```{r}
 peng %>%
     dplyr::group_by(species) %>% # group by species
-    dplyr::arrange(dplyr::desc(body_mass_g)) %>% # sort by weight within (!) groups
+    dplyr::arrange(dplyr::desc(body_mass_g)) %>% # sort by weight within groups
     dplyr::slice_head(n = 3) %>% # keep the first three penguins per group
     dplyr::ungroup() # remove the still lingering grouping
 ```
@@ -539,21 +551,21 @@ peng %>% dplyr::slice_sample(n = 10)
 
 ### Exercise
 
-For this exercise we once more go back to the `mtcars` dataset. See `?mtcars` for details
+For this exercise we once more go back to the `mtcars` dataset. See `?mtcars` for details.
 
-1. Determine the number of cars with four *forward gears* (`gear`) in the `mtcars` dataset
-
-```{r}
-
-```
-
-2. Determine the mean *1/4 mile time* (`qsec`) per *Number of cylinders* (`cyl`) group
+1. Determine the number of cars with four *forward gears* (`gear`) in the `mtcars` dataset.
 
 ```{r}
 
 ```
 
-3. Identify the least efficient cars for both *transmission types* (`am`)
+2. Determine the mean *1/4 mile time* (`qsec`) per *Number of cylinders* (`cyl`) group.
+
+```{r}
+
+```
+
+3. Identify the least efficient cars for both *transmission types* (`am`).
 
 ```{r}
 
