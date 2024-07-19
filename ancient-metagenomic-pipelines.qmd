@@ -635,9 +635,11 @@ mv config.yaml config.yaml.bkp
 mv samples.tsv samplest.tsv.bkp
 cd ../
 ln -s .test/data/ .
+ln -s .test/.snakemake/ . ## so we can re-use conda environments from the `.test` directory for the summer school run
 
 ## Again get the taxonomy tax dump for Krona, but this time for a real run
-env=$(grep krona ../.test/.snakemake/conda/*yaml | awk '{print $1}' | sed -e "s/.yaml://g" | head -1)
+## Make sure you're now in the root directory of the repository!
+env=$(grep krona .test/.snakemake/conda/*yaml | awk '{print $1}' | sed -e "s/.yaml://g" | head -1)
 conda activate $env
 cd $env/opt/krona
 ./updateTaxonomy.sh taxonomy
@@ -663,8 +665,8 @@ In a text editor (e.g. `nano`), write the following names paths in TSV format.
 
 ```bash
 sample	fastq
-foo	data/bar.fq.gz
-bar	data/foo.fq.gz
+bar	data/bar.fq.gz
+foo	data/foo.fq.gz
 ```
 
 :::{.callout-warning}
@@ -719,7 +721,6 @@ As this is only a dummy run (due to the large-ish computational resources requir
 While this will produce nonsense output, it is used here to demonstrate how we would execute the pipeline.
 :::
 
-
 ### Prepare and run aMeta
 
 Make sure we're still in the `aMeta` conda environment, and that we are still in the main aMeta directory with the following.
@@ -758,6 +759,14 @@ Complete log: .snakemake/log/2023-10-05T155051.524987.snakemake.log
 
 All output files of the workflow are located in `aMeta/results` directory.
 To get a quick overview of ancient microbes present in our samples we should check a heatmap in `results/overview_heatmap_scores.pdf`.
+
+:::{.callout-warning}
+If running during the summer school, you can use the following command to open the PDF file from the command line.
+
+```bash
+evince results/overview_heatmap_scores.pdf
+```
+:::
 
 ![Example microbiome profiling summary heatmap from aMeta.
 The columns represent different samples, and the rows of different species.
@@ -809,9 +818,12 @@ From Left to Right, Top from bottom, the panels consists of:
 
 ### Clean up
 
-Before continuing onto the next section of this chapter, we will need to deactivate from the conda environment.
+Before continuing onto the next section of this chapter, we will need to remove the output files, and deactivate from the conda environment.
 
 ```bash
+rm -r results/ log/
+## You can also optionall remove the conda environments if we are running out of space
+# rm -r .snakemake/ .test/.snakemake
 conda deactivate 
 ```
 
