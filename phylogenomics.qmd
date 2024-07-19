@@ -45,7 +45,73 @@ Load the conda environment.
 conda activate phylogenomics
 ```
 
-## Visualize the sequence alignment
+## Introduction
+
+### Definitions and concepts
+
+
+Phylogenetics is the study of evolutionary relationships between entities such as species, genes or individuals (but also non-biological entities such as languages), through the reconstruction of phylogenetic trees. Phylogenetic trees are composed of __branches__ (or edges) representing continuous lines of descent (or lineages), __nodes__  representing the split of an ancestral lineage into descending lineages, and tips (or leaves) representing the sampled entities.
+
+![](assets/images/chapters/phylogenomics/basic_tree_definitions.png)
+
+
+In a phylogenetic tree, a group containing all descendants of a given ancestor (or node), is called a __monophyletic group__, or a __clade__. Any group that is not monophyletic is called __paraphyletic__. 
+
+![](assets/images/chapters/phylogenomics/monophyly.png)
+
+The oldest node in a phylogenetic tree is called the _root_. It corresponds to the __most recent common ancestor (MRCA)__ of the whole group under consideration. The root is not defined in all phylogenetic trees. If so, it means that the tree is oriented in time, such that we can define which node is the oldest. We call such tree a __rooted tree__. Note that time-trees are rooted by definition (but the opposite is not true). Substitution trees are in principle unrooted, as these contain information about the genetic distance between nodes, but not about the relative age of nodes. Unrooted trees are best represented in a star-shaped manner (although visualization softwares such as _figtree_ present all trees as if they were rooted, by default). 
+
+
+![](assets/images/chapters/phylogenomics/rooted_tree.png)
+
+
+An unrooted tree can be turned into a rooted tree if one can define an __outgroup__ among the analysed entities. An outgroup is a tip or a clade that can be confidently considered to not belong to the group formed by the rest of the tips (the __ingroup__). Typically, this can be an  individual from a different species than the one under consideration. If one can define such an outgroup _a priori_, then the root of the tree can be placed on the branch between the outgroup and the ingroup. Outgroups can be included intentionally in phylogenetic analyses for this purpose.
+
+![](assets/images/chapters/phylogenomics/outgroup.png)
+
+
+### Phylogenetics: what for?
+
+Phylogenetic analyses are useful for a variety of applications, but its primary goal is to characterize and classify the observed biological diversity with an evolutionary perspective. Thus, phylogenies are essential to organize and interpret all knowledge about biological organisms in the light of evolution.
+  
+![](assets/images/chapters/phylogenomics/biological_classification.png)
+
+Furthermore, phylogenetic trees can be used in combination with various information about the sampled entities to reconstruct the characteristics of past lineages and changes that have occurred during the course of evolution. Typically, phylogenies can be combined with information about the geographic location of sampled entities to reconstruct the geographic spread of the studied organism in the past. Similarly, information about the host-species of pathogen strains can be used to identify past cross-species transmission events. Similar approaches can be applied to genetic features to map genomic changes such as gene loss or gain on the phylogeny. Note that if the phylogeny is calibrated in time, the date of these events can be estimated.
+
+![](assets/images/chapters/phylogenomics/ancestral_features.png)
+
+Phylogenies can also be used to obtain information about past epidemiological or population dynamics. Typically the time to the most recent common ancestor (tMRCA) of pathogen strains can be considered as an upper date limit for the emergence of the pathogen in the considered population. Using phylodynamic approaches, population or epidemiological parameters can be formally estimated through the phylogeny.
+
+![](assets/images/chapters/phylogenomics/phylodynamics.png)
+
+### Phylogenetic analysis of ancient genomes
+
+Ancient genomes are powerful date for phylogenetic inference for several reason. The most obvious one is that it might allow sampling lineages that have gone extinct in the past, thereby uncovering entire parts of the evolutionary history that are invisible from modern data alone. Furthermore, by providing direct observations from the past, ancient genomes may permit accurate reconstruction of past evolutionary events and phylogeographic scenarios which can be otherwise impossible to unveil.
+
+![](assets/images/chapters/phylogenomics/ancient_genome_phylogeography.png)
+
+Another fundamental advantage of ancient genomes for phylogenetic inference is that they can be used to estimate the rate of genetic changes of the studied group and calibrate phylogenies in time using molecular clock models (as performed in the last part of the practical). This is often difficult or impossible to do with modern sequences data alone, except for fast-evolving entities like RNA viruses.
+
+![](assets/images/chapters/phylogenomics/time_tree_calibration.png)
+
+### How to estimate phylogenetic trees?
+
+Before reconstructing a phylogenetic tree from a set of DNA sequences, these sequences need to be aligned. Sequence alignment consist in rearranging sequences to ensure that homologous nucleotide positions (i.e. descending from a common ancestor) are aligned and compared. To do so, gaps are inserted in sequences to accommodate genetic insertions or deletions that might have occurred in these sequences during the course evolution. Although it will not be covered in this practical, sequence alignment is an essential first step for phylogenetic analyses (or any comparative genetic analysis), and can be performed in different ways depending on the starting material. If one starts from already assembled gene or genome sequences, multiple sequence alignment can be performed using softwares such as __clustal__ or __MAFFT__. When analysing NGS data, one can map all data to the same reference genome and produce combined genotyping data and sequence alignments using softwares such as MultiVCFAnalyzer (as performed in the _Genome Mapping_ practical).
+
+![](assets/images/chapters/phylogenomics/sequence_alignment.png)
+
+Various methods can be employed to infer a phylogenetic tree from a DNA sequence alignment. Distance-based methods are based on pairwise genetic distance matrices derived from the sequences rather than from the sequences themselves. This includes techniques like Neighbour-Joining and UPGMA. Maximum parsimony is another method in which it is assumed that the most likely tree is the one minimizing the number of changes necessary to explain the observed sequences. Finally probabilistic methods are methods based on an explicit probabilistic model of evolution which allows calculating the probability of the observed sequence data given a certain phylogenetic tree. This measure is referred to as the __phylogenetic likelihood__. Probabilistic approaches are, by far, the most popular phylogenetic approaches nowadays, and fall into two categories: Maximum likelihood and Bayesian approaches.
+
+![](assets/images/chapters/phylogenomics/inference_methods.png)
+
+An important component of phylogenetic models is the genetic substitution model. Substitution models are used in distance-based and probabilistic phylogenetic approaches. In essence, these models allow estimating genetic distances between sequences accounting for cases in which multiple substitutions might have occurred at the same sites. Different substitution models exist allowing for more or less complexity, from the Jukes-Cantor (JC69) model in which all types of substitutions are assumed to occur at the same rate to General Time-Reversible (GTR) model (which is the GTR model) in which each type of substitution occurs at a different rate.
+
+ 
+![](assets/images/chapters/phylogenomics/substitution_models.png)
+
+## Practical
+
+### Visualize the sequence alignment
 
 In this practical session, we will work with an alignment produced as you learned in the practical _Genome mapping_.
 
@@ -110,7 +176,7 @@ Once you know this, can you already tell by looking at the alignment which seque
 We can easily see that the last sequence in the alignment (Y. pseudotuberculosis) contains more disagreements to the consensus. This is normal since this is the only genome not belonging to the _Y. pestis_ species: we will use it as an outgroup
 :::
 
-## Distance-based phylogeny: Neighbour-Joining
+### Distance-based phylogeny: Neighbour-Joining
 
 The Neighbour-Joining (NJ) method is an agglomerative algorithm which can be used to derive a phylogenetic tree from a pairwise distance matrix. In essence, this method groups taxa that have the shortest distance together first, and repeats this operation iteratively until all the taxa/sequences included in your alignment have been placed in a tree.
 
@@ -180,7 +246,7 @@ Do they form a monophyletic group (a clade)?
 Yes, they form a monophyletic group. We can also say that this group of prehistoric strains form their own lineage.
 :::
 
-## Probabilistic methods: Maximum Likelihood and Bayesian inference
+### Probabilistic methods: Maximum Likelihood and Bayesian inference
 
 These are the most commonly used approach today. In general, probabilistic methods are statistical techniques assuming that the observed data is generated through a stochastic process with a probablility depending on a set of parameters which we want to estimate. The probability of the data given the model parameters is called the likelihood.
 
@@ -198,7 +264,7 @@ In a phylogenetic probabilistic model, the data is the sequence alignment and th
 ![](assets/images/chapters/phylogenomics/20.png)
 :::
 
-## Maximum likelihood estimation and bootstrapping
+### Maximum likelihood estimation and bootstrapping
 
 One way to make inferences from a probabilistic model is by finding the combination of parameters which maximises the likelihood. These parameter values are called maximum likelihood (ML) estimates. We are usually not able to compute the likelihood value for all possible combinations of parameters and have to rely on heuristic algorithms to find the maximum likelihood estimates.
 
@@ -259,7 +325,7 @@ Lastly, we will export the rooted tree from figtree: File -> Export trees -> sel
 
 ![](assets/images/chapters/phylogenomics/export_tree.png)
 
-## Estimating a time-tree using Bayesian phylogenetics (_BEAST2_)
+### Estimating a time-tree using Bayesian phylogenetics (_BEAST2_)
 
 Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of substitutions but instead represent the time of evolution. To do so, we will use the dates of ancient genomes (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.
 
@@ -344,7 +410,7 @@ Once the analysis is running two files should have been created and are continuo
 
 While the analysis is running, you can start reading the next section!
 
-### Assessing _BEAST2_ results
+#### Assessing _BEAST2_ results
 
 ::: {.callout-note title="Reminder"}
 We are using an MCMC algorithm to sample the posterior distribution of parameters. If the MCMC has run long enough, we can use the sampled parameters to approximate the posterior distribution itself. Therefore, we have to check first that the MCMC chain has run long enough.
@@ -404,7 +470,7 @@ What is your mean estimate of the clock rate (ucld mean)?
 ![](assets/images/chapters/phylogenomics/beast_results_ucldMean.png)
 :::
 
-### MCC tree
+#### MCC tree
 
 Since we are working in a Bayesian framework, we do not obtain a single phylogenetic tree as with Maximum likelihood, but a large set of trees which should be representative of the posterior distribution. In contrast with mono-dimensional parameters, a tree distribution cannot be easily summarized with mean or median estimates. Instead, we need to use specific tree-summarizing techniques. One of the most popular is the maximum clade credibility (MCC) tree, which works as follows:
 
