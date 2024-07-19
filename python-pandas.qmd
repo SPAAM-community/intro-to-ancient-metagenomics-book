@@ -448,14 +448,29 @@ df.head()
 ```
 ::: {.callout-note collapse="true"}
 ## Expand to see output
+```{r}
+#| label: tbl-pythonpandas-plothead
+#| echo: false
+#| results: 'asis'
+#| tbl-cap: "head all_data.tsv."
+#| tbl-cap-location: top
+#| message: false
+#| warning: false
 
-ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
--|----|----|----------|------|-------|-|-|---|--|---|---|--|--|-|--|-|-|-|-|--
-0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|11
-1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11
-2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|3|11
-3|6182|1984|Graduation|Together|26646.0|1|0|11|4|20|10|3|5|2|0|4|6|0|3|11
-4|7446|1967|Master|Together|62513.0|0|1|520|42|98|0|42|14|6|4|10|6|0|3|11
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_2_all_data_head.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
 :::
 
 :::{.callout-tip collapse="true"}
@@ -514,10 +529,30 @@ df.loc[1:2]
 ```
 ::: {.callout-note collapse="true"}
 ## Expand to see output
-ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue
--|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-
-1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11
-2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|3|11
+
+```{r}
+#| label: tbl-pythonpandas-2rows
+#| echo: false
+#| results: 'asis'
+#| tbl-cap: "first 2 rows all_data.tsv."
+#| tbl-cap-location: top
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_3_all_data_first_2_lines.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
 :::
 
 To print all the rows with a certain column name works the same as subsetting rows, but then adding the column name after the comma.
@@ -1233,7 +1268,7 @@ ax.set_title("Histogram of income")
 ## Expand to see output
 Text(0.5, 1.0, 'Histogram of income')
 
-![png](https://github.com/Kevinnota/teaching_stuff/blob/main/histogram.png?raw=true)
+![This is the histogram of income that should appear with you run the code above.](https://github.com/Kevinnota/teaching_stuff/blob/main/histogram.png?raw=true){#fig-pythonpandas-incomehistogram}
 :::
 
 ::: {.callout-tip title="Question" appearance="simple"}
@@ -1283,7 +1318,7 @@ ax.set_title("Fixed Histogram of income")
 ## Expand to see output
 Text(0.5, 1.0, 'Fixed Histogram of income')
 
-![png](https://github.com/Kevinnota/teaching_stuff/blob/main/fixed_histogram.png?raw=true)
+![To "fix" the histogram, the one person with the income of 666666 is removed, making the plot look a lot neater.](https://github.com/Kevinnota/teaching_stuff/blob/main/fixed_histogram.png?raw=true){#fig-pythonpandas-incomefixhistogram}
 :::
 :::
 
@@ -1318,7 +1353,7 @@ ax.set_title("Mean income for each education level")
 ## Expand to see output
 Text(0.5, 1.0, 'Mean income for each education level')
 
-![png](https://github.com/Kevinnota/teaching_stuff/blob/main/bar_plot.png?raw=true)
+![Barplot of the mean income for each education level.](https://github.com/Kevinnota/teaching_stuff/blob/main/bar_plot.png?raw=true){#fig-pythonpandas-barplot}
 :::
 ### Scatter plot
 
@@ -1332,7 +1367,7 @@ ax.set_title("Wine purchases and Fruit purchases")
 ## Expand to see output
 Text(0.5, 1.0, 'Wine purchases and Fruit purchases')
 
-![png](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_01.png?raw=true)
+![A scatter plot with wine purchases on the x-axis and fruit purchases on the y-axis.](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_01.png?raw=true){#fig-pythonpandas-scatterplot}
 :::
 
 You can also specify whether the axes should be on the log scale or not.
@@ -1345,7 +1380,7 @@ ax.set_title("Wine purchases and Fruit purchases, on log scale")
 ## Expand to see output
 Text(0.5, 1.0, 'Wine purchases and Fruit purchases, on log scale')
 
-![png](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_02.png?raw=true)
+![The scatter plot with wine purchases on the x-axis and fruit purchases on the y-axis, with on a log scale.](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_02.png?raw=true)
 :::
 
 ## Plotnine
@@ -1361,7 +1396,7 @@ from plotnine import *
 ```
 :::{.callout-note collapse="true"}
 ## Expand to see output
-![png](https://github.com/Kevinnota/teaching_stuff/blob/main/boxplot.png?raw=true)
+![Boxplot with the amount spent on wine per education.](https://github.com/Kevinnota/teaching_stuff/blob/main/boxplot.png?raw=true){#fig-pythonpandas-boxplot}
 :::
 
 ```{.python eval=False} 
@@ -1372,7 +1407,7 @@ from plotnine import *
 ```
 :::{.callout-note collapse="true"}
 ## Expand to see output
-![png](https://github.com/Kevinnota/teaching_stuff/blob/main/facet_scatter.png?raw=true)
+![Plot of the income of people born after 1900, faceted by marital status, and filled by education level.](https://github.com/Kevinnota/teaching_stuff/blob/main/facet_scatter.png?raw=true){#fig-pythonpandas-facetplot}
 :::
 
 
