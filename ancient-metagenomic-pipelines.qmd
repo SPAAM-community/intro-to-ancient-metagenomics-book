@@ -816,6 +816,26 @@ From Left to Right, Top from bottom, the panels consists of:
 9. A general statistics table including the name of the taxonomic node, number of reads, duplicates, and mean read length etc.
 ](assets/images/chapters/ancient-metagenomic-pipelines/aMeta_output.png){#fig-ancientmetagenomicpipelines-persampleplot}
 
+::: {.callout-tip title="Question" appearance="simple"}
+In our test data, what score does the sample 'foo' for the hit against _Yersinia pestis_?
+Is this a good score? 
+
+Inspect the results `AUTHENTICATION/xxx/authentic_Sample_foo_*.pdf` file
+What could have contributed to this particular score?
+
+Hint: Check Supplementary File 2, section S5 of [@Pochon2022-hj] for some hints.
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+The sample foo gets a score of `4`.
+This is a low score, and indicates that aMeta is not very confident that this is a true hit.
+The metrics that contribute to this score are:
+
+- Edit distance all reads (+1)
+- Deamination plot (+2)
+- Reads mapped with identity (+1), 
+:::
+
 ### Clean up
 
 Before continuing onto the next section of this chapter, we will need to remove the output files, and deactivate from the conda environment.
