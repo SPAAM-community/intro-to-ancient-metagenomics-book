@@ -14,7 +14,7 @@ bibliography: assets/references/r-tidyverse.bib
 This session is typically ran in parallel to the Introduction to Python and Pandas. Participants of the summer schools choose which to attend based on their prior experience. We recommend this session if you have no experience with neither R nor Python.
 :::
 
-::: {.callout-note title="SPAAM Summerschool 2024 setup" collapse="true"}
+::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
 For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
 
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413026](https://doi.org/10.5281/zenodo.8413026), and unpack
@@ -26,62 +26,28 @@ cd r-tidyverse/
 
 You can then create the subsequently activate environment with
 
+::: {.callout-tip title="README if you already have Rstudio installed" collapse=true}
+Exception: _if you already have R studio installed on your laptop_, you can skip the conda environment activation.
+
+Open Rstudio, and check that you have the two following packages installed.
+
+```{r, eval=FALSE}
+library(tidyverse)
+library(palmerpenguins)
+```
+
+If one or neither are installed, please install as follows.
+Delete already-installed packages from the function as necessary
+
+```{r, eval=FALSE}
+install.packages(c("tidyverse", "palmerpenguins"))
+```
+:::
+
 ```bash
 conda env create -f r-tidyverse.yml
 conda activate r-tidyverse
 ```
-
-To load RStudio from within your `conda` environment, please run
-
-```bash
-rstudio
-```
-
-And the RStudio window will open.
-
-:::
-
-::: {.callout-note title="Home setup" collapse=true}
-
-If you wish to follow this chapter on your personal computer please prepare your working environment with the following steps:
-
-1. Install R and RStudio for your operating system according to one of the many instructions online (e.g. [here](https://www.r-bloggers.com/2022/01/how-to-install-and-update-r-and-rstudio)).
-2. Open RStudio and create a new project with `File` -> `New Project...`.
-3. Run the code below in the R console to install the necessary R package dependencies and prepare the required data.
-
-
-```{r, eval=FALSE}
-# installing necessary R packages
-install.packages(c("tidyverse", "palmerpenguins"))
-
-# preparing data (at the end of this tutorial you will understand this code)
-library(magrittr)
-set.seed(5678)
-
-peng_prepped <- palmerpenguins::penguins %>%
-    dplyr::filter(
-        !dplyr::if_any(
-            .cols = tidyselect::everything(),
-            .fns = is.na
-        )
-    ) %>%
-    tibble::add_column(., id = 1:nrow(.), .before = "species")
-
-peng_prepped %>%
-    dplyr::slice_sample(n = 300) %>%
-    dplyr::arrange(id) %>%
-    dplyr::select(-bill_length_mm, -bill_depth_mm) %>%
-    readr::write_csv("penguins.csv")
-
-peng_prepped %>%
-    dplyr::slice_sample(n = 300) %>%
-    dplyr::arrange(id) %>%
-    dplyr::select(id, bill_length_mm, bill_depth_mm) %>%
-    readr::write_csv("penguin_bills.csv")
-```
-
-4. Create a new R script file so that you can copy the relevant code sections into it and run them subsequently.
-
 :::
 
 ```{r, echo=FALSE}
@@ -102,17 +68,41 @@ So here is what you need to know for the beginning:
 - The tidyverse [@Wickham2019-ot] is a powerful collection of R packages with well-designed and consistent interfaces for the main steps of data analysis: loading, transforming and plotting data (<https://www.tidyverse.org>). This tutorial works with tidyverse ~v2.0. We will learn about the packages `readr`, `tibble`, `ggplot2`, `dplyr`, `magrittr` and `tidyr`. `forcats` will be briefly mentioned, but `purrr` and `stringr` are left out. 
 - The `palmerpenguins` package [@Horst2020] provides a neat example dataset to learn data exploration and visualization in R (<https://allisonhorst.github.io/palmerpenguins>)
 
+## Loading R Studio and preparing a project
+
+Before we being, we can load RStudio from within your `conda` environment, by running the following.
+
+```bash
+rstudio
+```
+
+:::{.callout-caution}
+It is _not_ recommended to download and update Rstudio if asked to on loading while following this textbook or during the summer school.
+You do so at your own risk.
+We recommend pressing 'Remind later' or 'Ignore'. 
+:::
+
+The RStudio window should then open.
+
+Open RStudio and create a new project by going to the top tool bar, and selecting `File` -> `New Project...`.
+
+When asked, create the new directory in an 'Existing directory' and select the `r-tidyverse/` directory.
+
+Once created, add new R script file so that you can copy the relevant code from this textbook into it to run them by pressing in the top tool bar `File` -> `New File` -> `New Rscript`.
+
 ## Loading data into tibbles
 
 ### Reading tabular data with readr
 
-With R we usually operate on data in our computer's memory. The tidyverse provides the package `readr` to read data from text files into memory, both from our file system or the internet. It provides functions to read data in almost any (text) format:
+With R we usually operate on data in our computer's memory.
+The tidyverse provides the package `readr` to read data from text files into memory, both from our file system or the internet.
+It provides functions to read data in almost any (text) format:
 
 ```{r eval=FALSE}
-readr::read_csv()   # .csv files (comma-separated) -> see penguins.csv
-readr::read_tsv()   # .tsv files (tab-separated)
+readr::read_csv() # .csv files (comma-separated) -> see penguins.csv
+readr::read_tsv() # .tsv files (tab-separated)
 readr::read_delim() # tabular files with arbitrary separator
-readr::read_fwf()   # fixed width files (each column with a set number of tokens)
+readr::read_fwf() # fixed width files (each column with a set number of tokens)
 readr::read_lines() # files with any content per line for self-parsing
 ```
 
@@ -186,9 +176,9 @@ peng
 But there are various other ways to inspect the content of a `tibble` 
 
 ```{r, eval=FALSE}
-str(peng)     # A structural overview of an R object
+str(peng) # A structural overview of an R object
 summary(peng) # A human-readable summary of an R object
-View(peng)    # Open RStudio's interactive data browser
+View(peng) # Open RStudio's interactive data browser
 ```
 
 ## Plotting data in `tibble`s
@@ -208,9 +198,9 @@ ggplot( # Every plot starts with a call to the ggplot() function
     data = peng # This function can also take the input tibble in the data argument
 ) + # The plot consists of individual functions linked with "+"
     geom_bar( # "geoms" define the plot layers we want to draw,
-              # so in this case a bar-chart
+        # so in this case a bar-chart
         mapping = aes( # The aes() function maps variables to visual properties
-            x = island,    # publication_year -> x-axis
+            x = island, # publication_year -> x-axis
             fill = species # community_type   -> fill color
         )
     )
@@ -422,7 +412,7 @@ dplyr::filter(peng, year == 2007 | year == 2009)
 # an alternative way to express OR with the match operator "%in%"
 dplyr::filter(peng, year %in% c(2007, 2009))
 # Adelie penguins heavier than 4kg
-dplyr::filter(peng, species == "Adelie" & body_mass_g >= 4000) 
+dplyr::filter(peng, species == "Adelie" & body_mass_g >= 4000)
 ```
 
 Note how each function here takes `peng` as a first argument. This invites a more elegant syntax.
@@ -451,7 +441,7 @@ peng %>%
 peng %>%
     dplyr::filter(island == "Biscoe") %$%
     species %>% # extract the species column as a vector
-    unique()    # get the unique elements of said vector
+    unique() # get the unique elements of said vector
 ```
 
 Here we already use the base R summary function `unique`.
@@ -860,9 +850,9 @@ Take observations from x and add fitting information from y (@fig-rtidyverse-lef
 
 ```{r}
 dplyr::left_join(
-    x = peng,  # 300 observations
+    x = peng, # 300 observations
     y = bills, # 300 observations
-    by = "id"  # the key column by which to join
+    by = "id" # the key column by which to join
 )
 ```
 
@@ -876,12 +866,12 @@ Take observations from y and add fitting information from x (@fig-rtidyverse-rig
 
 ```{r}
 dplyr::right_join(
-    x = peng,  # 300 observations
+    x = peng, # 300 observations
     y = bills, # 300 observations
     by = "id"
-) %>% 
-  # we arrange by id to highlight the missing observation in the peng dataset
-  dplyr::arrange(id)
+) %>%
+    # we arrange by id to highlight the missing observation in the peng dataset
+    dplyr::arrange(id)
 ```
 
 Right joins are almost identical to left joins -- only x and y have reversed roles.
@@ -894,7 +884,7 @@ Join the overlapping observations from x and y (@fig-rtidyverse-innerjoin).
 
 ```{r}
 dplyr::inner_join(
-    x = peng,  # 300 observations
+    x = peng, # 300 observations
     y = bills, # 300 observations
     by = "id"
 )
@@ -1027,10 +1017,10 @@ A naive assumption about this dataset might be that there is a correlation of th
 
 ```{r}
 samples_with_depth_and_age <- samples %>%
-  dplyr::filter(
-    !is.na(depth) & !is.na(sample_age),
-    site_name != "Unknown"
-  )
+    dplyr::filter(
+        !is.na(depth) & !is.na(sample_age),
+        site_name != "Unknown"
+    )
 ```
 
 :::
@@ -1041,8 +1031,8 @@ samples_with_depth_and_age <- samples %>%
 
 ```{r}
 samples_with_depth_and_age %>%
-  ggplot() +
-  geom_point(aes(x = depth, y = sample_age))
+    ggplot() +
+    geom_point(aes(x = depth, y = sample_age))
 ```
 
 :::
@@ -1055,10 +1045,10 @@ We can't see much here, because samples with very large ages dominate the y-scal
 
 ```{r}
 samples_with_depth_and_age %>%
-  ggplot() +
-  geom_point(aes(x = depth, y = sample_age)) +
-  scale_y_log10(labels = scales::label_comma()) +
-  geom_hline(yintercept = 20000, color = "red")
+    ggplot() +
+    geom_point(aes(x = depth, y = sample_age)) +
+    scale_y_log10(labels = scales::label_comma()) +
+    geom_hline(yintercept = 20000, color = "red")
 ```
 
 :::
@@ -1071,9 +1061,9 @@ This is more interesting. There may be a signal for samples, specifically below 
 
 ```{r}
 samples_young <- samples_with_depth_and_age %>%
-  dplyr::filter(
-    sample_age < 20000
-  )
+    dplyr::filter(
+        sample_age < 20000
+    )
 ```
 
 :::
@@ -1084,8 +1074,8 @@ samples_young <- samples_with_depth_and_age %>%
 
 ```{r}
 samples_young %>%
-  ggplot() +
-  geom_point(aes(x = depth, y = sample_age))
+    ggplot() +
+    geom_point(aes(x = depth, y = sample_age))
 ```
 
 :::
@@ -1103,7 +1093,9 @@ Maybe what we see is mostly driven by individual sites. How many sites are there
 ::: {.callout-important title="Solution" collapse=true appearance="simple"}
 
 ```{r}
-samples_young$site_name %>% unique() %>% length()
+samples_young$site_name %>%
+    unique() %>%
+    length()
 ```
 
 :::
@@ -1116,9 +1108,9 @@ And how many samples are there per site?
 
 ```{r}
 sample_count_per_site <- samples_young %>%
-  dplyr::group_by(site_name) %>%
-  dplyr::summarise(n = dplyr::n()) %>%
-  dplyr::arrange(n)
+    dplyr::group_by(site_name) %>%
+    dplyr::summarise(n = dplyr::n()) %>%
+    dplyr::arrange(n)
 ```
 
 :::
@@ -1129,13 +1121,13 @@ sample_count_per_site <- samples_young %>%
 
 ```{r}
 sample_count_per_site$site_name <- forcats::fct_reorder(
-  sample_count_per_site$site_name,
-  sample_count_per_site$n
+    sample_count_per_site$site_name,
+    sample_count_per_site$n
 )
 
 sample_count_per_site %>%
-  ggplot() +
-  geom_bar(aes(x = site_name, y = n), stat = "identity")
+    ggplot() +
+    geom_bar(aes(x = site_name, y = n), stat = "identity")
 ```
 
 :::
@@ -1148,9 +1140,9 @@ Oh no - the x-axis labels are not well readable in this version of the plot.
 
 ```{r}
 sample_count_per_site %>%
-  ggplot() +
-  geom_bar(aes(x = site_name, y = n), stat = "identity") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
+    ggplot() +
+    geom_bar(aes(x = site_name, y = n), stat = "identity") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1))
 ```
 
 :::
@@ -1163,10 +1155,10 @@ What the oldest and youngest samples for each site?
 
 ```{r}
 sites_oldest_youngest <- samples_young %>%
-  dplyr::group_by(site_name) %>%
-  dplyr::arrange(sample_age) %>%
-  dplyr::slice(1, dplyr::n()) %>%
-  dplyr::ungroup()
+    dplyr::group_by(site_name) %>%
+    dplyr::arrange(sample_age) %>%
+    dplyr::slice(1, dplyr::n()) %>%
+    dplyr::ungroup()
 ```
 
 :::
@@ -1179,8 +1171,8 @@ The result is a bit hard to read because it includes all columns of the input ta
 
 ```{r}
 sites_oldest_youngest <- sites_oldest_youngest %>%
-  dplyr::select(site_name, sample_age) %>%
-  print(n = Inf)
+    dplyr::select(site_name, sample_age) %>%
+    print(n = Inf)
 ```
 
 :::
@@ -1191,9 +1183,9 @@ sites_oldest_youngest <- sites_oldest_youngest %>%
 
 ```{r}
 sites_age_range <- sites_oldest_youngest %>%
-  dplyr::group_by(site_name) %>%
-  dplyr::summarise(age_range = max(sample_age) - min(sample_age)) %>%
-  print(n = Inf)
+    dplyr::group_by(site_name) %>%
+    dplyr::summarise(age_range = max(sample_age) - min(sample_age)) %>%
+    print(n = Inf)
 ```
 
 :::
@@ -1206,11 +1198,11 @@ So some sites have a huge age range of thousands of years, and others do not. Th
 
 ```{r}
 sites_joined <- dplyr::left_join(
-  sites_age_range,
-  sample_count_per_site,
-  by = "site_name" 
+    sites_age_range,
+    sample_count_per_site,
+    by = "site_name"
 ) %>%
-  print(n = Inf)
+    print(n = Inf)
 ```
 
 :::
@@ -1221,10 +1213,10 @@ sites_joined <- dplyr::left_join(
 
 ```{r}
 sites_joined %>%
-  dplyr::mutate(
-    sampling_interval = age_range / n
-  ) %>%
-  print(n = Inf)
+    dplyr::mutate(
+        sampling_interval = age_range / n
+    ) %>%
+    print(n = Inf)
 ```
 
 :::
@@ -1237,8 +1229,8 @@ After this never-ending digression we can go back to the initial question: Is th
 
 ```{r}
 samples_young %>%
-  ggplot() +
-  geom_point(aes(x = depth, y = sample_age, color = site_name))
+    ggplot() +
+    geom_point(aes(x = depth, y = sample_age, color = site_name))
 ```
 
 :::
@@ -1251,9 +1243,9 @@ There are a lot of sites, so the legend for the color space is annoyingly large.
 
 ```{r}
 samples_young %>%
-  ggplot() +
-  geom_point(aes(x = depth, y = sample_age, color = site_name)) +
-  guides(color = guide_none())
+    ggplot() +
+    geom_point(aes(x = depth, y = sample_age, color = site_name)) +
+    guides(color = guide_none())
 ```
 
 :::
@@ -1269,10 +1261,10 @@ It might be helpful to look at the sites separately to make sense of this data.
 #| fig-height: 10
 
 samples_young %>%
-  ggplot() +
-  geom_point(aes(x = depth, y = sample_age, color = site_name)) +
-  guides(color = guide_none()) +
-  facet_wrap(~site_name)
+    ggplot() +
+    geom_point(aes(x = depth, y = sample_age, color = site_name)) +
+    guides(color = guide_none()) +
+    facet_wrap(~site_name)
 ```
 
 :::
@@ -1288,10 +1280,10 @@ It is not exactly surprising that the sites operate on different scales regardin
 #| fig-height: 10
 
 samples_young %>%
-  ggplot() +
-  geom_point(aes(x = depth, y = sample_age, color = site_name)) +
-  guides(color = guide_none()) +
-  facet_wrap(~site_name, scales = "free")
+    ggplot() +
+    geom_point(aes(x = depth, y = sample_age, color = site_name)) +
+    guides(color = guide_none()) +
+    facet_wrap(~site_name, scales = "free")
 ```
 
 :::
@@ -1307,13 +1299,13 @@ Some sites have too few samples to contribute meaningfully to our main question.
 #| fig-height: 10
 
 samples_young %>%
-  dplyr::group_by(site_name) %>%
-  dplyr::filter(sd(depth) > 5) %>%
-  dplyr::ungroup() %>%
-  ggplot() +
-  geom_point(aes(x = depth, y = sample_age, color = site_name)) +
-  guides(color = guide_none()) +
-  facet_wrap(~site_name, scales = "free")
+    dplyr::group_by(site_name) %>%
+    dplyr::filter(sd(depth) > 5) %>%
+    dplyr::ungroup() %>%
+    ggplot() +
+    geom_point(aes(x = depth, y = sample_age, color = site_name)) +
+    guides(color = guide_none()) +
+    facet_wrap(~site_name, scales = "free")
 ```
 
 Unsurprisingly this facetted plot visually confirms that `depth` and `sample_age` are often correlated for the sites in the environmental samples table of the AncientMetagenomeDir. It also shows a number of notable exceptions that clearly stand out in this plot.
