@@ -11,7 +11,9 @@ bibliography: assets/references/r-tidyverse.bib
 ---
 
 ::: callout-note
-This session is typically ran in parallel to the Introduction to Python and Pandas. Participants of the summer schools choose which to attend based on their prior experience. We recommend this session if you have no experience with neither R nor Python.
+This session is typically ran in parallel to the Introduction to Python and Pandas.
+Participants of the summer schools choose which to attend based on their prior experience.
+We recommend this session if you have no experience with neither R nor Python.
 :::
 
 ::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
@@ -37,7 +39,7 @@ library(palmerpenguins)
 ```
 
 If one or neither are installed, please install as follows.
-Delete already-installed packages from the function as necessary
+Delete already-installed packages from the function as necessary.
 
 ```{r, eval=FALSE}
 install.packages(c("tidyverse", "palmerpenguins"))
@@ -57,20 +59,25 @@ knitr::opts_chunk$set(attr.output = "style='border: 1px; border-style: solid; ma
 
 ## R, RStudio, the tidyverse and penguins
 
-This chapter introduces the statistical programming environment R and how to use it with the RStudio editor. It is structured as self-study material with examples and little exercises to be completed in one to four hours. A larger exercise at the end pulls the individual units together.
+This chapter introduces the statistical programming environment R and how to use it with the RStudio editor.
+It is structured as self-study material with examples and little exercises to be completed in one to four hours.
+A larger exercise at the end pulls the individual units together.
 
-The didactic idea behind this tutorial is to get as fast as possible to tangible, useful output, namely data visualisation. So we will first learn about reading and plotting data, and only later go to some common operations like conditional queries, data structure transformation and joins. We will focus exclusively on tabular data and how to handle it with the packages in the tidyverse framework. The example data used here is an ecological dataset about penguins.
+The didactic idea behind this tutorial is to get as fast as possible to tangible, useful output, namely data visualisation.
+So we will first learn about reading and plotting data, and only later go to some common operations like conditional queries, data structure transformation and joins. 
+We will focus exclusively on tabular data and how to handle it with the packages in the tidyverse framework.
+The example data used here is an ecological dataset about penguins.
 
 So here is what you need to know for the beginning:
 
 - R [@RCoreTeam2023] is a fully featured programming language, but it excels as an environment for (statistical) data analysis (<https://www.r-project.org>)
 - RStudio [@RstudioTeam] is an integrated development environment (IDE) for R (and other languages) (<https://www.rstudio.com/products/rstudio>)
 - The tidyverse [@Wickham2019-ot] is a powerful collection of R packages with well-designed and consistent interfaces for the main steps of data analysis: loading, transforming and plotting data (<https://www.tidyverse.org>). This tutorial works with tidyverse ~v2.0. We will learn about the packages `readr`, `tibble`, `ggplot2`, `dplyr`, `magrittr` and `tidyr`. `forcats` will be briefly mentioned, but `purrr` and `stringr` are left out. 
-- The `palmerpenguins` package [@Horst2020] provides a neat example dataset to learn data exploration and visualization in R (<https://allisonhorst.github.io/palmerpenguins>)
+- The `palmerpenguins` package [@Horst2020] provides a neat example dataset to learn data exploration and visualisation in R (<https://allisonhorst.github.io/palmerpenguins>)
 
 ## Loading R Studio and preparing a project
 
-Before we being, we can load RStudio from within your `conda` environment, by running the following.
+Before we begin, we can load RStudio from within your `conda` environment, by running the following.
 
 ```bash
 rstudio
@@ -96,7 +103,7 @@ Once created, add new R script file so that you can copy the relevant code from 
 
 With R we usually operate on data in our computer's memory.
 The tidyverse provides the package `readr` to read data from text files into memory, both from our file system or the internet.
-It provides functions to read data in almost any (text) format:
+It provides functions to read data in almost any (text) format.
 
 ```{r eval=FALSE}
 readr::read_csv() # .csv files (comma-separated) -> see penguins.csv
@@ -131,7 +138,7 @@ read_csv(
 
 ### What does `readr` produce? The `tibble`!
 
-To read a .csv file (here `"penguins.csv"`) into a variable (here `peng_auto`) run
+To read a .csv file (here `"penguins.csv"`) into a variable (here `peng_auto`) run the following.
 
 ```{r, eval=FALSE}
 peng_auto <- readr::read_csv("penguins.csv")
@@ -144,7 +151,7 @@ peng_auto <- readr::read_csv("assets/data/r-tidyverse/penguins.csv")
 
 As a by-product of reading the file `readr` also prints some information on the number and type of rows and columns it discovered in the file.
 
-It automatically detects column types -- but you can also define them manually.
+It automatically detects column types - but you can also define them manually.
 
 ```{r, eval=FALSE}
 peng <- readr::read_csv(
@@ -153,7 +160,8 @@ peng <- readr::read_csv(
 )
 ```
 
-The `col_types` argument takes a string with a list of characters, where each character denotes one columns types. Possible types are `c` = character, `i` = integer, `d` = double, `l` = logical, etc. Remember that you can check `?readr::read_csv` for more.
+The `col_types` argument takes a string with a list of characters, where each character denotes one columns types.
+Possible types are `c` = character, `i` = integer, `d` = double, `l` = logical, etc. Remember that you can check `?readr::read_csv` for more.
 
 ```{r, echo=FALSE}
 # this version is only for the website!
@@ -163,7 +171,8 @@ peng <- readr::read_csv(
 )
 ```
 
-`readr` finally returns an in-memory representation of the data in the file, a `tibble`. A `tibble` is a "data frame", a tabular data structure with rows and columns. Unlike a simple array, each column can have another data type.
+`readr` finally returns an in-memory representation of the data in the file, a `tibble`.
+A `tibble` is a "data frame", a tabular data structure with rows and columns. Unlike a simple array, each column can have another data type.
 
 ### How to look at a `tibble`?
 
@@ -185,9 +194,10 @@ View(peng) # Open RStudio's interactive data browser
 
 ### `ggplot2` and the "grammar of graphics"
 
-To understand and present data, we usually have to visualize it.
+To understand and present data, we usually have to visualise it.
 
-`ggplot2` is an R package that offers a slightly unusual, but powerful and logical interface for this task [@Wickham2016]. The following example describes a stacked bar chart.
+`ggplot2` is an R package that offers a slightly unusual, but powerful and logical interface for this task [@Wickham2016].
+The following example describes a stacked bar chart.
 
 ```{r}
 library(ggplot2) # Loading a library to use its functions without ::
@@ -234,7 +244,8 @@ ggplot(peng_out) +
     geom_boxplot(aes(x = species, y = body_mass_g))
 ```
 
-This is not well readable, because the extreme outliers dictate the scale of the y-axis. A 50+kg penguin is a scary thought and we would probably remove these outliers, but let's assume they were valid observation we want to include in the plot.
+This is not well readable, because the extreme outliers dictate the scale of the y-axis.
+A 50+kg penguin is a scary thought and we would probably remove these outliers, but let's assume they were valid observation we want to include in the plot.
 
 To mitigate the visualisation issue we can change the **scale** of different visual elements - e.g. the y-axis.
 
@@ -271,7 +282,8 @@ ggplot(peng) +
 
 Note how mapping another variable to the fill colour automatically splits the dataset and how this is reflected in the number of boxplots per species.
 
-Another way to visualize more variables in one plot is to split the plot by categories into **facets**, so sub-plots per category. Here we split by sex, which is already mapped to the fill colour:
+Another way to visualise more variables in one plot is to split the plot by categories into **facets**, so sub-plots per category.
+Here we split by sex, which is already mapped to the fill colour:
 
 ```{r}
 ggplot(peng) +
@@ -287,7 +299,7 @@ ggplot(peng) +
     facet_wrap(~sex)
 ```
 
-This plot already visualizes the relationship of four variables: species, body mass, sex and year of observation.
+This plot already visualises the relationship of four variables: species, body mass, sex and year of observation.
 
 ### Setting purely aesthetic settings with `theme`
 
@@ -304,7 +316,8 @@ ggplot(peng) +
 
 ### Ordering elements in a plot with `factors`
 
-R supports defining ordinal data with `factor`s. This can be used to set the order of elements in a plot, e.g. the order of bars in a bar chart. 
+R supports defining ordinal data with `factor`s.
+This can be used to set the order of elements in a plot, e.g. the order of bars in a bar chart. 
 
 We do not cover `factor`s beyond the following example here, although the tidyverse includes a package (`forcats`) specifically for handling them.
 
@@ -334,15 +347,16 @@ ggplot(peng2) +
 
 ### Exercise
 
-1. Look at the `mtcars` dataset and read up on the meaning of its variables with the help operator `?`. `mtcars` is a test dataset integrated in R and can always be accessed just by typing `mtcars` in the console.
+1. Look at the `mtcars` dataset and read up on the meaning of its variables with the help operator `?`. 
+   `mtcars` is a test dataset integrated in R and can always be accessed just by typing `mtcars` in the console.
 
-2. Visualize the relationship between *Gross horsepower* and *1/4 mile time*.
+2. Visualise the relationship between _Gross horsepower_ and _1/4 mile time_.
 
 ```{r}
 
 ```
 
-3. Integrate the *Number of cylinders* into your plot as an additional variable.
+3. Integrate the _Number of cylinders_ into your plot as an additional variable.
 
 ```{r}
 
@@ -394,7 +408,8 @@ old_options <- options(
 )
 ```
 
-Among the most basic tabular data transformation operations is the conditional selection of columns and rows. The `dplyr` package includes powerful functions to subset data in tibbles.
+Among the most basic tabular data transformation operations is the conditional selection of columns and rows.
+The `dplyr` package includes powerful functions to subset data in tibbles.
 
 `dplyr::select` allows to select columns:
 
@@ -419,7 +434,8 @@ Note how each function here takes `peng` as a first argument. This invites a mor
 
 ### Chaining functions together with the pipe `%>%`
 
-A core feature of the tidyverse is the pipe `%>%` in the `magrittr` package. This 'infix' operator allows to chain data and operations for concise and clear data analysis syntax.
+A core feature of the tidyverse is the pipe `%>%` in the `magrittr` package.
+This 'infix' operator allows to chain data and operations for concise and clear data analysis syntax.
 
 ```{r}
 library(magrittr)
@@ -448,7 +464,9 @@ Here we already use the base R summary function `unique`.
 
 ### Summary statistics in `base` R
 
-Summarising and counting data is indispensable and R offers a variety of basic operations in its `base` package. Many of them operate on `vector`s, so lists of values of one type. Individual columns are vectors.
+Summarising and counting data is indispensable and R offers a variety of basic operations in its `base` package.
+Many of them operate on `vector`s, so lists of values of one type.
+Individual columns are vectors.
 
 ```{r}
 # we extract a single variable as a vector of values
@@ -508,7 +526,8 @@ peng %>%
     )
 ```
 
-If we group by more than one variable, then `summarise` will not entirely remove the group tagging when generating the result dataset. We can force this with `.groups = "drop"` to avoid undesired behaviour with this dataset later on.
+If we group by more than one variable, then `summarise` will not entirely remove the group tagging when generating the result dataset.
+We can force this with `.groups = "drop"` to avoid undesired behaviour with this dataset later on.
 
 ### Sorting and slicing tibbles with `arrange` and `slice`
 
@@ -540,21 +559,22 @@ peng %>% dplyr::slice_sample(n = 10)
 
 ### Exercise
 
-For this exercise we once more go back to the `mtcars` dataset. See `?mtcars` for details.
+For this exercise we once more go back to the `mtcars` dataset.
+See `?mtcars` for details.
 
-1. Determine the number of cars with four *forward gears* (`gear`) in the `mtcars` dataset.
-
-```{r}
-
-```
-
-2. Determine the mean *1/4 mile time* (`qsec`) per *Number of cylinders* (`cyl`) group.
+1. Determine the number of cars with four _forward gears_ (`gear`) in the `mtcars` dataset.
 
 ```{r}
 
 ```
 
-3. Identify the least efficient cars for both *transmission types* (`am`).
+2. Determine the mean _1/4 mile time_ (`qsec`) per _Number of cylinders_ (`cyl`) group.
+
+```{r}
+
+```
+
+3. Identify the least efficient cars for both _transmission types_ (`am`).
 
 ```{r}
 
@@ -670,7 +690,8 @@ peng %>% dplyr::mutate(
 )
 ```
 
-`ifelse` gets cumbersome for more than two cases. `dplyr::case_when` is more readable and scales much better for this application.
+`ifelse` gets cumbersome for more than two cases.
+`dplyr::case_when` is more readable and scales much better for this application.
 
 ```{r}
 peng %>% dplyr::mutate(
@@ -709,7 +730,8 @@ To simplify certain analysis or plotting operations data often has to be transfo
 - A table in **wide** format has N key columns and N value columns.
 - A table in **long** format has N key columns, one descriptor column and one value column.
 
-Here is an example of a wide dataset. It features information about the number of cars sold per year per brand at a dealership.
+Here is an example of a wide dataset.
+It features information about the number of cars sold per year per brand at a dealership.
 
 ```{r}
 carsales <- tibble::tribble(
@@ -720,7 +742,9 @@ carsales <- tibble::tribble(
 carsales
 ```
 
-In this wide format information is spread over many columns. Based on what we learned previously we can not easily plot it with `ggplot2`. Although it is often more verbose and includes more duplication, in the tidyverse we generally prefer data in long, "tidy" format -- well justified by @Wickham2014.
+In this wide format information is spread over many columns.
+Based on what we learned previously we can not easily plot it with `ggplot2`.
+Although it is often more verbose and includes more duplication, in the tidyverse we generally prefer data in long, "tidy" format -- well justified by @Wickham2014.
 
 To transform this dataset to a long format, we can apply `tidyr::pivot_longer`.
 
@@ -738,7 +762,9 @@ carsales_long <- carsales %>% tidyr::pivot_longer(
 carsales_long
 ```
 
-Wide datasets are not always the wrong choice. They are well suitable for example for adjacency matrices to represent graphs, covariance matrices or other pairwise statistics. When the data gets big, then wide formats can be significantly more efficient (e.g. for spatial data).
+Wide datasets are not always the wrong choice.
+They are well suitable for example for adjacency matrices to represent graphs, covariance matrices or other pairwise statistics.
+When the data gets big, then wide formats can be significantly more efficient (e.g. for spatial data).
 
 To transform data from long to wide, we can use `tidyr::pivot_wider`
 
@@ -762,13 +788,13 @@ carsales_wide
 
 ```
 
-2. Make a new dataset `mtcars2` from `mtcars` with the column `mpg` and an additional column `am_v`, which encodes the *transmission type* (`am`) as either `"manual"` or `"automatic"`.
+2. Make a new dataset `mtcars2` from `mtcars` with the column `mpg` and an additional column `am_v`, which encodes the _transmission type_ (`am`) as either `"manual"` or `"automatic"`.
 
 ```{r}
 
 ```
 
-3. Count the number of cars per *transmission type* (`am_v`) and *number of gears* (`gear`) in `mtcars2`. Then transform the result to a wide format, with one column per *transmission type*.
+3. Count the number of cars per _transmission type_ (`am_v`) and _number of gears_ (`gear`) in `mtcars2`. Then transform the result to a wide format, with one column per _transmission type_.
 
 ```{r}
 
@@ -814,7 +840,8 @@ mtcars2 %>%
 
 ### Types of joins
 
-Joins combine two datasets x and y based on overlapping key columns. We can generally distinguish two kinds of joins:
+Joins combine two datasets x and y based on overlapping key columns.
+We can generally distinguish two kinds of joins:
 
 1. Mutating joins add columns and rows of x and y:
 
@@ -830,7 +857,8 @@ Joins combine two datasets x and y based on overlapping key columns. We can gene
 
 The following sections will introduce each join with an example.
 
-To experiment with joins, we need a second dataset with complementary information. This new dataset contains additional variables for a subset of the penguins in our first dataset -- both datasets feature 300 penguins, but only with a partial overlap in individuals.
+To experiment with joins, we need a second dataset with complementary information.
+This new dataset contains additional variables for a subset of the penguins in our first dataset -- both datasets feature 300 penguins, but only with a partial overlap in individuals.
 
 ```{r eval=FALSE}
 bills <- readr::read_csv("penguin_bills.csv")
@@ -980,7 +1008,8 @@ dplyr::anti_join(mtcars, gear_opinions, by = "gear") %>%
 
 ## (Optional) Final exercise
 
-In this final exercise we reiterate many of the concepts introduced above. We also leave penguins and cars behind and finally start working with a dataset relevant to the topic of this book: The environmental samples table of the [AncientMetagenomeDir](https://www.spaam-community.org/AncientMetagenomeDir).
+In this final exercise we reiterate many of the concepts introduced above.
+We also leave penguins and cars behind and finally start working with a dataset relevant to the topic of this book: The environmental samples table of the [AncientMetagenomeDir](https://www.spaam-community.org/AncientMetagenomeDir).
 
 Here's the URL to the table for v24.06 of the AncientMetagenomeDir:
 
@@ -1006,12 +1035,16 @@ samples <- readr::read_tsv(url_to_samples_table)
 
 :::
 
-A naive assumption about this dataset might be that there is a correlation of the variables `depth` and `sample_age`. Here is a definition of these variables taken from the [meta-data specification](https://github.com/SPAAM-community/AncientMetagenomeDir/blob/master/ancientmetagenome-environmental/samples/ancientmetagenome-environmental_samples_schema.json):
+A naive assumption about this dataset might be that there is a correlation of the variables `depth` and `sample_age`.
+Here is a definition of these variables taken from the [meta-data specification](https://github.com/SPAAM-community/AncientMetagenomeDir/blob/master/ancientmetagenome-environmental/samples/ancientmetagenome-environmental_samples_schema.json):
 
-- `depth`: "Depth of sample taken from top of sequence in centimeters. In case of ranges use midpoint"
+- `depth`: "Depth of sample taken from top of sequence in centimeters.
+    In case of ranges use midpoint"
 - `sample_age`: "Age of the sample in year before present (BP 1950), to the closest century"
 
-**2**: Of course we could only detect this for samples with both depth and age information. Filter the dataset to only include samples with it. And also remove samples without an archaeological site name (`(!= "Unknown")`).
+**2**: Of course we could only detect this for samples with both depth and age information.
+    Filter the dataset to only include samples with it. 
+    And also remove samples without an archaeological site name (`(!= "Unknown")`).
 
 ::: {.callout-important title="Solution" collapse=true appearance="simple"}
 
@@ -1053,9 +1086,11 @@ samples_with_depth_and_age %>%
 
 :::
 
-This is more interesting. There may be a signal for samples, specifically below a certain age, maybe 20000 years BP.
+This is more interesting.
+There may be a signal for samples, specifically below a certain age, maybe 20000 years BP.
 
-**5**: Filter the dataset to remove all samples that are older than this threshold. Store the result in a variable `samples_young`.
+**5**: Filter the dataset to remove all samples that are older than this threshold.
+    Store the result in a variable `samples_young`.
 
 ::: {.callout-important title="Solution" collapse=true appearance="simple"}
 
@@ -1068,7 +1103,8 @@ samples_young <- samples_with_depth_and_age %>%
 
 :::
 
-**6**: Recreate the plot from above. The log-scaling can be turned off now.
+**6**: Recreate the plot from above.
+    The log-scaling can be turned off now.
 
 ::: {.callout-important title="Solution" collapse=true appearance="simple"}
 
@@ -1080,13 +1116,15 @@ samples_young %>%
 
 :::
 
-With the old samples removed, there indeed seems to be some correlation. Pearson's correlation coefficient is not that strong though.
+With the old samples removed, there indeed seems to be some correlation.
+Pearson's correlation coefficient is not that strong though.
 
 ```{r}
 cor(samples_young$depth, samples_young$sample_age, method = "pearson")
 ```
 
-Maybe what we see is mostly driven by individual sites. How many sites are there actually?
+Maybe what we see is mostly driven by individual sites.
+How many sites are there actually?
 
 **7**: Determine the number of sites in the filtered dataset.
 
@@ -1102,7 +1140,8 @@ samples_young$site_name %>%
 
 And how many samples are there per site?
 
-**8**: Calculate the number of samples per site with `group_by` and `summarize`. Sort the result table by the number of samples with `arrange`.
+**8**: Calculate the number of samples per site with `group_by` and `summarize`.
+    Sort the result table by the number of samples with `arrange`.
 
 ::: {.callout-important title="Solution" collapse=true appearance="simple"}
 
@@ -1190,7 +1229,8 @@ sites_age_range <- sites_oldest_youngest %>%
 
 :::
 
-So some sites have a huge age range of thousands of years, and others do not. This information is not really meaningful without the number of samples per site, though.
+So some sites have a huge age range of thousands of years, and others do not.
+This information is not really meaningful without the number of samples per site, though.
 
 **14**: Join the sample count per site (as computed above) with the age range per site to get a table with both variables.
 
@@ -1223,7 +1263,8 @@ sites_joined %>%
 
 After this never-ending digression we can go back to the initial question: Is there a global relationship between sample_age and depth?
 
-**16**: Take the `samples_young` dataset and recreate the simple scatter plot from above. But now map the `site_name` to the point color.
+**16**: Take the `samples_young` dataset and recreate the simple scatter plot from above.
+    But now map the `site_name` to the point colour.
 
 ::: {.callout-important title="Solution" collapse=true appearance="simple"}
 
@@ -1235,7 +1276,7 @@ samples_young %>%
 
 :::
 
-There are a lot of sites, so the legend for the color space is annoyingly large.
+There are a lot of sites, so the legend for the colour space is annoyingly large.
 
 **17**: Turn it off with `+ guides(color = guide_none())`.
 
@@ -1290,7 +1331,9 @@ samples_young %>%
 
 Some sites have too few samples to contribute meaningfully to our main question.
 
-**20**: As a final exercise remove these "single-dot" sites and recreate the plot. There are many possible ways to do this. One way may be to filter by the standard deviation (sd) along the age or the depth axis.
+**20**: As a final exercise remove these "single-dot" sites and recreate the plot.
+    There are many possible ways to do this.
+    One way may be to filter by the standard deviation (sd) along the age or the depth axis.
 
 ::: {.callout-important title="Solution" collapse=true appearance="simple"}
 
@@ -1308,7 +1351,8 @@ samples_young %>%
     facet_wrap(~site_name, scales = "free")
 ```
 
-Unsurprisingly this facetted plot visually confirms that `depth` and `sample_age` are often correlated for the sites in the environmental samples table of the AncientMetagenomeDir. It also shows a number of notable exceptions that clearly stand out in this plot.
+Unsurprisingly this facetted plot visually confirms that `depth` and `sample_age` are often correlated for the sites in the environmental samples table of the AncientMetagenomeDir.
+It also shows a number of notable exceptions that clearly stand out in this plot.
 
 We conclude the analysis at this point.
 
