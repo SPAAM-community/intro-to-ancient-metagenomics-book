@@ -11,10 +11,10 @@ bibliography: assets/references/r-tidyverse.bib
 ---
 
 ::: callout-note
-This session is typically ran held in parallel to the Introduction to Python and Pandas. Participants of the summer schools chose which to attend based on their prior experience. We recommend this session if you have no experience with neither R nor Python.
+This session is typically ran in parallel to the Introduction to Python and Pandas. Participants of the summer schools choose which to attend based on their prior experience. We recommend this session if you have no experience with neither R nor Python.
 :::
 
-::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
+::: {.callout-note title="SPAAM Summerschool 2024 setup" collapse="true"}
 For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
 
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413026](https://doi.org/10.5281/zenodo.8413026), and unpack
@@ -30,44 +30,31 @@ You can then create the subsequently activate environment with
 conda env create -f r-tidyverse.yml
 conda activate r-tidyverse
 ```
-:::
 
-```{r, echo=FALSE}
-# Set global options
-knitr::opts_chunk$set(attr.output = "style='border: 1px; border-style: solid; margin-left: 10px; margin-right: 10px;'")
+To load RStudio from within your `conda` environment, please run
+
+```bash
+rstudio
 ```
 
-## R, RStudio, the tidyverse and penguins
+And the RStudio window will open.
 
-This chapter introduces the statistical programming environment R and how to use it with the RStudio editor. It is structured as self-study material with examples and little exercises to be completed in one to four hours. A larger exercise at the end pulls the individual units together.
+:::
 
-The didactic idea behind this tutorial is to get as fast as possible to tangible, useful output, namely data visualisation. So we will first learn about reading and plotting data, and only later go to some common operations like conditional queries, data structure transformation and joins. We will focus exclusively on tabular data and how to handle it with the packages in the tidyverse framework. The example data used here is an ecological dataset about penguins.
+::: {.callout-note title="Home setup" collapse=true}
 
-So here is what you need to know for the beginning:
+If you wish to follow this chapter on your personal computer please prepare your working environment with the following steps:
 
-- R [@RCoreTeam2023] is a fully featured programming language, but it excels as an environment for (statistical) data analysis (<https://www.r-project.org>)
-- RStudio [@RstudioTeam] is an integrated development environment (IDE) for R (and other languages) (<https://www.rstudio.com/products/rstudio>)
-- The tidyverse [@Wickham2019-ot] is a powerful collection of R packages with well-designed and consistent interfaces for the main steps of data analysis: loading, transforming and plotting data (<https://www.tidyverse.org>). This tutorial works with tidyverse ~v2.0. We will learn about the packages `readr`, `tibble`, `ggplot2`, `dplyr`, `magrittr` and `tidyr`. `forcats` will be briefly mentioned, but `purrr` and `stringr` are left out. 
-- The `palmerpenguins` package [@Horst2020] provides a neat example dataset to learn data exploration and visualization in R (<https://allisonhorst.github.io/palmerpenguins>)
-
-::: {.callout-note title="Instructions for running this chapter without conda" collapse=true}
-
-If you wish to follow this chapter without installing conda, you can recreate the conda environment and data generation by running the following steps.
-
-1. Install R and RStudio for your operating system according to one of the many instructions online (e.g. [here](https://www.r-bloggers.com/2022/01/how-to-install-and-update-r-and-rstudio))
-2. Download the .qmd file underlying this webpage [here](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/blob/main/r-tidyverse.qmd) and copy it to a new directory
-3. Open RStudio and create a new project in this directory with `File` -> `New Project...` -> `Existing directory`
-4. Open this very file from the RStudio project, so that you can easily follow along
-5. Run the `Environment preparation code` code to install necessary R package dependencies and prepare the required data used below
+1. Install R and RStudio for your operating system according to one of the many instructions online (e.g. [here](https://www.r-bloggers.com/2022/01/how-to-install-and-update-r-and-rstudio)).
+2. Open RStudio and create a new project with `File` -> `New Project...`.
+3. Run the code below in the R console to install the necessary R package dependencies and prepare the required data.
 
 
 ```{r, eval=FALSE}
 # installing necessary R packages
 install.packages(c("tidyverse", "palmerpenguins"))
 
-# preparing data
-# (at the end of this tutorial
-# you will understand this code)
+# preparing data (at the end of this tutorial you will understand this code)
 library(magrittr)
 set.seed(5678)
 
@@ -93,15 +80,27 @@ peng_prepped %>%
     readr::write_csv("penguin_bills.csv")
 ```
 
+4. Create a new R script file so that you can copy the relevant code sections into it and run them subsequently.
+
 :::
 
-To load RStudio from within your `conda` environment, please run
-
-```bash
-rstudio
+```{r, echo=FALSE}
+# Set global options
+knitr::opts_chunk$set(attr.output = "style='border: 1px; border-style: solid; margin-left: 10px; margin-right: 10px;'")
 ```
 
-And the RStudio window will open.
+## R, RStudio, the tidyverse and penguins
+
+This chapter introduces the statistical programming environment R and how to use it with the RStudio editor. It is structured as self-study material with examples and little exercises to be completed in one to four hours. A larger exercise at the end pulls the individual units together.
+
+The didactic idea behind this tutorial is to get as fast as possible to tangible, useful output, namely data visualisation. So we will first learn about reading and plotting data, and only later go to some common operations like conditional queries, data structure transformation and joins. We will focus exclusively on tabular data and how to handle it with the packages in the tidyverse framework. The example data used here is an ecological dataset about penguins.
+
+So here is what you need to know for the beginning:
+
+- R [@RCoreTeam2023] is a fully featured programming language, but it excels as an environment for (statistical) data analysis (<https://www.r-project.org>)
+- RStudio [@RstudioTeam] is an integrated development environment (IDE) for R (and other languages) (<https://www.rstudio.com/products/rstudio>)
+- The tidyverse [@Wickham2019-ot] is a powerful collection of R packages with well-designed and consistent interfaces for the main steps of data analysis: loading, transforming and plotting data (<https://www.tidyverse.org>). This tutorial works with tidyverse ~v2.0. We will learn about the packages `readr`, `tibble`, `ggplot2`, `dplyr`, `magrittr` and `tidyr`. `forcats` will be briefly mentioned, but `purrr` and `stringr` are left out. 
+- The `palmerpenguins` package [@Horst2020] provides a neat example dataset to learn data exploration and visualization in R (<https://allisonhorst.github.io/palmerpenguins>)
 
 ## Loading data into tibbles
 
@@ -1297,9 +1296,9 @@ samples_young %>%
 
 :::
 
-This looks neat for many sites, but some have too few samples.
+Some sites have too few samples to contribute meaningfully to our main question.
 
-**20**: As a final exercise remove these "single-dot" sites and recreate this plot. There are many possible ways to do this. The easiest may be to filter by the standard deviation (sd) along the age or the depth axis.
+**20**: As a final exercise remove these "single-dot" sites and recreate the plot. There are many possible ways to do this. One way may be to filter by the standard deviation (sd) along the age or the depth axis.
 
 ::: {.callout-important title="Solution" collapse=true appearance="simple"}
 
@@ -1316,6 +1315,10 @@ samples_young %>%
   guides(color = guide_none()) +
   facet_wrap(~site_name, scales = "free")
 ```
+
+Unsurprisingly this facetted plot visually confirms that `depth` and `sample_age` are often correlated for the sites in the environmental samples table of the AncientMetagenomeDir. It also shows a number of notable exceptions that clearly stand out in this plot.
+
+We conclude the analysis at this point.
 
 :::
 
