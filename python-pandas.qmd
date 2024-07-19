@@ -728,19 +728,30 @@ df[two_at_once]
 ```
 :::{.callout-note collapse="true"}
 ## Expand to see output
-|ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue|
-|-|----|----|----------|------|-------|-|-|---|--|---|---|--|--|-|--|-|-|-|-|--|
-|0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|11|
-|1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11|
-|18|7892|1969|Graduation|Single|18589.0|0|0|6|4|25|15|12|13|2|1|3|7|0|3|11|
-|20|5255|1986|Graduation|Single|NaN|1|0|5|1|3|3|263|362|27|0|0|1|0|3|11|
-|33|1371|1976|Graduation|Single|79941.0|0|0|123|164|266|227|30|174|2|4|9|1|0|3|11|
-|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|
-|1720|10968|1969|Graduation|Single|57731.0|0|1|266|21|300|65|8|44|8|8|6|6|0|3|11|
-|1723|5959|1968|Graduation|Single|35893.0|1|1|158|0|23|0|0|18|3|1|5|8|0|3|11|
-|1743|4201|1962|Graduation|Single|57967.0|0|1|229|7|137|4|0|91|4|2|8|5|0|3|11|
-|1746|7004|1984|Graduation|Single|11012.0|1|0|24|3|26|7|1|23|3|1|2|9|0|3|11|
-|1748|8080|1986|Graduation|Single|26816.0|0|0|5|1|6|3|4|3|0|0|3|4|0|3|11|
+
+```{r}
+#| label: tbl-pythonpandas-conditionalsubset
+#| echo: false
+#| results: 'asis'
+#| tbl-cap: "conditional subset all_data.tsv."
+#| tbl-cap-location: top
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_4_all_data_conditional_subset.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
 252 rows × 20 columns
 :::
 
@@ -751,19 +762,29 @@ df[(df["Education"] == "Master") & (df["Marital_Status"] == "Single")]
 ```
 :::{.callout-note collapse="true"}
 ## Expand to see output
-||ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue|
-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
-|26|10738|1951|Master|Single|49389.0|1|1|40|0|19|2|1|3|2|0|3|7|0|3|11|
-|46|6853|1982|Master|Single|75777.0|0|0|712|26|538|69|13|80|3|6|11|1|0|3|11|
-|76|11178|1972|Master|Single|42394.0|1|0|15|2|10|0|1|4|1|0|3|7|0|3|11|
-|98|6205|1967|Master|Single|32557.0|1|0|34|3|29|0|4|10|2|1|3|5|0|3|11|
-|110|821|1992|Master|Single|92859.0|0|0|962|61|921|52|61|20|5|4|12|2|0|3|11|
-|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|
-|1690|3520|1990|Master|Single|91172.0|0|0|162|28|818|0|28|56|4|3|7|3|0|3|11|
-|1709|4418|1983|Master|Single|89616.0|0|0|671|47|655|145|111|15|7|5|12|2|0|3|11|
-|1714|2980|1952|Master|Single|8820.0|1|1|12|0|13|4|2|4|3|0|3|8|0|3|11|
-|1738|7366|1982|Master|Single|75777.0|0|0|712|26|538|69|13|80|3|6|11|1|0|3|11|
-|1747|9817|1970|Master|Single|44802.0|0|0|853|10|143|13|10|20|9|4|12|8|0|3|11|
+```{r}
+#| label: tbl-pythonpandas-conditionalsubset2
+#| echo: false
+#| results: 'asis'
+#| tbl-cap: "conditional subset 2 all_data.tsv."
+#| tbl-cap-location: top
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_5_all_data_conditional_subset2.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
 75 rows × 20 columns
 :::
 
@@ -777,16 +798,29 @@ df.describe()
 ```
 :::{.callout-note collapse="true"}
 ## Expand to see output
-||ID|Year_Birth|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue|
-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
-|count|1754.000000|1754.000000|1735.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.000000|1754.0|1754.0|
-|mean|5584.696123|1969.571266|51166.578098|0.456100|0.480616|276.072406|28.034778|166.492018|40.517104|28.958381|47.266819|3.990878|2.576967|5.714937|5.332383|0.011403|3.0|11.0|
-|std|3254.655979|11.876614|26200.419179|0.537854|0.536112|314.604735|41.348883|225.561694|57.412986|42.830660|53.885647|2.708278|2.848335|3.231465|2.380183|0.106202|0.0|0.0|
-|min|0.000000|1893.000000|1730.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|0.000000|3.0|11.0|
-|25%|2802.500000|1960.000000|33574.500000|0.000000|0.000000|19.000000|2.000000|15.000000|3.000000|2.000000|10.000000|2.000000|0.000000|3.000000|3.000000|0.000000|3.0|11.0|
-|50%|5468.000000|1971.000000|49912.000000|0.000000|0.000000|160.500000|9.000000|66.000000|13.000000|9.000000|27.000000|3.000000|1.000000|5.000000|6.000000|0.000000|3.0|11.0|
-|75%|8441.250000|1978.000000|68130.000000|1.000000|1.000000|454.000000|35.000000|232.000000|53.500000|35.000000|63.000000|6.000000|4.000000|8.000000|7.000000|0.000000|3.0|11.0|
-|max|11191.000000|1996.000000|666666.000000|2.000000|2.000000|1492.000000|199.000000|1725.000000|259.000000|263.000000|362.000000|27.000000|28.000000|13.000000|20.000000|1.000000|3.0|11.0|
+```{r}
+#| label: tbl-pythonpandas-Describing
+#| echo: false
+#| results: 'asis'
+#| tbl-cap: "Describing all_data.tsv."
+#| tbl-cap-location: top
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_6_Describing_df.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
 8 rows × 18 columns
 :::
 
@@ -985,19 +1019,30 @@ df.isna()
 ```
 :::{.callout-note collapse="true"}
 ## Expand to see output
-||ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue|
-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
-|0|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
-|1|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
-|2|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
-|3|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
-|4|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
-|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|
-|1749|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
-|1750|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
-|1751|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
-|1752|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
-|1753|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|False|
+
+```{r}
+#| label: tbl-pythonpandas-isna
+#| echo: false
+#| results: 'asis'
+#| tbl-cap: "is.na(all_data.tsv)."
+#| tbl-cap-location: top
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_7_isna_df.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
 1754 rows × 20 columns
 :::
 
@@ -1077,18 +1122,29 @@ concat_df
 ```
 :::{.callout-note collapse="true"}
 ## Expand to see output
-||ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Z_CostContact|Z_Revenue|
-|0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|11|
-|1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|11|
-|2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|3|11|
-|3|6182|1984|Graduation|Together|26646.0|1|0|11|4|20|10|3|5|2|0|4|6|0|3|11|
-|4|7446|1967|Master|Together|62513.0|0|1|520|42|98|0|42|14|6|4|10|6|0|3|11|
-|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|
-|481|11133|1973|PhD|YOLO|48432.0|0|1|322|3|50|4|3|42|7|1|6|8|0|3|11|
-|482|9589|1948|PhD|Widow|82032.0|0|0|332|194|377|149|125|57|4|6|7|1|0|3|11|
-|483|4286|1970|PhD|Single|57642.0|0|1|580|6|58|8|0|27|7|6|6|4|0|3|11|
-|484|4001|1946|PhD|Together|64014.0|2|1|406|0|30|0|0|8|8|2|5|7|0|3|11|
-|485|9405|1954|PhD|Married|52869.0|1|1|84|3|61|2|1|21|3|1|4|7|0|3|11|
+```{r}
+#| label: tbl-pythonpandas-concat
+#| echo: false
+#| results: 'asis'
+#| tbl-cap: "concat all_data.tsv."
+#| tbl-cap-location: top
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_8_concat_df.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
 2240 rows × 20 columns
 :::
 :::
@@ -1108,18 +1164,29 @@ concat_df
 ```
 :::{.callout-note collapse="true"}
 ## Expand to see output
-||ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|
-|0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|
-|1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|
-|2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|
-|3|6182|1984|Graduation|Together|26646.0|1|0|11|4|20|10|3|5|2|0|4|6|0|
-|4|7446|1967|Master|Together|62513.0|0|1|520|42|98|0|42|14|6|4|10|6|0|
-|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|
-|481|11133|1973|PhD|YOLO|48432.0|0|1|322|3|50|4|3|42|7|1|6|8|0|
-|482|9589|1948|PhD|Widow|82032.0|0|0|332|194|377|149|125|57|4|6|7|1|0|
-|483|4286|1970|PhD|Single|57642.0|0|1|580|6|58|8|0|27|7|6|6|4|0|
-|484|4001|1946|PhD|Together|64014.0|2|1|406|0|30|0|0|8|8|2|5|7|0|
-|485|9405|1954|PhD|Married|52869.0|1|1|84|3|61|2|1|21|3|1|4|7|0|
+```{r}
+#| label: tbl-pythonpandas-drop
+#| echo: false
+#| results: 'asis'
+#| tbl-cap: "drop all_data.tsv."
+#| tbl-cap-location: top
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_9_doncat_drop_df.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
 2240 rows × 18 columns
 :::
 :::
@@ -1227,19 +1294,29 @@ merged_df
 :::{.callout-note collapse="true"}
 ## Expand to see output
 
-|ID|Year_Birth|Education|Marital_Status|Income|Kidhome|Teenhome|MntWines|MntFruits|MntMeatProducts|MntFishProducts|MntSweetProducts|MntGoldProds|NumWebPurchases|NumCatalogPurchases|NumStorePurchases|NumWebVisitsMonth|Complain|Level|
-|-|----|----|----------|------|-------|-|-|---|--|---|---|--|--|-|--|-|-|-|-|
-|0|5524|1957|Graduation|Single|58138.0|0|0|635|88|546|172|88|88|8|10|4|7|0|3|
-|1|2174|1954|Graduation|Single|46344.0|1|1|11|1|6|2|1|6|1|1|2|5|0|3|
-|2|4141|1965|Graduation|Together|71613.0|0|0|426|49|127|111|21|42|8|2|10|4|0|3|
-|3|6182|1984|Graduation|Together|26646.0|1|0|11|4|20|10|3|5|2|0|4|6|0|3|
-|5|965|1971|Graduation|Divorced|55635.0|0|1|235|65|164|50|49|27|7|3|7|6|0|3|
-|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|…|
-|481|11133|1973|PhD|YOLO|48432.0|0|1|322|3|50|4|3|42|7|1|6|8|0|5|
-|482|9589|1948|PhD|Widow|82032.0|0|0|332|194|377|149|125|57|4|6|7|1|0|5|
-|483|4286|1970|PhD|Single|57642.0|0|1|580|6|58|8|0|27|7|6|6|4|0|5|
-|484|4001|1946|PhD|Together|64014.0|2|1|406|0|30|0|0|8|8|2|5|7|0|5|
-|485|9405|1954|PhD|Married|52869.0|1|1|84|3|61|2|1|21|3|1|4|7|0|5|
+```{r}
+#| label: tbl-pythonpandas-merge
+#| echo: false
+#| results: 'asis'
+#| tbl-cap: "merge all_data.tsv."
+#| tbl-cap-location: top
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_10_merged_df.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
 2240 rows × 19 columns
 
 :::
