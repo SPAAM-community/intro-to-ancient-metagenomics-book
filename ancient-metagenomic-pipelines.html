@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.54">
+<meta name="generator" content="quarto-1.5.55">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -1091,8 +1091,7 @@ Self guided: chapter environment setup
 </div>
 <div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>For this chapter’s exercises, if not already performed, we will need to create the <a href="./before-you-start.html#creating-a-conda-environment">conda environment</a> from the following <a href="https://github.com/NBISweden/aMeta/blob/main/workflow/envs/environment.yaml"><code>yml</code> file</a>, and activate the environment.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate aMeta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>For this chapter’s exercises, if not already performed, we will need to create the special aMeta <a href="./before-you-start.html#creating-a-conda-environment">conda environment</a> and activate the environment.</p>
 </div>
 </div>
 </div>
@@ -1112,9 +1111,11 @@ Figure&nbsp;17.4: Schematic diagram of the aMeta pipeline. Input samples initial
 <h3 data-number="17.4.1" class="anchored" data-anchor-id="running-ameta"><span class="header-section-number">17.4.1</span> Running aMeta</h3>
 <p>In this tutorial we will try running the small test data that comes with aMeta.</p>
 <p>aMeta has been written in <code>Snakemake</code>, which means running the pipeline has to be installed in a slightly different manner to the <code>nextflow pull</code> command that can be used for nf-core/eager.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/ancient-metagenomic-pipelines/aMeta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Make sure you have followed the instructions in the <a href="./before-you-start.html#ancient-metagenomic-pipelines">Before You Start Chapter</a> for cloning the aMeta GitHub repository to the <code>ancient-metagenomic-pipelines/</code> directory. Once we have done this, we can make sure we are in the aMeta directory, if not already.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/ancient-metagenomic-pipelines/aMeta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And activate the dedicated aMeta conda environment.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate aMeta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>As aMeta also includes tools that normally require very large computational resources that cannot fit on a standard laptop, we will instead try to re-use the internal very small ‘fake’ data the aMeta developers use to test the pipeline.</p>
-<p>We don’t have to worry about trying to understand exactly what the following commands are doing, they will not be important for the rest of the chapter. However generally the commands try to pull all the relevant software (via conda), make a fake database and download other required files, and then reconstruct the basic directory and file structure required for running the pipeline.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1125,90 +1126,98 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The next steps, particularly the <code>set up conda envs</code> will take a very long time!</p>
-<p>If we are impatient, we can speed this process up by using <code>mamba</code> rather than conda.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Download installation script and run</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> Miniforge3-Linux-x86_64.sh</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">## When asked: Accept the license</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">## When asked: Press 'y' to run conda init</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">## Turn off base</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--set</span> auto_activate_base false</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">## Re-add original conda environments to be recognised by mamba</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--append</span> envs_dirs /home/ubuntu/bin/miniconda3/envs/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The following steps are already performed up for Students in the summer schools as, particularly the <code>set up conda envs</code> will take a very long time!</p>
+<p>If you are doing this chapter self-guided, it is critical to perform the following set up steps!</p>
+<p>We don’t have to worry about trying to understand exactly what the following commands are doing, they will not be important for the rest of the chapter. However generally the commands try to pull all the relevant software (via conda), make a fake database and download other required files, and then reconstruct the basic directory and file structure required for running the pipeline.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Self-guided: aMeta set up and configuration">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Self-guided: aMeta set up and configuration
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Change into ~/.test to set up all the required test resources (Databases etc.)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> .test/</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Set up conda envs</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">## If we can an error about a 'non-default solver backend' the run `conda config --set solver classic` and re-start the command</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">## If we have installed the standalone mamba, change --conda-frontend to mamba</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--use-conda</span> <span class="at">--show-failed-logs</span> <span class="at">-j</span> 2 <span class="at">--conda-cleanup-pkgs</span> cache <span class="at">--conda-create-envs-only</span> <span class="at">-s</span> ../workflow/Snakefile <span class="at">--conda-frontend</span> conda</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> <span class="va">$(</span><span class="fu">dirname</span> <span class="va">$(</span><span class="fu">dirname</span> <span class="va">$CONDA_EXE))</span>/etc/profile.d/conda.sh</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">## If we had to change the solver back to classic, we can switch to libmamba with `conda config --set solver libmamba`</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">## Build dummy KrakenUniq database</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> krakenuniq .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span><span class="va">)</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="ex">krakenuniq-build</span> <span class="at">--db</span> resources/KrakenUniq_DB <span class="at">--kmer-len</span> 21 <span class="at">--minimizer-len</span> 11 <span class="at">--jellyfish-bin</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>/<span class="va">$env</span>/bin/jellyfish</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co">## Get Krona taxonomy tax dump</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> krona .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-1</span><span class="va">)</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$env</span>/opt/krona</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="ex">./updateTaxonomy.sh</span> taxonomy</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="at">-</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="co">## Adjust malt max memory usage</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> hops .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-1</span><span class="va">)</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="va">version</span><span class="op">=</span><span class="va">$(</span><span class="ex">conda</span> list malt <span class="at">--json</span> <span class="kw">|</span> <span class="fu">grep</span> version <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/</span><span class="dt">\"</span><span class="st">//g"</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $2}'</span><span class="va">)</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$env</span>/opt/malt-<span class="va">$version</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="at">-e</span> <span class="st">"s/-Xmx64G/-Xmx3G/"</span> malt-build.vmoptions</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="at">-e</span> <span class="st">"s/-Xmx64G/-Xmx3G/"</span> malt-run.vmoptions</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="at">-</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> .initdb</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="co">## Run a quick test and generate the report (you can open this to check it looks like everythin was generated)</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--use-conda</span> <span class="at">--show-failed-logs</span> <span class="at">--conda-cleanup-pkgs</span> cache <span class="at">-s</span> ../workflow/Snakefile <span class="va">$@</span> <span class="at">--conda-frontend</span> conda <span class="at">-j</span> 4</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">-s</span> ../workflow/Snakefile <span class="at">--report</span> <span class="at">--report-stylesheet</span> ../workflow/report/custom.css <span class="at">--conda-frontend</span> conda</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a><span class="co">## Now we move back into the main repository where we can symlink all the database files back to try running our 'own' test</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> resources/</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> ../.test/resources/<span class="pp">*</span> .</span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../config</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> config.yaml config.yaml.bkp</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> samples.tsv samplest.tsv.bkp</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../</span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> .test/data/ .</span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> .test/.snakemake/ . <span class="co">## so we can re-use conda environments from the `.test` directory for the summer school run</span></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a><span class="co">## Again get the taxonomy tax dump for Krona, but this time for a real run</span></span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a><span class="co">## Make sure you're now in the root directory of the repository!</span></span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> krona .test/.snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-1</span><span class="va">)</span></span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$env</span>/opt/krona</span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a><span class="ex">./updateTaxonomy.sh</span> taxonomy</span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="at">-</span></span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a><span class="co">## And back to the root of the repo for practising aMeta properly!</span></span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now hopefully we can forget all this, and imagine we are running data though aMeta as you would normally from scratch.</p>
 </div>
 </div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Change into ~/.test to set up all the required test resources (Databases etc.)</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/.test</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Set up conda envs</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">## If we can an error about a 'non-default solver backend' the run `conda config --set solver classic` and re-start the command</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">## If we have installed the standalone mamba, change --conda-frontend to mamba</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--use-conda</span> <span class="at">--show-failed-logs</span> <span class="at">-j</span> 2 <span class="at">--conda-cleanup-pkgs</span> cache <span class="at">--conda-create-envs-only</span> <span class="at">-s</span> ../workflow/Snakefile <span class="at">--conda-frontend</span> conda</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> <span class="va">$(</span><span class="fu">dirname</span> <span class="va">$(</span><span class="fu">dirname</span> <span class="va">$CONDA_EXE))</span>/etc/profile.d/conda.sh</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">## If we had to change the solver back to classic, we can switch to libmamba with `conda config --set solver libmamba`</span></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co">## Build dummy KrakenUniq database</span></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> krakenuniq .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span><span class="va">)</span></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="ex">krakenuniq-build</span> <span class="at">--db</span> resources/KrakenUniq_DB <span class="at">--kmer-len</span> 21 <span class="at">--minimiser-len</span> 11 <span class="at">--jellyfish-bin</span> <span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span>/<span class="va">$env</span>/bin/jellyfish</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="co">## Get Krona taxonomy tax dump</span></span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> krona .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-1</span><span class="va">)</span></span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$env</span>/opt/krona</span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="ex">./updateTaxonomy.sh</span> taxonomy</span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="at">-</span></span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a><span class="co">## Adjust malt max memory usage</span></span>
-<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> hops .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-1</span><span class="va">)</span></span>
-<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
-<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a><span class="va">version</span><span class="op">=</span><span class="va">$(</span><span class="ex">conda</span> list malt <span class="at">--json</span> <span class="kw">|</span> <span class="fu">grep</span> version <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/</span><span class="dt">\"</span><span class="st">//g"</span> <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $2}'</span><span class="va">)</span></span>
-<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$env</span>/opt/malt-<span class="va">$version</span></span>
-<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="at">-e</span> <span class="st">"s/-Xmx64G/-Xmx3G/"</span> malt-build.vmoptions</span>
-<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="at">-e</span> <span class="st">"s/-Xmx64G/-Xmx3G/"</span> malt-run.vmoptions</span>
-<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="at">-</span></span>
-<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
-<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> .initdb</span>
-<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a><span class="co">## Run a quick test</span></span>
-<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--use-conda</span> <span class="at">--show-failed-logs</span> <span class="at">--conda-cleanup-pkgs</span> cache <span class="at">-s</span> ../workflow/Snakefile <span class="va">$@</span> <span class="at">--conda-frontend</span> conda</span>
-<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">-s</span> ../workflow/Snakefile <span class="at">--report</span> <span class="at">--report-stylesheet</span> ../workflow/report/custom.css <span class="at">--conda-frontend</span> conda</span>
-<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a><span class="co">## Now we move back into the main repository where we can symlink all the database files back to try running our 'own' test</span></span>
-<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../</span>
-<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> resources/</span>
-<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> ../.test/resources/<span class="pp">*</span> .</span>
-<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../config</span>
-<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> config.yaml config.yaml.bkp</span>
-<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> samples.tsv samplest.tsv.bkp</span>
-<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../</span>
-<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> .test/data/ .</span>
-<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a><span class="co">## Again get hte taxonomy tax dump for Krona, but this time for a real run</span></span>
-<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a><span class="va">env</span><span class="op">=</span><span class="va">$(</span><span class="fu">grep</span> krona .snakemake/conda/<span class="pp">*</span>yaml <span class="kw">|</span> <span class="fu">awk</span> <span class="st">'{print $1}'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="at">-e</span> <span class="st">"s/.yaml://g"</span> <span class="kw">|</span> <span class="fu">head</span> <span class="at">-1</span><span class="va">)</span></span>
-<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate <span class="va">$env</span></span>
-<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="va">$env</span>/opt/krona</span>
-<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a><span class="ex">./updateTaxonomy.sh</span> taxonomy</span>
-<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="at">-</span></span>
-<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>OK now aMeta is all set up, we can now simulate running a ‘real’ pipeline job!</p>
+</div>
+</div>
 </section>
 <section id="ameta-configuration" class="level3" data-number="17.4.2">
 <h3 data-number="17.4.2" class="anchored" data-anchor-id="ameta-configuration"><span class="header-section-number">17.4.2</span> aMeta configuration</h3>
 <p>First, we will need to configure the workflow. First, we need to create a tab-delimited <code>samples.tsv</code> file inside <code>aMeta/config/</code> and provide the names of the input fastq-files. In a text editor (e.g.&nbsp;<code>nano</code>), write the following names paths in TSV format.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sample</span>  fastq</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">foo</span> data/bar.fq.gz</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">bar</span> data/foo.fq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sample</span>  fastq</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">bar</span> data/bar.fq.gz</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">foo</span> data/foo.fq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1223,23 +1232,42 @@ Warning
 </div>
 </div>
 <p>Then we need to write a config file. This tells aMeta where to find things such as database files and other settings.</p>
-<p>These paths and settings go inside a <code>config.yaml</code> file inside <code>aMeta/config/</code>. A minimal example <code>config.yaml</code> files can look like this.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samplesheet:</span> <span class="st">"config/samples.tsv"</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">krakenuniq_db:</span> resources/KrakenUniq_DB</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="ex">bowtie2_db:</span> resources/ref.fa</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="ex">bowtie2_seqid2taxid_db:</span> resources/seqid2taxid.pathogen.map</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="ex">pathogenomesFound:</span> resources/pathogenomesFound.tab</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="ex">malt_nt_fasta:</span> resources/ref.fa</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="ex">malt_seqid2taxid_db:</span> resources/KrakenUniq_DB/seqid2taxid.map</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="ex">malt_accession2taxid:</span> resources/accession2taxid.map</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="ex">ncbi_db:</span> resources/ncbi</span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="ex">n_unique_kmers:</span> 1000</span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="ex">n_tax_reads:</span> 200</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A minimal example <code>config.yaml</code> files can look like this. This includes specifying the location the main samplesheet, which points to a TSV file that contains all the FASTQs if the samples we want to analyse, and paths to all the required database files and reference genomes you may need. These paths and settings go inside the <code>config.yaml</code> file that must be placed inside inside <code>aMeta/config/</code>.</p>
+<p>Make a configuration file with your text editor of choice (e.g.&nbsp;<code>nano</code>).</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samplesheet:</span> <span class="st">"config/samples.tsv"</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">krakenuniq_db:</span> resources/KrakenUniq_DB</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="ex">bowtie2_db:</span> resources/ref.fa</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="ex">bowtie2_seqid2taxid_db:</span> resources/seqid2taxid.pathogen.map</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="ex">pathogenomesFound:</span> resources/pathogenomesFound.tab</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="ex">malt_nt_fasta:</span> resources/ref.fa</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="ex">malt_seqid2taxid_db:</span> resources/KrakenUniq_DB/seqid2taxid.map</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="ex">malt_accession2taxid:</span> resources/accession2taxid.map</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="ex">ncbi_db:</span> resources/ncbi</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="ex">n_unique_kmers:</span> 1000</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="ex">n_tax_reads:</span> 200</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And make a two column samplesheet file with the following content in a file called <code>samples.tsv</code>, also under <code>configs/</code>.</p>
+<pre class="tsv"><code>sample  fastq
+foo data/foo.fq.gz
+bar data/bar.fq.gz</code></pre>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>aMeta (v1.0.0) currently only supports single-end or pre-merged- data only!</p>
+</div>
+</div>
+<p>Once this config file is generated, we can start the run.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1256,9 +1284,10 @@ Note
 </section>
 <section id="prepare-and-run-ameta" class="level3" data-number="17.4.3">
 <h3 data-number="17.4.3" class="anchored" data-anchor-id="prepare-and-run-ameta"><span class="header-section-number">17.4.3</span> Prepare and run aMeta</h3>
-<p>Make sure we’re still in the <code>aMeta</code> conda environment, and in the main aMeta directory with the following.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path/<span class="op">&lt;</span>to<span class="op">&gt;</span>/ancient-metagenomic-pipelines/ameta/aMeta/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>And, finally, we are ready to run aMeta!</p>
+<p>Make sure we’re still in the <code>aMeta</code> conda environment, and that we are still in the main aMeta directory with the following.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate aMeta</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path/<span class="op">&lt;</span>to<span class="op">&gt;</span>/ancient-metagenomic-pipelines/aMeta/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Finally, we are ready to run aMeta, where it will automatically pick up our config and samplesheet file we placed in <code>config/</code>!</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">## change conda-frontend to mamba if we set this up earlier!</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="ex">snakemake</span> <span class="at">--snakefile</span> workflow/Snakefile <span class="at">--use-conda</span> <span class="at">-j</span> 10 <span class="at">--conda-frontend</span> conda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1285,6 +1314,20 @@ Complete log: .snakemake/log/2023-10-05T155051.524987.snakemake.log</code></pre>
 <section id="ameta-output" class="level3" data-number="17.4.4">
 <h3 data-number="17.4.4" class="anchored" data-anchor-id="ameta-output"><span class="header-section-number">17.4.4</span> aMeta output</h3>
 <p>All output files of the workflow are located in <code>aMeta/results</code> directory. To get a quick overview of ancient microbes present in our samples we should check a heatmap in <code>results/overview_heatmap_scores.pdf</code>.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If running during the summer school, you can use the following command to open the PDF file from the command line.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">evince</span> results/overview_heatmap_scores.pdf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
 <div id="fig-ancientmetagenomicpipelines-ametaoutput" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ancientmetagenomicpipelines-ametaoutput-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1322,11 +1365,50 @@ Figure&nbsp;17.6: Example of sample/hit specific PDF output from aMeta, 9 panels
 </figcaption>
 </figure>
 </div>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In our test data, what score does the sample ‘foo’ for the hit against <em>Yersinia pestis</em>? Is this a good score?</p>
+<p>Inspect the results <code>AUTHENTICATION/xxx/authentic_Sample_foo_*.pdf</code> file What could have contributed to this particular score?</p>
+<p>Hint: Check Supplementary File 2, section S5 of <span class="citation" data-cites="Pochon2022-hj">(<a href="#ref-Pochon2022-hj" role="doc-biblioref">Pochon et al. 2022</a>)</span> for some hints.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-26" class="callout-26-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The sample foo gets a score of <code>4</code>. This is a low score, and indicates that aMeta is not very confident that this is a true hit. The metrics that contribute to this score are:</p>
+<ul>
+<li>Edit distance all reads (+1)</li>
+<li>Deamination plot (+2)</li>
+<li>Reads mapped with identity (+1),</li>
+</ul>
+</div>
+</div>
+</div>
 </section>
 <section id="clean-up-1" class="level3" data-number="17.4.5">
 <h3 data-number="17.4.5" class="anchored" data-anchor-id="clean-up-1"><span class="header-section-number">17.4.5</span> Clean up</h3>
-<p>Before continuing onto the next section of this chapter, we will need to deactivate from the conda environment.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Before continuing onto the next section of this chapter, we will need to remove the output files, and deactivate from the conda environment.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-r</span> results/ log/</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co">## You can also optionall remove the conda environments if we are running out of space</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># rm -r .snakemake/ .test/.snakemake</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="what-is-nf-coremag" class="level2" data-number="17.5">
@@ -1358,7 +1440,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1367,7 +1449,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-23" class="callout-23-contents callout-collapse collapse">
+<div id="callout-28" class="callout-28-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Firstly we need a method of validating that contigs are from an ancient genome (in nf-core/mag, damage patterns are generated by <code>pyDamage</code>).</p>
 <p>Secondly, to correct for falsely included damage bases in contigs in some contexts. As previously stated a previous chapter by Alex Hübner:</p>
@@ -1384,10 +1466,10 @@ Answer
 <section id="running-nf-coremag" class="level3" data-number="17.5.1">
 <h3 data-number="17.5.1" class="anchored" data-anchor-id="running-nf-coremag"><span class="header-section-number">17.5.1</span> Running nf-core/mag</h3>
 <p>First re-activate the chapter’s conda environment.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate ancient-metagenomic-pipelines</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate ancient-metagenomic-pipelines</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In this tutorial, we will use the same data and aim to replicate the steps taken in the <a href="./denovo-assembly.html">De Novo assembly</a> chapter. It is important to note that generally, <em>de novo</em> assembly, is very computational intensive. In many cases it will not be able to run a <em>de novo</em> assembly on a standard laptop, therefore some of the parameters used here have been tweaked to get the pipeline runable on powerful laptop level machines.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Self guided: reference download and preparation">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-29-contents" aria-controls="callout-29" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1396,11 +1478,11 @@ Self guided: reference download and preparation
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-24" class="callout-24-contents callout-collapse collapse">
+<div id="callout-29" class="callout-29-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>This tutorial will re-use the data from the <em>de novo</em> assembly chapter. If we have not-run that practical, or deleted the data, pleas follow the instructions at the top of the <a href="./denovo-assembly.html">de novo assembly</a> page to download the <code>denovo-assembly.tar.gz</code> file and unpack it into the <code>denovo-assembly directory</code>.</p>
 <p>Make sure once we’ve finished, change back into this chapter’s directory with the following.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/ancient-metagenomic-pipelines</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/ancient-metagenomic-pipelines</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -1415,13 +1497,13 @@ Self guided: reference download and preparation
 <li>Genome annotation with <code>Prokka</code></li>
 </ol>
 <p>So, what command would we use to recreate these?</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">## 🛑 Don't run this yet! 🛑</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run nf-core/mag <span class="at">-r</span> 2.3.2 <span class="dt">\</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>-profile test,docker <span class="dt">\</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>--input <span class="st">'../../denovo-assembly/seqdata_files/*{R1,R2}.fastq.gz'</span> <span class="at">--outdir</span> ./results <span class="dt">\</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>--ancient_dna  <span class="at">--binning_map_mode</span> own <span class="dt">\</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>--binqc_tool checkm <span class="at">--checkm_db</span> data/checkm_data_2015_01_16/ <span class="dt">\</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>--centrifuge_db false <span class="at">--kraken2_db</span> false <span class="at">--skip_krona</span> <span class="at">--skip_spades</span> <span class="at">--skip_spadeshybrid</span> <span class="at">--skip_maxbin2</span> <span class="at">--skip_concoct</span> <span class="at">--skip_prodigal</span> <span class="at">--gtdb</span> false  <span class="at">--busco_reference</span> false </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">## 🛑 Don't run this yet! 🛑</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run nf-core/mag <span class="at">-r</span> 2.3.2 <span class="dt">\</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>-profile test,docker <span class="dt">\</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>--input <span class="st">'../../denovo-assembly/seqdata_files/*{R1,R2}.fastq.gz'</span> <span class="at">--outdir</span> ./results <span class="dt">\</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>--ancient_dna  <span class="at">--binning_map_mode</span> own <span class="dt">\</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>--binqc_tool checkm <span class="at">--checkm_db</span> data/checkm_data_2015_01_16/ <span class="dt">\</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>--centrifuge_db false <span class="at">--kraken2_db</span> false <span class="at">--skip_krona</span> <span class="at">--skip_spades</span> <span class="at">--skip_spadeshybrid</span> <span class="at">--skip_maxbin2</span> <span class="at">--skip_concoct</span> <span class="at">--skip_prodigal</span> <span class="at">--gtdb</span> false  <span class="at">--busco_reference</span> false </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In fact, nf-core/mag will do most of the steps for us! In this case, we mostly just need to <em>deactivate</em> most of the additional steps (the last line). Otherwise, as with eager we have done the following:</p>
 <ol type="1">
 <li>Tell <code>Nextflow</code> to run the nf-core/mag pipeline with version 2.3.2</li>
@@ -1434,7 +1516,7 @@ Self guided: reference download and preparation
 <li>Specify we want to run the aDNA mode with mapping of reads back to the original contigs rather than for co-assembly</li>
 </ol>
 <div class="callout callout-style-default callout-warning callout-titled" title="Binning mapping mode with ancient DNA">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-30-contents" aria-controls="callout-30" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1443,7 +1525,7 @@ Binning mapping mode with ancient DNA
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div id="callout-30" class="callout-30-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The aDNA mode of nf-core/mag <em>only</em> supports mapping reads back to the original contigs. The other mapping modes are when doing co-assembly, where we assume there are similar organisms across all our metagenomes, and wish to map reads from all samples in a group to a single sample’s contig (for example). Doing this on aDNA reads would risk making false positive damage patterns, as the damaged reads may derive from reads from a different sample with damage, that are otherwise not present in the sample used for generating the given contig.</p>
 </div>
@@ -1451,7 +1533,7 @@ Binning mapping mode with ancient DNA
 </div>
 <p>5 . Specify we want to generate completeness statistics with <code>CheckM</code> (rather than <code>BUSCO</code>), with the associated pre-downloaded database</p>
 <div class="callout callout-style-default callout-note callout-titled" title="nf-core pipelines and reference files">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-31-contents" aria-controls="callout-31" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1460,7 +1542,7 @@ nf-core pipelines and reference files
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-26" class="callout-26-contents callout-collapse collapse">
+<div id="callout-31" class="callout-31-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Most nf-core pipelines will actually download reference databases, build reference indices for alignment, and in some cases reference genomes for we if we do not specify them as pipeline input. These download and reference building steps are often very time consuming, so it’s recommended that once we’ve let the database download it once, we should move the files somewhere safe and we can re-use in subsequent pipeline runs.</p>
 </div>
@@ -1468,7 +1550,7 @@ nf-core pipelines and reference files
 </div>
 <p>6 . Skip a few steps that are either ‘nice to have’ (e.g.&nbsp;read taxonomic classification), or require large computational resources (e.g.<code>metaSPAdes</code>, <code>CONCOCT</code> or <code>BUSCO</code>)</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Information on skipped tests">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-27-contents" aria-controls="callout-27" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-32-contents" aria-controls="callout-32" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1477,7 +1559,7 @@ Information on skipped tests
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-27" class="callout-27-contents callout-collapse collapse">
+<div id="callout-32" class="callout-32-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The steps we are skipping are: host/arefact removal (<code>Bowtie2</code> removal of phiX), taxonomic classification of reads (<code>centrifuge</code>, <code>kraken2</code>, <code>krona</code>), the additional assemblers (<code>metaSPAdes</code> and <code>SPAdeshybrid</code>, as these require very large computational resources), additional binners (<code>MaxBin2</code> and <code>CONCOCT</code>, while they are used in the <em>de novo</em> assembly chapter, they take a long time to run), ship raw contig annotation (with <code>Prodigal</code>, as we do this at the bin level), and contig taxonomic classification (with <code>GTDB</code> and <code>BUSCO</code> as they require very large databases).</p>
 </div>
@@ -1492,52 +1574,52 @@ Information on skipped tests
 <p>While nf-core pipelines all have ‘reasonable default’ settings for memory, CPU, and time limits, they will not work in all contexts. Here we will give a brief example of how to tweak the parameters of the pipeline steps so that they can run on our compute node or laptop.</p>
 <p>For <code>Nextflow</code>, we must make a special ‘config’ that defines the names of each step of the pipeline we wish to tweak and the corresponding resources.</p>
 <p>For this our nf-core/mag run we will need to open our text editor an empty file called <code>custom.config</code>, and copy and paste the contents of the next code block.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode groovy code-with-copy"><code class="sourceCode groovy"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>process <span class="op">{</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> FASTP <span class="op">{</span> </span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> BOWTIE2_PHIX_REMOVAL_ALIGN <span class="op">{</span> </span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> BOWTIE2_ASSEMBLY_ALIGN <span class="op">{</span>    </span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> PYDAMAGE_ANALYZE <span class="op">{</span>      </span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> PROKKA <span class="op">{</span></span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">4</span></span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> MEGAHIT <span class="op">{</span></span>
-<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> CHECKM_LINEAGEWF<span class="op">{</span></span>
-<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>    memory <span class="op">=</span> <span class="fl">24.</span>GB</span>
-<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>    cpus   <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>    ext<span class="op">.</span>args <span class="op">=</span> <span class="st">"--reduced_tree"</span></span>
-<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
-<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode groovy code-with-copy"><code class="sourceCode groovy"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>process <span class="op">{</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> FASTP <span class="op">{</span> </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> BOWTIE2_PHIX_REMOVAL_ALIGN <span class="op">{</span> </span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> BOWTIE2_ASSEMBLY_ALIGN <span class="op">{</span>    </span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> PYDAMAGE_ANALYZE <span class="op">{</span>      </span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> PROKKA <span class="op">{</span></span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> MEGAHIT <span class="op">{</span></span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>    cpus <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>  withName<span class="op">:</span> CHECKM_LINEAGEWF<span class="op">{</span></span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>    memory <span class="op">=</span> <span class="fl">24.</span>GB</span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>    cpus   <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>    ext<span class="op">.</span>args <span class="op">=</span> <span class="st">"--reduced_tree"</span></span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Here we set the number of CPUs for most tools to a maximum of <code>8</code>, and then we limit the amount of memory for CheckM to 24 GB (down from the default (<a href="https://github.com/nf-core/mag/blob/66cf53aff834d2a254b78b94fc54cd656b8b7b57/conf/base.config#L37-L41">https://github.com/nf-core/mag/blob/66cf53aff834d2a254b78b94fc54cd656b8b7b57/conf/base.config#L37-L41</a>) of 36 GB - which exceeds most laptop memory). We also give a specifc <code>CheckM</code> flag command to use a smaller database.</p>
 <p>We can save this <code>custom.config</code> file, and supply this to the <code>Nextflow</code> command with the <code>Nextflow</code> parameter (<code>-c</code>). The good thing about the config file, is we can re-use across runs on the same machine! So set once, and never think about it again.</p>
 <p>And with that, we can run our nf-core/mag pipeline!</p>
 <p>As recommended in the nf-core/eager section above, start a screen session.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">screen</span> <span class="at">-R</span> mag</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">screen</span> <span class="at">-R</span> mag</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then execute the command.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run nf-core/mag <span class="at">-r</span> 2.3.2 <span class="dt">\</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>-profile test,docker <span class="dt">\</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>--input <span class="st">'../../denovo-assembly/seqdata_files/*{R1,R2}.fastq.gz'</span> <span class="at">--outdir</span> ./results <span class="dt">\</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>--ancient_dna  <span class="at">--binning_map_mode</span> own <span class="dt">\</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>--binqc_tool checkm <span class="at">--checkm_db</span> data/checkm_data_2015_01_16/ <span class="dt">\</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>--centrifuge_db false <span class="at">--kraken2_db</span> false <span class="at">--skip_krona</span> <span class="at">--skip_spades</span> <span class="at">--skip_spadeshybrid</span> <span class="at">--skip_maxbin2</span> <span class="at">--skip_concoct</span> <span class="at">--skip_prodigal</span> <span class="at">--gtdb</span> false  <span class="at">--busco_reference</span> false <span class="dt">\</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>-c custom.config</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nextflow</span> run nf-core/mag <span class="at">-r</span> 2.3.2 <span class="dt">\</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>-profile test,docker <span class="dt">\</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>--input <span class="st">'../../denovo-assembly/seqdata_files/*{R1,R2}.fastq.gz'</span> <span class="at">--outdir</span> ./results <span class="dt">\</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>--ancient_dna  <span class="at">--binning_map_mode</span> own <span class="dt">\</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>--binqc_tool checkm <span class="at">--checkm_db</span> data/checkm_data_2015_01_16/ <span class="dt">\</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>--centrifuge_db false <span class="at">--kraken2_db</span> false <span class="at">--skip_krona</span> <span class="at">--skip_spades</span> <span class="at">--skip_spadeshybrid</span> <span class="at">--skip_maxbin2</span> <span class="at">--skip_concoct</span> <span class="at">--skip_prodigal</span> <span class="at">--gtdb</span> false  <span class="at">--busco_reference</span> false <span class="dt">\</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>-c custom.config</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Again as with nf-core/eager when the run starts, we see a long list of <code>process</code> lines with progress bars slowly appearing over time. If in a screen session, we can press <kbd>ctrl</kbd> + <kbd>a</kbd> and then <kbd>[</kbd> to access a ‘navigation’ (called ‘copy’) mode, then use our arrow keys on our keyboard to scroll up and down. To quit this mode just press <code>q</code>.</p>
 <p>The pipeline run above should take around 20 minutes or so to complete.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -1569,7 +1651,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-30-contents" aria-controls="callout-30" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-35-contents" aria-controls="callout-35" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1578,7 +1660,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-30" class="callout-30-contents callout-collapse collapse">
+<div id="callout-35" class="callout-35-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The primary reason for optimising the configuration of workflow managers is efficiency.</p>
 <p>By correctly configuring your can ensure:</p>
@@ -1662,12 +1744,12 @@ Pro Tip
 <p>Always be VERY careful when using <code>rm -r</code>. Check 3x that the path we are specifying is exactly what we want to delete and nothing more before pressing ENTER!</p>
 </div>
 </div>
-<div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> /<span class="op">&lt;</span>PATH<span class="op">&gt;</span>/<span class="op">&lt;</span>TO<span class="op">&gt;</span>/ancient-metagenomic-pipelines<span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> /<span class="op">&lt;</span>PATH<span class="op">&gt;</span>/<span class="op">&lt;</span>TO<span class="op">&gt;</span>/ancient-metagenomic-pipelines<span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once deleted we can move elsewhere (e.g., <code>cd ~</code>).</p>
 <p>We can also get out of the <code>conda</code> environment with the following.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To delete the conda environment we can use <code>conda remove</code>.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> remove <span class="at">--name</span> ancient-metagenomic-data <span class="at">--all</span> <span class="at">-y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> remove <span class="at">--name</span> ancient-metagenomic-data <span class="at">--all</span> <span class="at">-y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="questions-to-think-about" class="level2" data-number="17.7">
 <h2 data-number="17.7" class="anchored" data-anchor-id="questions-to-think-about"><span class="header-section-number">17.7</span> Questions to think about</h2>
