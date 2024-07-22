@@ -302,7 +302,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./denovo-assembly.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Introduction to <em>de novo</em> Genome Assembly</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title"><em>De novo</em> Genome Assembly</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -574,15 +574,14 @@ Warning
 <section id="code" class="level3" data-number="21.3.3">
 <h3 data-number="21.3.3" class="anchored" data-anchor-id="code"><span class="header-section-number">21.3.3</span> Code</h3>
 <p>Single backticks for inline code should only be used for single words such as tool names, e.g.&nbsp;<code>samtools</code>, file extensions such as <code>.txt</code>, or single paths <code>&lt;path&gt;/&lt;to&gt;/&lt;here&gt;</code>.</p>
-<p>Any form of commands or code should be formatted as code in a syntax-named <em>triple</em> backtick block. Execution should be turned off by default (with <code>eval: false</code> in a code block header block), unless has a very low computational overhead and can be rendered on the fly. Language should be specified.</p>
+<p>Any form of commands or code should be formatted as code in a syntax-named <em>triple</em> backtick block. Execution should be turned off by default for those languages that may auto-execute (i..e, R, with <code>eval=FALSE</code> in a code block header block), unless has a very low computational overhead and can be rendered on the fly. Language should be specified.</p>
 <p>For example, this is a bash code block that has a whole command.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>    ```bash</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    #| eval: false</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    echo "SPAAM rules!"</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    ```</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="verbatim"><code>    ```bash
+    echo "SPAAM rules!"
+    ```</code></pre>
 <p>And gets rendered as like this.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"SPAAM rules!"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>If you wish to display <em>large</em> output from a code block that <em>does</em> get executed, you should turn off the command execution printing in the code block itself, and use a collapsible callout block with a ‘Expand to see output’ title immediately after the code block itself that contains. The content of the output should also be in a triple backtick block, with the the <code>default</code> syntax specified.</p>
+<p>If you wish to display <em>large</em> output from a code block that <em>does</em> get executed, you should turn off the command execution printing in the code block itself, and use a collapsible callout block with a ‘Expand to see output’ title immediately after the code block itself that contains. The content of the output should also be in a triple backtick block, with the the <code>verbatim</code> syntax specified.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"SPAAM rules!"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -601,16 +600,28 @@ Expand see output
 </div>
 </div>
 <p>This was generated with</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="in">    ```bash</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="in">    echo "SPAAM rules!"</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="in">    ```</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="in">    ::: {.callout-note collapse="true"}</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="in">    ## Expand see output</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="in">    ```{.default, eval = false}</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="in">    SPAAM rules!</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="in">    ```</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="in">    :::</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Another example, with setting <code>eval=FALSE</code> for R.</p>
+<pre class="verbatim"><code>```{.r eval=FALSE}
+print('SPAAM Rules!')
+```</code></pre>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Expand see output
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre class="verbatim"><code>```{.r eval=FALSE}
+[1] "SPAAM Rules!"
+```</code></pre>
+</div>
+</div>
+</div>
 <p>Additional guidance is as follows:</p>
 <ul>
 <li>Sentences prior a <em>code block</em> must end in a full stop and not a colon</li>
@@ -648,20 +659,20 @@ Figure&nbsp;21.1: A mock up of a possible full-book jacket for this textbook. Th
 </div>
 <p>It is important for the caption to be as descriptive as possible to account for accessibility reasons.</p>
 <p>All figures should be referenced in the text using the quarto label, and without a leading ‘Figure’ (this is rendered for you) e.g,.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a> "@fig-chapterwritingguidelines-jacket shows an example figure"</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a> "@fig-chapterwritingguidelines-jacket shows an example figure"</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Gets rendered as:</p>
 <p>“Figure <a href="#fig-chapterwritingguidelines-jacket" class="quarto-xref">Figure&nbsp;<span>21.1</span></a> shows an example figure”.</p>
 </section>
 <section id="tables" class="level3" data-number="21.3.5">
 <h3 data-number="21.3.5" class="anchored" data-anchor-id="tables"><span class="header-section-number">21.3.5</span> Tables</h3>
 <p>Much like figures, all markdown tables must have a caption and referenced in text. To copy the quarto documentation example.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>| Default | Left | Right | Center |</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>|---------|:-----|------:|:------:|</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>| 12      | 12   |    12 |   12   |</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>| 123     | 123  |   123 |  123   |</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>| 1       | 1    |     1 |   1    |</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>: Demonstration of pipe table syntax {#tbl-chapterwritingguidelines-exampletable1}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>| Default | Left | Right | Center |</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>|---------|:-----|------:|:------:|</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>| 12      | 12   |    12 |   12   |</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>| 123     | 123  |   123 |  123   |</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>| 1       | 1    |     1 |   1    |</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>: Demonstration of pipe table syntax {#tbl-chapterwritingguidelines-exampletable1}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Gets rendered as in <a href="#tbl-chapterwritingguidelines-exampletable1" class="quarto-xref">Table&nbsp;<span>21.1</span></a>.</p>
 <div id="tbl-chapterwritingguidelines-exampletable1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -703,17 +714,17 @@ Table&nbsp;21.1: Demonstration of pipe table syntax
 </figure>
 </div>
 <p>This also applies to code-block generated tables e.g.&nbsp;as in <a href="#tbl-chapterwritingguidelines-examplecodetable2" class="quarto-xref">Table&nbsp;<span>21.2</span></a>. For example the next code block (if wrapped in the triple-backticks with <code>r</code> syntax, not shown here).</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    #| label: tbl-chapterwritingguidelines-examplecodetable2</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    #| echo: false</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    #| results: 'asis'</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    #| tbl-cap: "Your caption goes here."</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    #| tbl-cap-location: top</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    library(tidyverse)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    library(pander)</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    tibble(a = 1, b = 2) %&gt;%</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        pandoc.table(., split.tables = Inf)</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    #| label: tbl-chapterwritingguidelines-examplecodetable2</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    #| echo: false</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    #| results: 'asis'</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    #| tbl-cap: "Your caption goes here."</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    #| tbl-cap-location: top</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    library(tidyverse)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    library(pander)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    tibble(a = 1, b = 2) %&gt;%</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        pandoc.table(., split.tables = Inf)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Gets rendered as follows.</p>
 <div id="tbl-chapterwritingguidelines-examplecodetable2" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-tbl-cap-location="top">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -744,19 +755,19 @@ Table&nbsp;21.2: Your caption goes here.
 </div>
 <p>If your table is <em>too wide</em>, you may load the table and use some R code render the table in a more readable format.</p>
 <p>To do so, place the CSV file in the <code>assets/images/chapters/&lt;your-chapter&gt;/</code> directory. Then use the following template to render the table in your chapter. <code>.qmd</code> file.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>library(tidyverse)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>library(gt)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a># Load the data from CSV</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>data &lt;- read_csv("assets/images/chapters/&lt;chapter-name&gt;/&lt;filename&gt;.csv")</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a># Create the table with gt</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>data %&gt;%</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    gt() %&gt;%</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    tab_options(</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        table.width = pct(100),</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        table.layout = "fixed",</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        container.overflow.x = "scroll"</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>library(tidyverse)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>library(gt)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a># Load the data from CSV</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>data &lt;- read_csv("assets/images/chapters/&lt;chapter-name&gt;/&lt;filename&gt;.csv")</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a># Create the table with gt</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>data %&gt;%</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    gt() %&gt;%</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    tab_options(</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        table.width = pct(100),</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        table.layout = "fixed",</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        container.overflow.x = "scroll"</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="chapter-content" class="level2" data-number="21.4">
@@ -787,7 +798,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -796,7 +807,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The answer(s) goes here, in a by-default ‘hidden’ block the reader can open to view.</p>
 </div>
