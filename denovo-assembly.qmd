@@ -10,7 +10,7 @@ library(tidyverse)
 library(pander)
 ```
 
-::: {.callout-tip}
+::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
 For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
 
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413147](https://doi.org/10.5281/zenodo.8413147), and unpack
@@ -159,7 +159,7 @@ This histogram belongs to a 700,000-year-old horse that was preserved in permafr
 
 To infer the distribution of the DNA molecules, we can run the command
 
-```{.bash eval=false}
+```bash
 fastp --in1 2612_R1.fastq.gz \
       --in2 2612_R2.fastq.gz \
       --stdout --merge -A -G -Q -L --json /dev/null --html overlaps.html \
@@ -227,7 +227,7 @@ While it produced a higher number of mis-assemblies compared to metaSPAdes when 
 
 To _de novo_ assemble the short-read sequencing data of the sample **2612** using MEGAHIT, we can run the command
 
-```{.bash eval=false}
+```bash
 megahit -1 2612_R1.fastq.gz \
         -2 2612_R2.fastq.gz \
         -t 14 --min-contig-len 500 \
@@ -261,7 +261,7 @@ We will process this FastA file with a small script from Heng Li (creator of the
 
 The script is already present in the chapter's directory.
 
-```{.bash eval=false}
+```bash
 k8 ./calN50.js megahit/final.contigs.fa
 ```
 
@@ -333,7 +333,7 @@ To save us some time and continue with the more interesting analyses, I prepared
 For this, I also corrected damage-derived alleles in the contig sequences.
 You can access these files on the cluster by running the following commands:
 
-```{.bash eval=false}
+```bash
 mkdir alignment
 ln -s /<PATH>/<TO>/denovo-assembly/seqdata_files/2612.sorted.calmd.bam alignment/
 ln -s /<PATH>/<TO>/denovo-assembly/seqdata_files/2612.sorted.calmd.bam.bai alignment/
@@ -345,7 +345,7 @@ If we wanted to generate the alignments ourselves, we can check the commands in 
 ::: {.callout-note title="Manual alignment with Bowtie2" collapse="true"}
 To execute the alignment step ourselves we could theoretically run the following commands:
 
-```{.bash eval=false}
+```bash
 mkdir alignment
 ln -s $PWD/megahit/final.contigs.fa alignment/2612.fa
 bowtie2-build -f alignment/2612.fa alignment/2612
@@ -413,7 +413,7 @@ See the beginning of the chapter for more information.
 
 To skip the first steps of metaWRAP and start straight with the binning, we need to create the folder structure and files that metaWRAP expects:
 
-```{.bash eval=false}
+```bash
 mkdir -p metawrap/INITIAL_BINNING/2612/work_files
 ln -s $PWD/alignment/2612.sorted.calmd.bam \
     metawrap/INITIAL_BINNING/2612/work_files/2612.bam
@@ -426,7 +426,7 @@ Now, we can start to run the binning.
 In this practical course, we will focus on metaBAT2 and MaxBin2.
 To bin the contigs with these binners, we execute:
 
-```{.bash eval=false}
+```bash
 conda activate metawrap-env
 metawrap binning -o metawrap/INITIAL_BINNING/2612 \
     -t 14 \
@@ -490,7 +490,7 @@ If you have sufficient computational memory resources, you can run the following
 ::: {.callout-warning title="Example commands - do not run!" collapse="true"}
 To apply metaWRAP's bin refinement to the bins that we obtained from metaBAT2 and MaxBin2, we first need to install the software checkM [@Parks2015] that will provide the lineage-specific marker gene catalogue:
 
-```{.bash eval=false}
+```bash
 ## Only run if you have at least 72 GB of memory!
 mkdir checkM
 wget -O checkM/checkm_data_2015_01_16.tar.gz \
@@ -502,7 +502,7 @@ echo checkM | checkm data setRoot checkM
 
 Afterwards, we can execute metaWRAP's bin refinement module:
 
-```{.bash eval=false}
+```bash
 ## Only run if you have at least 72 GB of memory!
 mkdir -p metawrap/BIN_REFINEMENT/2612
 metawrap bin_refinement -o metawrap/BIN_REFINEMENT/2612 \
@@ -604,8 +604,8 @@ An alternative for users with a less powerful infrastructure is the program [Kra
 
 Before running MMSeqs2's _taxonomy_ workflow against the GTDB reference database, we need to install it. 
 
-```{.bash eval=false}
-## Only run if you have at least 132 GB of disk space!
+```bash
+## Only run if you have at least 105 GB of disk space!
 mkdir -p refdbs/mmseqs2/gtdb
 mmseqs databases GTDB \
     refdbs/mmseqs2/gtdb /tmp --threads 14
@@ -613,8 +613,8 @@ mmseqs databases GTDB \
 
 Subsequently, we can align all the contigs of the sample 2612 against the GTDB r207 with MMSeqs2:
 
-```{.bash eval=false}
-## Only run if you have at least 850 GB of memory!
+```bash
+## Only run if you have at least 700 GB of memory!
 mkdir mmseqs2
 mmseqs createdb alignment/2612.fa mmseqs2/2612.contigs
 mmseqs taxonomy  mmseqs2/2612.contigs \
@@ -688,8 +688,8 @@ If you want to see how you would run the `gtdbtk classify_wf` see the collapsed 
 
 First, we need to install the GTDB database:
 
-```{.bash eval=false}
-## Only run if you have at least 83 GB disk space!
+```bash
+## Only run if you have at least 70 GB disk space!
 mkdir -p refdbs/gtdbtk
 wget -O refdbs/gtdbtk/gtdbtk_v2_data.tar.gz \
     https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_v2_data.tar.gz
@@ -698,7 +698,7 @@ tar xvf refdbs/gtdbtk/gtdbtk_v2_data.tar.gz -C refdbs/gtdbtk
 
 Afterwards, we can run GTDBTK's _classify_ workflow:
 
-```{.bash eval=false}
+```bash
 ## Only run if you have at least 80 GB of memory!
 mkdir gtdbtk
 GTDBTK_DATA_PATH="$PWD/refdbs/gtdbtk/gtdbtk_r207_v2" \
@@ -757,7 +757,7 @@ By comparing the fit of these two models to the observed data for each contig, p
 
 We can run pyDamage directly on the alignment data in BAM format:
 
-```{.bash eval=false}
+```bash
 pydamage analyze -w 30 -p 14 alignment/2612.sorted.calmd.bam
 ```
 
@@ -804,7 +804,7 @@ Next to returning information on the protein-coding genes, Prokka also returns t
 
 For this practical course, we will use Prokka and we will focus on annotating the pre-refined MAG bin `bin.3.fa` that we reconstructed from the sample 2612. 
 
-```{.bash eval=false}
+```bash
 prokka --outdir prokka \
     --prefix 2612_003 \
     --compliant --metagenome --cpus 14 \

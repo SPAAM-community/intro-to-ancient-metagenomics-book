@@ -4,7 +4,7 @@ author: Maxime Borry
 bibliography: assets/references/taxonomic-profiling.bib
 ---
 
-::: {.callout-tip}
+::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
 For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
 
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413138](https://doi.org/10.5281/zenodo.8413138), and unpack
@@ -26,23 +26,23 @@ conda activate taxonomic-profiling
 
 In this chapter, we're going to look at taxonomic profiling, or in other words, how to get the microbial composition of a sample from the DNA sequencing data.
 
-Though there are many algorithms, and even more different tools available to perform taxonomic profiling, the general idea remains the same (@fig-overview).
+Though there are many algorithms, and even more different tools available to perform taxonomic profiling, the general idea remains the same (@fig-taxonomicprofiling-overview).
 
-After cleaning up the sequencing data, generally saved as FASTQ files, a **taxonomic profiler** is used to compare the sequenced DNA to a reference database of sequences from known organisms, in order to generate a taxonomic profile of all organisms identified in a sample (@fig-overview)
+After cleaning up the sequencing data, generally saved as FASTQ files, a **taxonomic profiler** is used to compare the sequenced DNA to a reference database of sequences from known organisms, in order to generate a taxonomic profile of all organisms identified in a sample (@fig-taxonomicprofiling-overview)
 
-![General overview of a taxonomic profiling analysis workflow](assets/images/chapters/taxonomic-profiling/how_to_analyze.png){#fig-overview}
+![General overview of a taxonomic profiling analysis workflow](assets/images/chapters/taxonomic-profiling/how_to_analyze.png){#fig-taxonomicprofiling-overview}
 
-If you prefer text instead of pictograms, the workflow we're going to cover today is outlined in the figure below, adapted from @sharptonIntroductionAnalysisShotgun2014
+If you prefer text instead of pictograms, the workflow we're going to cover today is outlined in @fig-taxonomicprofiling-workflow, adapted from @sharptonIntroductionAnalysisShotgun2014
 
-![A typical metagenomics analysis workflow, adapted from @sharptonIntroductionAnalysisShotgun2014](assets/images/chapters/taxonomic-profiling/analysis_workflow.png){#fig-workflow}
+![A typical metagenomics analysis workflow, adapted from @sharptonIntroductionAnalysisShotgun2014](assets/images/chapters/taxonomic-profiling/analysis_workflow.png){#fig-taxonomicprofiling-workflow}
 
-Because different organisms can possess the same DNA, especially when looking at shorter sequences, taxonomic profilers need to have a way to resolve the ambiguity in the taxonomic assignation (@fig-ambiguity).
+Because different organisms can possess the same DNA, especially when looking at shorter sequences, taxonomic profilers need to have a way to resolve the ambiguity in the taxonomic assignation (@fig-taxonomicprofiling-ambiguity).
 
-![Different species can share the same DNA sequence](assets/images/chapters/taxonomic-profiling/ambiguity.png){#fig-ambiguity}
+![Different species can share the same DNA sequence](assets/images/chapters/taxonomic-profiling/ambiguity.png){#fig-taxonomicprofiling-ambiguity}
 
-By leveraging an algorithm known as the [Lowest Common Ancestor](https://en.wikipedia.org/wiki/Lowest_common_ancestor) (LCA), and the taxonomic tree of all known species, ambiguities are going to be resolved by assigning a higher, less precise, taxonomic rank to ambiguous matches(@fig-lca).
+By leveraging an algorithm known as the **Lowest Common Ancestor (LCA)**, and the taxonomic tree of all known species, ambiguities are going to be resolved by assigning a higher, less precise, taxonomic rank to ambiguous matches (@fig-taxonomicprofiling-lca).
 
-![A diagram of the LCA algorithm, a way to resolve these ambiguities](assets/images/chapters/taxonomic-profiling/lca.png){#fig-lca}
+![A diagram of the LCA algorithm, a way to resolve these ambiguities](assets/images/chapters/taxonomic-profiling/lca.png){#fig-taxonomicprofiling-lca}
 
 ## Chapter Overview
 
@@ -52,7 +52,7 @@ Today, we're going to use the following tools:
 - MetaPhlAn [@segata2012metagenomic], for taxonomic profiling 
 - Krona [@ondovInteractiveMetagenomicVisualization2011] and Pavian [@breitwieserPavianInteractiveAnalysis2016] for the interactive exploration of the taxonomic profiles
 - curatedMetagenomicData [@pasolliAccessibleCuratedMetagenomic2017] for retrieving modern comparison data
-- Python, pandas [@rebackPandasdevPandasPandas2022], [plotnine](https://plotnine.readthedocs.io/en/stable/) , and scikit-bio [@scikit-bioScikitbioBioinformaticsLibrary2022] to perform exploratory data analysis and a bit of microbial ecology
+- Python, pandas [@rebackPandasdevPandasPandas2022], plotnine ([https://plotnine.readthedocs.io/en/stable/](https://plotnine.readthedocs.io/en/stable/)), and scikit-bio [@scikit-bioScikitbioBioinformaticsLibrary2022] to perform exploratory data analysis and a bit of microbial ecology
 
 to explore a toy dataset that has already been prepared for you.
 
@@ -62,38 +62,44 @@ to explore a toy dataset that has already been prepared for you.
 ### Download and Subsample
 
 ```python
+#| eval: false
 import subprocess
 import glob
 from pathlib import Path
 ```
 
-For this tutorial, we will be using the ERR5766177 library from the sample 2612 published by [Maixner et al. 2021](https://doi.org/10.1016/j.cub.2021.09.031)
+For this tutorial, we will be using the ERR5766177 library from the sample 2612 published by [@maixner2021hallstatt]
 
 ![](assets/images/chapters/taxonomic-profiling/1-s2.0-S0960982221012719-fx1.jpg)
 
 ![](assets/images/chapters/taxonomic-profiling/1-s2.0-S0960982221012719-gr1.jpg)`
 
-#### Subsampling the sequencing files to make the analysis quicker for this tutorial
+### Subsampling the sequencing files to make the analysis quicker for this tutorial
 
-This Python code defines a function called subsample that takes in a FASTQ file name, an output directory, and a depth value (defaulting to 1000000). The function uses the seqtk command-line tool to subsample the input FASTQ file to the desired depth and saves the output to a new file in the specified output directory. The function prints the constructed command string to the console for debugging purposes.
+This Python code defines a function called subsample that takes in a FASTQ file name, an output directory, and a depth value (defaulting to 1000000).
+The function uses the seqtk command-line tool to subsample the input FASTQ file to the desired depth and saves the output to a new file in the specified output directory.
+The function prints the constructed command string to the console for debugging purposes.
 
 ```python
+#| eval: false
 def subsample(filename, outdir, depth=1000000):
     basename = Path(filename).stem
     cmd = f"seqtk sample -s42 {filename} {depth} > {outdir}/{basename}_subsample_{depth}.fastq"
     print(cmd)
     subprocess.check_output(cmd, shell=True)
 ```
+
 This Python code uses a for loop to iterate over all the files in the `../data/raw/` directory that match the pattern `*`, and calls the `subsample` (defined above) function on each file in the directory `../data/subsampled`.
 
 ```python
+#| eval: false
 for f in glob.glob("../data/raw/*"):
     outdir = "../data/subsampled"
     subsample(f, outdir)
 ```
 
 ::: {.callout-tip collapse="true" title='Expand to see command output'}
-```
+```{verbatim}
 seqtk sample -s42 ../data/raw/ERR5766177_PE.mapped.hostremoved.fwd.fq.gz 1000000 >
 ../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq
 seqtk sample -s42 ../data/raw/ERR5766177_PE.mapped.hostremoved.rev.fq.gz 1000000 >
@@ -110,9 +116,11 @@ gzip -f ../data/subsampled/*.fastq
 
 ## Working in a jupyter environment
 
-This tutorial run-through is using a [Jupyter Notebook](https://jupyter.org) for writing & executing Python code and for annotating.
+This tutorial run-through is using a Jupyter Notebook ([https://jupyter.org](https://jupyter.org)) for writing & executing Python code and for annotating.
 
-Jupyter notebooks are convenient and have two types of cells: **Markdown** and **Code**. The **markup cell** syntax is very similar to **R markdown**. The markdown cells are used for annotating, which is important for sharing code with collaborators, reproducibility, and documentation.
+Jupyter notebooks are convenient and have two types of cells: _Markdown_ and _Code_.
+The _markup cell_ syntax is very similar to _R markdown_.
+The markdown cells are used for annotating, which is important for sharing code with collaborators, reproducibility, and documentation.
 
 To load, please run the following command from within the chapter's directory.
 
@@ -131,12 +139,12 @@ If you wish to run all commands manually (i.e., without the notebook), you must 
 
 Before starting to analyze our data, we will need to pre-process them to remove reads mapping to the host genome, here, _Homo sapiens_.
 
-To do so, I've used the first steps of the [nf-core/eager](https://github.com/nf-core/eager) pipeline, more information of which can be found in the [Ancient Metagenomic Pipelines](ancient-metagenomic-pipelines.qmd) chapter. 
+To do so, I've used the first steps of the nf-core/eager [@Fellows-Yates2020-iy] pipeline, more information of which can be found in the [Ancient Metagenomic Pipelines](ancient-metagenomic-pipelines.qmd) chapter.
 
 I've already done some pre-processed the data, and the resulting cleaned files are available in the `data/eager_cleaned/`.
 
 ::: {.callout-note collapse="true"}
-## Instructions for manual pre-preparation of data
+## Self-guided: onstructions for manual pre-preparation of data
 
 If you wish to re-pre-prepare the data yourself, the basic eager command to do so is below, running on the output of the previous block in [chapter overview](#chapter-overview).
 
@@ -153,11 +161,11 @@ nextflow run nf-core/eager \
 ## Adapter sequence trimming and low-quality bases trimming
 
 Sequencing adapters are small DNA sequences adding prior to DNA sequencing to allow the DNA fragments to attach to the
-sequencing flow cells (see [Introduction to NGS Sequencing](introduction-to-ngs-sequencing.qmd)). Because these adapters could interfere with downstream analyses, we need to remove them before
-proceeding any further. Furthermore, because the quality of the sequencing is not always optimal, we need to remove bases
-of lower sequencing quality to might lead to spurious results in downstream analyses.
+sequencing flow cells (see [Introduction to NGS Sequencing](introduction-to-ngs-sequencing.qmd)).
+Because these adapters could interfere with downstream analyses, we need to remove them before proceeding any further.
+Furthermore, because the quality of the sequencing is not always optimal, we need to remove bases of lower sequencing quality to might lead to spurious results in downstream analyses.
 
-To perform both of these tasks, we'll use the program [fastp](https://github.com/OpenGene/fastp).
+To perform both of these tasks, we'll use the program fastp ([https://github.com/OpenGene/fastp](https://github.com/OpenGene/fastp)) by Chen et al. [-@chenFastpUltrafastAllinone2018].
 
 The following command gets you the help of fastp (the `--help` option is a common option in command-line tools that displays a list of available options and their descriptions).
 
@@ -288,7 +296,9 @@ fastp -h
       -?, --help                           print this message
 :::
 
-Here we use fastp to preprocess a pair of FASTQ files. The code specifies the input files, merges the paired-end reads on their overlaps, removes duplicate reads, and generates JSON and HTML reports. The output files are saved in the `../results/fastp/ directory`.
+Here we use fastp to preprocess a pair of FASTQ files.
+The code specifies the input files, merges the paired-end reads on their overlaps, removes duplicate reads, and generates JSON and HTML reports.
+The output files are saved in the `../results/fastp/ directory`.
 
 ```bash
 fastp \
@@ -349,9 +359,19 @@ fastp \
     fastp v0.23.2, time used: 11 seconds
 :::
 
+::: {.callout-tip title="Question" appearance="simple"}
+What do you think of the number of read pairs that were merged ?
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+Here, only 228 read pairs were merged.
+This is due to the length of the reads of 100bp, and length of the DNA fragments.
+If you would use fewer cycles, and have shorter DNA fragments, you would expect this number to go up.
+:::
+
 ## Taxonomic profiling with Metaphlan
 
-MetaPhlAn is a computational tool for profiling the composition of microbial communities from metagenomic shotgun sequencing data. 
+MetaPhlAn is a computational tool for profiling the composition of microbial communities from metagenomic shotgun sequencing data.
 
 ```bash
 metaphlan  --help
@@ -408,7 +428,7 @@ metaphlan  --help
 
     *  bowtie2out files generated with MetaPhlAn versions below 3 are not compatibile.
        Starting from MetaPhlAn 3.0, the BowTie2 ouput now includes the size of the profiled metagenome and the average read length.
-       If you want to re-run MetaPhlAn using these file you should provide the metagenome size via --nreads:
+       If you want to re-run MetaPhlAn using these file you should provide the metagenome s via --nreads:
     $ metaphlan metagenome.bowtie2.bz2 --nproc 5 --input_type bowtie2out --nreads 520000 -o profiled_metagenome.txt
 
     *  You can also provide an externally BowTie2-mapped SAM if you specify this format with
@@ -438,7 +458,7 @@ metaphlan  --help
        higher 0.0. (we are assuming that metagenome_outfmt.bz2 has been generated before as
        shown above).
     $ metaphlan -t marker_ab_table metagenome_outfmt.bz2 --input_type bowtie2out -o marker_abundance_table.txt
-       The obtained RPK can be optionally normalized by the total number of reads in the metagenome
+       The obtained RPK can be optionally normald by the total number of reads in the metagenome
        to guarantee fair comparisons of abundances across samples. The number of reads in the metagenome
        needs to be passed with the '--nreads' argument
 
@@ -600,7 +620,9 @@ metaphlan  --help
       -h, --help            show this help message and exit
 :::
 
-The following command uses MetaPhlAn to profile the taxonomic composition of the ERR5766177 metagenomic sample. The input file is specified as a merged FASTQ file, and the output is saved as a text file containing the taxonomic profile. The `--bowtie2out` option is used to specify the output file for the Bowtie2 alignment, and the --nproc option is used to specify the number of CPUs to use for the analysis.
+The following command uses MetaPhlAn to profile the taxonomic composition of the ERR5766177 metagenomic sample.
+The input file is specified as a merged FASTQ file, and the output is saved as a text file containing the taxonomic profile.
+The `--bowtie2out` option is used to specify the output file for the Bowtie2 alignment, and the --nproc option is used to specify the number of CPUs to use for the analysis.
 
 ```bash
 metaphlan ../results/fastp/ERR5766177.merged.fastq.gz  \
@@ -632,53 +654,95 @@ head ../results/metaphlan/ERR5766177.metaphlan_profile.txt
     k__Archaea|p__Euryarchaeota	2157|28890	17.76802
 :::
 
+::: {.callout-tip title="Question" appearance="simple"}
+What is the letter preceding the `__` before every clade name ? Eg. `k__Bacteria`
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+This letter corresponds to the rank of the clade.
+- k for Kingdom
+- p for Phylum
+- [...]
+- f for Family
+- g for Genus
+- s for Species
+:::
+
 ## Visualizing the taxonomic profile
 
 ### Visualizing metaphlan taxonomic profile with Pavian
 
-[Pavian](https://github.com/fbreitwieser/pavian) is a web-based tool for interactive visualization and analysis of metagenomics data. It provides a user-friendly interface for exploring taxonomic and functional profiles of microbial communities, and allows users to generate interactive plots and tables that can be customized and shared (@fig-pavian-interface).
+Pavian ([https://github.com/fbreitwieser/pavian](https://github.com/fbreitwieser/pavian)) by Breitweiser et al. [-@Breitwieser2020-zw] is a web-based tool for interactive visualization and analysis of metagenomics data.
+It provides a user-friendly interface for exploring taxonomic and functional profiles of microbial communities, and allows users to generate interactive plots and tables that can be customised and shared (@fig-taxonomicprofiling-pavianinterface).
 
-You can open Pavian in your browser by visiting [fbreitwieser.shinyapps.io/pavian](https://fbreitwieser.shinyapps.io/pavian/.).
+You can open Pavian in your browser by visiting [https://fbreitwieser.shinyapps.io/pavian](https://fbreitwieser.shinyapps.io/pavian/.).
 
-![Screenshot of the pavian metagenomics visualisation interface, with menus on the left, a select sample and filter taxa search bar at the top, and a Sankey visualisation of the example metagenome sample](assets/images/chapters/taxonomic-profiling/pavian.png){#fig-pavian-interface}
+![Screenshot of the pavian metagenomics visualisation interface, with menus on the left, a select sample and filter taxa search bar at the top, and a Sankey visualisation of the example metagenome sample](assets/images/chapters/taxonomic-profiling/pavian.png){#fig-taxonomicprofiling-pavianinterface}
 
 ::: {.callout-note collapse="true" title='Expand for instructions for running yourself'}
 
 There are different ways to run it:
 
-- If you have [docker](https://www.docker.com/) installed
+- If you have docker ([https://www.docker.com/](https://www.docker.com/)) installed
 
   ```bash
+  #| eval: false
   docker pull 'florianbw/pavian'
   docker run --rm -p 5000:80 florianbw/pavian
   ```
 
 Then open your browser and visit [localhost:5000](localhost:5000)
 
-- If you are familiar with [R](https://www.r-project.org/)
+- If you are familiar with R ([https://www.r-project.org/](https://www.r-project.org/))
 
-  ```r
-  if (!require(remotes)) { install.packages("remotes") }
-  remotes::install_github("fbreitwieser/pavian")
+  ```{r}
+#| eval: false
+if (!require(remotes)) {
+    install.packages("remotes")
+}
+remotes::install_github("fbreitwieser/pavian")
 
-  pavian::runApp(port=5000)
+pavian::runApp(port = 5000)
   ```
 
 Then open your browser and visit [localhost:5000](localhost:5000)
 :::
 
+::: {.callout-tip title="Question" appearance="simple"}
+What is the relative abundance of the phylum Firmicutes ?
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+In this example, the relative abundance of the Firmicutes (officially renamed Bacillota since 2021) is 33.5%.
+You can verify this number either in the Sankey plot (section "Sample"), or in the comparison table (section "Comparison") by selecting the Phylum tab.
+:::
+
 ### Visualizing metaphlan taxonomic profile with Krona
 
-[Krona](https://github.com/marbl/Krona/wiki) is a software tool for interactive visualization of hierarchical data, such as taxonomic profiles generated by metagenomics tools like MetaPhlAn. Krona allows users to explore the taxonomic composition of microbial communities in a hierarchical manner, from the highest taxonomic level down to the species level.
+Krona ([https://github.com/marbl/Krona/wiki](https://github.com/marbl/Krona/wiki)) by Ondov et  al. [@Ondov2011-se] is a software tool for interactive visualization of hierarchical data, such as taxonomic profiles generated by metagenomics tools like MetaPhlAn.
+Krona allows users to explore the taxonomic composition of microbial communities in a hierarchical manner, from the highest taxonomic level down to the species level.
 
-The `metaphlan2krona.py` script is used to convert the MetaPhlAn taxonomic profile output to a format that can be visualized by Krona. The output of the script is a text file that contains the taxonomic profile in a hierarchical format that can be read by Krona. The `ktImportText` command is then used to generate an interactive HTML file that displays the taxonomic profile in a hierarchical manner using Krona.
+The `metaphlan2krona.py` script is used to convert the MetaPhlAn taxonomic profile output to a format that can be visualised by Krona.
+The output of the script is a text file that contains the taxonomic profile in a hierarchical format that can be read by Krona.
+The `ktImportText` command is then used to generate an interactive HTML file that displays the taxonomic profile in a hierarchical manner using Krona.
 
 ```bash
+
 python ../scripts/metaphlan2krona.py -p ../results/metaphlan/ERR5766177.metaphlan_profile.txt -k ../results/krona/ERR5766177_krona.out
 ktImportText -o ../results/krona/ERR5766177_krona.html ../results/krona/ERR5766177_krona.out
 ```
+
 ::: {.callout-tip collapse="true" title='Expand to see command output'}
     Writing ../results/krona/ERR5766177_krona.html...
+:::
+
+::: {.callout-tip title="Question" appearance="simple"}
+Which proportion of the Firmicutes is made of Clostridiales ?
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+The Clostridiales represent 63% of the Firmicutes in this sample.
+You can verify this by clicking in the Clostridiales and looking at the pie chart for Firmicutes on the top right of the screen.
 :::
 
 ## Getting modern comparative reference data
@@ -688,7 +752,7 @@ which provides both curated metadata, and pre-computed metaphlan taxonomic profi
 
 The full R code to get these data is available in `curatedMetagenomics/get_sources.Rmd`.
 
-I pre-selected 200 gut microbiome samples from non-westernized (100) and westernized (100) from healthy, non-antibiotic users donors.
+I pre-selected 200 gut microbiome samples from non-westernised (100) and westernised (100) from healthy, non-antibiotic users donors.
 
 ```{r}
 #| eval: false
@@ -729,36 +793,42 @@ for (r in names(data_ranks)) {
 
 ## Loading the ancient sample taxonomic profile
 
-This is the moment where we will use the [Pandas](https://pandas.pydata.org) library [Python](https://www.python.org/) to perform some data manipulation.  
-We will also use the [Taxopy](https://github.com/apcamargo/taxopy) library to work with taxonomic information.
+This is the moment where we will use the Pandas ([https://pandas.pydata.org](https://pandas.pydata.org)) Python library ([https://www.python.org/](https://www.python.org/)) to perform some data manipulation.
+We will also use the Taxopy ([https://github.com/apcamargo/taxopy](https://github.com/apcamargo/taxopy)) library to work with taxonomic information.
 
 In python we need to import necessary libraries, i.e. pandas and taxopy, and a couple of other utility libraries.
 
 ```python
+#| eval: false
 import pandas as pd
 import taxopy
 import pickle
 import gzip
 ```
 
-And we then create an instance of the taxopy taxonomy database. This will take a few seconds/minutes, as it needs to download the entire NCBI taxonomy before storing in a local database.
+And we then create an instance of the taxopy taxonomy database.
+This will take a few seconds/minutes, as it needs to download the entire NCBI taxonomy before storing in a local database.
 
 ```python
+#| eval: false
 taxdb = taxopy.TaxDb()
 ```
 
-Let's read the metaphlan profile table with pandas (a python package with a similar concept to tidyverse dyplyr, tidyr packa). It's a tab separated file, so we need to specify the delimiter as `\t`, and skip the comment lines of the files that start with `#`.
+Let's read the metaphlan profile table with pandas (a python package with a similar concept to tidyverse dyplyr, tidyr packa).
+It's a tab separated file, so we need to specify the delimiter as `\t`, and skip the comment lines of the files that start with `#`.
 
 ```python
+#| eval: false
 ancient_data = pd.read_csv("../results/metaphlan/ERR5766177.metaphlan_profile.txt",
                             comment="#",
                             delimiter="\t",
                             names=['clade_name','NCBI_tax_id','relative_abundance','additional_species'])
 ```
 
-To look at the head of a dataframe (@tbl-mp3-raw) with pandas
+To look at the head of a dataframe (@tbl-taxonomicprofiling-mp3raw) with pandas
 
 ```python
+#| eval: false
 ancient_data.head()
 ```
 
@@ -770,11 +840,12 @@ ancient_data.head()
 | 3 | k__Bacteria\|p__Bacteroidetes  | 2\|976      | 28.42090           | NaN                |
 | 4 | k__Bacteria\|p__Actinobacteria | 2\|201174   | 20.33151           | NaN                |
 
-: Top few lines of a MetaPhlAn taxonomic profile {#tbl-mp3-raw}
+: Top few lines of a MetaPhlAn taxonomic profile {#tbl-taxonomicprofiling-mp3raw}
 
-We can also specify more rows by randomly picking 10 rows to display (@tbl-mp3-sampled).
+We can also specify more rows by randomly picking 10 rows to display (@tbl-taxonomicprofiling-mp3sampled).
 
 ```python
+#| eval: false
 ancient_data.sample(10)
 ```
 
@@ -791,12 +862,13 @@ ancient_data.sample(10)
 | 26 | k__Bacteria\|p__Actinobacteria\|c__Actinobacteri...  | 2\|201174\|1760\|85004\|31953                  | 9.39377            | NaN                                                  |
 | 48 | k__Bacteria\|p__Firmicutes\|c__Clostridia\|o__Clo... | 2\|1239\|186801\|186802\|541000\|1263\|40518   | 14.96816           | k__Bacteria\|p__Firmicutes\|c__Clostridia\|o__Clo... |
 
-: Ten randomly selected lines of a MetaPhlAn taxonomic profile {#tbl-mp3-sampled}
+: Ten randomly selected lines of a MetaPhlAn taxonomic profile {#tbl-taxonomicprofiling-mp3sampled}
 
 Because for this analysis, we're only going to look at the relative abundance, we'll only use this column, and
-the [Taxonomic ID (TAXID)](https://www.ncbi.nlm.nih.gov/taxonomy) information, so we can `drop` (get rid of) the unnecessary columns.
+the Taxonomic ID (TAXID) ([https://www.ncbi.nlm.nih.gov/taxonomy](https://www.ncbi.nlm.nih.gov/taxonomy)) information, so we can `drop` (get rid of) the unnecessary columns.
 
 ```python
+#| eval: false
 ancient_data = (
     ancient_data
     .rename(columns={'NCBI_tax_id': 'TAXID'})
@@ -808,18 +880,24 @@ ancient_data = (
 Always investigate your data at first !
 
 ```python
+#| eval: false
 ancient_data.relative_abundance.sum()
 ```
 
     700.00007
 
-**Pause and think**: A relative abundance of 700%, really ?
 :::
 
-::: {.callout-tip collapse="true" title="Unfold to see what's happening"}
-Let's proceed further and try to understand what's happening (@tbl-taxid-table).
+::: {.callout-tip title="Question" appearance="simple"}
+What do you think of a 700% relative abundance ?
+:::
+
+
+::: {.callout-tip collapse="true" title="Answer"}
+Let's proceed further and try to understand what's happening (@tbl-taxonomicprofiling-taxidtable).
 
 ```python
+#| eval: false
 ancient_data.head()
 ```
 
@@ -831,18 +909,19 @@ ancient_data.head()
 | 3 | 2\|976    | 28.42090           |
 | 4 | 2\|201174 | 20.33151           |
 
-: A two column table of TAXIDs and the organisms corresponding relative abundance {#tbl-taxid-table}
+: A two column table of TAXIDs and the organisms corresponding relative abundance {#tbl-taxonomicprofiling-taxidtable}
 
-To make sense of the TAXID, we will use taxopy to get all the taxonomic related informations such as (@tbl-taxid-table-with-path):
+To make sense of the TAXID, we will use taxopy to get all the taxonomic related informations such as (@tbl-taxonomicprofiling-taxidtablewithpath):
 
-- name of the taxon
-- rank of the taxon
-- lineage of the taxon
+- Name of the taxon
+- Rank of the taxon
+- Lineage of the taxon
 
 ```python
-#### This function is here to help us get the taxon information
-#### from the metaphlan taxonomic ID lineage, of the following form
-#### 2|976|200643|171549|171552|838|165179
+#| eval: false
+## This function is here to help us get the taxon information
+## from the metaphlan taxonomic ID lineage, of the following form
+## 2|976|200643|171549|171552|838|165179
 
 def to_taxopy(taxid_entry, taxo_db):
     """Returns a taxopy taxon object
@@ -863,6 +942,7 @@ def to_taxopy(taxid_entry, taxo_db):
 ```
 
 ```python
+#| eval: false
 ancient_data['taxopy'] = ancient_data['TAXID'].apply(to_taxopy, taxo_db=taxo_db)
 
 ancient_data.head()
@@ -876,9 +956,10 @@ ancient_data.head()
 | 3 | 2\|976    | 28.42090           | s__Bacteria;c__FCB group;p__Bacteroidetes         |
 | 4 | 2\|201174 | 20.33151           | s__Bacteria;c__Terrabacteria group;p__Actinoba... |
 
-: A three column table of TAXIDs and the organisms corresponding relative abundance, and the attached taxonomic path associated with the TAXID {#tbl-taxid-table-with-path}
+: A three column table of TAXIDs and the organisms corresponding relative abundance, and the attached taxonomic path associated with the TAXID {#tbl-taxonomicprofiling-taxidtablewithpath}
 
 ```python
+#| eval: false
 ancient_data = ancient_data.assign(
     rank = ancient_data.taxopy.apply(lambda x: x.rank),
     name = ancient_data.taxopy.apply(lambda x: x.name),
@@ -888,47 +969,68 @@ ancient_data = ancient_data.assign(
 ancient_data
 ```
 
-|     | TAXID                                            | relative_abundance | taxopy                                            | rank         | name                       | lineage                                           |
-|-----|--------------------------------------------------|--------------------|---------------------------------------------------|--------------|----------------------------|---------------------------------------------------|
-| 0   | 2                                                | 82.23198           | s__Bacteria                                       | superkingdom | Bacteria                   | [Bacteria, cellular organisms, root]              |
-| 1   | 2157                                             | 17.76802           | s__Archaea                                        | superkingdom | Archaea                    | [Archaea, cellular organisms, root]               |
-| 2   | 2\|1239                                          | 33.47957           | s__Bacteria;c__Terrabacteria group;p__Firmicutes  | phylum       | Firmicutes                 | [Firmicutes, Terrabacteria group, Bacteria, ce... |
-| 3   | 2\|976                                           | 28.42090           | s__Bacteria;c__FCB group;p__Bacteroidetes         | phylum       | Bacteroidetes              | [Bacteroidetes, Bacteroidetes/Chlorobi group, ... |
-| 4   | 2\|201174                                        | 20.33151           | s__Bacteria;c__Terrabacteria group;p__Actinoba... | phylum       | Actinobacteria             | [Actinobacteria, Terrabacteria group, Bacteria... |
-| ... | ...                                              | ...                | ...                                               | ...          | ...                        | ...                                               |
-| 62  | 2\|1239\|186801\|186802\|186803\|572511\|33039   | 0.24910            | s__Bacteria;c__Terrabacteria group;p__Firmicut... | species      | [Ruminococcus] torques     | [[Ruminococcus] torques, Mediterraneibacter, L... |
-| 63  | 2\|201174\|84998\|84999\|84107\|1472762\|1232426 | 0.17084            | s__Bacteria;c__Terrabacteria group;p__Actinoba... | species      | [Collinsella] massiliensis | [[Collinsella] massiliensis, Enorma, Coriobact... |
-| 64  | 2\|1239\|186801\|186802\|186803\|189330\|39486   | 0.07690            | s__Bacteria;c__Terrabacteria group;p__Firmicut... | species      | Dorea formicigenerans      | [Dorea formicigenerans, Dorea, Lachnospiraceae... |
-| 65  | 2\|201174\|1760\|85004\|31953\|1678\|216816      | 0.05447            | s__Bacteria;c__Terrabacteria group;p__Actinoba... | species      | Bifidobacterium longum     | [Bifidobacterium longum, Bifidobacterium, Bifi... |
-| 66  | 2\|1239\|186801\|186802\|541000\|1263\|1262959   | 0.01440            | s__Bacteria;c__Terrabacteria group;p__Firmicut... | species      | Ruminococcus sp. CAG:488   | [Ruminococcus sp. CAG:488, environmental sampl... |
 
-: A five column table of TAXIDs and the organisms corresponding relative abundance, and the attached taxonomic path associated with the TAXID, but also the rank and name of the particular taxonomic ID {#tbl-taxid-table-with-path-sep}
+```{r}
+#| label: tbl-taxonomicprofiling-taxidtablewithpathsep
+#| echo: false
+#| warning: false
+#| results: 'asis'
+#| tbl-cap: A five column table of TAXIDs and the organisms corresponding relative abundance, and the attached taxonomic path associated with the TAXID, but also the rank and name of the particular taxonomic ID
+#| tbl-cap-location: top
+
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/taxonomic-profiling/tbl-taxonomicprofiling-taxidtablewithpathsep.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
 
 Because our modern data are split by ranks, we'll first split our ancient sample by rank
 
 Which of the entries are at the `species rank` level?
 
 ```python
+#| eval: false
 ancient_species = ancient_data.query("rank == 'species'")
 
 ancient_species.head()
 ```
 
+```{r}
+#| label: tbl-taxonomicprofiling-taxidtablewithpathspecies
+#| echo: false
+#| warning: false
+#| results: 'asis'
+#| tbl-cap: A five column table of TAXIDs and the organisms corresponding relative abundance, and the attached taxonomic path associated with the TAXID, but also the rank and name of the particular taxonomic ID, filtered to only species
+#| tbl-cap-location: top
 
-|    | TAXID                                         | relative_abundance | taxopy                                            | rank    | name                       | lineage                                           |
-|----|-----------------------------------------------|--------------------|---------------------------------------------------|---------|----------------------------|---------------------------------------------------|
-| 46 | 2\|976\|200643\|171549\|171552\|838\|165179   | 25.75544           | s__Bacteria;c__FCB group;p__Bacteroidetes;c__B... | species | Prevotella copri           | [Prevotella copri, Prevotella, Prevotellaceae,... |
-| 47 | 2157\|28890\|183925\|2158\|2159\|2172\|2173   | 17.05626           | s__Archaea;p__Euryarchaeota;c__Methanomada gro... | species | Methanobrevibacter smithii | [Methanobrevibacter smithii, Methanobrevibacte... |
-| 48 | 2\|1239\|186801\|186802\|541000\|1263\|40518  | 14.96816           | s__Bacteria;c__Terrabacteria group;p__Firmicut... | species | Ruminococcus bromii        | [Ruminococcus bromii, Ruminococcus, Oscillospi... |
-| 49 | 2\|1239\|186801\|186802\|186803\|841\|301302  | 13.57908           | s__Bacteria;c__Terrabacteria group;p__Firmicut... | species | Roseburia faecis           | [Roseburia faecis, Roseburia, Lachnospiraceae,... |
-| 50 | 2\|201174\|84998\|84999\|84107\|102106\|74426 | 9.49165            | s__Bacteria;c__Terrabacteria group;p__Actinoba... | species | Collinsella aerofaciens    | [Collinsella aerofaciens, Collinsella, Corioba... |
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/taxonomic-profiling/tbl-taxonomicprofiling-taxidtablewithpathspecies.csv")
 
-: A five column table of TAXIDs and the organisms corresponding relative abundance, and the attached taxonomic path associated with the TAXID, but also the rank and name of the particular taxonomic ID, filtered to only species {#tbl-taxid-table-with-path-species}
-
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
 
 Let's do a bit of renaming to prepare for what's coming next
 
 ```python
+#| eval: false
 ancient_species = ancient_species[['relative_abundance','name']].set_index('name').rename(columns={'relative_abundance':'ERR5766177'})
 
 ancient_species.head()
@@ -942,10 +1044,11 @@ ancient_species.head()
 | Roseburia faecis           | 13.57908   |
 | Collinsella aerofaciens    | 9.49165    |
 
-: Reconstruction of the first two column taxonomic profile but with species-level organism names rather than TAXIDs {#tbl-taxid-table-with-name}
+: Reconstruction of the first two column taxonomic profile but with species-level organism names rather than TAXIDs {#tbl-taxonomicprofiling-taxidtablewithname}
 
 
 ```python
+#| eval: false
 ancient_phylums = ancient_data.query("rank == 'phylum'")
 
 ancient_phylums = ancient_phylums[['relative_abundance','name']].set_index('name').rename(columns={'relative_abundance':'ERR5766177'})
@@ -960,11 +1063,12 @@ ancient_phylums
 | Actinobacteria | 20.33151   |
 | Euryarchaeota  | 17.76802   |
 
-: Reconstruction of the first two column taxonomic profile but with phylum-level organism names rather than TAXIDs {#tbl-taxid-table-with-name}
+: Reconstruction of the first two column taxonomic profile but with phylum-level organism names rather than TAXIDs {#tbl-taxonomicprofiling-taxidtablewithname}
 
 Now, let's go back to the 700% relative abundance issue...
 
 ```python
+#| eval: false
 ancient_data.groupby('rank')['relative_abundance'].sum()
 ```
 ::: {.callout-tip collapse="true" title='Expand to see command output'}
@@ -985,80 +1089,144 @@ ancient_data.groupby('rank')['relative_abundance'].sum()
 
 Seems better, right ?
 
-**Pause and think: why don't we get exactly 100%** ?
+_Pause and think: why don't we get exactly 100%_ ?
 :::
 
 ## Bringing together ancient and modern samples
 
 Now let's load our modern reference samples
 
-First at the phylum level (@tbl-modern-taxtable-phylum)
+First at the phylum level (@tbl-taxonomicprofiling-tblmoderntaxtablephylum)
 
 ```python
+#| eval: false
 modern_phylums = pd.read_csv("../data/curated_metagenomics/modern_sources_phylum.csv", index_col=0)
 modern_phylums.head()
 ```
 
-|                 | de028ad4-7ae6-11e9-a106-68b59976a384 | PNP_Main_283 | PNP_Validation_55 | G80275   | PNP_Main_363 | SAMEA7045572 | SAMEA7045355 | HD-13    | EGAR00001420773_9002000001423910 | SID5428-4 | ... | A46_02_1FE | TZ_87532 | A94_01_1FE | KHG_7    | LDK_4    | KHG_9    | A48_01_1FE | KHG_1    | TZ_81781 | A09_01_1FE |
-|-----------------|--------------------------------------|--------------|-------------------|----------|--------------|--------------|--------------|----------|----------------------------------|-----------|-----|------------|----------|------------|----------|----------|----------|------------|----------|----------|------------|
-| Bacteroidetes   | 0.00000                              | 17.44332     | 82.86400          | 69.99087 | 31.93081     | 51.76204     | 53.32801     | 74.59667 | 8.81074                          | 26.39694  | ... | 1.97760    | 1.49601  | 67.21410   | 4.29848  | 68.16890 | 38.59709 | 14.81828   | 10.13908 | 57.14031 | 11.61544   |
-| Firmicutes      | 95.24231                             | 60.47031     | 16.53946          | 22.81977 | 65.23075     | 41.96928     | 45.77661     | 23.51065 | 54.35341                         | 62.23094  | ... | 76.68499   | 78.13269 | 29.72394   | 33.51772 | 19.11149 | 46.87139 | 72.68136   | 35.43789 | 40.57101 | 24.72113   |
-| Proteobacteria  | 4.49959                              | 0.77098      | 0.05697           | 4.07757  | 0.27316      | 3.33972      | 0.02001      | 1.72865  | 0.00000                          | 1.81016   | ... | 16.57250   | 0.76159  | 2.35058    | 9.83772  | 5.32392  | 0.19699  | 3.64655    | 17.64151 | 0.30580  | 56.20177   |
-| Actinobacteria  | 0.25809                              | 10.27631     | 0.45187           | 1.11902  | 2.31075      | 2.92715      | 0.77667      | 0.16403  | 36.55138                         | 1.19951   | ... | 3.01814    | 19.20468 | 0.69913    | 46.99479 | 7.39093  | 14.26365 | 5.47750    | 36.77145 | 1.16426  | 7.40894    |
-| Verrucomicrobia | 0.00000                              | 0.00784      | 0.00000           | 1.99276  | 0.25451      | 0.00000      | 0.00000      | 0.00000  | 0.09940                          | 3.29795   | ... | 0.05011    | 0.00000  | 0.00000    | 0.00000  | 0.00000  | 0.00000  | 0.00000    | 0.00000  | 0.00000  | 0.00000    |
+```{r}
+#| label: tbl-taxonomicprofiling-tblmoderntaxtablephylum
+#| echo: false
+#| warning: false
+#| results: 'asis'
+#| tbl-cap:  Taxonomic profiles at phylum level of multiple modern samples
+#| tbl-cap-location: top
 
-: Taxonomic profiles at phylum level of multiple modern samples {#tbl-modern-taxtable-phylum}
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/taxonomic-profiling/tbl-taxonomicprofiling-moderntaxtablephylum.csv")
 
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
 
 Then at the species level
 
 ```python
+#| eval: false
 modern_species = pd.read_csv("../data/curated_metagenomics/modern_sources_species.csv", index_col=0)
 ```
 
-As usual, we always check if our data has been loaded correctly (@tbl-modern-taxtable-species)
+As usual, we always check if our data has been loaded correctly (@tbl-taxonomicprofiling-tblmoderntaxtablespecies)
 
 ```python
+#| eval: false
 modern_species.head()
 ```
 
-|                            | de028ad4-7ae6-11e9-a106-68b59976a384 | PNP_Main_283 | PNP_Validation_55 | G80275  | PNP_Main_363 | SAMEA7045572 | SAMEA7045355 | HD-13    | EGAR00001420773_9002000001423910 | SID5428-4 | ... | A46_02_1FE | TZ_87532 | A94_01_1FE | KHG_7   | LDK_4   | KHG_9   | A48_01_1FE | KHG_1   | TZ_81781 | A09_01_1FE |
-|----------------------------|--------------------------------------|--------------|-------------------|---------|--------------|--------------|--------------|----------|----------------------------------|-----------|-----|------------|----------|------------|---------|---------|---------|------------|---------|----------|------------|
-| Bacteroides vulgatus       | 0.0                                  | 0.60446      | 1.59911           | 4.39085 | 0.04494      | 4.66505      | 2.99431      | 29.30325 | 1.48560                          | 0.98818   | ... | 0.20717    | 0.0      | 0.00309    | 0.48891 | 0.00000 | 0.02230 | 0.00000    | 0.15112 | 0.0      | 0.00836    |
-| Bacteroides stercoris      | 0.0                                  | 0.00546      | 0.00000           | 0.00000 | 2.50789      | 0.00000      | 20.57498     | 8.28443  | 1.23261                          | 0.00000   | ... | 0.00000    | 0.0      | 0.00000    | 0.00693 | 0.00000 | 0.02603 | 0.00000    | 0.19318 | 0.0      | 0.00000    |
-| Acidaminococcus intestini  | 0.0                                  | 0.00000      | 0.00000           | 0.00000 | 0.00000      | 0.00000      | 0.00000      | 0.00000  | 0.32822                          | 0.00000   | ... | 0.00000    | 0.0      | 0.00000    | 0.00000 | 0.00000 | 0.00000 | 0.00000    | 0.00000 | 0.0      | 0.00000    |
-| Eubacterium sp CAG 38      | 0.0                                  | 0.06712      | 0.81149           | 0.05247 | 0.26027      | 0.00000      | 0.00000      | 2.62415  | 0.46585                          | 0.23372   | ... | 0.78140    | 0.0      | 0.00000    | 0.00499 | 0.00000 | 0.02446 | 0.00000    | 0.00000 | 0.0      | 0.00000    |
-| Parabacteroides distasonis | 0.0                                  | 1.34931      | 2.00672           | 5.85067 | 0.59019      | 7.00027      | 1.28075      | 0.61758  | 0.07383                          | 2.80355   | ... | 0.11423    | 0.0      | 0.01181    | 0.01386 | 0.03111 | 0.07463 | 0.15597    | 0.07541 | 0.0      | 0.01932    |
+```{r}
+#| label: tbl-taxonomicprofiling-tblmoderntaxtablespecies
+#| echo: false
+#| warning: false
+#| results: 'asis'
+#| tbl-cap:  Taxonomic profiles at species level of multiple modern samples
+#| tbl-cap-location: top
 
-: Taxonomic profiles at species level of multiple modern samples  {#tbl-modern-taxtable-species}
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/taxonomic-profiling/tbl-taxonomicprofiling-moderntaxtablespecies.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
+
+::: {.callout-tip title="Question" appearance="simple"}
+How would we get a random sample of your species table ?
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+```python
+#| eval: false
+modern_species.sample()
+```
+:::
 
 ### Time to merge !
 
-Now, let's merge our ancient sample with the modern data in one single table.  
+Now, let's merge our ancient sample with the modern data in one single table.
 For that, we'll use the pandas `merge` function which will merge the two tables together, using the index as the merge key.
 
 ```python
+#| eval: false
 all_species = ancient_species.merge(modern_species, left_index=True, right_index=True, how='outer').fillna(0)
 all_phylums = ancient_phylums.merge(modern_phylums, left_index=True, right_index=True, how='outer').fillna(0)
 ```
 
-Finally, let's load the metadata, which contains the information about the modern samples (@tbl-sample-metadata).
+Finally, let's load the metadata, which contains the information about the modern samples (@tbl-taxonomicprofiling-tblsamplemetadata).
 
 ```python
+#| eval: false
 metadata = pd.read_csv("../data/metadata/curated_metagenomics_modern_sources.csv")
 
 metadata.head()
 ```
 
-|   | study_name    | sample_id                            | subject_id        | body_site | antibiotics_current_use | study_condition | disease | age | infant_age | age_category | ... | hla_drb11 | birth_order | age_twins_started_to_live_apart | zigosity | brinkman_index | alcohol_numeric | breastfeeding_duration | formula_first_day | ALT | eGFR |
-|---|---------------|--------------------------------------|-------------------|-----------|-------------------------|-----------------|---------|-----|------------|--------------|-----|-----------|-------------|---------------------------------|----------|----------------|-----------------|------------------------|-------------------|-----|------|
-| 0 | ShaoY_2019    | de028ad4-7ae6-11e9-a106-68b59976a384 | C01528_ba         | stool     | no                      | control         | healthy | 0.0 | 4.0        | newborn      | ... | NaN       | NaN         | NaN                             | NaN      | NaN            | NaN             | NaN                    | NaN               | NaN | NaN  |
-| 1 | ZeeviD_2015   | PNP_Main_283                         | PNP_Main_283      | stool     | no                      | control         | healthy | NaN | NaN        | adult        | ... | NaN       | NaN         | NaN                             | NaN      | NaN            | NaN             | NaN                    | NaN               | NaN | NaN  |
-| 2 | ZeeviD_2015   | PNP_Validation_55                    | PNP_Validation_55 | stool     | no                      | control         | healthy | NaN | NaN        | adult        | ... | NaN       | NaN         | NaN                             | NaN      | NaN            | NaN             | NaN                    | NaN               | NaN | NaN  |
-| 3 | VatanenT_2016 | G80275                               | T014806           | stool     | no                      | control         | healthy | 1.0 | NaN        | child        | ... | NaN       | NaN         | NaN                             | NaN      | NaN            | NaN             | NaN                    | NaN               | NaN | NaN  |
-| 4 | ZeeviD_2015   | PNP_Main_363                         | PNP_Main_363      | stool     | no                      | control         | healthy | NaN | NaN        | adult        | ... | NaN       | NaN         | NaN                             | NaN      | NaN            | NaN             | NaN                    | NaN               | NaN | NaN  |
+```{r}
+#| label: tbl-taxonomicprofiling-tblsamplemetadata
+#| echo: false
+#| warning: false
+#| results: 'asis'
+#| tbl-cap:  Various metadata information about the samples in this example
+#| tbl-cap-location: top
 
-: Taxonomic profiles at species level of multiple modern samples {#tbl-sample-metadata}
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/taxonomic-profiling/tbl-taxonomicprofiling-samplemetadata.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
+
+::: {.callout-tip title="Question" appearance="simple"}
+Why did we use an "outer" join when merging the ancient and modern taxonomic profiles ? 
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+An outer join will include entries from both left (ancient) and right (modern) table, even if they're not present in both.
+This ensures that taxons present in the ancient sample are not excluded when merging with the modern samples, and vice versa.
+Missing entries in one table will be replaced with `NaN` which we then replaced by zeros (with `.fillna(0)`).
+:::
 
 ## Comparing ancient and modern samples
 
@@ -1066,9 +1234,10 @@ metadata.head()
 
 One common plot in microbiome papers in a stacked barplot, often at the phylum or family level.
 
-First, we'll do some renaming, to make the value of the metadata variables a bit easier to understand (@tbl-sample-groups)
+First, we'll do some renaming, to make the value of the metadata variables a bit easier to understand (@tbl-taxonomicsampling-samplegroups)
 
 ```python
+#| eval: false
 group_info = pd.concat(
     [
         (
@@ -1088,7 +1257,7 @@ group_info
 
 ::: {.callout-tip collapse="true" title='Expand to see command output'}
 
-```
+```{verbatim}
     /var/folders/1c/l1qb09f15jddsh65f6xv1n_r0000gp/T/ipykernel_40830/27419655.py:2:
     FutureWarning: The frame.append method is deprecated and will be removed from pandas in a future version.
     Use pandas.concat instead.
@@ -1110,31 +1279,38 @@ group_info
 | 199 | A09_01_1FE                           | non_westernized |
 | 200 | ERR5766177                           | ancient         |
 
-: Table of samples and their group {#tbl-sample-groups}
+: Table of samples and their group {#tbl-taxonomicsampling-samplegroups}
 
-We need transform our data in [tidy](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) format to
-plot with [plotnine](https://plotnine.readthedocs.io/en/stable/), a python clone of [ggplot](https://ggplot2.tidyverse.org/index.html).  
+We need transform our data in 'tidy format' ([https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html)) to
+plot with plotnine ([https://plotnine.readthedocs.io/en/stable/](https://plotnine.readthedocs.io/en/stable/)), a python clone of ggplot ([https://ggplot2.tidyverse.org/index.html](https://ggplot2.tidyverse.org/index.html)).
 
-|     | Actinobacteria | Apicomplexa | Ascomycota | Bacteroidetes | Basidiomycota | Candidatus Melainabacteria | Chlamydiae | Chloroflexi | Cyanobacteria | Deferribacteres | ... | Fusobacteria | Lentisphaerae | Planctomycetes | Proteobacteria | Spirochaetes | Synergistetes | Tenericutes | Verrucomicrobia | sample_id                            | group           |
-|-----|----------------|-------------|------------|---------------|---------------|----------------------------|------------|-------------|---------------|-----------------|-----|--------------|---------------|----------------|----------------|--------------|---------------|-------------|-----------------|--------------------------------------|-----------------|
-| 200 | 20.33151       | 0.0         | 0.0        | 28.42090      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 0.00000        | 0.00000      | 0.0           | 0.0         | 0.00000         | ERR5766177                           | ancient         |
-| 0   | 0.25809        | 0.0         | 0.0        | 0.00000       | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 4.49959        | 0.00000      | 0.0           | 0.0         | 0.00000         | de028ad4-7ae6-11e9-a106-68b59976a384 | westernized     |
-| 1   | 10.27631       | 0.0         | 0.0        | 17.44332      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.01486       | 0.0            | 0.77098        | 0.00000      | 0.0           | 0.0         | 0.00784         | PNP_Main_283                         | westernized     |
-| 2   | 0.45187        | 0.0         | 0.0        | 82.86400      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 0.05697        | 0.00000      | 0.0           | 0.0         | 0.00000         | PNP_Validation_55                    | westernized     |
-| 3   | 1.11902        | 0.0         | 0.0        | 69.99087      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 4.07757        | 0.00000      | 0.0           | 0.0         | 1.99276         | G80275                               | westernized     |
-| ... | ...            | ...         | ...        | ...           | ...           | ...                        | ...        | ...         | ...           | ...             | ... | ...          | ...           | ...            | ...            | ...          | ...           | ...         | ...             | ...                                  | ...             |
-| 195 | 14.26365       | 0.0         | 0.0        | 38.59709      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 0.19699        | 0.00000      | 0.0           | 0.0         | 0.00000         | KHG_9                                | non_westernized |
-| 196 | 5.47750        | 0.0         | 0.0        | 14.81828      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 3.64655        | 0.09964      | 0.0           | 0.0         | 0.00000         | A48_01_1FE                           | non_westernized |
-| 197 | 36.77145       | 0.0         | 0.0        | 10.13908      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 17.64151       | 0.00000      | 0.0           | 0.0         | 0.00000         | KHG_1                                | non_westernized |
-| 198 | 1.16426        | 0.0         | 0.0        | 57.14031      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 0.30580        | 0.70467      | 0.0           | 0.0         | 0.00000         | TZ_81781                             | non_westernized |
-| 199 | 7.40894        | 0.0         | 0.0        | 11.61544      | 0.0           | 0.0                        | 0.0        | 0.0         | 0.0           | 0.0             | ... | 0.0          | 0.00000       | 0.0            | 56.20177       | 0.00000      | 0.0           | 0.0         | 0.00000         | A09_01_1FE                           | non_westernized |
+```{r}
+#| label: tbl-taxonomicprofiling-tblrawmultisampletable
+#| echo: false
+#| warning: false
+#| results: 'asis'
+#| tbl-cap:  Table of the raw multi-sample taxonomic table
+#| tbl-cap-location: top
 
-: Table of the raw multi-sample taxonomic table {#tbl-raw-multi-sample-table}
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/taxonomic-profiling/tbl-taxonomicprofiling-rawmultisampletable.csv")
 
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
 
-Now, we need transform this (@tbl-raw-multi-sample-table) in the tidy format, with the `melt` function.
+Now, we need transform this (@tbl-taxonomicprofiling-tblrawmultisampletable) in the tidy format, with the `melt` function.
 
 ```python
+#| eval: false
 tidy_phylums = (
     all_phylums
     .transpose()
@@ -1143,15 +1319,18 @@ tidy_phylums = (
 )
 ```
 
-Finally, we only want to keep the mean relative abundance for each phylum. To do so, we will compute the mean relative abundance, for each phylum, for each group (`ancient`, `westernized`, and `non_westernized`).
+Finally, we only want to keep the mean relative abundance for each phylum.
+To do so, we will compute the mean relative abundance, for each phylum, for each group (`ancient`, `westernized`, and `non_westernized`).
 
 ```python
+#| eval: false
 tidy_phylums = tidy_phylums.groupby(['group', 'Phylum']).mean().reset_index()
 ```
 
 We then verify that the sum of the mean relative abundance is still ~100%, as an extra sanity check.
 
 ```python
+#| eval: false
 tidy_phylums.groupby('group')['relative_abundance'].sum()
 ```
 
@@ -1166,12 +1345,14 @@ tidy_phylums.groupby('group')['relative_abundance'].sum()
 We first import plotnine
 
 ```python
+#| eval: false
 from plotnine import *
 ```
 
-And then run plotnine to a barplot of the mean abundance per group (@fig-plotnine-phylum-abundance). 
+And then run plotnine to a barplot of the mean abundance per group (@fig-taxonomicprofiling-plotninephylumabundance).
 
 ```python
+#| eval: false
 ggplot(tidy_phylums, aes(x='group', y='relative_abundance', fill='Phylum')) \
 + geom_bar(position='stack', stat='identity') \
 + ylab('mean abundance') \
@@ -1179,30 +1360,46 @@ ggplot(tidy_phylums, aes(x='group', y='relative_abundance', fill='Phylum')) \
 + theme_classic()
 ```
 
-![Stacked bar chart of ancient, non-westernised, and westernised sample groups on the X axis columns, and mean abundance percentage on the Y-axis. The legend and stacks of the bar represent different phyla each with a different colour](assets/images/chapters/taxonomic-profiling/analysis_80_0.png){#fig-plotnine-phylum-abundance}
+![Stacked bar chart of ancient, non-westernised, and westernised sample groups on the X axis columns, and mean abundance percentage on the Y-axis. The legend and stacks of the bar represent different phyla each with a different colour](assets/images/chapters/taxonomic-profiling/analysis_80_0.png){#fig-taxonomicprofiling-plotninephylumabundance}
+
+::: {.callout-tip title="Question" appearance="simple"}
+What is the most abundant Phylum in all samples
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+Whether ancient, non westernised, or westernised gut microbiome sample, the phylum Firmicutes (officially renamed Bacillota since 2021) is the most abundant.
+:::
 
 ## Ecological diversity
 
 ### Alpha diversity
 
-Alpha diversity is the measure of diversity withing each sample. It is used to estimate how many species are present in a sample, and how diverse they are.  
-We'll use the python library [scikit-bio](http://scikit-bio.org/) to compute it, and the [plotnine](https://plotnine.readthedocs.io/) library
-(a python port of [ggplot2](https://ggplot2.tidyverse.org/reference/ggplot.html) to visualize the results).
+Alpha diversity is the measure of diversity withing each sample.
+It is used to estimate how many species are present in a sample, and how diverse they are.
+We'll use the python library scikit-bio ([http://scikit-bio.org/](http://scikit-bio.org/)) to compute it, and the plotnine ([https://plotnine.readthedocs.io/](https://plotnine.readthedocs.io/)) library
+(a python port of ggplot2 ([https://ggplot2.tidyverse.org/reference/ggplot.html](https://ggplot2.tidyverse.org/reference/ggplot.html)) to visualise the results).
 
 ```python
+#| eval: false
 import skbio
 ```
 
-Let's compute the [species richness](https://en.wikipedia.org/wiki/Species_richness), the
-[Shannon, and Simpson index of diversity](https://www.biologydiscussion.com/biodiversity/types/2-types-of-diversity-indices-of-biodiversity/8388) index (@tbl-alpha-div)
+Let's compute the **species richness**, the **Shannon index**, and **Simpson index of diversity** (@tbl-taxonomicprofiling-alphadiv)
 
 ```python
-shannon = skbio.diversity.alpha_diversity(metric='shannon', counts=all_species.transpose(), ids=all_species.columns)
-simpson = skbio.diversity.alpha_diversity(metric='simpson', counts=all_species.transpose(), ids=all_species.columns)
+# | eval: false
+shannon = skbio.diversity.alpha_diversity(
+    metric="shannon", counts=all_species.transpose(), ids=all_species.columns
+)
+simpson = skbio.diversity.alpha_diversity(
+    metric="simpson", counts=all_species.transpose(), ids=all_species.columns
+)
 richness = (all_species != 0).astype(int).sum(axis=0)
-alpha_diversity = (shannon.to_frame(name='shannon')
-                   .merge(simpson.to_frame(name='simpson'), left_index=True, right_index=True)
-                   .merge(richness.to_frame(name='richness'), left_index=True, right_index=True))
+alpha_diversity = (
+    shannon.to_frame(name="shannon")
+    .merge(simpson.to_frame(name="simpson"), left_index=True, right_index=True)
+    .merge(richness.to_frame(name="richness"), left_index=True, right_index=True)
+)
 alpha_diversity
 ```
 
@@ -1220,12 +1417,14 @@ alpha_diversity
 | TZ_81781                             | 2.881856 | 0.719491 | 44       |
 | A09_01_1FE                           | 2.982322 | 0.719962 | 75       |
 
-: Table of the shannon, simpson, and richness alpha diversity indicies for a subset of samples {#tbl-alpha-div}
+: Table of the shannon, simpson, and richness alpha diversity indicies for a subset of samples {#tbl-taxonomicprofiling-alphadiv}
 
-Let's load the group information from the metadata. To do so, we merge the alpha diversity dataframe that we compute previously, with the metadata dataframe, using the `sample_id` as a merge key.
+Let's load the group information from the metadata.
+To do so, we merge the alpha diversity dataframe that we compute previously, with the metadata dataframe, using the `sample_id` as a merge key.
 Finally, we do a bit of renaming to re-encode `yes`/`no` as `non_westernized`/`westernized`.
 
 ```python
+#| eval: false
 alpha_diversity = (
     alpha_diversity
     .merge(metadata[['sample_id', 'non_westernized']], left_index=True, right_on='sample_id', how='outer')
@@ -1252,11 +1451,12 @@ alpha_diversity
 | TZ_81781                             | 2.881856 | 0.719491 | 44       | non_westernized |
 | A09_01_1FE                           | 2.982322 | 0.719962 | 75       | non_westernized |
 
-: Table of the shannon, simpson, and richness alpha diversity indicies for a subset of samples but with the group metadata {#tbl-alpha-div-group}
+: Table of the shannon, simpson, and richness alpha diversity indicies for a subset of samples but with the group metadata {#tbl-taxonomicprofiling-alphadivgroup}
 
-And as always, we need it in tidy format (@tbl-alpha-div-group-long) for plotnine.
+And as always, we need it in tidy format (@tbl-taxonomicprofiling-alphadivgrouplong) for plotnine.
 
 ```python
+#| eval: false
 alpha_diversity = alpha_diversity.melt(id_vars='group', value_name='alpha diversity', var_name='diversity_index', ignore_index=False)
 
 alpha_diversity
@@ -1277,11 +1477,12 @@ alpha_diversity
 | TZ_81781                             | non_westernized | richness        | 44.000000       |
 | A09_01_1FE                           | non_westernized | richness        | 75.000000       |
 
-: Table of the shannon, simpson, and richness alpha diversity indicies for a subset of samples but with the group metadata but in long-form tidy format {#tbl-alpha-div-group-long}
+: Table of the shannon, simpson, and richness alpha diversity indicies for a subset of samples but with the group metadata but in long-form tidy format {#tbl-taxonomicprofiling-alphadivgrouplong}
 
-We now make a violin plot to compare the alpha diversity for each group, faceted by the type of alpha diversity index (@fig-diversity-violin-plots).
+We now make a violin plot to compare the alpha diversity for each group, faceted by the type of alpha diversity index (@fig-taxonomicprofiling-diversityviolinplots).
 
 ```python
+#| eval: false
 g = ggplot(alpha_diversity, aes(x='group', y='alpha diversity', color='group'))
 g += geom_violin()
 g += geom_jitter()
@@ -1293,26 +1494,37 @@ g += theme(subplots_adjust={'wspace': 0.15})
 g
 ```
 
-![Three groups of violin plots of an ancient sample, westernised samples and non-westernised samples (x-axis) of the alpha diversity (y-axis) calculated for richness, shannon and simpson alpha indicies](assets/images/chapters/taxonomic-profiling/analysis_91_1.png){#fig-diversity-violin-plots}
+![Three groups of violin plots of an ancient sample, westernised samples and non-westernised samples (x-axis) of the alpha diversity (y-axis) calculated for richness, shannon and simpson alpha indicies](assets/images/chapters/taxonomic-profiling/analysis_91_1.png){#fig-taxonomicprofiling-diversityviolinplots}
 
 
-:::{.callout-note}
-**Pause and think: Why do we observe a smaller species richness and diversity in our sample ?**
+::: {.callout-tip title="Question" appearance="simple"}
+Why do we observe a smaller species richness and diversity in our sample ?
 :::
+
+::: {.callout-note collapse="true" title="Answer"}
+There are different possibilies:
+- First, our ancient sample might genuilely have a lower diversity.
+- Second, our ancient sample diversity might have been lost through the degradation of the sample.
+- And third, the most likely explanation here: to make this tutorial fast enough, the reads were downsampled by quite a bit, which artifically lowered the diversity of this ancient sample.
+:::
+
 
 ### Beta diversity
 
-The Beta diversity is the measure of diversity between a pair of samples. It is used to compare the diversity between samples and see how they relate.
+The Beta diversity is the measure of diversity between a pair of samples.
+It is used to compare the diversity between samples and see how they relate.
 
-We will compute the beta diversity using the [bray-curtis](https://en.wikipedia.org/wiki/Bray%E2%80%93Curtis_dissimilarity) dissimilarity
+We will compute the beta diversity using the **bray-curtis** dissimilarity
 
 ```python
+#| eval: false
 beta_diversity = skbio.diversity.beta_diversity(metric='braycurtis', counts=all_species.transpose(), ids=all_species.columns, validate=True)
 ```
 
 We get a distance matrix
 
 ```python
+#| eval: false
 print(beta_diversity)
 ```
 
@@ -1334,14 +1546,15 @@ print(beta_diversity)
 
 :::
 
-To visualize this distance matrix in a lower dimensional space, we'll use a [PCoA](https://en.wikipedia.org/wiki/Multidimensional_scaling#Types), which is is a method very similar to a PCA, but taking a distance matrix as input.
+To visualise this distance matrix in a lower dimensional space, we'll use a **PCoA**, which is is a method very similar to a PCA, but taking a distance matrix as input.
 
 ```python
+#| eval: false
 pcoa = skbio.stats.ordination.pcoa(beta_diversity)
 ```
 ::: {.callout-tip collapse="true" title='Expand to see command output'}
 
-```
+```{verbatim}
     /Users/maxime/mambaforge/envs/summer_school_microbiome/lib/python3.9/site-packages/skbio/stats/ordination/_principal_coordinate_analysis.py:143: RuntimeWarning:
     The result contains negative eigenvalues. Please compare their magnitude with the magnitude of some of the largest positive eigenvalues.
     If the negative ones are smaller, it's probably safe to ignore them, but if they are large in magnitude, the results won't be useful.
@@ -1350,28 +1563,37 @@ pcoa = skbio.stats.ordination.pcoa(beta_diversity)
 :::
 
 ```python
+#| eval: false
 pcoa.samples
 ```
 
-|                                      | PC1       | PC2       | PC3       | PC4       | PC5       | PC6       | PC7       | PC8       | PC9       | PC10      | ... | PC192 | PC193 | PC194 | PC195 | PC196 | PC197 | PC198 | PC199 | PC200 | PC201 |
-|--------------------------------------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----------|-----|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
-| ERR5766177                           | 0.216901  | -0.039778 | 0.107412  | 0.273272  | 0.020540  | 0.114876  | -0.256332 | -0.151069 | 0.097451  | 0.060211  | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
-| de028ad4-7ae6-11e9-a106-68b59976a384 | -0.099355 | 0.145224  | -0.191676 | 0.127626  | 0.119754  | -0.132209 | -0.097382 | 0.036728  | 0.081294  | -0.056686 | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
-| PNP_Main_283                         | -0.214108 | -0.147466 | 0.116027  | 0.090059  | 0.076644  | 0.111536  | 0.092115  | 0.026477  | -0.006460 | -0.018592 | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
-| PNP_Validation_55                    | 0.244827  | -0.173996 | -0.311197 | -0.012836 | 0.031759  | 0.117548  | 0.148715  | -0.135641 | 0.034730  | -0.009395 | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
-| G80275                               | -0.261358 | -0.077147 | -0.254374 | -0.065932 | 0.088538  | 0.165970  | -0.005260 | -0.028739 | -0.002016 | 0.015719  | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
-| ...                                  | ...       | ...       | ...       | ...       | ...       | ...       | ...       | ...       | ...       | ...       | ... | ...   | ...   | ...   | ...   | ...   | ...   | ...   | ...   | ...   | ...   |
-| KHG_9                                | 0.296057  | -0.150300 | 0.013941  | 0.032649  | -0.147692 | 0.019663  | -0.063120 | -0.034453 | -0.073514 | 0.070085  | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
-| A48_01_1FE                           | 0.110621  | 0.030971  | 0.154231  | -0.185961 | -0.008512 | -0.103420 | 0.028169  | -0.044530 | 0.041902  | 0.068597  | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
-| KHG_1                                | -0.100009 | 0.167885  | 0.009915  | 0.076842  | -0.405582 | -0.039111 | -0.006421 | -0.009774 | -0.072252 | 0.150000  | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
-| TZ_81781                             | 0.405716  | -0.139297 | -0.075026 | -0.079716 | -0.053264 | -0.119271 | 0.068261  | -0.018821 | 0.198152  | -0.012792 | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
-| A09_01_1FE                           | 0.089101  | 0.471135  | 0.069629  | -0.125644 | -0.036793 | 0.115151  | 0.060507  | -0.000912 | -0.027239 | -0.138436 | ... | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   | 0.0   |
+```{r}
+#| label: tbl-taxonomicprofiling-tblpca
+#| echo: false
+#| warning: false
+#| results: 'asis'
+#| tbl-cap:  Table of principal coordinates (columns) for each of the samples (rows)
+#| tbl-cap-location: top
 
-: Table principal coordinates (columns) for each of the samples (rows) {#tbl-alpha-div-group-long}
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/taxonomic-profiling/tbl-taxonomicprofiling-pca.csv")
 
-Let's look at the variance explained by the first axes by using a scree plot (@fig-scree-plot).
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
+
+Let's look at the variance explained by the first axes by using a scree plot (@fig-taxonomicprofiling-screeplot).
 
 ```python
+#| eval: false
 var_explained = pcoa.proportion_explained[:9].to_frame(name='variance explained').reset_index().rename(columns={'index':'PC'})
 
 ggplot(var_explained, aes(x='PC', y='variance explained', group=1)) \
@@ -1380,11 +1602,13 @@ ggplot(var_explained, aes(x='PC', y='variance explained', group=1)) \
 + theme_classic()
 ```
 
-![Scree plot describing the variance explained (Y-axis), for each Principal Componanent (X-axis), with a curved line from PC1 having highest variance to lowest on PC9.](assets/images/chapters/taxonomic-profiling/analysis_102_0.png){#fig-scree-plot}
+![Scree plot describing the variance explained (Y-axis), for each Principal Componanent (X-axis), with a curved line from PC1 having highest variance to lowest on PC9.](assets/images/chapters/taxonomic-profiling/analysis_102_0.png){#fig-taxonomicprofiling-screeplot}
 
-In this scree plot, we're looking for the "elbow", where there is a drop in the slope. Here, it seems that most of the variance is captures by the 3 first principal components
+In this scree plot, we're looking for the "elbow", where there is a drop in the slope.
+Here, it seems that most of the variance is captures by the 3 first principal components
 
 ```python
+#| eval: false
 pcoa_embed = pcoa.samples[['PC1','PC2','PC3']].rename_axis('sample').reset_index()
 
 pcoa_embed = (
@@ -1397,31 +1621,34 @@ pcoa_embed = (
 pcoa_embed['group'] = pcoa_embed['group'].replace({'yes':'non_westernized','no':'westernized', pd.NA:'ERR5766177'})
 ```
 
-Let's first look at these components with 2D plots (@fig-poca-1, @fig-poca-2)
+Let's first look at these components with 2D plots (@fig-taxonomicprofiling-poca1, @fig-taxonomicprofiling-poca2)
 
 ```python
+#| eval: false
 ggplot(pcoa_embed, aes(x='PC1', y='PC2', color='group')) \
 + geom_point() \
 + theme_classic() \
 + scale_color_manual({'ERR5766177':'#DB5F57','westernized':'#5F57DB','non_westernized':'#57DB5E'})
 ```
 
-![Principal Coordinate Analysis plot of PC1 (X-axis) and PC2 (Y-axis), with three groups of points in the scatter plot - blue circles of westernised data points in the bottom left, overlapping with green circles of non-westernised datapoints in the top right, and the single ancient sample as a red circle falling in between the two on the right of the overlap](assets/images/chapters/taxonomic-profiling/analysis_107_0.png){#fig-poca-1}
+![Principal Coordinate Analysis plot of PC1 (X-axis) and PC2 (Y-axis), with three groups of points in the scatter plot - blue circles of westernised data points in the bottom left, overlapping with green circles of non-westernised datapoints in the top right, and the single ancient sample as a red circle falling in between the two on the right of the overlap](assets/images/chapters/taxonomic-profiling/analysis_107_0.png){#fig-taxonomicprofiling-poca1}
 
 ```python
+#| eval: false
 ggplot(pcoa_embed, aes(x='PC1', y='PC3', color='group')) +
 geom_point() +
 theme_classic() +
 scale_color_manual({'ERR5766177':'#DB5F57','westernized':'#5F57DB','non_westernized':'#57DB5E'})
 ```
 
-![Principal Coordinate Analysis plot of PC1 (X-axis) and PC3 (Y-axis), a similar overlap between westernised/non-westernised individuals and position of the ancient sample as in the PC1-PC2 PCoA, however this time in a horseshoe shape from bottom left for the westernised data points, curving up to the top of PC3 at a peak, and then falling again at the top of PC1](assets/images/chapters/taxonomic-profiling/analysis_108_0.png){#fig-poca-2}
+![Principal Coordinate Analysis plot of PC1 (X-axis) and PC3 (Y-axis), a similar overlap between westernised/non-westernised individuals and position of the ancient sample as in the PC1-PC2 PCoA, however this time in a horseshoe shape from bottom left for the westernised data points, curving up to the top of PC3 at a peak, and then falling again at the top of PC1](assets/images/chapters/taxonomic-profiling/analysis_108_0.png){#fig-taxonomicprofiling-poca2}
 
 ::: {.callout-tip collapse="true" title='Expand to see additional visualisations'}
 
 You can also plot the data above as a with a 3d plot if you were to run the following command
 
 ```python
+#| eval: false
 import plotly.express as px
 
 fig = px.scatter_3d(pcoa_embed, x="PC1", y="PC2", z="PC3",
@@ -1432,13 +1659,10 @@ fig.show()
 ```
 :::
 
-:::{.callout-note}
-**Pause and think: How do you think this embedding represents how our sample relates to modern reference samples ?**
-:::
-
-Finally, we can also visualize this distance matrix using a clustered heatmap, where pairs of sample with a small beta diversity are clustered together (@fig-heatmap).
+Finally, we can also visualise this distance matrix using a clustered heatmap, where pairs of sample with a small beta diversity are clustered together (@fig-taxonomicprofiling-heatmap).
 
 ```python
+#| eval: false
 import seaborn as sns
 import scipy.spatial as sp, scipy.cluster.hierarchy as hc
 ```
@@ -1446,6 +1670,7 @@ import scipy.spatial as sp, scipy.cluster.hierarchy as hc
 We set the color in seaborn to match the color palette we've used so far.
 
 ```python
+#| eval: false
 pcoa_embed['colour'] = pcoa_embed['group'].map({'ERR5766177':'#DB5F57','westernized':'#5F57DB','non_westernized':'#57DB5E'})
 
 linkage = hc.linkage(sp.distance.squareform(beta_diversity.to_data_frame()), method='average')
@@ -1458,7 +1683,17 @@ sns.clustermap(
 )
 ```
 
-![Sample-by-sample clustered heatmap, with tree representation of the clustering on the left and top of the heatmap](assets/images/chapters/taxonomic-profiling/analysis_115_1.png){#fig-heatmap}
+![Sample-by-sample clustered heatmap, with tree representation of the clustering on the left and top of the heatmap](assets/images/chapters/taxonomic-profiling/analysis_115_1.png){#fig-taxonomicprofiling-heatmap}
+
+::: {.callout-tip title="Question" appearance="simple"}
+Based on the PCoA and heatmap, how you think our ancient sample relates to modern ones ?
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+The sample we looked at in this tutorial is actually coming from the [@maixner2021hallstatt] article, looking at a human gut microbiome found in a salt mine in nowadays Austria.
+This sample is actually for the Baroque period (150 years BP).
+Reassuringly for our analysis, the title of this article is *Hallstatt miners consumed blue cheese and beer during the Iron Age and retained a non-Westernized gut microbiome until the Baroque period*.
+:::
 
 ## (Optional) clean-up
 
@@ -1466,14 +1701,13 @@ Let's clean up your working directory by removing all the data and output from t
 
 When closing your `jupyter` notebook(s), say no to saving any additional files.
 
-Press <kbd>ctrl</kbd> + <kbd>c</kbd> on your terminal, and type <kbd>y</kbd> when requested. 
-Once completed, the command below will remove the `/<PATH>/<TO>/taxonomic-profiling` directory **as well as all of its contents**. 
+Press <kbd>ctrl</kbd> + <kbd>c</kbd> on your terminal, and type <kbd>y</kbd> when requested.
+Once completed, the command below will remove the `/<PATH>/<TO>/taxonomic-profiling` directory _as well as all of its contents_.
 
 ::: {.callout-tip}
 ## Pro Tip
-Always be VERY careful when using `rm -r`. Check 3x that the path you are
-specifying is exactly what you want to delete and nothing more before pressing
-ENTER!
+Always be VERY careful when using `rm -r`.
+Check 3x that the path you are specifying is exactly what you want to delete and nothing more before pressing ENTER!
 :::
 
 ```bash
@@ -1493,5 +1727,22 @@ To delete the conda environment
 ```bash
 conda remove --name taxonomic-profiling --all -y
 ```
+
+## Summary
+
+In this practical session we
+
+- Looked at how to process the raw sequencing data to focus only on the non-human reads
+- Profiled these reads with the Metaphlan3 taxonomic profiler
+- Looked at phylum composition, and alpha, and beta diversity with the help of PCoA and abundance heatmaps
+
+::: {.callout-caution title="Cautionary note - sequencing depth"}
+
+We worked on relative abundances provided by metaphlan.
+But beware that not all taxonomic profilers will output relative abundances.
+To perform quantitative analysis of taxonomic profiles, sequencing data need to be normalised for sequencing depth.
+There are many different ways to normalise sequencing data, but this out of the scope of this session.
+Just to name a few, the most commonly used are RLE, TSS, rarefaction, CLR, or GMPR.
+:::
 
 ## References
