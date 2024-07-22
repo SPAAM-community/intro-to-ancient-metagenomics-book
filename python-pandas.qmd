@@ -1,6 +1,6 @@
 ---
 title: Introduction to Python and Pandas
-author: Kevin Nota (2023-2024), Robin Warner (2023), and Maxime Borry (2022)
+author: Kevin Nota, Robin Warner, and Maxime Borry
 ---
 
 :::  {.callout-note} 
@@ -30,8 +30,7 @@ While a few years ago, it was often necessary to go to _R_ for performing routin
 Existing libraries exist for many different file formats encountered in metagenomics, such as fasta, fastq, sam, bam, etc.
 Furthermore, python is fast and extremely useful for writing programs that can be easily called from the command line like many existing tools.
 
-This tutorial/walkthrough will provide a short introduction to the 
-popular libraries for data analysis `pandas` ([(https://pandas.pydata.org/](https://pandas.pydata.org/)).
+This tutorial/walkthrough will provide a short introduction to the popular libraries for data analysis `pandas` ([(https://pandas.pydata.org/](https://pandas.pydata.org/)).
 This library has functions for reading and manipulating _tabular data_ similar to the _`data.frame()`_ in _R_ together with some basic data plotting.
 This will set the base for learning Python and use it for data analysis.
 
@@ -39,10 +38,10 @@ There are many IDEs in which Python code can be written.
 For data analysis, Jupyter is powerful and popular which looks and functions similar to R markdown, where code is written in code blocks with space in text blocks for annotations.
 In this tutorial/walkthrough, we will use these notebooks for running and visualising Python code.
 
-learning objectives:
+Learning objectives:
 
-- Get familiar with the Python code syntax and use Jupyter Notebook for executing code.
-- Get a kickstart to utilising the endless possibilities of data analysis in Python that can be applied to your data.
+- Get familiar with the Python code syntax and use Jupyter Notebook for executing code
+- Get a kickstart to utilising the endless possibilities of data analysis in Python that can be applied to our data
 
 ## Working in a Jupyter environment
 
@@ -68,13 +67,11 @@ jupyter notebook
 Jupyter Notebook should have a file structure with all the files from the working directory.
 Open the `student-notebook.ipynb` notebook by clicking on it.
 This notebook has exactly the same code as written in this book chapter and is only a support so that it is not necessary to copy and paste the code.
-It is of course also possible to copy the code from this chapter into a fresh notebook file by clicking on:
- `File` > `New` > `Notebook`.
+It is of course also possible to copy the code from this chapter into a fresh notebook file by clicking on:  `File` > `New` > `Notebook`.
 
-::: {.callout-note collapse="true"}
-## Note If the notebook is not there
+::: {.callout-note title="Note If the notebook is not there" collapse="true"}
 If you cannot find `student-notebook.ipynb`, it is possible the working directory is not correct.
-Make sure that `pwd` returns `/vol/volume/python-pandas/python-pandas_lecture`.
+Make sure that `pwd` returns `/<path>/<to>/python-pandas/python-pandas_lecture`.
 :::
 
 ### Creating and running cells
@@ -157,12 +154,12 @@ Hello World from bash!
 ```
 :::
 
-
 Stings or numbers can be stored as a variable by using the *=* sign.
 
 ```{.python eval=False}
 i = 0
 ```
+
 Ones a variable is set in one _code cell_ they are stored and can be accessed in other downstream _code cells_.
 
 To see what value a variable contains, the `print()` function can be used.
@@ -176,7 +173,8 @@ print(i)
 0
 ```
 :::
-You can also print multiple things together in one `print` statement such as a number and a string:
+
+You can also print multiple things together in one `print` statement such as a number and a string.
 
 ```{.python eval=True}
 print("The number is", i, "Wow!")
@@ -187,11 +185,14 @@ print("The number is", i, "Wow!")
 The number is, 0, Wow!
 ```
 :::
+
 ## Pandas
+
 ### Getting started
+
 Pandas is a Python library used for data manipulation and analysis.
 
-We can import the library like this:
+We can import the library like this.
 
 ```{.python eval=False}
 import pandas as pd
@@ -211,6 +212,7 @@ pd.__version__
 ## Expand to see output
 '2.2.2'
 :::
+
 ### Pandas data structures
 
 The primary data structures in `Pandas` are the `Series` and the `DataFrame`.
@@ -222,9 +224,7 @@ By default, rows are unnamed and are indexed similarly to a `series`.
 
 ![A single row or column (1-dimensional data) is a `Series`. The dark grey squares are the index or row names, and the light grey squares are the elements.](assets/images/chapters/python-pandas/01_table_series.svg){#fig-pythonpandas-figpandasseries}
 
-
 ![A dataframe with columns and rows. The dark grey squares are the index/row names and the column names. The light grey squares are the values.](assets/images/chapters/python-pandas/01_table_dataframe.svg){#fig-pythonpandas-figpandasdataframe}
-
 
 ::: {.callout-tip collapse="true" title="More details on pandas"}
 For a more in detail pandas getting started tutorial click here ([https://pandas.pydata.org/docs/getting_started/index.html#](https://pandas.pydata.org/docs/getting_started/index.html#))
@@ -232,7 +232,8 @@ For a more in detail pandas getting started tutorial click here ([https://pandas
 
 ## Reading data with Pandas
 
-Pandas can read in _csv_ (comma separated values) files, which are tables in text format.It is called _c_sv because each value is separated from the others through a comma.
+Pandas can read in _csv_ (comma separated values) files, which are tables in text format.
+It is called _c_sv because each value is separated from the others through a comma.
 
 ```{text}
 A,B
@@ -284,6 +285,7 @@ data %>%
     )
 ```
 :::
+
 ::: {.callout-tip collapse="true"}
 ## Help
 When you are unsure what arguments a function can take, it is possible to get a _help documentation_ using `help(pd.read_csv)`
@@ -320,7 +322,6 @@ df
 |-|-|-|
 |0|5|6|
 |1|8|4|
-
 :::
 
 There are many ways to turn a `DataFrame` back into a dictonary ([https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_dict.html#pandas.DataFrame.to_dict](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_dict.html#pandas.DataFrame.to_dict)), which might be very handy for certain purposes.
@@ -337,6 +338,7 @@ To display all the column names from the imported `DataFrame`, the attribute `co
 ```python{.python eval=False}
 df.columns
 ```
+
 ::: {.callout-note collapse="true"}
 ## Expand to see output
 ```
@@ -357,6 +359,7 @@ A column with only strings, or a combination of strings and `integers` or `float
 ```{.python eval=False}
 df.dtypes
 ```
+
 ::: {.callout-note collapse="true"}
 ## Expand to see output
 ```
@@ -383,6 +386,7 @@ Z_Revenue                int64
 dtype: object
 ```
 :::
+
 ::: {.callout-tip collapse="true"}
 ## What does 64 stand for?
 The 64 indicates the number of bits the integers are stored in.
@@ -397,7 +401,7 @@ df['Kidhome'] = df['Kidhome'].astype('int8')
 
 ### Inspecting the DataFrame
 
-To quikly check how many rows and columns the `DataFrame` has, you can access the `shape` attribute.
+To quickly check how many rows and columns the `DataFrame` has, we can access the `shape` attribute.
 
 ```{.python eval=False}
 df.shape
@@ -409,7 +413,7 @@ df.shape
 ```
 :::
 
-The .shape attribute of a DataFrame provides a tuple representing its dimensions.
+The `.shape` attribute of a DataFrame provides a tuple representing its dimensions.
 A tuple is a Python data structure that is used to store ordered items.
 In the case of shape, the first item is always the row, and the second item is the columns.
 To print, or access the rows or columns the index can be used.
@@ -418,6 +422,7 @@ To print, or access the rows or columns the index can be used.
 ```{.python eval=False}
 df.shape[0]
 ```
+
 ::: {.callout-note collapse="true"}
 ## Expand to see output
 ```
@@ -428,6 +433,7 @@ df.shape[0]
 ```{.python eval=False}
 df.shape[1]
 ```
+
 ::: {.callout-note collapse="true"}
 ## Expand to see output
 ```
@@ -443,6 +449,7 @@ This can be done with the `head()` function.
 ```{.python eval=False}
 df.head()
 ```
+
 ::: {.callout-note collapse="true"}
 ## Expand to see output
 ```{r}
@@ -488,6 +495,7 @@ To print the all the columns, the `:` is used.
 ```{.python eval=False}
 df.loc[1, :]
 ```
+
 ::: {.callout-note collapse="true"}
 ## Expand to see output
 ```
@@ -551,6 +559,7 @@ To print all the rows with a certain column name works the same as subsetting ro
 ```{.python eval=False}
 df[:, "Year_Birth"]
 ```
+
 ::: {.callout-note collapse="true"}
 ## Expand to see output
 ```
@@ -600,7 +609,7 @@ new_df
 :::
 
 It is also possible to remove rows and columns from a `DataFrame`.
-This can be done with the function `drop()`
+This can be done with the function `drop()`.
 To remove the columns `Z_CostContact` and `Z_Revenue` and keep those changes, it is necessary to overwrite the `DataFrame`.
 To make sure `Pandas` understands that the its `columns` that need to be removed, the `axis` can be specified.
 Rows are called `axis=0`, and columns are called `axis=1`.
@@ -632,6 +641,7 @@ This will return a series with Boolean values `True` or `False`.
 education_is_grad = (df["Education"] == "Graduation")
 education_is_grad
 ```
+
 :::{.callout-note collapse="true"}
 ## Expand to see output
 ```
@@ -681,6 +691,7 @@ This can be done by combining multiple statements with `&`.
 two_at_once = (df["Education"] == "Graduation") & (df["Marital_Status"] == "Single")
 two_at_once
 ```
+
 ::: {.callout-note collapse="true"}
 ## Expand to see output
 ```
@@ -806,20 +817,23 @@ data %>%
 8 rows × 18 columns
 :::
 
-You can also directly calculate the relevant statistics on numberic columns or rows you are interested in using the functions `max()`, `min()`, `mean()`, `median()` etc,.
+We can also directly calculate the relevant statistics on numberic columns or rows we are interested in using the functions `max()`, `min()`, `mean()`, `median()` etc..
 
 ```{.python eval=False} 
 df["MntWines"].max()
 ```
+
 :::{.callout-note collapse="true"}
 ## Expand to see output
 ```
 1492
 ```
 :::
+
 ```{.python eval=False} 
 df[["Kidhome", "Teenhome"]].mean()
 ```
+
 :::{.callout-note collapse="true"}
 ## Expand to see output
 ```
@@ -885,7 +899,6 @@ Name: Income, dtype: float6
 ```
 :::
 
-
 ### Subsetting Questions and Exercises
 
 Here there are several exercises to try conditional subsetting.
@@ -906,7 +919,6 @@ sum(df["Marital_Status"] == "Single")
 ```
 :::
 :::
-
 
 ::: {.callout-tip title="Question" appearance="simple"}
 Subset the `DataFrame` with people born before 1970 and after 1970 and store both `DataFrames`
@@ -982,7 +994,7 @@ income(after)  = 47490.29255319149
 :::
 
 ::: {.callout-tip title="Question" appearance="simple"}
-BONUS: Can you find something else that differs a lot between the two groups?
+**Bonus**: Can you find something else that differs a lot between the two groups?
 :::
 
 ::: {.callout-note collapse="true" title="Answer"}
@@ -1062,9 +1074,8 @@ For the tutorial, we are going to keep them in the data.
 
 Two possible actions that can be taken to deal with missing data.
 One is to remove the row or column using the `.dropna()` function.
-This function will by default remove the row with the `NA` but with specficing the `axis=1` the column will be dropped.
+This function will by default remove the row with the `NA` but with specifying the `axis=1` the column will be dropped.
 The second course of action is filling the empty cells with a value, this can be done with the `.fillna()` function, which will substitute the missing value with a set value, such as `0`.
-
 
 ##  Combining data
 
@@ -1073,7 +1084,7 @@ The second course of action is filling the empty cells with a value, this can be
 Data is very often present in multiple tables.
 Think, for example, about a taxonomy table giving count data per sample.
 One way to combine multiple datasets is through concatenation, which either combines all columns or rows of multiple `DataFrames`.
-The function in Pandas that does just that is called .concat.
+The function in Pandas that does just that is called `.concat`.
 This command combines two `DataFrames` by appending all rows or columns: `.concat([first_dataframe, second_dataframe])`.
 
 In the `DataFrame`, there are individuals with the education levels Graduation, Master, Basic, and 2n Cycle.
@@ -1194,10 +1205,10 @@ There are two people that have "YOLO" as their Marital Status ...
 ### Merging
 
 Besides concatenating two `DataFrames`, there is another powerful function for combining data from multiple sources: `.merge()`.
-This function is especially useful when you have different types of related data in separate tables.
-For example, you might have a taxonomy table with count data per sample and a metadata table in another `DataFrame`.
+This function is especially useful when we have different types of related data in separate tables.
+For example, we might have a taxonomy table with count data per sample and a metadata table in another `DataFrame`.
 
-The pandas function `.merge()` allows you to combine these `DataFrames` based on a common column.
+The pandas function `.merge()` allows us to combine these `DataFrames` based on a common column.
 This column must exist in both `DataFrames` and contain similar values.
 
 To illustrate the `.merge()` function, we will create a new `DataFrame` and merge it with the existing one.
@@ -1313,9 +1324,9 @@ ax.set_title("Histogram of income")
 
 :::{.callout-note collapse="true"}
 ## Expand to see output
-Text(0.5, 1.0, 'Histogram of income')
+Results in @fig-pythonpandas-incomehistogram.
 
-![This is the histogram of income that should appear with you run the code above.](https://github.com/Kevinnota/teaching_stuff/blob/main/histogram.png?raw=true){#fig-pythonpandas-incomehistogram}
+![This is the histogram of income that should appear with we run the code above.](https://github.com/Kevinnota/teaching_stuff/blob/main/histogram.png?raw=true){#fig-pythonpandas-incomehistogram}
 :::
 
 ::: {.callout-tip title="Question" appearance="simple"}
@@ -1324,7 +1335,7 @@ Looking at the data, can you figure out what might cause this?
 :::
 ::: {.callout-note collapse="true" title="Answer"}
 
-When we look at the highest earners, we see that somebody put *666666* as their income.
+When we look at the highest earners, we see that somebody put _666666_ as their income.
 This is much higher than any other income, which makes the histogram very draged out to include this person.
 
 ```{.python eval=False} 
@@ -1363,7 +1374,7 @@ ax.set_title("Fixed Histogram of income")
 ```
 :::{.callout-note collapse="true"}
 ## Expand to see output
-Text(0.5, 1.0, 'Fixed Histogram of income')
+Results in @fig-pythonpandas-incomefixhistogram.
 
 ![To "fix" the histogram, the one person with the income of 666666 is removed, making the plot look a lot neater.](https://github.com/Kevinnota/teaching_stuff/blob/main/fixed_histogram.png?raw=true){#fig-pythonpandas-incomefixhistogram}
 :::
@@ -1398,7 +1409,7 @@ ax.set_title("Mean income for each education level")
 ```
 :::{.callout-note collapse="true"}
 ## Expand to see output
-Text(0.5, 1.0, 'Mean income for each education level')
+Results in @fig-pythonpandas-barplot.
 
 ![Barplot of the mean income for each education level.](https://github.com/Kevinnota/teaching_stuff/blob/main/bar_plot.png?raw=true){#fig-pythonpandas-barplot}
 :::
@@ -1412,12 +1423,12 @@ ax.set_title("Wine purchases and Fruit purchases")
 ```
 :::{.callout-note collapse="true"}
 ## Expand to see output
-Text(0.5, 1.0, 'Wine purchases and Fruit purchases')
+Results in @fig-pythonpandas-scatterplot.
 
 ![A scatter plot with wine purchases on the x-axis and fruit purchases on the y-axis.](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_01.png?raw=true){#fig-pythonpandas-scatterplot}
 :::
 
-You can also specify whether the axes should be on the log scale or not.
+We can also specify whether the axes should be on the log scale or not.
 
 ```{.python eval=False} 
 ax = df.plot(kind="scatter", x="MntWines", y="MntFruits", logy=True, logx=True)
@@ -1432,7 +1443,7 @@ Text(0.5, 1.0, 'Wine purchases and Fruit purchases, on log scale')
 
 ## Plotnine
 
-Plotnine is the Python clone of ggplot2, which is very powerful and is great if you are already familiar with the ggplot2 syntax!
+Plotnine is the Python clone of ggplot2, which is very powerful and is great if we are already familiar with the ggplot2 syntax!
 
 ```{.python eval=False} 
 from plotnine import *
@@ -1443,6 +1454,8 @@ from plotnine import *
 ```
 :::{.callout-note collapse="true"}
 ## Expand to see output
+Results in @fig-pythonpandas-boxplot.
+
 ![Boxplot with the amount spent on wine per education.](https://github.com/Kevinnota/teaching_stuff/blob/main/boxplot.png?raw=true){#fig-pythonpandas-boxplot}
 :::
 
@@ -1454,17 +1467,19 @@ from plotnine import *
 ```
 :::{.callout-note collapse="true"}
 ## Expand to see output
+Results in @fig-pythonpandas-facetplot.
+
 ![Plot of the income of people born after 1900, faceted by marital status, and filled by education level.](https://github.com/Kevinnota/teaching_stuff/blob/main/facet_scatter.png?raw=true){#fig-pythonpandas-facetplot}
 :::
 
 
 ### Advanced Questions and Exercises
 
-Now that you are familiar with python, pandas, and plotting.
+Now that we are familiar with python, pandas, and plotting.
 There are two data.tables from _AncientMetagenomeDir_ which contains metadata from metagenomes.
-You should, by using the code in the tutorial be able to explore the datasets and make some fancy plots.
+We should, by using the code in the tutorial be able to explore the datasets and make some fancy plots.
 
-```
+```verbatim
 file names:
 sample_table_url
 library_table_url
@@ -1474,10 +1489,11 @@ library_table_url
 
 In this chapter, we have started exploring the basics of data analysis using `Python` with the versatile `Pandas` library.
 We wrote `Python` code and executed it in a Jupyter Notebook, with just a handful of functions such as `.read_csv()`, `.loc[]`, `drop()`, `merge()`, `.concat() and `plot()`, we have done data manipulation, calculated summary statistics, and plotted the data.
+
 The takeaway messages therefore are:
 
-- Python, Pandas and Jupyter Notebook are relatively easy to use and powerful for data analysis.
-- If you know R and R markdown, the syntax of Python is easy to learn.
+- Python, Pandas and Jupyter Notebook are relatively easy to use and powerful for data analysis
+- If you know R and R markdown, the syntax of Python is easy to learn
 
 These functions in this chapter and the general idea of the Python syntax should help you get started using Python on your data.
 
@@ -1488,7 +1504,7 @@ Let's clean up your working directory by removing all the data and output from t
 When closing your `jupyter` notebook(s), say no to saving any additional files.
 
 Press <kbd>ctrl</kbd> + <kbd>c</kbd> on your terminal, and type <kbd>y</kbd> when requested.
-Once completed, the command below will remove the `/<PATH>/<TO>/python-pandas` directory _as well as all of its contents_.
+Once completed, the command below will remove the `/<PATH>/<TO>/python-pandas` directory **as well as all of its contents*.
 
 ::: {.callout-tip}
 ## Pro Tip
@@ -1512,7 +1528,3 @@ To delete the conda environment
 ```bash
 conda remove --name python-pandas --all -y
 ```
-
-<!-- NO REFERENCES SO NOT NECESSARY
-## References
--->
