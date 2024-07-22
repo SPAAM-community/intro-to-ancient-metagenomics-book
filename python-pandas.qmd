@@ -1,6 +1,6 @@
 ---
 title: Introduction to Python and Pandas
-author: Robin Warner, Kevin Nota, and Maxime Borry
+author: Kevin Nota, Robin Warner, and Maxime Borry
 ---
 
 :::  {.callout-note} 
@@ -25,46 +25,79 @@ conda activate python-pandas
 ```
 :::
 
-## Introduction
+Over the last few years, _Python_ has gained popularity thanks to the numerous libraries (packages with pre-written functions) in bioinformatics, statistical data analysis, and machine learning.
+While a few years ago, it was often necessary to go to _R_ for performing routine data manipulation and analysis tasks, nowadays _Python_ has a vast ecosystem of useful libraries for working on metagenomic data.
+Existing libraries exist for many different file formats encountered in metagenomics, such as fasta, fastq, sam, bam, etc.
+Furthermore, python is fast and extremely useful for writing programs that can be easily called from the command line like many existing tools.
 
-Over the last few years, Python has gained popularity thanks to the numerous libraries (packages with pre-written functions) in the field of machine learning, statistical data analysis, and bioinformatics. While a few years ago, it was often necessary to go to R for performing routine data manipulation and analysis tasks, nowadays Python has a vast ecosystem of libraries. Libraries exist for many different file formats that you might encounter in metagenomics, such as fasta, fastq, sam, bam, etc.
+This tutorial/walkthrough will provide a short introduction to the popular libraries for data analysis `pandas` ([(https://pandas.pydata.org/](https://pandas.pydata.org/)).
+This library has functions for reading and manipulating _tabular data_ similar to the _`data.frame()`_ in _R_ together with some basic data plotting.
+This will set the base for learning Python and use it for data analysis.
 
-This tutorial/walkthrough will provide a short introduction to the most popular libraries for data analysis [pandas](https://pandas.pydata.org/). This library has functions for reading and manipulating tabular data similar to the `data.frame()` in R together with some basic data plotting codes.
+There are many IDEs in which Python code can be written.
+For data analysis, Jupyter is powerful and popular which looks and functions similar to R markdown, where code is written in code blocks with space in text blocks for annotations.
+In this tutorial/walkthrough, we will use these notebooks for running and visualising Python code.
 
-The aim of this walkthrough is to first: get familiar with the Python code syntax and use Jupiter Notebook for executing codes and secondly get a kickstart to utilising the endless possibilities of data analysis in Python that can be applied to your data.  
+Learning objectives:
 
-## Working in a jupyter environment
+- Get familiar with the Python code syntax and use Jupyter Notebook for executing code
+- Get a kickstart to utilising the endless possibilities of data analysis in Python that can be applied to our data
 
-This tutorial run-through is using a [Jupyter Notebook](https://jupyter.org) for writing & executing Python code and for annotating.
+## Working in a Jupyter environment
 
-Jupyter notebooks are convenient and have two types of cells: **Markdown** and **Code**. The **markup cell** syntax is very similar to **R markdown**. The markdown cells are used for annotating, which is important for sharing code with collaborators, reproducibility, and documentation.
+This tutorial/walkthrough is using a Jupyter Notebook ([https://jupyter.org](https://jupyter.org)) for writing and executing Python code and for annotating.
 
-To load, please run the following command from within the chapter's directory.
+Jupyter notebooks have two types of cells: _Markdown_ and _Code_.
+The _Markdown cell_ syntax is very similar to _R markdown_.
+The markdown cells are used for annotating code, which is important for sharing work with collaborators, reproducibility, and documentation.
+
+Change the directory to the the working directory of this tutorial/walkthrough.
+
+```bash
+cd python-pandas_lecture/
+```
+
+To launch jupyter, run the following command in the terminal.
+This will open a browser window with jupyter running.
 
 ```bash
 jupyter notebook
 ```
 
-The in the folder tree, navigate to the `python-pandas_lecture` directory, and then open the `student-notebook.ipynb`. 
+Jupyter Notebook should have a file structure with all the files from the working directory.
+Open the `student-notebook.ipynb` notebook by clicking on it.
+This notebook has exactly the same code as written in this book chapter and is only a support so that it is not necessary to copy and paste the code.
+It is of course also possible to copy the code from this chapter into a fresh notebook file by clicking on:  `File` > `New` > `Notebook`.
 
-You can then follow that notebook, which should mirror the contents of this chapter! Otherwise try making a new notebook within Jupyter `File > New > Notebook`!
-
-::: {.callout-tip}
-If you get stuck on solutions to the tasks in the Jupyter notebook, the answers should be in the corresponding 'Solutions' chapter on this page.
+::: {.callout-note title="Note If the notebook is not there" collapse="true"}
+If you cannot find `student-notebook.ipynb`, it is possible the working directory is not correct.
+Make sure that `pwd` returns `/<path>/<to>/python-pandas/python-pandas_lecture`.
 :::
 
-A few examples are shown below. For a full list of possible syntax [click here](https://www.ibm.com/docs/en/watson-studio-local/1.2.3?topic=notebooks-markdown-jupyter-cheatsheet) for a Jupyter Notebook cheat-sheet.  
+### Creating and running cells
 
-list of **markdown cell** examples:
+There are multiple ways of making a new cells in jupyter, such as typing the letter `b`, or using the cursor on the bottom of the page that says _`click to add cell`_.
+The cells can be assigned to `code` or `markdown` using the drop down menu at the top.
+Code cells are always in edit mode.
+Code can be run with pressing `Shift + Enter` or click on the `▶` botton.
+To make an markdown cell active, double-click on a markdown cell, it switches from display mode to edit mode.
+To leave the editing mode by running the cell.
 
-::: {.callout-note}
-In many cases, there are multiple possible syntaxes which give the same result. We present only one way in this run-through.
+::: {.callout-tip collapse="true" title="Clear your code cells"}
+Before starting it might be nice to clear the output of all code cells, by clicking on:
+
+ `edit` > `Clear outputs of All Cells`
 :::
 
-Text
+### Markdown cell syntax
+
+Here a few examples of the syntax for the Markdown cells are shown, such as making words **bold**, or _italics_.
+For a more comprehensive list with syntax check out this Jupyter Notebook cheat-sheet ([https://www.ibm.com/docs/en/watson-studio-local/1.2.3?topic=notebooks-markdown-jupyter-cheatsheet](https://www.ibm.com/docs/en/watson-studio-local/1.2.3?topic=notebooks-markdown-jupyter-cheatsheet)).
+
+List of _markdown cell_ examples:
 
 - `**bold**` : **bold**
-- `*italics*` : *italics*
+- `_italics_` : _italics_
 
 Code
 
@@ -74,99 +107,133 @@ Code
 
 - `$ x = \frac{\pi}{42} $` : $$ x = \frac{\pi}{42} $$
 
-url links
+URL links
 
-- `[link](https://www.python.org/)`[link](https://www.python.org/)
+- `[link](https://www.python.org/)` : [link](https://www.python.org/)
 
 Images
 
 - `![](https://www.spaam-community.org/assets/media/SPAAM-Logo-Full-Colour_ShortName.svg)` ![](https://www.spaam-community.org/assets/media/SPAAM-Logo-Full-Colour_ShortName.svg)
 
-\
-The **code cells** can interpret many different coding languages including Python and Bash. The syntax of the code cells is the same as the syntax of the coding languages, in our case python. 
-
-Below are some examples of Python **code cells** with some useful basic python functions:
-
-::: {.callout-tip}
-## Python function
-`print()` is a python function for printing lines in the terminal
-`print() == echo ` in bash
+::: {.callout-note collapse="true" title="All roads lead to Rome"}
+In many cases, there are multiple syntaxes, or 'ways of doing things,' that will give the same results.
+For each section in this tutorial/walkthrough, one way is presented.
 :::
 
-```python
+### code cell syntax
+
+The _code cells_ can interpret many different coding languages including _Python_ and _Bash_.
+The syntax of the code cells is the same as the syntax of the coding languages, in our case _python_.
+
+Below are some examples of Python _code cells_ with some useful basic python functions:
+
+::: {.callout-tip collapse="true" title="Python function print()"}
+`print()` is a python function for printing lines in the terminal
+
+`print()` is the same as `echo` in bash
+:::
+
+```{.python eval=False}
 print("Hello World from Python!")
 ```
-*out -* `Hello World from Python!`
 
-But it can also, for example, run bash commands by adding a *!* at the start of the line.
+::: {.callout-note collapse="true"}
+## Expand to see output
+```
+Hello World from Python!
+```
+:::
+::: {.callout-tip collapse="true" title="Running bash code in Jupyter"}
+It is also possible to run bash commands in Jupyter, by adding a *!* at the start of the line.
 
-```python
+```{.python eval=False}
 ! echo "Hello World from bash!"
 ```
-*out -* `Hello World from bash!`
+```
+Hello World from bash!
+```
+:::
 
-Stings or numbers can be stored as a variable by using the *=* sign
+Stings or numbers can be stored as a variable by using the *=* sign.
 
-```python
+```{.python eval=False}
 i = 0
 ```
-Ones a variable is set in one **code cell** they are stored and can be accessed in other downstream **code cells**.
 
-```python
+Ones a variable is set in one _code cell_ they are stored and can be accessed in other downstream _code cells_.
+
+To see what value a variable contains, the `print()` function can be used.
+
+```{.python eval=False}
 print(i)
 ```
+::: {.callout-note collapse="true"}
+## Expand to see output
+```
+0
+```
+:::
 
-You can also print multiple things together in one `print` statement such as a number and a string:
+You can also print multiple things together in one `print` statement such as a number and a string.
 
-```python
+```{.python eval=True}
 print("The number is", i, "Wow!")
 ```
-*out -* `The number is 0 Wow!`
+::: {.callout-note collapse="true"}
+## Expand to see output
+```
+The number is, 0, Wow!
+```
+:::
 
 ## Pandas
+
 ### Getting started
+
 Pandas is a Python library used for data manipulation and analysis.
 
-We can import the library like this:
+We can import the library like this.
 
-```python
+```{.python eval=False}
 import pandas as pd
 ```
 
-::: {.callout-note}
-We set "pandas" to the alias "pd" because we are lazy and don't want to write the full word too many times.
+::: {.callout-tip collapse="true"}
+## Why import as pd?
+We set `pandas` to the alias `pd` because we are lazy and do not want to write the full word too many times.
 :::
 
-Now, we can print the current version:
+Now that `Pandas` is imported, we can check if it worked correctly, and check which version is running by runing `.__version__`.
 
-```python
+```{.python eval=False}
 pd.__version__
 ```
-*out -* `'2.0.1'`
+::: {.callout-note collapse="true"}
+## Expand to see output
+'2.2.2'
+:::
 
 ### Pandas data structures
-The primary data structures in Pandas are `Series` and `DataFrame`.
 
-A `DataFrame` is a table with **columns** and **rows**. 
+The primary data structures in `Pandas` are the `Series` and the `DataFrame`.
+A Series is a one-dimensional array-like object containing a value of the same type and can be imagined as one column in a table @fig-pythonpandas-figpandasseries.
+Each element in the `series` is associated with an index from 0 to the number of elements, but these can be changed to labels.
+A `DataFrame` is two-dimensional, and can change in size after it is created by adding and removing rows and columns, which can hold different types of data such as numbers and strings  @fig-pythonpandas-figpandasdataframe.
+The columns and rows are labelled.
+By default, rows are unnamed and are indexed similarly to a `series`.
 
-Each **column** has a *column name* and each **row** has an *index*.
+![A single row or column (1-dimensional data) is a `Series`. The dark grey squares are the index or row names, and the light grey squares are the elements.](assets/images/chapters/python-pandas/01_table_series.svg){#fig-pythonpandas-figpandasseries}
 
+![A dataframe with columns and rows. The dark grey squares are the index/row names and the column names. The light grey squares are the values.](assets/images/chapters/python-pandas/01_table_dataframe.svg){#fig-pythonpandas-figpandasdataframe}
 
-![](assets/images/chapters/python-pandas/01_table_dataframe.svg)
-
-A single row or column (1 dimensional data) is a `Series`.
-
-![](assets/images/chapters/python-pandas/01_table_series.svg)
-
-::: {.callout-note}
-For a more in detail pandas getting started tutorial [click here](https://pandas.pydata.org/docs/getting_started/index.html#)
+::: {.callout-tip collapse="true" title="More details on pandas"}
+For a more in detail pandas getting started tutorial click here ([https://pandas.pydata.org/docs/getting_started/index.html#](https://pandas.pydata.org/docs/getting_started/index.html#))
 :::
 
 ## Reading data with Pandas
 
-Pandas can read in **csv** (comma separated values) files, which are tables in text format.
-
-It's called **c**sv because each value is separated from the others via a comma, like this:
+Pandas can read in _csv_ (comma separated values) files, which are tables in text format.
+It is called _c_sv because each value is separated from the others through a comma.
 
 ```{text}
 A,B
@@ -174,26 +241,7 @@ A,B
 8,4
 ```
 
-*out -* 
-<table border="1" class="dataframe" style="width:10%;margin-left:auto;margin-right:auto;dataframe">
-  <tr>
-    <th></th>
-    <th>A</th>
-    <th>B</th>
-  </tr>
-  <tr>
-    <td>1</td>
-    <td>2</td>
-    <td>3</td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>3</td>
-    <td>4</td>
-  </tr>
-</table>
-
-Another common tabular separator are **tsv**, where each value is separated by a **tab** `\t`
+Another common tabular separator are _tsv_, where each value is separated by a _tab_ `\t`.
 
 ```{text}
 A\tB
@@ -201,35 +249,98 @@ A\tB
 8\t4
 ```
 
->Our dataset `"all_data.tsv"` is tab separated, which Pandas can handle using the `sep` argument.
+The dataset that is used in this tutorial/walkthrough is called `"all_data.tsv"`, and is tab-separated.
+Pandas by default assume that the file is comma delimited, but this can be change by using the `sep= ` argument.
 
-::: {.callout-tip}
-## Pandas function
-`pd.read_csv()` is the pandas function to read in tabular tables. The `sep=` can be specified argument, `sep=,` is the default.
+::: {.callout-tip collapse="true" title="Pandas function pd.read_csv()"}
+`pd.read_csv()` is the pandas function to read in tabular tables.
+The `sep=` can be specified argument, `sep=,` is the default.
 :::
 
-```python
+```{.python eval=False}
 df = pd.read_csv("../all_data.tsv", sep="\t")
 df
 ```
+::: {.callout-note collapse="true"}
+## Expand to see output
 
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1749</th>\n      <td>9432</td>\n      <td>1977</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>666666.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>9</td>\n      <td>14</td>\n      <td>18</td>\n      <td>8</td>\n      <td>1</td>\n      <td>12</td>\n      <td>3</td>\n      <td>1</td>\n      <td>3</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1750</th>\n      <td>8372</td>\n      <td>1974</td>\n      <td>Graduation</td>\n      <td>Married</td>\n      <td>34421.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>3</td>\n      <td>7</td>\n      <td>6</td>\n      <td>2</td>\n      <td>9</td>\n      <td>1</td>\n      <td>0</td>\n      <td>2</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1751</th>\n      <td>10870</td>\n      <td>1967</td>\n      <td>Graduation</td>\n      <td>Married</td>\n      <td>61223.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>709</td>\n      <td>43</td>\n      <td>182</td>\n      <td>42</td>\n      <td>118</td>\n      <td>247</td>\n      <td>9</td>\n      <td>3</td>\n      <td>4</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1752</th>\n      <td>7270</td>\n      <td>1981</td>\n      <td>Graduation</td>\n      <td>Divorced</td>\n      <td>56981.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>908</td>\n      <td>48</td>\n      <td>217</td>\n      <td>32</td>\n      <td>12</td>\n      <td>24</td>\n      <td>2</td>\n      <td>3</td>\n      <td>13</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1753</th>\n      <td>8235</td>\n      <td>1956</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>69245.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>428</td>\n      <td>30</td>\n      <td>214</td>\n      <td>80</td>\n      <td>30</td>\n      <td>61</td>\n      <td>6</td>\n      <td>5</td>\n      <td>10</td>\n      <td>3</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>1754 rows × 20 columns</p>
+```{r}
+#| echo: false
+#| results: 'asis'
+#| message: false
+#| warning: false
 
-::: {.callout-tip}
-When you are unsure what arguments a function can take, it is possible to get a *help documentation* using `help(pd.read_csv)`
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_1_all_data.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
 :::
+
+::: {.callout-tip collapse="true"}
+## Help
+When you are unsure what arguments a function can take, it is possible to get a _help documentation_ using `help(pd.read_csv)`
+:::
+
+In most cases, data will be read in with the `pd.read_csv()` function, however, internal Python data structures can also be transformed into a pandas data frame.
+For example using a nested list, were each row in the datafram is a list `[]`.
+
+```{.python eval=False}
+df = pd.Dataframe([[5,6], [8,4]], colums=["A", "B"])
+df
+```
+::: {.callout-note collapse="true"}
+## Expand to see output
+
+| |A|B|
+|-|-|-|
+|0|5|6|
+|1|8|4|
+:::
+
+Another usful transformation is from a dictionary ([https://docs.python.org/3/tutorial/datastructures.html#dictionaries](https://docs.python.org/3/tutorial/datastructures.html#dictionaries)) to pd.Dataframe.
+
+```{.python eval=False}
+table_data = {'A' : [5, 6]
+              'B' : [8, 4]}
+
+df = pd.DataFrame(data)
+df
+```
+::: {.callout-note collapse="true"}
+## Expand to see output
+| |A|B|
+|-|-|-|
+|0|5|6|
+|1|8|4|
+:::
+
+There are many ways to turn a `DataFrame` back into a dictonary ([https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_dict.html#pandas.DataFrame.to_dict](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_dict.html#pandas.DataFrame.to_dict)), which might be very handy for certain purposes.
 
 ## Data exploration
 
-The data is from a customer personality analysis of a company trying to better understand how to modify their product catalogue. Here is the [link to the original source](https://www.kaggle.com/datasets/imakash3011/customer-personality-analysis) for more information. 
+The data for this tutorial/walkthrough is from a customer personality analysis of a company trying to better understand how to modify their product catalogue.
+Here is the link to the original source ([https://www.kaggle.com/datasets/imakash3011/customer-personality-analysis](https://www.kaggle.com/datasets/imakash3011/customer-personality-analysis)) for more information.
 
 ### Columns
 
-The command below prints all the column names.
+To display all the column names from the imported `DataFrame`, the attribute `columns` can be called.
 
-```python
+```python{.python eval=False}
 df.columns
 ```
+
+::: {.callout-note collapse="true"}
+## Expand to see output
 ```
 Index(['ID', 'Year_Birth', 'Education', 'Marital_Status', 'Income', 'Kidhome',
        'Teenhome', 'MntWines', 'MntFruits', 'MntMeatProducts',
@@ -238,16 +349,19 @@ Index(['ID', 'Year_Birth', 'Education', 'Marital_Status', 'Income', 'Kidhome',
        'NumWebVisitsMonth', 'Complain', 'Z_CostContact', 'Z_Revenue'],
       dtype='object')
 ```
+:::
 
-We can also list their respective data types.
+Each column has its own data types which are highly optimised.
+A column with only integers has the data type `int64`.
+Columns with decimal numbers are called `float64`.
+A column with only strings, or a combination of strings and `integers` or `floats` is called an `object`.
 
-- `int64` are integers
-- `float64` are floating point numbers, also called `double` in other languages
-- `object` are Python objects, which are strings in this case
-
-```python
+```{.python eval=False}
 df.dtypes
 ```
+
+::: {.callout-note collapse="true"}
+## Expand to see output
 ```
 ID                       int64
 Year_Birth               int64
@@ -271,48 +385,119 @@ Z_CostContact            int64
 Z_Revenue                int64
 dtype: object
 ```
+:::
+
+::: {.callout-tip collapse="true"}
+## What does 64 stand for?
+The 64 indicates the number of bits the integers are stored in.
+64 bits is the largest pandas handels.
+When it is known that a value is in a certain range, it is possible to change the bits to 8, 16, or 32.
+This chosing the correct range might reduce memory usage, to be save, 64 range is so large it will incorporate most user cases.
+
+```python{.python eval=False}
+df['Kidhome'] = df['Kidhome'].astype('int8')
+```
+:::
+
 ### Inspecting the DataFrame
 
-What is the size of our `DataFrame`
+To quickly check how many rows and columns the `DataFrame` has, we can access the `shape` attribute.
 
-```python
+```{.python eval=False}
 df.shape
 ```
+::: {.callout-note collapse="true"}
+## Expand to see output
 ```
 (1754, 20)
 ```
-It has **1754** rows and **20** columns.
+:::
 
-Let's look at the first 5 rows:
+The `.shape` attribute of a DataFrame provides a tuple representing its dimensions.
+A tuple is a Python data structure that is used to store ordered items.
+In the case of shape, the first item is always the row, and the second item is the columns.
+To print, or access the rows or columns the index can be used.
+ `.shape[0]` gives the number of rows, and `.shape[1]` gives the number of columns.
 
-```python
+```{.python eval=False}
+df.shape[0]
+```
+
+::: {.callout-note collapse="true"}
+## Expand to see output
+```
+1754
+```
+:::
+
+```{.python eval=False}
+df.shape[1]
+```
+
+::: {.callout-note collapse="true"}
+## Expand to see output
+```
+20
+```
+:::
+
+:::{.callout-tip}
+It is often useful to have a quick look at the first rows, to get, for example, an idea of the data was read correctly.
+This can be done with the `head()` function.
+:::
+
+```{.python eval=False}
 df.head()
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>
 
-What we can see it that, unlike **R**, **Python** and in extension **Pandas** is 0-indexed instead of 1-indexed.
+::: {.callout-note collapse="true"}
+## Expand to see output
+```{r}
+#| echo: false
+#| results: 'asis'
+#| message: false
+#| warning: false
 
-<details>
-  <summary markdown="span">Question: Can you show how to do the same using bash?</summary>
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_2_all_data_head.csv")
 
-```python
-! head all_data.tsv
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>5</th>\n      <td>965</td>\n      <td>1971</td>\n      <td>Graduation</td>\n      <td>Divorced</td>\n      <td>55635.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>235</td>\n      <td>65</td>\n      <td>164</td>\n      <td>50</td>\n      <td>49</td>\n      <td>27</td>\n      <td>7</td>\n      <td>3</td>\n      <td>7</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>6</th>\n      <td>1994</td>\n      <td>1983</td>\n      <td>Graduation</td>\n      <td>Married</td>\n      <td>NaN</td>\n      <td>1</td>\n      <td>0</td>\n      <td>5</td>\n      <td>5</td>\n      <td>6</td>\n      <td>0</td>\n      <td>2</td>\n      <td>1</td>\n      <td>1</td>\n      <td>0</td>\n      <td>2</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>7</th>\n      <td>387</td>\n      <td>1976</td>\n      <td>Basic</td>\n      <td>Married</td>\n      <td>7500.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>6</td>\n      <td>16</td>\n      <td>11</td>\n      <td>11</td>\n      <td>1</td>\n      <td>16</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>8</th>\n      <td>2125</td>\n      <td>1959</td>\n      <td>Graduation</td>\n      <td>Divorced</td>\n      <td>63033.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>194</td>\n      <td>61</td>\n      <td>480</td>\n      <td>225</td>\n      <td>112</td>\n      <td>30</td>\n      <td>3</td>\n      <td>4</td>\n      <td>8</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>9</th>\n      <td>8180</td>\n      <td>1952</td>\n      <td>Master</td>\n      <td>Divorced</td>\n      <td>59354.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>233</td>\n      <td>2</td>\n      <td>53</td>\n      <td>3</td>\n      <td>5</td>\n      <td>14</td>\n      <td>6</td>\n      <td>1</td>\n      <td>5</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>
+:::
 
-</details>
+:::{.callout-tip collapse="true"}
+## Fuctions and attributes
+The difference between calling a function and an atribute is the `()`.
+`.head()` is a function and will perform an action.
+While `.shape` is an attribute and will return a value that is already stored in the `DataFrame`.
+:::
+
+What we can see it that, unlike _R_, _Python_ and in extension _Pandas_ is 0-indexed instead of 1-indexed.
 
 ### Accessing rows and columns
 
-We can access parts of the data in `DataFrames` in different ways.
+It is possible to access parts of the data in `DataFrames` in different ways.
+The first method is sub-setting rows using the row name and column name.
+This can be done with the `.loc`, which _loc_ ates row(s) by providing the row name and column name `[row, column]`.
+When the rows are not named, the row index can be used instead.
+To print the second row, this would be index 1 since the index in Python starts at 0.
+To print the all the columns, the `:` is used.
 
-The first method is sub-setting the rows using the index.
-
-This will take only the second row and all columns, producing a `Series`:
-
-```python
+```{.python eval=False}
 df.loc[1, :]
 ```
+
+::: {.callout-note collapse="true"}
+## Expand to see output
 ```
 ID                           2174
 Year_Birth                   1954
@@ -336,30 +521,47 @@ Z_CostContact                   3
 Z_Revenue                      11
 Name: 1, dtype: object
 ```
+:::
 
-And this will take the second and third row, producing another `DataFrame`:
+To print a range of rows, the first and last index can be written with a `:`.
+To print the second and third row, this would be `[1:2, :]`.
 
-```python
-df.loc[1:2, :]
+```{.python eval=False}
+df.loc[1:2]
+```
+::: {.callout-note collapse="true"}
+## Expand to see output
+
+```{r}
+#| echo: false
+#| results: 'asis'
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_3_all_data_first_2_lines.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
+:::
+
+To print all the rows with a certain column name works the same as subsetting rows, but then adding the column name after the comma.
+
+```{.python eval=False}
+df[:, "Year_Birth"]
 ```
 
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>
-
-It's important to understand that almost all operations on `DataFrames` are not in-place, meaning that we don't modify the original object and would have to save the results to the same or a new variable to keep the changes.
-
-This, for example will create a new `DataFrame` of only the "Education" and "Marital_Status" columns.
-
-```python
-new_df = df.loc[:, ["Education", "Marital_Status"]]
-new_df
-```
-'<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>Graduation</td>\n      <td>Single</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>Graduation</td>\n      <td>Single</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>Graduation</td>\n      <td>Together</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>Graduation</td>\n      <td>Together</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>Master</td>\n      <td>Together</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1749</th>\n      <td>Graduation</td>\n      <td>Together</td>\n    </tr>\n    <tr>\n      <th>1750</th>\n      <td>Graduation</td>\n      <td>Married</td>\n    </tr>\n    <tr>\n      <th>1751</th>\n      <td>Graduation</td>\n      <td>Married</td>\n    </tr>\n    <tr>\n      <th>1752</th>\n      <td>Graduation</td>\n      <td>Divorced</td>\n    </tr>\n    <tr>\n      <th>1753</th>\n      <td>Master</td>\n      <td>Together</td>\n    </tr>\n  </tbody>\n</table>\n<p>1754 rows × 2 columns</p>'
-
-Selecting only one column by name:
-
-```python
-df["Year_Birth"]
-```
+::: {.callout-note collapse="true"}
+## Expand to see output
 ```
 0       1957
 1       1954
@@ -373,29 +575,75 @@ df["Year_Birth"]
 1752    1981
 1753    1956
 ```
+:::
 
-We can also remove columns from the `DataFrame`.
+It is important to notice that almost all operations on `DataFrames` are not in place, meaning that the `DataFrame` is not modified.
+To keep the changes, the `DataFrame` has to be actively stored using the same name or a new variable.
 
-In this case, we want to remove the columns `Z_CostContact` and `Z_Revenue` and keep those changes.
+To save the changes, a new `DataFrame` has to be created, or the existing `DataFrame` has to be overwritten.
+This can be done by directing the output to a variable with `=`.
+To make a new `DataFrame` with only the "Education" and "Marital_Status" columns, the column names have to be placed in a list `['colname1', 'colname2']`.
 
-```python
+```{.python eval=False}
+df.head()
+new_df = df.loc[:, ["Education", "Marital_Status"]]
+new_df
+```
+
+::: {.callout-note collapse="true"}
+## Expand to see output
+||Education|Marital_Status|
+|-|-|-|
+|0|Graduation|Single|
+|1|Graduation|Single|
+|2|Graduation|Together|
+|3|Graduation|Together|
+|4|Master|Together|
+|…|…|…|
+|1749|Graduation|Together|
+|1750|Graduation|Married|
+|1751|Graduation|Married|
+|1752|Graduation|Divorced|
+|1753|Master|Together|
+|1754 rows × 2 columns|
+:::
+
+It is also possible to remove rows and columns from a `DataFrame`.
+This can be done with the function `drop()`.
+To remove the columns `Z_CostContact` and `Z_Revenue` and keep those changes, it is necessary to overwrite the `DataFrame`.
+To make sure `Pandas` understands that the its `columns` that need to be removed, the `axis` can be specified.
+Rows are called `axis=0`, and columns are called `axis=1`.
+In most cases `Pandas` will guess correctly without specifying the axis, since in this case the no row is called `Z_CostContact` or `Z_Revenue`.
+It is however good practice to add the axis to make sure `Pandas` is operating as expected.
+
+```{.python eval=False}
 df = df.drop("Z_CostContact", axis=1)
 df = df.drop("Z_Revenue", axis=1)
 ```
+::: {.callout-tip collapse="true"}
+## Can be done in one go
+```
+df = df.drop(["Z_CostContact", "Z_Revenue"], axis=1)
+```
+:::
 
 ### Conditional subsetting
 
-We can more specifically look at subsets of the data we might be interested in.
+So far, all the subsetting has been based on `row names` and column names.
+However, in many cases, it is more helpful to look only at data that contain certain items.
+This can be done using conditional subsetting, which is based on Boolean values `True` or `False`.
+pandas will interpret a series of True and `False` values by printing only the rows or columns where a `True` is present and ignoring all rows or columns with a `False`.
 
-This subsetting is a bit weird in the syntax at first but hopefully makes more sense when we go through it step by step.
+For example, if we are only interested in individuals in the table who graduated, we can test each string in the column Education to see if it is equal (==) to Graduation.
+This will return a series with Boolean values `True` or `False`.
 
-We can, for example, test each string in the column `Education` if it is equal to `PhD`:
-
-
-```python
+```{.python eval=False}
 education_is_grad = (df["Education"] == "Graduation")
 education_is_grad
 ```
+
+:::{.callout-note collapse="true"}
+## Expand to see output
 ```
 0        True
 1        True
@@ -410,13 +658,42 @@ education_is_grad
 1753    False
 Name: Education, Length: 1754, dtype: bool
 ```
+:::
 
-We can also check for multiple conditions at once:
+To quicky check if the `True` and `False` values are correct, it can be useful to print out this column.
 
-```python
+```{.python eval=False}
+df["Education"]
+```
+
+:::{.callout-note collapse="true"}
+## Expand to see output
+```
+0       Graduation
+1       Graduation
+2       Graduation
+3       Graduation
+4       Master
+…       …
+1749    Graduation
+1750    Graduation
+1751    Graduation
+1752    Graduation
+1753    Master
+Name: Education, length: 1754, dtype: object
+```
+:::
+
+It is possible to provide pandas with multiple conditions at the same time.
+This can be done by combining multiple statements with `&`.
+
+```{.python eval=False}
 two_at_once = (df["Education"] == "Graduation") & (df["Marital_Status"] == "Single")
 two_at_once
 ```
+
+::: {.callout-note collapse="true"}
+## Expand to see output
 ```
 0        True
 1        True
@@ -431,61 +708,162 @@ two_at_once
 1753    False
 Length: 1754, dtype: bool
 ```
+:::
 
-This will create a `Series` of booleans, which can then be used to subset the data to rows where the condition(s) are **True**:
+To find out the total number of Graduated singles, the `.sum()` can be used.
 
-```python
+```{.python eval=False} 
+sum(two_at_once)
+```
+
+::: {.callout-note collapse="true"}
+## Expand to see output
+```
+252
+```
+:::
+
+These `Series` of Booleans can be used to subset the dataframe to rows where the condition(s) are _True_:
+
+```{.python eval=False} 
 df[two_at_once]
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>18</th>\n      <td>7892</td>\n      <td>1969</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>18589.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>6</td>\n      <td>4</td>\n      <td>25</td>\n      <td>15</td>\n      <td>12</td>\n      <td>13</td>\n      <td>2</td>\n      <td>1</td>\n      <td>3</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>20</th>\n      <td>5255</td>\n      <td>1986</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>NaN</td>\n      <td>1</td>\n      <td>0</td>\n      <td>5</td>\n      <td>1</td>\n      <td>3</td>\n      <td>3</td>\n      <td>263</td>\n      <td>362</td>\n      <td>27</td>\n      <td>0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>33</th>\n      <td>1371</td>\n      <td>1976</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>79941.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>123</td>\n      <td>164</td>\n      <td>266</td>\n      <td>227</td>\n      <td>30</td>\n      <td>174</td>\n      <td>2</td>\n      <td>4</td>\n      <td>9</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1720</th>\n      <td>10968</td>\n      <td>1969</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>57731.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>266</td>\n      <td>21</td>\n      <td>300</td>\n      <td>65</td>\n      <td>8</td>\n      <td>44</td>\n      <td>8</td>\n      <td>8</td>\n      <td>6</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1723</th>\n      <td>5959</td>\n      <td>1968</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>35893.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>158</td>\n      <td>0</td>\n      <td>23</td>\n      <td>0</td>\n      <td>0</td>\n      <td>18</td>\n      <td>3</td>\n      <td>1</td>\n      <td>5</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1743</th>\n      <td>4201</td>\n      <td>1962</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>57967.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>229</td>\n      <td>7</td>\n      <td>137</td>\n      <td>4</td>\n      <td>0</td>\n      <td>91</td>\n      <td>4</td>\n      <td>2</td>\n      <td>8</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1746</th>\n      <td>7004</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>11012.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>24</td>\n      <td>3</td>\n      <td>26</td>\n      <td>7</td>\n      <td>1</td>\n      <td>23</td>\n      <td>3</td>\n      <td>1</td>\n      <td>2</td>\n      <td>9</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1748</th>\n      <td>8080</td>\n      <td>1986</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>26816.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>5</td>\n      <td>1</td>\n      <td>6</td>\n      <td>3</td>\n      <td>4</td>\n      <td>3</td>\n      <td>0</td>\n      <td>0</td>\n      <td>3</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>252 rows × 20 columns</p>
+:::{.callout-note collapse="true"}
+## Expand to see output
 
-The syntax that seems more complicated and does it in one step without the extra `Series` is this:
+```{r}
+#| echo: false
+#| results: 'asis'
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_4_all_data_conditional_subset.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
+252 rows × 20 columns
+:::
+
+It is not actually necessary to create a `series` every time for subsetting the table and it can be done in one go by combining the conditions within the _`df[]`_.
 
 ```python
 df[(df["Education"] == "Master") & (df["Marital_Status"] == "Single")]
 ```
+:::{.callout-note collapse="true"}
+## Expand to see output
+```{r}
+#| echo: false
+#| results: 'asis'
+#| message: false
+#| warning: false
 
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>26</th>\n      <td>10738</td>\n      <td>1951</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>49389.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>40</td>\n      <td>0</td>\n      <td>19</td>\n      <td>2</td>\n      <td>1</td>\n      <td>3</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>46</th>\n      <td>6853</td>\n      <td>1982</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>75777.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>712</td>\n      <td>26</td>\n      <td>538</td>\n      <td>69</td>\n      <td>13</td>\n      <td>80</td>\n      <td>3</td>\n      <td>6</td>\n      <td>11</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>76</th>\n      <td>11178</td>\n      <td>1972</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>42394.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>15</td>\n      <td>2</td>\n      <td>10</td>\n      <td>0</td>\n      <td>1</td>\n      <td>4</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>98</th>\n      <td>6205</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>32557.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>34</td>\n      <td>3</td>\n      <td>29</td>\n      <td>0</td>\n      <td>4</td>\n      <td>10</td>\n      <td>2</td>\n      <td>1</td>\n      <td>3</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>110</th>\n      <td>821</td>\n      <td>1992</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>92859.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>962</td>\n      <td>61</td>\n      <td>921</td>\n      <td>52</td>\n      <td>61</td>\n      <td>20</td>\n      <td>5</td>\n      <td>4</td>\n      <td>12</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1690</th>\n      <td>3520</td>\n      <td>1990</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>91172.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>162</td>\n      <td>28</td>\n      <td>818</td>\n      <td>0</td>\n      <td>28</td>\n      <td>56</td>\n      <td>4</td>\n      <td>3</td>\n      <td>7</td>\n      <td>3</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1709</th>\n      <td>4418</td>\n      <td>1983</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>89616.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>671</td>\n      <td>47</td>\n      <td>655</td>\n      <td>145</td>\n      <td>111</td>\n      <td>15</td>\n      <td>7</td>\n      <td>5</td>\n      <td>12</td>\n      <td>2</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1714</th>\n      <td>2980</td>\n      <td>1952</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>8820.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>12</td>\n      <td>0</td>\n      <td>13</td>\n      <td>4</td>\n      <td>2</td>\n      <td>4</td>\n      <td>3</td>\n      <td>0</td>\n      <td>3</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1738</th>\n      <td>7366</td>\n      <td>1982</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>75777.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>712</td>\n      <td>26</td>\n      <td>538</td>\n      <td>69</td>\n      <td>13</td>\n      <td>80</td>\n      <td>3</td>\n      <td>6</td>\n      <td>11</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1747</th>\n      <td>9817</td>\n      <td>1970</td>\n      <td>Master</td>\n      <td>Single</td>\n      <td>44802.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>853</td>\n      <td>10</td>\n      <td>143</td>\n      <td>13</td>\n      <td>10</td>\n      <td>20</td>\n      <td>9</td>\n      <td>4</td>\n      <td>12</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>75 rows × 20 columns</p>
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_5_all_data_conditional_subset2.csv")
 
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
+75 rows × 20 columns
+:::
 
-## Describing a DataFrame
+### Describing a DataFrame
 
-Pandas can easily create overview statistics for all numeric columns:
+Sometimes is is nice to get a quick overview of the data in a table, such as `means` and `counts`.
+`Pandas` has a native function to do just that, it will output a `count`, `mean`, `standard deviation`, `minimum`, `25th percentile (Q1)`, `median (50th percentile or Q2)`, `75th percentile (Q3)`, and `maximum` for each numeric columns.
 
-```python
+```{.python eval=False} 
 df.describe()
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>count</th>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1735.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.000000</td>\n      <td>1754.0</td>\n      <td>1754.0</td>\n    </tr>\n    <tr>\n      <th>mean</th>\n      <td>5584.696123</td>\n      <td>1969.571266</td>\n      <td>51166.578098</td>\n      <td>0.456100</td>\n      <td>0.480616</td>\n      <td>276.072406</td>\n      <td>28.034778</td>\n      <td>166.492018</td>\n      <td>40.517104</td>\n      <td>28.958381</td>\n      <td>47.266819</td>\n      <td>3.990878</td>\n      <td>2.576967</td>\n      <td>5.714937</td>\n      <td>5.332383</td>\n      <td>0.011403</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>std</th>\n      <td>3254.655979</td>\n      <td>11.876614</td>\n      <td>26200.419179</td>\n      <td>0.537854</td>\n      <td>0.536112</td>\n      <td>314.604735</td>\n      <td>41.348883</td>\n      <td>225.561694</td>\n      <td>57.412986</td>\n      <td>42.830660</td>\n      <td>53.885647</td>\n      <td>2.708278</td>\n      <td>2.848335</td>\n      <td>3.231465</td>\n      <td>2.380183</td>\n      <td>0.106202</td>\n      <td>0.0</td>\n      <td>0.0</td>\n    </tr>\n    <tr>\n      <th>min</th>\n      <td>0.000000</td>\n      <td>1893.000000</td>\n      <td>1730.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>25%</th>\n      <td>2802.500000</td>\n      <td>1960.000000</td>\n      <td>33574.500000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>19.000000</td>\n      <td>2.000000</td>\n      <td>15.000000</td>\n      <td>3.000000</td>\n      <td>2.000000</td>\n      <td>10.000000</td>\n      <td>2.000000</td>\n      <td>0.000000</td>\n      <td>3.000000</td>\n      <td>3.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>50%</th>\n      <td>5468.000000</td>\n      <td>1971.000000</td>\n      <td>49912.000000</td>\n      <td>0.000000</td>\n      <td>0.000000</td>\n      <td>160.500000</td>\n      <td>9.000000</td>\n      <td>66.000000</td>\n      <td>13.000000</td>\n      <td>9.000000</td>\n      <td>27.000000</td>\n      <td>3.000000</td>\n      <td>1.000000</td>\n      <td>5.000000</td>\n      <td>6.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>75%</th>\n      <td>8441.250000</td>\n      <td>1978.000000</td>\n      <td>68130.000000</td>\n      <td>1.000000</td>\n      <td>1.000000</td>\n      <td>454.000000</td>\n      <td>35.000000</td>\n      <td>232.000000</td>\n      <td>53.500000</td>\n      <td>35.000000</td>\n      <td>63.000000</td>\n      <td>6.000000</td>\n      <td>4.000000</td>\n      <td>8.000000</td>\n      <td>7.000000</td>\n      <td>0.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n    <tr>\n      <th>max</th>\n      <td>11191.000000</td>\n      <td>1996.000000</td>\n      <td>666666.000000</td>\n      <td>2.000000</td>\n      <td>2.000000</td>\n      <td>1492.000000</td>\n      <td>199.000000</td>\n      <td>1725.000000</td>\n      <td>259.000000</td>\n      <td>263.000000</td>\n      <td>362.000000</td>\n      <td>27.000000</td>\n      <td>28.000000</td>\n      <td>13.000000</td>\n      <td>20.000000</td>\n      <td>1.000000</td>\n      <td>3.0</td>\n      <td>11.0</td>\n    </tr>\n  </tbody>\n</table>\n<p>8 rows × 18 columns</p>
+:::{.callout-note collapse="true"}
+## Expand to see output
+```{r}
+#| echo: false
+#| results: 'asis'
+#| message: false
+#| warning: false
 
-You can also directly calculate the relevant statistics on columns you are interested in:
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_6_Describing_df.csv")
 
-```python
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
+8 rows × 18 columns
+:::
+
+We can also directly calculate the relevant statistics on numberic columns or rows we are interested in using the functions `max()`, `min()`, `mean()`, `median()` etc..
+
+```{.python eval=False} 
 df["MntWines"].max()
 ```
+
+:::{.callout-note collapse="true"}
+## Expand to see output
 ```
 1492
 ```
-```python
+:::
+
+```{.python eval=False} 
 df[["Kidhome", "Teenhome"]].mean()
 ```
+
+:::{.callout-note collapse="true"}
+## Expand to see output
 ```
 Kidhome     0.456100
 Teenhome    0.480616
 dtype: float64
 ```
+:::
 
-For non-numeric columns, you can get the represented values or their counts:
+There are also ceartin functions that are usfule for non-numeric columns.
+To know which stings are present in a `object`, the fuction `unique()` can be used, this will returns an `array` with the unique values in the column or row.
 
-```python
+```{.python eval=False} 
 df["Education"].unique()
 ```
+:::{.callout-note collapse="true"}
+## Expand to see output
 ```
 array(['Graduation', 'Master', 'Basic', '2n Cycle'], dtype=object)
 ```
+:::
 
-```python
+To know how often a value is present in a column or row, the function `value_counts()` can be used.
+This will print a `series` for all the unique values and print a count.
+
+```{.python eval=False} 
 df["Marital_Status"].value_counts()
 ```
+:::{.callout-note collapse="true"}
+## Expand to see output
 ```
 Marital_Status
 Married     672
@@ -497,104 +875,177 @@ Alone         2
 Absurd        2
 Name: count, dtype: int64
 ```
-
-::: {.callout-tip title="Task" appearance="simple"}
-
-Subset the `DataFrame` in two different ways:
-
-::: {.callout-tip}
-Just like with the "PhD" string before, you can subset using integers and $<$, $>$, $<=$ and $>=$.
 :::
 
+### Getting summary statistics on grouped data
 
-- One where everybody is born before 1970
+`Pandas` is equipped with lots of useful functions which make complicated tasks very easy and fast.
+One of these functions is `.groupby()` with the arguments `by=...`, which will group a `DataFrame` using a categorical column (for example `Education` or `Marital_Status`).
+This makes it possible to perform operations on a group directly without the need for subsetting.
+For example, to get a mean income value for the different Education levels in the `DataFrame` can be done by specifying the column name for the grouping variable by `.groupby(by='Education')` and specifying the column name to perform this action on `[Income]` followed by the `sum()` function.
 
+```{.python eval=False} 
+df.groupby(by="Education")["Income"].mean()
+```
+:::{.callout-note collapse="true"}
+## Expand to see output
+```
+Education
+2n Cycle      47633.190000
+Basic         20306.259259
+Graduation    52720.373656
+Master        52917.534247
+Name: Income, dtype: float6
+```
+:::
+
+### Subsetting Questions and Exercises
+
+Here there are several exercises to try conditional subsetting.
+Try to first before seeing the awnsers.
+
+::: {.callout-tip title="Question" appearance="simple"}
+How many Single people are there in the table that also greduated? And how many are single?
+:::
+::: {.callout-note collapse="true" title="Answer"}
+```{.python eval=False} 
+sum(df["Marital_Status"] == "Single")
+```
+
+::: {.callout-note collapse="true"}
+## Expand to see output
+```
+382
+```
+:::
+:::
+
+::: {.callout-tip title="Question" appearance="simple"}
+Subset the `DataFrame` with people born before 1970 and after 1970 and store both `DataFrames`
+:::
 ::: {.callout-note collapse="true" title="Answer"}
 
-```python 
+```{.python eval=False} 
 df_before = df[df["Year_Birth"] < 1970]
+df_after = df[df["Year_Birth"] >= 1970]
 ```
 :::
 
-- One where everybody is born in or after 1970
-
-::: {.callout-note collapse="true" title="Answer"}
-
-```python 
-df_before = df[df["Year_Birth"] >= 1970]
-```
+::: {.callout-tip title="Question" appearance="simple"}
+How many people are in the two `DataFrames`? 
 :::
-
-- How many people are in the two `DataFrames`? 
-
 ::: {.callout-note collapse="true" title="Answer"}
 
-```python 
+```{.python eval=False} 
 print("n(before)   =", df_before.shape[0])
-print("n(after)   =", df_before.shape[0])
+print("n(after)   =", df_after.shape[0])
 ```
+::: {.callout-note collapse="true"}
+## Expand to see output
 ```
 n(before)   = 804
 n(after)   = 950
 ```
-
+:::
 :::
 
-- Do the total number of people sum up to the original `DataFrame` total?
-
+::: {.callout-tip title="Question" appearance="simple"}
+Do the total number of people sum up to the original `DataFrame` total?
+:::
 ::: {.callout-note collapse="true" title="Answer"}
 
-```python
+```{.python eval=False} 
  df_before.shape[0] + df_after.shape[0] == df.shape[0]
 ```
+:::{.callout-note collapse="true"}
+## Expand to see output
 True
-
-```python 
+:::
+```{.python eval=False} 
 print("n(sum)      =", df_before.shape[0] + df_after.shape[0])
 print("n(expected) =", df.shape[0])
 ```
+:::{.callout-note collapse="true"}
+## Expand to see output
 ```
 n(sum)      = 1754
 n(expected) = 1754
 ```
-
+:::
 :::
 
-- How does the mean income of the two groups differ?
+::: {.callout-tip title="Question" appearance="simple"}
+How does the mean income of the two groups differ?
+:::
 
 ::: {.callout-note collapse="true" title="Answer"}
 
-  ```python 
+```{.python eval=False} 
   print("income(before) =", df_before["Income"].mean())
   print("income(after)  =", df_after["Income"].mean())
-  ```
- income(before) = 55513.38113207547
-  income(after)  = 47490.29255319149  
+  
+```
+:::{.callout-note collapse="true"}
+## Expand to see output
+income(before) = 55513.38113207547
 
+income(after)  = 47490.29255319149  
+:::     
 :::
 
+::: {.callout-tip title="Question" appearance="simple"}
+**Bonus**: Can you find something else that differs a lot between the two groups?
 :::
 
-::: {.callout-tip title="Extra Task" appearance="simple"}
-Can you find something else that differs a lot between the two groups?
+::: {.callout-note collapse="true" title="Answer"}
+This is an open ended question.
 :::
 
 ## Dealing with missing data
 
-We can check for missing data for each cell like this:
+In large tables, it is often important to check if there are columns or rows that have missing data.
+`pandas` represents missing data with NA (Not Available).
+To identify these missing values, pandas provides the .isna() function.
+This function checks every cell in the `DataFrame` and returns a `DataFrame` of the same shape, where each cell contains a Boolean value: `True` if the original cell contains `NA`, and `False` otherwise.
 
 ```python
 df.isna()
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>1749</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1750</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1751</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1752</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n    <tr>\n      <th>1753</th>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n      <td>False</td>\n    </tr>\n  </tbody>\n</table>\n<p>1754 rows × 20 columns</p>
+:::{.callout-note collapse="true"}
+## Expand to see output
 
-By summing over each row, we see how many missing values are in each column.
+```{r}
+#| echo: false
+#| results: 'asis'
+#| message: false
+#| warning: false
 
-`True` is treated as `1` and `False` as `0`.
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_7_isna_df.csv")
 
-```python
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
+1754 rows × 20 columns
+:::
+
+It is very hard to see if there are any 'True' values in this new Boolean table.
+To investigate how many missing values are present in the table, the `sum()` function can be used.
+In `Python`, `True` has the `1` assigned to it and `False` `0`.
+
+```{.python eval=False} 
 df.isna().sum()
 ```
+:::{.callout-note collapse="true"}
+## Expand to see output
 ```
 ID                      0
 Year_Birth              0
@@ -616,86 +1067,124 @@ NumWebVisitsMonth       0
 Complain                0
 dtype: int64
 ```
+:::
 
-We don't really know what a missing value means so we are just going to keep them in the data.
+In this case is it not clear what a missing value represents, are these individuals who did not want to state their income, or did not have an income? 
+For the tutorial, we are going to keep them in the data.
 
-However, we could remove them using `df.dropna()`
-
-### Grouping data
-
-We can group a `DataFrame` using a categorical column (for example `Education` or `Marital_Status`).
-
-This allows us to do perform operations on each group individually.
-
-For example, we could group by `Education` and calculate the mean `Income`:
-
-```python
-df.groupby(by="Education")["Income"].mean()
-```
-```
-Education
-2n Cycle      47633.190000
-Basic         20306.259259
-Graduation    52720.373656
-Master        52917.534247
-Name: Income, dtype: float6
-```
+Two possible actions that can be taken to deal with missing data.
+One is to remove the row or column using the `.dropna()` function.
+This function will by default remove the row with the `NA` but with specifying the `axis=1` the column will be dropped.
+The second course of action is filling the empty cells with a value, this can be done with the `.fillna()` function, which will substitute the missing value with a set value, such as `0`.
 
 ##  Combining data
 
-### Concatenation
+### Concatenation exercises
 
-One way to combine multiple datasets is through **concatenation**, which either combines all columns or rows of multiple `DataFrames`.
+Data is very often present in multiple tables.
+Think, for example, about a taxonomy table giving count data per sample.
+One way to combine multiple datasets is through concatenation, which either combines all columns or rows of multiple `DataFrames`.
+The function in Pandas that does just that is called `.concat`.
+This command combines two `DataFrames` by appending all rows or columns: `.concat([first_dataframe, second_dataframe])`.
 
-The command to combine two `DataFrames` by appending all rows is `pd.concat([first_dataframe, second_dataframe])`
+In the `DataFrame`, there are individuals with the education levels Graduation, Master, Basic, and 2n Cycle.
+PhD is missing; however, there is data on people with the education level PhD in another table called phd_data.tsv.
 
-::: {.callout-tip title="Task" appearance="simple"}
+With everything learned so far, and basic information on the `.concat() `function, try to read in the data from `../phd_data.tsv` and concatenate it to the existing `df`.
 
-- Read the **tsv** "phd_data.tsv" as a new `DataFrame` and name the variable `df2`
-
+::: {.callout-tip title="Question" appearance="simple"}
+Read the _tsv_ "phd_data.tsv" as a new `DataFrame` and name the variable `df2`.
+:::
 
 ::: {.callout-note collapse="true" title="Answer"}
-```python 
+```{.python eval=False} 
 df2 = pd.read_csv("../phd_data.tsv", sep="\t")
 ```
 :::
 
-- Concatenate the "old" `DataFrame` `df` and the new `df2` and name the concatenated one `concat_df`
-
+::: {.callout-tip title="Question" appearance="simple"}
+Concatenate the "old" `DataFrame` `df` and the new `df2` and name the concatenated one `concat_df`.
+:::
 ::: {.callout-note collapse="true" title="Answer"}
-
-```python 
+```{.python eval=False}  
 concat_df = pd.concat([df, df2])
 concat_df
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Z_CostContact</th>\n      <th>Z_Revenue</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>481</th>\n      <td>11133</td>\n      <td>1973</td>\n      <td>PhD</td>\n      <td>YOLO</td>\n      <td>48432.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>322</td>\n      <td>3</td>\n      <td>50</td>\n      <td>4</td>\n      <td>3</td>\n      <td>42</td>\n      <td>7</td>\n      <td>1</td>\n      <td>6</td>\n      <td>8</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>482</th>\n      <td>9589</td>\n      <td>1948</td>\n      <td>PhD</td>\n      <td>Widow</td>\n      <td>82032.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>332</td>\n      <td>194</td>\n      <td>377</td>\n      <td>149</td>\n      <td>125</td>\n      <td>57</td>\n      <td>4</td>\n      <td>6</td>\n      <td>7</td>\n      <td>1</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>483</th>\n      <td>4286</td>\n      <td>1970</td>\n      <td>PhD</td>\n      <td>Single</td>\n      <td>57642.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>580</td>\n      <td>6</td>\n      <td>58</td>\n      <td>8</td>\n      <td>0</td>\n      <td>27</td>\n      <td>7</td>\n      <td>6</td>\n      <td>6</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>484</th>\n      <td>4001</td>\n      <td>1946</td>\n      <td>PhD</td>\n      <td>Together</td>\n      <td>64014.0</td>\n      <td>2</td>\n      <td>1</td>\n      <td>406</td>\n      <td>0</td>\n      <td>30</td>\n      <td>0</td>\n      <td>0</td>\n      <td>8</td>\n      <td>8</td>\n      <td>2</td>\n      <td>5</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n    <tr>\n      <th>485</th>\n      <td>9405</td>\n      <td>1954</td>\n      <td>PhD</td>\n      <td>Married</td>\n      <td>52869.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>84</td>\n      <td>3</td>\n      <td>61</td>\n      <td>2</td>\n      <td>1</td>\n      <td>21</td>\n      <td>3</td>\n      <td>1</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n      <td>11</td>\n    </tr>\n  </tbody>\n</table>\n<p>2240 rows × 20 columns</p>
+:::{.callout-note collapse="true"}
+## Expand to see output
+```{r}
+#| echo: false
+#| results: 'asis'
+#| message: false
+#| warning: false
 
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_8_concat_df.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
+2240 rows × 20 columns
 :::
-
-- Is there anything weird about the new `DataFrame` and can you fix that?
-
+:::
+::: {.callout-tip title="Question" appearance="simple"}
+Is there anything weird about the new `DataFrame` and can you fix that?
+:::
 ::: {.callout-note collapse="true" title="Answer"}
 
 We previously removed the columns "Z_CostContact" and "Z_Revenue" but they are in the new data again.
 
-We can remove them like before:
+We can remove them like before.
 
-```python 
+```{.python eval=False} 
 concat_df = concat_df.drop("Z_CostContact", axis=1)
 concat_df = concat_df.drop("Z_Revenue", axis=1)
 concat_df
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>4</th>\n      <td>7446</td>\n      <td>1967</td>\n      <td>Master</td>\n      <td>Together</td>\n      <td>62513.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>520</td>\n      <td>42</td>\n      <td>98</td>\n      <td>0</td>\n      <td>42</td>\n      <td>14</td>\n      <td>6</td>\n      <td>4</td>\n      <td>10</td>\n      <td>6</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>481</th>\n      <td>11133</td>\n      <td>1973</td>\n      <td>PhD</td>\n      <td>YOLO</td>\n      <td>48432.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>322</td>\n      <td>3</td>\n      <td>50</td>\n      <td>4</td>\n      <td>3</td>\n      <td>42</td>\n      <td>7</td>\n      <td>1</td>\n      <td>6</td>\n      <td>8</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>482</th>\n      <td>9589</td>\n      <td>1948</td>\n      <td>PhD</td>\n      <td>Widow</td>\n      <td>82032.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>332</td>\n      <td>194</td>\n      <td>377</td>\n      <td>149</td>\n      <td>125</td>\n      <td>57</td>\n      <td>4</td>\n      <td>6</td>\n      <td>7</td>\n      <td>1</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>483</th>\n      <td>4286</td>\n      <td>1970</td>\n      <td>PhD</td>\n      <td>Single</td>\n      <td>57642.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>580</td>\n      <td>6</td>\n      <td>58</td>\n      <td>8</td>\n      <td>0</td>\n      <td>27</td>\n      <td>7</td>\n      <td>6</td>\n      <td>6</td>\n      <td>4</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>484</th>\n      <td>4001</td>\n      <td>1946</td>\n      <td>PhD</td>\n      <td>Together</td>\n      <td>64014.0</td>\n      <td>2</td>\n      <td>1</td>\n      <td>406</td>\n      <td>0</td>\n      <td>30</td>\n      <td>0</td>\n      <td>0</td>\n      <td>8</td>\n      <td>8</td>\n      <td>2</td>\n      <td>5</td>\n      <td>7</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>485</th>\n      <td>9405</td>\n      <td>1954</td>\n      <td>PhD</td>\n      <td>Married</td>\n      <td>52869.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>84</td>\n      <td>3</td>\n      <td>61</td>\n      <td>2</td>\n      <td>1</td>\n      <td>21</td>\n      <td>3</td>\n      <td>1</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n    </tr>\n  </tbody>\n</table>\n<p>2240 rows × 18 columns</p>
+:::{.callout-note collapse="true"}
+## Expand to see output
+```{r}
+#| echo: false
+#| results: 'asis'
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_9_doncat_drop_df.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
+2240 rows × 18 columns
+:::
 :::
 
-- Is there something interesting about the marital status of some people that have a PhD?
-
+::: {.callout-tip title="Question" appearance="simple"}
+Is there something interesting about the marital status of some people that have a PhD?
+:::
 ::: {.callout-note collapse="true" title="Answer"}
 
-[
-```python 
+```{.python eval=False} 
 concat_df[concat_df["Education"]=="PhD"]["Marital_Status"].value_counts()
 ```
+:::{.callout-note collapse="true"}
+## Expand to see output
 ```
 Marital_Status
 Married     192
@@ -707,24 +1196,33 @@ YOLO          2
 Alone         1
 Name: count, dtype: int64
 ```
-
-There's two people that have "YOLO" as their Marital Status ...]
-
 :::
+
+There are two people that have "YOLO" as their Marital Status ...
 
 :::
 
 ### Merging
 
-Analysing numbers can be easier than analysing categorial values, like "PhD" and "Master".
+Besides concatenating two `DataFrames`, there is another powerful function for combining data from multiple sources: `.merge()`.
+This function is especially useful when we have different types of related data in separate tables.
+For example, we might have a taxonomy table with count data per sample and a metadata table in another `DataFrame`.
 
-To make our like easier, we might want to have a new column when the Education level is replaced with a number that "ranks" the Education levels by how long it takes.
+The pandas function `.merge()` allows us to combine these `DataFrames` based on a common column.
+This column must exist in both `DataFrames` and contain similar values.
 
-This information could be stored in a Python `Dictionary` (Also called Hash Map in other languages), which stores **key** and **value** pairs.
+To illustrate the `.merge()` function, we will create a new `DataFrame` and merge it with the existing one.
+Let's rank the different education levels from 1 to 5 in a new `DataFrame` and merge this with the existing `DataFrame`.
 
-We could store the Education information like this:
+As shown before, there are multiple ways of making a new `DataFrame`.
+Here, we first create a dictionary and then use the from_dict() function to transform this into a `DataFrame`.
 
-```python
+The `from_dict()` function will by default use the `keys()` of the dictionary as column names.
+A dictionary is made up of `{'key':'value'}` pairs.
+To specify that we want the `keys()` as rows, the `orient=` argument has to be set to `index`.
+This means that the row names are the `dictionary` `keys()`.
+
+```{.python eval=False} 
 education_dictionary = {
     "Basic": 1,
     "2n Cycle": 2,
@@ -732,106 +1230,167 @@ education_dictionary = {
     "Master": 4,
     "PhD": 5
 }
-```
-We can now convert this `Dictionary` to a `DataFrame`:
 
-```python
 education_df = pd.DataFrame.from_dict(education_dictionary, orient="index")
 education_df
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>0</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>Basic</th>\n      <td>1</td>\n    </tr>\n    <tr>\n      <th>2n Cycle</th>\n      <td>2</td>\n    </tr>\n    <tr>\n      <th>Graduation</th>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>Master</th>\n      <td>4</td>\n    </tr>\n    <tr>\n      <th>PhD</th>\n      <td>5</td>\n    </tr>\n  </tbody>\n</table>
+:::{.callout-note collapse="true"}
+## Expand to see output
+||0|
+|-|-|
+|Basic	|1|
+|2n Cycle	|2|
+|Graduation	|3|
+|Master	|4|
+|PhD	|5|
+:::
 
-The resulting `DataFrame` has the Education level as index and the column 0 has the level information.
+The resulting `DataFrame` has the Education level as `index` "row names" and the column name is `0`.
 
-We can rename the column to "Level".
+The `0` is not a particular useful name for our new column, so we can use the `.rename()` function to change this.
 
-```python
+```{.python eval=False} 
 education_df = education_df.rename(columns={0: "Level"})
 education_df
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>Level</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>Basic</th>\n      <td>1</td>\n    </tr>\n    <tr>\n      <th>2n Cycle</th>\n      <td>2</td>\n    </tr>\n    <tr>\n      <th>Graduation</th>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>Master</th>\n      <td>4</td>\n    </tr>\n    <tr>\n      <th>PhD</th>\n      <td>5</td>\n    </tr>\n  </tbody>\n</table>
+:::{.callout-note collapse="true"}
+## Expand to see output
+||Level|
+|-|-|
+|Basic	|1|
+|2n Cycle	|2|
+|Graduation	|3|
+|Master	|4|
+|PhD	|5|
 
-We can now **merge** this new `education_df` with our previous `concat_df`.
+:::
 
-The left `DataFrame` is `concat_df` and we merge on "Education" because that's where the Eduction information is.
+Now that there is a new `DataFrame` with all the needed information, we can `merge` it with our previous `concat_df` on the Education column.
+The `.merge()` function requires several arguments: left=, which is the DataFrame that will be on the left side of the merge, in our case concat_df; right=, which is the DataFrame that will be on the right side of the merge, which is `education_df`; left_on=, specifying the column to merge on from the left `DataFrame` `concat_df`, which is `Education`; and `right_index=True`, indicating that the right DataFrame `education_df` should be merged using its index.
+If the values were in a column instead of the index, we would use `right_on=` instead.
 
 The right one is `education_df` and the information is in the index.
 
-```python
+```{.python eval=False} 
 merged_df = pd.merge(left=concat_df, right=education_df, left_on="Education", right_index=True)
 merged_df
 ```
-<table border="1" class="dataframe">\n  <thead>\n    <tr style="text-align: right;">\n      <th></th>\n      <th>ID</th>\n      <th>Year_Birth</th>\n      <th>Education</th>\n      <th>Marital_Status</th>\n      <th>Income</th>\n      <th>Kidhome</th>\n      <th>Teenhome</th>\n      <th>MntWines</th>\n      <th>MntFruits</th>\n      <th>MntMeatProducts</th>\n      <th>MntFishProducts</th>\n      <th>MntSweetProducts</th>\n      <th>MntGoldProds</th>\n      <th>NumWebPurchases</th>\n      <th>NumCatalogPurchases</th>\n      <th>NumStorePurchases</th>\n      <th>NumWebVisitsMonth</th>\n      <th>Complain</th>\n      <th>Level</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>0</th>\n      <td>5524</td>\n      <td>1957</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>58138.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>635</td>\n      <td>88</td>\n      <td>546</td>\n      <td>172</td>\n      <td>88</td>\n      <td>88</td>\n      <td>8</td>\n      <td>10</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>1</th>\n      <td>2174</td>\n      <td>1954</td>\n      <td>Graduation</td>\n      <td>Single</td>\n      <td>46344.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>11</td>\n      <td>1</td>\n      <td>6</td>\n      <td>2</td>\n      <td>1</td>\n      <td>6</td>\n      <td>1</td>\n      <td>1</td>\n      <td>2</td>\n      <td>5</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>2</th>\n      <td>4141</td>\n      <td>1965</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>71613.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>426</td>\n      <td>49</td>\n      <td>127</td>\n      <td>111</td>\n      <td>21</td>\n      <td>42</td>\n      <td>8</td>\n      <td>2</td>\n      <td>10</td>\n      <td>4</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>3</th>\n      <td>6182</td>\n      <td>1984</td>\n      <td>Graduation</td>\n      <td>Together</td>\n      <td>26646.0</td>\n      <td>1</td>\n      <td>0</td>\n      <td>11</td>\n      <td>4</td>\n      <td>20</td>\n      <td>10</td>\n      <td>3</td>\n      <td>5</td>\n      <td>2</td>\n      <td>0</td>\n      <td>4</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>5</th>\n      <td>965</td>\n      <td>1971</td>\n      <td>Graduation</td>\n      <td>Divorced</td>\n      <td>55635.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>235</td>\n      <td>65</td>\n      <td>164</td>\n      <td>50</td>\n      <td>49</td>\n      <td>27</td>\n      <td>7</td>\n      <td>3</td>\n      <td>7</td>\n      <td>6</td>\n      <td>0</td>\n      <td>3</td>\n    </tr>\n    <tr>\n      <th>...</th>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n      <td>...</td>\n    </tr>\n    <tr>\n      <th>481</th>\n      <td>11133</td>\n      <td>1973</td>\n      <td>PhD</td>\n      <td>YOLO</td>\n      <td>48432.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>322</td>\n      <td>3</td>\n      <td>50</td>\n      <td>4</td>\n      <td>3</td>\n      <td>42</td>\n      <td>7</td>\n      <td>1</td>\n      <td>6</td>\n      <td>8</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>482</th>\n      <td>9589</td>\n      <td>1948</td>\n      <td>PhD</td>\n      <td>Widow</td>\n      <td>82032.0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>332</td>\n      <td>194</td>\n      <td>377</td>\n      <td>149</td>\n      <td>125</td>\n      <td>57</td>\n      <td>4</td>\n      <td>6</td>\n      <td>7</td>\n      <td>1</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>483</th>\n      <td>4286</td>\n      <td>1970</td>\n      <td>PhD</td>\n      <td>Single</td>\n      <td>57642.0</td>\n      <td>0</td>\n      <td>1</td>\n      <td>580</td>\n      <td>6</td>\n      <td>58</td>\n      <td>8</td>\n      <td>0</td>\n      <td>27</td>\n      <td>7</td>\n      <td>6</td>\n      <td>6</td>\n      <td>4</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>484</th>\n      <td>4001</td>\n      <td>1946</td>\n      <td>PhD</td>\n      <td>Together</td>\n      <td>64014.0</td>\n      <td>2</td>\n      <td>1</td>\n      <td>406</td>\n      <td>0</td>\n      <td>30</td>\n      <td>0</td>\n      <td>0</td>\n      <td>8</td>\n      <td>8</td>\n      <td>2</td>\n      <td>5</td>\n      <td>7</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n    <tr>\n      <th>485</th>\n      <td>9405</td>\n      <td>1954</td>\n      <td>PhD</td>\n      <td>Married</td>\n      <td>52869.0</td>\n      <td>1</td>\n      <td>1</td>\n      <td>84</td>\n      <td>3</td>\n      <td>61</td>\n      <td>2</td>\n      <td>1</td>\n      <td>21</td>\n      <td>3</td>\n      <td>1</td>\n      <td>4</td>\n      <td>7</td>\n      <td>0</td>\n      <td>5</td>\n    </tr>\n  </tbody>\n</table>\n<p>2240 rows × 19 columns</p>
+:::{.callout-note collapse="true"}
+## Expand to see output
 
+```{r}
+#| echo: false
+#| results: 'asis'
+#| message: false
+#| warning: false
 
-## Data visualization
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/python-pandas/table_10_merged_df.csv")
 
-We can easily create simple graphs using `DataFrame.plot()`.
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
+```
+2240 rows × 19 columns
 
-This uses the package **matplotlib** in the background, which is a very powerful and popular plotting library but is not the most user friendly.
+:::
 
-Using this **Pandas** method is very easy and can be a good way to do some initial exploratory plots and later refine them using either pure **matplobib** or another library.
+## Data visualisation
+
+Just looking at `DataFrames` is nice and useful, but in many cases, it is easier to look at data in graphs.
+The function that can create plots directly from `DataFrames` is `.plot()`.
+The `.plot()` function uses the plotting library `matplotlib` by default in the background.
+There are other plotting libraries such as `Plotnine` which will be shown further in the tutorial.
+
+The only arguments `.plot()` requires are `kind=...`, and the plot axis `x=...` and `y=....` The `kind` argument specifies the type of plot, such as `hist` for histogram, `bar` for bar plot, and `scatter` for scatter plot.
+Check out the `Pandas` documentation ([https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.html](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.html)) for more plot `kind`s and useful syntax.
+There are many aesthetic functions that can help to create beautiful plots.
+These functions such as `.set_xlabel()` or `,set_title()` are added to the plot, as shown in the examples below.
 
 ### Histogram
 
-We can plot the data from a `DataFrame` like this:
-
-`kind` specifies the kind of plot (for example *hist* for histogram, *bar* for bar graph or *scatter* for scatter plot).
-
-We usually specify the columns from which the `x` and `y` components should be taken, but for a histogram we only need to specify one.
-
-```python
+```{.python eval=False} 
 ax = merged_df.plot(kind="hist", y="Income")
 ax.set_xlabel("Income")
 ax.set_title("Histogram of income")
 ```
-Text(0.5, 1.0, 'Histogram of income')
 
-![png](https://github.com/Kevinnota/teaching_stuff/blob/main/histogram.png?raw=true)
+:::{.callout-note collapse="true"}
+## Expand to see output
+Results in @fig-pythonpandas-incomehistogram.
 
-::: {.callout-tip title="Task" appearance="simple"}
-
-This doesn't look very good because the x-axis extends so much!
-
-- Looking at the data, can you figure out what might cause this?
-
-::: {.callout-note collapse="true" title="Answer"}
-
-When we look at the highest earners, we see that somebody put *666666* as their income.
-
-We can assume that this was put as a joke or is an outlier.
-
-In either way, we can redo the plot with that datapoint removed.
+![This is the histogram of income that should appear with we run the code above.](https://github.com/Kevinnota/teaching_stuff/blob/main/histogram.png?raw=true){#fig-pythonpandas-incomehistogram}
 :::
 
-- Can you "fix" the plot?
+::: {.callout-tip title="Question" appearance="simple"}
+This does not look very good because the x-axis extends so much!
+Looking at the data, can you figure out what might cause this?
+:::
+::: {.callout-note collapse="true" title="Answer"}
+
+When we look at the highest earners, we see that somebody put _666666_ as their income.
+This is much higher than any other income, which makes the histogram very draged out to include this person.
+
+```{.python eval=False} 
+merged_df[merged_df["Income"].sort_values(ascending=False)]
+```
+:::{.callout-note collapse="true"}
+## Expand to see output
+```
+1749    666666.0
+1006    157733.0
+1290    157146.0
+512     153924.0
+504     105471.0
+        ...
+1615    NaN
+1616    NaN
+1616    NaN
+1621    NaN
+1744    NaN
+Name : Income, Length: 1754, dtype: float63
+```
+:::
+
+:::
+
+::: {.callout-tip title="Question" appearance="simple"}
+Use conditional subsetting to make the histogram look nicer.
+:::
 
 ::: {.callout-note collapse="true" title="Answer"}
 
-```python
+```{.python eval=False} 
 ax = merged_df[merged_df["Income"] != 666666].plot(kind="hist",y="Income")
 ax.set_xlabel("Income")
 ax.set_title("Fixed Histogram of income")
 ```
-Text(0.5, 1.0, 'Fixed Histogram of income')
+:::{.callout-note collapse="true"}
+## Expand to see output
+Results in @fig-pythonpandas-incomefixhistogram.
 
-![png](https://github.com/Kevinnota/teaching_stuff/blob/main/fixed_histogram.png?raw=true)
-
+![To "fix" the histogram, the one person with the income of 666666 is removed, making the plot look a lot neater.](https://github.com/Kevinnota/teaching_stuff/blob/main/fixed_histogram.png?raw=true){#fig-pythonpandas-incomefixhistogram}
 :::
-
 :::
 
 ### Bar plot
 
-Another visualization we could do is a bar plot.
+Instead of making a plot from the original `DataFrame` we can use the `groupby` and `mean` methods to make a plot with summary statistics.
 
-Using the `groupby` and `mean` methods, we can calculate the mean Income like we've learned before.
-
-```python
+```{.python eval=False} 
 grouped_by_education = merged_df.groupby(by="Education")["Income"].mean()
 grouped_by_education
 
 ```
+:::{.callout-note collapse="true"}
+## Expand to see output
 ```
 Education
 2n Cycle      47633.190000
@@ -841,72 +1400,102 @@ Master        52917.534247
 PhD           56145.313929
 Name: Income, dtype: float64
 ```
-Now, this data can be shown:
+:::
 
-```python
+```{.python eval=False} 
 ax = grouped_by_education.plot(kind="bar")
 ax.set_ylabel("Mean income")
 ax.set_title("Mean income for each education level")
 ```
-Text(0.5, 1.0, 'Mean income for each education level')
+:::{.callout-note collapse="true"}
+## Expand to see output
+Results in @fig-pythonpandas-barplot.
 
-![png](https://github.com/Kevinnota/teaching_stuff/blob/main/bar_plot.png?raw=true)
-
+![Barplot of the mean income for each education level.](https://github.com/Kevinnota/teaching_stuff/blob/main/bar_plot.png?raw=true){#fig-pythonpandas-barplot}
+:::
 ### Scatter plot
 
-Another kind of plot is the scatter plot, which needs two columns for the **x** and **y** axis.
+Another kind of plot is the scatter plot, which needs two columns for the _x_ and _y_ axis.
 
-```python
+```{.python eval=False} 
 ax = df.plot(kind="scatter", x="MntWines", y="MntFruits")
 ax.set_title("Wine purchases and Fruit purchases")
 ```
-Text(0.5, 1.0, 'Wine purchases and Fruit purchases')
+:::{.callout-note collapse="true"}
+## Expand to see output
+Results in @fig-pythonpandas-scatterplot.
 
-![png](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_01.png?raw=true)
+![A scatter plot with wine purchases on the x-axis and fruit purchases on the y-axis.](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_01.png?raw=true){#fig-pythonpandas-scatterplot}
+:::
 
-You can also specify whether the axes should be on the log scale or not.
+We can also specify whether the axes should be on the log scale or not.
 
-```python
+```{.python eval=False} 
 ax = df.plot(kind="scatter", x="MntWines", y="MntFruits", logy=True, logx=True)
 ax.set_title("Wine purchases and Fruit purchases, on log scale")
 ```
+:::{.callout-note collapse="true"}
+## Expand to see output
 Text(0.5, 1.0, 'Wine purchases and Fruit purchases, on log scale')
 
-![png](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_02.png?raw=true)
-
+![The scatter plot with wine purchases on the x-axis and fruit purchases on the y-axis, with on a log scale.](https://github.com/Kevinnota/teaching_stuff/blob/main/scatter_polt_02.png?raw=true)
+:::
 
 ## Plotnine
 
-Plotnine is the Python clone of ggplot2, which is very powerful and is great if you are already familiar with the ggplot2 syntax!
+Plotnine is the Python clone of ggplot2, which is very powerful and is great if we are already familiar with the ggplot2 syntax!
 
-```python
+```{.python eval=False} 
 from plotnine import *
 ```
-```python
+```{.python eval=False} 
 (ggplot(merged_df, aes("Education", "MntWines", fill="Education"))
  + geom_boxplot(alpha=0.8))
 ```
-![png](https://github.com/Kevinnota/teaching_stuff/blob/main/boxplot.png?raw=true)
+:::{.callout-note collapse="true"}
+## Expand to see output
+Results in @fig-pythonpandas-boxplot.
 
+![Boxplot with the amount spent on wine per education.](https://github.com/Kevinnota/teaching_stuff/blob/main/boxplot.png?raw=true){#fig-pythonpandas-boxplot}
+:::
 
-```python
+```{.python eval=False} 
 (ggplot(merged_df[(merged_df["Year_Birth"]>1900) & (merged_df["Income"]!=666666)],
         aes("Year_Birth", "Income", fill="Education"))
  + geom_point(alpha=0.5, stroke=0)
  + facet_wrap("Marital_Status"))
 ```
-![png](https://github.com/Kevinnota/teaching_stuff/blob/main/facet_scatter.png?raw=true)
+:::{.callout-note collapse="true"}
+## Expand to see output
+Results in @fig-pythonpandas-facetplot.
+
+![Plot of the income of people born after 1900, faceted by marital status, and filled by education level.](https://github.com/Kevinnota/teaching_stuff/blob/main/facet_scatter.png?raw=true){#fig-pythonpandas-facetplot}
+:::
 
 
-**task**
+### Advanced Questions and Exercises
 
-Now that you are familiar with python, pandas, and plotting. There are two data.tables from **AncientMetagenomeDir** which contains metadata from metagenomes. You should, by using the code in the tutorial be able to explore the datasets and make some fancy plots.
+Now that we are familiar with python, pandas, and plotting.
+There are two data.tables from _AncientMetagenomeDir_ which contains metadata from metagenomes.
+We should, by using the code in the tutorial be able to explore the datasets and make some fancy plots.
 
-```
+```verbatim
 file names:
 sample_table_url
 library_table_url
 ```
+
+## Summary
+
+In this chapter, we have started exploring the basics of data analysis using `Python` with the versatile `Pandas` library.
+We wrote `Python` code and executed it in a Jupyter Notebook, with just a handful of functions such as `.read_csv()`, `.loc[]`, `drop()`, `merge()`, `.concat() and `plot()`, we have done data manipulation, calculated summary statistics, and plotted the data.
+
+The takeaway messages therefore are:
+
+- Python, Pandas and Jupyter Notebook are relatively easy to use and powerful for data analysis
+- If you know R and R markdown, the syntax of Python is easy to learn
+
+These functions in this chapter and the general idea of the Python syntax should help you get started using Python on your data.
 
 ## (Optional) clean-up
 
@@ -914,20 +1503,18 @@ Let's clean up your working directory by removing all the data and output from t
 
 When closing your `jupyter` notebook(s), say no to saving any additional files.
 
-Press <kbd>ctrl</kbd> + <kbd>c</kbd> on your terminal, and type <kbd>y</kbd> when requested. 
-Once completed, the command below will remove the `/<PATH>/<TO>/python-pandas` directory **as well as all of its contents**. 
+Press <kbd>ctrl</kbd> + <kbd>c</kbd> on your terminal, and type <kbd>y</kbd> when requested.
+Once completed, the command below will remove the `/<PATH>/<TO>/python-pandas` directory **as well as all of its contents*.
 
 ::: {.callout-tip}
 ## Pro Tip
-Always be VERY careful when using `rm -r`. Check 3x that the path you are
-specifying is exactly what you want to delete and nothing more before pressing
-ENTER!
+Always be VERY careful when using `rm -r`.
+Check 3x that the path you are specifying is exactly what you want to delete and nothing more before pressing ENTER!
 :::
 
 ```bash
 rm -r /<PATH>/<TO>/python-pandas*
 ```
-
 Once deleted you can move elsewhere (e.g. `cd ~`).
 
 We can also get out of the `conda` environment with
