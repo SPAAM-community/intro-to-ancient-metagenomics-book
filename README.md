@@ -55,7 +55,6 @@ If adding a new section chapter:
 7. Render the book the extensions' `Quarto: Render Book` command, or run the following
 
    ```bash
-   #| eval: false
    quarto preview intro-to-ancient-metagenomics-book --render all --no-browser --no-watch-inputs
    ```
 

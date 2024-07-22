@@ -104,14 +104,13 @@ See the [Chapter Content](#chapter-content) for the reserved formatting. Note: I
 Single backticks for inline code should only be used for single words such as tool names, e.g. `samtools`, file extensions such as `.txt`, or single paths `<path>/<to>/<here>`.
 
 Any form of commands or code should be formatted as code in a syntax-named _triple_ backtick block.
-Execution should be turned off by default (with `eval: false` in a code block header block), unless has a very low computational overhead and can be rendered on the fly.
+Execution should be turned off by default for those languages that may auto-execute (i..e, R, with `eval=FALSE` in a code block header block), unless has a very low computational overhead and can be rendered on the fly.
 Language should be specified.
 
 For example, this is a bash code block that has a whole command.
 
-```{verbatim}
+```verbatim
     ```bash
-    #| eval: false
     echo "SPAAM rules!"
     ```
 ```
@@ -123,7 +122,7 @@ echo "SPAAM rules!"
 ```
 
 If you wish to display _large_ output from a code block that _does_ get executed, you should turn off the command execution printing in the code block itself, and use a collapsible callout block with a 'Expand to see output' title immediately after the code block itself that contains.
-The content of the output should also be in a triple backtick block, with the the `default` syntax specified.
+The content of the output should also be in a triple backtick block, with the the `verbatim` syntax specified.
 
 ```bash
 echo "SPAAM rules!"
@@ -138,18 +137,22 @@ SPAAM rules!
 
 This was generated with
 
-```markdown
-    ```bash
-    echo "SPAAM rules!"
-    ```
-    ::: {.callout-note collapse="true"}
-    ## Expand see output
+Another example, with setting `eval=FALSE` for R.
 
-    ```{.default, eval = false}
-    SPAAM rules!
-    ```
-    :::
+`````verbatim
+```{.r eval=FALSE}
+print('SPAAM Rules!')
 ```
+`````
+
+::: {.callout-note collapse="true"}
+## Expand see output
+`````verbatim
+```{.r eval=FALSE}
+[1] "SPAAM Rules!"
+```
+`````
+:::
 
 Additional guidance is as follows:
 
