@@ -550,8 +550,8 @@ For every hit that the reads match inside this database, then sees the genome of
 Rather than the very computationally heavy HOPS pipeline [@Hubler2019-qw], that requires extremely large computational nodes with large RAM (>1 TB) to load MALT databases into memory, aMeta does this via a two step approach.
 Firstly it uses `KrakenUniq` [a k-mer based and thus memory efficient method, @Breitwieser2018-xg] to do a screening of sequencing reads against a broad generalised microbial database.
 Once all the possible taxa have been detected, aMeta will then make a new database of just the genomes of the taxa that were reported from `KrakenUniq` (i.e.
-a specific database) but using `MALT`.
-`MALT` on thus much reduced database is then used to perform computationally much heavier alignment against the reference genomes and LCA taxonomic reassignment.
+a project-specific database) but using `MALT.
+Then aMeta will use `MALT` on thus much reduced database to perform computationally much heavier alignment against the reference genomes and LCA taxonomic reassignment.
 The output from `MALT` is then sent to the `MaltExtract` program of the HOPS pipeline for ancient DNA authentication statistics.
 
 ### Running aMeta
@@ -709,7 +709,7 @@ Once this config file is generated, we can start the run.
 
 
 :::{.callout-note}
-As this is only a dummy run (due to the large-ish computational resources required for KrakenUniq), we re-use some of the resource files here.
+As this is only a dummy run (due to the large-ish computational resources required for `MALT`), we re-use some of the resource files here.
 While this will produce nonsense output, it is used here to demonstrate how we would execute the pipeline.
 :::
 
@@ -767,7 +767,7 @@ Numbers in the coloured cells also provide the direct score number.](assets/imag
 The heatmap demonstrates microbial species (in rows) authenticated for each sample (in columns) ([@fig-ancientmetagenomicpipelines-ametaoutput]).
 
 The colors and the numbers in the heatmap represent authentications scores, i.e.
-numeric quantification of seven quality metrics that provide information about microbial presence and ancient status.
+numeric quantification of eight quality metrics that provide information about microbial presence and ancient status.
 
 The authentication scores can vary from 0 to 10, the higher is the score the more likely that a microbe is present in a sample and is ancient.
 
@@ -790,6 +790,7 @@ To visually examine the seven quality metrics
 - Read length distribution
 - PMD scores distribution
 - Number of assigned reads (depth of coverage)
+- average nucleotide identity (ANI)
 
 Corresponding to the numbers and colors of the heatmap, one can find them in `results/AUTHENTICATION/sampleID/taxID/authentic_<Sample>_<sampleID>.trimmed.rma6_<TaxID>_<taxID>.pdf` for each sample sampleID and each authenticated microbe taxID.
 An example of such quality metrics is shown below in @fig-ancientmetagenomicpipelines-persampleplot.
