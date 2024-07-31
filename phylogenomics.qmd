@@ -1,6 +1,7 @@
 ---
 title: Phylogenomics
 author: Arthur Kocher and Aida Andrades Valtueña
+bibliography: assets/references/phylogenomics.bib
 ---
 
 ::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
@@ -33,7 +34,7 @@ Please see the relevant chapter section in [Before you start](/before-you-start.
 
 
 Phylogenetics is the study of evolutionary relationships between entities such as species, genes or individuals (but also non-biological entities such as languages), through the reconstruction of phylogenetic trees.
-Phylogenetic trees are composed of __branches__ (or edges) representing continuous lines of descent (or lineages), __nodes__  representing the split of an ancestral lineage into descending lineages, and tips (or leaves) representing the sampled entities.
+Phylogenetic trees are composed of __branches__ (or edges) representing continuous lines of descent (or lineages), __nodes__  representing the split of an ancestral lineage into descending lineages, and tips (or leaves) representing the sampled entities [@baum2008reading].
 
 ![Main elements of a phylogenetic tree.](assets/images/chapters/phylogenomics/basic_tree_definitions.png){#fig-phylogenomics-basic_tree_definitions}
 
@@ -120,7 +121,7 @@ Probabilistic approaches are, by far, the most popular phylogenetic approaches n
 
 ![Phylogenetic inference methods.](assets/images/chapters/phylogenomics/inference_methods.png){#fig-phylogenomics-inference_methods}
 
-An important component of phylogenetic models is the genetic substitution model.
+An important component of phylogenetic models is the genetic substitution model [@yangMolecularEvolutionStatistical2014].
 Substitution models are used in distance-based and probabilistic phylogenetic approaches.
 In essence, these models allow estimating genetic distances between sequences accounting for cases in which multiple substitutions might have occurred at the same sites.
 Different substitution models exist allowing for more or less complexity, from the Jukes-Cantor (JC69) model in which all types of substitutions are assumed to occur at the same rate to General Time-Reversible (GTR) model (which is the GTR model) in which each type of substitution occurs at a different rate.
@@ -140,7 +141,7 @@ In this practical session, we will work with an alignment produced as you learne
 - in this practical, we will investigate the phylogenetic position of four prehistorical _Y. pestis_ strains that we have recently discovered: KZL002, GZL002, CHC004 and VLI092
 :::
 
-We start by exploring the alignment in _MEGA_.
+We start by exploring the alignment in _MEGA_ [@tamuraMEGA11MolecularEvolutionary2021].
 Open the _MEGA_ desktop application by typing ```mega &``` in the terminal.
 
 ::: {.callout-tip}
@@ -304,7 +305,7 @@ In a phylogenetic probabilistic model, the data is the sequence alignment and th
 - the parameters of the chosen substitution model (substitution rates and base frequencies)
 - the phylogenetic tree
 
-![Phylogenetic probabilistic model.](assets/images/chapters/phylogenomics/20.png){#fig-phylogenomics-20}
+![Phylogenetic probabilistic model (see @cornuaultRoadMapPhylogenetic2022 for more details).](assets/images/chapters/phylogenomics/20.png){#fig-phylogenomics-20}
 :::
 
 ### Maximum likelihood estimation and bootstrapping
@@ -331,7 +332,7 @@ Bootstrapping can be used to measure uncertainty with any type of inference meth
 
 **Let's make our own ML tree!**
 
-Here is a command to estimate an ML phylogenetic tree together with bootstraps using _RAxML_ (you may find the list of parameters in the _RAxML_ manual):
+Here is a command to estimate an ML phylogenetic tree together with bootstraps using _RAxML_ ([@stamatakisRAxMLVersionTool2014]; you may find the list of parameters in the _RAxML_ manual):
 
 ```bash
 raxmlHPC-PTHREADS -m GTRGAMMA -T 3 -f a -x 12345 -p 12345 -N autoMRE -s snpAlignment_session5.fasta -n full_dataset.tre
@@ -392,7 +393,7 @@ A great advantage of ancient pathogen genomes is that they provide calibration p
 This might not be possible to do with modern data alone.
 :::
 
-We will estimate a time-tree from our alignment using Bayesian inference as implemented in the _BEAST2_ software.
+We will estimate a time-tree from our alignment using Bayesian inference as implemented in the _BEAST2_ software [@bouckaertBEASTSoftwarePlatform2014; @drummondBayesianEvolutionaryAnalysis2015].
 Bayesian inference is based on a probability distribution that is different from the likelihood: the posterior probability.
 The posterior probability is the probability of the parameters given the data.
 It is easier to interpret than the likelihood because it directly contains all the information about the parameters: point estimates such as the median or the mean can be directly estimated from it, but also percentile intervals which can be used to measure uncertainty.
@@ -485,7 +486,7 @@ If the MCMC has run long enough, we can use the sampled parameters to approximat
 Therefore, we have to check first that the MCMC chain has run long enough.
 :::
 
-We can assess the MCMC sampling using the program _Tracer_.
+We can assess the MCMC sampling using the program _Tracer_ [@rambautPosteriorSummarizationBayesian2018].
 _Tracer_ can read BEAST log files an generate statistics and plots for each of the sampled parameters.
 Most importantly, _Tracer_ provides:
 
@@ -568,7 +569,7 @@ In general, this is good practice since not accounting for conserved positions i
 Since we are working in a Bayesian framework, we do not obtain a single phylogenetic tree as with Maximum likelihood, but a large set of trees which should be representative of the posterior distribution.
 In contrast with mono-dimensional parameters, a tree distribution cannot be easily summarized with mean or median estimates.
 Instead, we need to use specific tree-summarizing techniques.
-One of the most popular is the maximum clade credibility (MCC) tree, which works as follows:
+One of the most popular is the maximum clade credibility (MCC) tree [@heledLookingTreesForest2013], which works as follows:
 - 1. For any node in any of the sampled trees, compute a **posterior support**: the proportion of trees in the sample which contain the corresponding clade
 - 2. Select the MCC tree: this is the tree in which the product of node posterior supports is the highest
 - 3. Calculate node/branch statistics on the MCC tree: typically, the mean/median estimates and HPD interval of node ages are calculated from the full tree sample and annotated on the MCC tree
@@ -613,7 +614,7 @@ What is your estimate for the age of the most recent common ancestor of all Y. p
 ### Bonus: Temporal signal assessment
 
 It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree (i.e. we should have done this before the actual _BEAST2_ analysis).
-A classic way to assess the temporal signal of a dataset is the root-to-tip regression.
+A classic way to assess the temporal signal of a dataset is the root-to-tip regression [@rambautExploringTemporalStructure2016].
 The rationale of the root-to-tip regression is to verify that the older a sequence is, the closer it should be to the root in a (rooted) substitution tree because there was less time for substitution to accumulate.
 In other words, there should be a correlation between sample age and distance to the root, which we can assess using a linear regression (root-to-tip regression).
 This can be done using the program _TempEst_:
