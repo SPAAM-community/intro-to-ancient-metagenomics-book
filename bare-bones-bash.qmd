@@ -23,7 +23,7 @@ conda activate bare-bones-bash
 
 ## Preamble
 
-This chapter is a condensed version of the both 'Basic' and 'Boosted' Bare Bones Bash courses that can be found in the [Bare Bones Bash website](https://barebonesbash.github.io/#/).
+This chapter is a condensed version of both 'Basic' and 'Boosted' Bare Bones Bash courses that can be found in the [Bare Bones Bash website](https://barebonesbash.github.io/#/).
 The material is displayed here under a [CC-BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/) license.
 
 ![Logo of BareBonesBash, a computer monitor with a command prompt dollar symbol, BBB and a bone on the screen.](assets/images/chapters/bare-bones-bash/BareBonesBash_Icon.png){#fig-barebonesbash-logo width=15% fig-align="center"}
@@ -207,6 +207,14 @@ cd $HOME
 You'll learn about this commands in a bit!
 :::
 
+::: {.callout-tip title="Question" appearance="simple"}
+Given the following command prompt: bare@bones_bash:~$, what does "bare" mean?
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+That's right, "bare" is the username that is log into the machine. 
+:::
+
 ## Absolute vs Relative paths
 
 Filepaths (a.k.a. "paths"), come in two flavours.
@@ -273,6 +281,14 @@ They are easy to follow, but only work when we happen to start at the position w
 Examples of relative paths:  
 `./<PATH>/<TO>/my_file.txt`  
 `../Str_18_Oktober/Deutscher_Platz/MPI-EVA`
+:::
+
+::: {.callout-tip title="Question" appearance="simple"}
+What would be the relative path to the file "bones.txt" if you are in the folder "test" given the following absolute path "/home/sweet/home/lets/test/your/knowledge/to/the/bones.txt"
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+The relative path from the "test" folder to the "bones.txt" is: "./your/knowledge/to/the/bones.txt"
 :::
 
 ## Basic commands
@@ -356,6 +372,17 @@ wc -l Boosted-BBB-meta.tsv
 15 Boosted-BBB-meta.tsv
 ```
 
+::: {.callout-tip title="Question" appearance="simple"}
+Which command can you use to print the last 6 lines of the file "Boosted-BBB-meta.tsv"
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+For that you will need to use to use tail and modify the parameter given to the *-n* flag like: 
+```bash
+tail -n 6 Boosted-BBB-meta.tsv
+```
+:::
+
 ## Datastreams, piping, and redirects
 
 Each of the commands we learned above is a small program with a very
@@ -407,7 +434,7 @@ fail.
 
 Example:
 ```bash
-head -n 10 Boosted-BBB-meta.tsv | tail -n1
+head -n 10 Boosted-BBB-meta.tsv | tail -n 1
 ```
 
 ```
@@ -418,6 +445,17 @@ The above command will only show the 10th line of `Boosted-BBB-meta.tsv`.
 The way it works is that `head` will take the first 10 lines of the file.
 These
 lines are then passed on to `tail` which will keep only the last of those lines.
+
+::: {.callout-tip title="Question" appearance="simple"}
+How can we combine tail and head to print the 10th line starting from the end of the file "Boosted-BBB-meta.tsv"?
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+You will use the following command employing a | (pipe):
+```bash
+tail -n 10 Boosted-BBB-meta.tsv | head -n 1
+```
+:::
 
 ### Redirects
 
@@ -510,7 +548,7 @@ accidentally overwriting any environment variables.
 
 But as mentioned, we can store in a variable anything we want, so let's see a few examples:
 
-First let's try to store a number:
+First, let's try to store a number:
 
 ```bash
 GreekFood=4            #Here, 'GreekFood' is a number.
@@ -604,6 +642,26 @@ As mentioned above, when single (`'`) quotes are used the computer just prints w
 
  In the `echo` with the double (`"`) quotes we are telling the computer to extract the value from the variable `$Arr` and that is why we see the store value (`Banana`) in the printed output in the terminal.
 
+::: {.callout-tip title="Question" appearance="simple"}
+What is the correct notation to assign a value to a variable in bash?
+
+A) ```bash
+$arr=2
+```
+
+B) ```bash
+arr$=2
+```
+
+C) ```bash
+arr=2
+```
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+The option C is the correct one. To assign a variable we need to put the chosen name follewed by `=` and finally the value (number, string) that we want to be stored. When we want to call the variable we need to add `$` in from of the variable name.
+:::
+
 ## Find
 
 We can also ask our computer where we have put our files, in case we forgot.
@@ -641,7 +699,7 @@ wget git.io/Boosted-BBB-images -O Boosted-BBB.zip
 ```
 
 We realise that this is a compressed file, and more precisely is a zip file (extension `.zip`).
-In order to access to its content we will need to "unzip" it first.
+In order to access its content we will need to "unzip" it first.
 For that we can use the command **unzip**: 
 
 ```bash
@@ -690,6 +748,17 @@ To learn more on how to use them, please refer to the more complete material for
 
 Now we have all the paths of the files that we will need!
 
+::: {.callout-tip title="Question" appearance="simple"}
+How should you write a `find` comand to search for all files ending with .TXT in the folder Boosted-BBB?
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+The correct find command will be: ```bash
+find Boosted-BBB -type f -name '*.TXT'
+```
+As mentioned the first part is the folder `Boosted-BBB` followed by the type which is file and finally the name of what we are looking for, in our case all the files ending with .TXT
+:::
+
 ## For loops
 
 Until now we have seen how to run single commands on a file.
@@ -736,6 +805,19 @@ Does Spain have lovely food? Yes
 We see that changing the order of the list will affect the output, this is because the **for** loop will go through the list in a sequential manner.
 
 We can also add more elements to the list, and the **for** loop will continue until it reaches the end of the list.
+
+::: {.callout-tip title="Question" appearance="simple"}
+How many times will the following for loop run the command `echo`?
+```bash
+for i in Greece Spain Britain Italy Slovenia; Do
+  echo "I would love to go to $i"
+done
+```
+:::
+
+::: {.callout-note collapse="true" title="Answer"}
+The for loop will run the `echo` command 5 times, once for every element on the list `Greece Spain Britain Italy Slovenia`.
+:::
 
 ## How to Google like a pro
 
