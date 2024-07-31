@@ -34,31 +34,31 @@ Please see the relevant chapter section in [Before you start](/before-you-start.
 
 
 Phylogenetics is the study of evolutionary relationships between entities such as species, genes or individuals (but also non-biological entities such as languages), through the reconstruction of phylogenetic trees.
-Phylogenetic trees are composed of __branches__ (or edges) representing continuous lines of descent (or lineages), __nodes__  representing the split of an ancestral lineage into descending lineages, and tips (or leaves) representing the sampled entities [@baum2008reading].
+Phylogenetic trees are composed of _branches_ (or edges) representing continuous lines of descent (or lineages), _nodes_  representing the split of an ancestral lineage into descending lineages, and tips (or leaves) representing the sampled entities [@baum2008reading].
 
 ![Main elements of a phylogenetic tree.](assets/images/chapters/phylogenomics/basic_tree_definitions.png){#fig-phylogenomics-basic_tree_definitions}
 
 
-In a phylogenetic tree, a group containing all descendants of a given ancestor (or node), is called a __monophyletic group__, or a __clade__.
-Any group that is not monophyletic is called __paraphyletic__.
+In a phylogenetic tree, a group containing all descendants of a given ancestor (or node), is called a _monophyletic group_, or a _clade_.
+Any group that is not monophyletic is called _paraphyletic_.
 
 ![Monophyletic _versus_ paraphyletic group.](assets/images/chapters/phylogenomics/monophyly.png){#fig-phylogenomics-monophyly}
 
 The oldest node in a phylogenetic tree is called the _root_.
-It corresponds to the __most recent common ancestor (MRCA)__ of the whole group under consideration.
+It corresponds to the _most recent common ancestor (MRCA)_ of the whole group under consideration.
 The root is not defined in all phylogenetic trees.
 If so, it means that the tree is oriented in time, such that we can define which node is the oldest.
-We call such tree a __rooted tree__.
+We call such tree a _rooted tree_.
 Note that time-trees are rooted by definition (but the opposite is not true).
 Substitution trees are in principle unrooted, as these contain information about the genetic distance between nodes, but not about the relative age of nodes.
-Unrooted trees are best represented in a star-shaped manner (although visualization softwares such as _figtree_ present all trees as if they were rooted, by default).
+Unrooted trees are best represented in a star-shaped manner (although visualization softwares such as `FigTree` present all trees as if they were rooted, by default).
 
 
 ![Rooted _versus_ unrooted tree.](assets/images/chapters/phylogenomics/rooted_tree.png){#fig-phylogenomics-rooted_tree}
 
 
-An unrooted tree can be turned into a rooted tree if one can define an __outgroup__ among the analysed entities.
-An outgroup is a tip or a clade that can be confidently considered to not belong to the group formed by the rest of the tips (the __ingroup__).
+An unrooted tree can be turned into a rooted tree if one can define an _outgroup_ among the analysed entities.
+An outgroup is a tip or a clade that can be confidently considered to not belong to the group formed by the rest of the tips (the _ingroup_).
 Typically, this can be an  individual from a different species than the one under consideration.
 If one can define such an outgroup _a priori_, then the root of the tree can be placed on the branch between the outgroup and the ingroup.
 Outgroups can be included intentionally in phylogenetic analyses for this purpose.
@@ -106,8 +106,8 @@ Before reconstructing a phylogenetic tree from a set of DNA sequences, these seq
 Sequence alignment consist in rearranging sequences to ensure that homologous nucleotide positions (i.e. descending from a common ancestor) are aligned and compared.
 To do so, gaps are inserted in sequences to accommodate genetic insertions or deletions that might have occurred in these sequences during the course evolution.
 Although it will not be covered in this practical, sequence alignment is an essential first step for phylogenetic analyses (or any comparative genetic analysis), and can be performed in different ways depending on the starting material.
-If one starts from already assembled gene or genome sequences, multiple sequence alignment can be performed using softwares such as __clustal__ or __MAFFT__.
-When analysing NGS data, one can map all data to the same reference genome and produce combined genotyping data and sequence alignments using softwares such as MultiVCFAnalyzer (as performed in the _Genome Mapping_ practical).
+If one starts from already assembled gene or genome sequences, multiple sequence alignment can be performed using softwares such as `clustal` or `MAFFT`.
+When analysing NGS data, one can map all data to the same reference genome and produce combined genotyping data and sequence alignments using softwares such as `MultiVCFAnalyzer` (as performed in the _Genome Mapping_ practical).
 
 ![Sequence alignment is an essential first step of phylogenetic analyses.](assets/images/chapters/phylogenomics/sequence_alignment.png){#fig-phylogenomics-sequence_alignment}
 
@@ -116,7 +116,7 @@ Distance-based methods are based on pairwise genetic distance matrices derived f
 This includes techniques like Neighbour-Joining and UPGMA.
 Maximum parsimony is another method in which it is assumed that the most likely tree is the one minimizing the number of changes necessary to explain the observed sequences.
 Finally probabilistic methods are methods based on an explicit probabilistic model of evolution which allows calculating the probability of the observed sequence data given a certain phylogenetic tree.
-This measure is referred to as the __phylogenetic likelihood__.
+This measure is referred to as the _phylogenetic likelihood_.
 Probabilistic approaches are, by far, the most popular phylogenetic approaches nowadays, and fall into two categories: Maximum Likelihood (ML) and Bayesian approaches.
 
 ![Phylogenetic inference methods.](assets/images/chapters/phylogenomics/inference_methods.png){#fig-phylogenomics-inference_methods}
@@ -136,36 +136,40 @@ Different substitution models exist allowing for more or less complexity, from t
 In this practical session, we will work with an alignment produced as you learned in the practical _Genome mapping_.
 
 ::: {.callout-note title="What is in the data?"}
-- the alignment contains 33 _Yersinia pestis_ sequences and 1 _Yersinia pseudotuberculosis_ sequence which can be used as an outgroup
-- it is a SNP alignment: it contains only the variable genomic positions, not the full genomes
-- in this practical, we will investigate the phylogenetic position of four prehistorical _Y. pestis_ strains that we have recently discovered: KZL002, GZL002, CHC004 and VLI092
+- The alignment contains 33 _Yersinia pestis_ sequences and 1 _Yersinia pseudotuberculosis_ sequence which can be used as an outgroup
+- It is a SNP alignment: it contains only the variable genomic positions, not the full genomes
+- In this practical, we will investigate the phylogenetic position of four prehistorical _Y. pestis_ strains that we have recently discovered: KZL002, GZL002, CHC004 and VLI092
 :::
 
-We start by exploring the alignment in _MEGA_ [@tamuraMEGA11MolecularEvolutionary2021].
-Open the _MEGA_ desktop application by typing ```mega &``` in the terminal.
+We start by exploring the alignment in `MEGA` [@tamuraMEGA11MolecularEvolutionary2021].
+Open the `MEGA` desktop application in the terminal.
+
+```bash
+mega &
+```
 
 ::: {.callout-tip}
-Adding "&" at the end of a command line allows to run a program in the background while letting the terminal accessible.
+Adding `&` at the end of a command line allows to run a program in the background while letting the terminal accessible.
 This is particularly useful when starting a graphical interface from the terminal.
 :::
 
-Then, load the alignment by clicking on File -> Open A File/Session -> Select the _snpAlignment_session5.fasta_ (in the working directory of the session).
+Then, load the alignment by clicking on File -> Open A File/Session -> Select the `snpAlignment_session5.fasta` (in the working directory of the session).
 
 ![Loading the SNP alignment in MEGA](assets/images/chapters/phylogenomics/3.png){#fig-phylogenomics-3}
 
 It will ask you what you want to do with the alignment.
-In _MEGA_ you can also align sequences.
-However, since our sequences are already aligned, press on _Analyze_.
+In `MEGA` you can also align sequences.
+However, since our sequences are already aligned, press on`Analyze`.
 
-Then, select _Nucleotide Sequences_ since we are working with a DNA alignment.
-Note that _MEGA_ can also work with Protein Sequences as well as Pairwise Distance Matrix (which we will cover shortly).
-In the same window, change the character for _Missing Data_ to **N** and click _OK_.
+Then, select`Nucleotide Sequences` since we are working with a DNA alignment.
+Note that`MEGA` can also work with Protein Sequences as well as Pairwise Distance Matrix (which we will cover shortly).
+In the same window, change the character for`Missing Data` to `N` and click`OK`.
 
 ![Defining sequence type in MEGA.](assets/images/chapters/phylogenomics/4.png){#fig-phylogenomics-4}
 
-A window would open up asking if our alignment contains protein encoding sequences, and we will select _No_.
+A window would open up asking if our alignment contains protein encoding sequences, and we will select`No`.
 
-To explore the alignment, click on the box with _TA_
+To explore the alignment, click on the box with `TA`.
 
 ![Opening the alignment in MEGA.](assets/images/chapters/phylogenomics/5.png){#fig-phylogenomics-5}
 
@@ -186,13 +190,13 @@ What are the Ns in the sequences?
 :::
 ::: {.callout-note title="Answer" collapse="true"}
 They represent positions where we have missing data.
-We told _MEGA_ to encode missing positions as _N_
+We told`MEGA` to encode missing positions as `N`.
 :::
 ::: {.callout-tip title="Question" appearance="simple"}
 What do you think the dots represent?
 :::
 ::: {.callout-tip}
-The first line is a **consensus** sequence: it indicates the nucleotide supported by the majority of the sequences in the alignment (90% of the sequences should agree, otherwise an N is displayed)
+The first line is a _consensus_ sequence: it indicates the nucleotide supported by the majority of the sequences in the alignment (90% of the sequences should agree, otherwise an N is displayed)
 :::
 ::: {.callout-note title="Answer" collapse="true"}
 Dots represent positions in which sequences are identical to the reference the consensus
@@ -214,11 +218,11 @@ Here are the details of the calculations for a small NJ tree example with 6 taxa
 
 ![Neighbour-Joining algorithm.](assets/images/chapters/phylogenomics/NJ_algorithm.png){#fig-phylogenomics-NJ_algorithm}
 
-Luckily, you won't have to do this by hand since _MEGA_ allows you to build a NJ tree.
-For that go back to _MEGA_ and click on the _Phylogeny_ symbol (toolbar of the main menu window) and then select _Construct Neighbour Joining Tree_.
-Click "Yes" when you are asked if you want to use the currently active data.
-In the window that pop up, you will then change the _Model/Method_ to _p-distance_.
-Then press _OK_ and a window with the calculated phylogenetic tree will pop up.
+Luckily, you won't have to do this by hand since `MEGA` allows you to build a NJ tree.
+For that go back to `MEGA` and click on the `Phylogeny` symbol (toolbar of the main menu window) and then select `Construct Neighbour Joining Tree`.
+Click `Yes` when you are asked if you want to use the currently active data.
+In the window that pop up, you will then change the`Model/Method` to `p-distance`.
+Then press `OK` and a window with the calculated phylogenetic tree will pop up.
 
 ![Constructing a NJ tree in MEGA.](assets/images/chapters/phylogenomics/9.png){#fig-phylogenomics-9}
 
@@ -226,30 +230,35 @@ Then press _OK_ and a window with the calculated phylogenetic tree will pop up.
 A NJ tree can be built from any type of distances.
 This includes:
 - p-distances (also called raw distances): these are simply the proportion of differences between sequences
-- corrected distances: these are based on an underlying substitution model (JC69, K80, GTR...) and account for multiple substitutions at the same sites (which would result in only one visible difference)
+- Corrected distances: these are based on an underlying substitution model (JC69, K80, GTR...) and account for multiple substitutions at the same sites (which would result in only one visible difference)
 - p-distances and corrected distances should be similar when the number of substitutions is low compared to the genome length
-**note:** a "substitution" is a type of mutation in which a nucleotide is replaced by another.
+_note:_ a "substitution" is a type of mutation in which a nucleotide is replaced by another.
 :::
 
-Since the tree is not easily visualised in _MEGA_, we will export it in newick format (a standard text format for trees) and open it in _FigTree_.
+Since the tree is not easily visualised in `MEGA`, we will export it in newick format (a standard text format for trees) and open it in `FigTree`.
 This tool has a better graphical interface for visualizing and manipulating trees.
 
-To do that, click on _File_, then _Export current tree (Newick)_ and click on _Branch Lengths_ to include those in the newick annotation.
-When you press _OK_, a new window with the tree in newick format will pop up.
-Then, press _File_ -> _Save_ and saved it as _NJ_tree.nwk_.
+To do that, click on `File`, then `Export current tree (Newick)` and click on `Branch Lengths` to include those in the newick annotation.
+When you press `OK`, a new window with the tree in newick format will pop up.
+Then, press `File -> Save` and saved it as `NJ_tree.nwk`.
 You can then close the text editor and tree explorer windows (no need to save the session).
 
 ![Exporting the tree in newick format.](assets/images/chapters/phylogenomics/10.png){#fig-phylogenomics-10}
 
-As said above, we will explore oun NJ tree in _FigTree_.
-Open the software by typing ```figtree &``` in the terminal (if you use the same terminal window as the one in which you ran MEGA, you might have to press ```enter``` first).
-Then, open the NJ tree by clicking on _File_ -> _Open_ and selecting the file with the NJ tree _NJ_tree.nwk_
+As said above, we will explore oun NJ tree in `FigTree`.
+Open the software (if you use the same terminal window as the one in which you ran MEGA, you might have to press ```enter``` first).
+
+ ```bash
+ figtree &
+ ```
+
+Then, open the NJ tree by clicking on `File -> Open` and selecting the file with the NJ tree `NJ_tree.nwk`.
 
 ![Opening a tree in FigTree](assets/images/chapters/phylogenomics/11.png){#fig-phylogenomics-11}
 
-Note that even though a root is displayed by default in _FigTree_, NJ trees are actually **unrooted**.
+Note that even though a root is displayed by default in `FigTree`, NJ trees are actually _unrooted_.
 We know that _Yersinia pseudotuberculosis_ (labelled here as _Y. pseudotuberculosis_) is an outgroup to _Yersinia pestis_.
-You can reroot the tree by selecting _Y.pseudotuberculosis_ and pressing _Reroot_.
+You can reroot the tree by selecting _Y.pseudotuberculosis_ and pressing `Reroot`.
 
 ![Rerooting a tree in FigTree](assets/images/chapters/phylogenomics/14.png){#fig-phylogenomics-14}
 
@@ -302,8 +311,8 @@ In a phylogenetic probabilistic model, what are the data and what are the parame
 ::: {.callout-note title="Answer" collapse="true"}
 In a phylogenetic probabilistic model, the data is the sequence alignment and the parameters, are:
 
-- the parameters of the chosen substitution model (substitution rates and base frequencies)
-- the phylogenetic tree
+- The parameters of the chosen substitution model (substitution rates and base frequencies)
+- The phylogenetic tree
 
 ![Phylogenetic probabilistic model (see @cornuaultRoadMapPhylogenetic2022 for more details).](assets/images/chapters/phylogenomics/20.png){#fig-phylogenomics-20}
 :::
@@ -330,9 +339,9 @@ A bootstrap value of 70% or more is generally considered as good support.
 Bootstrapping can be used to measure uncertainty with any type of inference method, including distance-based methods
 :::
 
-**Let's make our own ML tree!**
+Let's make our own ML tree!
 
-Here is a command to estimate an ML phylogenetic tree together with bootstraps using _RAxML_ ([@stamatakisRAxMLVersionTool2014]; you may find the list of parameters in the _RAxML_ manual):
+Here is a command to estimate an ML phylogenetic tree together with bootstraps using `RAxML`([@stamatakisRAxMLVersionTool2014]; you may find the list of parameters in the `RAxML`manual).
 
 ```bash
 raxmlHPC-PTHREADS -m GTRGAMMA -T 3 -f a -x 12345 -p 12345 -N autoMRE -s snpAlignment_session5.fasta -n full_dataset.tre
@@ -342,13 +351,13 @@ Here is the meaning of the chosen parameters:
 
 ![Details of the RAxML command.](assets/images/chapters/phylogenomics/raxml_cmdline.png){#fig-phylogenomics-raxml_cmdline}
 
-Once the analysis has been completed, you can open the tree using _Figtree_ (RAxML_bipartitions.full_dataset.tre file, change “label” to “bootstrap support” at the prompt).
+Once the analysis has been completed, you can open the tree using `FigTree`(RAxML_bipartitions.full_dataset.tre file, change “label” to “bootstrap support” at the prompt).
 
 ![Changing the label of boostrap support values in FigTree.](assets/images/chapters/phylogenomics/figtree_prompt.png){#fig-phylogenomics-figtree_prompt}
 
 The tree estimated using this model is a substitution tree (branch lengths represent genetic distances in substitutions/site).
 As for the NJ tree, it is not oriented in time: this is an unrooted tree (displayed with a random root in Figtree).
-You can reroot the tree in _Figtree_ using _Y. pseudotuberculosis_ as an outgroup, as previously.
+You can reroot the tree in `FigTree` using _Y. pseudotuberculosis_ as an outgroup, as previously.
 
 ::: {.callout-tip title="Question" appearance="simple"}
 Can you confirm the position of our genomes of interest (KZL002, GZL002, CHC004 and VLI092)?
@@ -372,13 +381,13 @@ The placement is strongly supported as indicated by a bootstrap support of 100% 
 You can notice that the phylogeny is difficult to visualize due to the long branch leading to _Y. pseudotuberculosis_
 Having a very distant outgroup can also have deleterious effects on the estimated phylogeny (due to the so-called "long branch attraction" effect).
 We can construct a new phylogeny after removing the outgroup:
-- go back to the original alignment in mega (that we used for the Neighbour Joining tree), untick _Y.pseudotuberculosis_, and export in fasta format ("Data" -> "Export Data" -> change "Format" to "Fasta" and click "Ok"; you can save it as: "snpAlignment_without_outgroup.fas")
-- run raxml on this new alignment (change input to "snpAlignment_without_outgroup.fas" and output prefix (`-n`) to "without_outgroup" in the command line)
-- open the bipartition... file in figtree and reroot the tree based on the knowledge we have gained previously: place the root on the branch leading to the prehistoric Y. pestis strains (KZL002, GZL002, CHC004 and VLI092).
+- Go back to the original alignment in mega (that we used for the Neighbour Joining tree), untick _Y.pseudotuberculosis_, and export in fasta format (`Data -> Export Data` and change `Format` to `Fasta` and click `Ok`; you can save it as: `snpAlignment_without_outgroup.fas`)
+- Run raxml on this new alignment (change input to `snpAlignment_without_outgroup.fas` and output prefix (`-n`) to `without_outgroup` in the command line)
+- Open the `bipartition...` file in figtree and reroot the tree based on the knowledge we have gained previously: place the root on the branch leading to the prehistoric Y. pestis strains (KZL002, GZL002, CHC004 and VLI092).
 
 ![Substitution tree estimated with RAxML without the _Y. pseudotuberculosis_ outgroup.](assets/images/chapters/phylogenomics/raxml_tree_woOutgroup.png){#fig-phylogenomics-raxml_tree_woOutgroup}
 
-Lastly, we will export the rooted tree from figtree: File -> Export trees -> select the "save as currently displayed" box and save as "ML_tree_rooted.tre" (this will be useful for the section "Temporal signal assessment" at the end of this tutorial)
+Lastly, we will export the rooted tree from figtree: File -> Export trees -> select the `save as currently displayed` box and save as `ML_tree_rooted.tre` (this will be useful for the section `Temporal signal assessment` at the end of this tutorial)
 
 ![Exporting a tree after re-rooting in FigTree.](assets/images/chapters/phylogenomics/export_tree.png){#fig-phylogenomics-export_tree}
 
@@ -393,14 +402,14 @@ A great advantage of ancient pathogen genomes is that they provide calibration p
 This might not be possible to do with modern data alone.
 :::
 
-We will estimate a time-tree from our alignment using Bayesian inference as implemented in the _BEAST2_ software [@bouckaertBEASTSoftwarePlatform2014; @drummondBayesianEvolutionaryAnalysis2015].
+We will estimate a time-tree from our alignment using Bayesian inference as implemented in the `BEAST2` software [@bouckaertBEASTSoftwarePlatform2014; @drummondBayesianEvolutionaryAnalysis2015].
 Bayesian inference is based on a probability distribution that is different from the likelihood: the posterior probability.
 The posterior probability is the probability of the parameters given the data.
 It is easier to interpret than the likelihood because it directly contains all the information about the parameters: point estimates such as the median or the mean can be directly estimated from it, but also percentile intervals which can be used to measure uncertainty.
 
 ![Posterior probability of model parameters.](assets/images/chapters/phylogenomics/23.png){#fig-phylogenomics-phylogenomics}
 
-The Bayes theorem tells us that the posterior probability is proportional to the product of the likelihood and the "prior" probability of the parameters:
+The Bayes theorem tells us that the posterior probability is proportional to the product of the likelihood and the `prior` probability of the parameters:
 
 ![Bayes' theorem.](assets/images/chapters/phylogenomics/bayes_theorem.png){#fig-phylogenomics-bayes_theorem}
 
@@ -417,55 +426,61 @@ Therefore, if the MCMC has run long enough, the posterior distribution of the pa
 ![MCMC algorithm used to sample the posterior distribution of parameters (credit: Paul O. Lewis)](assets/images/chapters/phylogenomics/25.png){#fig-phylogenomics-25}
 
 ::: {.callout-tip}
-The ["taming the beast" website](https://taming-the-beast.org/tutorials/) has great tutorials for various analyses that can be done with _BEAST2_.
+The ["Taming the beast" website](https://taming-the-beast.org/tutorials/) has great tutorials for various analyses that can be done with `BEAST2`.
 In particular, the "Introduction to BEAST2", "Prior selection" and "Time-stamped data" are good starts.
 :::
 
-The different components of the _BEAST2_ analysis can be set up in the program _BEAUti_:
+The different components of the `BEAST2` analysis can be set up in the program `BEAUti`:
 
 ![Different component of a Bayesian phylogenetic analysis with BEAST.](assets/images/chapters/phylogenomics/26.png){#fig-phylogenomics-26}
 
-Open BEAUTi by typing ```beauti &``` in the terminal (if asked to update, press 'not now'), and set up an analysis as followed:
+Open BEAUTi (if asked to update, press 'not now').
 
-- load the alignment without outgroup in the "Partitions" tab ("File" -> "Import alignment"; select "nucleotide")
+```bash
+beauti &
+```
+
+Set up an analysis as follows:
+
+- Load the alignment without outgroup in the `Partitions` tab (`File -> Import alignment`; select `nucleotide`)
 
 ![Partitions panel in Beauti.](assets/images/chapters/phylogenomics/beauti_import_data.png){#fig-phylogenomics-beauti_import_data}
 
-- set the sampling dates in the "Tip dates" tab:
-    - select "Use tip dates"
-    - click on "Auto-configure" -> "read from file" and select the `sample_ages.txt` file
-    - change "Since some time in the past" to "Before present"
+- Set the sampling dates in the `Tip dates` tab:
+    - Select `Use tip dates`
+    - Click on `Auto-configure -> Read from file` and select the `sample_ages.txt` file
+    - Change `Since some time in the past` to `Before present`
 
 ![Tip dates panel in Beauti.](assets/images/chapters/phylogenomics/beauti_tip_dates.png){#fig-phylogenomics-beauti_tip_dates}
 
-- select the substitution model in the "Site model" tab:
-    - chose a GTR model
-    - use 4 Gamma categories for the Gamma site model: this is to account for variations of the substitution rate across sites (site=nucleotide position)
+- Select the substitution model in the `Site model` tab:
+    - Chose a GTR model
+    - Use 4 Gamma categories for the Gamma site model: this is to account for variations of the substitution rate across sites (site=nucleotide position)
 
 ![Site model panel in Beauti.](assets/images/chapters/phylogenomics/beauti_substitution_model.png){#fig-phylogenomics-beauti_substitution_model}
 
-- choose the molecular clock model in the "Clock model" tab:
-    - use a relaxed clock lognormal model (this is to allow for some variation of the clock rate across branches)
-    - change the initial value of the clock rate to 10<sup>-4</sup> substitution/site/year (**10<sup>-4</sup> can be written 1E-4**)
+- choose the molecular clock model in the `Clock model` tab:
+    - Use a relaxed clock lognormal model (this is to allow for some variation of the clock rate across branches)
+    - Change the initial value of the clock rate to 10<sup>-4</sup> substitution/site/year (10<sup>-4</sup> can be written 1E-4)
 
 ![Clock model panel in Beauti.](assets/images/chapters/phylogenomics/beauti_clock_model.png){#fig-phylogenomics-beauti_clock_model}
 
-- choose the prior distribution of parameters in the "Priors" tab:
-    - use a Coalescent Bayesian Skyline tree prior
-    - change the mean clock prior to a uniform distribution between 1E-6 and 1E-3 subst/site/year
-    - leave everything else to default
+- Choose the prior distribution of parameters in the `Priors` tab:
+    - Use a Coalescent Bayesian Skyline tree prior
+    - Change the mean clock prior to a uniform distribution between 1E-6 and 1E-3 subst/site/year
+    - Leave everything else to default
 
 ![Priors panel in Beauti.](assets/images/chapters/phylogenomics/beauti_priors.png){#fig-phylogenomics-beauti_priors}
 
-- set up the MCMC in the "MCMC" tab:
-    - use a chain length of 300M
-    - sample the mono-dimensional parameters and trees every 10,000 iterations (unfold "tracelog" and "treelog" menus and change "log every" to 10,000) 
+- Set up the MCMC in the `MCMC` tab:
+    - Use a chain length of 300M
+    - Sample the mono-dimensional parameters and trees every 10,000 iterations (unfold `tracelog` and `treelog` menus and change "log every" to 10,000) 
 
 ![MCMC panel in Beauti.](assets/images/chapters/phylogenomics/beauti_MCMC.png){#fig-phylogenomics-beauti_MCMC}
 
-- save the analysis setup as an xml file: "File" -> "Save as"; you can name the file "beast_analysis_Y_pestis.xml"
+- Save the analysis setup as an xml file: `File -> Save as`; you can name the file `beast_analysis_Y_pestis.xml`
 
-Now that the analysis is setup, we can run it using BEAST:
+Now that the analysis is setup, we can run it using BEAST.
 
 ```bash
 beast -java beast_analysis_Y_pestis.xml
@@ -473,8 +488,8 @@ beast -java beast_analysis_Y_pestis.xml
 
 Once the analysis is running two files should have been created and are continuously updated:
 
-- the "snpAlignment_without_outgroup.log" file which contains the values sampled by the MCMC for various mono-dimensional parameters such as the clock rate, as well as other values that are a logged along the MCMC such as the posterior probability and the likelihood.
-- the "snpAlignment_without_outgroup.trees" file which contains the MCMC trees sampled by the MCMC.
+- The `snpAlignment_without_outgroup.log` file which contains the values sampled by the MCMC for various mono-dimensional parameters such as the clock rate, as well as other values that are a logged along the MCMC such as the posterior probability and the likelihood.
+- The `snpAlignment_without_outgroup.trees` file which contains the MCMC trees sampled by the MCMC.
 
 While the analysis is running, you can start reading the next section!
 
@@ -486,11 +501,11 @@ If the MCMC has run long enough, we can use the sampled parameters to approximat
 Therefore, we have to check first that the MCMC chain has run long enough.
 :::
 
-We can assess the MCMC sampling using the program _Tracer_ [@rambautPosteriorSummarizationBayesian2018].
-_Tracer_ can read BEAST log files an generate statistics and plots for each of the sampled parameters.
-Most importantly, _Tracer_ provides:
+We can assess the MCMC sampling using the program `Tracer` [@rambautPosteriorSummarizationBayesian2018].
+_Tracer` can read BEAST log files an generate statistics and plots for each of the sampled parameters.
+Most importantly, `Tracer` provides:
 
-- **trace plots**: show the sampled parameter values along the MCMC run.
+- **Trace plots**: show the sampled parameter values along the MCMC run.
 Trace plots are a very useful MCMC diagnostic tool.
 
 ![Trace plot visualized in Tracer.](assets/images/chapters/phylogenomics/tracer_traceplot.png){#fig-phylogenomics-tracer_traceplot}
@@ -508,23 +523,35 @@ In the figure below, the trace on the left doesn't look good, the one on the rig
 
 ![Assessing correct MCMC sampling using trace plots.](assets/images/chapters/phylogenomics/33.png){#fig-phylogenomics-33}
 
--- **ESS values**: tracer also calculates effective sample sizes (ESS) for each of the sampled parameters.
+- **ESS values**: tracer also calculates effective sample sizes (ESS) for each of the sampled parameters.
 ESSs are estimates of the number of sampled parameter values after correcting for auto-correlation along the MCMC.
 As a rule of thumb, one usually considers that an MCMC has run long enough if all parameter's ESS are > 200.
 Note that if the trace looks like a hairy caterpillar, the corresponding ESS value should be high.
 
 ![Assessing effective sample sizes (ESS) in Tracer.](assets/images/chapters/phylogenomics/tracer_ESS.png){#fig-phylogenomics-tracer_ESS}
 
--- **Parameter estimates**: _Tracer_ also provides statistics and plots to explore the posterior distribution of the parameters.
+- **Parameter estimates**: `Tracer` also provides statistics and plots to explore the posterior distribution of the parameters.
 These should be considered only if the trace plot and ESS values look fine.
-In the "Estimates" tab, after selecting the chosen parameter in the left panel, the upper-right panel shows point estimates (mean, median) and measures of uncertainty (95% HPD interval), and the bottom-right panel shows a histogram of the sampled value:
+In the `Estimates` tab, after selecting the chosen parameter in the left panel, the upper-right panel shows point estimates (mean, median) and measures of uncertainty (95% HPD interval), and the bottom-right panel shows a histogram of the sampled value:
 
 ![Marginal estimates of parameters in Tracer.](assets/images/chapters/phylogenomics/tracer_estimates.png){#fig-phylogenomics-tracer_estimates}
 
-Let's now load the "snpAlignment_without_outgroup.log" file into _Tracer_.
+Let's now load the `snpAlignment_without_outgroup.log` file into `Tracer`.
 
-While the run is still going, open a new separate terminal, activate the conda environment with ```conda activate phylogenomics```, open tracer with ```tracer &```, and then "File" -> "Import trace file" -> select "snpAlignment_without_outgroup.log".
-Note that one can load a _BEAST2_ log file into tracer even if the analysis is still running.
+While the run is still going, open a new separate terminal and activate the conda environment
+
+```bash
+conda activate phylogenomics
+```
+
+Then, open `Tracer`.
+
+```bash
+tracer &
+```
+
+Open the log file: `File -> Import trace file` and select `snpAlignment_without_outgroup.log`.
+Note that one can load a `BEAST2` log file into `Tracer` even if the analysis is still running.
 This allows to assess if the MCMC is running correctly or has run long enough before it's completed.
 
 ::: {.callout-tip title="Question" appearance="simple"}
@@ -534,12 +561,12 @@ Has the MCMC run long enough?
 ::: {.callout-note title="Answer" collapse="true"}
 You have probably run your analysis for 10-20 mins before looking at the log file, and this is definitely not sufficient: the burnin phase has recently been passed, the trace plots do not look very dense and ESS values are low.
 It would probably take a few hours for the analysis to complete.
-Luckily we have run the analysis in advance and saved the log files for you in the "intermediateFiles" folder: "snpAlignment_without_outgroup.log" and "snpAlignment_without_outgroup.trees"
+Luckily we have run the analysis in advance and saved the log files for you in the `intermediateFiles` folder: `snpAlignment_without_outgroup.log` and `snpAlignment_without_outgroup.trees`.
 
 ![Trace plot indicating unsufficient MCMC sampling.](assets/images/chapters/phylogenomics/tracer_unsufficient_sampling.png){#fig-phylogenomics-tracer_unsufficient_sampling}
 :::
 
-You can now load the "intermediateFiles/snpAlignment_without_outgroup.log" file into _Tracer_.
+You can now load the `intermediateFiles/snpAlignment_without_outgroup.log` file into `Tracer`.
 
 ::: {.callout-tip title="Question" appearance="simple"}
 Has the MCMC run long enough?
@@ -570,15 +597,15 @@ Since we are working in a Bayesian framework, we do not obtain a single phylogen
 In contrast with mono-dimensional parameters, a tree distribution cannot be easily summarized with mean or median estimates.
 Instead, we need to use specific tree-summarizing techniques.
 One of the most popular is the maximum clade credibility (MCC) tree [@heledLookingTreesForest2013], which works as follows:
-- 1. For any node in any of the sampled trees, compute a **posterior support**: the proportion of trees in the sample which contain the corresponding clade
+- 1. For any node in any of the sampled trees, compute a _posterior support_: the proportion of trees in the sample which contain the corresponding clade
 - 2. Select the MCC tree: this is the tree in which the product of node posterior supports is the highest
 - 3. Calculate node/branch statistics on the MCC tree: typically, the mean/median estimates and HPD interval of node ages are calculated from the full tree sample and annotated on the MCC tree
 
 ![Maximum clade credibility tree as a summary of the tree posterior distribution.](assets/images/chapters/phylogenomics/MCC_tree_concept.png){#fig-phylogenomics-MCC_tree_concept}
 
 Let's generate an MCC tree from our tree sample.
-We can do this using the _TreeAnnotator_ software, which has both a command line and graphical interface.
-Let's use the command line here and run the following (using a burn-in of 10%):
+We can do this using the `TreeAnnotator` software, which has both a command line and graphical interface.
+Let's use the command line here and run the following (using a burn-in of 10%).
 
 ```bash
  treeannotator -burnin 10 intermediateFiles/snpAlignment_without_outgroup.trees snpAlignment_without_outgroup.MCC.tree
@@ -586,11 +613,11 @@ Let's use the command line here and run the following (using a burn-in of 10%):
 
 Once this is completed, we can open the MCC tree (`snpAlignment_without_outgroup.MCC.tree`) with figtree.
 Let's then add a few elements to the plot:
-- 1. Tick the "Scale Axis" box, unfold the corresponding menu, and select "Reverse axis" (now the timescale is in years BP)
-- 2. Tick the "Node Labels" box, unfold the corresponding menu, and select "Display: posterior".
+- 1. Tick the `Scale Axis` box, unfold the corresponding menu, and select `Reverse axis` (now the timescale is in years BP)
+- 2. Tick the `Node Labels` box, unfold the corresponding menu, and select `Display: posterior`.
 The posterior support of each node is now displayed.
 Note that the support value is a proportion (1=100%)
-- 3. Tick the "Node Bars" box, unfold the corresponding menu, and select "Display: height_95%_HPD".
+- 3. Tick the `Node Bars` box, unfold the corresponding menu, and select `Display: height_95%_HPD`.
 The 95% HPD intervals of node ages are now displayed.
 
 ![Maximum clade credibility tree of _Y. pestis_.](assets/images/chapters/phylogenomics/beast_results_MCC_tree.png){#fig-phylogenomics-beast_results_MCC_tree}
@@ -613,15 +640,21 @@ What is your estimate for the age of the most recent common ancestor of all Y. p
 
 ### Bonus: Temporal signal assessment
 
-It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree (i.e. we should have done this before the actual _BEAST2_ analysis).
+It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree (i.e. we should have done this before the actual `BEAST2` analysis).
 A classic way to assess the temporal signal of a dataset is the root-to-tip regression [@rambautExploringTemporalStructure2016].
 The rationale of the root-to-tip regression is to verify that the older a sequence is, the closer it should be to the root in a (rooted) substitution tree because there was less time for substitution to accumulate.
 In other words, there should be a correlation between sample age and distance to the root, which we can assess using a linear regression (root-to-tip regression).
-This can be done using the program _TempEst_:
-1. open _TempEst_ by typing ```tempest &``` and load the rooted ML tree that we produced previously (you should have saved it as "ML_tree_rooted.tre")
-2. click on "Import Dates" in the "Sample Dates" tab, select the sample_age.txt file and click on "OK"
-3. still in the "Sample Dates" tab, change "Since some time in the past" to "Before present" (one might need to extend the _TempEst_ window to see the pull down menu)
-4. look at the "Root-to-tip tab": is there a positive correlation between time and root-to-tip divergence as expected under the molecular clock hypothesis?
+This can be done using the program `TempEst`:
+1. open `TempEst` 
+
+```bash
+tempest &
+```
+
+2. Load the rooted ML tree that we produced previously (you should have saved it as `ML_tree_rooted.tre`)
+3. Click on `Import Dates` in the `Sample Dates` tab, select the `sample_age.txt` file and click on `OK`
+4. Still in the `Sample Dates` tab, change `Since some time in the past` to `Before present` (one might need to extend the `TempEst` window to see the pull down menu)
+5. Look at the `Root-to-tip tab`: is there a positive correlation between time and root-to-tip divergence as expected under the molecular clock hypothesis?
 
 ![Root-to-tip regression using TempEst.](assets/images/chapters/phylogenomics/Tempest.png){#fig-phylogenomics-Tempest}
 
@@ -632,7 +665,7 @@ Let's clean up your working directory by removing all the data and output from t
 You can close all windows and any terminals.
 If you have a terminal with a command still running, just press <kbd>ctrl</kbd> + <kbd>c</kbd> a couple of times until it drops you to an empty prompt.
 
-Once completed, the command below will remove the `/<PATH>/<TO>/phylogenomics` directory **as well as all of its contents**. 
+Once completed, the command below will remove the `/<PATH>/<TO>/phylogenomics` directory _as well as all of its contents_. 
 
 ::: {.callout-tip}
 ## Pro Tip
@@ -662,12 +695,12 @@ conda remove --name phylogenomics --all -y
 
 ## Summary
 
-- phylogenetics is the study of evolutionnary history and relationships between biological entities
-- phylogenetic analyses are essential to classify and organize all knowledge about biological organisms in the light of evolution
-- phylogenetic trees can be used to trace back various features along past lineages, such as the geographic location, host species or genomic content
-- ancient genomes permit more accurate phylogenetic reconstructions and the study of past extinct lineages
-- ancient genomes allow estimating molecular clock rates and the scaling of phylogenetic trees to time
-- phylogenetic inference relies on the comparison of homologous characters, such as aligned DNA sequences
-- probabilistic methods, including Maximum Likelihood and Bayesian inference, are the most popular phylogenetic approaches today
+- Phylogenetics is the study of the evolutionnary history and relationships between biological entities
+- Phylogenetic analyses are essential to classify and organize all knowledge about biological organisms in the light of evolution
+- Phylogenetic trees can be used to trace back various features along past lineages, such as the geographic location, host species or genomic content
+- Ancient genomes permit more accurate phylogenetic reconstructions and the study of past extinct lineages
+- Ancient genomes allow estimating molecular clock rates and the scaling of phylogenetic trees to time
+- Phylogenetic inference relies on the comparison of homologous characters, such as aligned DNA sequences
+- Probabilistic methods, including Maximum Likelihood and Bayesian inference, are the most popular phylogenetic approaches today
 
 ## References
