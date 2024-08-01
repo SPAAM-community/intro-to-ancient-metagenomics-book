@@ -8,7 +8,7 @@
 
 <meta name="author" content="Arthur Kocher and Aida Andrades Valtueña">
 
-<title>16&nbsp; Introduction to Phylogenomics – Introduction to Ancient Metagenomics</title>
+<title>16&nbsp; Phylogenomics – Introduction to Ancient Metagenomics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -55,7 +55,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -106,9 +126,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<meta property="og:title" content="16&nbsp; Introduction to Phylogenomics – Introduction to Ancient Metagenomics">
+<meta property="og:title" content="16&nbsp; Phylogenomics – Introduction to Ancient Metagenomics">
 <meta property="og:description" content="">
+<meta property="og:image" content="https://spaam-community.github.org/intro-to-ancient-metagenomics-book/assets/images/chapters/phylogenomics/ancestral_features.png">
 <meta property="og:site_name" content="Introduction to Ancient Metagenomics">
+<meta property="og:image:height" content="666">
+<meta property="og:image:width" content="2982">
 </head>
 
 <body class="nav-sidebar floating">
@@ -120,7 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./section-ancient-genomics.html">Ancient Genomics</a></li><li class="breadcrumb-item"><a href="./phylogenomics.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduction to Phylogenomics</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./section-ancient-genomics.html">Ancient Genomics</a></li><li class="breadcrumb-item"><a href="./phylogenomics.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Phylogenomics</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -323,7 +346,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./phylogenomics.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduction to Phylogenomics</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Phylogenomics</span></span></a>
   </div>
 </li>
       </ul>
@@ -419,18 +442,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preparation" id="toc-preparation" class="nav-link active" data-scroll-target="#preparation"><span class="header-section-number">16.1</span> Preparation</a></li>
-  <li><a href="#visualize-the-sequence-alignment" id="toc-visualize-the-sequence-alignment" class="nav-link" data-scroll-target="#visualize-the-sequence-alignment"><span class="header-section-number">16.2</span> Visualize the sequence alignment</a></li>
-  <li><a href="#distance-based-phylogeny-neighbour-joining" id="toc-distance-based-phylogeny-neighbour-joining" class="nav-link" data-scroll-target="#distance-based-phylogeny-neighbour-joining"><span class="header-section-number">16.3</span> Distance-based phylogeny: Neighbour Joining</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">16.1</span> Introduction</a>
+  <ul class="collapse">
+  <li><a href="#definitions-and-concepts" id="toc-definitions-and-concepts" class="nav-link" data-scroll-target="#definitions-and-concepts"><span class="header-section-number">16.1.1</span> Definitions and concepts</a></li>
+  <li><a href="#phylogenetics-what-for" id="toc-phylogenetics-what-for" class="nav-link" data-scroll-target="#phylogenetics-what-for"><span class="header-section-number">16.1.2</span> Phylogenetics: what for?</a></li>
+  <li><a href="#phylogenetic-analysis-of-ancient-genomes" id="toc-phylogenetic-analysis-of-ancient-genomes" class="nav-link" data-scroll-target="#phylogenetic-analysis-of-ancient-genomes"><span class="header-section-number">16.1.3</span> Phylogenetic analysis of ancient genomes</a></li>
+  <li><a href="#how-to-estimate-phylogenetic-trees" id="toc-how-to-estimate-phylogenetic-trees" class="nav-link" data-scroll-target="#how-to-estimate-phylogenetic-trees"><span class="header-section-number">16.1.4</span> How to estimate phylogenetic trees?</a></li>
+  </ul></li>
+  <li><a href="#practical" id="toc-practical" class="nav-link" data-scroll-target="#practical"><span class="header-section-number">16.2</span> Practical</a>
+  <ul class="collapse">
+  <li><a href="#visualise-the-sequence-alignment" id="toc-visualise-the-sequence-alignment" class="nav-link" data-scroll-target="#visualise-the-sequence-alignment"><span class="header-section-number">16.2.1</span> Visualise the sequence alignment</a></li>
+  <li><a href="#distance-based-phylogeny-neighbour-joining" id="toc-distance-based-phylogeny-neighbour-joining" class="nav-link" data-scroll-target="#distance-based-phylogeny-neighbour-joining"><span class="header-section-number">16.2.2</span> Distance-based phylogeny: Neighbour-Joining</a></li>
+  <li><a href="#probabilistic-methods-maximum-likelihood-and-bayesian-inference" id="toc-probabilistic-methods-maximum-likelihood-and-bayesian-inference" class="nav-link" data-scroll-target="#probabilistic-methods-maximum-likelihood-and-bayesian-inference"><span class="header-section-number">16.2.3</span> Probabilistic methods: Maximum Likelihood and Bayesian inference</a></li>
+  <li><a href="#maximum-likelihood-estimation-and-bootstrapping" id="toc-maximum-likelihood-estimation-and-bootstrapping" class="nav-link" data-scroll-target="#maximum-likelihood-estimation-and-bootstrapping"><span class="header-section-number">16.2.4</span> Maximum likelihood estimation and bootstrapping</a></li>
+  <li><a href="#estimating-a-time-tree-using-bayesian-phylogenetics-beast2" id="toc-estimating-a-time-tree-using-bayesian-phylogenetics-beast2" class="nav-link" data-scroll-target="#estimating-a-time-tree-using-bayesian-phylogenetics-beast2"><span class="header-section-number">16.2.5</span> Estimating a time-tree using Bayesian phylogenetics (<em>BEAST2</em>)</a></li>
+  <li><a href="#assessing-beast2-results" id="toc-assessing-beast2-results" class="nav-link" data-scroll-target="#assessing-beast2-results"><span class="header-section-number">16.2.6</span> Assessing <em>BEAST2</em> results</a></li>
+  <li><a href="#mcc-tree" id="toc-mcc-tree" class="nav-link" data-scroll-target="#mcc-tree"><span class="header-section-number">16.2.7</span> MCC tree</a></li>
+  <li><a href="#bonus-temporal-signal-assessment" id="toc-bonus-temporal-signal-assessment" class="nav-link" data-scroll-target="#bonus-temporal-signal-assessment"><span class="header-section-number">16.2.8</span> Bonus: Temporal signal assessment</a></li>
+  </ul></li>
+  <li><a href="#optional-clean-up" id="toc-optional-clean-up" class="nav-link" data-scroll-target="#optional-clean-up"><span class="header-section-number">16.3</span> (Optional) clean-up</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">16.4</span> Summary</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">16.5</span> References</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./section-ancient-genomics.html">Ancient Genomics</a></li><li class="breadcrumb-item"><a href="./phylogenomics.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduction to Phylogenomics</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./section-ancient-genomics.html">Ancient Genomics</a></li><li class="breadcrumb-item"><a href="./phylogenomics.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Phylogenomics</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Introduction to Phylogenomics</span></h1>
+<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Phylogenomics</span></h1>
 </div>
 
 
@@ -466,7 +507,7 @@ Self guided: chapter environment setup
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>For this chapter’s exercises, if not already performed, you will need to download the chapter’s dataset, decompress the archive, and create and activate the conda environment.</p>
-<p>Do this, use <code>wget</code> or right click and save to download this Zenodo archive: <a href="https://doi.org/10.5281/zenodo.8413215">10.5281/zenodo.8413215</a>, and unpack</p>
+<p>Do this, use <code>wget</code> or right click and save to download this Zenodo archive: <a href="https://doi.org/10.5281/zenodo.8413215">10.5281/zenodo.8413215</a>, and unpack.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> xvf phylogenomics.tar.gz </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> phylogenomics/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You can then create the subsequently activate environment with</p>
@@ -489,18 +530,158 @@ Warning
 <p>Please see the relevant chapter section in <a href="./before-you-start.html">Before you start</a> before continuing with this chapter.</p>
 </div>
 </div>
-<section id="preparation" class="level2" data-number="16.1">
-<h2 data-number="16.1" class="anchored" data-anchor-id="preparation"><span class="header-section-number">16.1</span> Preparation</h2>
-<p>The data and conda environment <code>.yaml</code> file for this practical session can be downloaded from here: <a href="https://doi.org/10.5281/zenodo.6983184">https://doi.org/10.5281/zenodo.6983184</a>. See instructions on page.</p>
-<p>Change into the session directory</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/phylogenomics/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The data in this folder should contain an alignment (snpAlignment_session5.fasta) and a txt file with the ages of the samples that we are going to be working with in this session (<code>samples.ages.txt</code>)</p>
-<p>Load the conda environment.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate phylogenomics</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="introduction" class="level2" data-number="16.1">
+<h2 data-number="16.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">16.1</span> Introduction</h2>
+<section id="definitions-and-concepts" class="level3" data-number="16.1.1">
+<h3 data-number="16.1.1" class="anchored" data-anchor-id="definitions-and-concepts"><span class="header-section-number">16.1.1</span> Definitions and concepts</h3>
+<p>Phylogenetics is the study of evolutionary relationships between entities such as species, genes or individuals (but also non-biological entities such as languages), through the reconstruction of phylogenetic trees. Phylogenetic trees are composed of <em>branches</em> (or edges) representing continuous lines of descent (or lineages), <em>nodes</em> representing the split of an ancestral lineage into descending lineages, and tips (or leaves) representing the sampled entities <span class="citation" data-cites="baum2008reading">(<a href="#ref-baum2008reading" role="doc-biblioref">Baum et al. 2008</a>)</span> (<a href="#fig-phylogenomics-basic_tree_definitions" class="quarto-xref">Figure&nbsp;<span>16.1</span></a>).</p>
+<div id="fig-phylogenomics-basic_tree_definitions" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-basic_tree_definitions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/basic_tree_definitions.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-basic_tree_definitions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.1: Main elements of a phylogenetic tree.
+</figcaption>
+</figure>
+</div>
+<p>In a phylogenetic tree, a group containing all descendants of a given ancestor (or node), is called a <em>monophyletic group</em>, or a <em>clade</em> (<a href="#fig-phylogenomics-monophyly" class="quarto-xref">Figure&nbsp;<span>16.2</span></a>). Any group that is not monophyletic is called <em>paraphyletic</em>.</p>
+<div id="fig-phylogenomics-monophyly" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-monophyly-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/monophyly.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-monophyly-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.2: Monophyletic <em>versus</em> paraphyletic group.
+</figcaption>
+</figure>
+</div>
+<p>The oldest node in a phylogenetic tree is called the <em>root</em> (<a href="#fig-phylogenomics-rooted_tree" class="quarto-xref">Figure&nbsp;<span>16.3</span></a>). It corresponds to the <em>most recent common ancestor (MRCA)</em> of the whole group under consideration. The root is not defined in all phylogenetic trees. If so, it means that the tree is oriented in time, such that we can define which node is the oldest. We call such tree a <em>rooted tree</em>. Note that time-trees are rooted by definition (but the opposite is not true). Substitution trees are in principle unrooted, as these contain information about the genetic distance between nodes, but not about the relative age of nodes. Unrooted trees are best represented in a star-shaped manner (although visualization softwares such as <code>FigTree</code> present all trees as if they were rooted, by default).</p>
+<div id="fig-phylogenomics-rooted_tree" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-rooted_tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/rooted_tree.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-rooted_tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.3: Rooted <em>versus</em> unrooted tree.
+</figcaption>
+</figure>
+</div>
+<p>An unrooted tree can be turned into a rooted tree if one can define an <em>outgroup</em> among the analysed entities (<a href="#fig-phylogenomics-outgroup" class="quarto-xref">Figure&nbsp;<span>16.4</span></a>). An outgroup is a tip or a clade that can be confidently considered to not belong to the group formed by the rest of the tips (the <em>ingroup</em>). Typically, this can be an individual from a different species than the one under consideration. If one can define such an outgroup <em>a priori</em>, then the root of the tree can be placed on the branch between the outgroup and the ingroup. Outgroups can be included intentionally in phylogenetic analyses for this purpose.</p>
+<div id="fig-phylogenomics-outgroup" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-outgroup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/outgroup.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-outgroup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.4: Outgroups can be used to root unrooted phylogenies.
+</figcaption>
+</figure>
+</div>
 </section>
-<section id="visualize-the-sequence-alignment" class="level2" data-number="16.2">
-<h2 data-number="16.2" class="anchored" data-anchor-id="visualize-the-sequence-alignment"><span class="header-section-number">16.2</span> Visualize the sequence alignment</h2>
-<p>In this practical session, we will be working with an alignment produced as you learned in the practical <em>Genome mapping</em>.</p>
+<section id="phylogenetics-what-for" class="level3" data-number="16.1.2">
+<h3 data-number="16.1.2" class="anchored" data-anchor-id="phylogenetics-what-for"><span class="header-section-number">16.1.2</span> Phylogenetics: what for?</h3>
+<p>Phylogenetic analyses are useful for a variety of applications, but its primary goal is to characterise and classify the observed biological diversity with an evolutionary perspective. Thus, phylogenies are essential to organise and interpret all knowledge about biological organisms in the light of evolution (<a href="#fig-phylogenomics-biological_classification" class="quarto-xref">Figure&nbsp;<span>16.5</span></a>).</p>
+<div id="fig-phylogenomics-biological_classification" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-biological_classification-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/biological_classification.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-biological_classification-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.5: Phylogenetics is essential for classifying biological diversity.
+</figcaption>
+</figure>
+</div>
+<p>Furthermore, phylogenetic trees can be used in combination with various information about the sampled entities to reconstruct the characteristics of past lineages and changes that have occurred during the course of evolution (<a href="#fig-phylogenomics-ancestral-features" class="quarto-xref">Figure&nbsp;<span>16.6</span></a>). Typically, phylogenies can be combined with information about the geographic location of sampled entities to reconstruct the geographic spread of the studied organism in the past. Similarly, information about the host-species of pathogen strains can be used to identify past cross-species transmission events. Similar approaches can be applied to genetic features to map genomic changes such as gene loss or gain on the phylogeny. Note that if the phylogeny is calibrated in time, the date of these events can be estimated.</p>
+<div id="fig-phylogenomics-ancestral-features" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-ancestral-features-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/ancestral_features.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-ancestral-features-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.6: Various features can mapped onto phylogenetic trees.
+</figcaption>
+</figure>
+</div>
+<p>Phylogenies can also be used to obtain information about past epidemiological or population dynamics (<a href="#fig-phylogenomics-phylodynamics" class="quarto-xref">Figure&nbsp;<span>16.7</span></a>). Typically the time to the most recent common ancestor (tMRCA) of pathogen strains can be considered as an upper date limit for the emergence of the pathogen in the considered population. Using phylodynamic approaches, population or epidemiological parameters can be formally estimated through the phylogeny.</p>
+<div id="fig-phylogenomics-phylodynamics" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-phylodynamics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/phylodynamics.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-phylodynamics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.7: Timetrees can be used to reconstruct past epidemiological dynamics.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="phylogenetic-analysis-of-ancient-genomes" class="level3" data-number="16.1.3">
+<h3 data-number="16.1.3" class="anchored" data-anchor-id="phylogenetic-analysis-of-ancient-genomes"><span class="header-section-number">16.1.3</span> Phylogenetic analysis of ancient genomes</h3>
+<p>Ancient genomes are powerful data for phylogenetic inference for several reason. The most obvious one is that they might allow uncovering lineages that have gone extinct in the past, thereby including in the phylogeny parts of the evolutionary history that are invisible from modern data alone. Furthermore, by providing direct observations from the past, ancient genomes may permit accurate reconstruction of past evolutionary events and phylogeographic scenarios which can be otherwise impossible to unveil (<a href="#fig-phylogenomics-ancient-genome-phylogeography" class="quarto-xref">Figure&nbsp;<span>16.8</span></a>).</p>
+<div id="fig-phylogenomics-ancient-genome-phylogeography" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-ancient-genome-phylogeography-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/ancient_genome_phylogeography.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-ancient-genome-phylogeography-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.8: Ancient genomes can unveil past evolutionnary and phylogeographic events.
+</figcaption>
+</figure>
+</div>
+<p>Another fundamental advantage of ancient genomes for phylogenetic inference is that they can be used to estimate the rate of genetic changes of the studied group and calibrate phylogenies in time (<a href="#fig-phylogenomics-time-tree-calibration" class="quarto-xref">Figure&nbsp;<span>16.9</span></a>) using molecular clock models (as performed in the last part of the practical). This is often difficult or impossible to do with modern sequences data alone, except for fast-evolving entities like RNA viruses.</p>
+<div id="fig-phylogenomics-time-tree-calibration" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-time-tree-calibration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/time_tree_calibration.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-time-tree-calibration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.9: Ancient genomes allow the calibration of phylogenetic trees in time.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="how-to-estimate-phylogenetic-trees" class="level3" data-number="16.1.4">
+<h3 data-number="16.1.4" class="anchored" data-anchor-id="how-to-estimate-phylogenetic-trees"><span class="header-section-number">16.1.4</span> How to estimate phylogenetic trees?</h3>
+<p>Before reconstructing a phylogenetic tree from a set of DNA sequences, these sequences need to be aligned. Sequence alignment consist in rearranging sequences to ensure that homologous nucleotide positions (i.e.&nbsp;descending from a common ancestor) are aligned and compared (<a href="#fig-phylogenomics-sequence-alignment" class="quarto-xref">Figure&nbsp;<span>16.10</span></a>). To do so, gaps are inserted in sequences to accommodate genetic insertions or deletions that might have occurred in these sequences during the course evolution. Although it will not be covered in this practical, sequence alignment is an essential first step for phylogenetic analyses (or any comparative genetic analysis), and can be performed in different ways depending on the starting material. If one starts from already assembled gene or genome sequences, multiple sequence alignment can be performed using softwares such as <code>clustal</code> or <code>MAFFT</code>. When analysing NGS data, one can map all data to the same reference genome and produce combined genotyping data and sequence alignments using softwares such as <code>MultiVCFAnalyzer</code> (as performed in the <em>Genome Mapping</em> practical).</p>
+<div id="fig-phylogenomics-sequence-alignment" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-sequence-alignment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/sequence_alignment.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-sequence-alignment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.10: Sequence alignment is an essential first step of phylogenetic analyses.
+</figcaption>
+</figure>
+</div>
+<p>Various methods can be employed to infer a phylogenetic tree from a DNA sequence alignment (<a href="#fig-phylogenomics-inference-methods" class="quarto-xref">Figure&nbsp;<span>16.11</span></a>). Distance-based methods are based on pairwise genetic distance matrices derived from the sequences rather than from the sequences themselves. This includes techniques like Neighbour-Joining and UPGMA. Maximum parsimony is another method in which it is assumed that the most likely tree is the one minimizing the number of changes necessary to explain the observed sequences. Finally probabilistic methods are methods based on an explicit probabilistic model of evolution which allows calculating the probability of the observed sequence data given a certain phylogenetic tree. This measure is referred to as the <em>phylogenetic likelihood</em>. Probabilistic approaches are, by far, the most popular phylogenetic approaches nowadays, and fall into two categories: Maximum Likelihood (ML) and Bayesian approaches.</p>
+<div id="fig-phylogenomics-inference-methods" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-inference-methods-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/inference_methods.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-inference-methods-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.11: Phylogenetic inference methods.
+</figcaption>
+</figure>
+</div>
+<p>An important component of phylogenetic models is the genetic substitution model <span class="citation" data-cites="yangMolecularEvolutionStatistical2014">(<a href="#ref-yangMolecularEvolutionStatistical2014" role="doc-biblioref">Yang 2014</a>)</span>. Substitution models are used in distance-based and probabilistic phylogenetic approaches (<a href="#fig-phylogenomics-substitution_models" class="quarto-xref">Figure&nbsp;<span>16.12</span></a>). In essence, these models allow estimating genetic distances between sequences accounting for cases in which multiple substitutions might have occurred at the same sites. Different substitution models exist allowing for more or less complexity, from the Jukes-Cantor (JC69) model in which all types of substitutions are assumed to occur at the same rate to General Time-Reversible (GTR) model (which is the GTR model) in which each type of substitution occurs at a different rate.</p>
+<div id="fig-phylogenomics-substitution_models" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-substitution_models-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/substitution_models.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-substitution_models-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.12: Nucleotide substitution models.
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="practical" class="level2" data-number="16.2">
+<h2 data-number="16.2" class="anchored" data-anchor-id="practical"><span class="header-section-number">16.2</span> Practical</h2>
+<section id="visualise-the-sequence-alignment" class="level3" data-number="16.2.1">
+<h3 data-number="16.2.1" class="anchored" data-anchor-id="visualise-the-sequence-alignment"><span class="header-section-number">16.2.1</span> Visualise the sequence alignment</h3>
+<p>In this practical session, we will work with an alignment produced as you learned in the practical <em>Genome mapping</em>.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="What is in the data?">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -512,13 +693,14 @@ What is in the data?
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>the alignment is a SNP alignment (it contains only the variable genomic positions, not the full genomes)</li>
-<li>it contains 33 <em>Yersinia pestis</em> sequences and 1 <em>Yersinia pseudotuberculosis</em> sequence which can be used as an outgroup</li>
-<li>in this practical, we will investigate the phylogenetic position of four prehistorical <em>Y. pestis</em> strains that we have recently discovered: KZL002, GZL002, CHC004 and VLI092</li>
+<li>The alignment contains 33 <em>Yersinia pestis</em> sequences and 1 <em>Yersinia pseudotuberculosis</em> sequence which can be used as an outgroup</li>
+<li>It is a SNP alignment: it contains only the variable genomic positions, not the full genomes</li>
+<li>In this practical, we will investigate the phylogenetic position of four prehistorical <em>Y. pestis</em> strains that we have recently discovered: KZL002, GZL002, CHC004 and VLI092</li>
 </ul>
 </div>
 </div>
-<p>We start by exploring the alignment in <em>MEGA</em>. Open the <em>MEGA</em> desktop application by typing <code>mega &amp;</code> in the terminal.</p>
+<p>We start by exploring the alignment in <code>MEGA</code> <span class="citation" data-cites="tamuraMEGA11MolecularEvolutionary2021">(<a href="#ref-tamuraMEGA11MolecularEvolutionary2021" role="doc-biblioref">Tamura, Stecher, and Kumar 2021</a>)</span>. Open the <code>MEGA</code> desktop application in the terminal.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">mega</span> <span class="kw">&amp;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -529,32 +711,55 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Adding “&amp;” at the end of a command line allows to run a program in the background while letting the terminal accessible. This particularly useful when starting a graphical interface from the terminal.</p>
+<p>Adding <code>&amp;</code> at the end of a command line allows to run a program in the background while letting the terminal accessible. This is particularly useful when starting a graphical interface from the terminal.</p>
 </div>
 </div>
-<p>Then, load the alignment by clicking on File -&gt; Open A File/Session -&gt; Select the <em>snpAlignment_session5.fasta</em> (in the working directory of the session).</p>
-<p><img src="assets/images/chapters/phylogenomics/3.png" class="img-fluid"></p>
-<p>It will you ask what you want to do with the alignment. In <em>MEGA</em> you can also produce an alignment, however, since our sequences are already aligned we will press on <em>Analyze</em>.</p>
-<p>Then we will select <em>Nucleotide Sequences</em> since we are working with a DNA alignment. Note that <em>MEGA</em> can also work with Protein Sequences as well as Pairwise Distance Matrix (which we will cover shortly). In the same window, we will change the character for <em>Missing Data</em> to <strong>N</strong> and click in <em>OK</em>.</p>
-<p><img src="assets/images/chapters/phylogenomics/4.png" class="img-fluid"></p>
-<p>A window would open up asking if our alignment contains protein encoding sequences, and we will select <em>No</em>.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<p>Then, load the alignment by clicking on File -&gt; Open A File/Session -&gt; Select the <code>snpAlignment_session5.fasta</code> (in the working directory of the session).</p>
+<div id="fig-phylogenomics-3" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/3.png" class="img-fluid figure-img">
 </div>
-<div class="callout-title-container flex-fill">
-Tip
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.13: Loading the SNP alignment in MEGA
+</figcaption>
+</figure>
 </div>
+<p>It will ask you what you want to do with the alignment. In <code>MEGA</code> you can also align sequences. However, since our sequences are already aligned, press on<code>Analyze</code>.</p>
+<p>Then, select<code>Nucleotide Sequences</code> since we are working with a DNA alignment. Note that<code>MEGA</code> can also work with Protein Sequences as well as Pairwise Distance Matrix (which we will cover shortly). In the same window, change the character for<code>Missing Data</code> to <code>N</code> and click<code>OK</code>.</p>
+<div id="fig-phylogenomics-4" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/4.png" class="img-fluid figure-img">
 </div>
-<div class="callout-body-container callout-body">
-<p>If you had protein encoding sequences, you would have selected Yes. This will allow you to treat different positions with different evolutionary modes depending on their codon position. One can do this to take in account that the third codon position can change to different nucleotides without resulting in a different amino acid, while position one and two of the codon are more restricted.</p>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.14: Defining sequence type in MEGA.
+</figcaption>
+</figure>
 </div>
+<p>A window would open up asking if our alignment contains protein encoding sequences, and we will select<code>No</code>.</p>
+<p>To explore the alignment, click on the box with <code>TA</code>.</p>
+<div id="fig-phylogenomics-5" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/5.png" class="img-fluid figure-img">
 </div>
-<p>To explore the alignment, you will then click on the box with <em>TA</em></p>
-<p><img src="assets/images/chapters/phylogenomics/5.png" class="img-fluid"></p>
-<p>You will see an alignment containing sequences from the bacterial pathogen <em>Yersinia pestis</em>. Within the alignment, we have four sequences of interest (KZL002, GZL002, CHC004 and VLI092) that date between 5000-2000 years Before Present (BP), and we want to know how they relate to the rest of the <em>Yersinia pestis</em> genomes in the alignment.</p>
-<p><img src="assets/images/chapters/phylogenomics/6.png" class="img-fluid"></p>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.15: Opening the alignment in MEGA.
+</figcaption>
+</figure>
+</div>
+<p>You should see an alignment containing sequences from the bacterial pathogen <em>Yersinia pestis</em>. Within the alignment, we have four sequences of interest (KZL002, GZL002, CHC004 and VLI092) that date between 5000-2000 years Before Present (BP), and we want to know how they relate to the rest of the <em>Yersinia pestis</em> genomes in the alignment.</p>
+<div id="fig-phylogenomics-6" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/6.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.16: Visualizing the alignment in MEGA.
+</figcaption>
+</figure>
+</div>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Question">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -569,7 +774,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -578,9 +783,9 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>We are analysing 34 sequences.</p>
+<p>34 sequences</p>
 </div>
 </div>
 </div>
@@ -598,7 +803,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -607,9 +812,9 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>They represent positions where we have missing data. We told <em>MEGA</em> to encode missing positions as <em>N</em></p>
+<p>They represent positions where we have missing data. We told<code>MEGA</code> to encode missing positions as <code>N</code>.</p>
 </div>
 </div>
 </div>
@@ -636,11 +841,11 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The first line is a <strong>consensus</strong> sequence: it indicates the nucleotide supported by the majority of the sequences in the alignment (90% of the sequences should agree, otherwise an N is displayed)</p>
+<p>The first line is a <em>consensus</em> sequence: it indicates the nucleotide supported by the majority of the sequences in the alignment (90% of the sequences should agree, otherwise an N is displayed)</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -649,9 +854,9 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>They represent positions that are the same as the consensus</p>
+<p>Dots represent positions in which sequences are identical to the reference the consensus</p>
 </div>
 </div>
 </div>
@@ -669,7 +874,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -678,20 +883,38 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We can easily see that the last sequence in the alignment (Y. pseudotuberculosis) contains more disagreements to the consensus. This is normal since this is the only genome not belonging to the <em>Y. pestis</em> species: we will use it as an outgroup</p>
 </div>
 </div>
 </div>
 </section>
-<section id="distance-based-phylogeny-neighbour-joining" class="level2" data-number="16.3">
-<h2 data-number="16.3" class="anchored" data-anchor-id="distance-based-phylogeny-neighbour-joining"><span class="header-section-number">16.3</span> Distance-based phylogeny: Neighbour Joining</h2>
-<p>The Neighbour Joining (NJ) method is an agglomerative algorithm which can be used to derive a phylogenetic tree from a pairwise distance matrix. In essence, this method will be grouping taxa that have the shortest distance together first, and will be doing this iteratively until all the taxa/sequences included in your alignment have been placed in a tree.</p>
+<section id="distance-based-phylogeny-neighbour-joining" class="level3" data-number="16.2.2">
+<h3 data-number="16.2.2" class="anchored" data-anchor-id="distance-based-phylogeny-neighbour-joining"><span class="header-section-number">16.2.2</span> Distance-based phylogeny: Neighbour-Joining</h3>
+<p>The Neighbour-Joining (NJ) method is an agglomerative algorithm which can be used to derive a phylogenetic tree from a pairwise distance matrix. In essence, this method groups taxa that have the shortest distance together first, and repeats this operation iteratively until all the taxa/sequences included in your alignment have been placed in a tree.</p>
 <p>Here are the details of the calculations for a small NJ tree example with 6 taxa:</p>
-<p><img src="assets/images/chapters/phylogenomics/NJ_algorithm.png" class="img-fluid"></p>
-<p>Luckily, you won’t have to do this by hand since <em>MEGA</em> allows you to build a NJ tree. For that go back to <em>MEGA</em> and click on the <em>Phylogeny</em> symbol (toolbar of the main menu window) and then select <em>Construct Neighbour Joining Tree</em>. Type “Yes” when you are asked if you want to use the currently active date. In the window that pop up, you will then chance the <em>Model/Method</em> to <em>p-distance</em>. Then press <em>OK</em> and a window with the calculated phylogenetic tree will pop up.</p>
-<p><img src="assets/images/chapters/phylogenomics/9.png" class="img-fluid"></p>
+<div id="fig-phylogenomics-NJ_algorithm" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-NJ_algorithm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/NJ_algorithm.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-NJ_algorithm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.17: Neighbour-Joining algorithm.
+</figcaption>
+</figure>
+</div>
+<p>Luckily, you won’t have to do this by hand since <code>MEGA</code> allows you to build a NJ tree. For that go back to <code>MEGA</code> and click on the <code>Phylogeny</code> symbol (toolbar of the main menu window) and then select <code>Construct Neighbour Joining Tree</code>. Click <code>Yes</code> when you are asked if you want to use the currently active data. In the window that pop up, you will then change the<code>Model/Method</code> to <code>p-distance</code>. Then press <code>OK</code> and a window with the calculated phylogenetic tree will pop up.</p>
+<div id="fig-phylogenomics-9" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-9-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/9.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-9-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.18: Constructing a NJ tree in MEGA.
+</figcaption>
+</figure>
+</div>
 <div class="callout callout-style-default callout-note callout-titled" title="p-distances?">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -702,22 +925,45 @@ p-distances?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>A NJ tree can be built from any type of distances. This includes:</p>
-<ul>
-<li>p-distances (also called raw distances): these are simply the proportion of differences between sequences</li>
-<li>corrected distances: these are based on an underlying substitution model (JC69, K80, GTR…) and account for multiple substitutions at the same sites (which would result in only one visible difference)</li>
-<li>p-distances and corrected distances should be similar when the number of substitutions is low compared to the genome length</li>
-</ul>
-<p><strong>note:</strong> a “substitution” is a type of mutation in which a nucleotide is replaced by another.</p>
+<p>A NJ tree can be built from any type of distances. This includes: - p-distances (also called raw distances): these are simply the proportion of differences between sequences - Corrected distances: these are based on an underlying substitution model (JC69, K80, GTR…) and account for multiple substitutions at the same sites (which would result in only one visible difference) - p-distances and corrected distances should be similar when the number of substitutions is low compared to the genome length <em>note:</em> a “substitution” is a type of mutation in which a nucleotide is replaced by another.</p>
 </div>
 </div>
-<p>Since the tree is not easily visualised in <em>MEGA</em>, we will export it in newick format (a standard text format for trees) and explore our tree in <em>FigTree</em>. This tool has a better interface for visually manipulating trees and allows us to interact with the phylogenetic tree.</p>
-<p>To do that you will click on <em>File</em>, then <em>Export current tree (Newick)</em> and click on <em>Branch Lengths</em> to include those in the newick annotation. When you press <em>OK</em>, a new window with the tree in newick format will pop up and you will then press <em>File</em> -&gt; <em>Save</em> and saved it as <em>NJ_tree.nwk</em>. You can then close the text editor and tree explorer windows (no need to save the session).</p>
-<p><img src="assets/images/chapters/phylogenomics/10.png" class="img-fluid"></p>
-<p>As said above, we will explore own NJ tree in <em>FigTree</em>. Open the software by typing <code>figtree &amp;</code> in the terminal (if you use the same terminal window as the one in which you ran mega, you might have to press <code>enter</code> first). Then, open the NJ tree by clicking on <em>File</em> -&gt; <em>Open</em> and selecting the file with the NJ tree <em>NJ_tree.nwk</em></p>
-<p><img src="assets/images/chapters/phylogenomics/11.png" class="img-fluid"></p>
-<p>Note that even though a root is displayed by default in <em>FigTree</em>, NJ trees are actually <strong>unrooted</strong>. We know that <em>Yersinia pseudotuberculosis</em> (labelled here as <em>Y. pseudotuberculosis</em>) is an outgroup to <em>Yersinia pestis</em>. You can reroot the tree by selecting <em>Y.pseudotuberculosis</em> and pressing <em>Reroot</em>.</p>
-<p><img src="assets/images/chapters/phylogenomics/14.png" class="img-fluid"></p>
+<p>Since the tree is not easily visualised in <code>MEGA</code>, we will export it in newick format (a standard text format for trees) and open it in <code>FigTree</code>. This tool has a better graphical interface for visualizing and manipulating trees.</p>
+<p>To do that, click on <code>File</code>, then <code>Export current tree (Newick)</code> and click on <code>Branch Lengths</code> to include those in the newick annotation. When you press <code>OK</code>, a new window with the tree in newick format will pop up. Then, press <code>File -&gt; Save</code> and saved it as <code>NJ_tree.nwk</code>. You can then close the text editor and tree explorer windows (no need to save the session).</p>
+<div id="fig-phylogenomics-10" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-10-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/10.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-10-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.19: Exporting the tree in newick format.
+</figcaption>
+</figure>
+</div>
+<p>As said above, we will explore oun NJ tree in <code>FigTree</code>. Open the software (if you use the same terminal window as the one in which you ran MEGA, you might have to press <code>enter</code> first).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">figtree</span> <span class="kw">&amp;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then, open the NJ tree by clicking on <code>File -&gt; Open</code> and selecting the file with the NJ tree <code>NJ_tree.nwk</code>.</p>
+<div id="fig-phylogenomics-11" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-11-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/11.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-11-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.20: Opening a tree in FigTree
+</figcaption>
+</figure>
+</div>
+<p>Note that even though a root is displayed by default in <code>FigTree</code>, NJ trees are actually <em>unrooted</em>. We know that <em>Yersinia pseudotuberculosis</em> (labelled here as <em>Y. pseudotuberculosis</em>) is an outgroup to <em>Yersinia pestis</em>. You can reroot the tree by selecting <em>Y.pseudotuberculosis</em> and pressing <code>Reroot</code>.</p>
+<div id="fig-phylogenomics-14" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-14-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/14.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-14-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.21: Rerooting a tree in FigTree
+</figcaption>
+</figure>
+</div>
 <p>Now we have a rooted tree.</p>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Question">
 <div class="callout-header d-flex align-content-center">
@@ -730,6 +976,8 @@ Question
 </div>
 <div class="callout-body-container callout-body">
 <p>How much time did the NJ-tree calculation take?</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -746,24 +994,19 @@ Answer
 </div>
 </div>
 </div>
-<p>How many leaves/tips has our tree?</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout callout-style-simple callout-tip callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Answer
+Question
 </div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>34, i.e.&nbsp;the number of sequences in our SNP alignment.</p>
+<p>How many leaves/tips has our tree?</p>
 </div>
 </div>
-</div>
-<p>Where are our taxa of interest? (KZL002, GZL002, CHC004 and VLI092)</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -776,13 +1019,25 @@ Answer
 </div>
 <div id="callout-18" class="callout-18-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>They all fall ancestral to the rest of <em>Yersinia pestis</em> in this tree.</p>
+<p>34, i.e.&nbsp;the number of sequences in our SNP alignment.</p>
 </div>
 </div>
 </div>
-<p>Do they form a monophyletic group (a clade)?</p>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Where are our taxa of interest? (KZL002, GZL002, CHC004 and VLI092)</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -791,16 +1046,55 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>They all fall ancestral to the rest of <em>Yersinia pestis</em> in this tree.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Question">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Do they form a monophyletic group (a clade)?</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Answer">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Yes, they form a monophyletic group. We can also say that this group of prehistoric strains form their own lineage.</p>
 </div>
 </div>
 </div>
-<section id="probabilistic-methods-maximum-likelihood-and-bayesian-inference" class="level2" data-number="16.4">
-<h2 data-number="16.4" class="anchored" data-anchor-id="probabilistic-methods-maximum-likelihood-and-bayesian-inference"><span class="header-section-number">16.4</span> Probabilistic methods: Maximum Likelihood and Bayesian inference</h2>
-<p>These are the most commonly used approach today. In general, probabilistic methods are statistical techniques that are based on models under which the observed data is generated through a stochastic process depending on a set of parameters which we want to estimate. The probability of the data given the model parameters is called the likelihood.</p>
-<p><img src="assets/images/chapters/phylogenomics/19.png" class="img-fluid"></p>
+</section>
+<section id="probabilistic-methods-maximum-likelihood-and-bayesian-inference" class="level3" data-number="16.2.3">
+<h3 data-number="16.2.3" class="anchored" data-anchor-id="probabilistic-methods-maximum-likelihood-and-bayesian-inference"><span class="header-section-number">16.2.3</span> Probabilistic methods: Maximum Likelihood and Bayesian inference</h3>
+<p>These are the most commonly used approach today. In general, probabilistic methods are statistical techniques assuming that the observed data is generated through a stochastic process with a probablility depending on a set of parameters which we want to estimate. The probability of the data given the model parameters is called the likelihood.</p>
+<div id="fig-phylogenomics-19" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-19-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/19.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-19-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.22: Graphical representation of a probabilistic model.
+</figcaption>
+</figure>
+</div>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Question">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -815,7 +1109,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -824,25 +1118,52 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div id="callout-24" class="callout-24-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>In a phylogenetic probabilistic model, the data is the sequence alignment and the parameters, are:</p>
 <ul>
-<li>the parameters of the chosen substitution model (substitution rates and base frequencies)</li>
-<li>the phylogenetic tree</li>
+<li>The parameters of the chosen substitution model (substitution rates and base frequencies)</li>
+<li>The phylogenetic tree</li>
 </ul>
-<p><img src="assets/images/chapters/phylogenomics/20.png" class="img-fluid"></p>
+<div id="fig-phylogenomics-20" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-20-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/20.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-20-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.23: Phylogenetic probabilistic model (see <span class="citation" data-cites="cornuaultRoadMapPhylogenetic2022">Cornuault and Sanmartín (<a href="#ref-cornuaultRoadMapPhylogenetic2022" role="doc-biblioref">2022</a>)</span> for more details).
+</figcaption>
+</figure>
+</div>
 </div>
 </div>
 </div>
 </section>
-<section id="maximum-likelihood-estimation-and-bootstrapping" class="level2" data-number="16.5">
-<h2 data-number="16.5" class="anchored" data-anchor-id="maximum-likelihood-estimation-and-bootstrapping"><span class="header-section-number">16.5</span> Maximum likelihood estimation and bootstrapping</h2>
-<p>One way we can make inferences from a probabilistic model is by finding the combination of parameters which maximises the likelihood. These parameter values are called maximum likelihood (ML) estimates. We are usually not able to compute the likelihood value for all possible combinations of parameters and have to rely on heuristic algorithms to find the maximum likelihood estimates.</p>
-<p><img src="assets/images/chapters/phylogenomics/21.png" class="img-fluid"></p>
-<p>The Maximum likelihood estimates are point estimates, i.e.&nbsp;single parameter values (for example, a tree), which does not allow to measure the associated uncertainty. A classic method to measure the uncertainty in ML trees is bootstrapping, which consists in repeatedly “disturbing” the alignment by masking sites randomly and estimating a tree from each of these bootstrap alignments.</p>
-<p><img src="assets/images/chapters/phylogenomics/22.png" class="img-fluid"></p>
-<p>For each clade in the ML tree, a bootstrap support value is computed which corresponds to the proportion of bootstrap trees containing the clade. This gives an indication of how robustly the clade is supported by the data (i.e.&nbsp;whether it holds even after disturbing the dataset). Bootstrapping can be used to measure the topology uncertainty of trees estimated with any inference method.</p>
+<section id="maximum-likelihood-estimation-and-bootstrapping" class="level3" data-number="16.2.4">
+<h3 data-number="16.2.4" class="anchored" data-anchor-id="maximum-likelihood-estimation-and-bootstrapping"><span class="header-section-number">16.2.4</span> Maximum likelihood estimation and bootstrapping</h3>
+<p>One way to make inferences from a probabilistic model is by finding the combination of parameters which maximises the likelihood. These parameter values are called Maximum Likelihood (ML) estimates. We are usually not able to compute the likelihood value for all possible combinations of parameters and have to rely on heuristic algorithms to find the ML estimates.</p>
+<div id="fig-phylogenomics-21" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-21-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/21.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-21-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.24: Maximum Likelihood inference.
+</figcaption>
+</figure>
+</div>
+<p>The ML estimates are point estimates, i.e.&nbsp;single parameter values (for example, a tree), which does not allow to measure the associated uncertainty. A classic method to measure the uncertainty in ML trees is bootstrapping. This consists in repeatedly “disturbing” the alignment by masking sites randomly and estimating a tree from each of these bootstrap alignments.</p>
+<div id="fig-phylogenomics-22" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-22-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/22.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-22-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.25: Bootstrapping procedure.
+</figcaption>
+</figure>
+</div>
+<p>For each clade in the ML tree, a bootstrap support value is computed which corresponds to the proportion of bootstrap trees containing the clade. This gives an indication of how confidently the clade is supported by the data (i.e.&nbsp;whether it is robust to small changes in the data). A bootstrap value of 70% or more is generally considered as good support.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -853,17 +1174,35 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Bootstrapping can be used to measure uncertainty with any type of inference method, including distance methods</p>
+<p>Bootstrapping can be used to measure uncertainty with any type of inference method, including distance-based methods</p>
 </div>
 </div>
-<p><strong>Let’s make our own ML tree!</strong></p>
-<p>Here is a command to estimate an ML phylogenetic tree together with bootstraps using <em>RAxML</em> (you may find the list of parameters in the <em>RAxML</em> manual):</p>
+<p>Let’s make our own ML tree!</p>
+<p>Here is a command to estimate an ML phylogenetic tree together with bootstraps using <code>RAxML</code>(<span class="citation" data-cites="stamatakisRAxMLVersionTool2014">(<a href="#ref-stamatakisRAxMLVersionTool2014" role="doc-biblioref">Stamatakis 2014</a>)</span>; you may find the list of parameters in the <code>RAxML</code>manual).</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">raxmlHPC-PTHREADS</span> <span class="at">-m</span> GTRGAMMA <span class="at">-T</span> 3 <span class="at">-f</span> a <span class="at">-x</span> 12345 <span class="at">-p</span> 12345 <span class="at">-N</span> autoMRE <span class="at">-s</span> snpAlignment_session5.fasta <span class="at">-n</span> full_dataset.tre</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Here is the meaning of the chosen parameters:</p>
-<p><img src="assets/images/chapters/phylogenomics/raxml_cmdline.png" class="img-fluid"></p>
-<p>Once the analysis has been completed, you can open the tree using <em>Figtree</em> (RAxML_bipartitions.full_dataset.tre file, change “label” to “bootstrap support” at the prompt).</p>
-<p><img src="assets/images/chapters/phylogenomics/figtree_prompt.png" class="img-fluid"></p>
-<p>The tree estimated using this model is a substitution tree (branch lengths represent genetic distances in substitutions/site). As for the NJ tree,it is not oriented in time: this is an unrooted tree (displayed with a random root in Figtree). You can reroot the tree in <em>Figtree</em> using <em>Y. pseudotuberculosis</em> as an outgroup, as previously.</p>
+<div id="fig-phylogenomics-raxml_cmdline" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-raxml_cmdline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/raxml_cmdline.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-raxml_cmdline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.26: Details of the RAxML command.
+</figcaption>
+</figure>
+</div>
+<p>Once the analysis has been completed, you can open the tree using <code>FigTree</code>(RAxML_bipartitions.full_dataset.tre file, change “label” to “bootstrap support” at the prompt).</p>
+<div id="fig-phylogenomics-figtree_prompt" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-figtree_prompt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/figtree_prompt.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-figtree_prompt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.27: Changing the label of boostrap support values in FigTree.
+</figcaption>
+</figure>
+</div>
+<p>The tree estimated using this model is a substitution tree (branch lengths represent genetic distances in substitutions/site). As for the NJ tree, it is not oriented in time: this is an unrooted tree (displayed with a random root in Figtree). You can reroot the tree in <code>FigTree</code> using <em>Y. pseudotuberculosis</em> as an outgroup, as previously.</p>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Question">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -878,7 +1217,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-27-contents" aria-controls="callout-27" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -887,7 +1226,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-24" class="callout-24-contents callout-collapse collapse">
+<div id="callout-27" class="callout-27-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Yes. Just as in the NJ tree, they form a clade which is basal to the rest of the <em>Y. pestis</em> diversity.</p>
 </div>
@@ -903,11 +1242,11 @@ Question
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Is that placement well-supported? (look at the bootstrap support value: click on the “Node Labels” box and open the drop-down menu, change “Node ages” to “bootstrap support”)</p>
+<p>Is that placement well-supported (look at the bootstrap support value: click on the “Node Labels” box and open the drop-down menu, change “Node ages” to “bootstrap support”)?</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-29-contents" aria-controls="callout-29" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -916,25 +1255,47 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-26" class="callout-26-contents callout-collapse collapse">
+<div id="callout-29" class="callout-29-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The placement is strongly supported as indicated by a bootstrap support of 100% for this clade (it is not very easy to see, you probably need to zoom in a bit)</p>
-<p><img src="assets/images/chapters/phylogenomics/bootstrap_support.png" class="img-fluid"></p>
+<div id="fig-phylogenomics-bootstrap_support" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-bootstrap_support-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/bootstrap_support.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-bootstrap_support-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.28: Boostrap support value for the placement of ancient <em>Y. pestis</em> genomes.
+</figcaption>
+</figure>
 </div>
 </div>
 </div>
-<p>You can notice that the phylogeny is difficult to visualize due to the long branch leading to <em>Y. pseudotuberculosis</em>. Having a very distant outgroup can also have deleterious effects on the estimated phylogeny (due to the so-called “long branch attraction” effect). We can construct a new phylogeny after removing the outgroup:</p>
-<ul>
-<li>go back to the original alignment in mega (that we used for the Neighbour Joining tree), untick <em>Y.pseudotuberculosis</em>, and export in fasta format (“Data” -&gt; “Export Data” -&gt; change “Format” to “Fasta” and click “Ok”; you can save it as: “snpAlignment_without_outgroup.fas”)</li>
-<li>run raxml on this new alignment (change input to “snpAlignment_without_outgroup.fas” and output prefix (<code>-n</code>) to “without_outgroup” in the command line)</li>
-<li>open the bipartition… file in figtree and reroot the tree based on the knowledge we have gained previously: place the root on the branch leading to the prehistoric Y. pestis strains (KZL002, GZL002, CHC004 and VLI092).</li>
-</ul>
-<p><img src="assets/images/chapters/phylogenomics/raxml_tree_woOutgroup.png" class="img-fluid"></p>
-<p>Lastly, we will export the rooted tree from figtree: File -&gt; Export trees -&gt; select the “save as currently displayed” box and save as “ML_tree_rooted.tre” (this will be useful for the section “Temporal signal assessment” at the end of this tutorial)</p>
-<p><img src="assets/images/chapters/phylogenomics/export_tree.png" class="img-fluid"></p>
+</div>
+<p>You can notice that the phylogeny is difficult to visualise due to the long branch leading to <em>Y. pseudotuberculosis</em> Having a very distant outgroup can also have deleterious effects on the estimated phylogeny (due to the so-called “long branch attraction” effect). We can construct a new phylogeny after removing the outgroup: - Go back to the original alignment in mega (that we used for the Neighbour Joining tree), untick <em>Y.pseudotuberculosis</em>, and export in fasta format (<code>Data -&gt; Export Data</code> and change <code>Format</code> to <code>Fasta</code> and click <code>Ok</code>; you can save it as: <code>snpAlignment_without_outgroup.fas</code>) - Run raxml on this new alignment (change input to <code>snpAlignment_without_outgroup.fas</code> and output prefix (<code>-n</code>) to <code>without_outgroup</code> in the command line) - Open the <code>bipartition...</code> file in figtree and reroot the tree based on the knowledge we have gained previously: place the root on the branch leading to the prehistoric Y. pestis strains (KZL002, GZL002, CHC004 and VLI092).</p>
+<div id="fig-phylogenomics-raxml_tree_woOutgroup" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-raxml_tree_woOutgroup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/raxml_tree_woOutgroup.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-raxml_tree_woOutgroup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.29: Substitution tree estimated with RAxML without the <em>Y. pseudotuberculosis</em> outgroup.
+</figcaption>
+</figure>
+</div>
+<p>Lastly, we will export the rooted tree from figtree: File -&gt; Export trees -&gt; select the <code>save as currently displayed</code> box and save as <code>ML_tree_rooted.tre</code> (this will be useful for the section <code>Temporal signal assessment</code> at the end of this tutorial)</p>
+<div id="fig-phylogenomics-export_tree" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-export_tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/export_tree.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-export_tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.30: Exporting a tree after re-rooting in FigTree.
+</figcaption>
+</figure>
+</div>
 </section>
-<section id="estimating-a-time-tree-using-bayesian-phylogenetics-beast2" class="level2" data-number="16.6">
-<h2 data-number="16.6" class="anchored" data-anchor-id="estimating-a-time-tree-using-bayesian-phylogenetics-beast2"><span class="header-section-number">16.6</span> Estimating a time-tree using Bayesian phylogenetics (<em>BEAST2</em>)</h2>
+<section id="estimating-a-time-tree-using-bayesian-phylogenetics-beast2" class="level3" data-number="16.2.5">
+<h3 data-number="16.2.5" class="anchored" data-anchor-id="estimating-a-time-tree-using-bayesian-phylogenetics-beast2"><span class="header-section-number">16.2.5</span> Estimating a time-tree using Bayesian phylogenetics (<em>BEAST2</em>)</h3>
 <p>Now, we will try to use reconstruct a phylogeny in which the branch lengths do not represent a number of substitutions but instead represent the time of evolution. To do so, we will use the dates of ancient genomes (C14 dates) to calibrate the tree in time. This assumes a molecular clock hypothesis in which substitutions occur at a rate that is relatively constant in time so that the time of evolution can be estimated based on the number of substitutions.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -946,17 +1307,53 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>A great advantage of ancient pathogen genomes is that they provide key calibration points to estimate molecular clocks and dated phylogenies. This is more difficult to do with modern data alone.</p>
+<p>A great advantage of ancient pathogen genomes is that they provide calibration points to estimate molecular clocks and dated phylogenies. This might not be possible to do with modern data alone.</p>
 </div>
 </div>
-<p>We will estimate a time-tree from our alignment using Bayesian inference as implemented in the <em>BEAST2</em> software. Bayesian inference is based on a probability distribution that is different from the likelihood: the posterior probability. The posterior probability is the probability of the parameters given the data. It is easier to interpret than the likelihood because it directly contains all the information about the parameters: point estimates such as the median or the mean can be directly estimated from it, but also percentile intervals which can be used to measure uncertainty.</p>
-<p><img src="assets/images/chapters/phylogenomics/23.png" class="img-fluid"></p>
-<p>The Bayes theorem tells us that the posterior probability is proportional to the product of the likelihood and the “prior” probability of the parameters:</p>
-<p><img src="assets/images/chapters/phylogenomics/bayes_theorem.png" class="img-fluid"></p>
+<p>We will estimate a time-tree from our alignment using Bayesian inference as implemented in the <code>BEAST2</code> software <span class="citation" data-cites="bouckaertBEASTSoftwarePlatform2014 drummondBayesianEvolutionaryAnalysis2015">(<a href="#ref-bouckaertBEASTSoftwarePlatform2014" role="doc-biblioref">Bouckaert et al. 2014</a>; <a href="#ref-drummondBayesianEvolutionaryAnalysis2015" role="doc-biblioref">Drummond and Bouckaert 2015</a>)</span>. Bayesian inference is based on a probability distribution that is different from the likelihood: the posterior probability. The posterior probability is the probability of the parameters given the data. It is easier to interpret than the likelihood because it directly contains all the information about the parameters: point estimates such as the median or the mean can be directly estimated from it, but also percentile intervals which can be used to measure uncertainty.</p>
+<div id="fig-phylogenomics-phylogenomics" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-phylogenomics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/23.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-phylogenomics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.31: Posterior probability of model parameters.
+</figcaption>
+</figure>
+</div>
+<p>The Bayes theorem tells us that the posterior probability is proportional to the product of the likelihood and the <code>prior</code> probability of the parameters:</p>
+<div id="fig-phylogenomics-bayes_theorem" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-bayes_theorem-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/bayes_theorem.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-bayes_theorem-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.32: Bayes’ theorem.
+</figcaption>
+</figure>
+</div>
 <p>Therefore, for Bayesian inference, we need to complement our probabilistic model with prior distributions for all the parameters. Because we want to estimate a time tree, we also add another parameter: the molecular clock (average substitution rate in time units).</p>
-<p><img src="assets/images/chapters/phylogenomics/24.png" class="img-fluid"></p>
-<p>To characterize the full posterior distribution of each parameter, we would need in theory to compute the posterior probability for each possible combination of parameters. This is impossible, and we will instead use an algorithm called Markov chain Monte Carlo (MCMC) to approximate the posterior distribution. The MCMC is an algorithm which iteratively samples values of the parameters from the posterior distribution. Therefore, if the MCMC has run long enough, the (marginal) posterior distribution of the parameters can be approximated by a histogram of the sampled values.</p>
-<p><img src="assets/images/chapters/phylogenomics/25.png" class="img-fluid"></p>
+<div id="fig-phylogenomics-24" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-24-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/24.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-24-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.33: Bayesian phylogenetic model.
+</figcaption>
+</figure>
+</div>
+<p>To characterise the full posterior distribution of each parameter, we would need in theory to compute the posterior probability for each possible combination of parameters. This is impossible, and we will instead use an algorithm called Markov chain Monte Carlo (MCMC) to approximate the posterior distribution. The MCMC is an algorithm which iteratively samples values of the parameters from the posterior distribution. Therefore, if the MCMC has run long enough, the posterior distribution of the parameters can be approximated by a histogram of the sampled values.</p>
+<div id="fig-phylogenomics-25" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-25-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/25.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-25-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.34: MCMC algorithm used to sample the posterior distribution of parameters (credit: Paul O. Lewis)
+</figcaption>
+</figure>
+</div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -967,71 +1364,137 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The <a href="https://taming-the-beast.org/tutorials/">“taming the beast” website</a> has great tutorials to learn setting a <em>BEAST2</em> analysis. In particular, the “Introduction to BEAST2”, “Prior selection” and “Time-stamped data” are good starts.</p>
+<p>The “Taming the beast” website (<a href="https://taming-the-beast.org/tutorials/">https://taming-the-beast.org/tutorials/</a>) has great tutorials for various analyses that can be done with <code>BEAST2</code>. In particular, the “Introduction to BEAST2”, “Prior selection” and “Time-stamped data” are good starts.</p>
 </div>
 </div>
-<p>The different components of the <em>BEAST2</em> analysis can be set up in the program <em>BEAUti</em>:</p>
-<p><img src="assets/images/chapters/phylogenomics/26.png" class="img-fluid"></p>
-<p>Open BEAUTi by typing <code>beauti &amp;</code> in the terminal (if asked to update, press ‘not now’), and set up an analysis as followed:</p>
+<p>The different components of the <code>BEAST2</code> analysis can be set up in the program <code>BEAUti</code>:</p>
+<div id="fig-phylogenomics-26" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-26-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/26.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-26-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.35: Different component of a Bayesian phylogenetic analysis with BEAST.
+</figcaption>
+</figure>
+</div>
+<p>Open BEAUTi (if asked to update, press ‘not now’).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">beauti</span> <span class="kw">&amp;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Set up an analysis as follows:</p>
 <ul>
-<li>load the alignment without outgroup in the “Partitions” tab (“File” -&gt; “Import alignment”; select “nucleotide”)</li>
+<li>Load the alignment without outgroup in the <code>Partitions</code> tab (<code>File -&gt; Import alignment</code>; select <code>nucleotide</code>)</li>
 </ul>
-<p><img src="assets/images/chapters/phylogenomics/beauti_import_data.png" class="img-fluid"></p>
+<div id="fig-phylogenomics-beauti_import_data" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-beauti_import_data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/beauti_import_data.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-beauti_import_data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.36: Partitions panel in Beauti.
+</figcaption>
+</figure>
+</div>
 <ul>
-<li>set the sampling dates in the “Tip dates” tab:
+<li>Set the sampling dates in the <code>Tip dates</code> tab:
 <ul>
-<li>select “Use tip dates”</li>
-<li>click on “Auto-configure” -&gt; “read from file” and select the <code>sample_ages.txt</code> file</li>
-<li>change “Since some time in the past” to “Before present”</li>
+<li>Select <code>Use tip dates</code></li>
+<li>Click on <code>Auto-configure -&gt; Read from file</code> and select the <code>sample_ages.txt</code> file</li>
+<li>Change <code>Since some time in the past</code> to <code>Before present</code></li>
 </ul></li>
 </ul>
-<p><img src="assets/images/chapters/phylogenomics/beauti_tip_dates.png" class="img-fluid"></p>
+<div id="fig-phylogenomics-beauti_tip_dates" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-beauti_tip_dates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/beauti_tip_dates.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-beauti_tip_dates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.37: Tip dates panel in Beauti.
+</figcaption>
+</figure>
+</div>
 <ul>
-<li>select the substitution model in the “Site model” tab:
+<li>Select the substitution model in the <code>Site model</code> tab:
 <ul>
-<li>chose a GTR model</li>
-<li>use 4 Gamma categories for the Gamma site model: this is to account for variations of the substitution rate across sites (site=nucleotide position)</li>
+<li>Chose a GTR model</li>
+<li>Use 4 Gamma categories for the Gamma site model: this is to account for variations of the substitution rate across sites (site=nucleotide position)</li>
 </ul></li>
 </ul>
-<p><img src="assets/images/chapters/phylogenomics/beauti_substitution_model.png" class="img-fluid"></p>
+<div id="fig-phylogenomics-beauti_substitution_model" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-beauti_substitution_model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/beauti_substitution_model.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-beauti_substitution_model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.38: Site model panel in Beauti.
+</figcaption>
+</figure>
+</div>
 <ul>
-<li>choose the molecular clock model in the “Clock model” tab:
+<li>choose the molecular clock model in the <code>Clock model</code> tab:
 <ul>
-<li>use a relaxed clock lognormal model (this is to allow for some variation of the clock rate across branches)</li>
-<li>change the initial value of the clock rate to 10<sup>-4</sup> substitution/site/year (<strong>10<sup>-4</sup> can be written 1E-4</strong>)</li>
+<li>Use a relaxed clock lognormal model (this is to allow for some variation of the clock rate across branches)</li>
+<li>Change the initial value of the clock rate to 10<sup>-4</sup> substitution/site/year (10<sup>-4</sup> can be written 1E-4)</li>
 </ul></li>
 </ul>
-<p><img src="assets/images/chapters/phylogenomics/beauti_clock_model.png" class="img-fluid"></p>
+<div id="fig-phylogenomics-beauti_clock_model" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-beauti_clock_model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/beauti_clock_model.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-beauti_clock_model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.39: Clock model panel in Beauti.
+</figcaption>
+</figure>
+</div>
 <ul>
-<li>choose the prior distribution of parameters in the “Priors” tab:
+<li>Choose the prior distribution of parameters in the <code>Priors</code> tab:
 <ul>
-<li>use a Coalescent Bayesian Skyline tree prior</li>
-<li>change the mean clock prior to a uniform distribution between 1E-6 and 1E-3 subst/site/year</li>
-<li>leave everything else to default</li>
+<li>Use a Coalescent Bayesian Skyline tree prior</li>
+<li>Change the mean clock prior to a uniform distribution between 1E-6 and 1E-3 subst/site/year</li>
+<li>Leave everything else to default</li>
 </ul></li>
 </ul>
-<p><img src="assets/images/chapters/phylogenomics/beauti_priors.png" class="img-fluid"></p>
+<div id="fig-phylogenomics-beauti_priors" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-beauti_priors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/beauti_priors.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-beauti_priors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.40: Priors panel in Beauti.
+</figcaption>
+</figure>
+</div>
 <ul>
-<li>set up the MCMC in the “MCMC” tab:
+<li>Set up the MCMC in the <code>MCMC</code> tab:
 <ul>
-<li>use a chain length of 300M</li>
-<li>sample the mono-dimensional parameters and trees every 10,000 iterations (unfold “tracelog” and “treelog” menus and change “log every” to 10,000)</li>
+<li>Use a chain length of 300M</li>
+<li>Sample the mono-dimensional parameters and trees every 10,000 iterations (unfold <code>tracelog</code> and <code>treelog</code> menus and change “log every” to 10,000)</li>
 </ul></li>
 </ul>
-<p><img src="assets/images/chapters/phylogenomics/beauti_MCMC.png" class="img-fluid"></p>
+<div id="fig-phylogenomics-beauti_MCMC" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-beauti_MCMC-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/beauti_MCMC.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-beauti_MCMC-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.41: MCMC panel in Beauti.
+</figcaption>
+</figure>
+</div>
 <ul>
-<li>save the analysis setup as an xml file: “File” -&gt; “Save as”; you can name the file “beast_analysis_Y_pestis.xml”</li>
+<li>Save the analysis setup as an xml file: <code>File -&gt; Save as</code>; you can name the file <code>beast_analysis_Y_pestis.xml</code></li>
 </ul>
-<p>Now that the analysis is setup, we can run it using BEAST:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">beast</span> beast_analysis_Y_pestis.xml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now that the analysis is setup, we can run it using BEAST.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">beast</span> <span class="at">-java</span> beast_analysis_Y_pestis.xml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once the analysis is running two files should have been created and are continuously updated:</p>
 <ul>
-<li>the “snpAlignment_without_outgroup.log” file which contains the values sampled by the MCMC for various mono-dimensional parameters such as the clock rate, as well as other values that are a logged along the MCMC such as the posterior probability and the likelihood.</li>
-<li>the “snpAlignment_without_outgroup.trees” file which contains the MCMC trees sampled by the MCMC</li>
+<li>The <code>snpAlignment_without_outgroup.log</code> file which contains the values sampled by the MCMC for various mono-dimensional parameters such as the clock rate, as well as other values that are a logged along the MCMC such as the posterior probability and the likelihood</li>
+<li>The <code>snpAlignment_without_outgroup.trees</code> file which contains the MCMC trees sampled by the MCMC</li>
 </ul>
 <p>While the analysis is running, you can start reading the next section!</p>
-<section id="assessing-beast2-results" class="level3" data-number="16.6.1">
-<h3 data-number="16.6.1" class="anchored" data-anchor-id="assessing-beast2-results"><span class="header-section-number">16.6.1</span> Assessing <em>BEAST2</em> results</h3>
+</section>
+<section id="assessing-beast2-results" class="level3" data-number="16.2.6">
+<h3 data-number="16.2.6" class="anchored" data-anchor-id="assessing-beast2-results"><span class="header-section-number">16.2.6</span> Assessing <em>BEAST2</em> results</h3>
 <div class="callout callout-style-default callout-note callout-titled" title="Reminder">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1045,21 +1508,73 @@ Reminder
 <p>We are using an MCMC algorithm to sample the posterior distribution of parameters. If the MCMC has run long enough, we can use the sampled parameters to approximate the posterior distribution itself. Therefore, we have to check first that the MCMC chain has run long enough.</p>
 </div>
 </div>
-<p>We can assess the MCMC sampling using the program <em>Tracer</em>. <em>Tracer</em> can read BEAST log files an generate statistics and plots for each of the sampled parameters. Most importantly, <em>Tracer</em> provides:</p>
+<p>We can assess the MCMC sampling using the program <code>Tracer</code> <span class="citation" data-cites="rambautPosteriorSummarizationBayesian2018">(<a href="#ref-rambautPosteriorSummarizationBayesian2018" role="doc-biblioref">Rambaut et al. 2018</a>)</span>. <code>Tracer</code> can read BEAST log files an generate statistics and plots for each of the sampled parameters. Most importantly, <code>Tracer</code> provides:</p>
 <ul>
-<li><strong>trace plots</strong>: show the sampled parameter values along the MCMC run. Trace plots are a very useful MCMC diagnostic tool.</li>
-</ul>
-<p><img src="assets/images/chapters/phylogenomics/tracer_traceplot.png" class="img-fluid"></p>
-<p>The first thing that one needs to assess is whether the MCMC has passed the so called “burn-in” phase. The MCMC starts with a random set of parameters and will take some time to reach a zone of high posterior probability density. The parameter values that are sampled during this initial phase are usually considered as noise and discarded (by default, tracer discards the first 10% of samples). The burn-in phase can be visualize on trace plots as an initial phase during which the posterior probability of sampled parameters is constantly increasing before reaching a plateau:</p>
-<p><img src="assets/images/chapters/phylogenomics/32.png" class="img-fluid"></p>
+<li><p><strong>Trace plots</strong>: show the sampled parameter values along the MCMC run</p>
+<p>Trace plots are a very useful MCMC diagnostic tool.</p>
+<div id="fig-phylogenomics-tracer_traceplot" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-tracer_traceplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/tracer_traceplot.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-tracer_traceplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.42: Trace plot visualised in Tracer.
+</figcaption>
+</figure>
+</div>
+<p>The first thing that one needs to assess is whether the MCMC has passed the so called “burn-in” phase. The MCMC starts with a random set of parameters and will take some time to reach a zone of high posterior probability density. The parameter values that are sampled during this initial phase are usually considered as noise and discarded (by default, tracer discards the first 10% of samples). The burn-in phase can be visualised on trace plots as an initial phase during which the posterior probability of sampled parameters is constantly increasing before reaching a plateau:</p>
+<div id="fig-phylogenomics-32" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-32-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/32.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-32-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.43: Burnin phase of the MCMC.
+</figcaption>
+</figure>
+</div>
 <p>Once the burn-in phase is passed, one can look at the trace plots to assess if the parameters have been sampled correctly and long enough. Usually, when this is the case, the trace should be quite dense and oscillating around a central value (nice trace plots should look like “hairy caterpillars”). In the figure below, the trace on the left doesn’t look good, the one on the right does:</p>
-<p><img src="assets/images/chapters/phylogenomics/33.png" class="img-fluid"></p>
-<p>– <strong>ESS values</strong>: tracer also calculates effective sample sizes (ESS) for each of the sampled parameters. ESSs are estimates of the number of sampled parameter values after correcting for auto-correlation along the MCMC. As a rule of thumb, one usually considers that an MCMC as run long enough if all parameter’s ESS are &gt; 200. Note that if the trace looks like a hairy caterpillar, the corresponding ESS value should be high.</p>
-<p><img src="assets/images/chapters/phylogenomics/tracer_ESS.png" class="img-fluid"></p>
-<p>– <strong>Parameter estimates</strong>: <em>Tracer</em> also provides statistics and plots to explore the posterior distribution of the parameters. These should be considered only if the trace plot and ESS values look fine. In the “Estimates” tab, after selecting the chosen parameter in the left panel, the upper-right panel shows point estimates (mean, median) and measures of uncertainty (95% HPD interval), and the bottom-right panel shows a histogram of the sampled value:</p>
-<p><img src="assets/images/chapters/phylogenomics/tracer_estimates.png" class="img-fluid"></p>
-<p>Let’s now load the “snpAlignment_without_outgroup.log” file into <em>Tracer</em>.</p>
-<p>While the run is still going, open a new separate terminal, activate the conda environment with <code>conda activate phylogenomics</code>, open tracer with <code>tracer &amp;</code>, and then “File” -&gt; “Import trace file” -&gt; select “snpAlignment_without_outgroup.log”. Note that one can load a <em>BEAST2</em> log file into tracer even if the analysis is still running. This allows to assess if the MCMC is running correctly or has run long enough before it’s completed.</p>
+<div id="fig-phylogenomics-33" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-33-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/33.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-33-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.44: Assessing correct MCMC sampling using trace plots.
+</figcaption>
+</figure>
+</div></li>
+<li><p><strong>ESS values</strong>: tracer also calculates effective sample sizes (ESS) for each of the sampled parameters.</p>
+<p>ESSs are estimates of the number of sampled parameter values after correcting for auto-correlation along the MCMC. As a rule of thumb, one usually considers that an MCMC has run long enough if all parameter’s ESS are &gt; 200. Note that if the trace looks like a hairy caterpillar, the corresponding ESS value should be high.</p>
+<div id="fig-phylogenomics-tracer_ESS" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-tracer_ESS-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/tracer_ESS.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-tracer_ESS-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.45: Assessing effective sample sizes (ESS) in Tracer.
+</figcaption>
+</figure>
+</div></li>
+<li><p><strong>Parameter estimates</strong>: <code>Tracer</code> also provides statistics and plots to explore the posterior distribution of the parameters.</p>
+<p>These should be considered only if the trace plot and ESS values look fine. In the <code>Estimates</code> tab, after selecting the chosen parameter in the left panel, the upper-right panel shows point estimates (mean, median) and measures of uncertainty (95% HPD interval), and the bottom-right panel shows a histogram of the sampled value:</p>
+<div id="fig-phylogenomics-tracer_estimates" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-tracer_estimates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/tracer_estimates.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-tracer_estimates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.46: Marginal estimates of parameters in Tracer.
+</figcaption>
+</figure>
+</div></li>
+</ul>
+<p>Let’s now load the <code>snpAlignment_without_outgroup.log</code> file into <code>Tracer</code>.</p>
+<p>While the run is still going, open a new separate terminal and activate the conda environment.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate phylogenomics</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then, open <code>Tracer</code>.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tracer</span> <span class="kw">&amp;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Open the log file: <code>File -&gt; Import trace file</code> and select <code>snpAlignment_without_outgroup.log</code>. Note that one can load a <code>BEAST2</code> log file into <code>Tracer</code> even if the analysis is still running. This allows to assess if the MCMC is running correctly or has run long enough before it’s completed.</p>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Question">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1074,7 +1589,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-31-contents" aria-controls="callout-31" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-34-contents" aria-controls="callout-34" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1083,14 +1598,23 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-31" class="callout-31-contents callout-collapse collapse">
+<div id="callout-34" class="callout-34-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You have probably let you analysis run for 10-20 mins before looking at the log file, and this is definitely not sufficient: the burnin phase has recently been passed, the trace plots do not look very dense and ESS values are low. It would probably take a few hours for the analysis to complete. Luckily we have run the analysis in advance and saved the log files for you in the “intermediateFiles” folder: “snpAlignment_without_outgroup.log” and “snpAlignment_without_outgroup.trees”</p>
-<p><img src="assets/images/chapters/phylogenomics/tracer_unsufficient_sampling.png" class="img-fluid"></p>
+<p>You have probably run your analysis for 10-20 mins before looking at the log file, and this is definitely not sufficient: the burnin phase has recently been passed, the trace plots do not look very dense and ESS values are low. It would probably take a few hours for the analysis to complete. Luckily we have run the analysis in advance and saved the log files for you in the <code>intermediateFiles</code> folder: <code>snpAlignment_without_outgroup.log</code> and <code>snpAlignment_without_outgroup.trees</code>.</p>
+<div id="fig-phylogenomics-tracer_unsufficient_sampling" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-tracer_unsufficient_sampling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/tracer_unsufficient_sampling.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-tracer_unsufficient_sampling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.47: Trace plot indicating unsufficient MCMC sampling.
+</figcaption>
+</figure>
 </div>
 </div>
 </div>
-<p>You can now load the “intermediateFiles/snpAlignment_without_outgroup.log” file into <em>Tracer</em>.</p>
+</div>
+<p>You can now load the <code>intermediateFiles/snpAlignment_without_outgroup.log</code> file into <code>Tracer</code>.</p>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Question">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1105,7 +1629,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-33-contents" aria-controls="callout-33" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-36-contents" aria-controls="callout-36" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1114,9 +1638,19 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-33" class="callout-33-contents callout-collapse collapse">
+<div id="callout-36" class="callout-36-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Yes! The trace plots look good and all ESSs are &gt; 200 <img src="assets/images/chapters/phylogenomics/beast_results_trace.png" class="img-fluid"></p>
+<p>Yes! The trace plots look good and all ESSs are &gt; 200.</p>
+<div id="fig-phylogenomics-beast_results_trace" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-beast_results_trace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/beast_results_trace.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-beast_results_trace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.48: Trace plot indicating sufficient MCMC sampling.
+</figcaption>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -1134,7 +1668,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-35-contents" aria-controls="callout-35" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-38-contents" aria-controls="callout-38" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1143,44 +1677,59 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-35" class="callout-35-contents callout-collapse collapse">
+<div id="callout-38" class="callout-38-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>~7.10<sup>-6</sup> substitution/site/year. Note, however, that this estimate is largely biased since we used a SNP alignment containing only variable positions. In order to get an unbiased estimate of the substitution rate, we should have used the full alignment or account for the number of constant sites by using a “filtered” alignment (see <a href="https://www.beast2.org/2019/07/18/ascertainment-correction.html">here</a>). In general, this is good practice since not accounting for conserved positions in the alignment can sometimes affect the tree as well (although this should usually be minor, which is why we didn’t bother to do this here).</p>
-<p><img src="assets/images/chapters/phylogenomics/beast_results_ucldMean.png" class="img-fluid"></p>
+<p>~7.10<sup>-6</sup> substitution/site/year. Note, however, that this estimate is largely biased since we used a SNP alignment containing only variable positions. In order to get an unbiased estimate of the substitution rate, we should have used the full alignment or account for the number of constant sites by using a “filtered” alignment (see here: <a href="https://www.beast2.org/2019/07/18/ascertainment-correction.html">https://www.beast2.org/2019/07/18/ascertainment-correction.html</a>). In general, this is good practice since not accounting for conserved positions in the alignment can sometimes affect the tree topology as well (although this should usually be minor).</p>
+<div id="fig-phylogenomics-beast_results_ucldMean" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-beast_results_ucldMean-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/beast_results_ucldMean.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-beast_results_ucldMean-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.49: Mean estimate of the clock rate.
+</figcaption>
+</figure>
+</div>
 </div>
 </div>
 </div>
 </section>
-<section id="mcc-tree" class="level3" data-number="16.6.2">
-<h3 data-number="16.6.2" class="anchored" data-anchor-id="mcc-tree"><span class="header-section-number">16.6.2</span> MCC tree</h3>
-<p>Since we are working in a Bayesian framework, we do not obtain a single phylogenetic tree as with Maximum likelihood, but a large set of trees which should be representative of the posterior distribution. In contrast with mono-dimensional parameters, a tree distribution cannot be easily summarized with mean or median estimates. Instead, we need to use specific tree-summarizing techniques. One of the most popular is the maximum clade credibility (MCC) tree, which works as follow:</p>
-<ul>
-<li><ol type="1">
-<li>For any node in any of the sampled trees, compute a <strong>posterior support</strong>: the proportion of trees in the sample which contain the node</li>
-</ol></li>
-<li><ol start="2" type="1">
+<section id="mcc-tree" class="level3" data-number="16.2.7">
+<h3 data-number="16.2.7" class="anchored" data-anchor-id="mcc-tree"><span class="header-section-number">16.2.7</span> MCC tree</h3>
+<p>Since we are working in a Bayesian framework, we do not obtain a single phylogenetic tree as with Maximum likelihood, but a large set of trees which should be representative of the posterior distribution. In contrast with mono-dimensional parameters, a tree distribution cannot be easily summarised with mean or median estimates. Instead, we need to use specific tree-summarizing techniques. One of the most popular is the maximum clade credibility (MCC) tree <span class="citation" data-cites="heledLookingTreesForest2013">(<a href="#ref-heledLookingTreesForest2013" role="doc-biblioref">Heled and Bouckaert 2013</a>)</span>, which works as follows:</p>
+<ol type="1">
+<li>For any node in any of the sampled trees, compute a <em>posterior support</em>: the proportion of trees in the sample which contain the corresponding clade</li>
 <li>Select the MCC tree: this is the tree in which the product of node posterior supports is the highest</li>
-</ol></li>
-<li><ol start="3" type="1">
 <li>Calculate node/branch statistics on the MCC tree: typically, the mean/median estimates and HPD interval of node ages are calculated from the full tree sample and annotated on the MCC tree</li>
-</ol></li>
-</ul>
-<p><img src="assets/images/chapters/phylogenomics/MCC_tree_concept.png" class="img-fluid"></p>
-<p>Let’s generate an MCC tree from our tree sample. We can do this using the <em>TreeAnnotator</em> software, which has both a command line and graphical interface. Let’s use the command line here and run the following (using a burn-in of 10%):</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a> <span class="ex">treeannotator</span> <span class="at">-burnin</span> 10 intermediateFiles/snpAlignment_without_outgroup.trees snpAlignment_without_outgroup.MCC.tree</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</ol>
+<div id="fig-phylogenomics-MCC_tree_concept" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-MCC_tree_concept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/MCC_tree_concept.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-MCC_tree_concept-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.50: Maximum clade credibility tree as a summary of the tree posterior distribution.
+</figcaption>
+</figure>
+</div>
+<p>Let’s generate an MCC tree from our tree sample. We can do this using the <code>TreeAnnotator</code> software, which has both a command line and graphical interface. Let’s use the command line here and run the following (using a burn-in of 10%).</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a> <span class="ex">treeannotator</span> <span class="at">-burnin</span> 10 intermediateFiles/snpAlignment_without_outgroup.trees snpAlignment_without_outgroup.MCC.tree</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once this is completed, we can open the MCC tree (<code>snpAlignment_without_outgroup.MCC.tree</code>) with figtree. Let’s then add a few elements to the plot:</p>
-<ul>
-<li><ol type="1">
-<li>Tick the “Scale Axis” box, unfold the corresponding menu, and select “Reverse axis” (now the timescale is in years BP)</li>
-</ol></li>
-<li><ol start="2" type="1">
-<li>Tick the “Node Labels” box, unfold the corresponding menu, and select “Display: posterior”. The posterior support of each node is now displayed. Note that the support value is a proportion (1=100%)</li>
-</ol></li>
-<li><ol start="3" type="1">
-<li>Tick the “Node Bars” box, unfold the corresponding menu, and select “Display: height_95%_HPD”. The 95% HPD intervals of node ages are now displayed.</li>
-</ol></li>
-</ul>
-<p><img src="assets/images/chapters/phylogenomics/beast_results_MCC_tree.png" class="img-fluid"></p>
+<ol type="1">
+<li>Tick the <code>Scale Axis</code> box, unfold the corresponding menu, and select <code>Reverse axis</code> (now the timescale is in years BP)</li>
+<li>Tick the <code>Node Labels</code> box, unfold the corresponding menu, and select <code>Display: posterior</code> The posterior support of each node is now displayed Note that the support value is a proportion (1=100%)</li>
+<li>Tick the <code>Node Bars</code> box, unfold the corresponding menu, and select <code>Display: height_95%_HPD</code> The 95% HPD intervals of node ages are now displayed</li>
+</ol>
+<div id="fig-phylogenomics-beast_results_MCC_tree" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-beast_results_MCC_tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/beast_results_MCC_tree.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-beast_results_MCC_tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.51: Maximum clade credibility tree of <em>Y. pestis</em>.
+</figcaption>
+</figure>
+</div>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Question">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1195,7 +1744,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-37-contents" aria-controls="callout-37" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-40-contents" aria-controls="callout-40" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1204,7 +1753,7 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-37" class="callout-37-contents callout-collapse collapse">
+<div id="callout-40" class="callout-40-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Yes! The root is placed between our prehistoric strains and the rest of Y. pestis strains. Note that this time we didn’t have to use an outgroup because we estimated a time-tree: the root is identified as the oldest node in the tree.</p>
 </div>
@@ -1224,7 +1773,7 @@ Question
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Answer">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-39-contents" aria-controls="callout-39" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-42-contents" aria-controls="callout-42" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1233,30 +1782,42 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-39" class="callout-39-contents callout-collapse collapse">
+<div id="callout-42" class="callout-42-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>~5800 years BP (HPD 95%: ~8000-4500 years BP)</p>
 </div>
 </div>
 </div>
 </section>
-<section id="bonus-temporal-signal-assessment" class="level3" data-number="16.6.3">
-<h3 data-number="16.6.3" class="anchored" data-anchor-id="bonus-temporal-signal-assessment"><span class="header-section-number">16.6.3</span> Bonus: Temporal signal assessment</h3>
-<p>It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree (i.e.&nbsp;we should have done this before the actual <em>BEAST2</em> analysis). A classic way to assess the temporal signal of a dataset is the root-to-tip regression. The rationale of the root-to-tip regression is to verify that the oldest a sequence is, the closer it should be to the root in a (rooted) substitution tree because there was less time for substitution to accumulate. In other words, their should be a correlation between sample age and distance to the root, which we can assess using a linear regression (root-to-tip regression). This can be done using the program <em>TempEst</em>:</p>
-<ol type="1">
-<li>open <em>TempEst</em> by typing <code>tempest &amp;</code> and load the rooted ML tree that we produced previously (you should have saved it as “ML_tree_rooted.tre”)</li>
-<li>click on “Import Dates” in the “Sample Dates” tab, select the sample_age.txt file and click “OK”</li>
-<li>still in the “Sample Dates” tab, change “Since some time in the past” to “Before present” (one might need to extend the <em>TempEst</em> window to see the pull down menu)</li>
-<li>look at the “Root-to-tip tab”: is there a positive correlation between time and root-to-tip divergence as expected under the molecular clock hypothesis?</li>
+<section id="bonus-temporal-signal-assessment" class="level3" data-number="16.2.8">
+<h3 data-number="16.2.8" class="anchored" data-anchor-id="bonus-temporal-signal-assessment"><span class="header-section-number">16.2.8</span> Bonus: Temporal signal assessment</h3>
+<p>It is a good practice to assess if the genetic sequences that we analyse do indeed behave like molecular clocks before trying to estimate a time tree (i.e.&nbsp;we should have done this before the actual <code>BEAST2</code> analysis). A classic way to assess the temporal signal of a dataset is the root-to-tip regression <span class="citation" data-cites="rambautExploringTemporalStructure2016">(<a href="#ref-rambautExploringTemporalStructure2016" role="doc-biblioref">Rambaut et al. 2016</a>)</span>. The rationale of the root-to-tip regression is to verify that the older a sequence is, the closer it should be to the root in a (rooted) substitution tree because there was less time for substitution to accumulate. In other words, there should be a correlation between sample age and distance to the root, which we can assess using a linear regression (root-to-tip regression). This can be done using the program <code>TempEst</code>: 1. Open <code>TempEst</code></p>
+<pre><code>```bash
+tempest &amp;
+```</code></pre>
+<ol start="2" type="1">
+<li>Load the rooted ML tree that we produced previously (you should have saved it as <code>ML_tree_rooted.tre</code>)</li>
+<li>Click on <code>Import Dates</code> in the <code>Sample Dates</code> tab, select the <code>sample_age.txt</code> file and click on <code>OK</code></li>
+<li>Still in the <code>Sample Dates</code> tab, change <code>Since some time in the past</code> to <code>Before present</code> (one might need to extend the <code>TempEst</code> window to see the pull down menu)</li>
+<li>Look at the <code>Root-to-tip tab</code>: is there a positive correlation between time and root-to-tip divergence as expected under the molecular clock hypothesis?</li>
 </ol>
-<p><img src="assets/images/chapters/phylogenomics/Tempest.png" class="img-fluid"></p>
+<div id="fig-phylogenomics-Tempest" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-phylogenomics-Tempest-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/phylogenomics/Tempest.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-phylogenomics-Tempest-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.52: Root-to-tip regression using TempEst.
+</figcaption>
+</figure>
+</div>
 </section>
 </section>
-<section id="optional-clean-up" class="level2" data-number="16.7">
-<h2 data-number="16.7" class="anchored" data-anchor-id="optional-clean-up"><span class="header-section-number">16.7</span> (Optional) clean-up</h2>
+<section id="optional-clean-up" class="level2" data-number="16.3">
+<h2 data-number="16.3" class="anchored" data-anchor-id="optional-clean-up"><span class="header-section-number">16.3</span> (Optional) clean-up</h2>
 <p>Let’s clean up your working directory by removing all the data and output from this chapter.</p>
 <p>You can close all windows and any terminals. If you have a terminal with a command still running, just press <kbd>ctrl</kbd> + <kbd>c</kbd> a couple of times until it drops you to an empty prompt.</p>
-<p>Once completed, the command below will remove the <code>/&lt;PATH&gt;/&lt;TO&gt;/phylogenomics</code> directory <strong>as well as all of its contents</strong>.</p>
+<p>Once completed, the command below will remove the <code>/&lt;PATH&gt;/&lt;TO&gt;/phylogenomics</code> directory <em>as well as all of its contents</em>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1270,15 +1831,59 @@ Pro Tip
 <p>Always be VERY careful when using <code>rm -r</code>. Check 3x that the path you are specifying is exactly what you want to delete and nothing more before pressing ENTER!</p>
 </div>
 </div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-r</span> /<span class="op">&lt;</span>PATH<span class="op">&gt;</span>/<span class="op">&lt;</span>TO<span class="op">&gt;</span>/phylogenomics<span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-r</span> /<span class="op">&lt;</span>PATH<span class="op">&gt;</span>/<span class="op">&lt;</span>TO<span class="op">&gt;</span>/phylogenomics<span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once deleted you can move elsewhere (e.g.&nbsp;<code>cd ~</code>).</p>
-<p>We can also get out of the <code>conda</code> environment with</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>To delete the conda environment</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> remove <span class="at">--name</span> phylogenomics <span class="at">--all</span> <span class="at">-y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-
+<p>We can also get out of the <code>conda</code> environment with.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To delete the conda environment.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> remove <span class="at">--name</span> phylogenomics <span class="at">--all</span> <span class="at">-y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
+<section id="summary" class="level2" data-number="16.4">
+<h2 data-number="16.4" class="anchored" data-anchor-id="summary"><span class="header-section-number">16.4</span> Summary</h2>
+<ul>
+<li>Phylogenetics is the study of the evolutionnary history and relationships between biological entities</li>
+<li>Phylogenetic analyses are essential to classify and organise all knowledge about biological organisms in the light of evolution</li>
+<li>Phylogenetic trees can be used to trace back various features along past lineages, such as the geographic location, host species or genomic content</li>
+<li>Ancient genomes permit more accurate phylogenetic reconstructions and the study of past extinct lineages</li>
+<li>Ancient genomes allow estimating molecular clock rates and the scaling of phylogenetic trees to time</li>
+<li>Phylogenetic inference relies on the comparison of homologous characters, such as aligned DNA sequences</li>
+<li>Probabilistic methods, including Maximum Likelihood and Bayesian inference, are the most popular phylogenetic approaches today</li>
+</ul>
+</section>
+<section id="references" class="level2" data-number="16.5">
+<h2 data-number="16.5" class="anchored" data-anchor-id="references"><span class="header-section-number">16.5</span> References</h2>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-baum2008reading" class="csl-entry" role="listitem">
+Baum, David et al. 2008. <span>“Reading a Phylogenetic Tree: The Meaning of Monophyletic Groups.”</span> <em>Nature Education</em> 1 (1): 190. <a href="https://www.nature.com/scitable/topicpage/reading-a-phylogenetic-tree-the-meaning-of-41956/">https://www.nature.com/scitable/topicpage/reading-a-phylogenetic-tree-the-meaning-of-41956/</a>.
+</div>
+<div id="ref-bouckaertBEASTSoftwarePlatform2014" class="csl-entry" role="listitem">
+Bouckaert, Remco, Joseph Heled, Denise Kühnert, Tim Vaughan, Chieh-Hsi Wu, Dong Xie, Marc A. Suchard, Andrew Rambaut, and Alexei J. Drummond. 2014. <span>“<span>BEAST</span> 2: <span>A</span> <span>Software</span> <span>Platform</span> for <span>Bayesian</span> <span>Evolutionary</span> <span>Analysis</span>.”</span> <em>PLoS Computational Biology</em> 10 (4): e1003537. <a href="https://doi.org/10.1371/journal.pcbi.1003537">https://doi.org/10.1371/journal.pcbi.1003537</a>.
+</div>
+<div id="ref-cornuaultRoadMapPhylogenetic2022" class="csl-entry" role="listitem">
+Cornuault, Josselin, and Isabel Sanmartín. 2022. <span>“A Road Map for Phylogenetic Models of Species Trees.”</span> <em>Molecular Phylogenetics and Evolution</em> 173 (April): 107483. <a href="https://doi.org/10.1016/j.ympev.2022.107483">https://doi.org/10.1016/j.ympev.2022.107483</a>.
+</div>
+<div id="ref-drummondBayesianEvolutionaryAnalysis2015" class="csl-entry" role="listitem">
+Drummond, Alexei J., and Remco R. Bouckaert. 2015. <em>Bayesian <span>Evolutionary</span> <span>Analysis</span> with <span>BEAST</span></em>. Cambridge: Cambridge University Press. <a href="https://doi.org/10.1017/CBO9781139095112">https://doi.org/10.1017/CBO9781139095112</a>.
+</div>
+<div id="ref-heledLookingTreesForest2013" class="csl-entry" role="listitem">
+Heled, Joseph, and Remco R. Bouckaert. 2013. <span>“Looking for Trees in the Forest: Summary Tree from Posterior Samples.”</span> <em>BMC Evolutionary Biology</em> 13 (1): 221. <a href="https://doi.org/10.1186/1471-2148-13-221">https://doi.org/10.1186/1471-2148-13-221</a>.
+</div>
+<div id="ref-rambautPosteriorSummarizationBayesian2018" class="csl-entry" role="listitem">
+Rambaut, Andrew, Alexei J Drummond, Dong Xie, Guy Baele, and Marc A Suchard. 2018. <span>“Posterior <span>Summarization</span> in <span>Bayesian</span> <span>Phylogenetics</span> <span>Using</span> <span>Tracer</span> 1.7.”</span> <em>Systematic Biology</em> 67 (5): 901–4. <a href="https://doi.org/10.1093/sysbio/syy032">https://doi.org/10.1093/sysbio/syy032</a>.
+</div>
+<div id="ref-rambautExploringTemporalStructure2016" class="csl-entry" role="listitem">
+Rambaut, Andrew, Tommy T. Lam, Luiz Max Carvalho, and Oliver G. Pybus. 2016. <span>“Exploring the Temporal Structure of Heterochronous Sequences Using <span>TempEst</span> (Formerly <span>Path</span>-<span>O</span>-<span>Gen</span>).”</span> <em>Virus Evolution</em> 2 (1): vew007. <a href="https://doi.org/10.1093/ve/vew007">https://doi.org/10.1093/ve/vew007</a>.
+</div>
+<div id="ref-stamatakisRAxMLVersionTool2014" class="csl-entry" role="listitem">
+Stamatakis, Alexandros. 2014. <span>“<span>RAxML</span> <span>Version</span> 8: A Tool for Phylogenetic Analysis and Post-Analysis of Large Phylogenies.”</span> <em>Bioinformatics</em> 30 (9): 1312–13. <a href="http://bioinformatics.oxfordjournals.org/content/early/2014/01/21/bioinformatics.btu033.short">http://bioinformatics.oxfordjournals.org/content/early/2014/01/21/bioinformatics.btu033.short</a>.
+</div>
+<div id="ref-tamuraMEGA11MolecularEvolutionary2021" class="csl-entry" role="listitem">
+Tamura, Koichiro, Glen Stecher, and Sudhir Kumar. 2021. <span>“<span>MEGA11</span>: <span>Molecular</span> <span>Evolutionary</span> <span>Genetics</span> <span>Analysis</span> <span>Version</span> 11.”</span> <em>Molecular Biology and Evolution</em> 38 (7): 3022–27. <a href="https://doi.org/10.1093/molbev/msab120">https://doi.org/10.1093/molbev/msab120</a>.
+</div>
+<div id="ref-yangMolecularEvolutionStatistical2014" class="csl-entry" role="listitem">
+Yang, Ziheng. 2014. <em>Molecular <span>Evolution</span>: <span>A</span> <span>Statistical</span> <span>Approach</span></em>. Oxford: Oxford University Press.
 </div>
 </div>
 </section>
