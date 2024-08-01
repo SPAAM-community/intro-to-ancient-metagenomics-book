@@ -17,12 +17,11 @@ To following the practical chapters of this text book, you will require:
 - An internet connection
 - A web browser 
 - A [`conda`](https://docs.conda.io/en/latest/miniconda.html) installation with [`bioconda`](https://bioconda.github.io/#usage) configured.
-    - Conda is a very popular package manager for installing software in bioinformatics. `bioconda` is a the main source of bioinformatics software for conda.
-    - To speed up installation, we would also highly recommend setting up the [`libmamba-solver`](https://www.anaconda.com/blog/a-faster-conda-for-a-growing-community)
+    - Conda is a very popular package manager for installing software in bioinformatics. `bioconda` is currently the most popular distribution source of bioinformatics software for conda.
 
-For each chapter, if it requires pre-prepared data, the top of the page will have a link to a `.tar` archive that will contain the raw data will be available to download.
-
-A conda `.yml` file that specifies the software environment for that chapter will also be available for you to install. 
+For each chapter, if it requires pre-prepared data, the top of the page will have a box called 'Self guided: chapter envionment setup' that link to a `.tar` archive.
+This contain the raw data will be available to download for following the chapter
+Furthermore, the same box will describe how to use a conda `.yml` file that specifies the software environment for that chapter will also be available for you to install. 
 
 See the rest of this page on how to install `conda` (if not already available to you), and also how to create `conda` software environments
 
@@ -32,7 +31,7 @@ Before loading the environment for the exercises, the software environment will 
 
 If you've not yet installed `conda`, please follow the instructions in the box below.
 
-::: {.callout-note title="Quick guide to installing conda and libmamba-solver" collapse=true}
+::: {.callout-note title="Quick guide to installing conda" collapse=true}
 These instructions have been tested on Ubuntu 22.04, but should apply to most Linux operating systems. For OSX you may need to download a different file from [here](https://www.google.com/search?channel=fs&client=ubuntu-sn&q=miniconda).
 
 - Change directory to somewhere suitable for installing a few gigabytes of software, e.g. `mkdir ~/bin/ && cd ~/bin/`
@@ -57,13 +56,6 @@ These instructions have been tested on Ubuntu 22.04, but should apply to most Li
     - Open the terminal again and run the command you copied (i.e., `conda config --set auto_activate_base false`)
     - Exit and open the terminal again
     - Type `conda --version` to check conda is installed and working
-    - Install `libsolver-mamba` for faster software installation
-
-        ```bash
-        conda install -n base conda-libmamba-solver
-        conda config --set solver libmamba
-        ```
-
     - Set up bioconda
 
         ```bash
@@ -224,5 +216,7 @@ For some chapters you may need the following software/and or data manually insta
     cd /<path>/<to>/ancient-metagenomic-pipelines/
     git clone https://github.com/NBISweden/aMeta
     cd aMeta
+    ## We have to patch the environment to use an old version of Snakemake as aMeta is not compatible with the latest version
+    sed -i 's/snakemake-minimal>=5.18/snakemake <=6.3.0/' workflow/envs/environment.yaml
     conda env create -f workflow/envs/environment.yaml
     ```

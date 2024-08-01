@@ -45,14 +45,25 @@ Generally, Quarto follows standard Markdown with some extra 'syntax' sugar. A Ma
 ### General Markdown
 
 - One sentence per line.
+    
+    i.e., this is bad:
+    
+    ```{verbatim}
+    For example this is the first sentence. Here is the second sentence. This makes reviewing on GitHub harder.
+    ```
+
+    This is good:
+    
+    ```{verbatim}
     For example this is the first sentence.
     Here is the second sentence.
     This makes reviewing on GitHub easier.
+    ```
 - New paragraphs should be separated by a blank line.
     
-    ```default
-    This would be a first sentence
-    Then a second sentence
+    ```{verbatim}
+    This would be a first sentence.
+    Then a second sentence.
 
     Then a new paragraph.
     And so on.
@@ -60,12 +71,13 @@ Generally, Quarto follows standard Markdown with some extra 'syntax' sugar. A Ma
 
 To continue
 
-- _Italic formatting_ should be used with a single underscore `_` and should be used for emphasis.
-- If required, **Bold formatting** should be used with double asterisks `**`. This should not be used for emphasis.
-- URLs should be both hyperlinked around a relevant bit of text.
-    - For example, for visit the [SPAAM Website](https://www.spaam-community.org/) this should be rendered visit the`[SPAAM Website](https://www.spaam-community.org/)`.
-    - This is to make sure URLs in printed copies of the textbook are still visible.
-- Bullet point lists must start with a capital letter and _not_ end with a full stop.
+- _Italic formatting_ should be used with a single underscore `_` and should be used for emphasis
+- If required, **Bold formatting** should be used with double asterisks `**`. This should not be used for emphasis
+    - Bold formatting should be used to indicate words for inclusion in a glossary, or to indicate the first word of bullet lists
+- URLs should be both hyperlinked around a relevant bit of text
+    - For example, for visit the [SPAAM Website](https://www.spaam-community.org/) this should be rendered visit the`[SPAAM Website](https://www.spaam-community.org/)`
+    - This is to make sure URLs in printed copies of the textbook are still visible
+- Bullet point lists must start with a capital letter and _not_ end with a full stop
 
 ### Notes and tips
 
@@ -73,7 +85,7 @@ For side nodes, tips, warnings, etc. you should [Quarto callout](https://quarto.
 
 For example.
 
-```default
+```{verbatim}
 ::: {.callout-warning}
 We reserve some callout formatting for specific objects!
 :::
@@ -85,57 +97,62 @@ Gets rendered like this.
 We reserve some callout formatting for specific objects!
 :::
 
-See the [Content](#content) for the reserved formatting. Note: I rendered that within-page link with `[Content](#content)` syntax, where `#content` is the name of the header in all lowercase and all punctiation replaced with `-`.
+See the [Chapter Content](#chapter-content) for the reserved formatting. Note: I rendered that within-page link with `[Chapter Content](#chapter-content)` syntax, where `#chapter-content` is the name of the header in all lowercase and all punctiation replaced with `-`.
 
 ### Code
 
 Single backticks for inline code should only be used for single words such as tool names, e.g. `samtools`, file extensions such as `.txt`, or single paths `<path>/<to>/<here>`.
 
 Any form of commands or code should be formatted as code in a syntax-named _triple_ backtick block.
+Execution should be turned off by default for those languages that may auto-execute (i..e, R, with `eval=FALSE` in a code block header block), unless has a very low computational overhead and can be rendered on the fly.
+Language should be specified.
 
 For example, this is a bash code block that has a whole command.
 
-```{markdown}
-    ```{#lst-chapterwritingguidelines-codeexample bash}
+```verbatim
+    ```bash
     echo "SPAAM rules!"
     ```
 ```
 
 And gets rendered as like this.
 
-```{bash}
+```bash
 echo "SPAAM rules!"
 ```
 
-If you wish to display _large_ output from a code block, you should turn off the command execution printing in the code block itself, and
-use a collapsible callout block with a 'Expand to see output' title immediately after the code block itself that contains.
-The content of the output should also be in a triple backtick block, with the the `default` syntax specified.
+If you wish to display _large_ output from a code block that _does_ get executed, you should turn off the command execution printing in the code block itself, and use a collapsible callout block with a 'Expand to see output' title immediately after the code block itself that contains.
+The content of the output should also be in a triple backtick block, with the the `verbatim` syntax specified.
 
-```{.bash eval=false}
+```bash
 echo "SPAAM rules!"
 ```
 ::: {.callout-note collapse="true"}
 ## Expand see output
 
-```{.bash eval=false}
+```bash
 SPAAM rules!
 ```
 :::
 
 This was generated with
 
-```{markdown}
-    ```{.bash eval=false}
-    echo "SPAAM rules!"
-    ```
-    ::: {.callout-note collapse="true"}
-    ## Expand see output
+Another example, with setting `eval=FALSE` for R.
 
-    ```{.default eval=false}
-    SPAAM rules!
-    ```
-    :::
+`````verbatim
+```{.r eval=FALSE}
+print('SPAAM Rules!')
 ```
+`````
+
+::: {.callout-note collapse="true"}
+## Expand see output
+`````verbatim
+```{.r eval=FALSE}
+[1] "SPAAM Rules!"
+```
+`````
+:::
 
 Additional guidance is as follows:
 
@@ -147,7 +164,7 @@ Additional guidance is as follows:
     - This ensures portability of code between different systems and readers
 - If paths require placeholders they should be in `<angle brackets>` 
 - Any code that should not actually be run by the user should be wrapped in a 'warning' [callout block](#notes-and-tips)
-- Optional 'self-guided' sections (i.e. sections that require user setup and would normally be already prepared for users by summer school organisers prior the summer school)
+- Optional 'self-guided' sections (i.e. sections that require user setup and would normally be already prepared for users by summer school organisers prior the summer school), should have be in a collapsed self-guided `.callout-note` with a title prefixed with `Self guided: `
 
 ### Figures
 
@@ -159,7 +176,7 @@ Regardless of the method used, the image should be given a caption, and a quarto
 
 For example, the following.
 
-```default
+```verbatim
 ![A mock up of a possible full-book jacket for this textbook. The left hand side includes a blurb and a list of contributors, and hte SPAAM logo. The right hand side includes the title of the book, a sankey diagram, and an 'edited by' section.](assets/images/jacket.png){#fig-chapterwritingguidelines-jacket}
 ```
 
@@ -171,7 +188,7 @@ It is important for the caption to be as descriptive as possible to account for 
 
 All figures should be referenced in the text using the quarto label, and without a leading 'Figure' (this is rendered for you) e.g,.
 
-```default
+```{verbatim}
  "@fig-chapterwritingguidelines-jacket shows an example figure"
 ```
 
@@ -185,7 +202,7 @@ Gets rendered as:
 Much like figures, all markdown tables must have a caption and referenced in text.
 To copy the quarto documentation example.
 
-```default
+```{verbatim}
 | Default | Left | Right | Center |
 |---------|:-----|------:|:------:|
 | 12      | 12   |    12 |   12   |
@@ -195,7 +212,7 @@ To copy the quarto documentation example.
 : Demonstration of pipe table syntax {#tbl-chapterwritingguidelines-exampletable1}
 ```
 
-Gets rendered as in Table @tbl-chapterwritingguidelines-exampletable1.
+Gets rendered as in @tbl-chapterwritingguidelines-exampletable1.
 
 | Default | Left | Right | Center |
 |---------|:-----|------:|:------:|
@@ -207,7 +224,7 @@ Gets rendered as in Table @tbl-chapterwritingguidelines-exampletable1.
 
 This also applies to code-block generated tables e.g. as in @tbl-chapterwritingguidelines-examplecodetable2. For example the next code block (if wrapped in the triple-backticks with `r` syntax, not shown here).
 
-```default
+```{verbatim}
     
     #| label: tbl-chapterwritingguidelines-examplecodetable2
     #| echo: false
@@ -233,6 +250,34 @@ library(tidyverse)
 library(pander)
 tibble(a = 1, b = 2) %>%
     pandoc.table(., split.tables = Inf)
+```
+
+If your table is _too wide_, you may load the table and use some R code render the table in a more readable format.
+
+To do so, place the CSV file in the `assets/images/chapters/<your-chapter>/` directory.
+Then use the following template to render the table in your chapter. `.qmd` file.
+
+```{verbatim}
+#| label: tbl-<chaptername>-<figure id>
+#| echo: false
+#| warning: false
+#| results: 'asis'
+#| tbl-cap: <CAPTION_GOES_HERE>
+#| tbl-cap-location: top
+
+library(tidyverse)
+library(gt)
+# Load the data from CSV
+data <- read_csv("assets/images/chapters/<chapter-name>/<filename>.csv")
+
+# Create the table with gt
+data %>%
+    gt() %>%
+    tab_options(
+        table.width = pct(100),
+        table.layout = "fixed",
+        container.overflow.x = "scroll"
+    )
 ```
 
 ## Chapter Content

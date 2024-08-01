@@ -4,7 +4,7 @@ author: Nikolay Oskolkov
 bibliography: assets/references/contamination.bib
 ---
 
-::: {.callout-tip}
+::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
 For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
 
 Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413184](https://doi.org/10.5281/zenodo.8413184), and unpack
@@ -376,7 +376,7 @@ condition <- rep(c("Sediment/Soil","Skin","aOral","mOral","Unknown"),
 dim(result)[1])
 data <- data.frame(name, condition, value)
 
-library("ggplot2"); library("viridis")
+library("ggplot2")
 ggplot(data, aes(fill=condition, y=value, x=reorder(name,seq(1:length(name))))) +
   geom_bar(position = "fill", stat = "identity") +
   theme(axis.text.x = element_text(angle=90, size = 5, hjust = 1, vjust = 0.5)) +
@@ -440,3 +440,19 @@ In this chapter we have learned that:
 2. What is contamination and how can it bias ancient metagenomic analysis?
 3. What is a negative (blank) control sample and why is it useful to have?
 4. What is microbial source tracking and how can it help with decontamination?
+
+## Resources
+
+1. **SourceTracker**: Knights D, Kuczynski J, Charlson ES, Zaneveld J, Mozer MC, Collman RG, Bushman FD, Knight R, Kelley ST. Bayesian community-wide culture-independent microbial source tracking. Nat Methods. 2011 Jul 17;8(9):761-3. doi: 10.1038/nmeth.1650. PMID: 21765408; PMCID: PMC3791591.
+
+2. **deCOM**: https://www.biorxiv.org/content/10.1101/2023.01.26.525439v1, doi: https://doi.org/10.1101/2023.01.26.525439
+
+3. **aMeta**: https://www.biorxiv.org/content/10.1101/2022.10.03.510579v1, doi: https://doi.org/10.1101/2022.10.03.510579
+
+4. **Bowtie2**: Langmead, B., Salzberg, S. Fast gapped-read alignment with Bowtie 2. Nat Methods 9, 357–359 (2012). https://doi.org/10.1038/nmeth.1923
+
+5. **cuperdec**: https://cran.r-project.org/web/packages/cuperdec/index.html
+
+6. **decontam**: https://www.bioconductor.org/packages/release/bioc/html/decontam.html
+
+## References

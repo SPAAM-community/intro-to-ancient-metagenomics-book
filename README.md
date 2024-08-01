@@ -21,7 +21,7 @@ If running [locally](#locally), I highly recommend installing [VS Code](https://
    - This may take a little bit of time to pull the docker container
    - Once loaded, wait a minute or so until the preview of the textbook is loaded (you will see lots of text being printed in the console)
    - To load the preview, press the 'open preview' button in the bottom right
-       ![image](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/assets/17950287/cc47d264-eb4e-4fff-94c8-a8da21e9494b)
+     ![image](https://github.com/SPAAM-community/intro-to-ancient-metagenomics-book/assets/17950287/cc47d264-eb4e-4fff-94c8-a8da21e9494b)
    - If you miss the message above, press 'Ports' in the bottom right toolbar, and click the running URL to open in a new tab
 3. Make a new branch e.g. `git switch -c new-chapter`
 4. If adding a new chapter, make a new `.qmd` file in the root directory, else edit the existing `.qmd` file of your choice
@@ -31,7 +31,7 @@ If running [locally](#locally), I highly recommend installing [VS Code](https://
 7. Conda environment files go in `docs/assets/envs/<chapter_name>.bib`
 8. If adding a new chapter, add the `.qmd` file to the `_quarto.yml` config file in the `chapters:` scope
 9. Refresh the preview tab to check your chapter renders correctly
-8. Commit, push to GitHub, and open a PR against the `main` branch [^2]
+10. Commit, push to GitHub, and open a PR against the `main` branch [^2]
 
 > ![WARNING]
 > Only push `.qmd`, images, `.bib` files etc! Do not push `html` `json` files etc., from the rendering!
@@ -45,7 +45,7 @@ General tips:
 
 If adding a new section chapter:
 
-1. Clone this repository 
+1. Clone this repository
 2. Make a new branch e.g. `git switch -c new-chapter`
 3. Make a new `.qmd` file in the root directory
 4. Images for the chapter should go into `assets/images/chapters/`
