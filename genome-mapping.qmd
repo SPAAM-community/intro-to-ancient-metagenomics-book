@@ -2,20 +2,38 @@
 title: Genome Mapping
 author: Alexander Herbig, Alina Hiß, and Teresa Zeibig
 bibliography: assets/references/genome-mapping.bib
-
 ---
+
+:::{.callout-note collapse="true" title="Self guided: chapter environment setup"}
+For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
+
+Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413204](https://doi.org/10.5281/zenodo.8413204), and unpack.
+
+```bash
+tar xvf genome-mapping.tar.gz 
+cd genome-mapping/
+```
+
+You can then create the subsequently activate environment with the following.
+
+```bash
+conda env create -f genome-mapping.yml
+conda activate genome-mapping
+```
+:::
+
 Mapping/aligning to a reference genome is one way of reconstructing genomic information from DNA sequencing reads.
 This allows for identification of differences between the genome from your sample and the reference genome.
-This information can be used for example for comparative analyses such as in phylogenetics. For a detailed explanation of the read alignment problem and an overview of concepts for solving it, please see [@Reinert2015] [https://doi.org/10.1146/annurev-genom-090413-025358](https://doi.org/10.1146/annurev-genom-090413-025358).
+This information can be used for example for comparative analyses such as in phylogenetics. For a detailed explanation of the read alignment problem and an overview of concepts for solving it, please see [@Reinert2015].
 
 In this session we will map two samples to the _Yersinia pestis_ (plague) genome using different parameter sets. 
 We will do this "manually" in the sense that we will use all necessary commands one by one in the terminal. 
 These commands usually run in the background when you apply DNA sequencing data processing pipelines.
 
-We will be using the Burrows-Wheeler Aligner ([@Li2010]– [http://bio-bwa.sourceforge.net](http://bio-bwa.sourceforge.net)).
+We will be using the Burrows-Wheeler Aligner [@Li2010, [http://bio-bwa.sourceforge.net](http://bio-bwa.sourceforge.net)].
 There are different algorithms implemented for different types of data (e.g. different read lengths).
-Here, we use BWA backtrack (_bwa aln_), which is suitable for Illumina sequences up to 100bp.
-Other algorithms are _bwa mem_ and _bwa sw_ for longer reads.
+Here, we use BWA backtrack (`bwa aln`), which is suitable for Illumina sequences up to 100bp.
+Other algorithms are `bwa mem` and `bwa sw` for longer reads.
 
 Your learning objectives:
 
@@ -25,46 +43,28 @@ Your learning objectives:
 4. **Interpret Results**: You will be able to interpret the results of a mapping experiment and discuss their implications. You will also be able to understand the genotyping tool multiVCFanalycer.  
 5. **Be Aware and Able to Read Up**: You will know about the existence of multiple mapping algorithms and the importance of parameter research and adjustment. You will know that the IGV viewer is one option to inspect mapping results but not the only one.
 
-
-::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
-For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
-
-Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413204](https://doi.org/10.5281/zenodo.8413204), and unpack
-
-```bash
-tar xvf genome-mapping.tar.gz 
-cd genome-mapping/
-```
-
-You can then create the subsequently activate environment with
-
-```bash
-conda env create -f genome-mapping.yml
-conda activate genome-mapping
-```
-:::
 ## Reference Genome
 
 For mapping we need a reference genome in FASTA format. Ideally we use a genome from the same species that our data relates to or, if not available, a closely related species.
 The selection of the correct reference genome is highly relevant. E.g. if the chosen genome differs too much from the organism the data relates to, it might not be possible to map most of the reads.
-Reference genomes can be retrieved from comprehensive databases such as [NCBI](https://www.ncbi.nlm.nih.gov/).
+Reference genomes can be retrieved from comprehensive databases such provided by the NCBI ([https://www.ncbi.nlm.nih.gov/](https://www.ncbi.nlm.nih.gov/)).
 
 In your directory, you can find 2 samples and your reference.
 As a first step we will index our reference genome (make sure you are inside your directory).
 
-The first index we will generate is for _bwa_.
+The first index we will generate is for `bwa`.
 
 ```bash
 bwa index YpestisCO92.fa
 ```
 
-The second index will be used by the genome browser we will apply to our results later on:
+The second index will be used by the genome browser we will apply to our results later on.
 
 ```bash
 samtools faidx YpestisCO92.fa
 ```
 
-We need to build a third index that is necessary for the genotyping step, which comes later after mapping:
+We need to build a third index that is necessary for the genotyping step, which comes later after mapping.
 
 ```bash
 picard CreateSequenceDictionary R=YpestisCO92.fa
@@ -72,10 +72,10 @@ picard CreateSequenceDictionary R=YpestisCO92.fa
 
 ## Mapping Parameters
 
-We will be using _bwa aln_, but we need to specify parameters.
+We will be using `bwa aln`, but we need to specify parameters.
 For now we will concentrate on the "seed length" and the "maximum edit distance". We will use the default setting for all other parameters during this session. The choice of the right parameters depend on many factors such as the type of data and the specific use case. One aspect is the mapping sensitivity, i.e. how different a read can be from the chosen reference and still be mapped. In this context we generally differentiate between _strict_ and _lenient_ mapping parameters.
 
-As many other mapping algorithms _bwa_ uses a so-called "seed-and-extend" approach. I.e. it initially maps the first _N_ nucleotides of each read to the genome with relatively few mismatches and thereby determines candidate positions for the more time-intensive full alignment.
+As many other mapping algorithms `bwa` uses a so-called "seed-and-extend" approach. I.e. it initially maps the first _N_ nucleotides of each read to the genome with relatively few mismatches and thereby determines candidate positions for the more time-intensive full alignment.
 
 A short seed length will generate more such candidate positions and therefore mapping will take longer, but it will also be more sensitive, i.e. there can be more differences between the read and the genome. Long seeds are less sensitive but the mapping procedure is faster.
 
@@ -83,20 +83,20 @@ In this session we will use the following two parameter sets:
 
 **Lenient**
 
-Allow for more mismatches → -n 0.01
+Allow for more mismatches → `-n 0.01`
 
-Short seed length → -l 16
+Short seed length → `-l 16`
 
 **Strict**
 
-Allow for less mismatches → -n 0.1
+Allow for less mismatches → `-n 0.1`
 
-Long seed length → -l 32
+Long seed length → `-l 32`
 
 We will be working with pre-processed files (`sample1.fastq.gz`, `sample2.fastq.gz`), i.e. any quality filtering and removal of sequencing adapters is already done.
 
 We will map each file once with lenient and once with strict parameters.
-For this, we will make 4 separate directories, to avoid mixing up files:
+For this, we will make 4 separate directories, to avoid mixing up files.
 
 ```bash
 mkdir sample1_lenient sample2_lenient sample1_strict sample2_strict
@@ -106,19 +106,19 @@ mkdir sample1_lenient sample2_lenient sample1_strict sample2_strict
 
 Let’s begin with a lenient mapping of sample1.
 
-Go into the corresponding folder:
+Go into the corresponding folder.
 
 ```bash
 cd sample1_lenient
 ```
 
-Perform the _bwa_ alignment, here for sample1, and specify lenient mapping parameters:
+Perform the `bwa` alignment, here for sample1, and specify lenient mapping parameters.
 
 ```bash
 bwa aln -n 0.01 -l 16 ../YpestisCO92.fa ../sample1.fastq.gz > reads_file.sai
 ```
 
-Proceed with writing the mapping in _sam_ format ([https://en.wikipedia.org/wiki/SAM\_(file_format)](<https://en.wikipedia.org/wiki/SAM_(file_format)>)):
+Proceed with writing the mapping in `sam` format [@Li2009, [https://en.wikipedia.org/wiki/SAM\_(file_format)](<https://en.wikipedia.org/wiki/SAM_(file_format)>)].
 
 ```bash
 bwa samse -r '@RG\tID:all\tLB:NA\tPL:illumina\tPU:NA\tSM:NA' ../YpestisCO92.fa reads_file.sai ../sample1.fastq.gz > reads_mapped.sam
@@ -127,30 +127,30 @@ bwa samse -r '@RG\tID:all\tLB:NA\tPL:illumina\tPU:NA\tSM:NA' ../YpestisCO92.fa r
 Note that we have specified the sequencing platform (Illumina) by creating a so-called "Read Group" (`-r`).
 This information is used later during the genotyping step.
 
-Convert SAM file to binary format (BAM file):
+Convert SAM file to binary format (BAM file).
 
 ```bash
 samtools view -b -S reads_mapped.sam > reads_mapped.bam
 ```
 
-For processing of _sam_ and _bam_ files we use _SAMtools_ ([@Li2009] – [http://samtools.sourceforge.net/](http://samtools.sourceforge.net/)).
+For processing of `sam` and `bam` files we use `samtools` [@Li2009, [https://github.com/samtools/samtools](https://github.com/samtools/samtools)].
 
 `-b` specifies to output in BAM format.
-(`-S` specifies input is SAM, can be omitted in recent versions.)
+(`-S` specifies input is SAM, can be omitted in recent versions).
 
-Now we sort the _bam_ file → Sort alignments by leftmost coordinates:
+Now we sort the `bam` file → Sort alignments by leftmost coordinates.
 
 ```bash
 samtools sort reads_mapped.bam > reads_mapped_sorted.bam
 ```
 
-The sorted bam file needs to be indexed → more efficient for further processing:
+The sorted bam file needs to be indexed → more efficient for further processing.
 
 ```bash
 samtools index reads_mapped_sorted.bam
 ```
 
-Deduplication → Removal of reads from duplicated fragments:
+Deduplication → Removal of reads from duplicated fragments.
 
 ```bash
 samtools rmdup -s reads_mapped_sorted.bam reads_mapped_sorted_dedup.bam
@@ -163,7 +163,7 @@ samtools index reads_mapped_sorted_dedup.bam
 Duplicated reads are usually a consequence of amplification of the DNA fragments in the lab. Therefore, they are not biologically meaningful.
 
 We have now completed the mapping procedure.
-Let's have a look at our mapping results:
+Let's have a look at our mapping results.
 
 ```bash
 samtools view reads_mapped_sorted_dedup.bam | less -S
@@ -171,7 +171,7 @@ samtools view reads_mapped_sorted_dedup.bam | less -S
 
 (exit by pressing <kbd>q</kbd>)
 
-We can also get a summary about the number of mapped reads. For this we use the _samtools idxstats_ command ([http://www.htslib.org/doc/samtools-idxstats.html](http://www.htslib.org/doc/samtools-idxstats.html)):
+We can also get a summary about the number of mapped reads. For this we use the `samtools idxstats` command ([http://www.htslib.org/doc/samtools-idxstats.html](http://www.htslib.org/doc/samtools-idxstats.html)).
 
 ```bash
 samtools idxstats reads_mapped_sorted_dedup.bam
@@ -180,11 +180,11 @@ samtools idxstats reads_mapped_sorted_dedup.bam
 ## Genotyping
 
 The next step we need to perform is genotyping, i.e. the identification of all SNPs that differentiate the sample from the reference.
-For this we use the _Genome Analysis Toolkit (GATK)_ ([@DePristo2011] – [http://www.broadinstitute.org/gatk/](http://www.broadinstitute.org/gatk/))
+For this we use the 'Genome Analysis Toolkit' (`gatk`) [@DePristo2011, [http://www.broadinstitute.org/gatk/](http://www.broadinstitute.org/gatk/)]
 
-It uses the reference genome and the mapping as input and produces an output in _Variant Call Format (VCF)_ ([https://en.wikipedia.org/wiki/Variant_Call_Format](https://en.wikipedia.org/wiki/Variant_Call_Format)).
+It uses the reference genome and the mapping as input and produces an output in 'Variant Call Format (VCF)' ([https://en.wikipedia.org/wiki/Variant_Call_Format](https://en.wikipedia.org/wiki/Variant_Call_Format)).
 
-Perform genotyping on the mapping file:
+Perform genotyping on the mapping file.
 
 ```bash
 gatk3 -T UnifiedGenotyper -R ../YpestisCO92.fa -I reads_mapped_sorted_dedup.bam --output_mode EMIT_ALL_SITES -o mysnps.vcf
@@ -281,36 +281,36 @@ gatk3 -T UnifiedGenotyper -R ../YpestisCO92.fa -I reads_mapped_sorted_dedup.bam 
 
 In order to combine the results from multiple samples and parameter settings we need to agregate and comparatively analyse the information from all the _vcf_ files.
 For this we will use the software
-_MultiVCFAnalyzer_ ([https://github.com/alexherbig/MultiVCFAnalyzer](https://github.com/alexherbig/MultiVCFAnalyzer)).
+`multivcfanalyzer` [@Bos2014-xe, [https://github.com/alexherbig/MultiVCFAnalyzer](https://github.com/alexherbig/MultiVCFAnalyzer)].
 
-It produces various output files and summary statistics and can integrate gene annotations for SNP effect analysis as done by the program _SnpEff_ ([@Cingolani2012] - [http://snpeff.sourceforge.net/](http://snpeff.sourceforge.net/)).
+It produces various output files and summary statistics and can integrate gene annotations for SNP effect analysis as done by the program `SnpEff` [@Cingolani2012, [https://github.com/pcingola/SnpEff](https://github.com/pcingola/SnpEff)].
 
-Run _MultiVCFAnalyzer_ on all 4 files at once.
-First `cd` one level up (if you type `ls` you should see your 4 directories, reference, etc.):
+Run `multivcfanalyzer` on all 4 files at once.
+First `cd` one level up (if you type `ls` you should see your 4 directories, reference, etc.).
 
 ```bash
 cd ..
 ```
 
-Then make a new directory…
+Then make a new directory.
 
 ```bash
 mkdir vcf_out
 ```
 
-…and run the programme:
+And run the programme.
 
 ```bash
 multivcfanalyzer NA YpestisCO92.fa NA vcf_out F 30 3 0.9 0.9 NA sample1_lenient/mysnps.vcf sample1_strict/mysnps.vcf sample2_lenient/mysnps.vcf sample2_strict/mysnps.vcf
 ```
 
-Let’s have a look in the ‘vcf_out’ directory (`cd` into it):
+Let’s have a look in the `vcf_out/` directory (`cd` into it).
 
 ```bash
 cd vcf_out
 ```
 
-Check the parameters we set earlier:
+Check the parameters we set earlier.
 
 ```bash
 less -S info.txt
@@ -326,7 +326,7 @@ less -S snpStatistics.tsv
 
 (exit by pressing <kbd>q</kbd>)
 
-The file content should look like this:
+The file content should look like this.
 
 ```bash
 SNP statistics for 4 samples.
@@ -351,15 +351,15 @@ The first column contains the dataset name and the second column the number of c
 ## Exploring the Results
 
 For visual exploration of mapping results so-called "Genome Browsers" are used.
-Here we will use the _Integrative Genomics Viewer (IGV)_ ([https://software.broadinstitute.org/software/igv/](https://software.broadinstitute.org/software/igv/)).
+Here we will use the 'Integrative Genomics Viewer' (`igv`)' ([https://software.broadinstitute.org/software/igv/](https://software.broadinstitute.org/software/igv/)).
 
-To open IGV, simply type the following command and the app will open:
+To open `igv`, simply type the following command and the app will open.
 
 ```bash
 igv
 ```
 
-Note that you cannot use the terminal while IGV is open. If you want to use it anyways, open a second terminal via the bar on the bottom.
+Note that you cannot use the terminal while `igv` is open. If you want to use it anyways, open a second terminal via the bar on the bottom.
 
 Load your reference (`YpestisCO92.fa`):
 
@@ -390,7 +390,7 @@ Have a look at `snpTable.tsv`.
 Can you identify SNPs that were called with lenient but not with strict parameters or vice versa?
 :::
 
-Let’s check out some of these in IGV.
+Let’s check out some of these in `igv`.
 
 ::: {.callout-tip title="Question" appearance="simple"}
 Do you observe certain patterns in these genomic regions?
@@ -398,7 +398,7 @@ Do you observe certain patterns in these genomic regions?
 
 ## Examples
 
-Please find here a few examples for exploration. To get a better visualization we only loaded `sample2_lenient` (top track) and `sample2_strict` (bottom track):
+Please find here a few examples for exploration. To get a better visualisation we only loaded `sample2_lenient` (top track) and `sample2_strict` (bottom track):
 
 ![](assets/images/chapters/genome-mapping/IGV_example_intro.png)
 
@@ -433,33 +433,29 @@ Such regions can be fairly large. For example, see this 20 kb region around posi
 
 ## (Optional) clean-up
 
-Let's clean up your working directory by removing all the data and output from this chapter.
+Let's clean up our working directory by removing all the data and output from this chapter.
 
-When closing your `jupyter` notebook(s), say no to saving any additional files.
-
-Press <kbd>ctrl</kbd> + <kbd>c</kbd> on your terminal, and type <kbd>y</kbd> when requested. 
-Once completed, the command below will remove the `/<PATH>/<TO>/genome-mapping directory` **as well as all of its contents**. 
+The command below will remove the `/<PATH>/<TO>/genome-mapping` _as well as all of its contents_. 
 
 ::: {.callout-tip}
 ## Pro Tip
-Always be VERY careful when using `rm -r`. Check 3x that the path you are
-specifying is exactly what you want to delete and nothing more before pressing
-ENTER!
+Always be VERY careful when using `rm -r`.
+Check 3x that the path you are specifying is exactly what you want to delete and nothing more before pressing ENTER!
 :::
 
 ```bash
 rm -r /<PATH>/<TO>/genome-mapping*
 ```
 
-Once deleted you can move elsewhere (e.g. `cd ~`).
+Once deleted we can move elsewhere (e.g. `cd ~`).
 
-We can also get out of the `conda` environment with
+We can also get out of the `conda` environment with.
 
 ```bash
 conda deactivate
 ```
 
-To delete the conda environment
+Then to delete the conda environment.
 
 ```bash
 conda remove --name genome-mapping --all -y
@@ -467,11 +463,11 @@ conda remove --name genome-mapping --all -y
 
 ## Summary
 
-- Mapping DNA sequencing reads to a reference genome is a complex procedure that requires multiple steps.
-- Mapping results are the basis for genotyping, i.e. the detection of differences to the reference.
-- The genotyping results can be aggregated from multiple samples and comparatively analysed e.g. in the context of phylogenomics.
-- The chosen mapping parameters can have a strong influence on the results of any downstream analysis.
-- This is particularly true when dealing with ancient DNA samples as they tend to contain DNA from multiple organisms.This can lead to mismapped reads and therefore incorrect genotypes, which can further influence downstream analyses.
+- Mapping DNA sequencing reads to a reference genome is a complex procedure that requires multiple steps
+- Mapping results are the basis for genotyping, i.e. the detection of differences to the reference
+- The genotyping results can be aggregated from multiple samples and comparatively analysed e.g. in the context of phylogenomics
+- The chosen mapping parameters can have a strong influence on the results of any downstream analysis
+- This is particularly true when dealing with ancient DNA samples as they tend to contain DNA from multiple organisms.This can lead to mismapped reads and therefore incorrect genotypes, which can further influence downstream analyses
 
 ## References
 
