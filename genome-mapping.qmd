@@ -1,7 +1,30 @@
 ---
 title: Genome Mapping
-author: Alexander Herbig and Alina Hiß
+author: Alexander Herbig, Alina Hiß, and Teresa Zeibig
+bibliography: assets/references/genome-mapping.bib
+
 ---
+Mapping/aligning to a reference genome is one way of reconstructing genomic information from DNA sequencing reads.
+This allows for identification of differences between the genome from your sample and the reference genome.
+This information can be used for example for comparative analyses such as in phylogenetics. For a detailed explanation of the read alignment problem and an overview of concepts for solving it, please see [@Reinert2015] [https://doi.org/10.1146/annurev-genom-090413-025358](https://doi.org/10.1146/annurev-genom-090413-025358).
+
+In this session we will map two samples to the _Yersinia pestis_ (plague) genome using different parameter sets. 
+We will do this "manually" in the sense that we will use all necessary commands one by one in the terminal. 
+These commands usually run in the background when you apply DNA sequencing data processing pipelines.
+
+We will be using the Burrows-Wheeler Aligner ([@Li2010]– [http://bio-bwa.sourceforge.net](http://bio-bwa.sourceforge.net)).
+There are different algorithms implemented for different types of data (e.g. different read lengths).
+Here, we use BWA backtrack (_bwa aln_), which is suitable for Illumina sequences up to 100bp.
+Other algorithms are _bwa mem_ and _bwa sw_ for longer reads.
+
+Your learning objectives:
+
+1. **Understand the Basics**: You will be able to define mapping and describe the basic principles of metagenomic mapping and the different parameters used.  
+2. **Apply Mapping Techniques**: You will be able to apply metagenomic mapping techniques to align raw sequence data to a reference genome in a step-by-step manner.  
+3. **Use Bioinformatics Tools**: You will be able to use the command line to apply different metagenomic mappers and perform genotype analysis via multivcfanalyzer in the standard settings. You will be able to inspect results in the IGV viewer.  
+4. **Interpret Results**: You will be able to interpret the results of a mapping experiment and discuss their implications. You will also be able to understand the genotyping tool multiVCFanalycer.  
+5. **Be Aware and Able to Read Up**: You will know about the existence of multiple mapping algorithms and the importance of parameter research and adjustment. You will know that the IGV viewer is one option to inspect mapping results but not the only one.
+
 
 ::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
 For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
@@ -20,22 +43,10 @@ conda env create -f genome-mapping.yml
 conda activate genome-mapping
 ```
 :::
-
-## Introduction 
-
-One way of reconstructing genomic information from DNA sequencing reads is mapping/aligning them to a reference genome. This allows for identification of differences between the genome from your sample and the reference genome. This information can be used for example for comparative analyses such as in phylogenetics. For a detailed explanation of the read alignment problem and an overview of concepts for solving it, please see [https://doi.org/10.1146/annurev-genom-090413-025358](https://doi.org/10.1146/annurev-genom-090413-025358).
-
-In this session we will map two samples to the _Yersinia pestis_ (plague) genome using different parameter sets. We will do this "manually" in the sense that we will use all necessary commands one by one in the terminal. These commands usually run in the background when you apply DNA sequencing data processing pipelines.
-
-We will be using the Burrows-Wheeler Aligner
-(Li et al. 2009 – [http://bio-bwa.sourceforge.net](http://bio-bwa.sourceforge.net)). There are
-different algorithms implemented for different types of data (e.g. different read lengths).
-Here, we use BWA backtrack (_bwa aln_), which is suitable for Illumina sequences up to 100bp.
-Other algorithms are _bwa mem_ and _bwa sw_ for longer reads.
-
 ## Reference Genome
 
-For mapping we need a reference genome in FASTA format. Ideally we use a genome from the same species that our data relates to or, if not available, a closely related species. The selection of the correct reference genome is highly relevant. E.g. if the chosen genome differs too much from the organism the data relates to, it might not be possible to map most of the reads.
+For mapping we need a reference genome in FASTA format. Ideally we use a genome from the same species that our data relates to or, if not available, a closely related species.
+The selection of the correct reference genome is highly relevant. E.g. if the chosen genome differs too much from the organism the data relates to, it might not be possible to map most of the reads.
 Reference genomes can be retrieved from comprehensive databases such as [NCBI](https://www.ncbi.nlm.nih.gov/).
 
 In your directory, you can find 2 samples and your reference.
@@ -122,7 +133,7 @@ Convert SAM file to binary format (BAM file):
 samtools view -b -S reads_mapped.sam > reads_mapped.bam
 ```
 
-For processing of _sam_ and _bam_ files we use _SAMtools_ (Li et al. 2009 – [http://samtools.sourceforge.net/](http://samtools.sourceforge.net/)).
+For processing of _sam_ and _bam_ files we use _SAMtools_ ([@Li2009] – [http://samtools.sourceforge.net/](http://samtools.sourceforge.net/)).
 
 `-b` specifies to output in BAM format.
 (`-S` specifies input is SAM, can be omitted in recent versions.)
@@ -169,7 +180,7 @@ samtools idxstats reads_mapped_sorted_dedup.bam
 ## Genotyping
 
 The next step we need to perform is genotyping, i.e. the identification of all SNPs that differentiate the sample from the reference.
-For this we use the _Genome Analysis Toolkit (GATK)_ (DePristo et al. 2011 – [http://www.broadinstitute.org/gatk/](http://www.broadinstitute.org/gatk/))
+For this we use the _Genome Analysis Toolkit (GATK)_ ([@DePristo2011] – [http://www.broadinstitute.org/gatk/](http://www.broadinstitute.org/gatk/))
 
 It uses the reference genome and the mapping as input and produces an output in _Variant Call Format (VCF)_ ([https://en.wikipedia.org/wiki/Variant_Call_Format](https://en.wikipedia.org/wiki/Variant_Call_Format)).
 
@@ -195,6 +206,8 @@ Let's now continue with mapping and genotyping for the other samples and paramet
 
 ::: {.callout-note}
 This is a larger file and lenient mapping takes longer so this file will likely take a few minutes. If you are short on time, proceed with the other sample/parameter settings first and come back to this later if there is time.
+
+The entire code block can be copied as it is and executed. It’s composed of all the steps we executed individually earlier.
 :::
 
 ```bash
@@ -270,7 +283,7 @@ In order to combine the results from multiple samples and parameter settings we 
 For this we will use the software
 _MultiVCFAnalyzer_ ([https://github.com/alexherbig/MultiVCFAnalyzer](https://github.com/alexherbig/MultiVCFAnalyzer)).
 
-It produces various output files and summary statistics and can integrate gene annotations for SNP effect analysis as done by the program _SnpEff_ (Cingolani et al. 2012 - [http://snpeff.sourceforge.net/](http://snpeff.sourceforge.net/)).
+It produces various output files and summary statistics and can integrate gene annotations for SNP effect analysis as done by the program _SnpEff_ ([@Cingolani2012] - [http://snpeff.sourceforge.net/](http://snpeff.sourceforge.net/)).
 
 Run _MultiVCFAnalyzer_ on all 4 files at once.
 First `cd` one level up (if you type `ls` you should see your 4 directories, reference, etc.):
@@ -458,5 +471,7 @@ conda remove --name genome-mapping --all -y
 - Mapping results are the basis for genotyping, i.e. the detection of differences to the reference.
 - The genotyping results can be aggregated from multiple samples and comparatively analysed e.g. in the context of phylogenomics.
 - The chosen mapping parameters can have a strong influence on the results of any downstream analysis.
-- This is particularly true when dealing with ancient DNA samples as they tend to contain DNA from multiple organisms. This can lead to mismapped reads and therefore incorrect genotypes, which can further influence downstream analyses.
+- This is particularly true when dealing with ancient DNA samples as they tend to contain DNA from multiple organisms.This can lead to mismapped reads and therefore incorrect genotypes, which can further influence downstream analyses.
+
+## References
 
