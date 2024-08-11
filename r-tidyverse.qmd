@@ -19,17 +19,21 @@ We recommend this session if you have no experience with neither R nor Python.
 ::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
 For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
 
-Do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413026](https://doi.org/10.5281/zenodo.8413026), and unpack
+To do this, use `wget` or right click and save to download this Zenodo archive: [10.5281/zenodo.8413026](https://doi.org/10.5281/zenodo.8413026), and unpack
 
 ```bash
 tar xvf r-tidyverse.tar.gz 
 cd r-tidyverse/
 ```
 
-You can then create the subsequently activate environment with
+You can then create and subsequently activate the conda environment with
 
-::: {.callout-tip title="README if you already have Rstudio installed" collapse=true}
-Exception: _if you already have R studio installed on your laptop_, you can skip the conda environment activation.
+```bash
+conda env create -f r-tidyverse.yml
+conda activate r-tidyverse
+```
+
+::: {.callout-tip title="README if you already have Rstudio installed and don't need conda" collapse=true}
 
 Open Rstudio, and check that you have the two following packages installed.
 
@@ -46,10 +50,37 @@ install.packages(c("tidyverse", "palmerpenguins"))
 ```
 :::
 
-```bash
-conda env create -f r-tidyverse.yml
-conda activate r-tidyverse
+::: {.callout-tip title="README if you want to create the test datasets yourself from the palmerpenguins package" collapse=true}
+
+```{r, eval=FALSE}
+install.packages(c("tidyverse", "palmerpenguins"))
+
+library(magrittr)
+set.seed(5678)
+
+peng_prepped <- palmerpenguins::penguins %>%
+    dplyr::filter(
+        !dplyr::if_any(
+            .cols = tidyselect::everything(),
+            .fns = is.na
+        )
+    ) %>%
+    tibble::add_column(., id = 1:nrow(.), .before = "species")
+
+peng_prepped %>%
+    dplyr::slice_sample(n = 300) %>%
+    dplyr::arrange(id) %>%
+    dplyr::select(-bill_length_mm, -bill_depth_mm) %>%
+    readr::write_csv("penguins.csv")
+
+peng_prepped %>%
+    dplyr::slice_sample(n = 300) %>%
+    dplyr::arrange(id) %>%
+    dplyr::select(id, bill_length_mm, bill_depth_mm) %>%
+    readr::write_csv("penguin_bills.csv")
 ```
+:::
+
 :::
 
 ```{r, echo=FALSE}
