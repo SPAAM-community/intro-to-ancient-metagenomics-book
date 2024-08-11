@@ -788,7 +788,7 @@ carsales_wide
 
 ```
 
-2. Make a new dataset `mtcars2` from `mtcars` with the column `mpg` and an additional column `am_v`, which encodes the _transmission type_ (`am`) as either `"manual"` or `"automatic"`.
+2. Make a new dataset `mtcars2` from `mtcars` with only the columns `gear` and `am_v`. `am_v` should be a new column which encodes the _transmission type_ (`am`) as either `"manual"` or `"automatic"`.
 
 ```{r}
 
@@ -810,7 +810,7 @@ mtcars %>%
 
 ```{r}
 mtcars2 <- mtcars %>%
-    dplyr::mutate(
+    dplyr::transmute(
         gear,
         am_v = dplyr::case_match(
             am,
@@ -826,7 +826,7 @@ mtcars2
 mtcars2 %>%
     dplyr::group_by(am_v, gear) %>%
     # dplyr::tally() is identical to dplyr::summarise(n = dplyr::n())
-    # it counts the number of entities in a group
+    # -> it counts the number of entities in a group
     dplyr::tally() %>%
     tidyr::pivot_wider(
         names_from = am_v,
