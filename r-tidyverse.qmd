@@ -199,6 +199,7 @@ View(peng) # Open RStudio's interactive data browser
 To understand and present data, we usually have to visualise it.
 
 `ggplot2` is an R package that offers a slightly unusual, but powerful and logical interface for this task [@Wickham2016].
+
 The following example describes a stacked bar chart.
 
 ```{r}
@@ -210,25 +211,25 @@ ggplot( # Every plot starts with a call to the ggplot() function
     data = peng # This function can also take the input tibble in the data argument
 ) + # The plot consists of individual functions linked with "+"
     geom_bar( # "geoms" define the plot layers we want to draw,
-        # so in this case a bar-chart
+              # so in this case a bar-chart
         mapping = aes( # The aes() function maps variables to visual properties
-            x = island, # publication_year -> x-axis
-            fill = species # community_type   -> fill color
+            x = island,    # publication_year -> x-axis
+            fill = species # community_type   -> fill colour
         )
     )
 ```
 
-A `geom_*` combines data (here `peng`), a geometry (here vertical, stacked bars) and a statistical transformation (here counting the number of penguins per island and species). `ggplot2` features many such geoms: A good overview is provided by this cheatsheet: [https://rstudio.github.io/cheatsheets/html/data-visualization.html](https://rstudio.github.io/cheatsheets/html/data-visualization.html).
+A `geom_*` combines data (here `peng`), a geometry (here vertical, stacked bars) and a statistical transformation (here counting the number of penguins per island and species). Each `geom` has different visual elements (e.g. an x- and a y-axis, shape and size of geometric elements, fill and border colour, ...) to which we can *map* certain variables (columns) of our input dataset. The visual elements will then represent these variables in the plot. `ggplot2` features many `geoms`: A good overview is provided by this cheatsheet: [https://rstudio.github.io/cheatsheets/html/data-visualization.html](https://rstudio.github.io/cheatsheets/html/data-visualization.html).
 
 Beyond `geom`s, a ggplot2 plot can be further specified with (among others) `scale`s, `facet`s and `theme`s.
 
-### `scale`s control the behaviour of visual elements
+### `scale`s control the exact behaviour of visual elements
 
 Here is another plot to demonstrate this: Boxplots of penguin weight per species.
 
 ```{r}
 ggplot(peng) +
-    geom_boxplot(aes(x = species, y = body_mass_g))
+    geom_boxplot(mapping = aes(x = species, y = body_mass_g))
 ```
 
 Let's assume we had some extreme outliers in this dataset. To simulate this, we replace some random weights with extreme values.
