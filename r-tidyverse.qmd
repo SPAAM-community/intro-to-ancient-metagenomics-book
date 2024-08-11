@@ -541,7 +541,7 @@ peng %>% dplyr::arrange(dplyr::desc(body_mass_g)) # sort descending
 
 Sorting also works within groups and can be paired with `slice` to extract extreme values per group.
 
-Here we extract the heaviest individuals per species.
+Here we extract the three heaviest individuals per species.
 
 ```{r}
 peng %>%
@@ -574,7 +574,7 @@ See `?mtcars` for details.
 
 ```
 
-3. Identify the least efficient cars for both _transmission types_ (`am`).
+3. Identify the least efficient (see `mpg`) cars for both _transmission types_ (`am`).
 
 ```{r}
 
@@ -597,11 +597,24 @@ mtcars %>%
 ```
 
 ```{r}
+# make the care name an explicit column
 mtcars2 <- tibble::rownames_to_column(mtcars, var = "car")
+
+# Solution 1
 mtcars2 %>%
     dplyr::group_by(am) %>%
     dplyr::arrange(mpg) %>%
-    dplyr::slice_head() %$%
+    dplyr::slice_head(n = 1) %$%
+    car
+
+# Solution 1 only returns n = 1 result per group even if
+# there are multiple cars with the same minimal mpg value.
+# Solution 2 shows both, if this is desired.
+
+# Solution 2
+mtcars2 %>%
+    dplyr::group_by(am) %>%
+    dplyr::filter(mpg == min(mpg)) %$%
     car
 ```
 
