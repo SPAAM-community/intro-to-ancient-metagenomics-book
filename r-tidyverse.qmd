@@ -83,6 +83,328 @@ peng_prepped %>%
 
 :::
 
+```{r, echo=FALSE, eval=FALSE}
+# This code chunk is invisible and does not get evaluated. It contains notes on
+# how to best present/introduce/present this chapter in the context of the SPAAM
+# summer school. We assume a 2*2h time window for the r-tidyverse course:
+
+## Share some audience survey questions and discuss the results ##
+
+# 1. Do you agree with the following statement?
+# "It is generally better to perform scientific data analysis in a scripting language
+# like R or Python than in a spreadsheet application like LibreOffice Calc or
+# Microsoft Excel?"
+# Answer options: Yes | Rather yes | Rather no | No
+# 2. Do you agree with the following statement? "Open source software is generally
+# better for scientific data analysis than proprietary, closed source software."
+# Answer options: Yes | Rather yes | Rather no | No
+# 3. How would you rate your overall skill-level with R?
+# Answer options: A number between 1 and 10
+
+## Prepare the working environment in the virtual machine ##
+
+# 1. Activate conda environment 
+# conda activate r-tidyverse
+# 2. Start rstudio
+# rstudio (in the the same console)
+# 3. Create new RStudio project
+# File -> New Project... -> Existing directory -> Select 
+# /vol/volume/r-tidyverse
+# -> Create Project
+# 4. Create script file
+# File -> New File -> New Rscript
+# Save file (Ctrl+S) and assign a name "sript.R"
+
+## Give a brief tour of RStudio and its different panels ##
+
+## Show some R finger exercises ##
+
+# Start in console and then immediately move up to a script file
+# Explain how to use Crtl+Enter to send code to the console
+
+# R as a calculator
+1 + 1
+-5 + 10
+3^2
+
+# basic mathematical functions
+sqrt(9)
+exp(10)
+log(22000)
+
+# writing values into variables
+a <- 8
+b <- 1
+1 + a
+b + a
+my_sum <- a + b
+sqrt(my_sum)
+
+# vectors - list of values
+c(1,2,3)
+v <- c(1,2,3)
+mean(v)
+sum(v)
+
+# vectorized computation
+c(1,2,3) + 5
+v * 5
+v + v
+
+# functions with multiple arguments
+v1 <- c(1,2,3)
+v2 <- c(1,2.5,3)
+plot(v1,v2)
+cor(v1,v2)
+cor(x = v1, y = v2)
+cor(x = v1, y = v2, method = "pearson")
+cor(x = v1, y = v2, method = "kendall")
+
+# beyond numbers: strings
+"Clemens Schmid"
+s <- "Clemens Schmid"
+tolower(s)
+toupper(s)
+paste(s,s)
+grepl("Clemenx", s)
+
+# vectors of strings
+ss <- c("a", "b", "c")
+toupper(ss)
+paste(ss, collapse = ", ")
+
+# searching an filtering in vectors
+ss == "a"
+v == 2
+v > 1
+v >= 2
+
+# subsetting vectors
+v
+v[1]
+v[1:3]
+v[c(TRUE, FALSE, TRUE)]
+v[v >= 2]
+
+# data.frames: multiple vectors form a table
+data.frame(
+  x = c(1,2,3),
+  y = c("a", "b", "c")
+)
+tibble::tibble(
+  x = c(1,2,3),
+  y = c("a", "b", "c")
+)
+
+## Let the participants work on the book chapter ##
+
+# https://www.spaam-community.org/intro-to-ancient-metagenomics-book/r-tidyverse.html
+
+# Share warning with the participants:
+# > Don't burn through the chapter too quickly!
+# > 1. Read the help files and look at the examples at the bottom of the help files
+# > 2. Experiment with each function, so try things beyond the provided examples
+# > 3. Cycle back and plot data after you modified it or created new data products
+
+# Ask the participants to frequently report their progress on a survey system,
+# so that you always know where they stand. Monitor this system.
+
+# Be available for questions and visit the participants to see how they are progressing
+
+## Discuss solutions for the exercises when most participants completed them ##
+
+library(ggplot2)
+library(magrittr)
+
+## 8.4.7 ##
+
+# Look at the mtcars dataset and read up on the meaning of its variables with the help operator ?. mtcars is a test dataset integrated in R and can always be accessed just by typing mtcars in the console.
+
+?mtcars
+
+# [, 1]	mpg	Miles/(US) gallon
+# [, 2]	cyl	Number of cylinders
+# [, 3]	disp	Displacement (cu.in.)
+# [, 4]	hp	Gross horsepower
+# [, 5]	drat	Rear axle ratio
+# [, 6]	wt	Weight (1000 lbs)
+# [, 7]	qsec	1/4 mile time
+# [, 8]	vs	Engine (0 = V-shaped, 1 = straight)
+# [, 9]	am	Transmission (0 = automatic, 1 = manual)
+# [,10]	gear	Number of forward gears
+# [,11]	carb	Number of carburetors
+
+# Visualise the relationship between Gross horsepower and 1/4 mile time.
+
+ggplot(mtcars) +
+  geom_point(aes(x = hp, y = qsec))
+
+# Integrate the Number of cylinders into your plot as an additional variable.
+
+ggplot(mtcars) +
+  geom_point(aes(x = hp, y = qsec, color = as.character(cyl)))
+
+# Additional insights: Combining multiple geoms
+
+ggplot(
+  data = mtcars,
+  mapping = aes(x = hp, y = qsec)
+) +
+  geom_point()
+
+ggplot(
+  data = mtcars,
+  mapping = aes(x = hp, y = qsec)
+) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  geom_text(aes(label = cyl))
+
+merc <- mtcars %>%
+  tibble::as_tibble(rownames = "car_name") %>%
+  dplyr::filter(grepl("Merc", car_name))
+
+ggplot(
+  data = mtcars,
+  mapping = aes(x = hp, y = qsec)
+) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  geom_text(
+    data = merc,
+    mapping = aes(x = hp, y = qsec, label = car_name)
+  )
+
+ggplot(
+  data = mtcars,
+  mapping = aes(x = hp, y = qsec)
+) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  ggrepel::geom_text_repel(
+    data = merc,
+    mapping = aes(x = hp, y = qsec, label = car_name),
+    box.padding = 0.8
+  )
+
+# Additional insights: Saving a ggplot
+
+p <- ggplot(
+  data = mtcars,
+  mapping = aes(x = hp, y = qsec)
+) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  ggrepel::geom_text_repel(
+    data = merc,
+    mapping = aes(x = hp, y = qsec, label = car_name),
+    box.padding = 0.8
+  )
+
+ggsave(
+  "mtcars_qsec_hp.pdf",
+  plot = p,
+  device = "pdf",
+  scale = 0.5,
+  dpi = 300,
+  width = 300, height = 250, units = "mm"
+)
+
+## 8.5.6 ##
+
+# Determine the number of cars with four forward gears (gear) in the mtcars dataset.
+
+mtcars %>%
+  dplyr::filter(gear == 4) %>%
+  nrow()
+
+# Determine the mean 1/4 mile time (qsec) per Number of cylinders (cyl) group.
+
+mean_qsec_per_cyl <- mtcars %>%
+  dplyr::group_by(cyl) %>%
+  dplyr::summarise(
+    qsec_mean = mean(qsec)
+  )
+
+# Additional insights: Use derived data products in plots
+
+ggplot(
+  data = mtcars,
+  mapping = aes(x = as.factor(cyl), y = qsec)
+) +
+  geom_boxplot() +
+  geom_point() +
+  geom_point(
+    data = mean_qsec_per_cyl,
+    mapping = aes(x = as.factor(cyl), y = qsec_mean),
+    color = "red"
+  )
+
+# Identify the least efficient cars for both transmission types (am).
+
+# make the care name an explicit column
+mtcars2 <- tibble::rownames_to_column(mtcars, var = "car")
+
+# Solution 1
+mtcars2 %>%
+    dplyr::group_by(am) %>%
+    dplyr::arrange(mpg) %>%
+    dplyr::slice_head(n = 1) %$%
+    car
+
+# Solution 1 only returns n = 1 result per group even if
+# there are multiple cars with the same minimal mpg value.
+# Solution 2 shows both, if this is desired.
+
+# Solution 2
+mtcars2 %>%
+    dplyr::group_by(am) %>%
+    dplyr::filter(mpg == min(mpg)) %$%
+    car
+
+## 8.6.5 ##
+
+# Move the column gear to the first position of the mtcars dataset.
+
+mtcars %>%
+  dplyr::relocate(gear, .before = mpg) %>%
+  tibble::as_tibble() # transforming the raw dataset for better printing
+
+# Make a new dataset mtcars2 from mtcars with only the columns gear and am_v. am_v should be a new column which encodes the _transmission type_ (am) as either "manual" or "automatic".
+
+mtcars2 <- mtcars %>%
+  dplyr::transmute(
+    gear,
+    am_v = dplyr::case_match(
+      am,
+      0 ~ "automatic",
+      1 ~ "manual"
+    )
+  ) %>%
+  tibble::as_tibble()
+mtcars2
+
+# Count the number of cars per transmission type (am_v) and number of gears (gear) in mtcars2. Then transform the result to a wide format, with one column per transmission type.
+
+mtcars2 %>%
+  dplyr::group_by(am_v, gear) %>%
+  dplyr::tally() %>%
+  tidyr::pivot_wider(
+    names_from = am_v,
+    values_from = n
+  )
+
+## End the course ##
+
+# Re-run the crucial starting question:
+# How would you rate your overall skill-level with R?
+# Answer options: A number between 1 and 10
+
+# Discuss any open questions/comments
+
+```
+
+
 ```{r, echo=FALSE}
 # Set global options
 knitr::opts_chunk$set(attr.output = "style='border: 1px; border-style: solid; margin-left: 10px; margin-right: 10px;'")
