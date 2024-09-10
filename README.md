@@ -79,6 +79,7 @@ General tips:
 - Make sure cover images updated (Edition 202X)
 - Make sure all software installation instructions/conda yaml files are up to date 
 - Make sure all data files uploaded, and if necessary Zenodo DOI updated
+- Make sure footnotes fixed everywhere (_quarto.yml)
 
 ### After
 
