@@ -70,9 +70,18 @@ General tips:
 
 ## Release procedure
 
+### Before
+
 - Make sure authors updated
+  - On authors.qmd
+  - In citations.gff
+  - In citing-this-book.qmd (set DOI to root DOI)
 - Make sure cover images updated (Edition 202X)
 - Make sure all data files uploaded, and if necessary Zenodo DOI updated
+
+### After
+
+- In citing-this-book.qmd (set DOI to release DOI)
 
 ## Notes
 
