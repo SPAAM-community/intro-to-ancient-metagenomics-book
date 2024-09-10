@@ -77,6 +77,7 @@ General tips:
   - In citations.gff
   - In citing-this-book.qmd (set DOI to root DOI)
 - Make sure cover images updated (Edition 202X)
+- Make sure all software installation instructions/conda yaml files are up to date 
 - Make sure all data files uploaded, and if necessary Zenodo DOI updated
 
 ### After

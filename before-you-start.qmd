@@ -23,7 +23,7 @@ For each chapter, if it requires pre-prepared data, the top of the page will hav
 This contain the raw data will be available to download for following the chapter
 Furthermore, the same box will describe how to use a conda `.yml` file that specifies the software environment for that chapter will also be available for you to install. 
 
-See the rest of this page on how to install `conda` (if not already available to you), and also how to create `conda` software environments
+See the rest of this page on how to install `conda` (if not already available to you), and also how to create `conda` software environments.
 
 ## Software Environments
 
@@ -59,7 +59,6 @@ These instructions have been tested on Ubuntu 22.04, but should apply to most Li
     - Set up bioconda
 
         ```bash
-        conda config --add channels defaults
         conda config --add channels bioconda
         conda config --add channels conda-forge
         ```
@@ -68,7 +67,6 @@ These instructions have been tested on Ubuntu 22.04, but should apply to most Li
 Once `conda` is installed and `bioconda` configured, at the beginning of each chapter, to create the `conda` environment from the `yml` file, you will need to run the following:
 
 1. Download and unpack the `conda` env file the top of the chapter by right clicking on the link and pressing 'save as'. Once uncompressed, change into the directory.
-
 2. Then you can run the following conda command to install the software into it's dedicated environment 
 
     ```bash
@@ -76,7 +74,7 @@ Once `conda` is installed and `bioconda` configured, at the beginning of each ch
     ```
 
 ::: {.callout-note}
-You only have to run the environment creation once!
+You only have to run the environment creation once for each chapter/environment!
 :::
 
 3. Follow the instructions as prompted. Once created, you can see a list of installed environments with
@@ -103,6 +101,28 @@ To reuse the environment, just run step 4 and 5 as necessary.
 To delete a conda software environment, run `conda remove --name <NAME_OF_ENV> --all -y`
 :::
 
+::: {.callout-note}
+If at any point you have issues of running out of space on your machine, you can first try running
+
+```bash
+conda clean --all
+```
+
+And you can answer 'yes' to all the prompts to remove unused packages and caches.
+
+If you are still having issues, you can remove the environments that you don't need any more with the following.
+
+```
+conda env list
+```
+
+To list all your existing conda environments, and then delete the directory of the unneeded environment with `rm`. 
+
+```bash
+rm -r /<path>/<to>/<conda_install>/envs/<environment_name>
+```
+:::
+
 ## Additional Software {.unnumbered}
 
 For some chapters you may need the following software/and or data manually installed, which are not available on `bioconda`:
@@ -126,9 +146,12 @@ For some chapters you may need the following software/and or data manually insta
     cd /<path>/<to>/denovo-assembly
     git clone https://github.com/bxlab/metaWRAP.git
     ## don't forget to update path/to!
-    echo "export PATH=$PATH:/<path>/<to>/metaWRAP/bin" >> ~/.bashrc
-    source ~/.bashrc
+    export PATH=$PATH:/<path>/<to>/metaWRAP/bin
     ```
+
+::: {.callout-warning}
+If you close your terminal halfway through the chapter, when opening the terminal again to continue the chapter, you MUST re-export the path to the metaWRAP bin directory to have access to the software!
+:::
 
 ### Functional Profiling
 
@@ -138,35 +161,72 @@ For some chapters you may need the following software/and or data manually insta
     humann3_databases --download uniref uniref90_ec_filtered_diamond /<path>/<to>/functional-profiling/humann3_db
     ```
 
-### Authentication and Decontamination <!-- TODO: update to use path method like e.g. metaWrap/tempest -->
+### Authentication
 
-<!--
-- [Sourcetracker](https://github.com/danknights/sourcetracker)
+- [pip](https://pip.pypa.io/en/stable/installation/)
+- [metaDMG](https://github.com/metaDMG-dev/metaDMG-cpp)
+    - Make a conda environment file called `metadmg.yml` containing the following:
 
-    ```bash
-    cd /<path>/<to>/authentication-decontamination/sourcetracker/
-    git clone https://github.com/danknights/sourcetracker.git
+        ```yaml
+        name: metaDMG
+        channels: 
+        - conda-forge
+        - bioconda
+        dependencies:
+        - conda-forge::python=3.9.15
+        - bioconda::htslib=1.17
+        - conda-forge::eigen=3.4.0
+        - conda-forge::cxx-compiler=1.5.2
+        - conda-forge::c-compiler=1.5.2
+        - conda-forge::gsl=2.7
+        - conda-forge::iminuit=2.17.0
+        - conda-forge::numpyro=0.10.1
+        - conda-forge::joblib=1.2.0
+        - conda-forge::numba=0.56.2
+        - conda-forge::flatbuffers=22.9.24
+        - conda-forge::psutil=5.9.4
+        ```
+    - Create the environment with
 
-    ## patch due to R update
-    sed -i '538,539s/^/#/' sourcetracker/src/SourceTracker.r
-    ```
+        ```bash
+        conda env create -f metadmg.yml
+        ```
 
--->
+    - Change to the chapter's directory 
+        
+        ```bash
+        cd /<path>/<to>/authentication
+        ```
+    - Activate the new environment 
+        
+        ```bash
+        conda activate metaDMG
+        ```
 
-<!--
-- [decOM](https://github.com/CamilaDuitama/decOM) 
+    - Clone the latest version of metaDMG, and compile
 
-    ```bash
-    cd /<path>/<to>/authentication-decontamination/decom
-    git clone https://github.com/CamilaDuitama/decOM.git  
-    cd decOM  
-    conda env create -n decOM --file environment.yml  
-    conda deactivate
-    conda activate decOM  
+        ```bash
+        git clone https://github.com/metaDMG-dev/metaDMG-cpp.git
+        cd metaDMG-cpp
+        make clean && make CPPFLAGS="-L${CONDA_PREFIX}/lib -I${CONDA_PREFIX}/include" HTSSRC=systemwide -j 8
+        ```
 
-    export PATH=/absolute/path/to/decOM:${PATH}
-    ```
--->
+    - Install some patches, and some additional modules
+
+        ```bash
+        pip install git+https://github.com/metaDMG-dev/metaDMG-core #@stopiferrors_branch
+        pip install metaDMG[viz]
+        ```
+    - Deactivate the conda environment 
+
+        ```bash
+        conda deactivate
+        ```
+
+    - Make the metaDMG executable available in the environment
+
+
+
 
 ### Phylogenomics
 
@@ -178,6 +238,10 @@ For some chapters you may need the following software/and or data manually insta
         cd TempEst_V1.5.3
         export tempest='bash /<PATH>/<TO>/TempEst_v1.5.3/bin/tempest'
         ```
+
+        ::: {.callout-warning}
+        If you close your terminal halfway through the chapter, when opening the terminal again to continue the chapter, you MUST re-export the path to the metaWRAP bin directory to have access to the software!
+        :::
 
     - If you get an error like `Exception in thread "main" java.lang.UnsatisfiedLinkError: Can't load library: /usr/lib/jvm/java-11-openjdk-amd64/lib/libawt_xawt.so`, make sure you have Java installed e.g. 
 
