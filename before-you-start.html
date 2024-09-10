@@ -419,7 +419,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#introduction-to-the-command-line" id="toc-introduction-to-the-command-line" class="nav-link" data-scroll-target="#introduction-to-the-command-line">Introduction to the command line</a></li>
   <li><a href="#de-novo-assembly" id="toc-de-novo-assembly" class="nav-link" data-scroll-target="#de-novo-assembly"><em>De novo</em> assembly</a></li>
   <li><a href="#functional-profiling" id="toc-functional-profiling" class="nav-link" data-scroll-target="#functional-profiling">Functional Profiling</a></li>
-  <li><a href="#authentication-and-decontamination" id="toc-authentication-and-decontamination" class="nav-link" data-scroll-target="#authentication-and-decontamination">Authentication and Decontamination <!-- TODO: update to use path method like e.g. metaWrap/tempest --></a></li>
+  <li><a href="#authentication" id="toc-authentication" class="nav-link" data-scroll-target="#authentication">Authentication</a></li>
   <li><a href="#phylogenomics" id="toc-phylogenomics" class="nav-link" data-scroll-target="#phylogenomics">Phylogenomics</a></li>
   <li><a href="#ancient-metagenomic-pipelines" id="toc-ancient-metagenomic-pipelines" class="nav-link" data-scroll-target="#ancient-metagenomic-pipelines">Ancient metagenomic pipelines</a></li>
   </ul></li>
@@ -477,7 +477,7 @@ Warning
 </ul></li>
 </ul>
 <p>For each chapter, if it requires pre-prepared data, the top of the page will have a box called ‘Self guided: chapter envionment setup’ that link to a <code>.tar</code> archive. This contain the raw data will be available to download for following the chapter Furthermore, the same box will describe how to use a conda <code>.yml</code> file that specifies the software environment for that chapter will also be available for you to install.</p>
-<p>See the rest of this page on how to install <code>conda</code> (if not already available to you), and also how to create <code>conda</code> software environments</p>
+<p>See the rest of this page on how to install <code>conda</code> (if not already available to you), and also how to create <code>conda</code> software environments.</p>
 </section>
 <section id="software-environments" class="level2">
 <h2 class="anchored" data-anchor-id="software-environments">Software Environments</h2>
@@ -513,15 +513,14 @@ Quick guide to installing conda
 <li><p>Exit and open the terminal again</p></li>
 <li><p>Type <code>conda --version</code> to check conda is installed and working</p></li>
 <li><p>Set up bioconda</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--add</span> channels defaults</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--add</span> channels bioconda</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--add</span> channels conda-forge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--add</span> channels bioconda</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--add</span> channels conda-forge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul></li>
 </ul>
 </div>
 </div>
 </div>
-<p>Once <code>conda</code> is installed and <code>bioconda</code> configured, at the beginning of each chapter, to create the <code>conda</code> environment from the <code>yml</code> file, you will need to run the following:</p>
+<p>Once <code>conda</code> is installed and <code>bioconda</code> configured, at the beginning of each chapter, to create the <code>conda</code> environment from the <code>yml</code> file, you will need to carry out the following steps.</p>
 <ol type="1">
 <li><p>Download and unpack the <code>conda</code> env file the top of the chapter by right clicking on the link and pressing ‘save as’. Once uncompressed, change into the directory.</p></li>
 <li><p>Then you can run the following conda command to install the software into it’s dedicated environment</p>
@@ -537,7 +536,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>You only have to run the environment creation once!</p>
+<p>You only have to run the environment creation once for each chapter/environment!</p>
 </div>
 </div>
 <ol start="3" type="1">
@@ -562,6 +561,25 @@ Tip
 <p>To delete a conda software environment, run <code>conda remove --name &lt;NAME_OF_ENV&gt; --all -y</code></p>
 </div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If at any point you have issues of running out of space on your machine, you can first try running</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> clean <span class="at">--all</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And you can answer ‘yes’ to all the prompts to remove unused packages and caches.</p>
+<p>If you are still having issues, you can remove the environments that you don’t need any more with the following.</p>
+<pre><code>conda env list</code></pre>
+<p>To list all your existing conda environments, and then delete the directory of the unneeded environment with <code>rm</code>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-r</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/<span class="op">&lt;</span>conda_install<span class="op">&gt;</span>/envs/<span class="op">&lt;</span>environment_name<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
 </section>
 <section id="additional-software" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="additional-software">Additional Software</h2>
@@ -570,58 +588,98 @@ Tip
 <h3 class="anchored" data-anchor-id="introduction-to-the-command-line">Introduction to the command line</h3>
 <ul>
 <li><p><a href="https://www.gnu.org/software/libc/manual/html_node/Renaming-Files.html">rename</a> (if not already installed, e.g.&nbsp;on OSX)</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install rename</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install rename</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul>
 </section>
 <section id="de-novo-assembly" class="level3">
 <h3 class="anchored" data-anchor-id="de-novo-assembly"><em>De novo</em> assembly</h3>
 <ul>
 <li><p><a href="https://github.com/bxlab/metaWRAP">MetaWRAP</a></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-n</span> metawrap-env python=2.7</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate metawrap-env</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> install <span class="at">-c</span> bioconda biopython=1.68 bwa=0.7.17 maxbin2=2.2.7 metabat2 samtools=1.9 checkm-genome=1.0.12</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/denovo-assembly</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/bxlab/metaWRAP.git</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">## don't forget to update path/to!</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"export PATH=</span><span class="va">$PATH</span><span class="st">:/&lt;path&gt;/&lt;to&gt;/metaWRAP/bin"</span> <span class="op">&gt;&gt;</span> ~/.bashrc</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> ~/.bashrc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-n</span> metawrap-env python=2.7</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate metawrap-env</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> install <span class="at">-c</span> bioconda biopython=1.68 bwa=0.7.17 maxbin2=2.2.7 metabat2 samtools=1.9 checkm-genome=1.0.12</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/denovo-assembly</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/bxlab/metaWRAP.git</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">## don't forget to update path/to!</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="va">$PATH</span>:/<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/metaWRAP/bin</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you close your terminal halfway through the chapter, when opening the terminal again to continue the chapter, you MUST re-export the path to the metaWRAP bin directory to have access to the software!</p>
+</div>
+</div>
 </section>
 <section id="functional-profiling" class="level3">
 <h3 class="anchored" data-anchor-id="functional-profiling">Functional Profiling</h3>
 <ul>
 <li><p><a href="https://github.com/biobakery/humann">HUMAnN3</a> UniRef database (where the functional providing conda environment is already activated - see the Functional Profiling chapter for more details)</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">humann3_databases</span> <span class="at">--download</span> uniref uniref90_ec_filtered_diamond /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/functional-profiling/humann3_db</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">humann3_databases</span> <span class="at">--download</span> uniref uniref90_ec_filtered_diamond /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/functional-profiling/humann3_db</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul>
 </section>
-<section id="authentication-and-decontamination" class="level3">
-<h3 class="anchored" data-anchor-id="authentication-and-decontamination">Authentication and Decontamination <!-- TODO: update to use path method like e.g. metaWrap/tempest --></h3>
-<!--
-- [Sourcetracker](https://github.com/danknights/sourcetracker)
-
-    ```bash
-    cd /<path>/<to>/authentication-decontamination/sourcetracker/
-    git clone https://github.com/danknights/sourcetracker.git
-
-    ## patch due to R update
-    sed -i '538,539s/^/#/' sourcetracker/src/SourceTracker.r
-    ```
-
--->
-<!--
-- [decOM](https://github.com/CamilaDuitama/decOM) 
-
-    ```bash
-    cd /<path>/<to>/authentication-decontamination/decom
-    git clone https://github.com/CamilaDuitama/decOM.git  
-    cd decOM  
-    conda env create -n decOM --file environment.yml  
-    conda deactivate
-    conda activate decOM  
-
-    export PATH=/absolute/path/to/decOM:${PATH}
-    ```
--->
+<section id="authentication" class="level3">
+<h3 class="anchored" data-anchor-id="authentication">Authentication</h3>
+<ul>
+<li><a href="https://pip.pypa.io/en/stable/installation/">pip</a></li>
+<li><a href="https://github.com/metaDMG-dev/metaDMG-cpp">metaDMG</a>
+<ul>
+<li><p>Make a conda environment file called <code>metadmg.yml</code> containing the following.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> metaDMG</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">channels</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> conda-forge</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> bioconda</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dependencies</span><span class="kw">:</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> conda-forge::python=3.9.15</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> bioconda::htslib=1.17</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> conda-forge::eigen=3.4.0</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> conda-forge::cxx-compiler=1.5.2</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> conda-forge::c-compiler=1.5.2</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> conda-forge::gsl=2.7</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> conda-forge::iminuit=2.17.0</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> conda-forge::numpyro=0.10.1</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> conda-forge::joblib=1.2.0</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> conda-forge::numba=0.56.2</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> conda-forge::flatbuffers=22.9.24</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> conda-forge::psutil=5.9.4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Create the environment with</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-f</span> metadmg.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Change to the chapter’s directory</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/authentication</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Activate the new environment</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate metaDMG</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Clone the latest version of metaDMG, and compile</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/metaDMG-dev/metaDMG-cpp.git</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> metaDMG-cpp</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> clean <span class="kw">&amp;&amp;</span> <span class="fu">make</span> CPPFLAGS=<span class="st">"-L</span><span class="va">${CONDA_PREFIX}</span><span class="st">/lib -I</span><span class="va">${CONDA_PREFIX}</span><span class="st">/include"</span> HTSSRC=systemwide <span class="at">-j</span> 8</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Install some patches, and some additional modules</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install git+https://github.com/metaDMG-dev/metaDMG-core <span class="co">#@stopiferrors_branch</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install metaDMG<span class="pp">[</span><span class="ss">viz</span><span class="pp">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Deactivate the conda environment</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Make the metaDMG executable available in the environment</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="st">"</span><span class="va">$PATH</span><span class="st">:/&lt;path&gt;/&lt;to&gt;/authentication/metaDMG-cpp/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul></li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you close your terminal halfway through the chapter, when opening the terminal again to continue the chapter, you MUST re-export the path to the metaDMG-cpp directory to have access to the software!</p>
+</div>
+</div>
 </section>
 <section id="phylogenomics" class="level3">
 <h3 class="anchored" data-anchor-id="phylogenomics">Phylogenomics</h3>
@@ -629,44 +687,58 @@ Tip
 <li><a href="http://tree.bio.ed.ac.uk/download.html?name=tempest&amp;id=102&amp;num=3">Tempest</a> (v1.5.3)
 <ul>
 <li><p>It is also recommended to assign the following <code>bash</code> variable so you can access the tool without the full path</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xvf</span> TempEst_v1.5.3.tgz</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> TempEst_V1.5.3</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">tempest</span><span class="op">=</span><span class="st">'bash /&lt;PATH&gt;/&lt;TO&gt;/TempEst_v1.5.3/bin/tempest'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/phylogenomics</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-xvf</span> TempEst_v1.5.3.tgz</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> TempEst_V1.5.3</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="st">"</span><span class="va">$PATH</span><span class="st">:/&lt;path&gt;/&lt;to&gt;/phylogenomics/TempEst_v1.5.3/bin/"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>If you get an error like <code>Exception in thread "main" java.lang.UnsatisfiedLinkError: Can't load library: /usr/lib/jvm/java-11-openjdk-amd64/lib/libawt_xawt.so</code>, make sure you have Java installed e.g.&nbsp;</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install openjdk-11-jdk</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install openjdk-11-jdk</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul></li>
 <li><a href="https://www.megasoftware.net">MEGAX</a> (v11.0.11)</li>
 </ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you close your terminal halfway through the chapter, when opening the terminal again to continue the chapter, you MUST re-export the path to the Tempest bin directory to have access to the software!</p>
+</div>
+</div>
 </section>
 <section id="ancient-metagenomic-pipelines" class="level3">
 <h3 class="anchored" data-anchor-id="ancient-metagenomic-pipelines">Ancient metagenomic pipelines</h3>
 <ul>
 <li><p><a href="https://www.docker.com/">Docker</a> (installation method will vary depending on your OS)</p>
 <ul>
-<li><a href="https://docs.docker.com/engine/install/ubuntu/">Standard install</a></li>
-<li>Linux-nerd install</li>
-</ul>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> install <span class="at">-m</span> 0755 <span class="at">-d</span> /etc/apt/keyrings</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://download.docker.com/linux/ubuntu/gpg <span class="kw">|</span> <span class="fu">sudo</span> gpg <span class="at">--dearmor</span> <span class="at">-o</span> /etc/apt/keyrings/docker.gpg</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod a+r /etc/apt/keyrings/docker.gpg</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="dt">\</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="st">"deb [arch="</span><span class="va">$(</span><span class="ex">dpkg</span> <span class="at">--print-architecture</span><span class="va">)</span><span class="st">" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu </span><span class="dt">\</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span><span class="va">$(</span><span class="bu">.</span> /etc/os-release <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">"</span><span class="va">$VERSION_CODENAME</span><span class="st">"</span><span class="va">)</span><span class="st">" stable"</span> <span class="kw">|</span> <span class="dt">\</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/apt/sources.list.d/docker.list <span class="op">&gt;</span> /dev/null</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">## May need to do a reboot or something here</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> groupadd docker</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> docker <span class="va">$USER</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="ex">newgrp</span> docker</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> reboot <span class="co">## will kick you out, but it'll be back in a minute or two</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><a href="https://docs.docker.com/engine/install/ubuntu/">Standard install</a></p></li>
+<li><p>Linux-nerd install</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> install <span class="at">-m</span> 0755 <span class="at">-d</span> /etc/apt/keyrings</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://download.docker.com/linux/ubuntu/gpg <span class="kw">|</span> <span class="fu">sudo</span> gpg <span class="at">--dearmor</span> <span class="at">-o</span> /etc/apt/keyrings/docker.gpg</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod a+r /etc/apt/keyrings/docker.gpg</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="dt">\</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="st">"deb [arch="</span><span class="va">$(</span><span class="ex">dpkg</span> <span class="at">--print-architecture</span><span class="va">)</span><span class="st">" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu </span><span class="dt">\</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span><span class="va">$(</span><span class="bu">.</span> /etc/os-release <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">"</span><span class="va">$VERSION_CODENAME</span><span class="st">"</span><span class="va">)</span><span class="st">" stable"</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/apt/sources.list.d/docker.list <span class="op">&gt;</span> /dev/null</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co">## May need to do a reboot or something here</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> groupadd docker</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> docker <span class="va">$USER</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="ex">newgrp</span> docker</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> reboot <span class="co">## will kick you out, but it'll be back in a minute or two</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul></li>
 <li><p><a href="https://github.com/NBISweden/aMeta">aMeta</a> (make sure you’ve already downloaded the data directory as per the <a href="./ancient-metagenomic-pipelines.html">chapter instructions</a>)</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/ancient-metagenomic-pipelines/</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/NBISweden/aMeta</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> aMeta</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">## We have to patch the environment to use an old version of Snakemake as aMeta is not compatible with the latest version</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">'s/snakemake-minimal&gt;=5.18/snakemake &lt;=6.3.0/'</span> workflow/envs/environment.yaml</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-f</span> workflow/envs/environment.yaml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/ancient-metagenomic-pipelines/</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/NBISweden/aMeta</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> aMeta</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">## We have to patch the environment to use an old version of Snakemake as aMeta is not compatible with the latest version</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">'s/snakemake-minimal&gt;=5.18/snakemake &lt;=6.3.0/'</span> workflow/envs/environment.yaml</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-f</span> workflow/envs/environment.yaml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul>
 
 
