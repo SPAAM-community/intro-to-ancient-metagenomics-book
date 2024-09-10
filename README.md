@@ -68,6 +68,12 @@ General tips:
 - Use the native markdown syntax for images (`![](assets/images/chapters/<your_image>.png)`)
 - For note blocks see the [Quarto docs](https://quarto.org/docs/authoring/callouts.html#callout-types)
 
+## Release procedure
+
+- Make sure authors updated
+- Make sure cover images updated (Edition 202X)
+- Make sure all data files uploaded, and if necessary Zenodo DOI updated
+
 ## Notes
 
 [^1]: I recommend installing the [gitpod chrome extension](https://chrome.google.com/webstore/detail/gitpod-always-ready-to-co/dodmmooeoklaejobgleioelladacbeki) which adds a nice shortcut button to the github repository next to the green 'code' button.
