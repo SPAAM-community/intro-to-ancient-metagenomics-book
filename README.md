@@ -77,9 +77,14 @@ General tips:
   - In citations.gff
   - In citing-this-book.qmd (set DOI to root DOI)
 - Make sure cover images updated (Edition 202X)
-- Make sure all software installation instructions/conda yaml files are up to date 
+- Make sure all software installation instructions/conda yaml files are up to date
 - Make sure all data files uploaded, and if necessary Zenodo DOI updated
-- Make sure footnotes fixed everywhere (_quarto.yml)
+  - Update from previous upload
+  - Make sure to bump year to title
+  - Version system: YYYY.point release (2024.0, 2024.1)
+  - Make sure to update authors if required
+- Update Zenodo DOI for each chapter
+- Make sure footnotes year fixed everywhere (\_quarto.yml)
 
 ### After
 
