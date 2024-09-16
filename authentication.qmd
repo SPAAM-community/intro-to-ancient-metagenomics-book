@@ -436,28 +436,31 @@ In particular, three different settings can be run:
 
 1. Single genome analysis with one overall global estimate of the damage patterns. Similar to mapDamage2.0 ([https://academic.oup.com/bioinformatics/article/29/13/1682/184965](https://academic.oup.com/bioinformatics/article/29/13/1682/184965)).
 
-  ```bash
-  metaDMG-cpp getdamage --run_mode 0
-  ```
+    ```bash
+    ## Example, do not run
+    metaDMG-cpp getdamage --run_mode 0
+    ```
 
 2. Metagenomic (e.g. multiple genome alignments) analyses. This mode provides a damage estimate per reference, taxonomic name or accession number, including all alignments without any taxonomical classification 
 
-  ```bash
-  metaDMG-cpp getdamage --run_mode 1
-  ```
+    ```bash
+    ## Example, do not run
+    metaDMG-cpp getdamage --run_mode 1
+    ```
 
 3.	Metagenomic analyses with the integration of the taxonomy: Least Common Ancestor algorithm (`ngsLCA`). This allows the computation of damage estimates for alignments classified to given taxonomic levels.
 
-  ```bash
-  metaDMG-cpp lca
-  ```
+    ```bash
+    ## Example, do not run
+    metaDMG-cpp lca
+    ```
 
 In this section we will utilise `metaDMG-cpp lca` since we are interested in a more comprehensive analysis that includes the taxonomic classification of our alignments.
 For those interested in exploring other functionalities of metaDMG, I encourage you to visit the tool’s official GitHub ([https://github.com/metaDMG-dev/metaDMG-cpp](https://github.com/metaDMG-dev/metaDMG-cpp)) and the ngsLCA official GitHub ([https://github.com/miwipe/ngsLCA](https://github.com/miwipe/ngsLCA)).
 
 ### Taxonomic profiling: metaDMG-cpp lca
 
-The `metaDMG-cpp lca` function is based on the `ngsLCA` (next-generation sequence Lowest Common Ancestor) algorithm to collect mismatch information for all reads and generate a taxonomic profile ([@Wang2022-fr]).
+The `metaDMG-cpp lca` function is based on the `ngsLCA` (next-generation sequence Lowest Common Ancestor) algorithm to collect mismatch information for all reads and generate a taxonomic profile [@Wang2022-fr].
 It counts substitutions between read and reference on internal nodes within a taxonomy (e.g. species, genus and family level).
 It is built upon the NCBI taxonomy ([https://www.ncbi.nlm.nih.gov/taxonomy](https://www.ncbi.nlm.nih.gov/taxonomy)) and requires three files: 
 
@@ -479,6 +482,7 @@ The lca file reports the sequence analysed and its taxonomic path, as well as ot
 We report an example of the bdamage.gz file output printed using the command `metaDMG-cpp print`:
 
 ```bash
+## Example, do not run
 metaDMG-cpp print file.bdamage.gz -names names.dmp > bdamage_table.tsv
 ```
 
@@ -515,6 +519,7 @@ data %>%
 This function is called the `metaDMG-cpp dfit` or damage estimates function.
 
 ```bash
+## Example, do not run
 metaDMG-cpp dfit 
 ```
 
