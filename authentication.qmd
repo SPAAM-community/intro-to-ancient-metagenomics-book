@@ -183,7 +183,7 @@ While KrakenUniq delivers information about breadth of coverage by default, you 
 
 For this one has to use a special flag *--report-minimizer-data* when running Kraken2 in order to get the breadth of coverage proxy which is called the **number of distinct minimizers** for the case of Kraken2. Below, we provide an example Kraken2 command line containing the distinct minimizer flag:
 
-::: {.callout-warning title="Example only -, do not run!"}
+::: {.callout-warning title="Example only - do not run!"}
 
 ```bash
 DBNAME=Kraken2_DB_directory
@@ -632,7 +632,7 @@ metaDMG-cpp dfit metadmg/VM-19_6100.merged.bam.bdamage.gz --names metadmg/small_
 
 ```
 
-::: {.callout-warning title="Example only -, do not run!"}
+::: {.callout-warning title="Example only - do not run!"}
 The `metaDMG-cpp dfit` function also allows for the computation of a binomial model, which includes additional statistics (such as bootstrap estimated parameters).
 For the exercise, we only run the quick statistics, but we provide an example of the codes for full stat:
 
@@ -657,7 +657,7 @@ metaDMG-cpp aggregate metadmg/VM-17_5300.merged.bam.bdamage.gz -lcastat metadmg/
 metaDMG-cpp aggregate metadmg/VM-19_6100.merged.bam.bdamage.gz -lcastat metadmg/VM-19_6100.merged.bam.stat.gz --names metadmg/small_taxonomy/names.dmp --nodes metadmg/small_taxonomy/nodes.dmp --dfit metadmg/VM-19_6100.merged.bam.dfit.gz --out metadmg/VM-19_aggregated_results
 ```
 
-In the last step we merge the header and the filenames in a unique tab-separated file (tsv).
+In the last step we merge the header and the filenames in a unique tab-separated file (TSV).
 
 We first change into the `metadmg/` results directory, and unzip the output files
 
@@ -666,7 +666,7 @@ cd metadmg
 gunzip *_aggregated_results.stat.gz
 ```
 
-Then we extract the header and we concatenate the content of all the output files in a unique tsv file.
+Then we extract the header and we concatenate the content of all the output files in a unique TSV file.
 
 ```bash
 #Define header for final output table
@@ -696,24 +696,18 @@ done
 
 ### Investigating the final output with R
 
-We first visualise our metaDMG output manually navigating to the folder `metadmg/` and clicking on "Open folder".
-We can double-click on the tsv file `concatenated_metaDMGfinal.tsv` and visualise it.
+We first visualise our metaDMG output manually by navigating to the folder `metadmg/` with your file browser and clicking on "Open folder".
+Open the TSV file `concatenated_metaDMGfinal.tsv` in a spreadsheet manner and inspect the files.
 
-We will now investigate the tsv table produced by metaDMG to authenticate damage patterns, visualise the relationship between the damage and the significance, and the degree of damage through depth and time.
+We will now investigate the TSV table produced by metaDMG to authenticate damage patterns, visualise the relationship between the damage and the significance, and the degree of damage through depth and time.
 
 R packages for this exercise are located in our original conda environment `authentication`.
 
-We deactivate the current conda environment and we re-activate the environment `authentication`
+While still in the `authentication/metadmg/` folder, We deactivate the current conda environment and we re-activate the environment `authentication`.
 
 ```bash
 conda deactivate
 conda activate authentication
-```
-
-We navigate to the working directory:
-
-```bash
-cd metadmg/
 ```
 
 We load R by running `R` in your terminal
@@ -853,7 +847,7 @@ get_dmg_decay_fit <- function(df, orient = "fwd", pos = 30, p_breaks = c(0, 0.1,
 }
 ```
 
-We load our metaDMG output data (tsv file) and the metadata with information on the age of each sample. We generate the damage plots as seen in @fig-authentication-fagusovisdmg using the function `get-damage`.
+We load our metaDMG output data (TSV file) and the metadata with information on the age of each sample. We generate the damage plots as seen in @fig-authentication-fagusovisdmg using the function `get-damage`.
 
 ```{r eval=F}
 df <- read.csv("concatenated_metaDMGfinal.tsv",  sep = "\t")
@@ -1013,7 +1007,7 @@ Check 3x that the path you are specifying is exactly what you want to delete and
 :::
 
 ```bash
-rm -r /<PATH>/<TO>/authentication*
+rm -rf /<PATH>/<TO>/authentication*
 ```
 
 Once deleted we can move elsewhere (e.g. `cd ~`).
