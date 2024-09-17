@@ -72,11 +72,14 @@ General tips:
 
 ### Before
 
+- Check for any major TODOs in the book
 - Make sure authors updated
   - On authors.qmd
   - In citations.gff
   - In citing-this-book.qmd (set DOI to root DOI)
-- Make sure cover images updated (Edition 202X)
+- Make sure cover images updated
+  - Stating (Edition 202X)
+  - Update contributors on jacket back
 - Make sure all software installation instructions/conda yaml files are up to date
 - Make sure all data files uploaded, and if necessary Zenodo DOI updated
   - Update from previous upload
