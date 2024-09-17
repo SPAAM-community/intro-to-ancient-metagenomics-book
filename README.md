@@ -88,6 +88,7 @@ General tips:
   - Make sure to update authors if required
 - Update Zenodo DOI for each chapter
 - Make sure footnotes year fixed everywhere (\_quarto.yml)
+- Update release date in citations.cff
 
 ### After
 
