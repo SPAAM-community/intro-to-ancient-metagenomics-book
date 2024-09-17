@@ -88,7 +88,7 @@ General tips:
 
 ### After
 
-- In citing-this-book.qmd (set DOI to release DOI)
+- In citing-this-book.qmd set DOI to release DOI
 
 ## Notes
 
