@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -93,10 +93,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-9dcef9bc6179ae6ca98dd89ff182b1a7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -128,7 +128,10 @@ div.csl-indent {
 
 <meta property="og:title" content="14&nbsp; Genome Mapping – Introduction to Ancient Metagenomics">
 <meta property="og:description" content="">
+<meta property="og:image" content="https://spaam-community.github.org/intro-to-ancient-metagenomics-book/assets/images/chapters/genome-mapping/IGV_load_genome.png">
 <meta property="og:site_name" content="Introduction to Ancient Metagenomics">
+<meta property="og:image:height" content="86">
+<meta property="og:image:width" content="675">
 </head>
 
 <body class="nav-sidebar floating">
@@ -492,7 +495,7 @@ Self guided: chapter environment setup
 </div>
 <p>Mapping/aligning to a reference genome is one way of reconstructing genomic information from DNA sequencing reads. This allows for identification of differences between the genome from your sample and the reference genome. This information can be used for example for comparative analyses such as in phylogenetics. For a detailed explanation of the read alignment problem and an overview of concepts for solving it, please see <span class="citation" data-cites="Reinert2015">(<a href="#ref-Reinert2015" role="doc-biblioref">Reinert et al. 2015</a>)</span>.</p>
 <p>In this session we will map two samples to the <em>Yersinia pestis</em> (plague) genome using different parameter sets. We will do this “manually” in the sense that we will use all necessary commands one by one in the terminal. These commands usually run in the background when you apply DNA sequencing data processing pipelines.</p>
-<p>We will be using the Burrows-Wheeler Aligner <span class="citation" data-cites="Li2010">(<a href="#ref-Li2010" role="doc-biblioref">Li and Durbin 2010</a>, <a href="http://bio-bwa.sourceforge.net" role="doc-biblioref">http://bio-bwa.sourceforge.net</a>)</span>. There are different algorithms implemented for different types of data (e.g.&nbsp;different read lengths). Here, we use BWA backtrack (<code>bwa aln</code>), which is suitable for Illumina sequences up to 100bp. Other algorithms are <code>bwa mem</code> and <code>bwa sw</code> for longer reads.</p>
+<p>We will be using the Burrows-Wheeler Aligner <span class="citation" data-cites="Li2010">(<a href="#ref-Li2010" role="doc-biblioref">Li and Durbin 2010</a>, <a href="http://bio-bwa.sourceforge.net">http://bio-bwa.sourceforge.net</a>)</span>. There are different algorithms implemented for different types of data (e.g.&nbsp;different read lengths). Here, we use BWA backtrack (<code>bwa aln</code>), which is suitable for Illumina sequences up to 100bp. Other algorithms are <code>bwa mem</code> and <code>bwa sw</code> for longer reads.</p>
 <p>Your learning objectives:</p>
 <ol type="1">
 <li><strong>Understand the Basics</strong>: You will be able to define mapping and describe the basic principles of metagenomic mapping and the different parameters used.<br>
@@ -539,12 +542,12 @@ Self guided: chapter environment setup
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> sample1_lenient</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Perform the <code>bwa</code> alignment, here for sample1, and specify lenient mapping parameters.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">bwa</span> aln <span class="at">-n</span> 0.01 <span class="at">-l</span> 16 ../YpestisCO92.fa ../sample1.fastq.gz <span class="op">&gt;</span> reads_file.sai</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Proceed with writing the mapping in <code>sam</code> format <span class="citation" data-cites="Li2009">(<a href="#ref-Li2009" role="doc-biblioref">Li et al. 2009</a>, <a href="https://en.wikipedia.org/wiki/SAM_(file_format)" role="doc-biblioref">https://en.wikipedia.org/wiki/SAM_(file_format)</a>)</span>.</p>
+<p>Proceed with writing the mapping in <code>sam</code> format <span class="citation" data-cites="Li2009">(<a href="#ref-Li2009" role="doc-biblioref">Li et al. 2009</a>, <a href="https://en.wikipedia.org/wiki/SAM_(file_format)">https://en.wikipedia.org/wiki/SAM_(file_format)</a>)</span>.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">bwa</span> samse <span class="at">-r</span> <span class="st">'@RG\tID:all\tLB:NA\tPL:illumina\tPU:NA\tSM:NA'</span> ../YpestisCO92.fa reads_file.sai ../sample1.fastq.gz <span class="op">&gt;</span> reads_mapped.sam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Note that we have specified the sequencing platform (Illumina) by creating a so-called “Read Group” (<code>-r</code>). This information is used later during the genotyping step.</p>
 <p>Convert SAM file to binary format (BAM file).</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> view <span class="at">-b</span> <span class="at">-S</span> reads_mapped.sam <span class="op">&gt;</span> reads_mapped.bam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>For processing of <code>sam</code> and <code>bam</code> files we use <code>samtools</code> <span class="citation" data-cites="Li2009">(<a href="#ref-Li2009" role="doc-biblioref">Li et al. 2009</a>, <a href="https://github.com/samtools/samtools" role="doc-biblioref">https://github.com/samtools/samtools</a>)</span>.</p>
+<p>For processing of <code>sam</code> and <code>bam</code> files we use <code>samtools</code> <span class="citation" data-cites="Li2009">(<a href="#ref-Li2009" role="doc-biblioref">Li et al. 2009</a>, <a href="https://github.com/samtools/samtools">https://github.com/samtools/samtools</a>)</span>.</p>
 <p><code>-b</code> specifies to output in BAM format. (<code>-S</code> specifies input is SAM, can be omitted in recent versions).</p>
 <p>Now we sort the <code>bam</code> file → Sort alignments by leftmost coordinates.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">samtools</span> sort reads_mapped.bam <span class="op">&gt;</span> reads_mapped_sorted.bam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -562,7 +565,7 @@ Self guided: chapter environment setup
 </section>
 <section id="genotyping" class="level2" data-number="14.4">
 <h2 data-number="14.4" class="anchored" data-anchor-id="genotyping"><span class="header-section-number">14.4</span> Genotyping</h2>
-<p>The next step we need to perform is genotyping, i.e.&nbsp;the identification of all SNPs that differentiate the sample from the reference. For this we use the ‘Genome Analysis Toolkit’ (<code>gatk</code>) <span class="citation" data-cites="DePristo2011">(<a href="#ref-DePristo2011" role="doc-biblioref">DePristo et al. 2011</a>, <a href="http://www.broadinstitute.org/gatk/" role="doc-biblioref">http://www.broadinstitute.org/gatk/</a>)</span></p>
+<p>The next step we need to perform is genotyping, i.e.&nbsp;the identification of all SNPs that differentiate the sample from the reference. For this we use the ‘Genome Analysis Toolkit’ (<code>gatk</code>) <span class="citation" data-cites="DePristo2011">(<a href="#ref-DePristo2011" role="doc-biblioref">DePristo et al. 2011</a>, <a href="http://www.broadinstitute.org/gatk/">http://www.broadinstitute.org/gatk/</a>)</span></p>
 <p>It uses the reference genome and the mapping as input and produces an output in ‘Variant Call Format (VCF)’ (<a href="https://en.wikipedia.org/wiki/Variant_Call_Format">https://en.wikipedia.org/wiki/Variant_Call_Format</a>).</p>
 <p>Perform genotyping on the mapping file.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gatk3</span> <span class="at">-T</span> UnifiedGenotyper <span class="at">-R</span> ../YpestisCO92.fa <span class="at">-I</span> reads_mapped_sorted_dedup.bam <span class="at">--output_mode</span> EMIT_ALL_SITES <span class="at">-o</span> mysnps.vcf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -653,8 +656,8 @@ Note
 </section>
 <section id="comparing-genotypes" class="level2" data-number="14.6">
 <h2 data-number="14.6" class="anchored" data-anchor-id="comparing-genotypes"><span class="header-section-number">14.6</span> Comparing Genotypes</h2>
-<p>In order to combine the results from multiple samples and parameter settings we need to agregate and comparatively analyse the information from all the <em>vcf</em> files. For this we will use the software <code>multivcfanalyzer</code> <span class="citation" data-cites="Bos2014-xe">(<a href="#ref-Bos2014-xe" role="doc-biblioref">Bos et al. 2014</a>, <a href="https://github.com/alexherbig/MultiVCFAnalyzer" role="doc-biblioref">https://github.com/alexherbig/MultiVCFAnalyzer</a>)</span>.</p>
-<p>It produces various output files and summary statistics and can integrate gene annotations for SNP effect analysis as done by the program <code>SnpEff</code> <span class="citation" data-cites="Cingolani2012">(<a href="#ref-Cingolani2012" role="doc-biblioref">Cingolani et al. 2012</a>, <a href="https://github.com/pcingola/SnpEff" role="doc-biblioref">https://github.com/pcingola/SnpEff</a>)</span>.</p>
+<p>In order to combine the results from multiple samples and parameter settings we need to agregate and comparatively analyse the information from all the <em>vcf</em> files. For this we will use the software <code>multivcfanalyzer</code> <span class="citation" data-cites="Bos2014-xe">(<a href="#ref-Bos2014-xe" role="doc-biblioref">Bos et al. 2014</a>, <a href="https://github.com/alexherbig/MultiVCFAnalyzer">https://github.com/alexherbig/MultiVCFAnalyzer</a>)</span>.</p>
+<p>It produces various output files and summary statistics and can integrate gene annotations for SNP effect analysis as done by the program <code>SnpEff</code> <span class="citation" data-cites="Cingolani2012">(<a href="#ref-Cingolani2012" role="doc-biblioref">Cingolani et al. 2012</a>, <a href="https://github.com/pcingola/SnpEff">https://github.com/pcingola/SnpEff</a>)</span>.</p>
 <p>Run <code>multivcfanalyzer</code> on all 4 files at once. First <code>cd</code> one level up (if you type <code>ls</code> you should see your 4 directories, reference, etc.).</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ..</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then make a new directory.</p>
@@ -909,8 +912,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -1021,7 +1022,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
