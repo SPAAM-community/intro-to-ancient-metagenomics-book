@@ -10,18 +10,28 @@ bibliography: assets/references/introduction-to-ngs-sequencing.bib
 :::
 
 ::: {.callout-important}
-Text is a raw transcription of the 2022 lecture from the Werner Siemens-Stiftung funded SPAAM Summer School: Introduction to Ancient Metagenomics (2022). Extensive editing is still underway. Readability will be low.
+Parts of this text are a raw transcription of the 2022 lecture from the Werner Siemens-Stiftung funded SPAAM Summer School: Introduction to Ancient Metagenomics (2022). Extensive editing is still underway. Readability will be low.
 :::
 
-## Introduction
+Next generation sequencing (NGS) revolutionised the whole of biology by providing rapid and cheap access to huge amounts of DNA sequence data. 
+One unexpected benefit of this technology was that the technique used by Illumina sequencers was that it was also _perfect_ for sequencing ancient DNA.
 
-We will make a start. So in this session, introduction to NGS data, I want to very briefly recap the basics of DNA for a good reason. Then introduce what DNA sequence is and how that works, and then also explain how Illumina NGS data, sequencing data is generated. The reason why I'm focusing on Illumina is because this is what the vast, very vast majority of ancient DNA will be sequenced on for reasons which I will explain later. 
+In this chapter, we will do a brief overview of how DNA is structured, how DNA sequencing works, how most NGS sequenced DNA sequences are digitally represented, and then cover some of the important considerations for ancient metagenomic sequencing datasets.
 
 ## Basic structure of DNA
 
-So first, to actually understand how sequencing works, we need to look at, just do a very, very briefly recap of what DNA is. So DNA, as you probably, everybody knows, is a double helix molecule which is stored in every single cell in your body ([@fig-intro-ngs-fig-3dhelix]). 
+To understand how sequencing works, we need to understand the basic structure of DNA.
+Deoxyribonucleic acid (DNA) is a biological molecule famous for it's 'double helix' structure ([@fig-intro-ngs-fig-3dhelix]), and is present in the vast majority of cells in your body . 
+It encodes all the genetic information required for the development, growth, and function of living organisms.
 
-And this double helix is actually made up of four main components called nucleotides, which you can see here ([@fig-intro-ngs-fig-2dhelix]), and they consist of two strands in which these four nucleotides will come together and bind together in a particular order. And these four nucleotides are made up of two groups, pyrimidines and purines. So pyrimidines are cytosines and thiamines, and purines are guanines and adenines. 
+The each strand of the double helix structure consist of four main components called nucleotides, which bind together in different orders.
+These nucleotides consist of two groups:
+
+- Pyrimidines: cytosine (C) and thymine (T)
+- Purines: guanine (G) and adenine (A)
+
+The nucleotides on one strand are connected via a 'sugar phosphate backbone', however the two strands are held together by the interaction of the hydrogen bond pairing of four different nucleobases on each strand ([@fig-intro-ngs-fig-2dhelix]).
+
 
 :::{layout-ncol=2}
 ![Animation of 3D DNA double helix. Source: [Erin Rod, CC BY 4.0, via Wikimedia Commons](https://commons.wikimedia.org/wiki/File:The_Structure_of_DNA_GIF.gif)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-3dhelix.gif){#fig-intro-ngs-fig-3dhelix height=300px}
@@ -29,65 +39,166 @@ And this double helix is actually made up of four main components called nucleot
 ![2D molecular diagram of DNA helix, with sugar-phosphate backbone and amine groups labelled indicated. Source: [Pradana Aumars, CC BY-SA 4.0, via Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Structure_ADN.png)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-2dhelix.png){#fig-intro-ngs-fig-2dhelix height=300px}
 :::
 
-And this base pairing, which brings the two strands of the DNA together, always consists of one pyrimidine and one pyrimine. I always remember which group go together, and so I remember it as C always goes with G, think CGI, and then go A with T. What's some of the best CGI you've ever seen? It's from Star Wars, so think AT-AT Walker ([@fig-intro-ngs-fig-atatwalker]), Antid Walker, you have been able to remember that. So what this means, and because they go together, it always means they're complementary. So whenever you find a C on one strand of the DNA molecule, you will see a G on the other and vice versa, and again, A with a T on the other. So depending on which strand you are reading, you can always get the order of the base on the other strand because of this complementary base pairing. 
+This pairing consists of one pyrimidine and one purine, which are complementary to each other.
+
+- C with G (to remember: thing CGI in animated movies)
+- A and T (to remember: think AT-AT Walker from Star Wars, [@fig-intro-ngs-fig-atatwalker])
+
+Therefore, whenever you find a C on one strand, you will normally find a G on the other strand (and vice versa), and the same for A and T.
+If you find an A on one strand, you will find a T on the other strand, or if a T on one strand, you will have another.
+
+What this means is that because of this complementary pairing, depending on which strand you are reading, you can always reconstruct the order bases on the _other_ strand.
 
 ![Lego construction of AT AT walker from Star Wars. Source: [Tim Moreillon, CC BY-SA 2.0 Generic, via Wikimedia Commons](https://commons.wikimedia.org/wiki/File:LEGO_Star_Wars_AT-AT_Walker_(6740909421).jpg)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-atatwalker.jpg){#fig-intro-ngs-fig-atatwalker height=300px}
 
-## DNA replication 
+## DNA replication
 
-And this is important because this is essentially how replication occurs, so when you basically make a copy of the DNA strand. And in very simple terms, what we do is, or what the body does, is unwinds the multiple various macro structures, including double helix. You then separate the strands into two, so you have, all of your nucleotides are basically exposed, so you don't have them binding together. And then you get an enzyme called DNA polymerase, which basically attaches onto the strands that's reading along it, and when it finds an exposed nucleotide, it will say, well, okay, I recognize, for example, this is a C that's being exposed, and it waits to basically pick up a free nucleotide floating around in the cellular gunk, and then basically allows it to bind together in that position. Then it basically will move along to the next exposed nucleotide, see what it is, let's say it's an A, and then it will basically wait to find the T and fix it on the strand, and eventually another enzyme, I believe, comes along, I can't remember the name, I didn't name this, comes along and basically repairs the backbone, like, no, it doesn't matter, prepares the backbone to basically then have your two, strands from your original strand. And just remember basically having this enzyme picking up free nucleotides and adding it to the new strand, because this is the important thing the sequencing is within a minute. 
+This characteristic of the DNA molecule is a critical component on how DNA gets replicated (or copied) within a cell.
 
-## Extracting DNA
+At it's core, DNA replication consists of:
 
-### Modern DNA
+1. Unwinding the DNA helix and separate the two strands by breaking the hydrogen bonds between the complementary bases using a helicase enzyme
+2. Use a polymerase enzyme to add complementary new 'free' nucleotides floating in the cell to the exposed base on the strand (repeating for each base until a 'stop' signal is received)
+3. Construct bonds on the sugar-phosphate backbone of the new strand using a ligase enzyme
 
-As a reminder, how we get DNA, so when you do this, you basically get your sample, you then have to break down the cells, the cell walls, and membranes, and then you basically have to destroy a lot of stuff inside the cell, there's not the DNAs, things like RNAs, proteins, and things like this, because this can basically inhibit your DNA replication downstream in your molecular steps. You then separate out the DNA from the rest of the broken stuff, which you can then pull out ([@fig-intro-ngs-fig-dnareplication]). And normally in modern DNA, this can actually look like a long, this sort of spaghetti-like thing. 
+A graphical representation can be seen in using a helicase enzyme in the image below ([@fig-intro-ngs-fig-dnareplication]).
 
 ![Schematic diagram of DNA replication, with a helicase unwinding DNA strand with DNA polymerases on the leading and lagging strand incorporating free nucleotides. Source: [Christine Imiller, CC BY-SA 4.0 Generic, via Wikimedia Commons](https://commons.wikimedia.org/wiki/File:DNA_Polymerase_DNA_Replication.png)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-dnareplication.jpg){#fig-intro-ngs-fig-dnareplication height=300px}
 
+This concept is important because it is the basis of how DNA sequencing works, and how we can reconstruct the sequence of a DNA molecule.
+
+## Extracting DNA
+
+To understand why NGS sequencing revolutionised the field of palaeogenomics, we need to quickly need to compare a difference between how we get modern and ancient DNA.
+
+### Modern DNA
+
+To get DNA from 'modern' samples (i.e., living organisms), you first get your tissue.
+You then have to break down (lyse) the cell membrane and/or walls, to release the molecular contents of the cell.
+Extraction protocols then use a variety of enzymes to degrade the other biomolecules in the cell (e.g., proteins, lipids, RNA) so that they do not 'interfere' with the extraction of the DNA itself.
+Finally, the DNA is separated and pulled out from the rest of the now-broken cell contents (purification).
+
+This extracted DNA are typically in very long and intact strands that you can sort of imagine as long, soft spaghetti pasta like structures ([@fig-intro-ngs-fig-moderndnaextraction]).
+
+![Simplified schematic diagram of the process of DNA extraction from living cells. Source: [CNX OpenStax, CC BY 4.0, via Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Figure_17_01_02.jpg)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-moderndnaextraction.jpg){#fig-intro-ngs-fig-moderndnaextraction width=90%}
+
 ### Ancient DNA
 
-However, ancient DNA is a bit different. The process is the same, you basically have to break down the tissue, in this case it's, let's say, bone, so you have to demineralize it to release all of the biomolecules, and you have to degrade all the other stuff, but the DNA molecules are also degraded, so they're already fragmented, so they're very short, they're very damaged, so they have modified nucleotides, and they also have contamination. So basically, your small fragments DNA is sitting in a super-modern DNA, so a lot of these things will be covered in more detail in other later sessions, but you have to remember that they're damaged, they're old, they're very, very short. 
+In contrast, while the concept of ancient DNA extraction is the similar, the end product of the extraction is different.
+
+Taking a skeleton as an example, once you have your bone sample, cell lysis is normally not necessary as the cells are already broken down.
+However, we have to instead 'liberate' the DNA from the mineral matrix of the bone - so palaeogenomicsts first demineralise the bone to release the DNA and then then degrade the remaining more robust molecules in the sample (typically just protein) before purifying the DNA.
+
+The resulting DNA molecules are quite different from the modern DNA.
+Rather than well cooked, soft spaghetti structures - ancient DNA molecules are more like extremely overcooked spaghetti. 
+These molecules are highly degraded, broken down to very small fragments, and also often have 'damage' at the ends in the form of 'modified nucleotides' that do not represent the original sequence.  
+Finally, the small amount of tiny and damaged DNA molecules typically sits in a 'soup' of 'contaminating' high-quality modern DNA from the surrounding burial and storage environment (see the [Introduction to Ancient DNA chapter](introduction-to-ancient-dna.qmd) for more information).
+
+As we will find out in the next section, this short fragments of DNA is not a disadvantage for NGS sequencing, but rather a benefit.
+
+<!-- TODO ASK PERMISSION FOR COPYRIGHTED IMAGE IN SLIDES -->
 
 ## DNA sequencing
 
-And this brings us on to DNA sequencing, which is essentially the conversion of the chemical, that's better, chemical nucleotides of a DNA molecule to the human-readable ACTG on your computer screen, and what we basically do all of our analyses on in genetics and genomics. And the way this works is pretty common across most methods, which is you replicate a strand, as I described a minute ago, but instead of adding just a standard nucleotide, you add a fluorophore-modified nucleotide, so a fluorophore is a little molecule which essentially, when you excite it somehow, will emit a color.
+Now that we have our DNA we want to be able to 'read' the order of the nucleotide sequence that makes up the molecule.
+Sequencing is the processing of converting the sequence of the four chemical nucleotides to the `ACTG` you can see on your computer screen.
+The result of this process is the essentially what we do pretty much all of our analyses on in genetics and genomics.
 
-And in the case of DNA, you can have four different nucleotides, and each one will emit a different color [@fig-intro-ngs-fig-colourednucleotides]. And so quite often, the way you excite the fluorophore is firing a laser, which then emits the light, and you record the color. And so when you're basically adding your nucleotide each time, you fire a laser, take a picture of the color being emitted, and then you know which base it is, and then you repeat on the next base, and next base, and next base. 
+The core concept of most NGS sequencing methods ^[Newer techniques such as Nanopore sequencers use different methods.] is to replicate the strand, but when adding a nucleotide, you instead supply a modified nucleotide with a fluorophore attached to it.
+This fluorophore is a small molecule that emits a specific colour when excited by a laser.
+As you have four different nucleotides, each will emit a different colour.
+Therefore if you record the colour emitted light each time the modified nucleotide is added to a strand, you can reconstruct the sequence of the DNA molecule ([@fig-intro-ngs-fig-colourednucleotides]).
 
 ![Molecular diagram of the four DNA nucleotides with coloured fluorophore amine groups. Source: [@Ju2006-cl]](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-colourednucleotides.jpeg){#fig-intro-ngs-fig-colourednucleotides height=600px}
 
 ### Sanger sequencing
 
-So historically, the first, let's say, mass production sequencing method was called Sanger sequencing ([@fig-intro-ngs-fig-sangersequencing]). So what this involved was taking a DNA molecule, making lots and lots of copies of it, but also fragmenting it in a random manner, so all of the, oh sorry, fragmenting it, no. I'm getting confused, one step ahead. Sorry, taking a DNA molecule, making lots of copies of it. Then you start extending the molecule, but instead of adding just no standard nucleotides, you mix in a few special modified nucleotides, which include essentially a blocker. And what this means is that once the polymerase gets to this particular blocking nucleotide, it will not extend it any further. However, as you added a mixture of standard nucleotides and also these blocker nucleotides, your DNA molecules will be extended to somewhat a random length each time, because you have many, many different copies.
+Historically, the first mass-production sequenced method was Sanger sequencing ([@fig-intro-ngs-fig-sangersequencing]) [@Sanger1977-zw].
+This was the method used for sequenced the first human genome under the Human Genome Project [@Heather2015-zo]
+
+The concept of Sanger sequencing involves making lots of copies of a single DNA molecule using replication. 
+But when adding the nucleotides, you include within the mixture of (normal) free nucleotides, you include a few modified nucleotides that include fluorophore, but also that also have a 'blocking' component that prevents any additional nucleotides from being added to the strand of that _particular copy_ by the polymerase.
+Critically, the point at which a blocking nucleotide is incorporated is random.
+As there is only a small proportion of blocking nucleotides in amongst pool of free nucleotides,the incorporation of the blocking nucleotides occurs at a slow rate and at different points during the replication process.
+This results in many replicated molecules but all of different lengths ([@fig-intro-ngs-fig-sangersequencing]).
 
 ![Diagram of sanger sequencing, with a primer, template and free blocking nucleotides being added to ends of molecules at random lengths, and then being sent through a size-selecting capillary with a laser dector to identify which of the four blocking nucleotides are passing through the capillary and thus ready ina  chromatopgraph. Source: [Estevezj, [CC-BY-SA 3.0 Unported](https://creativecommons.org/licenses/by-sa/3.0/) via Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sanger-sequencing.svg)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-sangersequencing.png){#fig-intro-ngs-fig-sangersequencing height=300px}
 
+Once you have the replicated molecules, Sanger sequencing involves running the mixture through a capillary gel.
+As all the molecules are of different lengths, they will move through the gel at different speeds, and therefore separate out.
+A laser is then fired at the gel at regular intervals, and the light emitted from the fluorophores is detected.
+Shorter molecules will move faster through the gel, and therefore will be detected first, whereas longer molecules will be detected later.
+Therefore, by detecting the light emitted as the incrementally longer molecules pass through the gel, you can reconstruct the sequence of the nucleotides along the module.
+
+The result is a chromatogram, which is a graph that records the strength of each colour at each point in the gel band ([@fig-intro-ngs-fig-chromatogram]).
+
 ![Example of gel-based chromatogram with four columns with bands indicating which colour is the blocking nucleotide of that particular sized DNA molecule, and on the size an intensity graph of each colour given off by each flourophore to indicate which colour it is. Source: [Morse Phoque (Abizar), [CC-BY-SA 3.0 Unported](https://creativecommons.org/licenses/by-sa/3.0/) via Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Radioactive_Fluorescent_Seq.jpg)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-chromatogram.jpg){#fig-intro-ngs-fig-chromatogram height=300px}
 
-In the end, you will essentially have the entirety of your original molecule covered, as you can sort of see in this sort of step-like manner here. And what would happen once you basically have your randomly extended molecules, but with these blockers, you would then send it through a capillary gel, which basically separates out the DNA molecules based on its length, and then you would fire a laser. And the important thing about these blocking nucleotides is also they were essentially fluorophores, so when you fire the laser, it'll emit a light. And as you basically have your DNA molecules going through the capillary gel, so the shorter ones going faster through the gel because of resistance, and the longer ones going slower, you can basically record the order of the molecules going through the capillary gel. And then according to the light, you can basically see the different colors, and then with that, you can basically count which base is in your DNA molecule, as it goes through the capillary gel, and basically reconstruct the sequence by this method ([@fig-intro-ngs-fig-chromatogram]). However, this is, the approach was actually not so good for high-throughput DNA, so trying to reconstruct whole genomes, a lot of the original human genome was generated with this, but this tooyears, was extremely expensive, and it's also very, very resource-hungry, you have to use a lot of preliminary, you have to use a lot of DNA, which again, when we deal with ancient DNA, which you get very small amounts, because it's very degraded, it doesn't really work. 
+While this method was used for the first sequencing human genome, it was very slow and very expensive - it does not scale well due to having to make many copies of a single molecule and sequence each nucleotide sequence one at a time.
+
+Furthermore, the method requires a large amount of starting DNA.
+However due to the degraded nature of ancient DNA, it is very rare to have sufficient concentration of DNA to be able to use Sanger sequencing.
 
 ### Next generation sequencing
 
-And then in about 2005, next-generation sequencing, which is a bit of a misnomer, to be honest, came along, where you can see sequence billions and billions of DNA molecules at once. It was very fast and cheap, and very much revolutionized genetics, and pushed us into a near of genomics. And the market leader was, and still is, is a company called Illumina. There are others called PacBio and IonTorrent, but really Illumina is the one that pretty much everybody uses nowadays for at least short read sequencing. And as I'm sure you're all aware, this is sort of, these machines are more second generation now, we have new machines like Oxford Nanopore, which basically do very long reads, PacBio to a certain extent, and that's sort of more a third generation that we're entering right now. 
+However, in 2005, the first 'Next Generation Sequencing' (NGS) machines were released ^[With the more recent emergence of Nanopore sequencing, really NGS should be equated to 'second generation sequencing', a term you will see in some contexts.] in the form of Roche's 454 Pyrosequencing [@Heather2015-zo].
 
-Oh, poop. Oh, dear, so unfortunately, my pretty picture has been, a video has been deleted, but what I want you to imagine is a big black window with lots of colored points. And when I press play, on all of these points, they're going to start changing colors, going from red to green to yellow to blue, and this happening thousands of times at once across this big black screen. And this is essentially the process of sequencing. 
+These new sequencers were able to quickly and cheaply sequence millions of DNA molecules at once, revolutionising genetics and enabling 'accessible' genomics to a much wider set of scientists.
+
+While a few companies emerged with their own NGS machines, such as PacBio and IonTorrent, sequencers from Illumina have been by far the been the most successful.
+These machines have been so successful, they have almost exclusively sequenced the entire corpus of ancient DNA sequence data.
+Therefore the rest of this chapter will focus just on Illumina sequencing.
 
 ## Illumina sequencing 
 
-So what this black window that you should have been seeing would have been is something called a flow cell. This is a glass slide, and on this glass slide, it's embedded sort of bound to the base of this, is lots of short DNA sequences, synthetic DNA sequences called oligos. And what you do is essentially take your DNA, and you basically inject it into the flow cell, and your DNA will spread across the flow cell, and start binding to this lawn. So imagine, literally imagine like a grass lawn on the base of this glass slide, and basically all of your DNA molecules are attaching to these random synthetic nucleotides, oligos. 
+Illumina sequencing relies on a process termed 'Sequencing by synthesis' (SBS) using reversible terminators [@Bentley2008-oj].
+This follows a similar concept as Sanger Sequencing in that you add modified nucleotides with fluorophores, however instead of using multiple molecules with different blocking separated via gel, it uses nucleotides that can be reversibly blocked and thus continue incorporating nucleotides in a single molecule.
 
-### Adapters
+This works by immobilising the DNA so it stays on one location on a special type of plate.
+The machine then performs out a typical DNA replication, adding the flourophore modified nucleotides one at a time, and then taking a photo of the emitted light.
+However the key difference is the blocking part of the oligo is removed, so the next modified oligo is added.
 
-But the question is, how is your DNA actually binding onto this lawn, and not basically getting washed away as your solution flows through the flow cell? What you do before injecting into the flow cell is convert your DNA samples into something called a library. A library is an adapters, and see these are basically the complement sequence of the oligos, of these synthetic oligos, which allow you to bind to the lawn flow cell. But in addition to the adapters, you add onto DNA sequence, things called priming sites, so this is where the enzymes actually bind on to start copying the DNA. 
+To visualise how this looks like, you can imagine a plate upon which you see millions of coloured tiny dots, each cycling in realtime through different colours as each new nucleotide is added. 
 
-And also, when you're sequencing multiple samples at once on the same sequencing run, you can add things called indices, or known as barcodes, which are basically sample specific. So it allows you to mix multiple samples at once into one sequencing run, sequencing all at the same time, later on separate them out. So this is ultimately a slightly simplified version of a Illuminate DNA construct. So the X, X, X, X, X in the middle, this is your target. So this is actually your DNA sequence from your sample. 
 
-And then at both ends, you essentially have a target primer. So this is where your polymerase will bind onto to start, then actually going, reading into your target, or your insert is another phrase that you can call it. Then prior to the target primer, you also have an index. So this is actually your sample specific barcode. This is actually added typically onto the adapter, and so this happens in the, no, sorry. And the library construction, sorry. And then also you have the adapter and index primer right at the beginning. So this is both what binds onto your flow cell, but also acts as a primer for actually reading the index because you also need a sequence index to know which DNA molecule, to which sample DNA molecule it's coming from. 
+<!-- TODO MAKE A PCITURE TO REPLACE GIF -->
+
+To follow this however, the DNA needs to be prepared in a specific way.
+
+### Flow cells and adapters
+
+To ensure the DNA molecules do not move while taking photos, in Illumina sequencing, the DNA molecules are bound to a special glass slide called a flowcell.
+This also ensures the DNA does not get washed away during the sequencing process as different solutions wash through the machine between each step.
+
+<!-- TODO SEE IF CAN REPRODUCE OR MAKE OWN VERSION OF FLOW CELL IMAGE -->
+
+To immobilise the DNA, the flow cell is coated with a 'lawn' of synthetic oligonucleotides (i.e., custom sequences made in a lab).
+By attaching (ligating) the _complementary_ sequence of the synthetic oligonucleotides to your DNA molecules from your sample, when your DNA molecules flow over the lawn, the complementary bonds between the nucleotide pairs will form.
+This then will hold the DNA in place.
+
+The process of adding the complementary synthetic oligonucleotides (often referred to as oligos), called 'Adapters', is called 'Library preparation'.
+These adapters sequences do not only include the complementary sequence to flowcell oligos, but also an additional sequence that acts as a priming site for polymerases to start the replication process
+Furthermore, researchers have exploited the highly-multiplex nature of Illumina sequence to allow them to sequence multiple samples at once.
+They do this by adding additional squences to the adapter sequence construct that consist of short sample-specific 'indices' or 'barcodes'.
+These indices allow DNA molecules from different samples to be sequenced at the same time and then separated back into the groups of molecules from the same samples during data analysis.
+.
+
+<!-- TODO INSERT ILLUMINA DNA CONSTRUCT FROM TINA -->
+
+
+In the image above <!-- TODO TO DESCRIBE ONCE WE HAVE THE IMAGE And also, when you're sequencing multiple samples at once on the same sequencing run, you can add things called indices, or known as barcodes, which are basically sample specific. So it allows you to mix multiple samples at once into one sequencing run, sequencing all at the same time, later on separate them out. So this is ultimately a slightly simplified version of a Illuminate DNA construct. So the X, X, X, X, X in the middle, this is your target. So this is actually your DNA sequence from your sample. And then at both ends, you essentially have a target primer. So this is where your polymerase will bind onto to start, then actually going, reading into your target, or your insert is another phrase that you can call it. Then prior to the target primer, you also have an index. So this is actually your sample specific barcode. This is actually added typically onto the adapter, and so this happens in the, no, sorry. And the library construction, sorry. And then also you have the adapter and index primer right at the beginning. So this is both what binds onto your flow cell, but also acts as a primer for actually reading the index because you also need a sequence index to know which DNA molecule, to which sample DNA molecule it's coming from. --> 
 
 ### Clustering
 
-So once you've done this, in Illuminate sequencing, you have the problem that the fluorophores will be adding to your DNA molecule. The eliterated is not enough for a camera to pick up. It's much, much, much too small. You're dealing with these very, very small biomolecules. And so what you have to do is once your DNA molecule is bound to your flow cell, sort of some randomly, you start to make lots and lots and lots of copies. So when you have lots of copies, that means that all the copies will make the same nucleotide, sorry, the same color at once, and make the emissions strong enough that a camera in the sequencer can actually take a picture and record a lot base it is. 
+Now that each DNA molecule is bound to it's own section of the flowcell, we have the problem that the light emitted from a single tiny fluorophore will not be strong enough to be captured by the camera in the sequencer.
+
+Illumina machines get around this through a process called 'clustering'.
+The clustering process will make many copies of the exact same DNA molecule right next to the original template molecule.
+When the cluster of DNA copies emit the light from the same part along their sequence at the same, collectively the light emitted will now be sufficiently strong to be captured by the camera.
+
+To make copies, clustering is carried out using 'bridge amplication' [@Bentley2008-oj].
+<!-- TODO CONTINUE FROM HERE -->
+
 
 And the procedure making these copies is called clustering. So what this consists of is you have your DNA molecule, which is bound to one of the synthetic oligos on the lawn. And you basically do some of the bridge amplification where you basically bend over the DNA molecule. Sorry, sorry, I forgot. Your DNA molecule is single stranded at the moment. So when you bind this over, bend this over so that the reverse complement will bind to the other oligo, a primer can bind on and start reading across the molecule to reconstruct your double stranded DNA. So you basically get the complement or reverse strand of your DNA molecule to double stranded DNA. Then you had a primer to basically cut at one end or each end of the DNA molecule on the two different sort of forward and reverse adapters to result in two single stranded again DNA molecules. So basically the reverse complement of the DNA molecule, but you have one, sorry, two strands. Then you do the same thing again, bend it over, reconstruct the full double stranded molecule again, separate it out and do this many, many, many, many, many different times. And basically you have loads and loads and loads of copies of the same molecule in the same tiny little cluster, which is why you could go clustering in the same point in the flow cell. 
 
