@@ -234,7 +234,7 @@ The process as in @fig-intro-ngs-fig-sequencingbysynthesis can be broken down to
 2. Add fluorescently labelled nucleotides (with a reversible terminator) to the flow cell
 3. Only complementary nucleotides will bind to the template strand at the first exposed base
 4. Wash away unbound nucleotides
-5. Fire a laser to excite the modified nucleotides to emit the corresponding colour, and take a picture]
+5. Fire a laser to excite the modified nucleotides to emit the corresponding colour, and take a picture
 6. Clip off the fluorophore part of the nucleotide
 7. Repeat 2-6 until the entire strand is sequenced
 
@@ -255,29 +255,125 @@ To throw a curve ball, Illumina sequencers actually have _three_ different 'colo
 
 ### Colour chemistry
 
-<-- TODO got to here -->
+To be able to offer cheaper machines, Illumina came up with a system that requires the number of colours that need to be detected.
+These variants are often referred to different 'colour chemistries'.
 
-But there's also on particularly the next seek and no seek machines, a slight different system, where they called, they tried to make it a bit cheaper by only using two colors or two dyes. And the approach they take there is that, again, a T is green, red is, C is a red. However, in this case, an A is actually two colors mixed at once. So if you emit that both, so if the machine picks up two colors, two wavelengths are being emitted, that is an A. However, if there was no color being emitted at all in that cluster, the machine reaches as a G, or a no detected dye. So this is very important for some caveats or things you have to consider when processing your data a bit later on. 
+A list of Illumina platforms and their colour chemistries as follows below:
 
-### Paired-end sequencing
+- Four-colour chemistry
+    - Illumina HiSeq
+    - Illumina MiSeq
+- Two-colour chemistry
+    - Illumina NovaSeq
+    - Illumina NextSeq
+- One-colour chemistry
+    - Illumina iSeq
 
-So something you have to consider though is we're dealing with biology. It is not like, I don't know, chemistry or even sort of physics, where things are perfect and wonderful. Over time, areas start happening, we're not perfect. And essentially the imaging reagents start getting tired, the polymerases start adding mistakes, or don't bind on properly and more areas will occur. So sometimes your nucleotides will not bind, meaning you'll skip a base or you'll get multiple nucleotides being added once and you go forward one. And essentially within your cluster, the DNA molecules being sort of replicated and emitting light will get desynced. So the color will get a bit blurry and less clear. 
+In the vast majority of cases, your data will be sequenced on only four- and two-colour chemistries, so we will focus on these two.
 
-And so first the machine does calculate some sort of base quality. So it captures the probability that it thinks it captured the right color, so the right nucleotide of each photo. But to the point where if it has no idea, it will call a dead base call, which will be reported as an N. And this became more and more of a problem, particularly in the early days of sequencing. And so people thought, how can we improve or correct such sort of errors? And the idea that came up was paired end sequencing. 
+In the case of the Illumina HiSeq and MiSeq platforms, the system for sequencing is as described previously: each of the four bases of the nucleotides that make up DNA will have a reversible-terminator variant, and each of these variants will have a fluorophore that will emit one of four colours.
+Therefore, the camera on the machine is designed to be able to pick up each of the four different wavelengths through different imaging channels.
 
-So what this means is you do one sequencing in one direction, then you flip the entire read over and then read it from the other end. So whereas you have to consider that when you're in the forward direction, over time you're getting more and more errors. So the further you get into the molecule, the less confident you are. And so the more errors are gonna be. You can then turn it over and start the whole thing from scratch with fresh reagents. By going from the reverse end forward, you basically can correct the mistakes that were occurring at the end of the forward sequencing, but get the high quality calls from the other end from the beginning. So you can sort of, that's a bad explanation. But you can sort of see here, you read it once in this direction. So you read the DNA insert and the prime, the index. You turn it over and you do the same thing, but from the beginning. So you basically sequence the same DNA molecule twice. An added bonus of this is also you get more cycles. So if your DNA molecule is a single molecule, it's actually longer than the cycles. It's 50% fair, five base pairs. By going from the other end, you can capture any DNA nucleotides which you're missing from the forward sequencing. This is not so necessarily relevant to DNA. We will typically very short DNA molecules, but in some cases that will apply. 
+In contrast, two-colour chemistry machines will only have imaging channels that detect have two dye colours - red and green
+If the machine detects green being emitted from a cluster on the flowcell, this correspond to T.
+If the machine detects red, it records a C. 
+If the machine detects _both_ red and green wavelengths being emitted from a cluster - this corresponds to an A.
+If no colour is emitted, this is _assumed to be a G_. 
 
-### Demultiplexing
+<!-- TODO Add 2 colour chemistry image here -->
 
-Then it comes on to biological to computational sequence. How do we take these sort of very raw nucleotide sequences and put it into a format that a computer can read? This typically happens in a step of demultiplexing. It's actually very rare that you yourself as students will have to deal with this or do with this. Typically this is done by sequencing centers or by your lab team. But what this essentially consists of is normally or rather often nowadays, there is two steps in which you're stuck together, which colloquially are no demultiplexing. 
+This characteristic of two colour-chemistry thus means you must be aware of the type of sequencer your data was generated on, as this will require slightly different preprocessing as we will see later on in the section [Low sequence diversity](#low-sequence-diversity).
 
-The first step is called base calling. This is where you basically take your photo files of every single nucleotide and convert this into an ACTNG. So taking image files, putting into a text file. But also in most cases, we have multiple sequence, multiple samples at once. And all the samples have these barcodes or indices. And we need to actually separate these out. So you know that all of these DNA molecules come from this sample or these DNA sample, sorry, DNA molecules from this sample. And this happens in this demultiplexing step. So essentially a computer program will read in each DNA molecule whether it finds such a barcode across from one sample, let's say an example here, the red one that corresponds to sample one and the reverse here. And then the machine will basically sort or order the DNA molecules accordingly. So all of the DNA molecules which have these combinations and indices will put into sample one, sample two. So the blue and yellow will go here and so on. So this is something you, again, rarely will have to do yourself, but it's something just to keep in mind. 
+### Base quality and paired-end sequencing
+
+Another consideration with Illumina sequencing kits is not just the number of cycles, but which kit to use based on its 'pairment'.
+
+As I'm sure everyone readying this book has experienced, biology is not like physics where everything is perfect and 'easy'.
+Biology is messy, things do not stay stable.
+The same applies to sequencing - as the sequencer goes through each cycle of adding a new nucleotide to each DNA strand in a cluster, mistakes will increasingly start happening as polymerases don't bind properly, fall off, skip nucleotides, or even add the wrong base.
+The accumulated effects of these mistakes across all DNA strands in a cluster is that the emitted light during the imaging part of the cycle becomes less clearly one colour as mixtures of wavelengths are emitted.
+Thus, the confidence of the _correct_ nucleotide has been recorded at that position of the DNA molecule becomes less.
+
+(Illumina) sequencers address this in two ways.
+
+Firstly, when measuring the particular base being recorded, all sequencers will at the same time record a 'base quality' that is associated with that call.
+This corresponds to the confidence (via a probability) that the recorded base was the correct one.
+For example, if the wavelength was mostly one colour (let's say red for C) but the camera picked up a bit of another colour (lets say green for T), it will record C in the output, but the base quality score will be lower.
+If the sequencer's camera picks up wavelengths of all four colours from the same cluster at the same time - or even no light is detected at all - then the base quality for that position in that DNA molecule will be recorded as an N and a base quality of 0.
+
+Secondly, specifically for Illumina sequencers, there is the concept of 'paired-end' sequencing.
+As there is an overall drop in base quality (i.e., confidence we have the right nucleotide) the closer we get to the end of the molecule due to the accumulated mistakes over time, we can freshly sequence the molecule again but in the _reverse_ direction.
+This way, we can 'merge' or average the base quality scores of two independent 'observations' of the nucleotide at that position.
+So if the last base when reading the molecule in the forward direction is an N (due to ambiguous wavelength emission), we can correct or 'recover' this last base by making it the _first_ base we call in when sequencing in the reverse direction from scratch with fresh reagents.
+
+This works as, Illumina sequencers can conveniently re-use the bending over approach as performed by the 'bridge' amplification method of clusterting we saw earlier in this chapter.
+I.e., after bending over, the opposite flowcell olgio from the forward reverse flowcell anchor is cut so the 'end' of the original molecule is now bound to the flow cell.
+
+This paired-end sequencing technique means you get a pair of files - both with the same sequence from each cluster, but one has the molecule 'read' in the forward direction, and the other file with the 'reverse' direction. 
+
+Another added benefit of paired-end sequencing is that you can recover longer molecules.
+In cases where the DNA molecule is _longer_ than the number of cycles the chemistry kit being used, by flipping the over the molecule and sequencing from the other end you can recover the end of the molecule.
+Of course if the molecule is longer than the sum of both set of cycles (e.g. a 120bp molecule, even though the sequencing kit is only two times 50bp), you will miss the 'middle' part of the molecule.
+However this is counteracted by the sheer number of independent molecules sequenced, so the 'missing' part can be filled in from another sequencing DNA molecule.
+
+<!-- TODO: add paired end sequencing image -->
+
+It should be noted, however, the added benefit of sequencing longer molecules via paired-end sequencing is not so relevant to ancient DNA or ancient metagnomics.
+This is because most 'true' DNA molecules are often _shorter_ than the sequencing cycles of a typical Illumina kit.
+
+### Base calling and demultiplexing
+
+We should now understand how the machine itself 'reads' the DNA molecule clusters on the flow cell.
+
+But how does these images get converted to a format that you can read on your computer screen?
+And if you have sequenced multiple samples at the same time (each with their own sample-specific indicies), how do you separate these out?
+
+Base calling is the process of converting the images to digital text-based `A`, `C`, `T,` and `G`s.
+This is not something the vast majority of researchers have to do as it nowadays happens on the sequencer itself and thus the process is not particularly relevant for us. 
+
+However, once the file with the digital representations of the sequences is taken off the machine, typically a sequencing technician or bioinformatician at the sequencing center, but sometimes a student, will perform something called 'demultiplexing'.
+This is where the person doing the demultiplexing will run the file through a tool that identifies the known index sequence at the beginning of each read entry in the file, and put all reads containing the same sample-specific index into it's own independent file.
+
+<!-- TODO: Add demultiplexing image --> 
+
+While this is not something most researchers will do themselves, it is useful to know as errors detected in downstream analysis can be traced back to suboptimal demultiplexing (such as incorrect assignment of indices, if you have not the number of sequenced reads you expected).
+
+
 
 ### FASTQ File
 
-And the output of this demultiplexing step is something called a fastq file. So this is a text-based format for storing biological sequences itimes of cases nucleotide sequences, but also with the base quality scores. So these are the things where the computer tries to estimate the probability that it thinks that the nucleotide call was correct. And both are encoded basically with ASCII text characters. Doesn't really matter what they are, if you're not familiar with that. So this is a very, very small example. These files can be gigabytes in size, so huge, huge text files typically compressed, but still a gigabyte start to being compressed. 
+The primary output from demultiplexing is called FASTQ file.
+This is a text-based (semi-)standard format for storing biological sequences, and their corresponding base quality scores.
+These files are typically compressed to save space, but can be very large (gigabytes in size, even when compressed).
 
-But what they, all they are made of, of basically a repeating set of four different lines. You have the first line up here, and this is called the ID line. This stores multiple information from the sequencer. So the sequencing, or the sequencing machine ID, then a run number, a flow cell ID, so each flow cell will have an ID from the manufacturer. And then you have essentially a bunch of coordinates going on here, which basically tells you from which cluster on their flow cell has the DNA molecule come from. Then you can have a bunch of extra information. This is often quite random depending on the sequencing and what they put in here, but often people put things like barcodes, maybe sort of how many errors were allowed during gene multiplexing, because you could do a certain enough filtering during that step. On the second line, you have the DNA sequence itself. So in this case, it starts with an N, this is dead-based call. This is actually quite often common, because this is when the camera is still calibrating itself. And so the first base is often a bit rubbish, but then the rest of the molecule, as you can see, sorry, the sequence here is A, C, T, and G, so it's usually a new molecule. You'll then have a plus, which is a separator. And the fourth line of this repeating set of four is then the base quality scores. So these are random, sort of a random set of characters, which I'll explain in a second. But basically this tells you the confidence of that, how good we think that that nucleotide call was. 
+The structure of a FASTQ file is a repeated set of four specific lines:
+
+1. A metadata or ID line
+2. The sequence itself
+3. A 'spacer' line
+4. The base quality score (corresponding to the base in the same position as in line 2)
+
+<!-- TODO add the coloured example here -->
+
+Let's break this down.
+
+The metadata line records a range of information from the sequencer and also potentially the demultiplexing.
+Typicall this line will record the sequencing machine ID, a run number, the ID of the flow cell, coordinate information from which cluster on the flow cell the particular sequence is from, and then extra information that depends on the sequencing center (e.g., some will record the sample-specific index pairs here, or certain settings of the demultiplexing tool).
+
+The sequence line will contain `A`, `C`, `T`, `G`, and `N` characters in the order of the DNA molecule as recorded by the sequencer.
+In the figure you can see an example of an `N` call in the first position.
+It is actually quite common to see in the first or second position of reads, as the sequencer's camera is still calibrating itself. 
+
+The third line is simply a spacer line, which is just a `+` sign.
+It serves no purpose in modern day FASTQ files (they just display the `+` to reduce file size), however in the past the metadata information was duplicated on this line to associate with the base quality scores on line 4.
+
+The fourth line
+
+
+<!-- TODO Up to here -->
+
+
+On the second line, you have the DNA sequence itself. So in this case, it starts with an N, this is dead-based call. This is actually quite often common, because this is when the camera is still calibrating itself. And so the first base is often a bit rubbish, but then the rest of the molecule, as you can see, sorry, the sequence here is A, C, T, and G, so it's usually a new molecule. You'll then have a plus, which is a separator. And the fourth line of this repeating set of four is then the base quality scores. So these are random, sort of a random set of characters, which I'll explain in a second. But basically this tells you the confidence of that, how good we think that that nucleotide call was. 
 
 And then you can basically see the same thing here on the next line, and it repeats as follows. So you can see, for example, this number is a bit different, because it's from a slightly different coordinate cluster. So these quality scores, they are not uniform, I have to say. So it depends on both the age of the machine and what the manufacturer selected. But typically they will look something like this, where there's a fixed order in the ASCII characters. And each one will correspond to a different probability of Fred's score. I won't explain exactly what that is, it's a bit mazzy. But essentially what it means is that the higher the character along this score, the more confident you are of the base call, because the probability that it's incorrect is sort of low. 
 
