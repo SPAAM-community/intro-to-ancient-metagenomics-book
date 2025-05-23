@@ -182,7 +182,8 @@ These adapters sequences do not only include the complementary sequence to flowc
 Furthermore, researchers have exploited the highly-multiplex nature of Illumina sequence to allow them to sequence multiple samples at once.
 They do this by adding additional sequences to the adapter sequence construct that consist of short sample-specific 'indices' or 'barcodes'.
 These indices allow DNA molecules from different samples to be sequenced at the same time and then separated back into the groups of molecules from the same samples during data analysis.
-.
+
+The completed index, adapter, and DNA molecule construction is termed a library, and is what is put into the sequencing machine. and what can in this form be immobilised on the flow cell.
 
 <!-- TODO INSERT ILLUMINA DNA CONSTRUCT FROM TINA -->
 
@@ -191,7 +192,7 @@ In the image above <!-- TODO TO DESCRIBE ONCE WE HAVE THE IMAGE And also, when y
 
 ### Clustering
 
-Now that each DNA molecule is bound to it's own section of the flowcell, we have the problem that the light emitted from a single tiny fluorophore will not be strong enough to be captured by the camera in the sequencer.
+Now that each DNA molecule of the library is bound to it's own section of the flowcell, we have the problem that the light emitted from a single tiny fluorophore will not be strong enough to be captured by the camera in the sequencer.
 
 Illumina machines get around this through a process called 'clustering'.
 The clustering process will make many copies of the exact same DNA molecule right next to the original template molecule.
@@ -338,8 +339,6 @@ This is where the person doing the demultiplexing will run the file through a to
 
 While this is not something most researchers will do themselves, it is useful to know as errors detected in downstream analysis can be traced back to suboptimal demultiplexing (such as incorrect assignment of indices, if you have not the number of sequenced reads you expected).
 
-
-
 ### FASTQ File
 
 The primary output from demultiplexing is called FASTQ file.
@@ -358,7 +357,7 @@ The structure of a FASTQ file is a repeated set of four specific lines:
 Let's break this down.
 
 The metadata line records a range of information from the sequencer and also potentially the demultiplexing.
-Typicall this line will record the sequencing machine ID, a run number, the ID of the flow cell, coordinate information from which cluster on the flow cell the particular sequence is from, and then extra information that depends on the sequencing center (e.g., some will record the sample-specific index pairs here, or certain settings of the demultiplexing tool).
+Typically this line will record the sequencing machine ID, a run number, the ID of the flow cell, coordinate information from which cluster on the flow cell the particular sequence is from, and then extra information that depends on the sequencing center (e.g., some will record the sample-specific index pairs here, or certain settings of the demultiplexing tool).
 
 The sequence line will contain `A`, `C`, `T`, `G`, and `N` characters in the order of the DNA molecule as recorded by the sequencer.
 In the figure you can see an example of an `N` call in the first position.
@@ -367,29 +366,46 @@ It is actually quite common to see in the first or second position of reads, as 
 The third line is simply a spacer line, which is just a `+` sign.
 It serves no purpose in modern day FASTQ files (they just display the `+` to reduce file size), however in the past the metadata information was duplicated on this line to associate with the base quality scores on line 4.
 
-The fourth line
+The fourth line has the base quality scores corresponding to the sequence in line 2.
+These are encoded using [ASCII characters](https://en.wikipedia.org/wiki/ASCII) (to ensure you can encode in a single character a score more than 9).
+What the exact each ASCII character represents slightly depends on [which sequencing machine you are using](https://en.wikipedia.org/wiki/FASTQ_format#Encoding) (e.g. Illumina have both a 1.3 and 1.8 variant).
+However all variants encode a quality score of 'Q' also known as a 'Phred' score which corresponds to the probability of the called base is _incorrect_.
+This essentially means that the lower the probability the base is incorrect, the higher the quality score.
+Modern Illumina sequencers have a minimum quality score of 0 (i.e., an incorrect call) score of 41 (a highly confident call).
+Wikipedia provides a very good summary of the differences between ASCII representations of the Phred score [here](https://en.wikipedia.org/wiki/FASTQ_format#Encoding). 
 
+The rest of a FASTQ file is simply just a repeated set of these four lines.
+Each line corresponds to an independent DNA cluster - and thus DNA molecule - that was sequenced.
+In the case of Illumina pair-end sequencing, you will normally have two FASTQ files for each sample - and you can match the forward and reverse reading of each strand by the metadata line and a `/1` or `/2` at the end of the ID[^1].
 
-<!-- TODO Up to here -->
-
-
-On the second line, you have the DNA sequence itself. So in this case, it starts with an N, this is dead-based call. This is actually quite often common, because this is when the camera is still calibrating itself. And so the first base is often a bit rubbish, but then the rest of the molecule, as you can see, sorry, the sequence here is A, C, T, and G, so it's usually a new molecule. You'll then have a plus, which is a separator. And the fourth line of this repeating set of four is then the base quality scores. So these are random, sort of a random set of characters, which I'll explain in a second. But basically this tells you the confidence of that, how good we think that that nucleotide call was. 
-
-And then you can basically see the same thing here on the next line, and it repeats as follows. So you can see, for example, this number is a bit different, because it's from a slightly different coordinate cluster. So these quality scores, they are not uniform, I have to say. So it depends on both the age of the machine and what the manufacturer selected. But typically they will look something like this, where there's a fixed order in the ASCII characters. And each one will correspond to a different probability of Fred's score. I won't explain exactly what that is, it's a bit mazzy. But essentially what it means is that the higher the character along this score, the more confident you are of the base call, because the probability that it's incorrect is sort of low. 
-
-## Sequencing recap
-
-So to recap, DNA molecules are essentially made of nucleotides, A, C, T, and Gs. We have two strands, which is complementary based pairings, C, G, CGI, AT, Atatoka, Star Wars, it's great. Modern DNA is very long, but AT DNA is very short. And this is very good for NGS sequencing, where we do this massive multiplexing. So where rather than trying to sequence few very long DNA molecules, we sequence lots and lots and lots of very short ones at very high accuracy, which we can then reconstruct the long sequences later on, if you've got a good DNA. So the main steps are adding adapters to create something called a library, which allows your DNA molecules to bind to the glass slide, the flow cell, or something called a lawn. You then basically make a new strand, each cycle, you basically add a fluorescent nucleotide, which you can fire a laser, AT, which emits a colour, you can take a photo, and by basically recording, the order of the colours being emitted in a single point in the flow cell, you can reconstruct the DNA sequence. This de-syncing of clusters results in lower based quality scores over time, so you can also improve this by paired end sequencing, where you basically sequence from one end, and then do turn it around, then you sequence from the other end with fresh reagents. 
+[^1]: You can occasionally see a format called 'interleaved' FASTQ files. This is where the forward and reverse reads are placed right after one another in the same file, but this is not common practice any more. 
 
 ## Sequencing and considerations for ancient metagenomics
 
-So for the last section of this lecture, I want to give you a few ideas of things you should consider when you're dealing with DNA for ancient genomics. Some of those are applicable to modern genomics too, but it's things I find that, through my career, people forget about in some cases. 
+In the second half of this chapter, we will look into some implications of the sequencing process for analysing ancient metagenomic data.
+
+While some of these points are not always specific to ancient metagenomics, and can apply to any DNA analysis - modern or ancient - they can be particularly impactful due to the particular characteristics of ancient DNA.
 
 ### Low DNA preservation
 
-So firstly is low DNA preservation. So when you're dealing with an ancient DNA, your samples are very old, and only have very little DNA in the sample, and during library preparation, you may have to do lots and lots and lots of amplification, make lots and lots and lots of copies of your DNA to make a sufficient amount to actually put sequencing. And this is important, and it will be discussed later during the week, but this is important because during library construction, you can actually inflate your counts in terms of DNA molecules that come from a particular taxon, micro-brothaxon, for example, and basically skew your estimate of which species are in your sample or not, or were in your sample because they're now dead. Also, by overamplifying your DNA molecules, you reduce the number of sequencers you actually get out there. By having these duplicate molecules, you're not actually providing any more extra information about your DNA library, and your sequencing flow cell only has a fixed number of sequencing slots, which basically, if you've overamplified your library, will basically fill up your slots and you will not sequence as many unique reads, and so the amount of information you're getting out of your DNA molecule can be problematic. So this is actually quite, I've jumped ahead quite a bit in terms of detail here, but this is, I wanted to have the slides here for you to go back to and recap later. 
+One side effect of the degradation and lost of DNA molecules in ancient samples is that the total molecular biomass of the sample is very low.
+
+This means that during library preparation, researchers often have to perform many rounds of PCR amplification to get a sufficient library concentration for sequencing. 
+
+By over-amplifying libraries, you reduce the number of unique sequences from your sample you actually retrieve.
+If you are repeatedly sequencing the same DNA sequence (i.e. the amplified copies) over and over, you use up the fixed number of available clusters on the flow cell, and prevent clusters of unique sequences from being sequenced.
+
+<!-- TODO add image here -->
+
+This is also important analysis wise, as will be discussed in the chapter on taxonomic profiling and genomic mapping, you can actually artificially 'inflate' the counts of reads that come from  a particular taxon.
+For microbiome studies, this can skew the estimate of which species are in your sample or not.
+
+While this artefact can be partially corrected in analysis through the process of 'deduplication', you should be careful to not overamplify your libraries in the first place as you can potentially waste a lot of money.
 
 ### Index hopping
+
+<!-- TODO to here -->
+
 
 Another thing during sequencing, you have to consider is something called index hopping. So this is a problem, particularly with Illumina Sequ, or people are aware of with Illumina sequencing, and it's a challenge when you're doing multiplex sequencing. When you're sequencing lots and lots of samples at once, and you have to have these indexes or barcodes, which allow you to identify this DNA molecule comes from this sample. This seems to happen more often on a type of flow cell, which you find on Illumina HiSeq X and NovaSeq machines, and is ultimately caused by free floating index primers. And why that is a problem, is that if you do not sufficiently clean up your primers, during the clustering process, you can accidentally start adding on or switching barcodes between DNA molecules. This does happen at a relatively low rate, but it does happen. And so what it means is that essentially you switch the barcodes and you may accidentally assign a DNA molecule from one sample into another sample when you're doing demultiplexing. And so let's say you're dealing with a microbiome sample, and you have lots of, let's say, unless you have an oral microbiome sample and a gut microbiome sample, you may start seeing, for example, oral species popping up in your, or sort of oral species which are only found in the mouth, ending up in your gut samples, which may be a bit weird. This can also be a particular problem if you're doing microbial genomics, so doing, let's say, pathogen reconstruction, if you're working on that. And you mix capture results with your shotgun samples because then you may start picking up the high amount of capture results in your shotgun samples where you're doing screening. So you may start getting false positives there. There's quite a few papers on this, also in the context of ancient DNA, so van der Waag has got quite a good paper to understand that and also had to correct such, or estimate the level of this in your studies. 
 
@@ -407,13 +423,6 @@ Another thing is low sequence diversity. So what I mean by this is mononucleotid
 
 ### Q and A
  
-#### How to design barcodes
-
-Okay. How to design the barcodes. That's a question from UD. That is quite tricky because there's a lot of considerations you have to make when making sure there's a balance and they're not too similar to each other. Often manufacturers have tools which allow you to basically generate this. I believe they also to sentence and have standard sets which they can also send you that you request. So you yourself do not have to necessarily design these. It depends on your lab. So often I'd say speak to your sequencing center if you have them. Because they all have advice. All check manufacturers, I think most like Agilent and Illumina will also basically have such things for you then. Yeah, sometimes they make it a little bit defined but you can't find them. And if you read the Meyer and Chercher article for buildinnew libraries, it would be provided in that set. Yeah. Could everyone hear Tina then? No? Okay. So she said that often the manufacturer make it a bit hard to find such functionality on their websites and stuff, but you can often do that. But also if you read the sort of classic paper by Meyer and Chercher 2011, 12, they actually have the set of barcodes that you can use yourself. So I think that link, that paper is on the website somewhere but we can also share with you. 
-
-#### How many indicies can you use
-
-How many indices can you use? So this is a good question. This depends on your strategy and is slowly changing over time. So you can actually choose one index if you want, which is at the beginning of your, this is from Laura, which is the beginning of your molecule. What has been recommended and what the Meyer and Chercher paper introduces double indexing where you have two at the end. And these are attached to your adapters. What people are commonly doing now is actually adding additional barcodes called inline barcodes. So these are very short sequences, about seven base pairs I think, which you actually attach immediately to the DNA molecule before library preparation. So after extraction before library preparation. And this actually helps you with, sorry, with correcting for index hopping. So if you read the van der Waal paper, which I mentioned earlier, we can send the link again later. They also describe how they use these internal barcodes to separate out. So for example, you can get from a manufacturer about 100, let's say barcodes, but you will normally per library can have somewhere between one to four separate identifiers. 
 
 #### Why Gs called more often in two colour chemistry sequencing
 
