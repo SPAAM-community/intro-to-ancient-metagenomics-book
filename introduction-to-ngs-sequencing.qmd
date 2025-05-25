@@ -343,7 +343,8 @@ While this is not something most researchers will do themselves, it is useful to
 
 The primary output from demultiplexing is called FASTQ file.
 This is a text-based (semi-)standard format for storing biological sequences, and their corresponding base quality scores.
-These files are typically compressed to save space, but can be very large (gigabytes in size, even when compressed).
+A biological sequence that has been converted to a digital text format is referred to as a 'read' or 'sequence read'. 
+The files that stored reads are typically compressed to save space, but can be very large (gigabytes in size, even when compressed).
 
 The structure of a FASTQ file is a repeated set of four specific lines:
 
@@ -399,25 +400,87 @@ If you are repeatedly sequencing the same DNA sequence (i.e. the amplified copie
 
 This is also important analysis wise, as will be discussed in the chapter on taxonomic profiling and genomic mapping, you can actually artificially 'inflate' the counts of reads that come from  a particular taxon.
 For microbiome studies, this can skew the estimate of which species are in your sample or not.
+Some studies have also suggested dedeuplication can improve the accuracy of metagenomic _de novo_ assembly [@Zhang2023-vz]
 
 While this artefact can be partially corrected in analysis through the process of 'deduplication', you should be careful to not overamplify your libraries in the first place as you can potentially waste a lot of money.
 
+
 ### Index hopping
 
-<!-- TODO to here -->
+A more recent artefact that has appeared in more recent Illumina platforms is something that has been termed 'index hopping' [@Van_der_Valk2019-to].
+This can cause problems when you are multiplex sequencing samples, i.e., sequencing multiple samples at once on the same flow cell.
 
+Some more recent Illumina platforms such as the HiSeq X and NovaSeq machines have a new type of flow cell called 'patterned flow cells'.
+These aim to better separate out and make more consistent the layout of DNA clusters on the flow cell by having  'nanowells' that the clusters form within.
+By having a stricter pattern where clusters form, it allows even tighter distribution of clusters on the flow cell without impeding on each other and thus increasing the number of clusters that can be sequenced at once.
 
-Another thing during sequencing, you have to consider is something called index hopping. So this is a problem, particularly with Illumina Sequ, or people are aware of with Illumina sequencing, and it's a challenge when you're doing multiplex sequencing. When you're sequencing lots and lots of samples at once, and you have to have these indexes or barcodes, which allow you to identify this DNA molecule comes from this sample. This seems to happen more often on a type of flow cell, which you find on Illumina HiSeq X and NovaSeq machines, and is ultimately caused by free floating index primers. And why that is a problem, is that if you do not sufficiently clean up your primers, during the clustering process, you can accidentally start adding on or switching barcodes between DNA molecules. This does happen at a relatively low rate, but it does happen. And so what it means is that essentially you switch the barcodes and you may accidentally assign a DNA molecule from one sample into another sample when you're doing demultiplexing. And so let's say you're dealing with a microbiome sample, and you have lots of, let's say, unless you have an oral microbiome sample and a gut microbiome sample, you may start seeing, for example, oral species popping up in your, or sort of oral species which are only found in the mouth, ending up in your gut samples, which may be a bit weird. This can also be a particular problem if you're doing microbial genomics, so doing, let's say, pathogen reconstruction, if you're working on that. And you mix capture results with your shotgun samples because then you may start picking up the high amount of capture results in your shotgun samples where you're doing screening. So you may start getting false positives there. There's quite a few papers on this, also in the context of ancient DNA, so van der Waag has got quite a good paper to understand that and also had to correct such, or estimate the level of this in your studies. 
+However, even though the cause it not fully understood, it appears that the method used to prevent two DNA molecules entering he same well ('exclusion amplification)' can accidentally cause 'switching' of the index barcode between two different DNA molecules. 
+Thus, DNA molecules from one sample can instead receive the index barcode of another sample, and subsequently assigned to the wrong sample during demultiplexing.
+
+While this has been observed a low rates in earlier Illumina platforms, index misassignment appears to occur more often in patterned flow cells, somewhere between 0%-10% [@Van_der_Valk2019-to].
+
+For (ancient) metagenomics this can be problem as it can result in false positive identification of taxa in your sample.
+For example, this can be a particular problem if you sequencing in the same run a capture-library of a pathogen, with a shotgun metagenomic library for screening.
+With index hopping, some of the abundant pathogen reads in the pathogen will be accidently assigned in demultiplexing to the shotgun metagenomic library giving a false positive identification of the pathogen in the screening sample.
+In another case, if you have an oral microbiome sample and a gut microbiome sample sequenced on the same run, you may start seeing oral species being detected up in your gut samples.
+While this _could_ be valid biologically, but in other cases this could be false and it becomes hard to disambiguate if the species is truly present in the gut or not.
+
+<!-- TODO add index hopping image -->
+
+Therefore, you should keep this in mind when sending your libraries for sequencing.
+One way around this is to add additional (short) 'inline' barcodes that ligate directly to the DNA molecules during library preparation _prior_ adapting of the index-library construct.
+However this adds cost, and reduces the length of the template molecule you can sequence (as must include the inline barcode in the number of sequencing cycles).
+Otherwise, good sequencing core facilities should automatically screen for this artefact when using these platforms, however you should always verify this if you find interesting results in your data.
 
 ### Sequencing errors
 
-They go back to the sequencing, you have to consider your sequencing errors. So if you don't sufficiently quality control and check for these errors happening on DNA sequencing, you may actually start incorporating errors into your analysis downstream. So for example, what may happen is if you have a low base quality score, the machine may have picked up the wrong base or the wrong nucleotide. And this means that your DNA molecule or sequence, when you compare to reference genome databases or reference genomes, may start going to the wrong place or match the wrong reference genome because you have the wrong nucleotides, the wrong sequence. Which can be a problem. Also, it can reduce your chance of getting sufficient overlap during the assembly, which is where you basically stick together all of the overlapping DNA molecules together to try and reconstruct the entire molecule. This is something that Alex will present on Thursday, like Subna. And also if you're doing variant calling for phylogenomics and you have very low coverage, this may also start increasing, increasing the add errors and you will do the wrong SNP call, which means that basically your, the relationship between your genomes in your tree, for example, will be skewed. And so it's always very important to check for such errors and check that your sequencing run was high quality.
+
+As many parts of this textbook demonstrates, metagenomic sequencing is becoming extremely high-throughput and analysis is becoming increasingly automated and routine.
+However this does not mean you should skip over quality control of your sequencing data.
+
+While Illumina sequencers have a very low error rate, this are not perfect  - we have already seen the paired-end sequencing approach for correcting for terminal error accumulation - and things can also go wrong during the sequencing process.
+
+All sequencing machines will record their confidence in the base calls the make, so it is still critical that researchers quality check these before performing downstream analyses.
+
+If your reads have a high number of errors, the machine has possibly picked up the wrong nucleotide in the sequence.
+This could cause a range of problems in various aspects of data analysis: your read to false have a sequence that is more similar to another organism if comparing against a reference database, potentially place the read in the wrong place during mapping (or not align at all!), prevent sufficient overlap of sequences during assembling causing fragmented assemblies, or even cause false positive variant calls during genotyping for phylogenomic analysis.
+
+This is a particular concern for ancient metagenomics due to the very low number of truly endogenous ancient molecules in our libraries.
+The low number of reads means that we cannot as easily 'correct' for errors through having many repeated observations of a base call in the same a position from independent DNA molecules.
+
+Many core sequencing facilities will mostly handle modern samples with high quality libraries, and thus the threshold for a rejected sequencing run maybe lower than what you would want for ancient metagenomics. 
+Therefore it's always important to _always_ (or double)check the quality of your sequencing data before proceeding with any analysis.
+
+<!-- TODO: add sequence error image -->
 
 ### Dirty Genomes
 
-You also have to consider, so this is again sort of jumping ahead, but there's a reason why I'm putting in this presentation, is dirty genomes. So unfortunately, there are many reference genomes which are very dirty. So dirty, I mean, for example, having a lot of adapters still in there. And this means you have the problem where if you yourself have not sufficiently cleaned up your DNA library to remove the adapters and remove also pre-processing, you will start seeing weird results. For example, I very, very highly expect that if any of you screen against the NTPI-NT nucleotide database, you will start seeing carp everywhere. And the reason why is because people somehow got onto the NCBI a whole carp genome without removing any of their adapters. So there's adapters sequences everywhere in the genome. And so whenever you have an adapter in your library, this will basically align to the carp genome and then you'll get carp, which particularly if you're trying to look at diet, for example, or ancient diet in, like say microbiome studies, where you look at some calculus, you may start seeing carp even if you're, I don't know, from, got samples from, I don't know, Chile or somewhere where carp is not expected to find. You also often will find this with zebrafish. So often many, many, many, I think it's Darius Varini or something like that, which makes no sense because all of these fish comes from one lake in Africa, but you see it everywhere in your metronome examples. And again, it's because of dirty genomes where they think of adapters or vectors in the genome. 
+Another very common problem we encounter in both ancient and modern metagenomics are 'dirty genomes'.
+
+To briefly jump ahead into the bioinformatic analysis of an ancient metagenomic project, we will often compare our reads against a reference database of genomes.
+This is done to classify which species' organism a particular read comes from, and allows us to infer something about the taxonomic composition of the sample.
+
+We pull these reference genomes from a range of user-submitted databases, such as the NCBI's GenBank or RefSeq databases.
+However, the genomes that are uploaded to these databases are not always of high quality.
+While the NCBI does have quality control checks in place, these have not always been as stringent in the past, and are constantly evolving.
+
+This means that some genomes in these databases are 'dirty' - i.e., they contain sequences that should not be there, such as adapters, primers, contaminating sequences from other species, or other artefactual sequences [@Longo2011-qd;@Mukherjee2015-vc;@Merchant2014-eu;@Steinegger2020-br;@Breitwieser2019-iz;@Kryukov2016-my].
+
+A common example, which many ancient metagenomicists have encountered is repeated identificiation of _Cyprinus carpio_ (carp) in their samples.
+This is not a true hit, but in fact repeated false positive hits due to the presence of adapter sequences in the carp genome ^[See [https://web.archive.org/web/20170823143538/http://www.opiniomics.org/we-need-to-stop-making-this-simple-fcking-mistake/](https://web.archive.org/web/20170823143538/http://www.opiniomics.org/we-need-to-stop-making-this-simple-fcking-mistake/) and [https://web.archive.org/web/20241012070028/https://grahametherington.blogspot.com/2014/09/why-you-should-qc-your-reads-and-your.html](https://web.archive.org/web/20241012070028/https://grahametherington.blogspot.com/2014/09/why-you-should-qc-your-reads-and-your.html)].
+
+The implication for ancient metagenomicsists is that if you do not properly remove artefacts from your reads, you can end up with a lot of false positive hits in your data.
+This can be particularly impactful, for example, if you are trying to identify the presence of dietary species in a human microbiome sample.
+But this also extends to microbes, where insufficient removal of contaminating DNA (e.g. modern human sequences incorporated during sampling) can align against stretches of human sequences incorporated into chimeric reference microbial genomes. 
+
+Therefore, while it always good to quality control check the genomes going into your reference database, you should also also thoroughly quality control your sequenced reads _prior_ downstream analysis.
+So make sure you do trim reads of adapters, remove host contamination, and other artefacts, and check these steps worked properly! 
+
 
 ### Low Sequence Diversity
+
+<!-- TO HERE -->
+
 
 Another thing is low sequence diversity. So what I mean by this is mononucleotide reads, like GGGGG, or dinoucleotide repeats. This is not so much of an error necessarily when you're doing metagenomics, but when you come into genomics, this can be a problem. So the problem with such DNA molecules, like this one here, GGGGG, is they're very unspecific. They give you no information. That can come from any species everywhere because they are very common across all genomes. So the problem here is that firstly, it slows down your processing because basically you are aligning against, or comparing of DNA sequence against many, many, many different genomes to ultimately say, I don't know which one it comes from, which is unnecessary. And also in some cases, it can inflate counts at higher nodes when you're doing an LCA. This will be described later on. But this can be very common. So if you remember this two-color chemistry which I mentioned earlier, where you don't have one color per base, but rather if there is no color emitted, the machine uses a G, particularly with an ek-seq and no-seq data, you will have a lot of these Gs, particularly as we're dealing with ancient DNA, which is very short. When you have very short ancient DNA and you don't reach all of your cycles, so let's say you're doinbase pair cycles, but your DNA molecules are onlbase pairs, you will basically get to the end of your DNA molecules and not add anything else. So you start getting these very long tails of Gs at the end of your molecules. And if you don't remove these, this will make it very difficult to correctly align your DNA molecule to a reference genome or sequence. So be aware to look for these and remove these. Also because it will speed up your processing. So to recap the considerations, a lot of this will make more sense later on in the other sessions, but consider your duplication rates. You check for lots of copies of same DNA molecule in your library. It's a good idea to check for index hopping, so making sure that the index combinations that you have in your library are correct and you've sorted your samples correctly. Always check for sequencing error and remove low quality bases if possible. Check for adapters, so to make sure you don't start finding CARP everywhere. And also it's a good idea to look for low-seq and diversity reads. For example, particularly if you put next-seq or no-seq data, because it just slows down your results and you get lower quality text-long assignment. 
 
