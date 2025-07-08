@@ -969,9 +969,9 @@ purrr::map(tax_g_list, function(X, nrank) {
       pull(nreads) %>%
       sum()
     ggpubr::ggarrange(plotlist = list(
-      get_dmg_decay_fit(df = dt1 %>% rename(label = sample) %>% inner_join(sel_tax) %>% filter(rank == rank), orient = "fwd", y_max = 0.70) +
+      get_dmg_decay_fit(df = dt2 %>% rename(label = sample) %>% inner_join(sel_tax) %>% filter(rank == rank), orient = "fwd", y_max = 0.70) +
         ggtitle(paste0(X, " nreads=", n_readsa, " Forward")),
-      get_dmg_decay_fit(df = dt1 %>% rename(label = sample)  %>% inner_join(sel_tax) %>% filter(rank == rank), orient = "rev", y_max = 0.70) +
+      get_dmg_decay_fit(df = dt2 %>% rename(label = sample)  %>% inner_join(sel_tax) %>% filter(rank == rank), orient = "rev", y_max = 0.70) +
         ggtitle(paste0(X, " nreads=", n_readsa, " Reverse"))
     ), align = "hv")
     ggsave(paste0("figures/", X, "-dmg.pdf"), plot = last_plot(), width = 8, height = 4)
