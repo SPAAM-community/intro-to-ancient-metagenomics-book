@@ -789,7 +789,7 @@ Here we visualise the amplitude of damage (A) and the mean length of the fragmen
 
 ```{r eval=F}
 #Plotting damage (A) by period (dates BP)
-p1a<- dt1 %>%
+p2a<- dt1 %>%
   mutate(Date_BP = fct_relevel(Date_BP,
                              "6100","5300","4100","3900","3000", "800")) %>%
   ggplot(aes(x=A, y=Date_BP))+ 
@@ -797,10 +797,10 @@ p1a<- dt1 %>%
   geom_point(aes(fill = sample), size = 3, shape = 21, color = "black", stroke = .5) +
   scale_x_continuous(limits = c(0, 0.20), breaks = seq(0, 0.20, by = 0.05)) +
   theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-p1a
+p2a
 
 #Plotting mean length (mean_rlen) by period (dates BP)
-p1b<- dt1 %>%
+p2b<- dt1 %>%
   mutate(Date_BP = fct_relevel(Date_BP,
                              "6100","5300","4100","3900","3000", "800")) %>%
   ggplot(aes(x=mean_rlen, y=Date_BP))+ 
@@ -808,11 +808,11 @@ p1b<- dt1 %>%
   geom_point(aes(fill = sample), size = 3, shape = 21, color = "black", stroke = .5) +
   scale_x_continuous(limits = c(30, 80), breaks = seq(30, 80, by = 10)) +
   theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-p1b
+p2b
 
 #Combining the plots and saving as pdf file
-pdf(file = "figures/p1.pdf", width = 8, height = 6)
-p1 <- grid.arrange(p1a, p1b,
+pdf(file = "figures/p2.pdf", width = 8, height = 6)
+p2 <- grid.arrange(p2a, p2b,
                    ncol = 2, nrow = 1)
 dev.off()
 ``` 
