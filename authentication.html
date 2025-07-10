@@ -911,7 +911,7 @@ Tip
 </div>
 </div>
 <p>The <code>ngsLCA</code> program considers a chosen similarity interval between each read and its reference in the generated bam/sam file. The similarity can be set as an edit distance <code>[-editdist[min/max]]</code>, i.e., number of mismatches between the read to reference genome, or as a similarity distance <code>[-simscore[low/high]]</code>, i.e., percentage of mismatches between the read to reference genome.</p>
-<p>The main files produced by this command have the extensions <code>.bdamage.gz</code> and <code>lca.gz</code>. The first consists of a nucleotide misincorporation matrix (also called <strong>mismatch matrix</strong>) which represents the nucleotide substitution counts across the reads (<a href="#tbl-authentication-examplecodetable2" class="quarto-xref">Table&nbsp;<span>12.1</span></a>). The lca file reports the sequence analysed and its taxonomic path, as well as other statistics (gc content, fragment length).</p>
+<p>The main files produced by this command have the extensions <code>.bdamage.gz</code>, <code>lca.gz</code> and ‘stat.gz’. The first consists of a nucleotide misincorporation matrix (also called <strong>mismatch matrix</strong>) which represents the nucleotide substitution counts across the reads (<a href="#tbl-authentication-examplecodetable2" class="quarto-xref">Table&nbsp;<span>12.1</span></a>). The lca file reports the sequences analysed and their taxonomic paths, while the stat file includes other statistics (gc content, fragment length).</p>
 <p>We report an example of the bdamage.gz file output printed using the command <code>metaDMG-cpp print</code>:</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Example, do not run</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> print file.bdamage.gz <span class="at">-names</span> names.dmp <span class="op">&gt;</span> bdamage_table.tsv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -921,23 +921,23 @@ Tip
 Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for beech (Fagus sylvatica) of sample VM-14 provided in the exercise.
 </figcaption>
 <div aria-describedby="tbl-authentication-examplecodetable2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div id="sdslkgrnql" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
-<style>#sdslkgrnql table {
+<div id="ulmhuhlawf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
+<style>#ulmhuhlawf table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#sdslkgrnql thead, #sdslkgrnql tbody, #sdslkgrnql tfoot, #sdslkgrnql tr, #sdslkgrnql td, #sdslkgrnql th {
+#ulmhuhlawf thead, #ulmhuhlawf tbody, #ulmhuhlawf tfoot, #ulmhuhlawf tr, #ulmhuhlawf td, #ulmhuhlawf th {
   border-style: none;
 }
 
-#sdslkgrnql p {
+#ulmhuhlawf p {
   margin: 0;
   padding: 0;
 }
 
-#sdslkgrnql .gt_table {
+#ulmhuhlawf .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -963,12 +963,12 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   border-left-color: #D3D3D3;
 }
 
-#sdslkgrnql .gt_caption {
+#ulmhuhlawf .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#sdslkgrnql .gt_title {
+#ulmhuhlawf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -980,7 +980,7 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   border-bottom-width: 0;
 }
 
-#sdslkgrnql .gt_subtitle {
+#ulmhuhlawf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -992,7 +992,7 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   border-top-width: 0;
 }
 
-#sdslkgrnql .gt_heading {
+#ulmhuhlawf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1004,13 +1004,13 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   border-right-color: #D3D3D3;
 }
 
-#sdslkgrnql .gt_bottom_border {
+#ulmhuhlawf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#sdslkgrnql .gt_col_headings {
+#ulmhuhlawf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1025,7 +1025,7 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   border-right-color: #D3D3D3;
 }
 
-#sdslkgrnql .gt_col_heading {
+#ulmhuhlawf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1045,7 +1045,7 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   overflow-x: hidden;
 }
 
-#sdslkgrnql .gt_column_spanner_outer {
+#ulmhuhlawf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1057,15 +1057,15 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   padding-right: 4px;
 }
 
-#sdslkgrnql .gt_column_spanner_outer:first-child {
+#ulmhuhlawf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#sdslkgrnql .gt_column_spanner_outer:last-child {
+#ulmhuhlawf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#sdslkgrnql .gt_column_spanner {
+#ulmhuhlawf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1077,11 +1077,11 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   width: 100%;
 }
 
-#sdslkgrnql .gt_spanner_row {
+#ulmhuhlawf .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#sdslkgrnql .gt_group_heading {
+#ulmhuhlawf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1107,7 +1107,7 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   text-align: left;
 }
 
-#sdslkgrnql .gt_empty_group_heading {
+#ulmhuhlawf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1122,15 +1122,15 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   vertical-align: middle;
 }
 
-#sdslkgrnql .gt_from_md > :first-child {
+#ulmhuhlawf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#sdslkgrnql .gt_from_md > :last-child {
+#ulmhuhlawf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#sdslkgrnql .gt_row {
+#ulmhuhlawf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1149,7 +1149,7 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   overflow-x: hidden;
 }
 
-#sdslkgrnql .gt_stub {
+#ulmhuhlawf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1162,7 +1162,7 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   padding-right: 5px;
 }
 
-#sdslkgrnql .gt_stub_row_group {
+#ulmhuhlawf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1176,15 +1176,15 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   vertical-align: top;
 }
 
-#sdslkgrnql .gt_row_group_first td {
+#ulmhuhlawf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#sdslkgrnql .gt_row_group_first th {
+#ulmhuhlawf .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#sdslkgrnql .gt_summary_row {
+#ulmhuhlawf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1194,16 +1194,16 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   padding-right: 5px;
 }
 
-#sdslkgrnql .gt_first_summary_row {
+#ulmhuhlawf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#sdslkgrnql .gt_first_summary_row.thick {
+#ulmhuhlawf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#sdslkgrnql .gt_last_summary_row {
+#ulmhuhlawf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1213,7 +1213,7 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   border-bottom-color: #D3D3D3;
 }
 
-#sdslkgrnql .gt_grand_summary_row {
+#ulmhuhlawf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1223,7 +1223,7 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   padding-right: 5px;
 }
 
-#sdslkgrnql .gt_first_grand_summary_row {
+#ulmhuhlawf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1233,7 +1233,7 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   border-top-color: #D3D3D3;
 }
 
-#sdslkgrnql .gt_last_grand_summary_row_top {
+#ulmhuhlawf .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1243,11 +1243,11 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   border-bottom-color: #D3D3D3;
 }
 
-#sdslkgrnql .gt_striped {
+#ulmhuhlawf .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#sdslkgrnql .gt_table_body {
+#ulmhuhlawf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1256,7 +1256,7 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   border-bottom-color: #D3D3D3;
 }
 
-#sdslkgrnql .gt_footnotes {
+#ulmhuhlawf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1270,7 +1270,7 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   border-right-color: #D3D3D3;
 }
 
-#sdslkgrnql .gt_footnote {
+#ulmhuhlawf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1279,7 +1279,7 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   padding-right: 5px;
 }
 
-#sdslkgrnql .gt_sourcenotes {
+#ulmhuhlawf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1293,7 +1293,7 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   border-right-color: #D3D3D3;
 }
 
-#sdslkgrnql .gt_sourcenote {
+#ulmhuhlawf .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1301,72 +1301,72 @@ Table&nbsp;12.1: Table 1. Example of the bdamage.gz mismatch matrix table for be
   padding-right: 5px;
 }
 
-#sdslkgrnql .gt_left {
+#ulmhuhlawf .gt_left {
   text-align: left;
 }
 
-#sdslkgrnql .gt_center {
+#ulmhuhlawf .gt_center {
   text-align: center;
 }
 
-#sdslkgrnql .gt_right {
+#ulmhuhlawf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#sdslkgrnql .gt_font_normal {
+#ulmhuhlawf .gt_font_normal {
   font-weight: normal;
 }
 
-#sdslkgrnql .gt_font_bold {
+#ulmhuhlawf .gt_font_bold {
   font-weight: bold;
 }
 
-#sdslkgrnql .gt_font_italic {
+#ulmhuhlawf .gt_font_italic {
   font-style: italic;
 }
 
-#sdslkgrnql .gt_super {
+#ulmhuhlawf .gt_super {
   font-size: 65%;
 }
 
-#sdslkgrnql .gt_footnote_marks {
+#ulmhuhlawf .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#sdslkgrnql .gt_asterisk {
+#ulmhuhlawf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#sdslkgrnql .gt_indent_1 {
+#ulmhuhlawf .gt_indent_1 {
   text-indent: 5px;
 }
 
-#sdslkgrnql .gt_indent_2 {
+#ulmhuhlawf .gt_indent_2 {
   text-indent: 10px;
 }
 
-#sdslkgrnql .gt_indent_3 {
+#ulmhuhlawf .gt_indent_3 {
   text-indent: 15px;
 }
 
-#sdslkgrnql .gt_indent_4 {
+#ulmhuhlawf .gt_indent_4 {
   text-indent: 20px;
 }
 
-#sdslkgrnql .gt_indent_5 {
+#ulmhuhlawf .gt_indent_5 {
   text-indent: 25px;
 }
 
-#sdslkgrnql .katex-display {
+#ulmhuhlawf .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#sdslkgrnql div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ulmhuhlawf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1823,14 +1823,14 @@ Figure&nbsp;12.8: The amount of damage as a function of significance (metagenomi
 </section>
 <section id="ancient-metagenomic-dataset" class="level3" data-number="12.5.3">
 <h3 data-number="12.5.3" class="anchored" data-anchor-id="ancient-metagenomic-dataset"><span class="header-section-number">12.5.3</span> Ancient metagenomic dataset</h3>
-<p>In this section, we will use 6 metagenomic libraries downsampled with eukaryotes reads from the study by <span class="citation" data-cites="Zampirolo2023.12.01.569562">(<a href="#ref-Zampirolo2023.12.01.569562" role="doc-biblioref">Zampirolo et al. 2023</a>)</span> (<a href="#fig-authentication-fig6" class="quarto-xref">Figure&nbsp;<span>12.9</span></a>). The libraries originate from sediment samples of the Velký Mamut’ák rock shelter located in Northern Bohemia (Czech Republic) and covering the period between the Late Neolithic (~6100-5300 cal. BP) to more recent times (800 cal BP).</p>
+<p>In this section, we will use 6 metagenomic libraries downsampled with eukaryotes reads from the study by <span class="citation" data-cites="zampirolo2024tracing">(<a href="#ref-zampirolo2024tracing" role="doc-biblioref">Zampirolo et al. 2024</a>)</span> (<a href="#fig-authentication-fig6" class="quarto-xref">Figure&nbsp;<span>12.9</span></a>). The libraries originate from sediment samples of the Velký Mamut’ák rock shelter located in Northern Bohemia (Czech Republic) and covering the period between the Late Neolithic (~6100-5300 cal. BP) to more recent times (800 cal BP).</p>
 <div id="fig-authentication-fig6" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-authentication-fig6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/images/chapters/authentication/BioxRiv_paper.png" class="img-fluid figure-img">
+<img src="assets/images/chapters/authentication/paper.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-authentication-fig6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.9: Screenshot of preprint of the source dataset by <span class="citation" data-cites="Zampirolo2023.12.01.569562">(<a href="#ref-Zampirolo2023.12.01.569562" role="doc-biblioref">Zampirolo et al. 2023</a>)</span>
+Figure&nbsp;12.9: Screenshot of the study of the source dataset by <span class="citation" data-cites="zampirolo2024tracing">(<a href="#ref-zampirolo2024tracing" role="doc-biblioref">Zampirolo et al. 2024</a>)</span>
 </figcaption>
 </figure>
 </div>
@@ -1838,7 +1838,7 @@ Figure&nbsp;12.9: Screenshot of preprint of the source dataset by <span class="c
 <section id="ancient-metagenomics-with-metadmg-cpp-the-workflow" class="level3" data-number="12.5.4">
 <h3 data-number="12.5.4" class="anchored" data-anchor-id="ancient-metagenomics-with-metadmg-cpp-the-workflow"><span class="header-section-number">12.5.4</span> Ancient metagenomics with metaDMG-cpp: the workflow</h3>
 <p>This section will cover the metaDMG analysis which involve taxonomic classification of the reads starting from sorted SAM files, the damage estimation and compilation of the final metaDMG output.</p>
-<p>To begin, we can find raw SAM files used as input to <code>metaDMG</code> we will use for the exercise are stored in <code>metadmg</code>.</p>
+<p>To begin, we can find raw SAM files used as input to <code>metaDMG</code> we will use for the exercise are stored in the <code>metadmg</code> folder.</p>
 <p>We also need the taxonomy files, which are in the folder <code>metadmg/small_taxonomy/</code>, these include <code>names.dmp</code>, <code>nodes.dmp</code> and <code>small_accession2taxid.txt.gz</code>.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1853,10 +1853,8 @@ Warning
 <p><strong>metaDMG</strong> is currently under development and it is therefore important to keep it updated. The best documentation is currently found in the –help function.</p>
 </div>
 </div>
-<p>We need to activate a dedicated environment for <code>metaDMG</code> as it is still under development. We candeactivate the current one with</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>And we will work with metaDMG by activating the environment with the following command.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate metaDMG</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>metaDMG is installed in the conda environment ’authentication`. If not activated yet, we run</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate authentication </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1871,29 +1869,29 @@ Warning
 </div>
 </div>
 <p>First we will run <code>metaDMG-cpp lca</code> to get the mismatch matrix file <code>bdamage.gz</code> that we need to estimate the dfit.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> lca <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--acc2tax</span> metadmg/small_taxonomy/small_accession2taxid.txt.gz <span class="at">--sim_score_low</span> 0.95 <span class="at">--sim_score_high</span> 1.0 <span class="at">--how_many</span> 30 <span class="at">--weight_type</span> 1 <span class="at">--threads</span> 12 <span class="at">--bam</span> metadmg/VM-3_800.merged.sort.bam <span class="at">--out_prefix</span> metadmg/VM-3_800.merged.bam</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> lca <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--acc2tax</span> metadmg/small_taxonomy/small_accession2taxid.txt.gz <span class="at">--sim_score_low</span> 0.95 <span class="at">--sim_score_high</span> 1.0 <span class="at">--how_many</span> 30 <span class="at">--weight_type</span> 1 <span class="at">--threads</span> 12 <span class="at">--bam</span> metadmg/VM-11_3000.merged.sort.bam <span class="at">--out_prefix</span> metadmg/VM-11_3000.merged.bam</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> lca <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--acc2tax</span> metadmg/small_taxonomy/small_accession2taxid.txt.gz <span class="at">--sim_score_low</span> 0.95 <span class="at">--sim_score_high</span> 1.0 <span class="at">--how_many</span> 30 <span class="at">--weight_type</span> 1 <span class="at">--threads</span> 12 <span class="at">--bam</span> metadmg/VM-14_3900.merged.sort.bam <span class="at">--out_prefix</span> metadmg/VM-14_3900.merged.bam </span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> lca <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--acc2tax</span> metadmg/small_taxonomy/small_accession2taxid.txt.gz <span class="at">--sim_score_low</span> 0.95 <span class="at">--sim_score_high</span> 1.0 <span class="at">--how_many</span> 30 <span class="at">--weight_type</span> 1 <span class="at">--threads</span> 12 <span class="at">--bam</span> metadmg/VM-15_4100.merged.sort.bam <span class="at">--out_prefix</span> metadmg/VM-15_4100.merged.bam </span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> lca <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--acc2tax</span> metadmg/small_taxonomy/small_accession2taxid.txt.gz <span class="at">--sim_score_low</span> 0.95 <span class="at">--sim_score_high</span> 1.0 <span class="at">--how_many</span> 30 <span class="at">--weight_type</span> 1 <span class="at">--threads</span> 12 <span class="at">--bam</span> metadmg/VM-17_5300.merged.sort.bam <span class="at">--out_prefix</span> metadmg/VM-17_5300.merged.bam </span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> lca <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--acc2tax</span> metadmg/small_taxonomy/small_accession2taxid.txt.gz <span class="at">--sim_score_low</span> 0.95 <span class="at">--sim_score_high</span> 1.0 <span class="at">--how_many</span> 30 <span class="at">--weight_type</span> 1 <span class="at">--threads</span> 12 <span class="at">--bam</span> metadmg/VM-19_6100.merged.sort.bam <span class="at">--out_prefix</span> metadmg/VM-19_6100.merged.bam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> lca <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--acc2tax</span> metadmg/small_taxonomy/small_accession2taxid.txt.gz <span class="at">--sim_score_low</span> 0.95 <span class="at">--sim_score_high</span> 1.0 <span class="at">--how_many</span> 30 <span class="at">--weight_type</span> 1 <span class="at">--threads</span> 12 <span class="at">--bam</span> metadmg/VM-3_800.merged.sort.bam <span class="at">--out_prefix</span> metadmg/VM-3_800.merged.bam</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> lca <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--acc2tax</span> metadmg/small_taxonomy/small_accession2taxid.txt.gz <span class="at">--sim_score_low</span> 0.95 <span class="at">--sim_score_high</span> 1.0 <span class="at">--how_many</span> 30 <span class="at">--weight_type</span> 1 <span class="at">--threads</span> 12 <span class="at">--bam</span> metadmg/VM-11_3000.merged.sort.bam <span class="at">--out_prefix</span> metadmg/VM-11_3000.merged.bam</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> lca <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--acc2tax</span> metadmg/small_taxonomy/small_accession2taxid.txt.gz <span class="at">--sim_score_low</span> 0.95 <span class="at">--sim_score_high</span> 1.0 <span class="at">--how_many</span> 30 <span class="at">--weight_type</span> 1 <span class="at">--threads</span> 12 <span class="at">--bam</span> metadmg/VM-14_3900.merged.sort.bam <span class="at">--out_prefix</span> metadmg/VM-14_3900.merged.bam </span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> lca <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--acc2tax</span> metadmg/small_taxonomy/small_accession2taxid.txt.gz <span class="at">--sim_score_low</span> 0.95 <span class="at">--sim_score_high</span> 1.0 <span class="at">--how_many</span> 30 <span class="at">--weight_type</span> 1 <span class="at">--threads</span> 12 <span class="at">--bam</span> metadmg/VM-15_4100.merged.sort.bam <span class="at">--out_prefix</span> metadmg/VM-15_4100.merged.bam </span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> lca <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--acc2tax</span> metadmg/small_taxonomy/small_accession2taxid.txt.gz <span class="at">--sim_score_low</span> 0.95 <span class="at">--sim_score_high</span> 1.0 <span class="at">--how_many</span> 30 <span class="at">--weight_type</span> 1 <span class="at">--threads</span> 12 <span class="at">--bam</span> metadmg/VM-17_5300.merged.sort.bam <span class="at">--out_prefix</span> metadmg/VM-17_5300.merged.bam </span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> lca <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--acc2tax</span> metadmg/small_taxonomy/small_accession2taxid.txt.gz <span class="at">--sim_score_low</span> 0.95 <span class="at">--sim_score_high</span> 1.0 <span class="at">--how_many</span> 30 <span class="at">--weight_type</span> 1 <span class="at">--threads</span> 12 <span class="at">--bam</span> metadmg/VM-19_6100.merged.sort.bam <span class="at">--out_prefix</span> metadmg/VM-19_6100.merged.bam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>We use the file generated from the previous command (<code>bdamage.gz</code>), containing the misincorporation matrix to calculate the deamination pattern. We use metaDMG-cpp dfit function to obtain a quick computation of a beta-binomial model.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> dfit metadmg/VM-3_800.merged.bam.bdamage.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span>  metadmg/small_taxonomy/nodes.dmp <span class="at">--showfits</span> 2  <span class="at">--lib</span> ds <span class="at">--out</span> metadmg/VM-3_800.merged.bam </span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> dfit metadmg/VM-11_3000.merged.bam.bdamage.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span>  metadmg/small_taxonomy/nodes.dmp <span class="at">--showfits</span> 2  <span class="at">--lib</span> ds <span class="at">--out</span> metadmg/VM-11_3000.merged.bam </span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> dfit metadmg/VM-14_3900.merged.bam.bdamage.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span>  metadmg/small_taxonomy/nodes.dmp <span class="at">--showfits</span> 2  <span class="at">--lib</span> ds <span class="at">--out</span> metadmg/VM-14_3900.merged.bam</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> dfit metadmg/VM-15_4100.merged.bam.bdamage.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span>  metadmg/small_taxonomy/nodes.dmp <span class="at">--showfits</span> 2  <span class="at">--lib</span> ds <span class="at">--out</span> metadmg/VM-15_4100.merged.bam </span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> dfit metadmg/VM-17_5300.merged.bam.bdamage.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span>  metadmg/small_taxonomy/nodes.dmp <span class="at">--showfits</span> 2  <span class="at">--lib</span> ds <span class="at">--out</span> metadmg/VM-17_5300.merged.bam </span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> dfit metadmg/VM-19_6100.merged.bam.bdamage.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span>  metadmg/small_taxonomy/nodes.dmp <span class="at">--showfits</span> 2  <span class="at">--lib</span> ds <span class="at">--out</span> metadmg/VM-19_6100.merged.bam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> dfit metadmg/VM-3_800.merged.bam.bdamage.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span>  metadmg/small_taxonomy/nodes.dmp <span class="at">--showfits</span> 2  <span class="at">--lib</span> ds <span class="at">--out</span> metadmg/VM-3_800.merged.bam </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> dfit metadmg/VM-11_3000.merged.bam.bdamage.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span>  metadmg/small_taxonomy/nodes.dmp <span class="at">--showfits</span> 2  <span class="at">--lib</span> ds <span class="at">--out</span> metadmg/VM-11_3000.merged.bam </span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> dfit metadmg/VM-14_3900.merged.bam.bdamage.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span>  metadmg/small_taxonomy/nodes.dmp <span class="at">--showfits</span> 2  <span class="at">--lib</span> ds <span class="at">--out</span> metadmg/VM-14_3900.merged.bam</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> dfit metadmg/VM-15_4100.merged.bam.bdamage.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span>  metadmg/small_taxonomy/nodes.dmp <span class="at">--showfits</span> 2  <span class="at">--lib</span> ds <span class="at">--out</span> metadmg/VM-15_4100.merged.bam </span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> dfit metadmg/VM-17_5300.merged.bam.bdamage.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span>  metadmg/small_taxonomy/nodes.dmp <span class="at">--showfits</span> 2  <span class="at">--lib</span> ds <span class="at">--out</span> metadmg/VM-17_5300.merged.bam </span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> dfit metadmg/VM-19_6100.merged.bam.bdamage.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span>  metadmg/small_taxonomy/nodes.dmp <span class="at">--showfits</span> 2  <span class="at">--lib</span> ds <span class="at">--out</span> metadmg/VM-19_6100.merged.bam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-warning callout-titled" title="Example only - do not run!">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1905,75 +1903,175 @@ Example only - do not run!
 </div>
 <div class="callout-body-container callout-body">
 <p>The <code>metaDMG-cpp dfit</code> function also allows for the computation of a binomial model, which includes additional statistics (such as bootstrap estimated parameters). For the exercise, we only run the quick statistics, but we provide an example of the codes for full stat:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> dfit metadmg/VM-11_3000.merged.bam.bdamage.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span>  metadmg/small_taxonomy/nodes.dmp <span class="at">--showfits</span> 2 <span class="at">--nopt</span> 10 <span class="at">--nbootstrap</span> 20 <span class="at">--doboot</span> 1 <span class="at">--seed</span> 1234  <span class="at">--lib</span> ds <span class="at">--out</span> metadmg/VM-11_3000.merged.bam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> dfit metadmg/VM-11_3000.merged.bam.bdamage.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span>  metadmg/small_taxonomy/nodes.dmp <span class="at">--showfits</span> 2 <span class="at">--nopt</span> 10 <span class="at">--nbootstrap</span> 20 <span class="at">--doboot</span> 1 <span class="at">--seed</span> 1234  <span class="at">--lib</span> ds <span class="at">--out</span> metadmg/VM-11_3000.merged.bam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <p>We run the <code>metaDMG-cpp aggregate</code> function to merge the statistics from the previous two steps and obtain a file for each sample.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> aggregate metadmg/VM-3_800.merged.bam.bdamage.gz <span class="at">-lcastat</span> metadmg/VM-3_800.merged.bam.stat.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--dfit</span> metadmg/VM-3_800.merged.bam.dfit.gz <span class="at">--out</span> metadmg/VM-3_aggregated_results</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> aggregate metadmg/VM-11_3000.merged.bam.bdamage.gz <span class="at">-lcastat</span> metadmg/VM-11_3000.merged.bam.stat.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--dfit</span> metadmg/VM-11_3000.merged.bam.dfit.gz <span class="at">--out</span> metadmg/VM-11_aggregated_results</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> aggregate metadmg/VM-14_3900.merged.bam.bdamage.gz <span class="at">-lcastat</span> metadmg/VM-14_3900.merged.bam.stat.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--dfit</span> metadmg/VM-14_3900.merged.bam.dfit.gz <span class="at">--out</span> metadmg/VM-14_aggregated_results</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> aggregate metadmg/VM-15_4100.merged.bam.bdamage.gz <span class="at">-lcastat</span> metadmg/VM-15_4100.merged.bam.stat.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--dfit</span> metadmg/VM-15_4100.merged.bam.dfit.gz <span class="at">--out</span> metadmg/VM-15_aggregated_results</span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> aggregate metadmg/VM-17_5300.merged.bam.bdamage.gz <span class="at">-lcastat</span> metadmg/VM-17_5300.merged.bam.stat.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--dfit</span> metadmg/VM-17_5300.merged.bam.dfit.gz <span class="at">--out</span> metadmg/VM-17_aggregated_results</span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> aggregate metadmg/VM-19_6100.merged.bam.bdamage.gz <span class="at">-lcastat</span> metadmg/VM-19_6100.merged.bam.stat.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--dfit</span> metadmg/VM-19_6100.merged.bam.dfit.gz <span class="at">--out</span> metadmg/VM-19_aggregated_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> aggregate metadmg/VM-3_800.merged.bam.bdamage.gz <span class="at">-lcastat</span> metadmg/VM-3_800.merged.bam.stat.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--dfit</span> metadmg/VM-3_800.merged.bam.dfit.gz <span class="at">--out</span> metadmg/VM-3_aggregated_results</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> aggregate metadmg/VM-11_3000.merged.bam.bdamage.gz <span class="at">-lcastat</span> metadmg/VM-11_3000.merged.bam.stat.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--dfit</span> metadmg/VM-11_3000.merged.bam.dfit.gz <span class="at">--out</span> metadmg/VM-11_aggregated_results</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> aggregate metadmg/VM-14_3900.merged.bam.bdamage.gz <span class="at">-lcastat</span> metadmg/VM-14_3900.merged.bam.stat.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--dfit</span> metadmg/VM-14_3900.merged.bam.dfit.gz <span class="at">--out</span> metadmg/VM-14_aggregated_results</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> aggregate metadmg/VM-15_4100.merged.bam.bdamage.gz <span class="at">-lcastat</span> metadmg/VM-15_4100.merged.bam.stat.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--dfit</span> metadmg/VM-15_4100.merged.bam.dfit.gz <span class="at">--out</span> metadmg/VM-15_aggregated_results</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> aggregate metadmg/VM-17_5300.merged.bam.bdamage.gz <span class="at">-lcastat</span> metadmg/VM-17_5300.merged.bam.stat.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--dfit</span> metadmg/VM-17_5300.merged.bam.dfit.gz <span class="at">--out</span> metadmg/VM-17_aggregated_results</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a><span class="ex">metaDMG-cpp</span> aggregate metadmg/VM-19_6100.merged.bam.bdamage.gz <span class="at">-lcastat</span> metadmg/VM-19_6100.merged.bam.stat.gz <span class="at">--names</span> metadmg/small_taxonomy/names.dmp <span class="at">--nodes</span> metadmg/small_taxonomy/nodes.dmp <span class="at">--dfit</span> metadmg/VM-19_6100.merged.bam.dfit.gz <span class="at">--out</span> metadmg/VM-19_aggregated_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In the last step we merge the header and the filenames in a unique tab-separated file (TSV).</p>
 <p>We first change into the <code>metadmg/</code> results directory, and unzip the output files</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> metadmg</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gunzip</span> <span class="pp">*</span>_aggregated_results.stat.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> metadmg</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gunzip</span> <span class="pp">*</span>_aggregated_results.stat.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then we extract the header and we concatenate the content of all the output files in a unique TSV file.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Define header for final output table</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="va">header_file</span><span class="op">=</span><span class="st">"VM-11_aggregated_results.stat"</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the header</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="va">header</span><span class="op">=</span><span class="va">$(</span><span class="fu">head</span> <span class="at">-n</span> 1 <span class="st">"</span><span class="va">$header_file</span><span class="st">"</span><span class="va">)</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the output file</span></span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="va">output_file</span><span class="op">=</span><span class="st">"concatenated_metaDMGfinal.tsv"</span></span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the header to the concatenated file</span></span>
-<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"filename\t</span><span class="va">$header</span><span class="st">"</span> <span class="op">&gt;</span> <span class="st">"</span><span class="va">$output_file</span><span class="st">"</span></span>
-<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> file <span class="kw">in</span> VM-11_aggregated_results.stat <span class="dt">\</span></span>
-<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>        VM-14_aggregated_results.stat <span class="dt">\</span></span>
-<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>            VM-15_aggregated_results.stat <span class="dt">\</span></span>
-<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>            VM-17_aggregated_results.stat <span class="dt">\</span></span>
-<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>            VM-19_aggregated_results.stat <span class="dt">\</span></span>
-<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>            VM-3_aggregated_results.stat</span>
-<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
-<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="kw">|</span> <span class="cf">while</span> <span class="bu">read</span> <span class="at">-r</span> <span class="va">line</span><span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>        <span class="bu">echo</span> <span class="at">-e</span> <span class="st">"</span><span class="va">$file</span><span class="st">\t</span><span class="va">$line</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="st">"</span><span class="va">$output_file</span><span class="st">"</span></span>
-<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">done</span></span>
-<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Define header for final output table</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="va">header_file</span><span class="op">=</span><span class="st">"VM-11_aggregated_results.stat"</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the header</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="va">header</span><span class="op">=</span><span class="va">$(</span><span class="fu">head</span> <span class="at">-n</span> 1 <span class="st">"</span><span class="va">$header_file</span><span class="st">"</span><span class="va">)</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the output file</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="va">output_file</span><span class="op">=</span><span class="st">"concatenated_metaDMGfinal.tsv"</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the header to the concatenated file</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"filename\t</span><span class="va">$header</span><span class="st">"</span> <span class="op">&gt;</span> <span class="st">"</span><span class="va">$output_file</span><span class="st">"</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> file <span class="kw">in</span> VM-11_aggregated_results.stat <span class="dt">\</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>        VM-14_aggregated_results.stat <span class="dt">\</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>            VM-15_aggregated_results.stat <span class="dt">\</span></span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>            VM-17_aggregated_results.stat <span class="dt">\</span></span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>            VM-19_aggregated_results.stat <span class="dt">\</span></span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>            VM-3_aggregated_results.stat</span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tail</span> <span class="at">-n</span> +2 <span class="st">"</span><span class="va">$file</span><span class="st">"</span> <span class="kw">|</span> <span class="cf">while</span> <span class="bu">read</span> <span class="at">-r</span> <span class="va">line</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>        <span class="bu">echo</span> <span class="at">-e</span> <span class="st">"</span><span class="va">$file</span><span class="st">\t</span><span class="va">$line</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="st">"</span><span class="va">$output_file</span><span class="st">"</span></span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">done</span></span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="investigating-the-final-output-with-r" class="level3" data-number="12.5.5">
 <h3 data-number="12.5.5" class="anchored" data-anchor-id="investigating-the-final-output-with-r"><span class="header-section-number">12.5.5</span> Investigating the final output with R</h3>
 <p>We first visualise our metaDMG output manually by navigating to the folder <code>metadmg/</code> with your file browser and clicking on “Open folder”. Open the TSV file <code>concatenated_metaDMGfinal.tsv</code> in a spreadsheet manner and inspect the files.</p>
 <p>We will now investigate the TSV table produced by metaDMG to authenticate damage patterns, visualise the relationship between the damage and the significance, and the degree of damage through depth and time.</p>
-<p>R packages for this exercise are located in our original conda environment <code>authentication</code>.</p>
-<p>While still in the <code>authentication/metadmg/</code> folder, We deactivate the current conda environment and we re-activate the environment <code>authentication</code>.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate authentication</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>We load R by running <code>R</code> in your terminal</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>R packages for this exercise are located in the same conda environment <code>authentication</code>.</p>
+<p>While still in the <code>authentication/metadmg/</code> folder, we load R by running <code>R</code> in your terminal</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>We load the libraries</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forcats)</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forcats)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="deamination-patterns-1" class="level4" data-number="12.5.5.1">
-<h4 data-number="12.5.5.1" class="anchored" data-anchor-id="deamination-patterns-1"><span class="header-section-number">12.5.5.1</span> Deamination patterns</h4>
+</section>
+<section id="amplitude-of-damage-vs-significance" class="level3" data-number="12.5.6">
+<h3 data-number="12.5.6" class="anchored" data-anchor-id="amplitude-of-damage-vs-significance"><span class="header-section-number">12.5.6</span> Amplitude of damage vs Significance</h3>
+<p>We provide an R script to investigate the main statistics.</p>
+<p>Here we visualise the amplitude of damage (A) and its significance (Zfit), for the full dataset but filtering it to a minimum of 100 reads and at the genus level (<a href="#fig-authentication-fig7" class="quarto-xref">Figure&nbsp;<span>12.10</span></a>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#We load our metaDMG output data (TSV file) and the metadata with information on the age of each sample.</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"concatenated_metaDMGfinal.tsv"</span>,  <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Rename sample column</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df)[<span class="fu">colnames</span>(df) <span class="sc">==</span> <span class="st">'filename'</span>] <span class="ot">&lt;-</span> <span class="st">'sample'</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Modify sample name with short names</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sample[df<span class="sc">$</span>sample <span class="sc">==</span> <span class="st">"VM-11_aggregated_results.stat"</span>] <span class="ot">&lt;-</span> <span class="st">"VM-11"</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sample[df<span class="sc">$</span>sample <span class="sc">==</span> <span class="st">"VM-14_aggregated_results.stat"</span>] <span class="ot">&lt;-</span> <span class="st">"VM-14"</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sample[df<span class="sc">$</span>sample <span class="sc">==</span> <span class="st">"VM-15_aggregated_results.stat"</span>] <span class="ot">&lt;-</span> <span class="st">"VM-15"</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sample[df<span class="sc">$</span>sample <span class="sc">==</span> <span class="st">"VM-17_aggregated_results.stat"</span>] <span class="ot">&lt;-</span> <span class="st">"VM-17"</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sample[df<span class="sc">$</span>sample <span class="sc">==</span> <span class="st">"VM-19_aggregated_results.stat"</span>] <span class="ot">&lt;-</span> <span class="st">"VM-19"</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sample[df<span class="sc">$</span>sample <span class="sc">==</span> <span class="st">"VM-3_aggregated_results.stat"</span>] <span class="ot">&lt;-</span> <span class="st">"VM-3"</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a><span class="co">#Import the metadata with dates BP</span></span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>depth_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"figures/depth_data.csv"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span> (depth_data)</span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a><span class="co">#Merge context_data and depth_data with dataframe (adding new column for dates BP)</span></span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>new <span class="ot">&lt;-</span> depth_data<span class="sc">$</span>Date_BP[<span class="fu">match</span>(df<span class="sc">$</span>sample, depth_data<span class="sc">$</span>Sample_ID)]</span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df)[<span class="fu">names</span>(df) <span class="sc">==</span> <span class="st">'new'</span>] <span class="ot">&lt;-</span> <span class="st">'Date_BP'</span></span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert Date_BP columns to factors (categorical variable) </span></span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>Date_BP <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(df<span class="sc">$</span>Date_BP)</span>
+<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a><span class="co">#Subset dataset animal and plants at the genus level</span></span>
+<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a>dt1 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(nreads <span class="sc">&gt;</span> <span class="dv">100</span>, <span class="fu">grepl</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">bgenus</span><span class="sc">\\</span><span class="st">b"</span>, rank), <span class="fu">grepl</span>(<span class="st">"Metazoa"</span>, taxa_path) <span class="sc">|</span> <span class="fu">grepl</span>(<span class="st">"Viridiplant"</span>, taxa_path))</span>
+<span id="cb44-28"><a href="#cb44-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-29"><a href="#cb44-29" aria-hidden="true" tabindex="-1"></a><span class="co">#Adding factor column for Kingdom</span></span>
+<span id="cb44-30"><a href="#cb44-30" aria-hidden="true" tabindex="-1"></a>dt1 <span class="ot">&lt;-</span> dt1 <span class="sc">%&gt;%</span> </span>
+<span id="cb44-31"><a href="#cb44-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Kingdom =</span>   <span class="co"># creating our new column</span></span>
+<span id="cb44-32"><a href="#cb44-32" aria-hidden="true" tabindex="-1"></a>           <span class="fu">case_when</span>(<span class="fu">grepl</span>(<span class="st">"Viridiplant"</span>, taxa_path) <span class="sc">~</span> <span class="st">"Viridiplantae"</span>,</span>
+<span id="cb44-33"><a href="#cb44-33" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">grepl</span>(<span class="st">"Metazoa"</span>,taxa_path) <span class="sc">~</span> <span class="st">"Metazoa"</span>))</span>
+<span id="cb44-34"><a href="#cb44-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-35"><a href="#cb44-35" aria-hidden="true" tabindex="-1"></a><span class="co">#Plotting  amplitude of damage vs its significance and saving as pdf file</span></span>
+<span id="cb44-36"><a href="#cb44-36" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">"figures/p1.pdf"</span>, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>)</span>
+<span id="cb44-37"><a href="#cb44-37" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dt1, <span class="fu">aes</span>(<span class="at">y=</span>A, <span class="at">x=</span>Zfit)) <span class="sc">+</span> </span>
+<span id="cb44-38"><a href="#cb44-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size=</span>nreads, <span class="at">col=</span>Kingdom)) <span class="sc">+</span></span>
+<span id="cb44-39"><a href="#cb44-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span><span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb44-40"><a href="#cb44-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#8B1A1A"</span>, <span class="st">"#458B00"</span>))<span class="sc">+</span></span>
+<span id="cb44-41"><a href="#cb44-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_continuous</span>(<span class="at">labels =</span> <span class="cf">function</span>(x) <span class="fu">format</span>(x, <span class="at">scientific =</span> <span class="cn">FALSE</span>)) <span class="sc">+</span></span>
+<span id="cb44-42"><a href="#cb44-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"significance"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"damage"</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span>
+<span id="cb44-43"><a href="#cb44-43" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="fig-authentication-fig7" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-authentication-fig7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/authentication/p1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-authentication-fig7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12.10: Amplitude of damage (A) vs significance (Zfit) for animals and plants.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="amplitude-of-damage-and-mean-fragment-length-through-time" class="level3" data-number="12.5.7">
+<h3 data-number="12.5.7" class="anchored" data-anchor-id="amplitude-of-damage-and-mean-fragment-length-through-time"><span class="header-section-number">12.5.7</span> Amplitude of damage and mean fragment length through time</h3>
+<p>Here we visualise the amplitude of damage (A) and the mean length of the fragments (mean_rlen) by date (BP) for the filtered dataset with a minimum of 100 reads and at the genus level (<a href="#fig-authentication-fig8" class="quarto-xref">Figure&nbsp;<span>12.11</span></a>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plotting damage (A) by period (dates BP)</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>p2a<span class="ot">&lt;-</span> dt1 <span class="sc">%&gt;%</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Date_BP =</span> <span class="fu">fct_relevel</span>(Date_BP,</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"6100"</span>,<span class="st">"5300"</span>,<span class="st">"4100"</span>,<span class="st">"3900"</span>,<span class="st">"3000"</span>, <span class="st">"800"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>A, <span class="at">y=</span>Date_BP))<span class="sc">+</span> </span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>A, <span class="at">y=</span>Date_BP, <span class="at">fill =</span> sample))<span class="sc">+</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">fill =</span> sample), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">stroke =</span> .<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.20</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fl">0.20</span>, <span class="at">by =</span> <span class="fl">0.05</span>)) <span class="sc">+</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>))</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>p2a</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Plotting mean length (mean_rlen) by period (dates BP)</span></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>p2b<span class="ot">&lt;-</span> dt1 <span class="sc">%&gt;%</span></span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Date_BP =</span> <span class="fu">fct_relevel</span>(Date_BP,</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"6100"</span>,<span class="st">"5300"</span>,<span class="st">"4100"</span>,<span class="st">"3900"</span>,<span class="st">"3000"</span>, <span class="st">"800"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>mean_rlen, <span class="at">y=</span>Date_BP))<span class="sc">+</span> </span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>mean_rlen, <span class="at">y=</span>Date_BP, <span class="at">fill =</span> sample)) <span class="sc">+</span></span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">fill =</span> sample), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">stroke =</span> .<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">80</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">80</span>, <span class="at">by =</span> <span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>))</span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>p2b</span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a><span class="co">#Combining the plots and saving as pdf file</span></span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">"figures/p2.pdf"</span>, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>)</span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">grid.arrange</span>(p2a, p2b,</span>
+<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">nrow =</span> <span class="dv">1</span>)</span>
+<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="fig-authentication-fig8" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-authentication-fig8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assets/images/chapters/authentication/p2.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-authentication-fig8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12.11: Amplitude of damage (A) and mean fragment length (mean_rlen) through time.
+</figcaption>
+</figure>
+</div>
+<section id="deamination-patterns-1" class="level4" data-number="12.5.7.1">
+<h4 data-number="12.5.7.1" class="anchored" data-anchor-id="deamination-patterns-1"><span class="header-section-number">12.5.7.1</span> Deamination patterns</h4>
 <p>We run the damage plot to visualise the deamination patterns along forward and reverse strands, and we save the results per each taxon detected in the samples.</p>
-<p>We will use the function <code>get_dmg_decay_fit</code> to visualise damage pattern (<a href="#fig-authentication-fagusovisdmg" class="quarto-xref">Figure&nbsp;<span>12.10</span></a>). The function is saved in <code>metadmg/script/</code>, so we only need to run the following command to recall it:</p>
+<p>We will use the function <code>get_dmg_decay_fit</code> to visualise damage pattern (<a href="#fig-authentication-fagusovisdmg" class="quarto-xref">Figure&nbsp;<span>12.12</span></a>). The function is saved in <code>metadmg/script/</code>, so we only need to run the following command to recall it:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"script/get_dmg_decay_fit.R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -2082,69 +2180,45 @@ Example only - do not run!
 <span id="cb47-101"><a href="#cb47-101" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb47-102"><a href="#cb47-102" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We load our metaDMG output data (TSV file) and the metadata with information on the age of each sample. We generate the damage plots as seen in <a href="#fig-authentication-fagusovisdmg" class="quarto-xref">Figure&nbsp;<span>12.10</span></a> using the function <code>get-damage</code>.</p>
+<p>We generate the damage plots as seen in <a href="#fig-authentication-fagusovisdmg" class="quarto-xref">Figure&nbsp;<span>12.12</span></a> using the function <code>get-damage</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"concatenated_metaDMGfinal.tsv"</span>,  <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Rename sample column</span></span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df)[<span class="fu">colnames</span>(df) <span class="sc">==</span> <span class="st">'filename'</span>] <span class="ot">&lt;-</span> <span class="st">'sample'</span></span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Modify sample name with short names</span></span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sample[df<span class="sc">$</span>sample <span class="sc">==</span> <span class="st">"VM-11_aggregated_results.stat"</span>] <span class="ot">&lt;-</span> <span class="st">"VM-11"</span></span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sample[df<span class="sc">$</span>sample <span class="sc">==</span> <span class="st">"VM-14_aggregated_results.stat"</span>] <span class="ot">&lt;-</span> <span class="st">"VM-14"</span></span>
-<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sample[df<span class="sc">$</span>sample <span class="sc">==</span> <span class="st">"VM-15_aggregated_results.stat"</span>] <span class="ot">&lt;-</span> <span class="st">"VM-15"</span></span>
-<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sample[df<span class="sc">$</span>sample <span class="sc">==</span> <span class="st">"VM-17_aggregated_results.stat"</span>] <span class="ot">&lt;-</span> <span class="st">"VM-17"</span></span>
-<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sample[df<span class="sc">$</span>sample <span class="sc">==</span> <span class="st">"VM-19_aggregated_results.stat"</span>] <span class="ot">&lt;-</span> <span class="st">"VM-19"</span></span>
-<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sample[df<span class="sc">$</span>sample <span class="sc">==</span> <span class="st">"VM-3_aggregated_results.stat"</span>] <span class="ot">&lt;-</span> <span class="st">"VM-3"</span></span>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Setting filtering theshold for ancient reads</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>minDMG <span class="ot">=</span> <span class="fl">0.02</span> <span class="co"># filter criteria, plot only taxa above set value</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>zfit <span class="ot">=</span> <span class="dv">2</span> <span class="co"># minimum significance, the higher the better, 2 would mean that we estimante the damage with 95% confidence. </span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>MinLength <span class="ot">=</span> <span class="dv">35</span> <span class="co"># minimum mean readlength, while we set a hard filter initially while trimming, we would like the mean readlength to be 35 or higher. </span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>reads <span class="ot">=</span> <span class="dv">200</span> <span class="co"># number of reads required depends on the amount of damage and the significance</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Subsetting only animals and plants, at the genus level, number of reads &gt; 200.</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>dt2 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(A <span class="sc">&gt;</span> minDMG, nreads <span class="sc">&gt;=</span> reads, mean_rlen <span class="sc">&gt;=</span> MinLength, Zfit  <span class="sc">&gt;</span> zfit, <span class="fu">grepl</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">bgenus</span><span class="sc">\\</span><span class="st">b"</span>, rank), <span class="sc">!</span><span class="fu">grepl</span>(<span class="st">"Bacteria"</span>,taxa_path))</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="co">#deamination plot with facet wrap per each taxon in a sample</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>tax_g_list <span class="ot">&lt;-</span> <span class="fu">unique</span>(dt2<span class="sc">$</span>name)</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>nrank <span class="ot">&lt;-</span> <span class="st">"rank"</span> <span class="co"># Replace with the actual rank column name</span></span>
 <span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a><span class="co">#Import the metadata with dates BP</span></span>
-<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>depth_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span> (<span class="st">"figures/depth_data.csv"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span> (depth_data)</span>
-<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a><span class="co">#Merge context_data and depth_data with dataframe (adding new column for dates BP)</span></span>
-<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>new <span class="ot">&lt;-</span> depth_data<span class="sc">$</span>Date_BP[<span class="fu">match</span>(df<span class="sc">$</span>sample, depth_data<span class="sc">$</span>Sample_ID)]</span>
-<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df)[<span class="fu">names</span>(df) <span class="sc">==</span> <span class="st">'new'</span>] <span class="ot">&lt;-</span> <span class="st">'Date_BP'</span></span>
-<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert Date_BP columns to factors (categorical variable) </span></span>
-<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>Date_BP <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(df<span class="sc">$</span>Date_BP)</span>
-<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a><span class="co">#Setting filtering theshold for ancient reads</span></span>
-<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a>minDMG <span class="ot">=</span> <span class="fl">0.02</span> <span class="co"># filter criteria, plot only taxa above set value</span></span>
-<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a>zfit <span class="ot">=</span> <span class="dv">2</span> <span class="co"># minimum significance, the higher the better, 2 would mean that we estimante the damage with 95% confidence. </span></span>
-<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a>MinLength <span class="ot">=</span> <span class="dv">35</span> <span class="co"># minimum mean readlength, while we set a hard filter initially while trimming, we would like the mean readlength to be 35 or higher. </span></span>
-<span id="cb48-29"><a href="#cb48-29" aria-hidden="true" tabindex="-1"></a>reads <span class="ot">=</span> <span class="dv">200</span> <span class="co"># number of reads required depends on the amount of damage and the significance</span></span>
-<span id="cb48-30"><a href="#cb48-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-31"><a href="#cb48-31" aria-hidden="true" tabindex="-1"></a><span class="co">#Subsetting only animals and plants, at the genus level, number of reads &gt; 200.</span></span>
-<span id="cb48-32"><a href="#cb48-32" aria-hidden="true" tabindex="-1"></a>dt1 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(A <span class="sc">&gt;</span> minDMG, nreads <span class="sc">&gt;=</span> reads, mean_rlen <span class="sc">&gt;=</span> MinLength, Zfit  <span class="sc">&gt;</span> zfit, <span class="fu">grepl</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">bgenus</span><span class="sc">\\</span><span class="st">b"</span>, rank), <span class="sc">!</span><span class="fu">grepl</span>(<span class="st">"Bacteria"</span>,taxa_path))</span>
-<span id="cb48-33"><a href="#cb48-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-34"><a href="#cb48-34" aria-hidden="true" tabindex="-1"></a><span class="co">#deamination plot with facet wrap per each taxon in a sample</span></span>
-<span id="cb48-35"><a href="#cb48-35" aria-hidden="true" tabindex="-1"></a>tax_g_list <span class="ot">&lt;-</span> <span class="fu">unique</span>(dt1<span class="sc">$</span>name)</span>
-<span id="cb48-36"><a href="#cb48-36" aria-hidden="true" tabindex="-1"></a>nrank <span class="ot">&lt;-</span> <span class="st">"rank"</span> <span class="co"># Replace with the actual rank column name</span></span>
-<span id="cb48-37"><a href="#cb48-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-38"><a href="#cb48-38" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> tax_g_list </span>
-<span id="cb48-39"><a href="#cb48-39" aria-hidden="true" tabindex="-1"></a>purrr<span class="sc">::</span><span class="fu">map</span>(tax_g_list, <span class="cf">function</span>(X, nrank) {</span>
-<span id="cb48-40"><a href="#cb48-40" aria-hidden="true" tabindex="-1"></a>  sel_tax <span class="ot">&lt;-</span> dt1 <span class="sc">%&gt;%</span></span>
-<span id="cb48-41"><a href="#cb48-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">label =</span> sample) <span class="sc">%&gt;%</span></span>
-<span id="cb48-42"><a href="#cb48-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(name <span class="sc">==</span> X) <span class="sc">%&gt;%</span></span>
-<span id="cb48-43"><a href="#cb48-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(rank <span class="sc">==</span> rank) <span class="sc">%&gt;%</span></span>
-<span id="cb48-44"><a href="#cb48-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(name, label) <span class="sc">%&gt;%</span></span>
-<span id="cb48-45"><a href="#cb48-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb48-46"><a href="#cb48-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(name)</span>
-<span id="cb48-47"><a href="#cb48-47" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">nrow</span>(sel_tax) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb48-48"><a href="#cb48-48" aria-hidden="true" tabindex="-1"></a>    n_readsa <span class="ot">&lt;-</span> dt1 <span class="sc">%&gt;%</span></span>
-<span id="cb48-49"><a href="#cb48-49" aria-hidden="true" tabindex="-1"></a>      <span class="fu">inner_join</span>(sel_tax) <span class="sc">%&gt;%</span></span>
-<span id="cb48-50"><a href="#cb48-50" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(rank <span class="sc">==</span> rank) <span class="sc">%&gt;%</span></span>
-<span id="cb48-51"><a href="#cb48-51" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pull</span>(nreads) <span class="sc">%&gt;%</span></span>
-<span id="cb48-52"><a href="#cb48-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sum</span>()</span>
-<span id="cb48-53"><a href="#cb48-53" aria-hidden="true" tabindex="-1"></a>    ggpubr<span class="sc">::</span><span class="fu">ggarrange</span>(<span class="at">plotlist =</span> <span class="fu">list</span>(</span>
-<span id="cb48-54"><a href="#cb48-54" aria-hidden="true" tabindex="-1"></a>      <span class="fu">get_dmg_decay_fit</span>(<span class="at">df =</span> dt1 <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">label =</span> sample) <span class="sc">%&gt;%</span> <span class="fu">inner_join</span>(sel_tax) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(rank <span class="sc">==</span> rank), <span class="at">orient =</span> <span class="st">"fwd"</span>, <span class="at">y_max =</span> <span class="fl">0.70</span>) <span class="sc">+</span></span>
-<span id="cb48-55"><a href="#cb48-55" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ggtitle</span>(<span class="fu">paste0</span>(X, <span class="st">" nreads="</span>, n_readsa, <span class="st">" Forward"</span>)),</span>
-<span id="cb48-56"><a href="#cb48-56" aria-hidden="true" tabindex="-1"></a>      <span class="fu">get_dmg_decay_fit</span>(<span class="at">df =</span> dt1 <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">label =</span> sample)  <span class="sc">%&gt;%</span> <span class="fu">inner_join</span>(sel_tax) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(rank <span class="sc">==</span> rank), <span class="at">orient =</span> <span class="st">"rev"</span>, <span class="at">y_max =</span> <span class="fl">0.70</span>) <span class="sc">+</span></span>
-<span id="cb48-57"><a href="#cb48-57" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ggtitle</span>(<span class="fu">paste0</span>(X, <span class="st">" nreads="</span>, n_readsa, <span class="st">" Reverse"</span>))</span>
-<span id="cb48-58"><a href="#cb48-58" aria-hidden="true" tabindex="-1"></a>    ), <span class="at">align =</span> <span class="st">"hv"</span>)</span>
-<span id="cb48-59"><a href="#cb48-59" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggsave</span>(<span class="fu">paste0</span>(<span class="st">"figures/"</span>, X, <span class="st">"-dmg.pdf"</span>), <span class="at">plot =</span> <span class="fu">last_plot</span>(), <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">4</span>)</span>
-<span id="cb48-60"><a href="#cb48-60" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb48-61"><a href="#cb48-61" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> tax_g_list </span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>purrr<span class="sc">::</span><span class="fu">map</span>(tax_g_list, <span class="cf">function</span>(X, nrank) {</span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>  sel_tax <span class="ot">&lt;-</span> dt2 <span class="sc">%&gt;%</span></span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">label =</span> sample) <span class="sc">%&gt;%</span></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(name <span class="sc">==</span> X) <span class="sc">%&gt;%</span></span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(rank <span class="sc">==</span> rank) <span class="sc">%&gt;%</span></span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(name, label) <span class="sc">%&gt;%</span></span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(name)</span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">nrow</span>(sel_tax) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a>    n_readsa <span class="ot">&lt;-</span> dt2 <span class="sc">%&gt;%</span></span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a>      <span class="fu">inner_join</span>(sel_tax) <span class="sc">%&gt;%</span></span>
+<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(rank <span class="sc">==</span> rank) <span class="sc">%&gt;%</span></span>
+<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pull</span>(nreads) <span class="sc">%&gt;%</span></span>
+<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sum</span>()</span>
+<span id="cb48-29"><a href="#cb48-29" aria-hidden="true" tabindex="-1"></a>    ggpubr<span class="sc">::</span><span class="fu">ggarrange</span>(<span class="at">plotlist =</span> <span class="fu">list</span>(</span>
+<span id="cb48-30"><a href="#cb48-30" aria-hidden="true" tabindex="-1"></a>      <span class="fu">get_dmg_decay_fit</span>(<span class="at">df =</span> dt2 <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">label =</span> sample) <span class="sc">%&gt;%</span> <span class="fu">inner_join</span>(sel_tax) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(rank <span class="sc">==</span> rank), <span class="at">orient =</span> <span class="st">"fwd"</span>, <span class="at">y_max =</span> <span class="fl">0.70</span>) <span class="sc">+</span></span>
+<span id="cb48-31"><a href="#cb48-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ggtitle</span>(<span class="fu">paste0</span>(X, <span class="st">" nreads="</span>, n_readsa, <span class="st">" Forward"</span>)),</span>
+<span id="cb48-32"><a href="#cb48-32" aria-hidden="true" tabindex="-1"></a>      <span class="fu">get_dmg_decay_fit</span>(<span class="at">df =</span> dt2 <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">label =</span> sample)  <span class="sc">%&gt;%</span> <span class="fu">inner_join</span>(sel_tax) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(rank <span class="sc">==</span> rank), <span class="at">orient =</span> <span class="st">"rev"</span>, <span class="at">y_max =</span> <span class="fl">0.70</span>) <span class="sc">+</span></span>
+<span id="cb48-33"><a href="#cb48-33" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ggtitle</span>(<span class="fu">paste0</span>(X, <span class="st">" nreads="</span>, n_readsa, <span class="st">" Reverse"</span>))</span>
+<span id="cb48-34"><a href="#cb48-34" aria-hidden="true" tabindex="-1"></a>    ), <span class="at">align =</span> <span class="st">"hv"</span>)</span>
+<span id="cb48-35"><a href="#cb48-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggsave</span>(<span class="fu">paste0</span>(<span class="st">"figures/"</span>, X, <span class="st">"-dmg.pdf"</span>), <span class="at">plot =</span> <span class="fu">last_plot</span>(), <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">4</span>)</span>
+<span id="cb48-36"><a href="#cb48-36" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb48-37"><a href="#cb48-37" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="fig-authentication-fagusovisdmg" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -2152,86 +2226,7 @@ Example only - do not run!
 <img src="assets/images/chapters/authentication/Fagus_Ovis-dmg.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-authentication-fagusovisdmg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.10: Deamination patterns for sheep (<em>Ovis</em>) and beech (<em>Fagus</em>) reads.
-</figcaption>
-</figure>
-</div>
-</section>
-</section>
-<section id="amplitude-of-damage-vs-significance" class="level3" data-number="12.5.6">
-<h3 data-number="12.5.6" class="anchored" data-anchor-id="amplitude-of-damage-vs-significance"><span class="header-section-number">12.5.6</span> Amplitude of damage vs Significance</h3>
-<p>We provide an R script to investigate the main statistics.</p>
-<p>Here we visualise the amplitude of damage (A) and its significance (Zfit), for the full dataset but filtering it to a minimum of 100 reads and at the genus level (<a href="#fig-authentication-fig8" class="quarto-xref">Figure&nbsp;<span>12.11</span></a>).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Subset dataset animal and plants at the genus level</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>dt2 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(nreads <span class="sc">&gt;</span> <span class="dv">100</span>, <span class="fu">grepl</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">bgenus</span><span class="sc">\\</span><span class="st">b"</span>, rank), <span class="fu">grepl</span>(<span class="st">"Metazoa"</span>, taxa_path) <span class="sc">|</span> <span class="fu">grepl</span>(<span class="st">"Viridiplant"</span>, taxa_path))</span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Adding factor column for Kingdom</span></span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>dt2 <span class="ot">&lt;-</span> dt2 <span class="sc">%&gt;%</span> </span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Kingdom =</span>   <span class="co"># creating our new column</span></span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">case_when</span>(<span class="fu">grepl</span>(<span class="st">"Viridiplant"</span>, taxa_path) <span class="sc">~</span> <span class="st">"Viridiplantae"</span>,</span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">grepl</span>(<span class="st">"Metazoa"</span>,taxa_path) <span class="sc">~</span> <span class="st">"Metazoa"</span>))</span>
-<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Plotting  amplitude of damage vs its significance and saving as pdf file</span></span>
-<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">"figures/p1.pdf"</span>, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>)</span>
-<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dt2, <span class="fu">aes</span>(<span class="at">y=</span>A, <span class="at">x=</span>Zfit)) <span class="sc">+</span> </span>
-<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size=</span>nreads, <span class="at">col=</span>Kingdom)) <span class="sc">+</span></span>
-<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span><span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#8B1A1A"</span>, <span class="st">"#458B00"</span>))<span class="sc">+</span></span>
-<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_continuous</span>(<span class="at">labels =</span> <span class="cf">function</span>(x) <span class="fu">format</span>(x, <span class="at">scientific =</span> <span class="cn">FALSE</span>)) <span class="sc">+</span></span>
-<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"significance"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"damage"</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span>
-<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="fig-authentication-fig8" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-authentication-fig8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/images/chapters/authentication/p2.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-authentication-fig8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.11: Amplitude of damage (A) vs significance (Zfit) for animals and plants.
-</figcaption>
-</figure>
-</div>
-</section>
-<section id="amplitude-of-damage-and-mean-fragment-length-through-time" class="level3" data-number="12.5.7">
-<h3 data-number="12.5.7" class="anchored" data-anchor-id="amplitude-of-damage-and-mean-fragment-length-through-time"><span class="header-section-number">12.5.7</span> Amplitude of damage and mean fragment length through time</h3>
-<p>Here we visualise the amplitude of damage (A) and the mean length of the fragments (mean_rlen) by date (BP) for the filtered dataset with a minimum of 100 reads and at the genus level (<a href="#fig-authentication-fig9" class="quarto-xref">Figure&nbsp;<span>12.12</span></a>).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Plotting damage (A) by period (dates BP)</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>p2a<span class="ot">&lt;-</span> dt2 <span class="sc">%&gt;%</span></span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Date_BP =</span> <span class="fu">fct_relevel</span>(Date_BP,</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"6100"</span>,<span class="st">"5300"</span>,<span class="st">"4100"</span>,<span class="st">"3900"</span>,<span class="st">"3000"</span>, <span class="st">"800"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>A, <span class="at">y=</span>Date_BP))<span class="sc">+</span> </span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>A, <span class="at">y=</span>Date_BP, <span class="at">fill =</span> sample))<span class="sc">+</span></span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">fill =</span> sample), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">stroke =</span> .<span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.20</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fl">0.20</span>, <span class="at">by =</span> <span class="fl">0.05</span>)) <span class="sc">+</span></span>
-<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>))</span>
-<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>p2a</span>
-<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Plotting mean length (mean_rlen) by period (dates BP)</span></span>
-<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>p2b<span class="ot">&lt;-</span> dt2 <span class="sc">%&gt;%</span></span>
-<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Date_BP =</span> <span class="fu">fct_relevel</span>(Date_BP,</span>
-<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"6100"</span>,<span class="st">"5300"</span>,<span class="st">"4100"</span>,<span class="st">"3900"</span>,<span class="st">"3000"</span>, <span class="st">"800"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>mean_rlen, <span class="at">y=</span>Date_BP))<span class="sc">+</span> </span>
-<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>mean_rlen, <span class="at">y=</span>Date_BP, <span class="at">fill =</span> sample)) <span class="sc">+</span></span>
-<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">fill =</span> sample), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">stroke =</span> .<span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">80</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">80</span>, <span class="at">by =</span> <span class="dv">10</span>)) <span class="sc">+</span></span>
-<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>))</span>
-<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a>p2b</span>
-<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a><span class="co">#Combining the plots and saving as pdf file</span></span>
-<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">"figures/p2.pdf"</span>, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>)</span>
-<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">grid.arrange</span>(p2a, p2b,</span>
-<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">nrow =</span> <span class="dv">1</span>)</span>
-<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="fig-authentication-fig9" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-authentication-fig9-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/images/chapters/authentication/p3.png" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-authentication-fig9-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12.12: Amplitude of damage (A) and mean fragment length (mean_rlen) through time.
+Figure&nbsp;12.12: Deamination patterns for sheep (<em>Ovis</em>) and beech (<em>Fagus</em>) reads.
 </figcaption>
 </figure>
 </div>
@@ -2246,8 +2241,8 @@ Tip
 </div>
 <div class="callout-body-container callout-body">
 <p>Once finished examining the plots you can quit R</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Press 'n' when asked if you want to save your workspace image.</span></span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">quit()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Press 'n' when asked if you want to save your workspace image.</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">quit()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -2263,6 +2258,7 @@ Tip
 <p>You can manually navigate to the folder <code>metadmg/figures/</code> And click “Open folder” You can double-click on the pdf files to visualise them.</p>
 </div>
 </div>
+</section>
 </section>
 </section>
 <section id="optional-clean-up" class="level2" data-number="12.6">
@@ -2282,12 +2278,12 @@ Pro Tip
 <p>Always be VERY careful when using <code>rm -r</code>. Check 3x that the path you are specifying is exactly what you want to delete and nothing more before pressing ENTER!</p>
 </div>
 </div>
-<div class="sourceCode" id="cb52"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> /<span class="op">&lt;</span>PATH<span class="op">&gt;</span>/<span class="op">&lt;</span>TO<span class="op">&gt;</span>/authentication<span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> /<span class="op">&lt;</span>PATH<span class="op">&gt;</span>/<span class="op">&lt;</span>TO<span class="op">&gt;</span>/authentication<span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once deleted we can move elsewhere (e.g.&nbsp;<code>cd ~</code>).</p>
 <p>We can also get out of the <code>conda</code> environment with.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Then to delete the conda environment.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> remove <span class="at">--name</span> authentication <span class="at">--all</span> <span class="at">-y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> remove <span class="at">--name</span> authentication <span class="at">--all</span> <span class="at">-y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="summary" class="level2" data-number="12.7">
 <h2 data-number="12.7" class="anchored" data-anchor-id="summary"><span class="header-section-number">12.7</span> Summary</h2>
@@ -2305,7 +2301,7 @@ Pro Tip
 </section>
 <section id="acknowledgments" class="level2" data-number="12.8">
 <h2 data-number="12.8" class="anchored" data-anchor-id="acknowledgments"><span class="header-section-number">12.8</span> Acknowledgments</h2>
-<p>We thank Mikkel Winther Pedersen and Antonio Fernandez Guerra for their contribution to the development of the <code>metaDMG</code> section.</p>
+<p>We thank Mikkel Winther Pedersen and Antonio Fernandez Guerra for their contribution to the development of the <code>metaDMG</code> section. G.Z. would like to thank the European Research Council (ERC) under the European Union’s Horizon 2020 research and innovation programme (Grant Agreement No.&nbsp;856488, project SEACHANGE).</p>
 </section>
 <section id="recommended-reading" class="level2" data-number="12.9">
 <h2 data-number="12.9" class="anchored" data-anchor-id="recommended-reading"><span class="header-section-number">12.9</span> Recommended Reading</h2>
@@ -2340,8 +2336,8 @@ Pochon, Zoé, Nora Bergfeldt, Emrah Kırdök, Mário Vicente, Thijessen Naidoo, 
 <div id="ref-Wang2022-fr" class="csl-entry" role="listitem">
 Wang, Yucheng, Thorfinn Sand Korneliussen, Luke E Holman, Andrea Manica, and Mikkel Winther Pedersen. 2022. <span>“<em>Ngs</em>LCA—a Toolkit for Fast and Flexible Lowest Common Ancestor Inference and Taxonomic Profiling of Metagenomic Data.”</span> <em>Methods in Ecology and Evolution</em> 13 (12): 2699–2708. <a href="https://doi.org/10.1111/2041-210x.14006">https://doi.org/10.1111/2041-210x.14006</a>.
 </div>
-<div id="ref-Zampirolo2023.12.01.569562" class="csl-entry" role="listitem">
-Zampirolo, Giulia, Luke E. Holman, Rikai Sawafuji, Michaela Ptáková, Lenka Kovačiková, Petr Šı́da, Petr Pokorný, Mikkel Winther Pedersen, and Matthew Walls. 2023. <span>“Early Pastoralism in Central European Forests: Insights from Ancient Environmental Genomics.”</span> <em>bioRxiv</em>. <a href="https://doi.org/10.1101/2023.12.01.569562">https://doi.org/10.1101/2023.12.01.569562</a>.
+<div id="ref-zampirolo2024tracing" class="csl-entry" role="listitem">
+Zampirolo, Giulia, Luke E Holman, Rikai Sawafuji, Michaela Ptáková, Lenka Kovačiková, Petr Šı́da, Petr Pokornỳ, Mikkel Winther Pedersen, and Matthew Walls. 2024. <span>“Tracing Early Pastoralism in Central Europe Using Sedimentary Ancient DNA.”</span> <em>Current Biology</em> 34 (20): 4650–61. <a href="https://doi.org/10.1016/j.cub.2024.08.047">https://doi.org/10.1016/j.cub.2024.08.047</a>.
 </div>
 </div>
 </section>
