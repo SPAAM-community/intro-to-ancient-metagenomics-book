@@ -152,13 +152,14 @@ Next we can re-visit AMDirT (see [Accessing Ancient Metagenomic Data](accessing-
     - Press the burger icon on the column
     - Press the filter tab and deselect everything
     - Search _GLZ002_ and select in filter menu 
-    - Search _KZL002_ and select in filter menu
+    - Search _KZL002_ and select in filter menu (careful: _K**Z**L_ not _K**L**Z_!) 
     - Close filter menu and select the two rows
 3. Press the Validate Selection button
 4. Press the 'Download Curl sample download script', 'Download nf-core/eager input TSV',  and 'Download Citations as BibTex' buttons
 5. Move the downloaded files into `eager/` of this tutorial's directory 
-  - i.e., if the files were downloaded to we `Downloads/` folder rather than the chapters directory,
-  - e.g., assuming we've got no other previous downloads we can run `mv ~/Downloads/AncientMetagenomeDir_* eager/`
+    - i.e., if the files were downloaded to we `Downloads/` folder rather than the chapters directory,
+    - e.g., assuming we've got no other previous downloads we can run `mv ~/Downloads/AncientMetagenomeDir_* eager/`
+6. Close AMDiRT in the web browser and shut it down in the terminal with <kdb>ctrl</kbd> + <kbd>c</kbd>
 
 ::: {.callout-tip} 
 We won't actually use the BibTex citations file for anything in this tutorial, but it is good habit to _always_ to record and save all citations of any software or data we use!
@@ -166,10 +167,8 @@ We won't actually use the BibTex citations file for anything in this tutorial, b
 
 To download the FASTQ files
 
-1.
-Move into the `eager/` directory
-2.
-Run `bash AncientMetagenomeDir_curl_download_script.sh` to download the files (this may take ~3 minutes)
+1. Move into the `eager/` directory
+2. Run `bash AncientMetagenomeDir_curl_download_script.sh` to download the files (this may take ~3 minutes)
 
 Next we now inspect the AMDirT generated input TSV file for nf-core/eager!
 
@@ -225,7 +224,7 @@ conda activate ancient-metagenomic-pipelines
 Now we can construct an eager command from within the `data/` directory so that it looks like this.
 
 ```bash
-nextflow run nf-core/eager -r 2.4.7 \
+nextflow run nf-core/eager -r 2.5.3 \
 -profile docker \
 --fasta ../reference/GCF_001293415.1_ASM129341v1_genomic.fna \
 --input AncientMetagenomeDir_nf_core_eager_input_table.tsv \
@@ -252,7 +251,7 @@ This run will take between 20m-40m to run on a standard laptop! Time for a break
 
 So what is this command doing? The different parameters do the following:
 
-1. Tell `Nextflow` to run the nf-core/eager pipeline with version 2.4.7
+1. Tell `nextflow` to run the nf-core/eager pipeline with version 2.4.7
 2. Specify which computing and software environment to use with `-profile`
     - In this case we are running locally so we don't specify a computing environment (such as a configuration for an institutional HPC) 
     - We use `docker` as our container engine, which downloads all the software and specific versions needed for nf-core/eager in immutable 'containers', to ensure nothing get broken and is as nf-core/eager expects
@@ -373,7 +372,7 @@ nf-core/eager tries to only save the 'useful' files.
 
 Everyday useful files for ancient (microbial) (meta)genomics typically are in folders such as:
 
-- `deduplication/` or `merged_bams`
+- `deduplication/` or `merged_bams/`
   - These contain the most basic BAM files we would want to use for downstream analyses (and used in the rest of the genomic workflow of the pipeline)
   - They contain deduplicated BAM files (i.e., with PCR artefacts removed)
   - `merged_bams/` 
@@ -418,7 +417,18 @@ If we're impatient, and our nf-core/eager run hasn't finished yet, we can cancel
 :::
 
 In here we should see a bunch of files, but we should open the `multiqc_report.html` file in our browser.
-we can either do this via the command-line (e.g. for firefox `firefox multiqc_report.html`) or navigate to the file using our file browser and double clicking on the HTML file.
+We can either do this via the command-line (e.g. for firefox `firefox multiqc_report.html`) or navigate to the file using our file browser and double clicking on the HTML file.
+
+::: {.callout-note}
+During the summer school if you cannot open the MultiQC HTML file directly in the VM, copy the file to your Downloads folder and open from there.e.g.
+
+For example the following two commands.
+
+```bash
+cp multiqc_report.html ~/Downloads/
+firefox ~/Downloads/multiqc_report.html
+```
+:::
 
 Once opened we will see a table, and below it many figures and other tables ([@fig-ancientmetagenomicpipelines-multiqcscreenshot]).
 All of these statistics can help we evaluate the quality of our data, pipeline run, and also possibly some initial results! 
