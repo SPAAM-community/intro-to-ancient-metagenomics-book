@@ -207,16 +207,24 @@ Now, after we have detected an interesting *Y. pestis* hit, we would like to fol
 ::: {.callout-note title="Self guided: data preparation" collapse=true}
 ```bash
 cd /<path/<to>/authentication/bowtie2
+```
 
+```
 ## Download reference genome
 NCBI=https://ftp.ncbi.nlm.nih.gov; ID=GCF_000222975.1_ASM22297v1
 wget $NCBI/genomes/all/GCF/000/222/975/${ID}/${ID}_genomic.fna.gz
 ```
 :::
 
+Change into the `bowtie2/` folder.
+
 ```bash
 cd /<path/<to>/authentication/bowtie2
+```
 
+And then prepare the reference genome and align the reads against the reference.
+
+```bash
 ## Prepare reference genome and build Bowtie2 index
 gunzip GCF_000222975.1_ASM22297v1_genomic.fna.gz; echo NC_017168.1 > region.bed
 seqtk subseq GCF_000222975.1_ASM22297v1_genomic.fna region.bed > NC_017168.1.fasta
@@ -245,7 +253,7 @@ Load R by running `R` in your terminal
 R
 ``` 
 
-Note the following may take a minute or so to run.
+And run the following R code to generate a coverage plot.
 
 ```{r, eval = F}
 # Read output of samtools depth commans
@@ -270,16 +278,21 @@ mtext(paste0(round((sum(df$N_reads > 0) / length(df$N_reads)) * 100, 2),
 "% of genome covered"), cex = 0.8)
 ```
 
+::: {.callout-warning}
+Note the command above may take a minute or so to run.
+:::
+
+In the R script above, we simply split the reference genome into *N_tiles* tiles and compute the breadth of coverage (number of reference nucleotides covered by at least one read normalised by the total length) locally in each tile.
+By visualising how the local breadth of coverage changes from tile to tile, we can monitor the distribution of the reads across the reference genome. In the evenness of coverage figure above, the reads seem to cover all parts of the reference genome uniformly, which is a good evidence of true-positive detection, even though the total mean breadth of coverage is low due to the low total number of reads.
+
+![](assets/images/chapters/authentication/Evenness_of_coverage.png)
+
 Once finished examining the plot you can quit R
 
 ```bash
 ## Press 'n' when asked if you want to save your workspace image.
 quit()
 ```
-
-![](assets/images/chapters/authentication/Evenness_of_coverage.png)
-
-In the R script above, we simply split the reference genome into *N_tiles* tiles and compute the breadth of coverage (number of reference nucleotides covered by at least one read normalised by the total length) locally in each tile. By visualising how the local breadth of coverage changes from tile to tile, we can monitor the distribution of the reads across the reference genome. In the evenness of coverage figure above, the reads seem to cover all parts of the reference genome uniformly, which is a good evidence of true-positive detection, even though the total mean breadth of coverage is low due to the low total number of reads.
 
 ### Alignment quality
 
@@ -307,7 +320,9 @@ hist(as.numeric(readLines("mapq.txt")), col = "darkred", breaks = 100)
 
 ![](assets/images/chapters/authentication/MAPQ.png)
 
-Note that MAPQ scores are computed slightly differently for Bowtie and BWA, so they are not directly comparable, however, for both MAPQ ~ 10-30, as in the histograms below, indicates good affinity of the DNA reads to the reference genome. here we provide some examples of how typical MAPQ histograms for Bowtie2 and BWA alignments can look like:
+Note that MAPQ scores are computed slightly differently for Bowtie and BWA, so they are not directly comparable, however, for both MAPQ ~ 10-30, as in the histograms below, indicates good affinity of the DNA reads to the reference genome. 
+
+We can see some examples of how typical MAPQ histograms for Bowtie2 and BWA alignments on real data below.
 
 ![](assets/images/chapters/authentication/mapq.png)
 
@@ -355,9 +370,18 @@ Deamination profile of a damaged DNA demonstrate an enrichment of C / T polymorp
 mapDamage -i Y.pestis_sample10.sorted.bam -r NC_017168.1.fasta -d mapDamage_results/ --merge-reference-sequences --no-stats
 ```
 
+::: {.callout-note}
+During the summer school, you can view the two generated PDFs by running the following command
+
+```bash
+evince mapDamage_results/Fragmisincorporation_plot.pdf
+evince mapDamage_results/Length_plot.pdf
+```
+:::
+
 ![](assets/images/chapters/authentication/deamination.png)
 
-maDamage delivers a bunch of useful statistics, among other read length distribution can be checked. A typical mode of DNA reads should be within a range 30-70 base-pairs in order to be a good evidence of DNA fragmentation. Reads longer tha 100 base-pairs are more likely to originate from modern contamination.
+mapDamage delivers a bunch of useful statistics, among other read length distribution can be checked. A typical mode of DNA reads should be within a range 30-70 base-pairs in order to be a good evidence of DNA fragmentation. Reads longer tha 100 base-pairs are more likely to originate from modern contamination.
 
 ![](assets/images/chapters/authentication/read_length.png)
 
@@ -382,6 +406,10 @@ pmd_scores <- read.delim("PMDscores.txt", header = FALSE, sep = "\t")
 hist(pmd_scores$V4, breaks = 1000, xlab = "PMDscores")
 ```
 
+![](assets/images/chapters/authentication/pmd_scores.png)
+
+Typically, reads with PMD scores greater than 3 are considered to be reliably ancient, i.e. damaged, and can be extracted for taking a closer look. Therefore PMDtools is great for separating ancient reads from modern contaminant reads.
+
 Once finished examining the plot you can quit R
 
 ```bash
@@ -389,11 +417,9 @@ Once finished examining the plot you can quit R
 quit()
 ```
 
-![](assets/images/chapters/authentication/pmd_scores.png)
+As mapDamage, PMDtools can also compute deamination profile. However, the advantage of PMDtools that it can compute deamination profile for UDG / USER treated samples (with the flag *--CpG*). For this purpose, PMDtools uses only CpG sites which escape the treatment, so deamination is not gone completely and there is a chance to authenticate treated samples. Computing deamination pattern with PMDtools can be achieved with the following command line commands.
 
-Typically, reads with PMD scores greater than 3 are considered to be reliably ancient, i.e. damaged, and can be extracted for taking a closer look. Therefore PMDtools is great for separating ancient reads from modern contaminant reads.
-
-As mapDamage, PMDtools can also compute deamination profile. However, the advantage of PMDtools that it can compute deamination profile for UDG / USER treated samples (with the flag *--CpG*). For this purpose, PMDtools uses only CpG sites which escape the treatment, so deamination is not gone completely and there is a chance to authenticate treated samples. Computing deamination pattern with PMDtools can be achieved with the following command line (please note that the scripts *pmdtools.0.60.py* and *plotPMD.v2.R* can be downloaded from the github repository here https://github.com/pontussk/PMDtools):
+::: *plotPMD.v2.R* can be downloaded from the github repository here https://github.com/pontussk/PMDtools):
 
 ```bash
 samtools view Y.pestis_sample10.bam | pmdtools --platypus > PMD_temp.txt
@@ -402,7 +428,7 @@ samtools view Y.pestis_sample10.bam | pmdtools --platypus > PMD_temp.txt
 We can then run simple R commands directly from the terminal (without loading R itself with) the following.
 
 ```bash
-R CMD BATCH plotPMD
+R CMD BATCH plotPMD.v2.R
 ```
 
 ![](assets/images/chapters/authentication/PMD_Skoglund_et_al_2015_Current_Biology.png)
