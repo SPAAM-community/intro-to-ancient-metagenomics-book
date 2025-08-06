@@ -825,7 +825,7 @@ options:
 <p>Here we use fastp to preprocess a pair of FASTQ files. The code specifies the input files, merges the paired-end reads on their overlaps, removes duplicate reads, and generates JSON and HTML reports. The output files are saved in the <code>../results/fastp/ directory</code>.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fastp</span> <span class="dt">\</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--in1</span> ../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq.gz <span class="dt">\</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--in2</span> ../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq.gz <span class="dt">\</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--in2</span> ../data/subsampled/ERR5766177_PE.mapped.hostremoved.rev.fq_subsample_1000000.fastq.gz <span class="dt">\</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--merge</span> <span class="dt">\</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--merged_out</span> ../results/fastp/ERR5766177.merged.fastq.gz <span class="dt">\</span></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--include_unmerged</span> <span class="dt">\</span></span>
@@ -849,46 +849,46 @@ total reads: 1000000
 total bases: 101000000
 Q20 bases: 99440729(98.4562%)
 Q30 bases: 94683150(93.7457%)
+Q40 bases: 27968326(27.6914%)
 
 Read2 before filtering:
 total reads: 1000000
 total bases: 101000000
-Q20 bases: 99440729(98.4562%)
-Q30 bases: 94683150(93.7457%)
+Q20 bases: 96103171(95.1517%)
+Q30 bases: 89042465(88.1609%)
+Q40 bases: 24849295(24.6033%)
 
 Merged and filtered:
-total reads: 1994070
-total bases: 201397311
-Q20 bases: 198330392(98.4772%)
-Q30 bases: 188843169(93.7665%)
+total reads: 1312040
+total bases: 122538903
+Q20 bases: 119762428(97.7342%)
+Q30 bases: 113200374(92.3791%)
+Q40 bases: 35574405(29.0311%)
 
 Filtering result:
-reads passed filter: 1999252
-reads failed due to low quality: 728
-reads failed due to too many N: 20
+reads passed filter: 1985074
+reads failed due to low quality: 14419
+reads failed due to too many N: 507
 reads failed due to too short: 0
-reads with adapter trimmed: 282
-bases trimmed due to adapters: 18654
-reads corrected by overlap analysis: 0
-bases corrected by overlap analysis: 0
+reads with adapter trimmed: 889290
+bases trimmed due to adapters: 34036630
+reads corrected by overlap analysis: 26668
+bases corrected by overlap analysis: 36019
 
-Duplication rate: 0.2479%
+Duplication rate: 0.0192%
 
-Insert size peak (evaluated by paired-end reads): 31
+Insert size peak (evaluated by paired-end reads): 43
 
-Read pairs merged: 228
-% of original read pairs: 0.0228%
-% in reads after filtering: 0.0114339%
+Read pairs merged: 672964
+% of original read pairs: 67.2964%
+% in reads after filtering: 51.2914%
 
 
 JSON report: ../results/fastp/ERR5766177.fastp.json
 HTML report: ../results/fastp/ERR5766177.fastp.html
 
-fastp --in1 ../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq.gz \
---in2 ../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq.gz --merge \
---merged_out ../results/fastp/ERR5766177.merged.fastq.gz --include_unmerged --dedup \
---json ../results/fastp/ERR5766177.fastp.json --html ../results/fastp/ERR5766177.fastp.html
-fastp v0.23.2, time used: 11 seconds</code></pre>
+fastp --in1 ../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq.gz --in2 ../data/subsampled/ERR5766177_PE.mapped.hostremoved.rev.fq_subsample_1000000.fastq.gz --merge --merged_out ../results/fastp/ERR5766177.merged.fastq.gz --include_unmerged --dedup --json ../results/fastp/ERR5766177.fastp.json --html ../results/fastp/ERR5766177.fastp.html 
+fastp v1.0.1, time used: 8 seconds</code></pre>
 </div>
 </div>
 </div>
@@ -917,7 +917,7 @@ Answer
 </div>
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Here, only 228 read pairs were merged. This is due to the length of the reads of 100bp, and length of the DNA fragments. If you would use fewer cycles, and have shorter DNA fragments, you would expect this number to go up.</p>
+<p>Here, only 672964 read pairs were merged. This is due to the length of the reads of 100bp, and length of the DNA fragments. If you would use fewer cycles, and have shorter DNA fragments, you would expect this number to go up.</p>
 </div>
 </div>
 </div>
@@ -1795,23 +1795,23 @@ Table&nbsp;10.4: A three column table of TAXIDs and the organisms corresponding 
 Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding relative abundance, and the attached taxonomic path associated with the TAXID, but also the rank and name of the particular taxonomic ID
 </figcaption>
 <div aria-describedby="tbl-taxonomicprofiling-taxidtablewithpathsep-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div id="ldzwmsjsre" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
-<style>#ldzwmsjsre table {
+<div id="qmmmtfiubz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
+<style>#qmmmtfiubz table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ldzwmsjsre thead, #ldzwmsjsre tbody, #ldzwmsjsre tfoot, #ldzwmsjsre tr, #ldzwmsjsre td, #ldzwmsjsre th {
+#qmmmtfiubz thead, #qmmmtfiubz tbody, #qmmmtfiubz tfoot, #qmmmtfiubz tr, #qmmmtfiubz td, #qmmmtfiubz th {
   border-style: none;
 }
 
-#ldzwmsjsre p {
+#qmmmtfiubz p {
   margin: 0;
   padding: 0;
 }
 
-#ldzwmsjsre .gt_table {
+#qmmmtfiubz .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1837,12 +1837,12 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   border-left-color: #D3D3D3;
 }
 
-#ldzwmsjsre .gt_caption {
+#qmmmtfiubz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ldzwmsjsre .gt_title {
+#qmmmtfiubz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1854,7 +1854,7 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   border-bottom-width: 0;
 }
 
-#ldzwmsjsre .gt_subtitle {
+#qmmmtfiubz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1866,7 +1866,7 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   border-top-width: 0;
 }
 
-#ldzwmsjsre .gt_heading {
+#qmmmtfiubz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1878,13 +1878,13 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   border-right-color: #D3D3D3;
 }
 
-#ldzwmsjsre .gt_bottom_border {
+#qmmmtfiubz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ldzwmsjsre .gt_col_headings {
+#qmmmtfiubz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1899,7 +1899,7 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   border-right-color: #D3D3D3;
 }
 
-#ldzwmsjsre .gt_col_heading {
+#qmmmtfiubz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1919,7 +1919,7 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   overflow-x: hidden;
 }
 
-#ldzwmsjsre .gt_column_spanner_outer {
+#qmmmtfiubz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1931,15 +1931,15 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   padding-right: 4px;
 }
 
-#ldzwmsjsre .gt_column_spanner_outer:first-child {
+#qmmmtfiubz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ldzwmsjsre .gt_column_spanner_outer:last-child {
+#qmmmtfiubz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ldzwmsjsre .gt_column_spanner {
+#qmmmtfiubz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1951,11 +1951,11 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   width: 100%;
 }
 
-#ldzwmsjsre .gt_spanner_row {
+#qmmmtfiubz .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ldzwmsjsre .gt_group_heading {
+#qmmmtfiubz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1981,7 +1981,7 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   text-align: left;
 }
 
-#ldzwmsjsre .gt_empty_group_heading {
+#qmmmtfiubz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1996,15 +1996,15 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   vertical-align: middle;
 }
 
-#ldzwmsjsre .gt_from_md > :first-child {
+#qmmmtfiubz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ldzwmsjsre .gt_from_md > :last-child {
+#qmmmtfiubz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ldzwmsjsre .gt_row {
+#qmmmtfiubz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2023,7 +2023,7 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   overflow-x: hidden;
 }
 
-#ldzwmsjsre .gt_stub {
+#qmmmtfiubz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2036,7 +2036,7 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   padding-right: 5px;
 }
 
-#ldzwmsjsre .gt_stub_row_group {
+#qmmmtfiubz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2050,15 +2050,15 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   vertical-align: top;
 }
 
-#ldzwmsjsre .gt_row_group_first td {
+#qmmmtfiubz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ldzwmsjsre .gt_row_group_first th {
+#qmmmtfiubz .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ldzwmsjsre .gt_summary_row {
+#qmmmtfiubz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2068,16 +2068,16 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   padding-right: 5px;
 }
 
-#ldzwmsjsre .gt_first_summary_row {
+#qmmmtfiubz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ldzwmsjsre .gt_first_summary_row.thick {
+#qmmmtfiubz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ldzwmsjsre .gt_last_summary_row {
+#qmmmtfiubz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2087,7 +2087,7 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   border-bottom-color: #D3D3D3;
 }
 
-#ldzwmsjsre .gt_grand_summary_row {
+#qmmmtfiubz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2097,7 +2097,7 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   padding-right: 5px;
 }
 
-#ldzwmsjsre .gt_first_grand_summary_row {
+#qmmmtfiubz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2107,7 +2107,7 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   border-top-color: #D3D3D3;
 }
 
-#ldzwmsjsre .gt_last_grand_summary_row_top {
+#qmmmtfiubz .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2117,11 +2117,11 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   border-bottom-color: #D3D3D3;
 }
 
-#ldzwmsjsre .gt_striped {
+#qmmmtfiubz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ldzwmsjsre .gt_table_body {
+#qmmmtfiubz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2130,7 +2130,7 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   border-bottom-color: #D3D3D3;
 }
 
-#ldzwmsjsre .gt_footnotes {
+#qmmmtfiubz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2144,7 +2144,7 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   border-right-color: #D3D3D3;
 }
 
-#ldzwmsjsre .gt_footnote {
+#qmmmtfiubz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2153,7 +2153,7 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   padding-right: 5px;
 }
 
-#ldzwmsjsre .gt_sourcenotes {
+#qmmmtfiubz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2167,7 +2167,7 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   border-right-color: #D3D3D3;
 }
 
-#ldzwmsjsre .gt_sourcenote {
+#qmmmtfiubz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2175,72 +2175,72 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
   padding-right: 5px;
 }
 
-#ldzwmsjsre .gt_left {
+#qmmmtfiubz .gt_left {
   text-align: left;
 }
 
-#ldzwmsjsre .gt_center {
+#qmmmtfiubz .gt_center {
   text-align: center;
 }
 
-#ldzwmsjsre .gt_right {
+#qmmmtfiubz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ldzwmsjsre .gt_font_normal {
+#qmmmtfiubz .gt_font_normal {
   font-weight: normal;
 }
 
-#ldzwmsjsre .gt_font_bold {
+#qmmmtfiubz .gt_font_bold {
   font-weight: bold;
 }
 
-#ldzwmsjsre .gt_font_italic {
+#qmmmtfiubz .gt_font_italic {
   font-style: italic;
 }
 
-#ldzwmsjsre .gt_super {
+#qmmmtfiubz .gt_super {
   font-size: 65%;
 }
 
-#ldzwmsjsre .gt_footnote_marks {
+#qmmmtfiubz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ldzwmsjsre .gt_asterisk {
+#qmmmtfiubz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ldzwmsjsre .gt_indent_1 {
+#qmmmtfiubz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ldzwmsjsre .gt_indent_2 {
+#qmmmtfiubz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ldzwmsjsre .gt_indent_3 {
+#qmmmtfiubz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ldzwmsjsre .gt_indent_4 {
+#qmmmtfiubz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ldzwmsjsre .gt_indent_5 {
+#qmmmtfiubz .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ldzwmsjsre .katex-display {
+#qmmmtfiubz .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ldzwmsjsre div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#qmmmtfiubz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2375,23 +2375,23 @@ Table&nbsp;10.5: A five column table of TAXIDs and the organisms corresponding r
 Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding relative abundance, and the attached taxonomic path associated with the TAXID, but also the rank and name of the particular taxonomic ID, filtered to only species
 </figcaption>
 <div aria-describedby="tbl-taxonomicprofiling-taxidtablewithpathspecies-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div id="ncvixgmekq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
-<style>#ncvixgmekq table {
+<div id="pbefnegdhe" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
+<style>#pbefnegdhe table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ncvixgmekq thead, #ncvixgmekq tbody, #ncvixgmekq tfoot, #ncvixgmekq tr, #ncvixgmekq td, #ncvixgmekq th {
+#pbefnegdhe thead, #pbefnegdhe tbody, #pbefnegdhe tfoot, #pbefnegdhe tr, #pbefnegdhe td, #pbefnegdhe th {
   border-style: none;
 }
 
-#ncvixgmekq p {
+#pbefnegdhe p {
   margin: 0;
   padding: 0;
 }
 
-#ncvixgmekq .gt_table {
+#pbefnegdhe .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2417,12 +2417,12 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   border-left-color: #D3D3D3;
 }
 
-#ncvixgmekq .gt_caption {
+#pbefnegdhe .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ncvixgmekq .gt_title {
+#pbefnegdhe .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2434,7 +2434,7 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   border-bottom-width: 0;
 }
 
-#ncvixgmekq .gt_subtitle {
+#pbefnegdhe .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2446,7 +2446,7 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   border-top-width: 0;
 }
 
-#ncvixgmekq .gt_heading {
+#pbefnegdhe .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2458,13 +2458,13 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   border-right-color: #D3D3D3;
 }
 
-#ncvixgmekq .gt_bottom_border {
+#pbefnegdhe .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ncvixgmekq .gt_col_headings {
+#pbefnegdhe .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2479,7 +2479,7 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   border-right-color: #D3D3D3;
 }
 
-#ncvixgmekq .gt_col_heading {
+#pbefnegdhe .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2499,7 +2499,7 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   overflow-x: hidden;
 }
 
-#ncvixgmekq .gt_column_spanner_outer {
+#pbefnegdhe .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2511,15 +2511,15 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   padding-right: 4px;
 }
 
-#ncvixgmekq .gt_column_spanner_outer:first-child {
+#pbefnegdhe .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ncvixgmekq .gt_column_spanner_outer:last-child {
+#pbefnegdhe .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ncvixgmekq .gt_column_spanner {
+#pbefnegdhe .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2531,11 +2531,11 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   width: 100%;
 }
 
-#ncvixgmekq .gt_spanner_row {
+#pbefnegdhe .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ncvixgmekq .gt_group_heading {
+#pbefnegdhe .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2561,7 +2561,7 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   text-align: left;
 }
 
-#ncvixgmekq .gt_empty_group_heading {
+#pbefnegdhe .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2576,15 +2576,15 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   vertical-align: middle;
 }
 
-#ncvixgmekq .gt_from_md > :first-child {
+#pbefnegdhe .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ncvixgmekq .gt_from_md > :last-child {
+#pbefnegdhe .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ncvixgmekq .gt_row {
+#pbefnegdhe .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2603,7 +2603,7 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   overflow-x: hidden;
 }
 
-#ncvixgmekq .gt_stub {
+#pbefnegdhe .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2616,7 +2616,7 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   padding-right: 5px;
 }
 
-#ncvixgmekq .gt_stub_row_group {
+#pbefnegdhe .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2630,15 +2630,15 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   vertical-align: top;
 }
 
-#ncvixgmekq .gt_row_group_first td {
+#pbefnegdhe .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ncvixgmekq .gt_row_group_first th {
+#pbefnegdhe .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ncvixgmekq .gt_summary_row {
+#pbefnegdhe .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2648,16 +2648,16 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   padding-right: 5px;
 }
 
-#ncvixgmekq .gt_first_summary_row {
+#pbefnegdhe .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ncvixgmekq .gt_first_summary_row.thick {
+#pbefnegdhe .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ncvixgmekq .gt_last_summary_row {
+#pbefnegdhe .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2667,7 +2667,7 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   border-bottom-color: #D3D3D3;
 }
 
-#ncvixgmekq .gt_grand_summary_row {
+#pbefnegdhe .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2677,7 +2677,7 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   padding-right: 5px;
 }
 
-#ncvixgmekq .gt_first_grand_summary_row {
+#pbefnegdhe .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2687,7 +2687,7 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   border-top-color: #D3D3D3;
 }
 
-#ncvixgmekq .gt_last_grand_summary_row_top {
+#pbefnegdhe .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2697,11 +2697,11 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   border-bottom-color: #D3D3D3;
 }
 
-#ncvixgmekq .gt_striped {
+#pbefnegdhe .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ncvixgmekq .gt_table_body {
+#pbefnegdhe .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2710,7 +2710,7 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   border-bottom-color: #D3D3D3;
 }
 
-#ncvixgmekq .gt_footnotes {
+#pbefnegdhe .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2724,7 +2724,7 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   border-right-color: #D3D3D3;
 }
 
-#ncvixgmekq .gt_footnote {
+#pbefnegdhe .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2733,7 +2733,7 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   padding-right: 5px;
 }
 
-#ncvixgmekq .gt_sourcenotes {
+#pbefnegdhe .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2747,7 +2747,7 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   border-right-color: #D3D3D3;
 }
 
-#ncvixgmekq .gt_sourcenote {
+#pbefnegdhe .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2755,72 +2755,72 @@ Table&nbsp;10.6: A five column table of TAXIDs and the organisms corresponding r
   padding-right: 5px;
 }
 
-#ncvixgmekq .gt_left {
+#pbefnegdhe .gt_left {
   text-align: left;
 }
 
-#ncvixgmekq .gt_center {
+#pbefnegdhe .gt_center {
   text-align: center;
 }
 
-#ncvixgmekq .gt_right {
+#pbefnegdhe .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ncvixgmekq .gt_font_normal {
+#pbefnegdhe .gt_font_normal {
   font-weight: normal;
 }
 
-#ncvixgmekq .gt_font_bold {
+#pbefnegdhe .gt_font_bold {
   font-weight: bold;
 }
 
-#ncvixgmekq .gt_font_italic {
+#pbefnegdhe .gt_font_italic {
   font-style: italic;
 }
 
-#ncvixgmekq .gt_super {
+#pbefnegdhe .gt_super {
   font-size: 65%;
 }
 
-#ncvixgmekq .gt_footnote_marks {
+#pbefnegdhe .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ncvixgmekq .gt_asterisk {
+#pbefnegdhe .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ncvixgmekq .gt_indent_1 {
+#pbefnegdhe .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ncvixgmekq .gt_indent_2 {
+#pbefnegdhe .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ncvixgmekq .gt_indent_3 {
+#pbefnegdhe .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ncvixgmekq .gt_indent_4 {
+#pbefnegdhe .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ncvixgmekq .gt_indent_5 {
+#pbefnegdhe .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ncvixgmekq .katex-display {
+#pbefnegdhe .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ncvixgmekq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#pbefnegdhe div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -3018,23 +3018,23 @@ Expand to see command output
 Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
 </figcaption>
 <div aria-describedby="tbl-taxonomicprofiling-tblmoderntaxtablephylum-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div id="vshpnecuaw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
-<style>#vshpnecuaw table {
+<div id="ddgbfpdvjk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
+<style>#ddgbfpdvjk table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#vshpnecuaw thead, #vshpnecuaw tbody, #vshpnecuaw tfoot, #vshpnecuaw tr, #vshpnecuaw td, #vshpnecuaw th {
+#ddgbfpdvjk thead, #ddgbfpdvjk tbody, #ddgbfpdvjk tfoot, #ddgbfpdvjk tr, #ddgbfpdvjk td, #ddgbfpdvjk th {
   border-style: none;
 }
 
-#vshpnecuaw p {
+#ddgbfpdvjk p {
   margin: 0;
   padding: 0;
 }
 
-#vshpnecuaw .gt_table {
+#ddgbfpdvjk .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -3060,12 +3060,12 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   border-left-color: #D3D3D3;
 }
 
-#vshpnecuaw .gt_caption {
+#ddgbfpdvjk .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#vshpnecuaw .gt_title {
+#ddgbfpdvjk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3077,7 +3077,7 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   border-bottom-width: 0;
 }
 
-#vshpnecuaw .gt_subtitle {
+#ddgbfpdvjk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3089,7 +3089,7 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   border-top-width: 0;
 }
 
-#vshpnecuaw .gt_heading {
+#ddgbfpdvjk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3101,13 +3101,13 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   border-right-color: #D3D3D3;
 }
 
-#vshpnecuaw .gt_bottom_border {
+#ddgbfpdvjk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vshpnecuaw .gt_col_headings {
+#ddgbfpdvjk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3122,7 +3122,7 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   border-right-color: #D3D3D3;
 }
 
-#vshpnecuaw .gt_col_heading {
+#ddgbfpdvjk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3142,7 +3142,7 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   overflow-x: hidden;
 }
 
-#vshpnecuaw .gt_column_spanner_outer {
+#ddgbfpdvjk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3154,15 +3154,15 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   padding-right: 4px;
 }
 
-#vshpnecuaw .gt_column_spanner_outer:first-child {
+#ddgbfpdvjk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vshpnecuaw .gt_column_spanner_outer:last-child {
+#ddgbfpdvjk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vshpnecuaw .gt_column_spanner {
+#ddgbfpdvjk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3174,11 +3174,11 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   width: 100%;
 }
 
-#vshpnecuaw .gt_spanner_row {
+#ddgbfpdvjk .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#vshpnecuaw .gt_group_heading {
+#ddgbfpdvjk .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3204,7 +3204,7 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   text-align: left;
 }
 
-#vshpnecuaw .gt_empty_group_heading {
+#ddgbfpdvjk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3219,15 +3219,15 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   vertical-align: middle;
 }
 
-#vshpnecuaw .gt_from_md > :first-child {
+#ddgbfpdvjk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vshpnecuaw .gt_from_md > :last-child {
+#ddgbfpdvjk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vshpnecuaw .gt_row {
+#ddgbfpdvjk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3246,7 +3246,7 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   overflow-x: hidden;
 }
 
-#vshpnecuaw .gt_stub {
+#ddgbfpdvjk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3259,7 +3259,7 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   padding-right: 5px;
 }
 
-#vshpnecuaw .gt_stub_row_group {
+#ddgbfpdvjk .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3273,15 +3273,15 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   vertical-align: top;
 }
 
-#vshpnecuaw .gt_row_group_first td {
+#ddgbfpdvjk .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vshpnecuaw .gt_row_group_first th {
+#ddgbfpdvjk .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#vshpnecuaw .gt_summary_row {
+#ddgbfpdvjk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3291,16 +3291,16 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   padding-right: 5px;
 }
 
-#vshpnecuaw .gt_first_summary_row {
+#ddgbfpdvjk .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vshpnecuaw .gt_first_summary_row.thick {
+#ddgbfpdvjk .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vshpnecuaw .gt_last_summary_row {
+#ddgbfpdvjk .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3310,7 +3310,7 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   border-bottom-color: #D3D3D3;
 }
 
-#vshpnecuaw .gt_grand_summary_row {
+#ddgbfpdvjk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3320,7 +3320,7 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   padding-right: 5px;
 }
 
-#vshpnecuaw .gt_first_grand_summary_row {
+#ddgbfpdvjk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3330,7 +3330,7 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   border-top-color: #D3D3D3;
 }
 
-#vshpnecuaw .gt_last_grand_summary_row_top {
+#ddgbfpdvjk .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3340,11 +3340,11 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   border-bottom-color: #D3D3D3;
 }
 
-#vshpnecuaw .gt_striped {
+#ddgbfpdvjk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vshpnecuaw .gt_table_body {
+#ddgbfpdvjk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3353,7 +3353,7 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   border-bottom-color: #D3D3D3;
 }
 
-#vshpnecuaw .gt_footnotes {
+#ddgbfpdvjk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3367,7 +3367,7 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   border-right-color: #D3D3D3;
 }
 
-#vshpnecuaw .gt_footnote {
+#ddgbfpdvjk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3376,7 +3376,7 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   padding-right: 5px;
 }
 
-#vshpnecuaw .gt_sourcenotes {
+#ddgbfpdvjk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3390,7 +3390,7 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   border-right-color: #D3D3D3;
 }
 
-#vshpnecuaw .gt_sourcenote {
+#ddgbfpdvjk .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3398,72 +3398,72 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
   padding-right: 5px;
 }
 
-#vshpnecuaw .gt_left {
+#ddgbfpdvjk .gt_left {
   text-align: left;
 }
 
-#vshpnecuaw .gt_center {
+#ddgbfpdvjk .gt_center {
   text-align: center;
 }
 
-#vshpnecuaw .gt_right {
+#ddgbfpdvjk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vshpnecuaw .gt_font_normal {
+#ddgbfpdvjk .gt_font_normal {
   font-weight: normal;
 }
 
-#vshpnecuaw .gt_font_bold {
+#ddgbfpdvjk .gt_font_bold {
   font-weight: bold;
 }
 
-#vshpnecuaw .gt_font_italic {
+#ddgbfpdvjk .gt_font_italic {
   font-style: italic;
 }
 
-#vshpnecuaw .gt_super {
+#ddgbfpdvjk .gt_super {
   font-size: 65%;
 }
 
-#vshpnecuaw .gt_footnote_marks {
+#ddgbfpdvjk .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#vshpnecuaw .gt_asterisk {
+#ddgbfpdvjk .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vshpnecuaw .gt_indent_1 {
+#ddgbfpdvjk .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vshpnecuaw .gt_indent_2 {
+#ddgbfpdvjk .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vshpnecuaw .gt_indent_3 {
+#ddgbfpdvjk .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vshpnecuaw .gt_indent_4 {
+#ddgbfpdvjk .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vshpnecuaw .gt_indent_5 {
+#ddgbfpdvjk .gt_indent_5 {
   text-indent: 25px;
 }
 
-#vshpnecuaw .katex-display {
+#ddgbfpdvjk .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#vshpnecuaw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ddgbfpdvjk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -3633,23 +3633,23 @@ Table&nbsp;10.9: Taxonomic profiles at phylum level of multiple modern samples
 Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
 </figcaption>
 <div aria-describedby="tbl-taxonomicprofiling-tblmoderntaxtablespecies-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div id="bwmevkbbet" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
-<style>#bwmevkbbet table {
+<div id="rnjidaimlm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
+<style>#rnjidaimlm table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#bwmevkbbet thead, #bwmevkbbet tbody, #bwmevkbbet tfoot, #bwmevkbbet tr, #bwmevkbbet td, #bwmevkbbet th {
+#rnjidaimlm thead, #rnjidaimlm tbody, #rnjidaimlm tfoot, #rnjidaimlm tr, #rnjidaimlm td, #rnjidaimlm th {
   border-style: none;
 }
 
-#bwmevkbbet p {
+#rnjidaimlm p {
   margin: 0;
   padding: 0;
 }
 
-#bwmevkbbet .gt_table {
+#rnjidaimlm .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -3675,12 +3675,12 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   border-left-color: #D3D3D3;
 }
 
-#bwmevkbbet .gt_caption {
+#rnjidaimlm .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#bwmevkbbet .gt_title {
+#rnjidaimlm .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3692,7 +3692,7 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   border-bottom-width: 0;
 }
 
-#bwmevkbbet .gt_subtitle {
+#rnjidaimlm .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3704,7 +3704,7 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   border-top-width: 0;
 }
 
-#bwmevkbbet .gt_heading {
+#rnjidaimlm .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3716,13 +3716,13 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   border-right-color: #D3D3D3;
 }
 
-#bwmevkbbet .gt_bottom_border {
+#rnjidaimlm .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#bwmevkbbet .gt_col_headings {
+#rnjidaimlm .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3737,7 +3737,7 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   border-right-color: #D3D3D3;
 }
 
-#bwmevkbbet .gt_col_heading {
+#rnjidaimlm .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3757,7 +3757,7 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   overflow-x: hidden;
 }
 
-#bwmevkbbet .gt_column_spanner_outer {
+#rnjidaimlm .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3769,15 +3769,15 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   padding-right: 4px;
 }
 
-#bwmevkbbet .gt_column_spanner_outer:first-child {
+#rnjidaimlm .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#bwmevkbbet .gt_column_spanner_outer:last-child {
+#rnjidaimlm .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#bwmevkbbet .gt_column_spanner {
+#rnjidaimlm .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3789,11 +3789,11 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   width: 100%;
 }
 
-#bwmevkbbet .gt_spanner_row {
+#rnjidaimlm .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#bwmevkbbet .gt_group_heading {
+#rnjidaimlm .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3819,7 +3819,7 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   text-align: left;
 }
 
-#bwmevkbbet .gt_empty_group_heading {
+#rnjidaimlm .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3834,15 +3834,15 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   vertical-align: middle;
 }
 
-#bwmevkbbet .gt_from_md > :first-child {
+#rnjidaimlm .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#bwmevkbbet .gt_from_md > :last-child {
+#rnjidaimlm .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#bwmevkbbet .gt_row {
+#rnjidaimlm .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3861,7 +3861,7 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   overflow-x: hidden;
 }
 
-#bwmevkbbet .gt_stub {
+#rnjidaimlm .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3874,7 +3874,7 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   padding-right: 5px;
 }
 
-#bwmevkbbet .gt_stub_row_group {
+#rnjidaimlm .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3888,15 +3888,15 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   vertical-align: top;
 }
 
-#bwmevkbbet .gt_row_group_first td {
+#rnjidaimlm .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#bwmevkbbet .gt_row_group_first th {
+#rnjidaimlm .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#bwmevkbbet .gt_summary_row {
+#rnjidaimlm .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3906,16 +3906,16 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   padding-right: 5px;
 }
 
-#bwmevkbbet .gt_first_summary_row {
+#rnjidaimlm .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#bwmevkbbet .gt_first_summary_row.thick {
+#rnjidaimlm .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#bwmevkbbet .gt_last_summary_row {
+#rnjidaimlm .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3925,7 +3925,7 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   border-bottom-color: #D3D3D3;
 }
 
-#bwmevkbbet .gt_grand_summary_row {
+#rnjidaimlm .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3935,7 +3935,7 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   padding-right: 5px;
 }
 
-#bwmevkbbet .gt_first_grand_summary_row {
+#rnjidaimlm .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3945,7 +3945,7 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   border-top-color: #D3D3D3;
 }
 
-#bwmevkbbet .gt_last_grand_summary_row_top {
+#rnjidaimlm .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3955,11 +3955,11 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   border-bottom-color: #D3D3D3;
 }
 
-#bwmevkbbet .gt_striped {
+#rnjidaimlm .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#bwmevkbbet .gt_table_body {
+#rnjidaimlm .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3968,7 +3968,7 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   border-bottom-color: #D3D3D3;
 }
 
-#bwmevkbbet .gt_footnotes {
+#rnjidaimlm .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3982,7 +3982,7 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   border-right-color: #D3D3D3;
 }
 
-#bwmevkbbet .gt_footnote {
+#rnjidaimlm .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3991,7 +3991,7 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   padding-right: 5px;
 }
 
-#bwmevkbbet .gt_sourcenotes {
+#rnjidaimlm .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4005,7 +4005,7 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   border-right-color: #D3D3D3;
 }
 
-#bwmevkbbet .gt_sourcenote {
+#rnjidaimlm .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -4013,72 +4013,72 @@ Table&nbsp;10.10: Taxonomic profiles at species level of multiple modern samples
   padding-right: 5px;
 }
 
-#bwmevkbbet .gt_left {
+#rnjidaimlm .gt_left {
   text-align: left;
 }
 
-#bwmevkbbet .gt_center {
+#rnjidaimlm .gt_center {
   text-align: center;
 }
 
-#bwmevkbbet .gt_right {
+#rnjidaimlm .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#bwmevkbbet .gt_font_normal {
+#rnjidaimlm .gt_font_normal {
   font-weight: normal;
 }
 
-#bwmevkbbet .gt_font_bold {
+#rnjidaimlm .gt_font_bold {
   font-weight: bold;
 }
 
-#bwmevkbbet .gt_font_italic {
+#rnjidaimlm .gt_font_italic {
   font-style: italic;
 }
 
-#bwmevkbbet .gt_super {
+#rnjidaimlm .gt_super {
   font-size: 65%;
 }
 
-#bwmevkbbet .gt_footnote_marks {
+#rnjidaimlm .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#bwmevkbbet .gt_asterisk {
+#rnjidaimlm .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#bwmevkbbet .gt_indent_1 {
+#rnjidaimlm .gt_indent_1 {
   text-indent: 5px;
 }
 
-#bwmevkbbet .gt_indent_2 {
+#rnjidaimlm .gt_indent_2 {
   text-indent: 10px;
 }
 
-#bwmevkbbet .gt_indent_3 {
+#rnjidaimlm .gt_indent_3 {
   text-indent: 15px;
 }
 
-#bwmevkbbet .gt_indent_4 {
+#rnjidaimlm .gt_indent_4 {
   text-indent: 20px;
 }
 
-#bwmevkbbet .gt_indent_5 {
+#rnjidaimlm .gt_indent_5 {
   text-indent: 25px;
 }
 
-#bwmevkbbet .katex-display {
+#rnjidaimlm .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#bwmevkbbet div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#rnjidaimlm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -4282,23 +4282,23 @@ Answer
 Table&nbsp;10.11: Various metadata information about the samples in this example
 </figcaption>
 <div aria-describedby="tbl-taxonomicprofiling-tblsamplemetadata-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div id="yrzorjtaht" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
-<style>#yrzorjtaht table {
+<div id="srpwdrwnam" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
+<style>#srpwdrwnam table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#yrzorjtaht thead, #yrzorjtaht tbody, #yrzorjtaht tfoot, #yrzorjtaht tr, #yrzorjtaht td, #yrzorjtaht th {
+#srpwdrwnam thead, #srpwdrwnam tbody, #srpwdrwnam tfoot, #srpwdrwnam tr, #srpwdrwnam td, #srpwdrwnam th {
   border-style: none;
 }
 
-#yrzorjtaht p {
+#srpwdrwnam p {
   margin: 0;
   padding: 0;
 }
 
-#yrzorjtaht .gt_table {
+#srpwdrwnam .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -4324,12 +4324,12 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   border-left-color: #D3D3D3;
 }
 
-#yrzorjtaht .gt_caption {
+#srpwdrwnam .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#yrzorjtaht .gt_title {
+#srpwdrwnam .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -4341,7 +4341,7 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   border-bottom-width: 0;
 }
 
-#yrzorjtaht .gt_subtitle {
+#srpwdrwnam .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -4353,7 +4353,7 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   border-top-width: 0;
 }
 
-#yrzorjtaht .gt_heading {
+#srpwdrwnam .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -4365,13 +4365,13 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   border-right-color: #D3D3D3;
 }
 
-#yrzorjtaht .gt_bottom_border {
+#srpwdrwnam .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#yrzorjtaht .gt_col_headings {
+#srpwdrwnam .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4386,7 +4386,7 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   border-right-color: #D3D3D3;
 }
 
-#yrzorjtaht .gt_col_heading {
+#srpwdrwnam .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4406,7 +4406,7 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   overflow-x: hidden;
 }
 
-#yrzorjtaht .gt_column_spanner_outer {
+#srpwdrwnam .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4418,15 +4418,15 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   padding-right: 4px;
 }
 
-#yrzorjtaht .gt_column_spanner_outer:first-child {
+#srpwdrwnam .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#yrzorjtaht .gt_column_spanner_outer:last-child {
+#srpwdrwnam .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#yrzorjtaht .gt_column_spanner {
+#srpwdrwnam .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -4438,11 +4438,11 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   width: 100%;
 }
 
-#yrzorjtaht .gt_spanner_row {
+#srpwdrwnam .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#yrzorjtaht .gt_group_heading {
+#srpwdrwnam .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4468,7 +4468,7 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   text-align: left;
 }
 
-#yrzorjtaht .gt_empty_group_heading {
+#srpwdrwnam .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -4483,15 +4483,15 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   vertical-align: middle;
 }
 
-#yrzorjtaht .gt_from_md > :first-child {
+#srpwdrwnam .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#yrzorjtaht .gt_from_md > :last-child {
+#srpwdrwnam .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#yrzorjtaht .gt_row {
+#srpwdrwnam .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4510,7 +4510,7 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   overflow-x: hidden;
 }
 
-#yrzorjtaht .gt_stub {
+#srpwdrwnam .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4523,7 +4523,7 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   padding-right: 5px;
 }
 
-#yrzorjtaht .gt_stub_row_group {
+#srpwdrwnam .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4537,15 +4537,15 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   vertical-align: top;
 }
 
-#yrzorjtaht .gt_row_group_first td {
+#srpwdrwnam .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#yrzorjtaht .gt_row_group_first th {
+#srpwdrwnam .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#yrzorjtaht .gt_summary_row {
+#srpwdrwnam .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4555,16 +4555,16 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   padding-right: 5px;
 }
 
-#yrzorjtaht .gt_first_summary_row {
+#srpwdrwnam .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#yrzorjtaht .gt_first_summary_row.thick {
+#srpwdrwnam .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#yrzorjtaht .gt_last_summary_row {
+#srpwdrwnam .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4574,7 +4574,7 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   border-bottom-color: #D3D3D3;
 }
 
-#yrzorjtaht .gt_grand_summary_row {
+#srpwdrwnam .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4584,7 +4584,7 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   padding-right: 5px;
 }
 
-#yrzorjtaht .gt_first_grand_summary_row {
+#srpwdrwnam .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4594,7 +4594,7 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   border-top-color: #D3D3D3;
 }
 
-#yrzorjtaht .gt_last_grand_summary_row_top {
+#srpwdrwnam .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4604,11 +4604,11 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   border-bottom-color: #D3D3D3;
 }
 
-#yrzorjtaht .gt_striped {
+#srpwdrwnam .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#yrzorjtaht .gt_table_body {
+#srpwdrwnam .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4617,7 +4617,7 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   border-bottom-color: #D3D3D3;
 }
 
-#yrzorjtaht .gt_footnotes {
+#srpwdrwnam .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4631,7 +4631,7 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   border-right-color: #D3D3D3;
 }
 
-#yrzorjtaht .gt_footnote {
+#srpwdrwnam .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -4640,7 +4640,7 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   padding-right: 5px;
 }
 
-#yrzorjtaht .gt_sourcenotes {
+#srpwdrwnam .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4654,7 +4654,7 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   border-right-color: #D3D3D3;
 }
 
-#yrzorjtaht .gt_sourcenote {
+#srpwdrwnam .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -4662,72 +4662,72 @@ Table&nbsp;10.11: Various metadata information about the samples in this example
   padding-right: 5px;
 }
 
-#yrzorjtaht .gt_left {
+#srpwdrwnam .gt_left {
   text-align: left;
 }
 
-#yrzorjtaht .gt_center {
+#srpwdrwnam .gt_center {
   text-align: center;
 }
 
-#yrzorjtaht .gt_right {
+#srpwdrwnam .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#yrzorjtaht .gt_font_normal {
+#srpwdrwnam .gt_font_normal {
   font-weight: normal;
 }
 
-#yrzorjtaht .gt_font_bold {
+#srpwdrwnam .gt_font_bold {
   font-weight: bold;
 }
 
-#yrzorjtaht .gt_font_italic {
+#srpwdrwnam .gt_font_italic {
   font-style: italic;
 }
 
-#yrzorjtaht .gt_super {
+#srpwdrwnam .gt_super {
   font-size: 65%;
 }
 
-#yrzorjtaht .gt_footnote_marks {
+#srpwdrwnam .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#yrzorjtaht .gt_asterisk {
+#srpwdrwnam .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#yrzorjtaht .gt_indent_1 {
+#srpwdrwnam .gt_indent_1 {
   text-indent: 5px;
 }
 
-#yrzorjtaht .gt_indent_2 {
+#srpwdrwnam .gt_indent_2 {
   text-indent: 10px;
 }
 
-#yrzorjtaht .gt_indent_3 {
+#srpwdrwnam .gt_indent_3 {
   text-indent: 15px;
 }
 
-#yrzorjtaht .gt_indent_4 {
+#srpwdrwnam .gt_indent_4 {
   text-indent: 20px;
 }
 
-#yrzorjtaht .gt_indent_5 {
+#srpwdrwnam .gt_indent_5 {
   text-indent: 25px;
 }
 
-#yrzorjtaht .katex-display {
+#srpwdrwnam .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#yrzorjtaht div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#srpwdrwnam div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -5040,23 +5040,23 @@ Table&nbsp;10.12: Table of samples and their group
 Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
 </figcaption>
 <div aria-describedby="tbl-taxonomicprofiling-tblrawmultisampletable-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div id="ctwttyoccb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
-<style>#ctwttyoccb table {
+<div id="untycxcdbs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
+<style>#untycxcdbs table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ctwttyoccb thead, #ctwttyoccb tbody, #ctwttyoccb tfoot, #ctwttyoccb tr, #ctwttyoccb td, #ctwttyoccb th {
+#untycxcdbs thead, #untycxcdbs tbody, #untycxcdbs tfoot, #untycxcdbs tr, #untycxcdbs td, #untycxcdbs th {
   border-style: none;
 }
 
-#ctwttyoccb p {
+#untycxcdbs p {
   margin: 0;
   padding: 0;
 }
 
-#ctwttyoccb .gt_table {
+#untycxcdbs .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -5082,12 +5082,12 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   border-left-color: #D3D3D3;
 }
 
-#ctwttyoccb .gt_caption {
+#untycxcdbs .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ctwttyoccb .gt_title {
+#untycxcdbs .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -5099,7 +5099,7 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   border-bottom-width: 0;
 }
 
-#ctwttyoccb .gt_subtitle {
+#untycxcdbs .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -5111,7 +5111,7 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   border-top-width: 0;
 }
 
-#ctwttyoccb .gt_heading {
+#untycxcdbs .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -5123,13 +5123,13 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   border-right-color: #D3D3D3;
 }
 
-#ctwttyoccb .gt_bottom_border {
+#untycxcdbs .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ctwttyoccb .gt_col_headings {
+#untycxcdbs .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -5144,7 +5144,7 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   border-right-color: #D3D3D3;
 }
 
-#ctwttyoccb .gt_col_heading {
+#untycxcdbs .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5164,7 +5164,7 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   overflow-x: hidden;
 }
 
-#ctwttyoccb .gt_column_spanner_outer {
+#untycxcdbs .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5176,15 +5176,15 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   padding-right: 4px;
 }
 
-#ctwttyoccb .gt_column_spanner_outer:first-child {
+#untycxcdbs .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ctwttyoccb .gt_column_spanner_outer:last-child {
+#untycxcdbs .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ctwttyoccb .gt_column_spanner {
+#untycxcdbs .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -5196,11 +5196,11 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   width: 100%;
 }
 
-#ctwttyoccb .gt_spanner_row {
+#untycxcdbs .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ctwttyoccb .gt_group_heading {
+#untycxcdbs .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5226,7 +5226,7 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   text-align: left;
 }
 
-#ctwttyoccb .gt_empty_group_heading {
+#untycxcdbs .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -5241,15 +5241,15 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   vertical-align: middle;
 }
 
-#ctwttyoccb .gt_from_md > :first-child {
+#untycxcdbs .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ctwttyoccb .gt_from_md > :last-child {
+#untycxcdbs .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ctwttyoccb .gt_row {
+#untycxcdbs .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5268,7 +5268,7 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   overflow-x: hidden;
 }
 
-#ctwttyoccb .gt_stub {
+#untycxcdbs .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5281,7 +5281,7 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   padding-right: 5px;
 }
 
-#ctwttyoccb .gt_stub_row_group {
+#untycxcdbs .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5295,15 +5295,15 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   vertical-align: top;
 }
 
-#ctwttyoccb .gt_row_group_first td {
+#untycxcdbs .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ctwttyoccb .gt_row_group_first th {
+#untycxcdbs .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ctwttyoccb .gt_summary_row {
+#untycxcdbs .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5313,16 +5313,16 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   padding-right: 5px;
 }
 
-#ctwttyoccb .gt_first_summary_row {
+#untycxcdbs .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ctwttyoccb .gt_first_summary_row.thick {
+#untycxcdbs .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ctwttyoccb .gt_last_summary_row {
+#untycxcdbs .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5332,7 +5332,7 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   border-bottom-color: #D3D3D3;
 }
 
-#ctwttyoccb .gt_grand_summary_row {
+#untycxcdbs .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5342,7 +5342,7 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   padding-right: 5px;
 }
 
-#ctwttyoccb .gt_first_grand_summary_row {
+#untycxcdbs .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5352,7 +5352,7 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   border-top-color: #D3D3D3;
 }
 
-#ctwttyoccb .gt_last_grand_summary_row_top {
+#untycxcdbs .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5362,11 +5362,11 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   border-bottom-color: #D3D3D3;
 }
 
-#ctwttyoccb .gt_striped {
+#untycxcdbs .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ctwttyoccb .gt_table_body {
+#untycxcdbs .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -5375,7 +5375,7 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   border-bottom-color: #D3D3D3;
 }
 
-#ctwttyoccb .gt_footnotes {
+#untycxcdbs .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5389,7 +5389,7 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   border-right-color: #D3D3D3;
 }
 
-#ctwttyoccb .gt_footnote {
+#untycxcdbs .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -5398,7 +5398,7 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   padding-right: 5px;
 }
 
-#ctwttyoccb .gt_sourcenotes {
+#untycxcdbs .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5412,7 +5412,7 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   border-right-color: #D3D3D3;
 }
 
-#ctwttyoccb .gt_sourcenote {
+#untycxcdbs .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -5420,72 +5420,72 @@ Table&nbsp;10.13: Table of the raw multi-sample taxonomic table
   padding-right: 5px;
 }
 
-#ctwttyoccb .gt_left {
+#untycxcdbs .gt_left {
   text-align: left;
 }
 
-#ctwttyoccb .gt_center {
+#untycxcdbs .gt_center {
   text-align: center;
 }
 
-#ctwttyoccb .gt_right {
+#untycxcdbs .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ctwttyoccb .gt_font_normal {
+#untycxcdbs .gt_font_normal {
   font-weight: normal;
 }
 
-#ctwttyoccb .gt_font_bold {
+#untycxcdbs .gt_font_bold {
   font-weight: bold;
 }
 
-#ctwttyoccb .gt_font_italic {
+#untycxcdbs .gt_font_italic {
   font-style: italic;
 }
 
-#ctwttyoccb .gt_super {
+#untycxcdbs .gt_super {
   font-size: 65%;
 }
 
-#ctwttyoccb .gt_footnote_marks {
+#untycxcdbs .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ctwttyoccb .gt_asterisk {
+#untycxcdbs .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ctwttyoccb .gt_indent_1 {
+#untycxcdbs .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ctwttyoccb .gt_indent_2 {
+#untycxcdbs .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ctwttyoccb .gt_indent_3 {
+#untycxcdbs .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ctwttyoccb .gt_indent_4 {
+#untycxcdbs .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ctwttyoccb .gt_indent_5 {
+#untycxcdbs .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ctwttyoccb .katex-display {
+#untycxcdbs .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ctwttyoccb div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#untycxcdbs div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -6307,23 +6307,23 @@ Expand to see command output
 Table&nbsp;10.17: Table of principal coordinates (columns) for each of the samples (rows)
 </figcaption>
 <div aria-describedby="tbl-taxonomicprofiling-tblpca-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div id="szhjltdzmk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
-<style>#szhjltdzmk table {
+<div id="kjjmooluui" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:scroll;overflow-y:auto;width:auto;height:auto;">
+<style>#kjjmooluui table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#szhjltdzmk thead, #szhjltdzmk tbody, #szhjltdzmk tfoot, #szhjltdzmk tr, #szhjltdzmk td, #szhjltdzmk th {
+#kjjmooluui thead, #kjjmooluui tbody, #kjjmooluui tfoot, #kjjmooluui tr, #kjjmooluui td, #kjjmooluui th {
   border-style: none;
 }
 
-#szhjltdzmk p {
+#kjjmooluui p {
   margin: 0;
   padding: 0;
 }
 
-#szhjltdzmk .gt_table {
+#kjjmooluui .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -6349,12 +6349,12 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   border-left-color: #D3D3D3;
 }
 
-#szhjltdzmk .gt_caption {
+#kjjmooluui .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#szhjltdzmk .gt_title {
+#kjjmooluui .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -6366,7 +6366,7 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   border-bottom-width: 0;
 }
 
-#szhjltdzmk .gt_subtitle {
+#kjjmooluui .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -6378,7 +6378,7 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   border-top-width: 0;
 }
 
-#szhjltdzmk .gt_heading {
+#kjjmooluui .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -6390,13 +6390,13 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   border-right-color: #D3D3D3;
 }
 
-#szhjltdzmk .gt_bottom_border {
+#kjjmooluui .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#szhjltdzmk .gt_col_headings {
+#kjjmooluui .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -6411,7 +6411,7 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   border-right-color: #D3D3D3;
 }
 
-#szhjltdzmk .gt_col_heading {
+#kjjmooluui .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -6431,7 +6431,7 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   overflow-x: hidden;
 }
 
-#szhjltdzmk .gt_column_spanner_outer {
+#kjjmooluui .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -6443,15 +6443,15 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   padding-right: 4px;
 }
 
-#szhjltdzmk .gt_column_spanner_outer:first-child {
+#kjjmooluui .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#szhjltdzmk .gt_column_spanner_outer:last-child {
+#kjjmooluui .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#szhjltdzmk .gt_column_spanner {
+#kjjmooluui .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -6463,11 +6463,11 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   width: 100%;
 }
 
-#szhjltdzmk .gt_spanner_row {
+#kjjmooluui .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#szhjltdzmk .gt_group_heading {
+#kjjmooluui .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -6493,7 +6493,7 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   text-align: left;
 }
 
-#szhjltdzmk .gt_empty_group_heading {
+#kjjmooluui .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -6508,15 +6508,15 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   vertical-align: middle;
 }
 
-#szhjltdzmk .gt_from_md > :first-child {
+#kjjmooluui .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#szhjltdzmk .gt_from_md > :last-child {
+#kjjmooluui .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#szhjltdzmk .gt_row {
+#kjjmooluui .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -6535,7 +6535,7 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   overflow-x: hidden;
 }
 
-#szhjltdzmk .gt_stub {
+#kjjmooluui .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -6548,7 +6548,7 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   padding-right: 5px;
 }
 
-#szhjltdzmk .gt_stub_row_group {
+#kjjmooluui .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -6562,15 +6562,15 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   vertical-align: top;
 }
 
-#szhjltdzmk .gt_row_group_first td {
+#kjjmooluui .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#szhjltdzmk .gt_row_group_first th {
+#kjjmooluui .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#szhjltdzmk .gt_summary_row {
+#kjjmooluui .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -6580,16 +6580,16 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   padding-right: 5px;
 }
 
-#szhjltdzmk .gt_first_summary_row {
+#kjjmooluui .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#szhjltdzmk .gt_first_summary_row.thick {
+#kjjmooluui .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#szhjltdzmk .gt_last_summary_row {
+#kjjmooluui .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -6599,7 +6599,7 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   border-bottom-color: #D3D3D3;
 }
 
-#szhjltdzmk .gt_grand_summary_row {
+#kjjmooluui .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -6609,7 +6609,7 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   padding-right: 5px;
 }
 
-#szhjltdzmk .gt_first_grand_summary_row {
+#kjjmooluui .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -6619,7 +6619,7 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   border-top-color: #D3D3D3;
 }
 
-#szhjltdzmk .gt_last_grand_summary_row_top {
+#kjjmooluui .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -6629,11 +6629,11 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   border-bottom-color: #D3D3D3;
 }
 
-#szhjltdzmk .gt_striped {
+#kjjmooluui .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#szhjltdzmk .gt_table_body {
+#kjjmooluui .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -6642,7 +6642,7 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   border-bottom-color: #D3D3D3;
 }
 
-#szhjltdzmk .gt_footnotes {
+#kjjmooluui .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -6656,7 +6656,7 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   border-right-color: #D3D3D3;
 }
 
-#szhjltdzmk .gt_footnote {
+#kjjmooluui .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -6665,7 +6665,7 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   padding-right: 5px;
 }
 
-#szhjltdzmk .gt_sourcenotes {
+#kjjmooluui .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -6679,7 +6679,7 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   border-right-color: #D3D3D3;
 }
 
-#szhjltdzmk .gt_sourcenote {
+#kjjmooluui .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -6687,72 +6687,72 @@ Table&nbsp;10.17: Table of principal coordinates (columns) for each of the sampl
   padding-right: 5px;
 }
 
-#szhjltdzmk .gt_left {
+#kjjmooluui .gt_left {
   text-align: left;
 }
 
-#szhjltdzmk .gt_center {
+#kjjmooluui .gt_center {
   text-align: center;
 }
 
-#szhjltdzmk .gt_right {
+#kjjmooluui .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#szhjltdzmk .gt_font_normal {
+#kjjmooluui .gt_font_normal {
   font-weight: normal;
 }
 
-#szhjltdzmk .gt_font_bold {
+#kjjmooluui .gt_font_bold {
   font-weight: bold;
 }
 
-#szhjltdzmk .gt_font_italic {
+#kjjmooluui .gt_font_italic {
   font-style: italic;
 }
 
-#szhjltdzmk .gt_super {
+#kjjmooluui .gt_super {
   font-size: 65%;
 }
 
-#szhjltdzmk .gt_footnote_marks {
+#kjjmooluui .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#szhjltdzmk .gt_asterisk {
+#kjjmooluui .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#szhjltdzmk .gt_indent_1 {
+#kjjmooluui .gt_indent_1 {
   text-indent: 5px;
 }
 
-#szhjltdzmk .gt_indent_2 {
+#kjjmooluui .gt_indent_2 {
   text-indent: 10px;
 }
 
-#szhjltdzmk .gt_indent_3 {
+#kjjmooluui .gt_indent_3 {
   text-indent: 15px;
 }
 
-#szhjltdzmk .gt_indent_4 {
+#kjjmooluui .gt_indent_4 {
   text-indent: 20px;
 }
 
-#szhjltdzmk .gt_indent_5 {
+#kjjmooluui .gt_indent_5 {
   text-indent: 25px;
 }
 
-#szhjltdzmk .katex-display {
+#kjjmooluui .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#szhjltdzmk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#kjjmooluui div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
