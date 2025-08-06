@@ -302,7 +302,7 @@ The output files are saved in the `../results/fastp/ directory`.
 ```bash
 fastp \
     --in1 ../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq.gz \
-    --in2 ../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq.gz \
+    --in2 ../data/subsampled/ERR5766177_PE.mapped.hostremoved.rev.fq_subsample_1000000.fastq.gz \
     --merge \
     --merged_out ../results/fastp/ERR5766177.merged.fastq.gz \
     --include_unmerged \
@@ -316,46 +316,46 @@ fastp \
     total bases: 101000000
     Q20 bases: 99440729(98.4562%)
     Q30 bases: 94683150(93.7457%)
-
+    Q40 bases: 27968326(27.6914%)
+    
     Read2 before filtering:
     total reads: 1000000
     total bases: 101000000
-    Q20 bases: 99440729(98.4562%)
-    Q30 bases: 94683150(93.7457%)
-
+    Q20 bases: 96103171(95.1517%)
+    Q30 bases: 89042465(88.1609%)
+    Q40 bases: 24849295(24.6033%)
+    
     Merged and filtered:
-    total reads: 1994070
-    total bases: 201397311
-    Q20 bases: 198330392(98.4772%)
-    Q30 bases: 188843169(93.7665%)
-
+    total reads: 1312040
+    total bases: 122538903
+    Q20 bases: 119762428(97.7342%)
+    Q30 bases: 113200374(92.3791%)
+    Q40 bases: 35574405(29.0311%)
+    
     Filtering result:
-    reads passed filter: 1999252
-    reads failed due to low quality: 728
-    reads failed due to too many N: 20
+    reads passed filter: 1985074
+    reads failed due to low quality: 14419
+    reads failed due to too many N: 507
     reads failed due to too short: 0
-    reads with adapter trimmed: 282
-    bases trimmed due to adapters: 18654
-    reads corrected by overlap analysis: 0
-    bases corrected by overlap analysis: 0
-
-    Duplication rate: 0.2479%
-
-    Insert size peak (evaluated by paired-end reads): 31
-
-    Read pairs merged: 228
-    % of original read pairs: 0.0228%
-    % in reads after filtering: 0.0114339%
-
-
+    reads with adapter trimmed: 889290
+    bases trimmed due to adapters: 34036630
+    reads corrected by overlap analysis: 26668
+    bases corrected by overlap analysis: 36019
+    
+    Duplication rate: 0.0192%
+    
+    Insert size peak (evaluated by paired-end reads): 43
+    
+    Read pairs merged: 672964
+    % of original read pairs: 67.2964%
+    % in reads after filtering: 51.2914%
+    
+    
     JSON report: ../results/fastp/ERR5766177.fastp.json
     HTML report: ../results/fastp/ERR5766177.fastp.html
-
-    fastp --in1 ../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq.gz \
-    --in2 ../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq.gz --merge \
-    --merged_out ../results/fastp/ERR5766177.merged.fastq.gz --include_unmerged --dedup \
-    --json ../results/fastp/ERR5766177.fastp.json --html ../results/fastp/ERR5766177.fastp.html
-    fastp v0.23.2, time used: 11 seconds
+    
+    fastp --in1 ../data/subsampled/ERR5766177_PE.mapped.hostremoved.fwd.fq_subsample_1000000.fastq.gz --in2 ../data/subsampled/ERR5766177_PE.mapped.hostremoved.rev.fq_subsample_1000000.fastq.gz --merge --merged_out ../results/fastp/ERR5766177.merged.fastq.gz --include_unmerged --dedup --json ../results/fastp/ERR5766177.fastp.json --html ../results/fastp/ERR5766177.fastp.html 
+    fastp v1.0.1, time used: 8 seconds
 :::
 
 ::: {.callout-tip title="Question" appearance="simple"}
@@ -363,7 +363,7 @@ What do you think of the number of read pairs that were merged ?
 :::
 
 ::: {.callout-note collapse="true" title="Answer"}
-Here, only 228 read pairs were merged.
+Here, only 672964 read pairs were merged.
 This is due to the length of the reads of 100bp, and length of the DNA fragments.
 If you would use fewer cycles, and have shorter DNA fragments, you would expect this number to go up.
 :::
