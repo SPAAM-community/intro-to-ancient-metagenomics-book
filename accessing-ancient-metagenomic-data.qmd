@@ -128,7 +128,7 @@ First, we will need to activate a conda environment, and then install the latest
 While in the `accessing-ancient-metagenomic-data` conda environment, run the following command to load the GUI into your web-browser. If the browser doesn't automatically load, copy the IP address and paste it in your browser's URL bar.
 
 ```bash
-AMDirT viewer
+amdirt viewer
 ```
 
 :::{.callout-note}
@@ -337,7 +337,7 @@ As in note above sometimes not all citation information can be retrieved using w
 
 ### AMDirT download and convert
 
-If you're less of a GUI person and consider yourself a command-line wizard, you can also use the `AMDirT download` and `AMDirT convert` commands instead of the GUI version.
+If you're less of a GUI person and consider yourself a command-line wizard, you can also use the `amdirt download` and `amdirt convert` commands instead of the GUI version.
 
 Make a new directory called `cli`, and change into it.
 
@@ -347,12 +347,12 @@ mkdir cli && cd cli/
 
 In this case you must supply your own filtered AncientMetagenomeDir samples table, and use command line options to specify which files to generate.
 
-For this, we will download the samples table, use a bit of bash filtering, and then use the `AMDirT convert` command to generate the same downstream-ready files as we did with the GUI.
+For this, we will download the samples table, use a bit of bash filtering, and then use the `amdirt convert` command to generate the same downstream-ready files as we did with the GUI.
 
 First we can download the ancientsinglegenome-hostassociated samples table with the following command.
 
 ```bash
-AMDirT download -t ancientsinglegenome-hostassociated -y samples
+amdirt download -t ancientsinglegenome-hostassociated -y samples
 ```
 
 This will produce a file called `ancientsinglegenome-hostassociated_samples_<DATA_VERSION>.tsv` in your current directory (by default).
@@ -375,10 +375,10 @@ In this command, we tell `awk` that the column separator is a tab, print the row
 awk -F "\t" 'NR==1 || $1 == "Muhlemann2020" && $7 == "Norway"' ancientsinglegenome-hostassociated_samples_<DATA_VERSION>.tsv > ancientsinglegenome-hostassociated_samples_<DATA_VERSION>_filtered.tsv
 ```
 
-Then, we can pass this filtered table to the `AMDirT convert` command to firstly retrieve the library-level metadata.
+Then, we can pass this filtered table to the `amdirt convert` command to firstly retrieve the library-level metadata.
 
 ```bash
-AMDirT convert --librarymetadata ancientsinglegenome-hostassociated_samples_<DATA_VERSION>_filtered.tsv ancientsinglegenome-hostassociated
+amdirt convert --librarymetadata ancientsinglegenome-hostassociated_samples_<DATA_VERSION>_filtered.tsv ancientsinglegenome-hostassociated
 ```
 
 This has downloaded a new file called `AncientMetagenomeDir_filtered_libraries.tsv`, which we can then further filter in the same away to match the desired libraries as we picked during the GUI section of the tutorial!
@@ -390,7 +390,7 @@ awk -F "\t" 'NR==1 || $14 == "Targeted-Capture"' AncientMetagenomeDir_filtered_l
 Then with these two filtered files, one for samples,and one for libraries, we can supply them to the `convert` command to generate the same download scripts, eager input samplesheet, and citation `.bib` file as we did before!
 
 ```bash
-AMDirT convert -o . --bibliography --curl --eager --libraries AncientMetagenomeDir_filtered_libraries_capturedonly.tsv ancientsinglegenome-hostassociated_samples_<DATA_VERSION>_filtered.tsv ancientsinglegenome-hostassociated
+amdirt convert -o . --bibliography --curl --eager --libraries AncientMetagenomeDir_filtered_libraries_capturedonly.tsv ancientsinglegenome-hostassociated_samples_<DATA_VERSION>_filtered.tsv ancientsinglegenome-hostassociated
 ```
 
 You should see a few messages saying `Writing <XYZ>`, and then if we run `ls`, you should see the same resulting files starting with `AncientMetagenomeDir_` as before with the GUI!
@@ -424,13 +424,13 @@ You can calculate this with the CLI method as follows.
 
 ```bash
 ## Download the ancient metagenome table
-AMDirT download -t ancientmetagenome-hostassociated -y samples
+amdirt download -t ancientmetagenome-hostassociated -y samples
 
 ## Filter to just palaeofaeces since 2021
 awk -F "\t" 'NR==1 || $2 >= 2021 && $13 == "palaeofaeces"' ancientmetagenome-hostassociated_samples_<DATA_VERSION>.tsv > ancientmetagenome-hostassociated_samples_<DATA_VERSION>_filtered.tsv
 
 ## Get the library metadata of the dental calculus (might take a little bit of time)
-AMDirT convert --librarymetadata ancientmetagenome-hostassociated_samples_<DATA_VERSION>_filtered.tsv ancientmetagenome-hostassociated
+amdirt convert --librarymetadata ancientmetagenome-hostassociated_samples_<DATA_VERSION>_filtered.tsv ancientmetagenome-hostassociated
 
 ## Filter to just single stranded libraries
 awk -F "\t" 'NR==1 || $9 == "single"' AncientMetagenomeDir_filtered_libraries.tsv > AncientMetagenomeDir_filtered_libraries_singlestranded.tsv
