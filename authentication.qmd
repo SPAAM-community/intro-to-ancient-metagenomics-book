@@ -207,16 +207,24 @@ Now, after we have detected an interesting *Y. pestis* hit, we would like to fol
 ::: {.callout-note title="Self guided: data preparation" collapse=true}
 ```bash
 cd /<path/<to>/authentication/bowtie2
+```
 
+```
 ## Download reference genome
 NCBI=https://ftp.ncbi.nlm.nih.gov; ID=GCF_000222975.1_ASM22297v1
 wget $NCBI/genomes/all/GCF/000/222/975/${ID}/${ID}_genomic.fna.gz
 ```
 :::
 
+Change into the `bowtie2/` folder.
+
 ```bash
 cd /<path/<to>/authentication/bowtie2
+```
 
+And then prepare the reference genome and align the reads against the reference.
+
+```bash
 ## Prepare reference genome and build Bowtie2 index
 gunzip GCF_000222975.1_ASM22297v1_genomic.fna.gz; echo NC_017168.1 > region.bed
 seqtk subseq GCF_000222975.1_ASM22297v1_genomic.fna region.bed > NC_017168.1.fasta
@@ -245,7 +253,7 @@ Load R by running `R` in your terminal
 R
 ``` 
 
-Note the following may take a minute or so to run.
+And run the following R code to generate a coverage plot.
 
 ```{r, eval = F}
 # Read output of samtools depth commans
@@ -270,16 +278,21 @@ mtext(paste0(round((sum(df$N_reads > 0) / length(df$N_reads)) * 100, 2),
 "% of genome covered"), cex = 0.8)
 ```
 
+::: {.callout-warning}
+Note the command above may take a minute or so to run.
+:::
+
+In the R script above, we simply split the reference genome into *N_tiles* tiles and compute the breadth of coverage (number of reference nucleotides covered by at least one read normalised by the total length) locally in each tile.
+By visualising how the local breadth of coverage changes from tile to tile, we can monitor the distribution of the reads across the reference genome. In the evenness of coverage figure above, the reads seem to cover all parts of the reference genome uniformly, which is a good evidence of true-positive detection, even though the total mean breadth of coverage is low due to the low total number of reads.
+
+![](assets/images/chapters/authentication/Evenness_of_coverage.png)
+
 Once finished examining the plot you can quit R
 
 ```bash
 ## Press 'n' when asked if you want to save your workspace image.
 quit()
 ```
-
-![](assets/images/chapters/authentication/Evenness_of_coverage.png)
-
-In the R script above, we simply split the reference genome into *N_tiles* tiles and compute the breadth of coverage (number of reference nucleotides covered by at least one read normalised by the total length) locally in each tile. By visualising how the local breadth of coverage changes from tile to tile, we can monitor the distribution of the reads across the reference genome. In the evenness of coverage figure above, the reads seem to cover all parts of the reference genome uniformly, which is a good evidence of true-positive detection, even though the total mean breadth of coverage is low due to the low total number of reads.
 
 ### Alignment quality
 
@@ -307,7 +320,9 @@ hist(as.numeric(readLines("mapq.txt")), col = "darkred", breaks = 100)
 
 ![](assets/images/chapters/authentication/MAPQ.png)
 
-Note that MAPQ scores are computed slightly differently for Bowtie and BWA, so they are not directly comparable, however, for both MAPQ ~ 10-30, as in the histograms below, indicates good affinity of the DNA reads to the reference genome. here we provide some examples of how typical MAPQ histograms for Bowtie2 and BWA alignments can look like:
+Note that MAPQ scores are computed slightly differently for Bowtie and BWA, so they are not directly comparable, however, for both MAPQ ~ 10-30, as in the histograms below, indicates good affinity of the DNA reads to the reference genome. 
+
+We can see some examples of how typical MAPQ histograms for Bowtie2 and BWA alignments on real data below.
 
 ![](assets/images/chapters/authentication/mapq.png)
 
@@ -355,9 +370,18 @@ Deamination profile of a damaged DNA demonstrate an enrichment of C / T polymorp
 mapDamage -i Y.pestis_sample10.sorted.bam -r NC_017168.1.fasta -d mapDamage_results/ --merge-reference-sequences --no-stats
 ```
 
+::: {.callout-note}
+During the summer school, you can view the two generated PDFs by running the following command
+
+```bash
+evince mapDamage_results/Fragmisincorporation_plot.pdf
+evince mapDamage_results/Length_plot.pdf
+```
+:::
+
 ![](assets/images/chapters/authentication/deamination.png)
 
-maDamage delivers a bunch of useful statistics, among other read length distribution can be checked. A typical mode of DNA reads should be within a range 30-70 base-pairs in order to be a good evidence of DNA fragmentation. Reads longer tha 100 base-pairs are more likely to originate from modern contamination.
+mapDamage delivers a bunch of useful statistics, among other read length distribution can be checked. A typical mode of DNA reads should be within a range 30-70 base-pairs in order to be a good evidence of DNA fragmentation. Reads longer tha 100 base-pairs are more likely to originate from modern contamination.
 
 ![](assets/images/chapters/authentication/read_length.png)
 
@@ -382,6 +406,10 @@ pmd_scores <- read.delim("PMDscores.txt", header = FALSE, sep = "\t")
 hist(pmd_scores$V4, breaks = 1000, xlab = "PMDscores")
 ```
 
+![](assets/images/chapters/authentication/pmd_scores.png)
+
+Typically, reads with PMD scores greater than 3 are considered to be reliably ancient, i.e. damaged, and can be extracted for taking a closer look. Therefore PMDtools is great for separating ancient reads from modern contaminant reads.
+
 Once finished examining the plot you can quit R
 
 ```bash
@@ -389,11 +417,9 @@ Once finished examining the plot you can quit R
 quit()
 ```
 
-![](assets/images/chapters/authentication/pmd_scores.png)
+As mapDamage, PMDtools can also compute deamination profile. However, the advantage of PMDtools that it can compute deamination profile for UDG / USER treated samples (with the flag *--CpG*). For this purpose, PMDtools uses only CpG sites which escape the treatment, so deamination is not gone completely and there is a chance to authenticate treated samples. Computing deamination pattern with PMDtools can be achieved with the following command line commands.
 
-Typically, reads with PMD scores greater than 3 are considered to be reliably ancient, i.e. damaged, and can be extracted for taking a closer look. Therefore PMDtools is great for separating ancient reads from modern contaminant reads.
-
-As mapDamage, PMDtools can also compute deamination profile. However, the advantage of PMDtools that it can compute deamination profile for UDG / USER treated samples (with the flag *--CpG*). For this purpose, PMDtools uses only CpG sites which escape the treatment, so deamination is not gone completely and there is a chance to authenticate treated samples. Computing deamination pattern with PMDtools can be achieved with the following command line (please note that the scripts *pmdtools.0.60.py* and *plotPMD.v2.R* can be downloaded from the github repository here https://github.com/pontussk/PMDtools):
+::: *plotPMD.v2.R* can be downloaded from the github repository here https://github.com/pontussk/PMDtools):
 
 ```bash
 samtools view Y.pestis_sample10.bam | pmdtools --platypus > PMD_temp.txt
@@ -402,7 +428,7 @@ samtools view Y.pestis_sample10.bam | pmdtools --platypus > PMD_temp.txt
 We can then run simple R commands directly from the terminal (without loading R itself with) the following.
 
 ```bash
-R CMD BATCH plotPMD
+R CMD BATCH plotPMD.v2.R
 ```
 
 ![](assets/images/chapters/authentication/PMD_Skoglund_et_al_2015_Current_Biology.png)
@@ -475,9 +501,9 @@ For custom reference genomes not covered by NCBI, their accession IDs and the co
 The `ngsLCA` program considers a chosen similarity interval between each read and its reference in the generated bam/sam file.
 The similarity can be set as an edit distance `[-editdist[min/max]]`, i.e., number of mismatches between the read to reference genome, or as a similarity distance `[-simscore[low/high]]`, i.e., percentage of mismatches between the read to reference genome. 
 
-The main files produced by this command have the extensions `.bdamage.gz` and `lca.gz`.
+The main files produced by this command have the extensions `.bdamage.gz`, `lca.gz` and `stat.gz`.
 The first consists of a nucleotide misincorporation matrix (also called **mismatch matrix**) which represents the nucleotide substitution counts across the reads (@tbl-authentication-examplecodetable2).
-The lca file reports the sequence analysed and its taxonomic path, as well as other statistics (gc content, fragment length).
+The lca file reports the sequences analysed and their taxonomic paths, while the stat file includes other statistics (gc content, fragment length).
 
 We report an example of the bdamage.gz file output printed using the command `metaDMG-cpp print`:
 
@@ -564,16 +590,16 @@ While Pitch-6 and Cave-22 samples, which are 6 and 22 thousand years old and thu
 
 ### Ancient metagenomic dataset
 
-In this section, we will use 6 metagenomic libraries downsampled with eukaryotes reads from the study by [@Zampirolo2023.12.01.569562] (@fig-authentication-fig6).
+In this section, we will use 6 metagenomic libraries downsampled with eukaryotes reads from the study by [@zampirolo2024tracing] (@fig-authentication-fig6).
 The libraries originate from sediment samples of the Velký Mamut'ák rock shelter located in Northern Bohemia (Czech Republic) and covering the period between the Late Neolithic (~6100-5300 cal. BP) to more recent times (800 cal BP). 
 
-![Screenshot of preprint of the source dataset by [@Zampirolo2023.12.01.569562]](assets/images/chapters/authentication/BioxRiv_paper.png){#fig-authentication-fig6}
+![Screenshot of the study of the source dataset by [@zampirolo2024tracing]](assets/images/chapters/authentication/paper.png){#fig-authentication-fig6}
 
 ### Ancient metagenomics with metaDMG-cpp: the workflow
 
 This section will cover the metaDMG analysis which involve taxonomic classification of the reads starting from sorted SAM files, the damage estimation and compilation of the final metaDMG output.
 
-To begin, we can find raw SAM files used as input to `metaDMG` we will use for the exercise are stored in `metadmg`.
+To begin, we can find raw SAM files used as input to `metaDMG` we will use for the exercise are stored in the `metadmg` folder.
 
 We also need the taxonomy files, which are in the folder `metadmg/small_taxonomy/`, these include `names.dmp`, `nodes.dmp` and `small_accession2taxid.txt.gz`. 
 
@@ -582,16 +608,10 @@ We also need the taxonomy files, which are in the folder `metadmg/small_taxonomy
 The best documentation is currently found in the –help function.
 :::
 
-We need to activate a dedicated environment for `metaDMG` as it is still under development. We candeactivate the current one with
+metaDMG is installed in the conda environment `authentication`. If not activated yet, we run 
 
 ```bash
-conda deactivate 
-```
-
-And we will work with metaDMG by activating the environment with the following command.
-
-```bash
-conda activate metaDMG
+conda activate authentication 
 ```
 
 :::{.callout-warning}
@@ -701,16 +721,9 @@ Open the TSV file `concatenated_metaDMGfinal.tsv` in a spreadsheet manner and in
 
 We will now investigate the TSV table produced by metaDMG to authenticate damage patterns, visualise the relationship between the damage and the significance, and the degree of damage through depth and time.
 
-R packages for this exercise are located in our original conda environment `authentication`.
+R packages for this exercise are located in the same conda environment `authentication`.
 
-While still in the `authentication/metadmg/` folder, We deactivate the current conda environment and we re-activate the environment `authentication`.
-
-```bash
-conda deactivate
-conda activate authentication
-```
-
-We load R by running `R` in your terminal
+While still in the `authentication/metadmg/` folder, we load R by running `R` in your terminal
 
 ```bash
 R
@@ -728,6 +741,96 @@ library(ggplot2)
 library(purrr)
 library(ggpubr)
 ``` 
+
+### Amplitude of damage vs Significance
+
+We provide an R script to investigate the main statistics. 
+
+Here we visualise the amplitude of damage (A) and its significance (Zfit), for the full dataset but filtering it to a minimum of 100 reads and at the genus level (@fig-authentication-fig7). 
+
+```{r eval=F}
+#We load our metaDMG output data (TSV file) and the metadata with information on the age of each sample.
+df <- read.csv("concatenated_metaDMGfinal.tsv",  sep = "\t")
+
+#Rename sample column
+colnames(df)[colnames(df) == 'filename'] <- 'sample'
+
+#Modify sample name with short names
+df$sample[df$sample == "VM-11_aggregated_results.stat"] <- "VM-11"
+df$sample[df$sample == "VM-14_aggregated_results.stat"] <- "VM-14"
+df$sample[df$sample == "VM-15_aggregated_results.stat"] <- "VM-15"
+df$sample[df$sample == "VM-17_aggregated_results.stat"] <- "VM-17"
+df$sample[df$sample == "VM-19_aggregated_results.stat"] <- "VM-19"
+df$sample[df$sample == "VM-3_aggregated_results.stat"] <- "VM-3"
+
+#Import the metadata with dates BP
+depth_data <- read.csv ("figures/depth_data.csv", header = TRUE)
+View (depth_data)
+
+#Merge context_data and depth_data with dataframe (adding new column for dates BP)
+df$new <- depth_data$Date_BP[match(df$sample, depth_data$Sample_ID)]
+names(df)[names(df) == 'new'] <- 'Date_BP'
+
+# Convert Date_BP columns to factors (categorical variable) 
+df$Date_BP <- as.factor(df$Date_BP)
+
+#Subset dataset animal and plants at the genus level
+dt1 <- df %>% filter(nreads > 100, grepl("\\bgenus\\b", rank), grepl("Metazoa", taxa_path) | grepl("Viridiplant", taxa_path))
+
+#Adding factor column for Kingdom
+dt1 <- dt1 %>% 
+  mutate(Kingdom =   # creating our new column
+           case_when(grepl("Viridiplant", taxa_path) ~ "Viridiplantae",
+                     grepl("Metazoa",taxa_path) ~ "Metazoa"))
+
+#Plotting  amplitude of damage vs its significance and saving as pdf file
+pdf(file = "figures/p1.pdf", width = 8, height = 6)
+ggplot(dt1, aes(y=A, x=Zfit)) + 
+  geom_point(aes(size=nreads, col=Kingdom)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust =1)) +
+  scale_color_manual(values = c("#8B1A1A", "#458B00"))+
+  scale_size_continuous(labels = function(x) format(x, scientific = FALSE)) +
+  xlab("significance") + ylab("damage") + theme_minimal()
+dev.off()
+``` 
+
+![Amplitude of damage (A) vs significance (Zfit) for animals and plants.](assets/images/chapters/authentication/p1.png){#fig-authentication-fig7}
+
+### Amplitude of damage and mean fragment length through time
+
+Here we visualise the amplitude of damage (A) and the mean length of the fragments (mean_rlen) by date (BP) for the filtered dataset with a minimum of 100 reads and at the genus level (@fig-authentication-fig8).
+
+```{r eval=F}
+#Plotting damage (A) by period (dates BP)
+p2a<- dt1 %>%
+  mutate(Date_BP = fct_relevel(Date_BP,
+                             "6100","5300","4100","3900","3000", "800")) %>%
+  ggplot(aes(x=A, y=Date_BP))+ 
+  geom_boxplot(aes(x=A, y=Date_BP, fill = sample))+
+  geom_point(aes(fill = sample), size = 3, shape = 21, color = "black", stroke = .5) +
+  scale_x_continuous(limits = c(0, 0.20), breaks = seq(0, 0.20, by = 0.05)) +
+  theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+p2a
+
+#Plotting mean length (mean_rlen) by period (dates BP)
+p2b<- dt1 %>%
+  mutate(Date_BP = fct_relevel(Date_BP,
+                             "6100","5300","4100","3900","3000", "800")) %>%
+  ggplot(aes(x=mean_rlen, y=Date_BP))+ 
+  geom_boxplot(aes(x=mean_rlen, y=Date_BP, fill = sample)) +
+  geom_point(aes(fill = sample), size = 3, shape = 21, color = "black", stroke = .5) +
+  scale_x_continuous(limits = c(30, 80), breaks = seq(30, 80, by = 10)) +
+  theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+p2b
+
+#Combining the plots and saving as pdf file
+pdf(file = "figures/p2.pdf", width = 8, height = 6)
+p2 <- grid.arrange(p2a, p2b,
+                   ncol = 2, nrow = 1)
+dev.off()
+``` 
+
+![Amplitude of damage (A) and mean fragment length (mean_rlen) through time.](assets/images/chapters/authentication/p2.png){#fig-authentication-fig8}
 
 #### Deamination patterns
 
@@ -847,33 +950,9 @@ get_dmg_decay_fit <- function(df, orient = "fwd", pos = 30, p_breaks = c(0, 0.1,
 }
 ```
 
-We load our metaDMG output data (TSV file) and the metadata with information on the age of each sample. We generate the damage plots as seen in @fig-authentication-fagusovisdmg using the function `get-damage`.
+We generate the damage plots as seen in @fig-authentication-fagusovisdmg using the function `get-damage`.
 
 ```{r eval=F}
-df <- read.csv("concatenated_metaDMGfinal.tsv",  sep = "\t")
-
-#Rename sample column
-colnames(df)[colnames(df) == 'filename'] <- 'sample'
-
-#Modify sample name with short names
-df$sample[df$sample == "VM-11_aggregated_results.stat"] <- "VM-11"
-df$sample[df$sample == "VM-14_aggregated_results.stat"] <- "VM-14"
-df$sample[df$sample == "VM-15_aggregated_results.stat"] <- "VM-15"
-df$sample[df$sample == "VM-17_aggregated_results.stat"] <- "VM-17"
-df$sample[df$sample == "VM-19_aggregated_results.stat"] <- "VM-19"
-df$sample[df$sample == "VM-3_aggregated_results.stat"] <- "VM-3"
-
-#Import the metadata with dates BP
-depth_data <- read.csv ("figures/depth_data.csv", header = TRUE)
-View (depth_data)
-
-#Merge context_data and depth_data with dataframe (adding new column for dates BP)
-df$new <- depth_data$Date_BP[match(df$sample, depth_data$Sample_ID)]
-names(df)[names(df) == 'new'] <- 'Date_BP'
-
-# Convert Date_BP columns to factors (categorical variable) 
-df$Date_BP <- as.factor(df$Date_BP)
-
 #Setting filtering theshold for ancient reads
 minDMG = 0.02 # filter criteria, plot only taxa above set value
 zfit = 2 # minimum significance, the higher the better, 2 would mean that we estimante the damage with 95% confidence. 
@@ -881,15 +960,15 @@ MinLength = 35 # minimum mean readlength, while we set a hard filter initially w
 reads = 200 # number of reads required depends on the amount of damage and the significance
 
 #Subsetting only animals and plants, at the genus level, number of reads > 200.
-dt1 <- df %>% filter(A > minDMG, nreads >= reads, mean_rlen >= MinLength, Zfit  > zfit, grepl("\\bgenus\\b", rank), !grepl("Bacteria",taxa_path))
+dt2 <- df %>% filter(A > minDMG, nreads >= reads, mean_rlen >= MinLength, Zfit  > zfit, grepl("\\bgenus\\b", rank), !grepl("Bacteria",taxa_path))
 
 #deamination plot with facet wrap per each taxon in a sample
-tax_g_list <- unique(dt1$name)
+tax_g_list <- unique(dt2$name)
 nrank <- "rank" # Replace with the actual rank column name
 
 X <- tax_g_list 
 purrr::map(tax_g_list, function(X, nrank) {
-  sel_tax <- dt1 %>%
+  sel_tax <- dt2 %>%
     rename(label = sample) %>%
     filter(name == X) %>%
     filter(rank == rank) %>%
@@ -897,15 +976,15 @@ purrr::map(tax_g_list, function(X, nrank) {
     distinct() %>%
     arrange(name)
   if (nrow(sel_tax) > 0) {
-    n_readsa <- dt1 %>%
+    n_readsa <- dt2 %>%
       inner_join(sel_tax) %>%
       filter(rank == rank) %>%
       pull(nreads) %>%
       sum()
     ggpubr::ggarrange(plotlist = list(
-      get_dmg_decay_fit(df = dt1 %>% rename(label = sample) %>% inner_join(sel_tax) %>% filter(rank == rank), orient = "fwd", y_max = 0.70) +
+      get_dmg_decay_fit(df = dt2 %>% rename(label = sample) %>% inner_join(sel_tax) %>% filter(rank == rank), orient = "fwd", y_max = 0.70) +
         ggtitle(paste0(X, " nreads=", n_readsa, " Forward")),
-      get_dmg_decay_fit(df = dt1 %>% rename(label = sample)  %>% inner_join(sel_tax) %>% filter(rank == rank), orient = "rev", y_max = 0.70) +
+      get_dmg_decay_fit(df = dt2 %>% rename(label = sample)  %>% inner_join(sel_tax) %>% filter(rank == rank), orient = "rev", y_max = 0.70) +
         ggtitle(paste0(X, " nreads=", n_readsa, " Reverse"))
     ), align = "hv")
     ggsave(paste0("figures/", X, "-dmg.pdf"), plot = last_plot(), width = 8, height = 4)
@@ -913,71 +992,6 @@ purrr::map(tax_g_list, function(X, nrank) {
 })
 ``` 
 ![Deamination patterns for sheep (*Ovis*) and beech (*Fagus*) reads.](assets/images/chapters/authentication/Fagus_Ovis-dmg.png){#fig-authentication-fagusovisdmg}
-
-### Amplitude of damage vs Significance
-
-We provide an R script to investigate the main statistics. 
-
-Here we visualise the amplitude of damage (A) and its significance (Zfit), for the full dataset but filtering it to a minimum of 100 reads and at the genus level (@fig-authentication-fig8). 
-
-```{r eval=F}
-#Subset dataset animal and plants at the genus level
-dt2 <- df %>% filter(nreads > 100, grepl("\\bgenus\\b", rank), grepl("Metazoa", taxa_path) | grepl("Viridiplant", taxa_path))
-
-#Adding factor column for Kingdom
-dt2 <- dt2 %>% 
-  mutate(Kingdom =   # creating our new column
-           case_when(grepl("Viridiplant", taxa_path) ~ "Viridiplantae",
-                     grepl("Metazoa",taxa_path) ~ "Metazoa"))
-
-#Plotting  amplitude of damage vs its significance and saving as pdf file
-pdf(file = "figures/p1.pdf", width = 8, height = 6)
-ggplot(dt2, aes(y=A, x=Zfit)) + 
-  geom_point(aes(size=nreads, col=Kingdom)) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust =1)) +
-  scale_color_manual(values = c("#8B1A1A", "#458B00"))+
-  scale_size_continuous(labels = function(x) format(x, scientific = FALSE)) +
-  xlab("significance") + ylab("damage") + theme_minimal()
-dev.off()
-``` 
-
-![Amplitude of damage (A) vs significance (Zfit) for animals and plants.](assets/images/chapters/authentication/p2.png){#fig-authentication-fig8}
-
-### Amplitude of damage and mean fragment length through time
-
-Here we visualise the amplitude of damage (A) and the mean length of the fragments (mean_rlen) by date (BP) for the filtered dataset with a minimum of 100 reads and at the genus level (@fig-authentication-fig9).
-
-```{r eval=F}
-#Plotting damage (A) by period (dates BP)
-p2a<- dt2 %>%
-  mutate(Date_BP = fct_relevel(Date_BP,
-                             "6100","5300","4100","3900","3000", "800")) %>%
-  ggplot(aes(x=A, y=Date_BP))+ 
-  geom_boxplot(aes(x=A, y=Date_BP, fill = sample))+
-  geom_point(aes(fill = sample), size = 3, shape = 21, color = "black", stroke = .5) +
-  scale_x_continuous(limits = c(0, 0.20), breaks = seq(0, 0.20, by = 0.05)) +
-  theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-p2a
-
-#Plotting mean length (mean_rlen) by period (dates BP)
-p2b<- dt2 %>%
-  mutate(Date_BP = fct_relevel(Date_BP,
-                             "6100","5300","4100","3900","3000", "800")) %>%
-  ggplot(aes(x=mean_rlen, y=Date_BP))+ 
-  geom_boxplot(aes(x=mean_rlen, y=Date_BP, fill = sample)) +
-  geom_point(aes(fill = sample), size = 3, shape = 21, color = "black", stroke = .5) +
-  scale_x_continuous(limits = c(30, 80), breaks = seq(30, 80, by = 10)) +
-  theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-p2b
-
-#Combining the plots and saving as pdf file
-pdf(file = "figures/p2.pdf", width = 8, height = 6)
-p2 <- grid.arrange(p2a, p2b,
-                   ncol = 2, nrow = 1)
-dev.off()
-``` 
-
-![Amplitude of damage (A) and mean fragment length (mean_rlen) through time.](assets/images/chapters/authentication/p3.png){#fig-authentication-fig9}
 
 ::: {.callout-tip}
 Once finished examining the plots you can quit R
@@ -1038,7 +1052,8 @@ In addition, we:
 
 ## Acknowledgments
 
-We thank Mikkel Winther Pedersen and Antonio Fernandez Guerra for their contribution to the development of the `metaDMG` section.
+We thank Mikkel Winther Pedersen and Antonio Fernandez Guerra for their contribution to the development of the `metaDMG` section. 
+G.Z. would like to thank the European Research Council (ERC) under the European Union’s Horizon 2020 research and innovation programme (Grant Agreement No. 856488, project SEACHANGE).
 
 ## Recommended Reading
 
