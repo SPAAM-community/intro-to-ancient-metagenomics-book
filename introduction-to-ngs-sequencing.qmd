@@ -164,7 +164,7 @@ To follow this however, the DNA needs to be prepared in a specific way.
 To ensure the DNA molecules do not move while taking photos, in Illumina sequencing, the DNA molecules are bound to a special glass slide called a flowcell.
 This also ensures the DNA does not get washed away during the sequencing process as different solutions wash through the machine between each step.
 
-![Photo of a lawn of grass, as a metaphor of the 'lawn' of artificial oligonucltide sequences of an Illumina flowcell. Source: Animaldetector, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Seededfertilizedlawn.JPG)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-grassy-lawn.jpg){#fig-intro-ngs-fig-grassy-lawn height=300px}
+![Photo of a lawn of grass, as a metaphor of the 'lawn' of artificial oligonucleotide sequences of an Illumina flowcell. Source: Animaldetector, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Seededfertilizedlawn.JPG)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-grassy-lawn.jpg){#fig-intro-ngs-fig-grassy-lawn height=300px}
 
 <!-- TODO SEE IF CAN REPRODUCE OR MAKE OWN VERSION OF FLOW CELL IMAGE -->
 
@@ -223,7 +223,6 @@ This makes the SBS technique more resource sufficient, both in reagents (you nee
 
 ![Diagram of sequencing by synthesis. Source: Abizar Lakdawalla, [CC BY-SA 3.0 Unported](https://creativecommons.org/licenses/by-sa/3.0/) via [Wikimedia Commons](https://en.wikipedia.org/wiki/File:Sequencing_by_synthesis_Reversible_terminators.png)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-sequencingbysynthesis.png){#fig-intro-ngs-fig-sequencingbysynthesis height=300px}
 
-
 The process as in @fig-intro-ngs-fig-sequencingbysynthesis can be broken down to:
 
 1. On a single stranded molecule, bind a primer on the molecule's adapter priming site
@@ -276,123 +275,7 @@ If the machine detects red, it records a C.
 If the machine detects _both_ red and green wavelengths being emitted from a cluster - this corresponds to an A.
 If no colour is emitted, this is _assumed to be a G_. 
 
-![Graphical representation of difference between four- (left) and two-colour (right) chemistry of Illumina Platforms. Inspired by [https://www.ecseq.com/support/ngs/do_you_have_two_colors_or_four_colors_in_Illumina](https://www.ecseq.com/support/ngs/do_you_have_two_colors_or_four_colors_in_Illumina)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-twocolourchemistry.png){#fig-intro-ngs-fig-twocolourchemistry height=300px}
+![Graphical representation of difference between four- (left) and two-colour (right) chemistry of Illumina Platforms. Inspired by [https://www.ecseq.com/support/ngs/do_you_have_two_colors_or_four_colors_in_Illumina](https://www.ecseq.com/support/ngs/do_you_have_two_colors_or_four_colors_in_Illumina)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-twocolourchemistry.png){#fig-intro-ngs-fig-twocolourchemistry height=300px}
 
 This characteristic of two colour-chemistry thus means you must be aware of the type of sequencer your data was generated on, as this will require slightly different preprocessing as we will see later on in the section [Low sequence diversity](#low-sequence-diversity).
 
@@ -457,19 +340,17 @@ This is a text-based (semi-)standard format for storing biological sequences, an
 A biological sequence that has been converted to a digital text format is referred to as a 'read' or 'sequence read'. 
 The files that stored reads are typically compressed to save space, but can be very large (gigabytes in size, even when compressed).
 
-The structure of a FASTQ file is a repeated set of four specific lines:
+The structure of a FASTQ file is a repeated set of four specific lines (@fig-intro-ngs-fig-sequencing-read):
 
 1. A metadata or ID line
 2. The sequence itself
 3. A 'spacer' line
 4. The base quality score (corresponding to the base in the same position as in line 2)
 
-<!-- TODO add the coloured example here -->
-
-Let's break this down.
-
 The metadata line records a range of information from the sequencer and also potentially the demultiplexing.
 Typically this line will record the sequencing machine ID, a run number, the ID of the flow cell, coordinate information from which cluster on the flow cell the particular sequence is from, and then extra information that depends on the sequencing center (e.g., some will record the sample-specific index pairs here, or certain settings of the demultiplexing tool).
+
+![Annotated example of a single sequencing read as represented in a FASTQ file. A read consists of four lines: a metadata line, a sequence line, a spacer line, and a base quality score line. This set of four lines is repeated for every sequenced molecule in the library.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-sequencing-read.png){#fig-intro-ngs-fig-sequencing-read width=90%}
 
 The sequence line will contain `A`, `C`, `T`, `G`, and `N` characters in the order of the DNA molecule as recorded by the sequencer.
 In the figure you can see an example of an `N` call in the first position.
@@ -507,11 +388,11 @@ This means that during library preparation, researchers often have to perform ma
 By over-amplifying libraries, you reduce the number of unique sequences from your sample you actually retrieve.
 If you are repeatedly sequencing the same DNA sequence (i.e. the amplified copies) over and over, you use up the fixed number of available clusters on the flow cell, and prevent clusters of unique sequences from being sequenced.
 
-<!-- TODO add image here -->
-
-This is also important analysis wise, as will be discussed in the chapter on taxonomic profiling and genomic mapping, you can actually artificially 'inflate' the counts of reads that come from  a particular taxon.
+This is also important analysis wise, as will be discussed in the chapter on taxonomic profiling and genomic mapping, you can actually artificially 'inflate' the counts of reads that come from a particular taxon (@fig-intro-ngs-fig-sequencing-read).
 For microbiome studies, this can skew the estimate of which species are in your sample or not.
 Some studies have also suggested dedeuplication can improve the accuracy of metagenomic _de novo_ assembly [@Zhang2023-vz]
+
+![Schematic representation of the result on over-amplification on reference-based genome mapping. Exact duplicate reads (yellow) that derive from overamplifying a library, can result in portions of the genome having higher depth coverage in certain regions (top distribution) and thus artificially provide a misleading sense of confidence in recovered regions during analysis, even though the overall coverage is low.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-sequencing-read.png){#fig-intro-ngs-fig-sequencing-read}
 
 While this artefact can be partially corrected in analysis through the process of 'deduplication', you should be careful to not overamplify your libraries in the first place as you can potentially waste a lot of money.
 
@@ -547,7 +428,7 @@ Otherwise, good sequencing core facilities should automatically screen for this 
 As many parts of this textbook demonstrates, metagenomic sequencing is becoming extremely high-throughput and analysis is becoming increasingly automated and routine.
 However this does not mean you should skip over quality control of your sequencing data.
 
-While Illumina sequencers have a very low error rate, this are not perfect  - we have already seen the paired-end sequencing approach for correcting for terminal error accumulation - and things can also go wrong during the sequencing process.
+While Illumina sequencers have a very low error rate, this are not perfect  - we have already seen the paired-end sequencing approach for correcting for terminal error accumulation - and things can also go wrong during the sequencing process (@fig-intro-ngs-fig-fastqc).
 
 All sequencing machines will record their confidence in the base calls the make, so it is still critical that researchers quality check these before performing downstream analyses.
 
@@ -560,7 +441,7 @@ The low number of reads means that we cannot as easily 'correct' for errors thro
 Many core sequencing facilities will mostly handle modern samples with high quality libraries, and thus the threshold for a rejected sequencing run maybe lower than what you would want for ancient metagenomics. 
 Therefore it's always important to _always_ (or double)check the quality of your sequencing data before proceeding with any analysis.
 
-<!-- TODO: add sequence error image -->
+![Screenshot of the output of the sequencing quality evaluation tool FASTQC [@Andrews2010-pd] of the ancient DNA palaeofaeces sample 2612 from @Maixner2021-sg. Many of the reads have low quality scores (Y-axis) at the end of molecules (X-axis) from around 110bp. This likely represents error accumulation as the sequencing chemistry becomes 'tired'. Such low-quality bases should be removed using base quality score trimming to reduce the chance of incorrect read assignment or false-positive variant calls due to the wrong base being called.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-fastqc.png){#fig-intro-ngs-fig-fastqc}
 
 ### Dirty Genomes
 

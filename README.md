@@ -52,10 +52,10 @@ If adding a new section chapter:
    - Do not place in `docs/assets/images/chapters/`!
 5. References in BibTex for the chapter should go a `references.bib` file into `assets/references/chapters/<chapter>`
 6. Add the `.qmd` file to the `_quarto.yml` config file in the `chapters:` scope
-7. Render the book the extensions' `Quarto: Render Book` command, or run the following
+7. Render the book the extensions' `Quarto: Render Book` command, or run the following while inside the reposiroty directory
 
    ```bash
-   quarto preview intro-to-ancient-metagenomics-book/ --render all --no-browser --no-watch-inputs
+   quarto preview . --render all --no-browser --no-watch-inputs
    ```
 
 8. Commit, push to GitHub, and open a PR against the `main` branch [^2]
