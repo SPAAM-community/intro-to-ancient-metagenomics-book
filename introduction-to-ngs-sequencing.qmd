@@ -127,7 +127,7 @@ Therefore, by detecting the light emitted as the incrementally longer molecules 
 
 The result is a chromatogram, which is a graph that records the strength of each colour at each point in the gel band ([@fig-intro-ngs-fig-chromatogram]).
 
-![Example of gel-based chromatogram with four columns with bands indicating which colour is the blocking nucleotide of that particular sized DNA molecule, and on the size an intensity graph of each colour given off by each flourophore to indicate which colour it is. Source: Morse Phoque (Abizar), [CC BY-SA 3.0 Unported](https://creativecommons.org/licenses/by-sa/3.0/) via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Radioactive_Fluorescent_Seq.jpg)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-chromatogram.jpg){#fig-intro-ngs-fig-chromatogram height=300px}
+![Example of gel-based chromatogram with four columns with bands indicating which colour is the blocking nucleotide of that particular sized DNA molecule, and on the size an intensity graph of each colour given off by each flourophore to indicate which colour it is. Source: Morse Phoque (Abizar), [CC BY-SA 3.0 Unported](https://creativecommons.org/licenses/by-sa/3.0/) via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Radioactive_Fluorescent_Seq.jpg)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-chromatogram.jpg){#fig-intro-ngs-fig-chromatogram height=300px}
 
 While this method was used for the first sequencing human genome, it was very slow and very expensive - it does not scale well  [@Schloss2020-gp] due to having to make many copies of a single molecule and sequence each nucleotide sequence one at a time.
 
@@ -161,15 +161,17 @@ To follow this however, the DNA needs to be prepared in a specific way.
 
 ### Flow cells and adapters
 
-To ensure the DNA molecules do not move while taking photos, in Illumina sequencing, the DNA molecules are bound to a special glass slide called a flowcell.
+To ensure the DNA molecules do not move while taking photos, in Illumina sequencing, the DNA molecules are bound to a special glass slide called a flowcell ([@fig-intro-ngs-fig-flowcellschematic]).
 This also ensures the DNA does not get washed away during the sequencing process as different solutions wash through the machine between each step.
+
 
 ![Photo of a lawn of grass, as a metaphor of the 'lawn' of artificial oligonucleotide sequences of an Illumina flowcell. Source: Animaldetector, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Seededfertilizedlawn.JPG)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-grassy-lawn.jpg){#fig-intro-ngs-fig-grassy-lawn height=300px}
 
-<!-- TODO SEE IF CAN REPRODUCE OR MAKE OWN VERSION OF FLOW CELL IMAGE -->
+![Schematic diagram of a Illumina HiSeq-like flowcell. The glass slide has eight 'lanes' (top), with wells at each end of each lane. The sequencing library is injected into the well, and moves through the lane in the direction as indicated by the arrows. Indicated in by the dark green dots at the the bottom of each lane, is the synthetic oligonucleotides that capture the DNA molecules, also known as the 'lawn'. Image based on and inspired by @Bronner2013-sv .](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-flowcellschematic.png){#fig-intro-ngs-fig-flowcellschematic height=300px}
 
-To immobilise the DNA, the flow cell is coated with a 'lawn' of synthetic oligonucleotides (i.e., custom sequences made in a lab)  [@Holt2008-wk].
-By attaching (ligating) the _complementary_ sequence of the synthetic oligonucleotides to your DNA molecules from your sample, when your DNA molecules flow over the lawn, the complementary bonds between the nucleotide pairs will form.
+
+To immobilise the DNA, the flow cell is coated with a 'lawn' of synthetic oligonucleotides (i.e., custom sequences made in a lab) [@Holt2008-wk].
+By attaching (ligating) the _complementary_ sequence of the synthetic oligonucleotides to your DNA molecules from your sample, when your DNA molecules flow over the lawn (@fig-intro-ngs-fig-flowcellschematic), the complementary bonds between the nucleotide pairs will form.
 This then will hold the DNA in place.
 
 The process of adding the complementary synthetic oligonucleotides (often referred to as oligos), called 'Adapters', is called 'Library preparation'.
@@ -302,7 +304,7 @@ This way, we can 'merge' or average the base quality scores of two independent '
 So if the last base when reading the molecule in the forward direction is an N (due to ambiguous wavelength emission), we can correct or 'recover' this last base by making it the _first_ base we call in when sequencing in the reverse direction from scratch with fresh reagents.
 
 This works as, Illumina sequencers can conveniently re-use the bending over approach as performed by the 'bridge' amplification method of clustering we saw earlier in this chapter.
-I.e., after bending over, the opposite flowcell olgio from the forward reverse flowcell anchor is cut so the 'end' of the original molecule is now bound to the flow cell.
+I.e., after bending over, the opposite flowcell oligo from the forward reverse flowcell anchor is cut so the 'end' of the original molecule is now bound to the flow cell (@fig-intro-ngs-fig-pairedendsequencing).
 
 This paired-end sequencing technique means you get a pair of files - both with the same sequence from each cluster, but one has the molecule 'read' in the forward direction, and the other file with the 'reverse' direction. 
 
@@ -311,7 +313,7 @@ In cases where the DNA molecule is _longer_ than the number of cycles the chemis
 Of course if the molecule is longer than the sum of both set of cycles (e.g. a 120bp molecule, even though the sequencing kit is only two times 50bp), you will miss the 'middle' part of the molecule.
 However this is counteracted by the sheer number of independent molecules sequenced, so the 'missing' part can be filled in from another sequencing DNA molecule.
 
-<!-- TODO: add paired end sequencing image -->
+![Diagram showing a a broad overview of how Illumina paired-end sequencing works for a single DNA molecule. 1. The single-stranded DNA strand is attached to the flow cell, and read in one direction. 2. The molecule is denatured and one strand gets discarded. 3. The molecule is bent over (similar to bridge amplification), and the adapter at the other end is bound to the flow cell 4. The original anchored end of the molecule is then cut, allowing the original 'end' to become the new starting point sequencing. 5. The molecule is sequenced in the reverse direction.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-pairedendsequencing.png){#fig-intro-ngs-fig-pairedendsequencing width=90%}
 
 It should be noted, however, the added benefit of sequencing longer molecules via paired-end sequencing is not so relevant to ancient DNA or ancient metagenomics.
 This is because most 'true' DNA molecules are often _shorter_ than the sequencing cycles of a typical Illumina kit.
