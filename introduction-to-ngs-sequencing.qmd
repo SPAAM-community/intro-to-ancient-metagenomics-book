@@ -164,28 +164,24 @@ To follow this however, the DNA needs to be prepared in a specific way.
 To ensure the DNA molecules do not move while taking photos, in Illumina sequencing, the DNA molecules are bound to a special glass slide called a flowcell ([@fig-intro-ngs-fig-flowcellschematic]).
 This also ensures the DNA does not get washed away during the sequencing process as different solutions wash through the machine between each step.
 
+![Schematic diagram of a Illumina HiSeq-like flowcell. The glass slide has eight 'lanes' (top), with wells at each end of each lane. The sequencing library is injected into the well, and moves through the lane in the direction as indicated by the arrows. Indicated in by the dark green dots at the the bottom of each lane, is the synthetic oligonucleotides that capture the DNA molecules, also known as the 'lawn'. Image based on and inspired by @Bronner2013-sv .](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-flowcellschematic.png){#fig-intro-ngs-fig-flowcellschematic height=300px}
 
 ![Photo of a lawn of grass, as a metaphor of the 'lawn' of artificial oligonucleotide sequences of an Illumina flowcell. Source: Animaldetector, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Seededfertilizedlawn.JPG)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-grassy-lawn.jpg){#fig-intro-ngs-fig-grassy-lawn height=300px}
 
-![Schematic diagram of a Illumina HiSeq-like flowcell. The glass slide has eight 'lanes' (top), with wells at each end of each lane. The sequencing library is injected into the well, and moves through the lane in the direction as indicated by the arrows. Indicated in by the dark green dots at the the bottom of each lane, is the synthetic oligonucleotides that capture the DNA molecules, also known as the 'lawn'. Image based on and inspired by @Bronner2013-sv .](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-flowcellschematic.png){#fig-intro-ngs-fig-flowcellschematic height=300px}
-
-
-To immobilise the DNA, the flow cell is coated with a 'lawn' of synthetic oligonucleotides (i.e., custom sequences made in a lab) [@Holt2008-wk].
+To immobilise the DNA, the flow cell is coated with a 'lawn' (@fig-intro-ngs-fig-grassy-lawn) of synthetic oligonucleotides (i.e., custom sequences made in a lab) [@Holt2008-wk].
 By attaching (ligating) the _complementary_ sequence of the synthetic oligonucleotides to your DNA molecules from your sample, when your DNA molecules flow over the lawn (@fig-intro-ngs-fig-flowcellschematic), the complementary bonds between the nucleotide pairs will form.
 This then will hold the DNA in place.
 
-The process of adding the complementary synthetic oligonucleotides (often referred to as oligos), called 'Adapters', is called 'Library preparation'.
+The process of adding the complementary synthetic oligonucleotides (often referred to as oligos), referred to as 'Adapters', is called 'Library preparation'.
+
 These adapters sequences do not only include the complementary sequence to flowcell oligos, but also an additional sequence that acts as a priming site for polymerases to start the replication process
 Furthermore, researchers have exploited the highly-multiplex nature of Illumina sequence to allow them to sequence multiple samples at once.
 They do this by adding additional sequences to the adapter sequence construct that consist of short sample-specific 'indices' or 'barcodes'.
 These indices allow DNA molecules from different samples to be sequenced at the same time and then separated back into the groups of molecules from the same samples during data analysis.
 
-The completed index, adapter, and DNA molecule construction is termed a library, and is what is put into the sequencing machine. and what can in this form be immobilised on the flow cell.
+![Annotated library construct of a DNA molecule prepared for sequencing on Illumina platforms. The P5 and P7 primers are complementary to the flow cell oligo 'lawn', the i5 and i7 indices act as the library specific 'bar code' used for separating samples when multiplex-sequencing, The Read 1 and Read 2 primers act as priming sites for sequencing the template molecule (in this, case an ancient DNA molecule).](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-library-construct.png){#fig-intro-ngs-fig-library-construct width=100%}
 
-<!-- TODO INSERT ILLUMINA DNA CONSTRUCT FROM TINA -->
-
-
-In the image above <!-- TODO TO DESCRIBE ONCE WE HAVE THE IMAGE And also, when you're sequencing multiple samples at once on the same sequencing run, you can add things called indices, or known as barcodes, which are basically sample specific. So it allows you to mix multiple samples at once into one sequencing run, sequencing all at the same time, later on separate them out. So this is ultimately a slightly simplified version of a Illuminate DNA construct. So the X, X, X, X, X in the middle, this is your target. So this is actually your DNA sequence from your sample. And then at both ends, you essentially have a target primer. So this is where your polymerase will bind onto to start, then actually going, reading into your target, or your insert is another phrase that you can call it. Then prior to the target primer, you also have an index. So this is actually your sample specific barcode. This is actually added typically onto the adapter, and so this happens in the, no, sorry. And the library construction, sorry. And then also you have the adapter and index primer right at the beginning. So this is both what binds onto your flow cell, but also acts as a primer for actually reading the index because you also need a sequence index to know which DNA molecule, to which sample DNA molecule it's coming from. --> 
+The completed index, adapter, and target DNA molecule construct (@fig-intro-ngs-fig-library-construct) of all molecules from a given construction process is termed a library, and is what is put into the sequencing machine.
 
 ### Clustering
 
@@ -285,7 +281,7 @@ This characteristic of two colour-chemistry thus means you must be aware of the 
 
 Another consideration with Illumina sequencing kits is not just the number of cycles, but which kit to use based on its 'pairment'.
 
-As I'm sure everyone readying this book has experienced, biology is not like physics where everything is perfect and 'easy'.
+As I'm sure everyone reading this book has experienced, biology is not like physics where everything is perfect and 'easy'.
 Biology is messy, things do not stay stable.
 The same applies to sequencing - as the sequencer goes through each cycle of adding a new nucleotide to each DNA strand in a cluster, mistakes will increasingly start happening as polymerases don't bind properly, fall off, skip nucleotides, or even add the wrong base.
 The accumulated effects of these mistakes across all DNA strands in a cluster is that the emitted light during the imaging part of the cycle becomes less clearly one colour as mixtures of wavelengths are emitted.
@@ -315,8 +311,10 @@ However this is counteracted by the sheer number of independent molecules sequen
 
 ![Diagram showing a a broad overview of how Illumina paired-end sequencing works for a single DNA molecule. 1. The single-stranded DNA strand is attached to the flow cell, and read in one direction. 2. The molecule is denatured and one strand gets discarded. 3. The molecule is bent over (similar to bridge amplification), and the adapter at the other end is bound to the flow cell 4. The original anchored end of the molecule is then cut, allowing the original 'end' to become the new starting point sequencing. 5. The molecule is sequenced in the reverse direction.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-pairedendsequencing.png){#fig-intro-ngs-fig-pairedendsequencing width=90%}
 
-It should be noted, however, the added benefit of sequencing longer molecules via paired-end sequencing is not so relevant to ancient DNA or ancient metagenomics.
+It should be noted, however, the added benefit of sequencing _longer_ molecules via paired-end sequencing is not always relevant to older ancient DNA or ancient metagenomics.
 This is because most 'true' DNA molecules are often _shorter_ than the sequencing cycles of a typical Illumina kit.
+However, fragmented ancient DNA molecules follow a distribution, and retrieval of longer reads can be useful during [_de novo_ assembly](denovo-assembly.qmd) for scaffolding purposes.
+
 
 ### Base calling and demultiplexing
 
@@ -328,10 +326,12 @@ And if you have sequenced multiple samples at the same time (each with their own
 Base calling is the process of converting the images to digital text-based `A`, `C`, `T,` and `G`s.
 This is not something the vast majority of researchers have to do as it nowadays happens on the sequencer itself and thus the process is not particularly relevant for us. 
 
-However, once the file with the digital representations of the sequences is taken off the machine, typically a sequencing technician or bioinformatician at the sequencing center, but sometimes a student, will perform something called 'demultiplexing'.
+However, once the file with the digital representations of the sequences is taken off the machine, typically a sequencing technician or bioinformatician at the sequencing center, but sometimes a student, will perform something called 'demultiplexing' (@fig-intro-ngs-fig-demultiplexing).
+
 This is where the person doing the demultiplexing will run the file through a tool that identifies the known index sequence at the beginning of each read entry in the file, and put all reads containing the same sample-specific index into it's own independent file.
 
-<!-- TODO: Add demultiplexing image --> 
+![Schematic diagram showing the demultimultiplexing concept. Multiple libraries have been sequenced in a single lane of a sequencer. Each library has their own index sequence combination. Demultiplexing consists of taking the large single-lane FASTQ file, then using information recorded during the library construction regarding which index combination goes with each sample, the reads are sorted and separated into separate per-sample FASTQ files.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-demultiplexing.png){#fig-intro-ngs-fig-demultiplexing width=100%}
+
 
 While this is not something most researchers will do themselves, it is useful to know as errors detected in downstream analysis can be traced back to suboptimal demultiplexing (such as incorrect assignment of indices, if you have not the number of sequenced reads you expected).
 
@@ -390,11 +390,11 @@ This means that during library preparation, researchers often have to perform ma
 By over-amplifying libraries, you reduce the number of unique sequences from your sample you actually retrieve.
 If you are repeatedly sequencing the same DNA sequence (i.e. the amplified copies) over and over, you use up the fixed number of available clusters on the flow cell, and prevent clusters of unique sequences from being sequenced.
 
-This is also important analysis wise, as will be discussed in the chapter on taxonomic profiling and genomic mapping, you can actually artificially 'inflate' the counts of reads that come from a particular taxon (@fig-intro-ngs-fig-sequencing-read).
+This is also important analysis wise, as will be discussed in the chapter on taxonomic profiling and genomic mapping, you can actually artificially 'inflate' the counts of reads that come from a particular taxon (@fig-intro-ngs-fig-read-stacking).
 For microbiome studies, this can skew the estimate of which species are in your sample or not.
 Some studies have also suggested dedeuplication can improve the accuracy of metagenomic _de novo_ assembly [@Zhang2023-vz]
 
-![Schematic representation of the result on over-amplification on reference-based genome mapping. Exact duplicate reads (yellow) that derive from overamplifying a library, can result in portions of the genome having higher depth coverage in certain regions (top distribution) and thus artificially provide a misleading sense of confidence in recovered regions during analysis, even though the overall coverage is low.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-sequencing-read.png){#fig-intro-ngs-fig-sequencing-read}
+![Schematic representation of the result on over-amplification on reference-based genome mapping. Exact duplicate reads (yellow) that derive from overamplifying a library, can result in portions of the genome having higher depth coverage in certain regions (top distribution) and thus artificially provide a misleading sense of confidence in recovered regions during analysis, even though the overall coverage is low.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-read-stacking.png){#fig-intro-ngs-fig-read-stacking}
 
 While this artefact can be partially corrected in analysis through the process of 'deduplication', you should be careful to not overamplify your libraries in the first place as you can potentially waste a lot of money.
 
@@ -407,7 +407,7 @@ Some more recent Illumina platforms such as the HiSeq X and NovaSeq machines hav
 These aim to better separate out and make more consistent the layout of DNA clusters on the flow cell by having  'nanowells' that the clusters form within.
 By having a stricter pattern where clusters form, it allows even tighter distribution of clusters on the flow cell without impeding on each other and thus increasing the number of clusters that can be sequenced at once.
 
-However, even though the cause it not fully understood, it appears that the method used to prevent two DNA molecules entering he same well ('exclusion amplification)' can accidentally cause 'switching' of the index barcode between two different DNA molecules. 
+However, even though the cause it not fully understood, it appears that the method used to prevent two DNA molecules entering he same well ('exclusion amplification)' can accidentally cause 'switching' of the index barcode between two different DNA molecules (@fig-intro-ngs-fig-indexhopping). 
 Thus, DNA molecules from one sample can instead receive the index barcode of another sample, and subsequently assigned to the wrong sample during demultiplexing.
 
 While this has been observed a low rates in earlier Illumina platforms, index misassignment appears to occur more often in patterned flow cells, somewhere between 0%-10% [@Van_der_Valk2019-to].
@@ -418,7 +418,7 @@ With index hopping, some of the abundant pathogen reads in the pathogen will be 
 In another case, if you have an oral microbiome sample and a gut microbiome sample sequenced on the same run, you may start seeing oral species being detected up in your gut samples.
 While this _could_ be valid biologically, but in other cases this could be false and it becomes hard to disambiguate if the species is truly present in the gut or not.
 
-<!-- TODO add index hopping image -->
+![Diagram from @Van_der_Valk2018-xx's preprint demonstrating how free-floating adapters (with a different index) can be incorrectly incorporated into molecules during exclusion amplification on Illumina platforms using patterned flowcells (reproduced here under a [CC-BY-ND 4.0](http://creativecommons.org/licenses/by-nd/4.0/) license without modification).](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-indexhopping.jpg){#fig-intro-ngs-fig-indexhopping}
 
 Therefore, you should keep this in mind when sending your libraries for sequencing.
 One way around this is to add additional (short) 'inline' barcodes that ligate directly to the DNA molecules during library preparation _prior_ adapting of the index-library construct.
@@ -458,8 +458,12 @@ While the NCBI does have quality control checks in place, these have not always 
 
 This means that some genomes in these databases are 'dirty' - i.e., they contain sequences that should not be there, such as adapters, primers, contaminating sequences from other species, or other artefactual sequences [@Longo2011-qd;@Mukherjee2015-vc;@Merchant2014-eu;@Steinegger2020-br;@Breitwieser2019-iz;@Kryukov2016-my].
 
-A common example, which many ancient metagenomicists have encountered is repeated identificiation of _Cyprinus carpio_ (carp) in their samples.
+A common example, which many ancient metagenomicists have encountered is repeated identificiation of _Cyprinus carpio_ (carp) in their samples (@fig-intro-ngs-fig-contamination-blog-screenshots).
+
 This is not a true hit, but in fact repeated false positive hits due to the presence of adapter sequences in the carp genome ^[See [https://web.archive.org/web/20170823143538/http://www.opiniomics.org/we-need-to-stop-making-this-simple-fcking-mistake/](https://web.archive.org/web/20170823143538/http://www.opiniomics.org/we-need-to-stop-making-this-simple-fcking-mistake/) and [https://web.archive.org/web/20241012070028/https://grahametherington.blogspot.com/2014/09/why-you-should-qc-your-reads-and-your.html](https://web.archive.org/web/20241012070028/https://grahametherington.blogspot.com/2014/09/why-you-should-qc-your-reads-and-your.html)].
+
+
+![Screenshot of the exasperation after the discovery of a publically available _Cyprinus carpio_ (carp) genome that was full of sequencing adapters. Any remaining sequencing adapters in your FASTQ files would thus align against the sequences in this genome and you would magically have carp in all of your metagenomic samples. Screenshot of [post](https://web.archive.org/web/20170823143538/http://www.opiniomics.org/we-need-to-stop-making-this-simple-fcking-mistake/) on the Opinionomics blog by Mick Watson](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-contamination-blog-screenshots.png){#fig-intro-ngs-fig-contamination-blog-screenshots}
 
 The implication for ancient metagenomicsists is that if you do not properly remove artefacts from your reads, you can end up with a lot of false positive hits in your data.
 This can be particularly impactful, for example, if you are trying to identify the presence of dietary species in a human microbiome sample.
