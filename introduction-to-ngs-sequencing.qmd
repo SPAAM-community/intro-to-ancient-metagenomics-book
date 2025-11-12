@@ -9,229 +9,239 @@ bibliography: assets/references/introduction-to-ngs-sequencing.bib
 🚧 This page is still under construction 🚧
 :::
 
-Next generation sequencing (NGS) revolutionised the whole of biology by providing rapid and cheap access to huge amounts of DNA sequence data. 
-One unexpected benefit of this technology was that the technique used by Illumina sequencers was that it was also _perfect_ for sequencing ancient DNA.
+Next generation sequencing (NGS) revolutionised biology by providing rapid and cheap access to huge amounts of DNA sequence data. 
+One unexpected benefits of the technology used in Illumina NGS sequencers, was that it was also ideal for sequencing _ancient_ DNA.
 
-In this chapter, we will do a brief overview of how DNA is structured, how DNA sequencing works, how most NGS sequenced DNA sequences are digitally represented, and then cover some of the important considerations for ancient metagenomic sequencing datasets.
+In this chapter, we will go through a brief overview of how DNA is structured, how DNA sequencing works, and how most NGS sequenced DNA sequences are digitally represented.
+Finally we will cover some important considerations for ancient metagenomic sequencing datasets.
 
 ## Basic Concepts
 
 ### Basic structure of DNA
 
-To understand how sequencing works, we need to understand the basic structure of DNA.
-Deoxyribonucleic acid (DNA) is a biological molecule famous for it's 'double helix' structure ([@fig-intro-ngs-fig-3dhelix]), and is present in the vast majority of cells in your body . 
+To understand how sequencing works, we first need to be familiar with the basic structure of DNA.
+Deoxyribonucleic acid (DNA) is a biological molecule famous for it's 'double helix' structure ([@fig-intro-ngs-fig-3dhelix]), and is present in the vast majority of cells in your body. 
 It encodes all the genetic information required for the development, growth, and function of living organisms.
 
-The each strand of the double helix structure consist of four main components called nucleotides, which bind together in different orders.
-These nucleotides consist of two groups:
+Each strand of the double helix structure consists of four main components called nucleotides, which bind together in different orders.
+These nucleotides can be grouped into two categories:
 
 - Pyrimidines: cytosine (C) and thymine (T)
 - Purines: guanine (G) and adenine (A)
 
-The nucleotides on one strand are connected via a 'sugar phosphate backbone', however the two strands are held together by the interaction of the hydrogen bond pairing of four different nucleobases on each strand ([@fig-intro-ngs-fig-2dhelix]).
+The nucleotides on one strand are connected via a sugar-phosphate 'backbone', however the two strands are held together by the interaction of the hydrogen bond pairing between the four different nucleobases on each strand ([@fig-intro-ngs-fig-2dhelix]).
 
 
 :::{layout-ncol=2}
 ![Still from animation of 3D DNA double helix. Source: Erin Rod, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:The_Structure_of_DNA_GIF.gif)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-3dhelix.png){#fig-intro-ngs-fig-3dhelix height=300px}
 
-![2D molecular diagram of DNA helix, with sugar-phosphate backbone and amine groups labelled indicated. Source: Pradana Aumars, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Structure_ADN.png)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-2dhelix.png){#fig-intro-ngs-fig-2dhelix height=300px}
+![2D molecular diagram of a DNA helix, with the sugar-phosphate backbone and amine groups labelled indicated. Source: Pradana Aumars, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Structure_ADN.png)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-2dhelix.png){#fig-intro-ngs-fig-2dhelix height=300px}
 :::
 
-This pairing consists of one pyrimidine and one purine, which are complementary to each other.
+This pairing consists of one pyrimidine and one purine that are complementary to each other.
 
-- `C with `G` (to remember: thing CGI in animated movies)
+- `C` with `G` (to remember: think CGI in animated movies)
 - `A` and `T` (to remember: think AT-AT Walker from Star Wars, [@fig-intro-ngs-fig-atatwalker])
 
 Therefore, whenever you find a `C` on one strand, you will normally find a `G` on the other strand (and vice versa), and the same for `A` and `T`.
-If you find an `A` on one strand, you will find a `T` on the other strand, or if a `T` on one strand, you will have another.
 
-What this means is that because of this complementary pairing, depending on which strand you are reading, you can always reconstruct the order bases on the _other_ strand.
+What this means is that because of this complementary pairing, regardless of which strand you are 'reading', you can almost always reconstruct the order bases on the _other_ strand.
 
-![Lego construction of AT AT walker from Star Wars. Source: Tim Moreillon, [CC BY-SA 2.0 Generic](https://creativecommons.org/licenses/by-sa/2.0/deed), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:LEGO_Star_Wars_AT-AT_Walker_(6740909421).jpg)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-atatwalker.jpg){#fig-intro-ngs-fig-atatwalker height=300px}
+![Lego reconstruction of AT AT walker from Star Wars. Source: Tim Moreillon, [CC BY-SA 2.0 Generic](https://creativecommons.org/licenses/by-sa/2.0/deed), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:LEGO_Star_Wars_AT-AT_Walker_(6740909421).jpg)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-atatwalker.jpg){#fig-intro-ngs-fig-atatwalker height=300px}
 
 ### DNA replication
 
-This characteristic of the DNA molecule is a critical component on how DNA gets replicated (or copied) within a cell.
+This complementary-stranded characteristic of the DNA molecule is a critical component of how DNA gets replicated (or copied) within a cell.
 
 At it's core, DNA replication consists of:
 
-1. Unwinding the DNA helix and separate the two strands by breaking the hydrogen bonds between the complementary bases using a helicase enzyme
-2. Use a polymerase enzyme to add complementary new 'free' nucleotides floating in the cell to the exposed base on the strand (repeating for each base until a 'stop' signal is received)
-3. Construct bonds on the sugar-phosphate backbone of the new strand using a ligase enzyme
+1. Unwinding the DNA helix and separating the two strands by breaking the hydrogen bonds between the complementary bases using a helicase enzyme
+2. Using a polymerase enzyme to add complementary new 'free' nucleotides floating in the cell, to the exposed base on the strand (repeating this step for each base until a 'stop' signal is received)
+3. Constructing bonds on the sugar-phosphate backbone of the new strand, using a ligase enzyme
 
 A graphical representation can be seen in using a helicase enzyme in the image below ([@fig-intro-ngs-fig-dnareplication]).
 
 ![Schematic diagram of DNA replication, with a helicase unwinding DNA strand with DNA polymerases on the leading and lagging strand incorporating free nucleotides. Source: Christine Imiller, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:DNA_Polymerase_DNA_Replication.png)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-dnareplication.jpg){#fig-intro-ngs-fig-dnareplication height=300px}
 
-This concept is important because it is the basis of how DNA sequencing works, and how we can reconstruct the sequence of a DNA molecule.
+This concept is important because it is the basis of how DNA sequencing works, and thus we can reconstruct the sequence of a DNA molecule for analysis.
 
 ### Extracting DNA
 
-To understand why NGS sequencing revolutionised the field of palaeogenomics, we need to quickly need to compare a difference between how we get modern and ancient DNA.
+To understand why specifically _NGS_ sequencing revolutionised the field of palaeogenomics, we need to briefly compare the differences between how we get modern and ancient DNA.
 
-To get DNA from 'modern' samples (i.e., living organisms), you first get your tissue.
-You then have to break down (lyse) the cell membrane and/or walls, to release the molecular contents of the cell [@Danaeifar2022-sk].
-Extraction protocols then use a variety of enzymes to degrade the other biomolecules in the cell (e.g., proteins, lipids, RNA) so that they do not 'interfere' with the extraction of the DNA itself.
-Finally, the DNA is separated and pulled out from the rest of the now-broken cell contents (purification).
+To get DNA from 'modern' samples (i.e., living organisms), first a biological tissue or sample is acquired.
+You then typically break down (lyse) the cell membrane and/or walls, to release the molecular contents of the cell [@Danaeifar2022-sk].
+Extraction protocols then use a variety of enzymes or other mechanisms to degrade the other biomolecules in the cell (e.g., proteins, lipids, RNA) so that they do not 'interfere' with the extraction of the DNA itself.
+Finally, the DNA is somehow separated and isolated out from the rest of the now-broken cell contents (purification).
 
-This extracted DNA are typically in very long and intact strands that you can sort of imagine as long, soft spaghetti pasta like structures ([@fig-intro-ngs-fig-moderndnaextraction]).
+This extracted 'fresh' DNA is typically in very long and intact strands that can be sort of imagined as long, soft spaghetti pasta like structures ([@fig-intro-ngs-fig-moderndnaextraction]).
 
 ![Simplified schematic diagram of the process of DNA extraction from living cells. Source: CNX OpenStax, [CC BY 4.0 International](https://creativecommons.org/licenses/by/4.0/deed), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Figure_17_01_02.jpg)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-moderndnaextraction.jpg){#fig-intro-ngs-fig-moderndnaextraction width=90%}
 
-In contrast, while the concept of ancient DNA extraction is the similar, the end product of the extraction is different.
+In contrast, while the concept of _ancient_ DNA extraction is very similar, the end product of the extraction is different.
 
-Taking a skeleton as an example, once you have your bone sample, cell lysis is normally not necessary as the cells are already broken down.
-However, we have to instead 'liberate' the DNA from the mineral matrix of the bone - so palaeogenomicsts first demineralise the bone to release the DNA and then then degrade the remaining more robust molecules in the sample (typically just protein) before purifying the DNA [@Andreeva2022-oe].
+Taking a skeleton as an example, once a bone has been sampled for bone podwer, cell lysis is normally not necessary as the cells are already broken down due to age.
+Instead, we have to 'liberate' the DNA from the mineral matrix of the bone.
+So palaeogenomicists first demineralise the bone to release the DNA, before degrading the remaining non-nucleic acid biomolecules in the sample (typically with proteinases) and then purifying the DNA [@Andreeva2022-oe].
 
-The resulting DNA molecules are quite different from the modern DNA.
-Rather than well cooked, soft spaghetti structures - ancient DNA molecules are more like extremely overcooked spaghetti. 
-These molecules are highly degraded, broken down to very small fragments, and also often have 'damage' at the ends in the form of 'modified nucleotides' that do not represent the original sequence  (see the [Introduction to Ancient DNA chapter](introduction-to-ancient-dna.qmd) for more information).  
+In contrast, the resulting DNA molecules are quite different from the modern DNA.
+Rather than well cooked, soft spaghetti structures - ancient DNA molecules are more like _extremely overcooked_ spaghetti. 
+These molecules are highly degraded, broken down into very small fragments, and also often have 'damage' at the ends in the form of 'modified nucleotides' that do not represent the original sequence  (see the [Introduction to Ancient DNA chapter](introduction-to-ancient-dna.qmd) for more information).  
 Finally, the small amount of tiny and damaged DNA molecules typically sits in a 'soup' of 'contaminating' high-quality modern DNA from the surrounding burial and storage environment ([@fig-intro-ngs-fig-ancientdnainbone]).
 
-As we will find out in the next section, this short fragments of DNA is not a disadvantage for NGS sequencing, but rather a benefit.
+As we will find out in the next section, these short fragments of DNA is not a disadvantage for NGS sequencing, but rather a benefit.
 
 ![© [Lucy Reading-Ikkanda](https://www.lucyreading.co.uk/project/ancient-dna/) for The Scientist Magazine, June 2015 (reused here with permission). Very small fragmented 'endogenous' DNA is preserved in bone, but alongside more recent and modern contaminating microbial and recent human DNA](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-ancientdnainbone.png){#fig-intro-ngs-fig-ancientdnainbone height=600px}
 
 
 ### DNA sequencing
 
-Now that we have our DNA we want to be able to 'read' the order of the nucleotide sequence that makes up the molecule.
-Sequencing is the processing of converting the sequence of the four chemical nucleotides to the `ACTG` you can see on your computer screen.
-The result of this process is the essentially what we do pretty much all of our analyses on in genetics and genomics.
+Now that we have our DNA, we want to be able to 'read' the order of the sequence of nucleotides that makes up a strand of the molecule.
 
-The core concept of most NGS sequencing methods ^[Newer techniques such as Nanopore sequencers use different methods.] is to replicate the strand, but when adding a nucleotide, you instead supply a modified nucleotide with a fluorophore attached to it.
-This fluorophore is a small molecule that emits a specific colour when excited by a laser.
-As you have four different nucleotides, each will emit a different colour [@Ju2006-cl].
-Therefore if you record the colour emitted light each time the modified nucleotide is added to a strand, you can reconstruct the sequence of the DNA molecule ([@fig-intro-ngs-fig-colourednucleotides]).
+Sequencing is the process of converting the long sequences of the four chemical nucleotides to the `ACTG` we can see on our computer screen.
+The result of this process is what we essentially apply all of our (meta)genomic analyses upon.
+
+The core concept of most NGS sequencing methods ^[Newer techniques such as Nanopore sequencers use different methods.] is to replicate the strand as normal.
+But instead of adding a standard nucleotide, we instead incorporate a modified nucleotide with a fluorophore attached to it.
+A type of fluorophore is a small molecule that emits a specific colour when excited by a laser.
+As there are four different nucleotides, each will emit a different colour [@Ju2006-cl].
+Therefore if we record the colour emitted each time a modified nucleotide is added to a strand, we can reconstruct the sequence of the DNA nucleotides in order ([@fig-intro-ngs-fig-colourednucleotides]).
 
 ![Molecular diagram of the four DNA nucleotides with coloured fluorophore amine groups. Source: [@Ju2006-cl]](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-colourednucleotides.jpeg){#fig-intro-ngs-fig-colourednucleotides height=600px}
 
 ### Sanger sequencing
 
-Historically, the first mass-production sequenced method was Sanger sequencing ([@fig-intro-ngs-fig-sangersequencing]) [@Sanger1977-zw].
-This was the method used for sequenced the first human genome under the Human Genome Project [@Heather2015-zo]
+Historically, the first mass-production sequencing method was called Sanger sequencing ([@fig-intro-ngs-fig-sangersequencing]) [@Sanger1977-zw].
+This was the method used for sequencing the first human genome during the Human Genome Project [@Heather2015-zo].
 
-The concept of Sanger sequencing involves making lots of copies of a single DNA molecule using replication. 
-But when adding the nucleotides, you include within the mixture of (normal) free nucleotides, you include a few modified nucleotides that include fluorophore, but also that also have a 'blocking' component that prevents any additional nucleotides from being added to the strand of that _particular copy_ by the polymerase.
-Critically, the point at which a blocking nucleotide is incorporated is random.
-As there is only a small proportion of blocking nucleotides in amongst pool of free nucleotides,the incorporation of the blocking nucleotides occurs at a slow rate and at different points during the replication process.
-This results in many replicated molecules but all of different lengths ([@fig-intro-ngs-fig-sangersequencing]).
+The concept of Sanger sequencing involves making many copies of a single DNA molecule using replication. 
+However, when adding the free nucleotides, within the replication mixture of a pool of (normal) free nucleotides are a proportion of the modified nucleotides mentioned above.
 
-![Diagram of sanger sequencing, with a primer, template and free blocking nucleotides being added to ends of molecules at random lengths, and then being sent through a size-selecting capillary with a laser dector to identify which of the four blocking nucleotides are passing through the capillary and thus ready ina  chromatopgraph. Source: Estevezj, [CC BY-SA 3.0 Unported](https://creativecommons.org/licenses/by-sa/3.0/) via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sanger-sequencing.svg)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-sangersequencing.png){#fig-intro-ngs-fig-sangersequencing height=300px}
+These modified nucleotides include the fluorophores that emit light when excited by certain wavelengths - typically controlled by a laser.
+In addition to the light emitting property, these modified nucleotides also contain a 'blocking' component that, once incorporated into the strand, prevents any further extension of the strand by other nucleotides.
 
-Once you have the replicated molecules, Sanger sequencing involves running the mixture through a capillary gel.
-As all the molecules are of different lengths, they will move through the gel at different speeds, and therefore separate out.
-A laser is then fired at the gel at regular intervals, and the light emitted from the fluorophores is detected.
+Critically, as there is only a small proportion of blocking nucleotides amongst the pool of free nucleotides,the incorporation of the blocking nucleotides occurs at a slow rate and at different points during the replication process.
+This results in many replicates of the original molecules but all at different lengths ([@fig-intro-ngs-fig-sangersequencing]).
+
+![Diagram of sanger sequencing, with a primer, template and free blocking nucleotides being added to ends of molecules at random lengths. The molecules are passed through a size-selecting capillary with a laser detector, which identifies which of the four blocking nucleotides are passing through the capillary at a given point and recorded in a chromatogram. Source: Estevezj, [CC BY-SA 3.0 Unported](https://creativecommons.org/licenses/by-sa/3.0/) via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sanger-sequencing.svg)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-sangersequencing.png){#fig-intro-ngs-fig-sangersequencing height=300px}
+
+Once many different-length replicates of the template molecules are ready, the Sanger sequencing method involves running the pool of DNA fragments through a capillary gel.
+As all the molecules are of different sizes, they will move through the gel at different speeds, and therefore separate out based on the length of the molecule.
+A laser is fired at the gel at regular intervals, and the light emitted from the fluorophores is detected.
 Shorter molecules will move faster through the gel, and therefore will be detected first, whereas longer molecules will be detected later.
-Therefore, by detecting the light emitted as the incrementally longer molecules pass through the gel, you can reconstruct the sequence of the nucleotides along the module.
+Therefore, by detecting the light emitted as the incrementally longer molecules pass through the gel, we can reconstruct the sequence of the nucleotides along the module.
 
 The result is a chromatogram, which is a graph that records the strength of each colour at each point in the gel band ([@fig-intro-ngs-fig-chromatogram]).
 
-![Example of gel-based chromatogram with four columns with bands indicating which colour is the blocking nucleotide of that particular sized DNA molecule, and on the size an intensity graph of each colour given off by each flourophore to indicate which colour it is. Source: Morse Phoque (Abizar), [CC BY-SA 3.0 Unported](https://creativecommons.org/licenses/by-sa/3.0/) via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Radioactive_Fluorescent_Seq.jpg)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-chromatogram.jpg){#fig-intro-ngs-fig-chromatogram height=300px}
+![Example of a gel-based chromatogram with four columns with different bands. Each column corresponds to a different nucleotide and the light that is emitted at that position along the molecule. On the right is intensity graph of each colour given off by each flourophore at each position. Source: Morse Phoque (Abizar), [CC BY-SA 3.0 Unported](https://creativecommons.org/licenses/by-sa/3.0/) via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Radioactive_Fluorescent_Seq.jpg)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-chromatogram.jpg){#fig-intro-ngs-fig-chromatogram height=300px}
 
-While this method was used for the first sequencing human genome, it was very slow and very expensive - it does not scale well  [@Schloss2020-gp] due to having to make many copies of a single molecule and sequence each nucleotide sequence one at a time.
-
-Furthermore, the method requires a large amount of starting DNA.
-However due to the degraded nature of ancient DNA, it is very rare to have sufficient concentration of DNA to be able to use Sanger sequencing.
+While this method was used for the first sequencing of the human genome, it was very slow and very expensive.
+It does not scale well  [@Schloss2020-gp] due to the requirement of having many redundant copies to sequence each molecule.
+Furthermore, this method also requires a large amount of starting DNA.
+This is problematic when we are handling degraded ancient DNA, as it is very rare to have a sufficient concentration of DNA to be able to use Sanger with sequencing - unless the initially preservation is high enough, and/or we take very large amounts input sample (which is typically via destructive methods).
 
 ## Next generation sequencing
 
-In 2005, the first 'Next Generation Sequencing' (NGS) machines were released ^[With the more recent emergence of Nanopore sequencing, really NGS should be equated to 'second generation sequencing', a term you will see in some contexts.] in the form of Roche's 454 Pyrosequencing [@Heather2015-zo].
+In 2005, the first 'Next Generation Sequencing' (NGS) machines were released ^[With the more recent emergence of Nanopore sequencing, really NGS should be equated to 'second generation sequencing', a term you will see in some contexts.], in the form of Roche's 454 Pyrosequencing [@Heather2015-zo].
 
-These new sequencers were able to quickly and cheaply sequence millions of DNA molecules at once, revolutionising genetics and enabling 'accessible' genomics to a much wider set of scientists.
+These new sequencers were able to quickly and cheaply sequence millions of DNA molecules at once, revolutionising genetics and enabling 'accessible' genomics to a much wider group of scientists.
 
-While a few companies emerged with their own NGS machines, such as PacBio and IonTorrent, sequencers from Illumina have been by far the been the most successful.
-These machines have been so successful, they have almost exclusively sequenced the entire corpus of ancient DNA sequence data.
+While a few companies emerged with competing NGS sequencers employing different techniques, such as PacBio and IonTorrent, the platform that was been by far the most successful is the one from Illumina.
+These machines have been so successful, they have almost exclusively sequenced the entire corpus of ancient DNA sequencing data.
 Therefore the rest of this chapter will focus just on Illumina sequencing.
 
 ### Illumina sequencing 
 
-Illumina sequencing relies on a process termed 'Sequencing by synthesis' (SBS) using reversible terminators.
-This follows a similar concept as Sanger Sequencing in that you add modified nucleotides with fluorophores, however instead of using multiple molecules with different blocking separated via gel, it uses nucleotides that can be reversibly blocked and thus continue incorporating nucleotides in a single molecule [@Bentley2008-oj].
+Illumina sequencing relies on a process termed 'Sequencing by synthesis' (SBS) but with _reversible_ terminators.
+This follows a similar concept as Sanger Sequencing in that we add modified nucleotides with fluorophores for emitting per-nucleotide light. However instead of using multiple molecules of different lengths that are separated via a gel, it uses nucleotides that can be reversibly blocked, and thus after removing the 'block' can continue incorporating nucleotides within a single molecule [@Bentley2008-oj].
 
-This works by immobilising the DNA so it stays on one location on a special type of plate.
-The machine then performs out a typical DNA replication, adding the flourophore modified nucleotides one at a time, and then taking a photo of the emitted light.
-However the key difference is the blocking part of the oligo is removed, so the next modified oligo is added.
+This works by immobilising the DNA so it stays at one location on a special type of plate.
+The machine then performs a typical DNA replication, adding the flourophore modified nucleotides one at a time.
+Instead of a chromatogram, the machine takes a type of photo of the emitted light.
+However the key difference is that when after this photo is taken, the blocking part of the oligo is _removed_, so the next modified oligo can added.
 
-To visualise how this looks like, you can imagine a plate upon which you see millions of coloured tiny dots ([@fig-intro-ngs-fig-flowcell]), each cycling in realtime through different colours as each new nucleotide is added. 
+To visualise how this looks like, we can imagine looking down at a rectangular plate.
+On this plate, we can see millions of coloured tiny dots ([@fig-intro-ngs-fig-flowcell]), that are all changing colour in realtime as each new nucleotide is added. 
 
 ![Graphical representation of an Illumina sequencing flowcell during sequencing. Each colour dot corresponds to a single cluster of copies of the same DNA molecule emitting light corresponding to a single nucleotide along the molecular sequence.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-flowcell.png){#fig-intro-ngs-fig-flowcell height=300px}
 
-To follow this however, the DNA needs to be prepared in a specific way.
+To sequence DNA on an Illumina platform, however, we need to prepare the DNA in a specific way.
 
 ### Flow cells and adapters
 
-To ensure the DNA molecules do not move while taking photos, in Illumina sequencing, the DNA molecules are bound to a special glass slide called a flowcell ([@fig-intro-ngs-fig-flowcellschematic]).
+To ensure that DNA molecules do not move while recording the light being emitted by a modified nucleotide, in Illumina sequencing the DNA molecules are bound to a special glass slide called a flowcell ([@fig-intro-ngs-fig-flowcellschematic]).
 This also ensures the DNA does not get washed away during the sequencing process as different solutions wash through the machine between each step.
 
-![Schematic diagram of a Illumina HiSeq-like flowcell. The glass slide has eight 'lanes' (top), with wells at each end of each lane. The sequencing library is injected into the well, and moves through the lane in the direction as indicated by the arrows. Indicated in by the dark green dots at the the bottom of each lane, is the synthetic oligonucleotides that capture the DNA molecules, also known as the 'lawn'. Image based on and inspired by @Bronner2013-sv .](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-flowcellschematic.png){#fig-intro-ngs-fig-flowcellschematic height=300px}
+![Schematic diagram of a Illumina HiSeq-like flowcell. The glass slide has eight 'lanes' (top), with wells at each end of each lane. The sequencing library is injected into the well, and moves through the lane in the direction as indicated by the arrows. Indicated by the dark green dots at the the bottom of each lane are the synthetic oligonucleotides that capture the DNA molecules, also known as the 'lawn'. Image based on and inspired by @Bronner2013-sv .](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-flowcellschematic.png){#fig-intro-ngs-fig-flowcellschematic height=300px}
 
 ![Photo of a lawn of grass, as a metaphor of the 'lawn' of artificial oligonucleotide sequences of an Illumina flowcell. Source: Animaldetector, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Seededfertilizedlawn.JPG)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-grassy-lawn.jpg){#fig-intro-ngs-fig-grassy-lawn height=300px}
 
-To immobilise the DNA, the flow cell is coated with a 'lawn' (@fig-intro-ngs-fig-grassy-lawn) of synthetic oligonucleotides (i.e., custom sequences made in a lab) [@Holt2008-wk].
-By attaching (ligating) the _complementary_ sequence of the synthetic oligonucleotides to your DNA molecules from your sample, when your DNA molecules flow over the lawn (@fig-intro-ngs-fig-flowcellschematic), the complementary bonds between the nucleotide pairs will form.
-This then will hold the DNA in place.
+To immobilise the DNA, the flow cell is coated with a 'lawn' (@fig-intro-ngs-fig-grassy-lawn) of synthetic oligonucleotides (i.e., artificially produced DNA molecule with a specific and known sequence also known as 'oligos') [@Holt2008-wk].
+By attaching (i.e., ligating) the _complementary_ sequence of the synthetic oligos to the DNA molecules from our sample, when our DNA molecules flow over the lawn (@fig-intro-ngs-fig-flowcellschematic), the complementary bonds between the oligos on the lawn and the complementary sequence on our DNA molecules will form.
+This then will hold the DNA in place and 'immoblise' it for capturing emitted light at a specific location on the flow cell.
 
-The process of adding the complementary synthetic oligonucleotides (often referred to as oligos), referred to as 'Adapters', is called 'Library preparation'.
+The process of adding the complementary synthetic oligos, referred to as 'Adapters', to the DNA molecules of a sample is called 'Library preparation'.
 
-These adapters sequences do not only include the complementary sequence to flowcell oligos, but also an additional sequence that acts as a priming site for polymerases to start the replication process
-Furthermore, researchers have exploited the highly-multiplex nature of Illumina sequence to allow them to sequence multiple samples at once.
+These adapter sequences not only include the complementary sequence to flowcell oligos, but also an additional sequence that acts as a priming site for polymerases to start the replication process.
+Furthermore, researchers have exploited the ability of Illumina sequencers to sequence millions of molecules at once, to allow them to also sequence multiple _samples_ at once.
 They do this by adding additional sequences to the adapter sequence construct that consist of short sample-specific 'indices' or 'barcodes'.
 These indices allow DNA molecules from different samples to be sequenced at the same time and then separated back into the groups of molecules from the same samples during data analysis.
+This system of sequencing multiple samples at once is known as 'multiplexing'.
 
-![Annotated library construct of a DNA molecule prepared for sequencing on Illumina platforms. The P5 and P7 primers are complementary to the flow cell oligo 'lawn', the i5 and i7 indices act as the library specific 'bar code' used for separating samples when multiplex-sequencing, The Read 1 and Read 2 primers act as priming sites for sequencing the template molecule (in this, case an ancient DNA molecule).](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-library-construct.png){#fig-intro-ngs-fig-library-construct width=100%}
+![Annotated library construct of a DNA molecule prepared for sequencing on Illumina platforms. The P5 and P7 primers are complementary to the flow cell oligo 'lawn', the i5 and i7 indices act as the library specific 'barcode' used for separating samples when performing multiplex-sequencing, The Read 1 and Read 2 primers act as priming sites for sequencing the template molecule (in this, case an ancient DNA molecule).](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-library-construct.png){#fig-intro-ngs-fig-library-construct width=100%}
 
-The completed index, adapter, and target DNA molecule construct (@fig-intro-ngs-fig-library-construct) of all molecules from a given construction process is termed a library, and is what is put into the sequencing machine.
+The completed index, adapter, and target DNA molecule construct (@fig-intro-ngs-fig-library-construct) of all molecules from a given construction protocol run is termed a library, and this is what is injected into the sequencing machine.
 
 ### Clustering
 
-Now that each DNA molecule of the library is bound to it's own section of the flowcell, we have the problem that the light emitted from a single tiny fluorophore will not be strong enough to be captured by the camera in the sequencer.
+Once a library is injected into a flowcell, and each DNA molecule of the library is bound to it's unique own location on the flowcell, we could start sequencing.
+However, there is the problem that the light emitted from a single tiny fluorophore is not strong enough to be captured by the camera in the sequencer.
 
-Illumina machines get around this through a process called 'clustering'.
-The clustering process will make many copies of the exact same DNA molecule right next to the original template molecule.
-When the cluster of DNA copies emit the light from the same nucleotide along their sequence at the same time, collectively the light emitted will now be sufficiently strong to be captured by the camera.
+The Illumina platforms get around this through a process called 'clustering'.
+The clustering process makes many identical copies of the molecule right next to the original template molecule.
+When this cluster of DNA copies emit the light from the same nucleotide along their sequence at the same time, the light collectively emitted will now be sufficiently strong to be captured by the camera.
 
-To make copies sufficient copies of the 'template' molecule, clustering is carried out using 'bridge amplification' [@Bentley2008-oj].
+To make sufficient copies of the 'template' molecule efficiently, this clustering is carried out using 'bridge amplification' [@Bentley2008-oj].
 
 The process of bridge amplification is as follows:
 
-1. A single-stranded DNA molecule is immobilised on the flow cell via the oligo adapter on _one_ end of the module
-2. The DNA is bent over
-3. The oligo adapter on the other end of the molecule binds to the other complementary flow-cell oligo adapter in the close vicinity to the template (forming a bridge)
-4. A priming sequence, free nucleotides, and a polymerase is added to the flow cell
+1. A single-stranded DNA molecule is immobilised on the flow cell via the adapter at _one_ end of the module
+2. The DNA is 'bent over'
+3. The oligo adapter at the other end of the molecule binds to another complementary flow-cell oligo in its close vicinity  (forming a bridge)
+4. A priming sequence, free nucleotides, and a polymerase is then added to the flow cell
 5. The reverse complement of the DNA molecule is made via replication, and the polymerase mixture is washed away
-6. The two strands are then separated to form two single-stranded DNA molecules (the new one the reverse complement of the original template molecule)
+6. The two strands are then separated to form two single-stranded DNA molecules (with the new strand representing the reverse complement of the original template molecule)
 7. Repeat 1-5 for the two new strands until sufficient copies are made
 
 This process is also depicted in [@fig-intro-ngs-fig-bridgeamplification.png].
 
 ![Diagram of bridge amplification. Source: DMLapato, [CC BY-SA 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Cluster_Generation.png)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-bridgeamplification.png){#fig-intro-ngs-fig-bridgeamplification.png height=600px}
 
-Of course, at the stage that you've had many cycles of replication, you have in a single cluster both forward and reverse complement copies of the same DNA molecule.
-As this would emit different colours at each position along the sequence, one of the strand directions are removed but 'trimming' the flow cell lawn at one of the complementary oligo adapter sequences
+Of course, after had many cycles of replication, we will have in a single cluster both forward and reverse complement copies of the same DNA molecule.
+As this would emit two different colours at each position along the sequence, one of the strand 'directions are' removed by 'trimming' the flow cell lawn at one of the adapter sequences
 
 ### Sequencing-by-synthesis
 
-With our cluster of many copies of the same DNA molecule, we can now start the 'Sequencing by synthesis' (SBS) process itself.
+With our cluster of many copies of the same DNA molecule all in the same direction, we can now start the 'Sequencing by synthesis' (SBS) process itself.
 
-As with replication and Sanger sequencing, the process SBS involves adding free nucleotides to the template strand (with only the complementary base being able to be incorporated to the exposed strand), some of which are modified to emit light when excited with a laser, and taking a picture [@Bentley2008-oj].
+As with replication and Sanger sequencing, SBS involves adding free modified nucleotides to the template strand (with only the complementary base being able to be incorporated to the exposed strand at any one point), the modified nucleotides are excited with a laser, and a picture is taken [@Bentley2008-oj].
 
-The main difference with Sanger sequencing is you can actually reuse the same DNA molecule to add more nucleotides along the same strand - rather than 'discarding' it with permanently blocking nucleotides. 
-This makes the SBS technique more resource sufficient, both in reagents (you need fewer copies of the molecule and recycle the same original copies of template molecules), but also in space - you don't have to separate out the molecules in a gel - they are all fixed on the flowcell in a tightly packed layout.
+The main difference with Sanger sequencing is we can actually reuse the same DNA molecule to add more nucleotides along the same strand - rather than 'discarding' due to the permanently blocking nucleotides. 
+This makes the SBS technique more resource sufficient, both in reagents (you need fewer copies of the molecule and recycle the same original copies of template molecules), but also in space as it is not necessary to separate out the molecules in a gel. Instead, they can be all fixed in a tightly packed layout on the flowcell.
 
 ![Diagram of sequencing by synthesis. Source: Abizar Lakdawalla, [CC BY-SA 3.0 Unported](https://creativecommons.org/licenses/by-sa/3.0/) via [Wikimedia Commons](https://en.wikipedia.org/wiki/File:Sequencing_by_synthesis_Reversible_terminators.png)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-sequencingbysynthesis.png){#fig-intro-ngs-fig-sequencingbysynthesis height=300px}
 
-The process as in @fig-intro-ngs-fig-sequencingbysynthesis can be broken down to:
+The process as depicted in @fig-intro-ngs-fig-sequencingbysynthesis can be broken down to:
 
-1. On a single stranded molecule, bind a primer on the molecule's adapter priming site
+1. On a single stranded molecule, bind a primer to the molecule's adapter priming site
 2. Add fluorescently labelled nucleotides (with a reversible terminator) to the flow cell
-3. Only complementary nucleotides will bind to the template strand at the first exposed base
+3. Only complementary (modified) nucleotides will bind to the template strand at the first exposed base
 4. Wash away unbound nucleotides
 5. Fire a laser to excite the modified nucleotides to emit the corresponding colour, and take a picture
 6. Clip off the fluorophore part of the nucleotide
 7. Repeat 2-6 until the entire strand is sequenced
 
-On Illumina sequencers, the number of repetitions (known as cycles) and images typically happens either 50, 75, or 125 times, depending on the machine and the type of sequencing chemistry kit.
+On Illumina sequencers, the number of repetitions (known as cycles) typically happens either 50, 75, or 125 times, depending on the machine and the type of sequencing chemistry kit.
 
 The reason why Illumina sequencers (and similar NGS technologies) have been so successful is that this process is happening across millions of clusters at the same time.
 
@@ -240,18 +250,18 @@ The reason why Illumina sequencers (and similar NGS technologies) have been so s
 You can see a small fraction of this flow cell in @fig-intro-ngs-fig-sbsimagecapture.
 Each coloured dot corresponds to a cluster of DNA molecules.
 At each cycle (each photo), a new nucleotide is added to the strand, and a laser is fired to excite the fluorophores.
-You can see two different clusters emit different lights, as they are different DNA molecules thus have different nucleotides at that particular 'cycle' of the 'replication' process.
-By converting the emitted light to the known corresponding A, C, G, T, at each photo you can reconstruct the sequence of the DNA molecule.
+You can see two different clusters emit different lights, as they are different DNA molecules and thus have different nucleotides at that particular 'cycle' (or position in the sequence) of the 'replication' process.
+By converting the emitted light to the known corresponding A, C, G, T, at each photo, we can reconstruct the sequence of the DNA molecule.
 
-By now you probably are starting to feel comfortable with the concept for one-colour equals one nucleotide.
-To throw a curve ball, Illumina sequencers actually have _three_ different 'colour chemistries' they use on different machines.
+We are hopefully now starting to feel comfortable with the concept for one-colour equals one nucleotide.
+To throw a curve ball, Illumina sequencers actually have _three_ different 'colour chemistries' that they use on different machines.
 
 ### Colour chemistry
 
-To be able to offer cheaper machines, Illumina came up with a system that requires the number of colours that need to be detected.
+To be able to offer cheaper machines, Illumina came up with alternative systems that require a fewer number of colours to be detected.
 These variants are often referred to different 'colour chemistries'.
 
-A list of Illumina platforms and their colour chemistries as follows below:
+A list of Illumina platforms and their colour chemistries (at the time of writing)  areas follows below:
 
 - Four-colour chemistry
     - Illumina HiSeq
@@ -262,124 +272,133 @@ A list of Illumina platforms and their colour chemistries as follows below:
 - One-colour chemistry
     - Illumina iSeq
 
-In the vast majority of cases, your data will be sequenced on only four- and two-colour chemistries, so we will focus on these two.
+In the vast majority of cases, our data will be only sequenced on four- and two-colour chemistries, so we will focus on these two.
 
-In the case of the Illumina HiSeq and MiSeq platforms, the system for sequencing is as described previously: each of the four bases of the nucleotides that make up DNA will have a reversible-terminator variant, and each of these variants will have a fluorophore that will emit one of four colours.
+In the case of the Illumina HiSeq and MiSeq platforms, the system for sequencing is as described previously: each of the four bases of the nucleotides that make up DNA will have a reversible-terminator variant, and each of these variants will have a specific fluorophore that will emit one of four colours.
 Therefore, the camera on the machine is designed to be able to pick up each of the four different wavelengths through different imaging channels.
 
-In contrast, two-colour chemistry machines will only have imaging channels that detect have two dye colours - red and green ([@fig-intro-ngs-fig-twocolourchemistry]). 
-If the machine detects green being emitted from a cluster on the flowcell, this correspond to T.
-If the machine detects red, it records a C. 
+In contrast, two-colour chemistry machines will only have imaging channels that detect have two colours - red and green ([@fig-intro-ngs-fig-twocolourchemistry]). 
+If the machine detects only green being emitted from a cluster on the flowcell, this correspond to T.
+If the machine detects only red, it records a C. 
 If the machine detects _both_ red and green wavelengths being emitted from a cluster - this corresponds to an A.
-If no colour is emitted, this is _assumed to be a G_. 
+If no colour is emitted, this is _assumed_ to be a G. 
 
 ![Graphical representation of difference between four- (left) and two-colour (right) chemistry of Illumina Platforms. Inspired by [https://www.ecseq.com/support/ngs/do_you_have_two_colors_or_four_colors_in_Illumina](https://www.ecseq.com/support/ngs/do_you_have_two_colors_or_four_colors_in_Illumina)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-twocolourchemistry.png){#fig-intro-ngs-fig-twocolourchemistry height=300px}
 
-This characteristic of two colour-chemistry thus means you must be aware of the type of sequencer your data was generated on, as this will require slightly different preprocessing as we will see later on in the section [Low sequence diversity](#low-sequence-diversity).
+This characteristic of two colour-chemistry thus means we have to be aware of the type of sequencer our data was generated on, as this will require slightly different computational preprocessing, as we will see later on in the section on [Low sequence diversity](#low-sequence-diversity).
 
 ### Base quality and paired-end sequencing
 
-Another consideration with Illumina sequencing kits is not just the number of cycles, but which kit to use based on its 'pairment'.
+Another consideration with Illumina sequencing kits is not just the number of cycles, but what 'pairment' they kit has.
 
-As I'm sure everyone reading this book has experienced, biology is not like physics where everything is perfect and 'easy'.
-Biology is messy, things do not stay stable.
-The same applies to sequencing - as the sequencer goes through each cycle of adding a new nucleotide to each DNA strand in a cluster, mistakes will increasingly start happening as polymerases don't bind properly, fall off, skip nucleotides, or even add the wrong base.
-The accumulated effects of these mistakes across all DNA strands in a cluster is that the emitted light during the imaging part of the cycle becomes less clearly one colour as mixtures of wavelengths are emitted.
-Thus, the confidence of the _correct_ nucleotide has been recorded at that position of the DNA molecule becomes less.
+As we all know, biology is not like physics where everything is perfect and 'easy' [^2].
+Biology likes to be messy, and things often do not stay consistent.
 
-(Illumina) sequencers address this in two ways.
+The same applies to sequencing - as the sequencer goes through each cycle of adding a new nucleotide to each DNA strand in a cluster, 'mistakes' will increasingly start to happen. 
+Polymerases will not bind properly, or fall off, or skip nucleotides, or even add the wrong base.
+The accumulated effects of these mistakes across all DNA strands in a cluster is that the emitted light during the imaging part of the cycle becomes less clearly one colour, as mixtures of wavelengths are emitted.
+This results in our confidence that _correct_ nucleotide has been recorded at a given position of the DNA molecule becomes lower.
 
-Firstly, when measuring the particular base being recorded, all sequencers will at the same time record a 'base quality' that is associated with that call.
+[^2]: Take this statement very much tongue in cheek.
+
+Sequencers address this in two ways.
+
+Firstly, when measuring the particular base being recorded, all sequencers will at the same time calculate a 'base quality' that is associated with that call.
 This corresponds to the confidence (via a probability) that the recorded base was the correct one.
-For example, if the wavelength was mostly one colour (let's say red for C) but the camera picked up a bit of another colour (lets say green for T), it will record `C` in the output, but the base quality score will be lower.
-If the sequencer's camera picks up wavelengths of all four colours from the same cluster at the same time - or even no light is detected at all - then the base quality for that position in that DNA molecule will be recorded as an N and a base quality of 0.
+For example, if the wavelength was mostly one colour (let's say red for C) but the camera picked up a bit of another colour (lets say green for T), it will record `C` in the output, but the base quality score associated with this base call will be lower.
+If the sequencer's camera picks up wavelengths of all four colours from the same cluster at the same time - or even no light is detected at all - then the base quality for that position in that DNA molecule will be recorded as an N and a confidence score of 0.
 
 Secondly, specifically for Illumina sequencers, there is the concept of 'paired-end' sequencing [@Bentley2008-oj].
-As there is an overall drop in base quality (i.e., confidence we have the right nucleotide) the closer we get to the end of the molecule due to the accumulated mistakes over time, we can freshly sequence the molecule again but in the _reverse_ direction.
-This way, we can 'merge' or average the base quality scores of two independent 'observations' of the nucleotide at that position.
+There is an overall drop in base quality (i.e., confidence we have the right nucleotide) the closer we get to the end of the molecule due to the accumulated mistakes over time.
+To counteract this, we can freshly sequence the molecule again but in the _reverse_ direction.
+This way, we can 'merge' and take an average of the two base quality scores of two independent 'observations' of the nucleotide at a given position.
 So if the last base when reading the molecule in the forward direction is an N (due to ambiguous wavelength emission), we can correct or 'recover' this last base by making it the _first_ base we call in when sequencing in the reverse direction from scratch with fresh reagents.
 
-This works as, Illumina sequencers can conveniently re-use the bending over approach as performed by the 'bridge' amplification method of clustering we saw earlier in this chapter.
-I.e., after bending over, the opposite flowcell oligo from the forward reverse flowcell anchor is cut so the 'end' of the original molecule is now bound to the flow cell (@fig-intro-ngs-fig-pairedendsequencing).
+This works as Illumina sequencers can conveniently re-use the 'bending over' approach as performed by the 'bridge' amplification method during clustering we saw earlier in this chapter.
 
-This paired-end sequencing technique means you get a pair of files - both with the same sequence from each cluster, but one has the molecule 'read' in the forward direction, and the other file with the 'reverse' direction. 
+I.e., after bending over, the opposite flowcell oligo from the forward reverse flowcell anchor is cut so the 'end' of the original molecule is now bound to the flow cell and becomes the 'start' of the new cluster (@fig-intro-ngs-fig-pairedendsequencing).
+This paired-end sequencing technique means we get a pair of files - both with the same sequence from each cluster, but one has the molecule 'read' in the forward direction, and the other file with the 'reverse' direction. 
 
-Another added benefit of paired-end sequencing is that you can recover longer molecules.
-In cases where the DNA molecule is _longer_ than the number of cycles the chemistry kit being used, by flipping the over the molecule and sequencing from the other end you can recover the end of the molecule.
-Of course if the molecule is longer than the sum of both set of cycles (e.g. a 120bp molecule, even though the sequencing kit is only two times 50bp), you will miss the 'middle' part of the molecule.
-However this is counteracted by the sheer number of independent molecules sequenced, so the 'missing' part can be filled in from another sequencing DNA molecule.
+Another added benefit of paired-end sequencing is that we can recover longer molecules.
+In cases where the DNA molecule is _longer_ than the number of cycles of the chemistry kit, by flipping over the molecule and sequencing from the other end, we can recover the end of the molecule that otherwise falls outside the original number of cycles.
+Of course, if the molecule is longer than the sum of both set of cycles (e.g. a 120bp molecule, even though the sequencing kit is only two times 50bp), we will still miss the 'middle' part of the molecule.
+However, this is counteracted by the sheer number of independent molecules sequenced, so the 'missing' part can be filled in from another sequencing DNA molecule that 'starts' in this position.
 
-![Diagram showing a a broad overview of how Illumina paired-end sequencing works for a single DNA molecule. 1. The single-stranded DNA strand is attached to the flow cell, and read in one direction. 2. The molecule is denatured and one strand gets discarded. 3. The molecule is bent over (similar to bridge amplification), and the adapter at the other end is bound to the flow cell 4. The original anchored end of the molecule is then cut, allowing the original 'end' to become the new starting point sequencing. 5. The molecule is sequenced in the reverse direction.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-pairedendsequencing.png){#fig-intro-ngs-fig-pairedendsequencing width=90%}
+![Diagram showing a broad overview of how Illumina paired-end sequencing works for a single DNA molecule. 1. The single-stranded DNA strand is attached to the flow cell, and read in one direction. 2. The molecule is denatured and one strand gets discarded. 3. The molecule is bent over (similar to bridge amplification), and the adapter at the other end is bound to the flow cell. 4. The original anchored end of the molecule is then cut, allowing the original 'end' to become the new starting point sequencing. 5. The molecule is sequenced in the reverse direction.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-pairedendsequencing.png){#fig-intro-ngs-fig-pairedendsequencing width=90%}
 
-It should be noted, however, the added benefit of sequencing _longer_ molecules via paired-end sequencing is not always relevant to older ancient DNA or ancient metagenomics.
+It should be noted however that, the added benefit of sequencing _longer_ molecules via paired-end sequencing is not always relevant to older ancient DNA or ancient metagenomics.
 This is because most 'true' DNA molecules are often _shorter_ than the sequencing cycles of a typical Illumina kit.
-However, fragmented ancient DNA molecules follow a distribution, and retrieval of longer reads can be useful during [_de novo_ assembly](denovo-assembly.qmd) for scaffolding purposes.
-
+That said, fragmented ancient DNA molecules follow a distribution of molecule lengths, and retrieval of longer reads can be useful during in analyses such as [_de novo_ assembly](denovo-assembly.qmd) for scaffolding purposes.
 
 ### Base calling and demultiplexing
 
-We should now understand how the machine itself 'reads' the DNA molecule clusters on the flow cell.
+We now understand how the machine itself 'reads' the DNA molecule clusters on the flow cell.
 
-But how does these images get converted to a format that you can read on your computer screen?
-And if you have sequenced multiple samples at the same time (each with their own sample-specific indices), how do you separate these out?
+But how do these images get converted to a format that we can read on our computer screens?
+Furthermore, if we have sequenced multiple samples at the same time with multiplexing (each with their own sample-specific indices), how do we separate the molecules from sample out?
+
+We can do this with two, often integrated, steps.
 
 Base calling is the process of converting the images to digital text-based `A`, `C`, `T,` and `G`s.
-This is not something the vast majority of researchers have to do as it nowadays happens on the sequencer itself and thus the process is not particularly relevant for us. 
+This is not something the vast majority of researchers have to do, as nowadays it happens on the sequencer itself or by the sequencing technicians and not necessary for researchers to carry out. 
 
-However, once the file with the digital representations of the sequences is taken off the machine, typically a sequencing technician or bioinformatician at the sequencing center, but sometimes a student, will perform something called 'demultiplexing' (@fig-intro-ngs-fig-demultiplexing).
+However, once the file with the digital representations of the sequences is taken off the machine, and if not also performed by the sequencing facility, we may have to perform something called 'demultiplexing' (@fig-intro-ngs-fig-demultiplexing).
 
-This is where the person doing the demultiplexing will run the file through a tool that identifies the known index sequence at the beginning of each read entry in the file, and put all reads containing the same sample-specific index into it's own independent file.
+This involves using computational software that identifies the known index sequence at the beginning of each sequence entry in the base-called file, and then separates all reads containing the same sample-specific index into it's own independent file.
 
-![Schematic diagram showing the demultimultiplexing concept. Multiple libraries have been sequenced in a single lane of a sequencer. Each library has their own index sequence combination. Demultiplexing consists of taking the large single-lane FASTQ file, then using information recorded during the library construction regarding which index combination goes with each sample, the reads are sorted and separated into separate per-sample FASTQ files.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-demultiplexing.png){#fig-intro-ngs-fig-demultiplexing width=100%}
+![Schematic diagram showing the demultimultiplexing concept. Multiple libraries have been sequenced in a single lane of a sequencer. Each library has their own index sequence combination. Demultiplexing consists of taking the large single-lane FASTQ file, and using information recorded during the library construction to assign each read to it's associated sample. These reads then are sorted by sample and separated into separate per-sample FASTQ files.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-demultiplexing.png){#fig-intro-ngs-fig-demultiplexing width=100%}
 
-
-While this is not something most researchers will do themselves, it is useful to know as errors detected in downstream analysis can be traced back to suboptimal demultiplexing (such as incorrect assignment of indices, if you have not the number of sequenced reads you expected).
+While these processes are not something most researchers will do themselves, it is useful to know the basic concept, as sometimes errors detected in downstream analysis can be traced back to suboptimal demultiplexing.
+One example is when we have not received the number of reads we expected, which may have be caused by incorrect assignment of indices during demultiplexing.
 
 ### FASTQ File
 
-The primary output from demultiplexing is called FASTQ file.
+The primary output from demultiplexing is called the FASTQ file.
 This is a text-based (semi-)standard format for storing biological sequences, and their corresponding base quality scores.
 A biological sequence that has been converted to a digital text format is referred to as a 'read' or 'sequence read'. 
-The files that stored reads are typically compressed to save space, but can be very large (gigabytes in size, even when compressed).
+The files that store reads are typically compressed to save space, but can still be very large (gigabytes in size, even when compressed).
 
-The structure of a FASTQ file is a repeated set of four specific lines (@fig-intro-ngs-fig-sequencing-read):
+The structure of a FASTQ file is a repeated series of four lines (@fig-intro-ngs-fig-sequencing-read):
 
 1. A metadata or ID line
-2. The sequence itself
+2. The DNA sequence itself
 3. A 'spacer' line
 4. The base quality score (corresponding to the base in the same position as in line 2)
 
+This can broken down as follows:
+
 The metadata line records a range of information from the sequencer and also potentially the demultiplexing.
-Typically this line will record the sequencing machine ID, a run number, the ID of the flow cell, coordinate information from which cluster on the flow cell the particular sequence is from, and then extra information that depends on the sequencing center (e.g., some will record the sample-specific index pairs here, or certain settings of the demultiplexing tool).
+Typically this line will record the sequencing machine ID, a run number, the ID of the flow cell, coordinate information from which cluster on the flow cell the sequence is from, and then extra information that depends on the sequencing center (e.g., some will record the sample-specific index pairs here, or certain settings of the demultiplexing tool).
 
 ![Annotated example of a single sequencing read as represented in a FASTQ file. A read consists of four lines: a metadata line, a sequence line, a spacer line, and a base quality score line. This set of four lines is repeated for every sequenced molecule in the library.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-sequencing-read.png){#fig-intro-ngs-fig-sequencing-read width=90%}
 
 The sequence line will contain `A`, `C`, `T`, `G`, and `N` characters in the order of the DNA molecule as recorded by the sequencer.
-In the figure you can see an example of an `N` call in the first position.
-It is actually quite common to see in the first or second position of reads, as the sequencer's camera is still calibrating itself. 
+In the figure we can see an example of an `N` call in the first position [^3].
+
+[^3]: It is actually quite common to see in the first or second position of reads, as the sequencer's camera is still calibrating itself. 
 
 The third line is simply a spacer line, which is just a `+` sign.
-It serves no purpose in modern day FASTQ files (they just display the `+` to reduce file size), however in the past the metadata information was duplicated on this line to associate with the base quality scores on line 4.
+It serves no purpose in modern day FASTQ files (they just display the `+` to ensure we retain an even number of lines for analysis purposes), however in the past, the metadata information was duplicated on this line to associate with the base quality scores on line 4.
 
 The fourth line has the base quality scores corresponding to the sequence in line 2.
-These are encoded using [ASCII characters](https://en.wikipedia.org/wiki/ASCII) (to ensure you can encode in a single character a score more than 9).
-What the exact each ASCII character represents slightly depends on [which sequencing machine you are using](https://en.wikipedia.org/wiki/FASTQ_format#Encoding) (e.g. Illumina have both a 1.3 and 1.8 variant).
-However all variants encode a quality score of 'Q' also known as a 'Phred' score which corresponds to the probability of the called base is _incorrect_.
+These are encoded using [ASCII characters](https://en.wikipedia.org/wiki/ASCII), to allow encoding of scores more than 9 in a single character.
+What the exact each ASCII character represents slightly depends on [which sequencing machine we are using](https://en.wikipedia.org/wiki/FASTQ_format#Encoding) (e.g. Illumina have both a 1.3 and 1.8 variant).
+However all variants encode a quality score of 'Q', also known as a 'Phred' score, which corresponds to the probability that the called base is _incorrect_.
 This essentially means that the lower the probability the base is incorrect, the higher the quality score.
-Modern Illumina sequencers have a minimum quality score of 0 (i.e., an incorrect call) score of 41 (a highly confident call).
-Wikipedia provides a very good summary of the differences between ASCII representations of the Phred score [here](https://en.wikipedia.org/wiki/FASTQ_format#Encoding). 
+Modern Illumina sequencers have a minimum quality score of 0 (i.e., an incorrect call) and a maximum score of 41 (a highly confident call).
+Wikipedia provides a very good summary of the differences between ASCII representations of the Phred score on different platforms [here](https://en.wikipedia.org/wiki/FASTQ_format#Encoding). 
 
 The rest of a FASTQ file is simply just a repeated set of these four lines.
 Each line corresponds to an independent DNA cluster - and thus DNA molecule - that was sequenced.
-In the case of Illumina pair-end sequencing, you will normally have two FASTQ files for each sample - and you can match the forward and reverse reading of each strand by the metadata line and a `/1` or `/2` at the end of the ID[^1].
+In the case of Illumina pair-end sequencing, we will normally have two FASTQ files for each sample - and we can match the forward and reverse reading of each strand by the metadata line and a `/1` or `/2` at the end of the ID[^1].
 
-[^1]: You can occasionally see a format called 'interleaved' FASTQ files. This is where the forward and reverse reads are placed right after one another in the same file, but this is not common practice any more. 
+[^1]: You can occasionally see a format called 'interleaved' FASTQ files, where the forward and reverse reads are placed right after one another in the same file, but this is not common practice any more. 
 
 ## Sequencing and considerations for ancient metagenomics
 
 In the second half of this chapter, we will look into some implications of the sequencing process for analysing ancient metagenomic data.
 
-While some of these points are not always specific to ancient metagenomics, and can apply to any DNA analysis - modern or ancient - they can be particularly impactful due to the particular characteristics of ancient DNA.
+While some of these points are not always specific to ancient metagenomics, and can apply to any DNA analysis - modern or ancient, they can be particularly impactful due to the particular characteristics of ancient DNA.
 
 ### Low DNA preservation
 
@@ -387,61 +406,63 @@ One side effect of the degradation and lost of DNA molecules in ancient samples 
 
 This means that during library preparation, researchers often have to perform many rounds of PCR amplification to get a sufficient library concentration for sequencing. 
 
-By over-amplifying libraries, you reduce the number of unique sequences from your sample you actually retrieve.
-If you are repeatedly sequencing the same DNA sequence (i.e. the amplified copies) over and over, you use up the fixed number of available clusters on the flow cell, and prevent clusters of unique sequences from being sequenced.
+By over-amplifying libraries, we reduce the number of unique sequences from our sample we can actually retrieve.
+If we are repeatedly sequencing the same DNA sequence (i.e. the amplified copies) over and over, we use up the fixed number of available clusters on the flow cell, and prevent clusters of unique sequences from forming and thus being sequenced.
 
-This is also important analysis wise, as will be discussed in the chapter on taxonomic profiling and genomic mapping, you can actually artificially 'inflate' the counts of reads that come from a particular taxon (@fig-intro-ngs-fig-read-stacking).
-For microbiome studies, this can skew the estimate of which species are in your sample or not.
+This is also important analysis-wise, as will be discussed in the chapter on taxonomic profiling and genomic mapping, as we can actually artificially 'inflate' the counts of reads that come from a particular taxon (@fig-intro-ngs-fig-read-stacking).
+For microbiome studies, this can skew the estimate of which species are in our sample or not.
 Some studies have also suggested dedeuplication can improve the accuracy of metagenomic _de novo_ assembly [@Zhang2023-vz]
 
-![Schematic representation of the result on over-amplification on reference-based genome mapping. Exact duplicate reads (yellow) that derive from overamplifying a library, can result in portions of the genome having higher depth coverage in certain regions (top distribution) and thus artificially provide a misleading sense of confidence in recovered regions during analysis, even though the overall coverage is low.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-read-stacking.png){#fig-intro-ngs-fig-read-stacking}
+![Schematic representation of the result on over-amplification on reference-based genome mapping. Exact duplicate reads (yellow), that derive from overamplifying a library, can result in portions of the genome having higher depth coverage in certain regions (top distribution) and thus artificially provide a misleading sense of confidence in recovered regions during analysis, even though the overall coverage is low.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-read-stacking.png){#fig-intro-ngs-fig-read-stacking}
 
-While this artefact can be partially corrected in analysis through the process of 'deduplication', you should be careful to not overamplify your libraries in the first place as you can potentially waste a lot of money.
+While this artefact can be partially corrected during computational analysis through the process of 'deduplication', we should be careful to not overamplify our libraries in the first place as we can potentially waste a lot of money.
 
 ### Index hopping
 
 A more recent artefact that has appeared in more recent Illumina platforms is something that has been termed 'index hopping' [@Van_der_Valk2019-to].
-This can cause problems when you are multiplex sequencing samples, i.e., sequencing multiple samples at once on the same flow cell.
+This can cause problems when we are multiplex-sequencing samples, i.e., sequencing multiple samples at once on the same flow cell.
 
 Some more recent Illumina platforms such as the HiSeq X and NovaSeq machines have a new type of flow cell called 'patterned flow cells'.
-These aim to better separate out and make more consistent the layout of DNA clusters on the flow cell by having  'nanowells' that the clusters form within.
-By having a stricter pattern where clusters form, it allows even tighter distribution of clusters on the flow cell without impeding on each other and thus increasing the number of clusters that can be sequenced at once.
+These aim to better separate out and make more consistent the layout of DNA clusters on the flow cell by having 'nanowells' that the clusters form inside.
+By having a stricter pattern where clusters form, it allows even tighter distribution of clusters on the flow cell without impeding each other and thus increasing the number of clusters that can be sequenced at once.
 
-However, even though the cause it not fully understood, it appears that the method used to prevent two DNA molecules entering he same well ('exclusion amplification)' can accidentally cause 'switching' of the index barcode between two different DNA molecules (@fig-intro-ngs-fig-indexhopping). 
+However, even though the cause it not fully understood, it appears that the method used to prevent two DNA molecules occupying the same well ('exclusion amplification') can accidentally cause 'switching' of the index barcode between two different DNA molecules (@fig-intro-ngs-fig-indexhopping). 
 Thus, DNA molecules from one sample can instead receive the index barcode of another sample, and subsequently assigned to the wrong sample during demultiplexing.
 
-While this has been observed a low rates in earlier Illumina platforms, index misassignment appears to occur more often in patterned flow cells, somewhere between 0%-10% [@Van_der_Valk2019-to].
+While this has been observed a low rates in earlier Illumina platforms, index misassignment appears to occur more often in patterned flow cells, at a rate somewhere between 0%-10% [@Van_der_Valk2019-to].
 
-For (ancient) metagenomics this can be problem as it can result in false positive identification of taxa in your sample.
-For example, this can be a particular problem if you sequencing in the same run a capture-library of a pathogen, with a shotgun metagenomic library for screening.
-With index hopping, some of the abundant pathogen reads in the pathogen will be accidentally assigned in demultiplexing to the shotgun metagenomic library giving a false positive identification of the pathogen in the screening sample.
+For (ancient) metagenomics this can be problematic as it can result in false positive identification of taxa in your sample.
+For example, if you sequence in the same run a capture-library of a pathogen and a shotgun metagenomic library for screening, you may falsely 'identify' the presence of the pathogen in the shotgun sample.
+With index hopping, some of the abundant pathogen reads in the pathogen will be accidentally assigned in demultiplexing to the shotgun metagenomic library giving a false positive identification.
 In another case, if you have an oral microbiome sample and a gut microbiome sample sequenced on the same run, you may start seeing oral species being detected up in your gut samples.
-While this _could_ be valid biologically, but in other cases this could be false and it becomes hard to disambiguate if the species is truly present in the gut or not.
+While this _could_ be valid biologically, in other cases this could be false and it becomes hard to disambiguate if the species is truly present in the gut or not.
 
 ![Diagram from @Van_der_Valk2018-xx's preprint demonstrating how free-floating adapters (with a different index) can be incorrectly incorporated into molecules during exclusion amplification on Illumina platforms using patterned flowcells (reproduced here under a [CC-BY-ND 4.0](http://creativecommons.org/licenses/by-nd/4.0/) license without modification).](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-indexhopping.jpg){#fig-intro-ngs-fig-indexhopping}
 
-Therefore, you should keep this in mind when sending your libraries for sequencing.
-One way around this is to add additional (short) 'inline' barcodes that ligate directly to the DNA molecules during library preparation _prior_ adapting of the index-library construct.
-However this adds cost, and reduces the length of the template molecule you can sequence (as must include the inline barcode in the number of sequencing cycles).
-Otherwise, good sequencing core facilities should automatically screen for this artefact when using these platforms, however you should always verify this if you find interesting results in your data.
+Therefore, we should always keep this in mind when sending our libraries for sequencing.
+One workaround to this is to ligate additional (short) 'inline' barcodes directly to the DNA molecules during library preparation _prior_ to adding adapters.
+However this adds financial cost, and reduces the length of the template molecule we can sequence (as now we must include the inline barcode in the number of sequencing cycles).
+Otherwise, good sequencing core facilities will automatically screen for this artefact when using these platforms.
+Despite this, we should always verify this artefact of the sequencing process has not occurred if we find 'unexpected' results in our data.
 
 ### Sequencing errors
 
 As many parts of this textbook demonstrates, metagenomic sequencing is becoming extremely high-throughput and analysis is becoming increasingly automated and routine.
-However this does not mean you should skip over quality control of your sequencing data.
+However this does not mean we should skip over quality control of our sequencing data.
 
-While Illumina sequencers have a very low error rate, this are not perfect  - we have already seen the paired-end sequencing approach for correcting for terminal error accumulation - and things can also go wrong during the sequencing process (@fig-intro-ngs-fig-fastqc).
+While Illumina sequencers nowadays have a very low error rate, they are still not perfect - and things can also go wrong during the sequencing process (@fig-intro-ngs-fig-fastqc).
 
-All sequencing machines will record their confidence in the base calls the make, so it is still critical that researchers quality check these before performing downstream analyses.
+All sequencing machines will record 'their confidence' in the base calls they make.
+It is still critical that researchers quality check these before performing downstream analyses.
 
-If your reads have a high number of errors, the machine has possibly picked up the wrong nucleotide in the sequence.
-This could cause a range of problems in various aspects of data analysis: your read to false have a sequence that is more similar to another organism if comparing against a reference database, potentially place the read in the wrong place during mapping (or not align at all!), prevent sufficient overlap of sequences during assembling causing fragmented assemblies, or even cause false positive variant calls during genotyping for phylogenomic analysis.
+If our reads have a high number of low base quality socres, the machine may have picked up the wrong nucleotide in the sequence.
+This could cause a range of problems in various aspects of data analysis: our read may falsely taxonomically classified to the wrong organism with that has a more similar sequence to our errored sequence than the original organism, our read may align to wrong place on a genome during [mapping](genome-mapping.qmd) (or not align at all!), prevent sufficient overlap of sequences during assembly causing fragmented assemblies, or even cause false positive variant calls during genotyping for phylogenomic analysis.
 
 This is a particular concern for ancient metagenomics due to the very low number of truly endogenous ancient molecules in our libraries.
-The low number of reads means that we cannot as easily 'correct' for errors through having many repeated observations of a base call in the same a position from independent DNA molecules.
+This low number of reads means that we cannot as easily 'correct' for errors through simply having many repeated observations of a base call in the same a position (higher depth coverage) from independent DNA molecules.
 
-Many core sequencing facilities will mostly handle modern samples with high quality libraries, and thus the threshold for a rejected sequencing run maybe lower than what you would want for ancient metagenomics. 
-Therefore it's always important to _always_ (or double)check the quality of your sequencing data before proceeding with any analysis.
+Many core sequencing facilities will be used to handling modern samples with high quality libraries, and thus the threshold for a rejected sequencing run maybe lower than what we would want for ancient metagenomics. 
+Therefore it's always important to _always_ (double)check the quality of our sequencing data before proceeding with any analysis.
 
 ![Screenshot of the output of the sequencing quality evaluation tool FASTQC [@Andrews2010-pd] of the ancient DNA palaeofaeces sample 2612 from @Maixner2021-sg. Many of the reads have low quality scores (Y-axis) at the end of molecules (X-axis) from around 110bp. This likely represents error accumulation as the sequencing chemistry becomes 'tired'. Such low-quality bases should be removed using base quality score trimming to reduce the chance of incorrect read assignment or false-positive variant calls due to the wrong base being called.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-fastqc.png){#fig-intro-ngs-fig-fastqc}
 
@@ -450,7 +471,7 @@ Therefore it's always important to _always_ (or double)check the quality of your
 Another very common problem we encounter in both ancient and modern metagenomics are 'dirty genomes'.
 
 To briefly jump ahead into the bioinformatic analysis of an ancient metagenomic project, we will often compare our reads against a reference database of genomes.
-This is done to classify which species' organism a particular read comes from, and allows us to infer something about the taxonomic composition of the sample.
+This is done to classify which species' genome a particular read comes from, and allows us to infer the taxonomic makeup of the sample.
 
 We pull these reference genomes from a range of user-submitted databases, such as the NCBI's GenBank or RefSeq databases.
 However, the genomes that are uploaded to these databases are not always of high quality.
@@ -458,20 +479,19 @@ While the NCBI does have quality control checks in place, these have not always 
 
 This means that some genomes in these databases are 'dirty' - i.e., they contain sequences that should not be there, such as adapters, primers, contaminating sequences from other species, or other artefactual sequences [@Longo2011-qd;@Mukherjee2015-vc;@Merchant2014-eu;@Steinegger2020-br;@Breitwieser2019-iz;@Kryukov2016-my].
 
-A common example, which many ancient metagenomicists have encountered is repeated identificiation of _Cyprinus carpio_ (carp) in their samples (@fig-intro-ngs-fig-contamination-blog-screenshots).
+A common example, which many ancient metagenomicists have encountered is the repeated identification of _Cyprinus carpio_ (carp) in their samples (@fig-intro-ngs-fig-contamination-blog-screenshots).
 
-This is not a true hit, but in fact repeated false positive hits due to the presence of adapter sequences in the carp genome ^[See [https://web.archive.org/web/20170823143538/http://www.opiniomics.org/we-need-to-stop-making-this-simple-fcking-mistake/](https://web.archive.org/web/20170823143538/http://www.opiniomics.org/we-need-to-stop-making-this-simple-fcking-mistake/) and [https://web.archive.org/web/20241012070028/https://grahametherington.blogspot.com/2014/09/why-you-should-qc-your-reads-and-your.html](https://web.archive.org/web/20241012070028/https://grahametherington.blogspot.com/2014/09/why-you-should-qc-your-reads-and-your.html)].
+This is not a true hit, but in fact false positive hits due to the presence of adapter sequences in the carp genome ^[See [https://web.archive.org/web/20170823143538/http://www.opiniomics.org/we-need-to-stop-making-this-simple-fcking-mistake/](https://web.archive.org/web/20170823143538/http://www.opiniomics.org/we-need-to-stop-making-this-simple-fcking-mistake/) and [https://web.archive.org/web/20241012070028/https://grahametherington.blogspot.com/2014/09/why-you-should-qc-your-reads-and-your.html](https://web.archive.org/web/20241012070028/https://grahametherington.blogspot.com/2014/09/why-you-should-qc-your-reads-and-your.html)].
+I.e., remaining adapter sequences in the sequencing library that were not properly removed during read preprocessing, align against the adapter sequences in the carp genome, resulting in false positive identification of carp in all samples.
 
+![Screenshot of the exasperation after the discovery of a publicly available _Cyprinus carpio_ (carp) genome that was full of sequencing adapters. Any remaining sequencing adapters in our FASTQ files would thus align against the sequences in this genome and we would magically have carp in all of our metagenomic samples. Screenshot of [post](https://web.archive.org/web/20170823143538/http://www.opiniomics.org/we-need-to-stop-making-this-simple-fcking-mistake/) on the Opinionomics blog by Mick Watson](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-contamination-blog-screenshots.png){#fig-intro-ngs-fig-contamination-blog-screenshots}
 
-![Screenshot of the exasperation after the discovery of a publically available _Cyprinus carpio_ (carp) genome that was full of sequencing adapters. Any remaining sequencing adapters in your FASTQ files would thus align against the sequences in this genome and you would magically have carp in all of your metagenomic samples. Screenshot of [post](https://web.archive.org/web/20170823143538/http://www.opiniomics.org/we-need-to-stop-making-this-simple-fcking-mistake/) on the Opinionomics blog by Mick Watson](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-contamination-blog-screenshots.png){#fig-intro-ngs-fig-contamination-blog-screenshots}
-
-The implication for ancient metagenomicsists is that if you do not properly remove artefacts from your reads, you can end up with a lot of false positive hits in your data.
-This can be particularly impactful, for example, if you are trying to identify the presence of dietary species in a human microbiome sample.
+The implication for ancient metagenomicists is that if we do not properly remove artefacts from our reads, we can end up with a lot of false positive hits in our data.
+This can be particularly impactful, for example, if we are trying to identify the presence of dietary species in a human microbiome sample.
 But this also extends to microbes, where insufficient removal of contaminating DNA (e.g. modern human sequences incorporated during sampling) can align against stretches of human sequences incorporated into chimeric reference microbial genomes. 
 
-Therefore, while it always good to quality control check the genomes going into your reference database, you should also also thoroughly quality control your sequenced reads _prior_ downstream analysis.
-So make sure you do trim reads of adapters, remove host contamination, and other artefacts, and check these steps worked properly! 
-
+Therefore, while it always good to quality control check the genomes going into our reference database, we should also thoroughly quality control our sequenced reads _prior_ downstream analysis.
+We should make sure to trim reads of adapters, remove host contamination and other artefacts, and check these steps worked properly! 
 
 ### Low Sequence Diversity Reads
 
@@ -479,23 +499,23 @@ The presence of low sequence diversity reads in a FASTQ file can cause degraded 
 
 Low sequence diversity reads are those that have very little nucleotide variation, such as mononucleotide (`GGGGGG`) or dinucleotide (`ATATAT`) repeats.
 
-While some of these are not necessarily errors (long stretches of repeats occur naturally in particularly eukaryotic genomes), they can also be caused by the type of sequencer used.
+While some of these are not necessarily errors (long stretches of repeats do occur naturally in particularly eukaryotic genomes), they can also be caused by the type of sequencer used.
 
 As described earlier in this chapter, Illumina NovaSeq and NextSeq platforms use two-colour chemistry.
 In this system, if no light is detected by the camera, the sequencer assumes the base is a `G`.
 Therefore if the molecule is very short, once the molecule finishes and there are still remaining sequencing cycles to go, there will be repeated cycles of no light being emitted ^[See: [https://support.illumina.com/content/dam/illumina-support/help/Illumina_DRAGEN_Bio_IT_Platform_v3_7_1000000141465/Content/SW/Informatics/Dragen/PolyG_Trimming_fDG.htm](https://support.illumina.com/content/dam/illumina-support/help/Illumina_DRAGEN_Bio_IT_Platform_v3_7_1000000141465/Content/SW/Informatics/Dragen/PolyG_Trimming_fDG.htm)].
 This results in poly-`G` 'tails' in reads.
 
-Ancient DNA libraries are particularly susceptible to poly-`G` tails, as the degraded nature of the molecules means that a large number of _are_ very short and thus the length of molecule finishes before all the cycles have finished.
+Ancient DNA libraries are particularly susceptible to poly-`G` tails, as the degraded nature of the molecules means that a large number of are _very_ short and thus the length of molecule finishes before all the cycles have finished.
 
 The impact of these low sequence diversity reads is two-fold.
-Firstly, they slow down processing of reads during computationally expensive alignment of eukaryotic genomes, as low sequence diversity reads can often match many different locations thus resulting in an unspecific or ambiguous alignment.
-These often do not not provide useful information, and discarded from downstream analysis but only after the computational resources have been used to align them in the first place.
-Secondly, you can also end up _losing_ otherwise valid reads, purely due to half of the read has an artefactual stretch of nucleotides at the end of short reads (e.g. `AGTCTCGATGGGGGGGGGG`, where the first half is a valid sequence and the tail is just because the sequence is short) and thus cannot be aligned to any part of a reference genome.
-For taxonomic profiling, reads that match multiple genomes will be pushed up by Lowest Common Ancestor algorithms 'up' the taxonomic tree.
-When comparing taxonomic profiles between samples at higher ranks, this can inflate counts at higher nodes (e.g., kingdom or phylum level) that do not accurately reflect the true diversity of the sample as ultimately such reads are sequencing artefacts.
+Firstly, they slow down processing of reads during the computationally expensive step of alignment to eukaryotic genomes, as low sequence diversity reads can often match many different locations on ta genome, and thus result in an unspecific or ambiguous alignment.
+These often do not provide useful information, and are anyway discarded during downstream analysis - but only after the computational resources have been used to align them in the first place.
+Secondly, we can also end up _losing_ otherwise valid reads, purely due to half of the read having an artefactual stretch of nucleotides at the tail end (e.g. `AGTCTCGATGGGGGGGGGG`, where the first half is a valid sequence and the tail is just because the sequence is short) and thus cannot be aligned to any part of a reference genome.
+For taxonomic profiling, reads that match multiple genomes will be pushed by Lowest Common Ancestor algorithms 'up' the taxonomic tree.
+When comparing taxonomic profiles between samples at higher ranks, this can inflate counts at higher nodes (e.g., kingdom or phylum level) that do not accurately reflect the true diversity of the sample, as ultimately such reads are sequencing artefacts.
 
-Therefore, if you have sequencing data (particularly from Illumina two-colour chemistry platforms), it is a good idea to check for signatures of increased low sequence diversity reads and remove these from your data through poly-G trimming.
+Therefore, if we have sequencing data (particularly from Illumina two-colour chemistry platforms), it is a good idea to check for signatures of increased low sequence diversity reads and remove these from our data through poly-G trimming.
 Read processing tools such as `fastp` [@Chen2018-vg] can help with this, as they have functionality that can automatically detect and remove poly-`G` tails from reads.
 
 ## Summary
