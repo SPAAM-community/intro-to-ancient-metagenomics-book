@@ -5,10 +5,6 @@ number-depth: 2
 bibliography: assets/references/introduction-to-ngs-sequencing.bib
 ---
 
-::: {.callout-important}
-🚧 This page is still under construction 🚧
-:::
-
 Next generation sequencing (NGS) revolutionised biology by providing rapid and cheap access to huge amounts of DNA sequence data. 
 One unexpected benefit of the technology used in Illumina NGS sequencers was that it was also ideal for sequencing ultra-short ancient DNA.
 
@@ -86,7 +82,7 @@ So palaeogenomicists first demineralise the bone to release the DNA, before degr
 
 In contrast, the resulting DNA molecules are quite different from the modern DNA.
 Rather than well cooked, soft spaghetti structures - ancient DNA molecules are more like extremely overcooked spaghetti. 
-These molecules are highly degraded, broken down into very small fragments, and also often have 'damage' at the ends in the form of 'modified nucleotides' that do not represent the original sequence [@Dabney2013-zo]  (see the [Introduction to Ancient DNA chapter](introduction-to-ancient-dna.qmd) for more information).  
+These molecules are highly degraded, broken down into very small fragments, and also often have 'damage' at the ends in the form of 'modified nucleotides' that do not represent the original sequence [@Dabney2013-zo, and see the [Introduction to Ancient DNA chapter](introduction-to-ancient-dna.qmd) for more information].  
 Finally, the small amount of tiny and damaged DNA molecules typically sits in a 'soup' of 'contaminating' high-quality modern DNA from the surrounding burial and storage environment ([@fig-intro-ngs-fig-ancientdnainbone]).
 
 As we will find out in the next section, these short fragments of DNA is not necessartily a disadvantage for NGS sequencing, but rather a benefit.
@@ -339,7 +335,7 @@ Furthermore, if we have sequenced multiple samples at the same time with multipl
 
 We can do this with two, often integrated, steps.
 
-Base calling is the process of converting the images to digital text-based `A`, `C`, `T,` and `G`s [@Rougemont2008-ugp].
+Base calling is the process of converting the images to digital text-based `A`, `C`, `T,` and `G`s [@Rougemont2008-ug].
 This is not something the vast majority of researchers have to do, as nowadays it happens on the sequencer itself or by the sequencing technicians and thus not necessary for researchers to carry out. 
 
 However, once the file with the digital representations of the sequences is taken off the machine, and if not also performed by the sequencing facility, we may have to perform something called 'demultiplexing' (@fig-intro-ngs-fig-demultiplexing).
@@ -455,7 +451,7 @@ All sequencing machines will record 'their confidence' in the base calls they ma
 It is still critical that researchers quality check these before performing downstream analyses.
 
 If our reads have a high number of low base quality socres, the machine may have picked up the wrong nucleotide in the sequence.
-This could cause a range of problems in various aspects of data analysis: our read may falsely taxonomically classified to the wrong organism with that has a more similar sequence to our errored sequence than the original organism, our read may align to wrong place on a genome during [mapping](genome-mapping.qmd) (or not align at all!), prevent sufficient overlap of sequences during assembly causing fragmented assemblies, or even cause false positive variant calls during genotyping for phylogenomic analysis <!-- CITE -->.
+This could cause a range of problems in various aspects of data analysis: our read may falsely taxonomically classified to the wrong organism with that has a more similar sequence to our errored sequence than the original organism, our read may align to wrong place on a genome during [mapping](genome-mapping.qmd) (or not align at all!), prevent sufficient overlap of sequences during assembly causing fragmented assemblies, or even cause false positive variant calls during genotyping for phylogenomic analysis [@Dohm2008-rf].
 
 This is a particular concern for ancient metagenomics due to the very low number of truly endogenous ancient molecules in our libraries.
 This low number of reads means that we cannot as easily 'correct' for errors through simply having many repeated observations of a base call in the same a position (higher depth coverage) from independent DNA molecules.
@@ -473,12 +469,11 @@ To briefly jump ahead into the bioinformatic analysis of an ancient metagenomic 
 This is done to classify which species' genome a particular read comes from, and allows us to infer the taxonomic makeup of the sample.
 
 We pull these reference genomes from a range of user-submitted databases, such as the NCBI's GenBank or RefSeq databases.
-However, the genomes that are uploaded to these databases are not always of high quality <!-- CITE conterminator -->.
+However, the genomes that are uploaded to these databases are not always of high quality.
+Some genomes can contain sequences that should not be there, such as adapters, primers, contaminating sequences from other species, or other artefactual sequences [@Longo2011-qd;@Mukherjee2015-vc;@Merchant2014-eu;@Steinegger2020-br;@Breitwieser2019-iz;@Kryukov2016-my].
 While the NCBI does have quality control checks in place, these have not always been as stringent in the past, and are constantly evolving.
 
-This means that some genomes in these databases are 'dirty' - i.e., they contain sequences that should not be there, such as adapters, primers, contaminating sequences from other species, or other artefactual sequences [@Longo2011-qd;@Mukherjee2015-vc;@Merchant2014-eu;@Steinegger2020-br;@Breitwieser2019-iz;@Kryukov2016-my].
-
-A common example, which many ancient metagenomicists have encountered is the repeated identification of _Cyprinus carpio_ (carp) in their samples (@fig-intro-ngs-fig-contamination-blog-screenshots).
+A common example of a notoriously contaminated genome, which many ancient metagenomicists have encountered is the repeated identification of _Cyprinus carpio_ (carp) in their samples (@fig-intro-ngs-fig-contamination-blog-screenshots).
 
 This is not a true hit, but in fact false positive hits due to the presence of adapter sequences in the carp genome ^[See [https://web.archive.org/web/20170823143538/http://www.opiniomics.org/we-need-to-stop-making-this-simple-fcking-mistake/](https://web.archive.org/web/20170823143538/http://www.opiniomics.org/we-need-to-stop-making-this-simple-fcking-mistake/) and [https://web.archive.org/web/20241012070028/https://grahametherington.blogspot.com/2014/09/why-you-should-qc-your-reads-and-your.html](https://web.archive.org/web/20241012070028/https://grahametherington.blogspot.com/2014/09/why-you-should-qc-your-reads-and-your.html)].
 I.e., remaining adapter sequences in the sequencing library that were not properly removed during read preprocessing, align against the adapter sequences in the carp genome, resulting in false positive identification of carp in all samples.
@@ -487,7 +482,7 @@ I.e., remaining adapter sequences in the sequencing library that were not proper
 
 The implication for ancient metagenomicists is that if we do not properly remove artefacts from our reads, we can end up with a lot of false positive hits in our data.
 This can be particularly impactful, for example, if we are trying to identify the presence of dietary species in a human microbiome sample.
-But this also extends to microbes, where insufficient removal of contaminating DNA (e.g. modern human sequences incorporated during sampling) can align against stretches of human sequences incorporated into chimeric reference microbial genomes <!-- CITE Microbiome cancer controvsery? -->. 
+But this also extends to microbes, where insufficient removal of contaminating DNA (e.g. modern human sequences incorporated during sampling) can align against stretches of human sequences incorporated into chimeric reference microbial genomes [@Breitwieser2019-iz,@Gihawi2023-hu]. 
 
 Therefore, while it is always good to perform quality checks on the genomes going into our reference database, we should also thoroughly quality control our sequenced reads _prior_ downstream analysis.
 We should make sure to trim reads of adapters, remove host contamination and other artefacts, and check these steps worked properly! 
@@ -525,32 +520,6 @@ We looked at how library preparation is required to add adapters that can includ
 We discussed how sequencing methods are not perfect, and how the confidence in base calls are stored in FASTQ files, and how such low confidence calls can be corrected through paired-end sequencing. 
 
 Finally we discussed some important considerations ancient DNA and ancient metagenomics, including duplicated sequences, index hopping, sequencing errors, causes behind contaminated reference genomes, and poly-G tails in low sequence diversity reads.
-
-## Readings
-
-### Reviews
-
-[@Schuster2008-qx]
-
-[@Shendure2008-fh]
-
-[@Slatko2018-hg]
-
-[@Van_Dijk2014-ep]
-
-### Sequencing Library Construction
-
-[@Kircher2012-fg]
-
-[@Meyer2010-qc]
-
-### Errors and Considerations
-
-[@Ma2019-lg]
-
-[@Sinha2017-zo]
-
-[@Van_der_Valk2019-to]
 
 ## Questions to think about
 
