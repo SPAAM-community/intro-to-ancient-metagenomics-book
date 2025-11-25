@@ -57,7 +57,7 @@ General tips:
   - Make sure to bump year to title
   - Version system: YYYY.point release (2024.0, 2024.1)
   - Make sure to update authors if required
-- Update data Zenodo DOI for each chapter
+- Update Zenodo DOI for in each chapter DOI
 - Make sure footnotes year fixed everywhere (\_quarto.yml)
 - Update release date in citations.cff
 
