@@ -258,7 +258,7 @@ To throw a curve ball, Illumina sequencers actually have _three_ different 'colo
 
 ### Colour chemistry
 
-To be able to offer cheaper machines, Illumina came up with alternative systems that require a fewer number of colours to be detected  <!-- CITE -->.
+To be able to offer cheaper machines, Illumina came up with alternative systems that require a fewer number of colours to be detected [@Fu2025-oq].
 These variants are often referred to different 'colour chemistries'.
 
 A list of Illumina platforms and their colour chemistries (at the time of writing)  areas follows below:
@@ -285,7 +285,7 @@ If no colour is emitted, this is _assumed_ to be a G.
 
 ![Graphical representation of difference between four- (left) and two-colour (right) chemistry of Illumina Platforms. While in four-colour chemistry machines there is one colour for each nucleotide, two colour chemistry models emit single colours for `T` and `C`, a mixture of both wavelengths for `A`, and no colour is assumed to represent a `G`. Inspired by [https://www.ecseq.com/support/ngs/do_you_have_two_colors_or_four_colors_in_Illumina](https://www.ecseq.com/support/ngs/do_you_have_two_colors_or_four_colors_in_Illumina)](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-twocolourchemistry.png){#fig-intro-ngs-fig-twocolourchemistry height=300px}
 
-This characteristic of two colour-chemistry thus means we have to be aware of the type of sequencer our data was generated on, as this will require slightly different computational preprocessing <!-- CITE -->, as we will see later on in the section on [Low sequence diversity](#low-sequence-diversity).
+This characteristic of two colour-chemistry thus means we have to be aware of the type of sequencer our data was generated on, as this will require slightly different computational preprocessing [@De-Kayne2021-pc], as we will see later on in the section on [Low sequence diversity](#low-sequence-diversity).
 
 ### Base quality and paired-end sequencing
 
@@ -294,7 +294,7 @@ Another consideration with Illumina sequencing kits is not just the number of cy
 As we all know, biology is not like physics where everything is perfect and 'logical' [^2].
 Biology likes to be messy, and things often do not stay consistent.
 
-The same applies to sequencing - as the sequencer goes through each cycle of adding a new nucleotide to each DNA strand in a cluster, 'mistakes' will increasingly start to happen <!-- CITE -->. 
+The same applies to sequencing - as the sequencer goes through each cycle of adding a new nucleotide to each DNA strand in a cluster, 'mistakes' will increasingly start to happen [@Metzker2010-qw]. 
 Polymerases will not bind properly, or fall off, or skip nucleotides, or even add the wrong base.
 The accumulated effects of these mistakes across all DNA strands in a cluster is that the emitted light during the imaging part of the cycle becomes less clearly one colour, as mixtures of wavelengths are emitted.
 This results in our confidence that _correct_ nucleotide has been recorded at a given position of the DNA molecule becomes lower.
@@ -303,7 +303,7 @@ This results in our confidence that _correct_ nucleotide has been recorded at a 
 
 Sequencers address this in two ways.
 
-Firstly, when measuring the particular base being recorded, all sequencers will at the same time calculate a 'base quality' that is associated with that call <!-- CITE -->.
+Firstly, when measuring the particular base being recorded, all sequencers will at the same time calculate a 'base quality' that is associated with that call [@Cacho2016-ci].
 This corresponds to the confidence (via a probability) that the recorded base was the correct one.
 For example, if the wavelength was mostly one colour (let's say red for `C`) but the camera picked up a bit of another colour (lets say green for `T`), it will record `C` in the output, but the base quality score associated with this base call will be lower.
 If the sequencer's camera picks up wavelengths of all four colours from the same cluster at the same time - or even no light is detected at all - then the base quality for that position in that DNA molecule will be recorded as an N and a confidence score of 0.
@@ -319,7 +319,7 @@ This works as Illumina sequencers can conveniently re-use the 'bending over' app
 In other words, after bending over, the opposite flowcell oligo from the forward reverse flowcell anchor is cut so the 'end' of the original molecule is now bound to the flow cell and becomes the 'start' of the new cluster (@fig-intro-ngs-fig-pairedendsequencing).
 This paired-end sequencing technique means we get a pair of files - both with the same sequence from each cluster, but one has the molecule 'read' in the forward direction, and the other file with the 'reverse' direction. 
 
-Another added benefit of paired-end sequencing is that we can recover longer molecules <!-- CITE -->.
+Another added benefit of paired-end sequencing is that we can recover longer molecules [@Magoc2011-xl].
 In cases where the DNA molecule is _longer_ than the number of cycles of the chemistry kit, by flipping over the molecule and sequencing from the other end, we can recover the end of the molecule that otherwise falls outside the original number of cycles.
 Of course, if the molecule is longer than the sum of both set of cycles (e.g. a 120bp molecule, even though the sequencing kit is only two times 50bp), we will still miss the 'middle' part of the molecule.
 However, this is counteracted by the sheer number of independent molecules sequenced, so the 'missing' part can be filled in from another sequencing DNA molecule that 'starts' in this position.
@@ -328,7 +328,7 @@ However, this is counteracted by the sheer number of independent molecules seque
 
 It should be noted, however, that the added benefit of sequencing _longer_ molecules via paired-end sequencing is not always relevant to older ancient DNA or ancient metagenomics.
 This is because most 'true' DNA molecules are often _shorter_ than the sequencing cycles of a typical Illumina kit.
-That said, fragmented ancient DNA molecules follow a distribution of molecule lengths, and retrieval of longer reads can be useful during in analyses such as [_de novo_ assembly](denovo-assembly.qmd) for scaffolding purposes <!-- CITE -->.
+That said, fragmented ancient DNA molecules follow a distribution of molecule lengths, and retrieval of longer reads can be useful during in analyses such as [_de novo_ assembly](denovo-assembly.qmd) for scaffolding purposes [@Ayling2020-ra].
 
 ### Base calling and demultiplexing
 
@@ -339,7 +339,7 @@ Furthermore, if we have sequenced multiple samples at the same time with multipl
 
 We can do this with two, often integrated, steps.
 
-Base calling is the process of converting the images to digital text-based `A`, `C`, `T,` and `G`s <!-- CITE -->.
+Base calling is the process of converting the images to digital text-based `A`, `C`, `T,` and `G`s [@Rougemont2008-ugp].
 This is not something the vast majority of researchers have to do, as nowadays it happens on the sequencer itself or by the sequencing technicians and thus not necessary for researchers to carry out. 
 
 However, once the file with the digital representations of the sequences is taken off the machine, and if not also performed by the sequencing facility, we may have to perform something called 'demultiplexing' (@fig-intro-ngs-fig-demultiplexing).
@@ -353,7 +353,7 @@ One example is when we have not received the number of reads we expected, which 
 ### FASTQ File
 
 The primary output from demultiplexing is called the FASTQ file.
-This is a text-based (semi-)standard format for storing biological sequences, and their corresponding base quality scores <!-- CITE -->.
+This is a text-based (semi-)standard format for storing biological sequences, and their corresponding base quality scores [@Cock2010-qs].
 A biological sequence that has been converted to a digital text format is referred to as a 'read' or 'sequence read'. 
 The files that store reads are typically compressed to save space, but can still be very large (gigabytes in size, even when compressed).
 
@@ -382,7 +382,7 @@ It serves no purpose in modern day FASTQ files (they just display the `+` to ens
 The fourth line has the base quality scores corresponding to the sequence in line 2.
 These are encoded using [ASCII characters](https://en.wikipedia.org/wiki/ASCII), to allow encoding of scores more than 9 in a single character.
 What the exact each ASCII character represents slightly depends on [which sequencing machine we are using](https://en.wikipedia.org/wiki/FASTQ_format#Encoding) (e.g. Illumina have both a 1.3 and 1.8 variant).
-However all variants encode a quality score of 'Q', also known as a 'Phred' score, which corresponds to the probability that the called base is _incorrect_ <!-- CITE -->.
+However all variants encode a quality score of 'Q', also known as a 'Phred' score, which corresponds to the probability that the called base is _incorrect_ [@Ewing1998-su].
 This essentially means that the lower the probability the base is incorrect, the higher the quality score.
 Modern Illumina sequencers have a minimum quality score of 0 (i.e., an incorrect call) and a maximum score of 41 (a highly confident call).
 Wikipedia provides a very good summary of the differences between ASCII representations of the Phred score on different platforms [here](https://en.wikipedia.org/wiki/FASTQ_format#Encoding). 
@@ -401,12 +401,12 @@ While some of these points are not always specific to ancient metagenomics, and 
 
 ### Low DNA preservation
 
-One side effect of the degradation and lost of DNA molecules in ancient samples is that the total molecular biomass of the sample is very low <!-- CITE -->.
+One side effect of the degradation and lost of DNA molecules in ancient samples is that the total molecular biomass of the sample is very low [@Weyrich2019-am].
 
 This means that during library preparation, researchers often have to perform many rounds of PCR amplification to get a sufficient library concentration for sequencing. 
 
 By over-amplifying libraries, we reduce the number of unique sequences from our sample we can actually retrieve.
-If we are repeatedly sequencing the same DNA sequence (i.e. the amplified copies) over and over, we use up the fixed number of available clusters on the flow cell, and prevent clusters of unique sequences from forming and thus being sequenced <!-- CITE - CLR/PHiLR stuff? -->.
+If we are repeatedly sequencing the same DNA sequence (i.e. the amplified copies) over and over, we use up the fixed number of available clusters on the flow cell [@Gloor2017-ml], and prevent clusters of unique sequences from forming and thus being sequenced.
 
 This is also important analysis-wise, as will be discussed in the chapters on [taxonomic profiling](taxonomic-profiling.qmd) and [genomic mapping](genome-mapping.qmd), as we can actually artificially 'inflate' the counts of reads that come from a particular taxon (@fig-intro-ngs-fig-read-stacking).
 For microbiome studies, this can skew the estimate of which species are in our sample or not.
@@ -414,7 +414,7 @@ Some studies have also suggested dedeuplication can improve the accuracy of meta
 
 ![Schematic representation of the result on over-amplification on reference-based genome mapping. Exact duplicate reads (yellow), that derive from overamplifying a library, can result in portions of the genome having higher depth coverage in certain regions (top distribution) and thus artificially provide a misleading sense of confidence in recovered regions during analysis, even though the overall coverage is low.](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-read-stacking.png){#fig-intro-ngs-fig-read-stacking}
 
-While this artefact can be partially corrected during computational analysis through the process of 'deduplication', we should be careful and aim to not overamplify our libraries in the first place, as we can potentially waste a lot of money on sequencing uninformative molecules.
+While this artefact can be partially corrected during computational analysis through the process of 'deduplication', we should be careful and aim to not overamplify our libraries in the first place, as we can potentially waste a lot of money on sequencing uninformative molecules [@Daley2013-kn].
 
 ### Index hopping
 
@@ -423,7 +423,7 @@ This can cause problems when we are multiplex-sequencing samples, i.e., sequenci
 
 Some more recent Illumina platforms such as the HiSeq X and NovaSeq machines have a new type of flow cell called 'patterned flow cells'.
 These aim to better separate out and make more consistent the layout of DNA clusters on the flow cell by having 'nanowells' that the clusters form inside.
-By having a stricter pattern where clusters form, it allows even tighter distribution of clusters on the flow cell without impeding each other and thus increasing the number of clusters that can be sequenced at once <!-- CITE -->.
+By having a stricter pattern where clusters form, it allows even tighter distribution of clusters on the flow cell without impeding each other and thus increasing the number of clusters that can be sequenced at once [@Modi2021-ka].
 
 However, even though the cause it not fully understood, it appears that the method used to prevent two DNA molecules occupying the same well ('exclusion amplification') can accidentally cause 'switching' of the index barcode between two different DNA molecules (@fig-intro-ngs-fig-indexhopping). 
 Thus, DNA molecules from one sample can instead receive the index barcode of another sample, and subsequently assigned to the wrong sample during demultiplexing.
@@ -439,7 +439,7 @@ While this _could_ be valid biologically, in other cases this could be false and
 ![Diagram from @Van_der_Valk2018-xx's preprint demonstrating how free-floating adapters (with a different index) can be incorrectly incorporated into molecules during exclusion amplification on Illumina platforms using patterned flowcells (reproduced here under a [CC-BY-ND 4.0](http://creativecommons.org/licenses/by-nd/4.0/) license without modification).](assets/images/chapters/intro-to-ngs/fig-intro-ngs-fig-indexhopping.jpg){#fig-intro-ngs-fig-indexhopping}
 
 Therefore, we should always keep this in mind when sending our libraries for sequencing.
-One workaround to this is to ligate additional (short) 'inline' barcodes directly to the DNA molecules during library preparation _prior_ to adding adapters <!-- CITE -->.
+One workaround to this is to ligate additional (short) 'inline' barcodes directly to the DNA molecules during library preparation _prior_ to adding adapters [@Rohland2015-xn].
 However this adds financial cost, and reduces the length of the template molecule we can sequence (as now we must include the inline barcode in the number of sequencing cycles).
 Otherwise, good sequencing core facilities will automatically screen for this artefact when using these platforms.
 Despite this, we should always verify this artefact of the sequencing process has not occurred if we find 'unexpected' results in our data.
