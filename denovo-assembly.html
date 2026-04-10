@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.9.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,6 +10,9 @@
 
 <title>11&nbsp; De novo Genome Assembly – Introduction to Ancient Metagenomics</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -60,7 +63,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -91,15 +93,14 @@ div.csl-indent {
 <link href="./favicon.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-0c9234a4e7dab329d8f8a4a8147d0ef6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-ded6c891813d86a1f7d8ee69971bbfb5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -937,11 +938,11 @@ Figure&nbsp;11.8: Scheme of binning <em>de novo</em> assembled contigs into meta
 <p>Three commonly used binners are:</p>
 <ul>
 <li>metaBAT2 <span class="citation" data-cites="Kang2019">(<a href="#ref-Kang2019" role="doc-biblioref">Kang et al. 2019</a>, more than 2,000 citations)</span></li>
-<li>MaxBin2 <span class="citation" data-cites="WuMaxbin2016">(<a href="#ref-WuMaxbin2016" role="doc-biblioref">Wu, Simmons, and Singer 2016</a>, more than 1,700 citations)</span></li>
-<li>CONCOCT <span class="citation" data-cites="Alneberg2014">(<a href="#ref-Alneberg2014" role="doc-biblioref">Alneberg et al. 2014</a>, more than 1,800 citation)</span></li>
+<li>MaxBin2 <span class="citation" data-cites="WuMaxbin2016">(<a href="#ref-WuMaxbin2016" role="doc-biblioref">Wu et al. 2016</a>, more than 1,700 citations)</span></li>
+<li>CONCOCT <span class="citation" data-cites="Alneberg2014">(<a href="#ref-Alneberg2014" role="doc-biblioref"><span class="nocase">Alneberg et al.</span> 2014</a>, more than 1,800 citation)</span></li>
 </ul>
 <p>Each of these three binners employs a slightly different strategy. While metaBAT2 simply uses the two previously mentioned metrics, the tetra-nucleotide frequency and the coverage along the contigs, MaxBin2 additionally uses single-copy marker genes to infer the taxonomic origin of contigs. In contrast, CONCOCT also just uses the two aforementioned metrics but first performs a Principal Component Analysis (PCA) on these metrics and uses the PCA results for the clustering.</p>
-<p>The easiest way to run all these three programs is the program metaWRAP <span class="citation" data-cites="Uritskiy2018">(<a href="#ref-Uritskiy2018" role="doc-biblioref">Uritskiy, DiRuggiero, and Taylor 2018</a>)</span>. metaWRAP is in fact a pipeline that allows you to assemble your contigs, bin them, and subsequently refine the resulting MAGs. However, the pipeline is not very well written and does not contain any strategies to deal with ancient metagenomic sequencing data. Therefore, I prefer to use different pipelines, such as nf-core/mag for the assembly, and only use metaWRAP for binning and bin refinement.</p>
+<p>The easiest way to run all these three programs is the program metaWRAP <span class="citation" data-cites="Uritskiy2018">(<a href="#ref-Uritskiy2018" role="doc-biblioref">Uritskiy et al. 2018</a>)</span>. metaWRAP is in fact a pipeline that allows you to assemble your contigs, bin them, and subsequently refine the resulting MAGs. However, the pipeline is not very well written and does not contain any strategies to deal with ancient metagenomic sequencing data. Therefore, I prefer to use different pipelines, such as nf-core/mag for the assembly, and only use metaWRAP for binning and bin refinement.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1024,7 +1025,7 @@ Caution
 <img src="assets/images/chapters/denovo-assembly/MetaWrap_Fig4.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-denovoassembly-metawrap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;11.9: Performance of metaWRAP’s bin refinement algorithm compared to other tools. Adapted from <span class="citation" data-cites="Uritskiy2018">Uritskiy, DiRuggiero, and Taylor (<a href="#ref-Uritskiy2018" role="doc-biblioref">2018</a>)</span>, Fig. 4
+Figure&nbsp;11.9: Performance of metaWRAP’s bin refinement algorithm compared to other tools. Adapted from <span class="citation" data-cites="Uritskiy2018">Uritskiy et al. (<a href="#ref-Uritskiy2018" role="doc-biblioref">2018</a>)</span>, Fig. 4
 </figcaption>
 </figure>
 </div>
@@ -1146,7 +1147,7 @@ Caution
 <li>NCBI Taxonomy</li>
 <li>GTDB</li>
 </ul>
-<p>As for any task that involves the alignment of sequences against a reference database, the chosen reference database should fit the sequences you are searching for. If your reference database does not capture the diversity of your samples, you will not be able to assign a subset of the contigs. There is also a trade-off between a large reference database that contains all sequences and its memory requirement. <span class="citation" data-cites="Wright2023">Wright, Comeau, and Langille (<a href="#ref-Wright2023" role="doc-biblioref">2023</a>)</span> elaborated on this quite extensively when comparing Kraken2 against MetaPhlAn.</p>
+<p>As for any task that involves the alignment of sequences against a reference database, the chosen reference database should fit the sequences you are searching for. If your reference database does not capture the diversity of your samples, you will not be able to assign a subset of the contigs. There is also a trade-off between a large reference database that contains all sequences and its memory requirement. <span class="citation" data-cites="Wright2023">Wright et al. (<a href="#ref-Wright2023" role="doc-biblioref">2023</a>)</span> elaborated on this quite extensively when comparing Kraken2 against MetaPhlAn.</p>
 <p>While all of these tools can do the job, I typically prefer to use the program MMSeqs2 <span class="citation" data-cites="Steinegger2017">(<a href="#ref-Steinegger2017" role="doc-biblioref">Steinegger and Söding 2017</a>)</span> because it comes along with a very fast algorithm based on amino acid sequence alignment and implements a lowest common ancestor (LCA) algorithm (<a href="#fig-denovoassembly-mmseqs2" class="quarto-xref">Figure&nbsp;<span>11.10</span></a>). Recently, they implemented a <em>taxonomy</em> workflow <span class="citation" data-cites="Mirdita2021">(<a href="#ref-Mirdita2021" role="doc-biblioref">Mirdita et al. 2021</a>)</span> that allows to efficiently assign contigs to taxons. Luckily, it comes with multiple pre-computed reference databases, such as the GTDB v214 reference database <span class="citation" data-cites="Parks2020">(<a href="#ref-Parks2020" role="doc-biblioref">Parks et al. 2020</a>)</span>, and therefore it is even more accessible for users.</p>
 <div id="fig-denovoassembly-mmseqs2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1342,7 +1343,7 @@ Caution
 <section id="evaluating-the-amount-of-ancient-dna-damage" class="level2" data-number="11.9">
 <h2 data-number="11.9" class="anchored" data-anchor-id="evaluating-the-amount-of-ancient-dna-damage"><span class="header-section-number">11.9</span> Evaluating the amount of ancient DNA damage</h2>
 <p>One of the common questions that remain at this point of our analysis is whether the contigs that we assembled show evidence for the presence of ancient DNA damage. If yes, we could argue that these microbes are indeed ancient, particularly when their DNA fragment length distribution is rather short, too.</p>
-<p>MAGs typically consist of either tens or hundreds of contigs. For this case, many of the commonly used tools for quantifying the amount of ancient DNA damage, such as damageprofiler <span class="citation" data-cites="Neukamm2021">(<a href="#ref-Neukamm2021" role="doc-biblioref">Neukamm, Peltzer, and Nieselt 2021</a>)</span> or mapDamage2 <span class="citation" data-cites="Jonsson2013">(<a href="#ref-Jonsson2013" role="doc-biblioref">Jónsson et al. 2013</a>)</span>, are not very well suited because they would require us to manually check each of their generated “smiley plots”, which visualise the amount of C-to-T substitutions at the end of reads.</p>
+<p>MAGs typically consist of either tens or hundreds of contigs. For this case, many of the commonly used tools for quantifying the amount of ancient DNA damage, such as damageprofiler <span class="citation" data-cites="Neukamm2021">(<a href="#ref-Neukamm2021" role="doc-biblioref">Neukamm et al. 2021</a>)</span> or mapDamage2 <span class="citation" data-cites="Jonsson2013">(<a href="#ref-Jonsson2013" role="doc-biblioref">Jónsson et al. 2013</a>)</span>, are not very well suited because they would require us to manually check each of their generated “smiley plots”, which visualise the amount of C-to-T substitutions at the end of reads.</p>
 <div id="fig-denovoassembly-pydamage" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-denovoassembly-pydamage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1514,18 +1515,18 @@ Warning
 <h2 data-number="11.13" class="anchored" data-anchor-id="references"><span class="header-section-number">11.13</span> References</h2>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-Almeida2021" class="csl-entry" role="listitem">
-Almeida, Alexandre, Stephen Nayfach, Miguel Boland, Francesco Strozzi, Martin Beracochea, Zhou Jason Shi, Katherine S. Pollard, et al. 2021. <span>“A Unified Catalog of 204,938 Reference Genomes from the Human Gut Microbiome.”</span> <em>Nature Biotechnology</em> 39 (1): 105–14. <a href="https://doi.org/10.1038/s41587-020-0603-3">https://doi.org/10.1038/s41587-020-0603-3</a>.
+Almeida, Alexandre, Stephen Nayfach, Miguel Boland, et al. 2021. <span>“A Unified Catalog of 204,938 Reference Genomes from the Human Gut Microbiome.”</span> <em>Nature Biotechnology</em> 39 (1): 105–14. <a href="https://doi.org/10.1038/s41587-020-0603-3">https://doi.org/10.1038/s41587-020-0603-3</a>.
 </div>
 <div id="ref-Alneberg2014" class="csl-entry" role="listitem">
-Alneberg, Johannes, Brynjar Smári Bjarnason, Ino de Bruijn, Melanie Schirmer, Joshua Quick, Umer Z. Ijaz, Leo Lahti, Nicholas J. Loman, Anders F. Andersson, and Christopher Quince. 2014. <span>“Binning Metagenomic Contigs by Coverage and Composition.”</span> <em>Nature Methods</em> 11 (11): 1144–46. <a href="https://doi.org/10.1038/nmeth.3103">https://doi.org/10.1038/nmeth.3103</a>.
+<span class="nocase">Alneberg, Johannes, Brynjar Smári Bjarnason, Ino de Bruijn, et al.</span> 2014. <span>“Binning Metagenomic Contigs by Coverage and Composition.”</span> <em>Nature Methods</em> 11 (11): 1144–46. <a href="https://doi.org/10.1038/nmeth.3103">https://doi.org/10.1038/nmeth.3103</a>.
 </div>
 <div id="ref-Borry2021" class="csl-entry" role="listitem">
 Borry, Maxime, Alexander Hübner, Adam B. Rohrlach, and Christina Warinner. 2021. <span>“<span>PyDamage</span>: Automated Ancient Damage Identification and Estimation for Contigs in Ancient <span>DNA</span> de Novo Assembly.”</span> <em>PeerJ</em> 9: e11845. <a href="https://doi.org/10.7717/peerj.11845">https://doi.org/10.7717/peerj.11845</a>.
 </div>
 <div id="ref-Bowers2017" class="csl-entry" role="listitem">
-Bowers, Robert M., Nikos C. Kyrpides, Ramunas Stepanauskas, Miranda Harmon-Smith, Devin Doud, T. B. K. Reddy, Frederik Schulz, et al. 2017. <span>“Minimum Information about a Single Amplified Genome (<span>MISAG</span>) and a Metagenome-Assembled Genome (<span>MIMAG</span>) of Bacteria and Archaea.”</span> <em>Nature Biotechnology</em> 35 (8): 725–31. <a href="https://doi.org/10.1038/nbt.3893">https://doi.org/10.1038/nbt.3893</a>.
+Bowers, Robert M., Nikos C. Kyrpides, Ramunas Stepanauskas, et al. 2017. <span>“Minimum Information about a Single Amplified Genome (<span>MISAG</span>) and a Metagenome-Assembled Genome (<span>MIMAG</span>) of Bacteria and Archaea.”</span> <em>Nature Biotechnology</em> 35 (8): 725–31. <a href="https://doi.org/10.1038/nbt.3893">https://doi.org/10.1038/nbt.3893</a>.
 </div>
 <div id="ref-Chaumeil2020" class="csl-entry" role="listitem">
 Chaumeil, Pierre-Alain, Aaron J Mussig, Philip Hugenholtz, and Donovan H Parks. 2020. <span>“<span>GTDB-Tk</span>: A Toolkit to Classify Genomes with the <span>Genome Taxonomy Database</span>.”</span> <em>Bioinformatics</em> 36 (6): 1925–27. <a href="https://doi.org/10.1093/bioinformatics/btz848">https://doi.org/10.1093/bioinformatics/btz848</a>.
@@ -1534,34 +1535,34 @@ Chaumeil, Pierre-Alain, Aaron J Mussig, Philip Hugenholtz, and Donovan H Parks. 
 Chen, Shifu, Yanqing Zhou, Yaru Chen, and Jia Gu. 2018. <span>“Fastp: An Ultra-Fast All-in-One <span>FASTQ</span> Preprocessor.”</span> <em>Bioinformatics</em> 34 (17): i884–90. <a href="https://doi.org/10.1093/bioinformatics/bty560">https://doi.org/10.1093/bioinformatics/bty560</a>.
 </div>
 <div id="ref-Chklovski2022" class="csl-entry" role="listitem">
-Chklovski, Alex, Donovan H. Parks, Ben J. Woodcroft, and Gene W. Tyson. 2022. <span>“<span>CheckM2</span>: A Rapid, Scalable and Accurate Tool for Assessing Microbial Genome Quality Using Machine Learning.”</span> <span>bioRxiv</span>. <a href="https://doi.org/10.1101/2022.07.11.499243">https://doi.org/10.1101/2022.07.11.499243</a>.
+Chklovski, Alex, Donovan H. Parks, Ben J. Woodcroft, and Gene W. Tyson. 2022. <em><span>CheckM2</span>: A Rapid, Scalable and Accurate Tool for Assessing Microbial Genome Quality Using Machine Learning</em>. <span>bioRxiv</span>. <a href="https://doi.org/10.1101/2022.07.11.499243">https://doi.org/10.1101/2022.07.11.499243</a>.
 </div>
 <div id="ref-Jonsson2013" class="csl-entry" role="listitem">
 Jónsson, Hákon, Aurélien Ginolhac, Mikkel Schubert, Philip L. F. Johnson, and Ludovic Orlando. 2013. <span>“<span class="nocase">mapDamage2</span>.0: Fast Approximate <span>Bayesian</span> Estimates of Ancient <span>DNA</span> Damage Parameters.”</span> <em>Bioinformatics</em> 29 (13): 1682–84. <a href="https://doi.org/10.1093/bioinformatics/btt193">https://doi.org/10.1093/bioinformatics/btt193</a>.
 </div>
 <div id="ref-Kang2019" class="csl-entry" role="listitem">
-Kang, Dongwan D., Feng Li, Edward Kirton, Ashleigh Thomas, Rob Egan, Hong An, and Zhong Wang. 2019. <span>“<span>MetaBAT</span> 2: An Adaptive Binning Algorithm for Robust and Efficient Genome Reconstruction from Metagenome Assemblies.”</span> <em>PeerJ</em> 7 (July): e7359. <a href="https://doi.org/10.7717/peerj.7359">https://doi.org/10.7717/peerj.7359</a>.
+Kang, Dongwan D., Feng Li, Edward Kirton, et al. 2019. <span>“<span>MetaBAT</span> 2: An Adaptive Binning Algorithm for Robust and Efficient Genome Reconstruction from Metagenome Assemblies.”</span> <em>PeerJ</em> 7 (July): e7359. <a href="https://doi.org/10.7717/peerj.7359">https://doi.org/10.7717/peerj.7359</a>.
 </div>
 <div id="ref-Klapper2023" class="csl-entry" role="listitem">
-Klapper, Martin, Alexander Hübner, Anan Ibrahim, Ina Wasmuth, Maxime Borry, Veit G. Haensch, Shuaibing Zhang, et al. 2023. <span>“Natural Products from Reconstructed Bacterial Genomes of the <span>Middle</span> and <span>Upper Paleolithic</span>.”</span> <em>Science</em> 380 (6645): 619–24. <a href="https://doi.org/10.1126/science.adf5300">https://doi.org/10.1126/science.adf5300</a>.
+Klapper, Martin, Alexander Hübner, Anan Ibrahim, et al. 2023. <span>“Natural Products from Reconstructed Bacterial Genomes of the <span>Middle</span> and <span>Upper Paleolithic</span>.”</span> <em>Science</em> 380 (6645): 619–24. <a href="https://doi.org/10.1126/science.adf5300">https://doi.org/10.1126/science.adf5300</a>.
 </div>
 <div id="ref-Krakau2022" class="csl-entry" role="listitem">
 Krakau, Sabrina, Daniel Straub, Hadrien Gourlé, Gisela Gabernet, and Sven Nahnsen. 2022. <span>“Nf-Core/Mag: A Best-Practice Pipeline for Metagenome Hybrid Assembly and Binning.”</span> <em>NAR Genomics and Bioinformatics</em> 4 (1): lqac007. <a href="https://doi.org/10.1093/nargab/lqac007">https://doi.org/10.1093/nargab/lqac007</a>.
 </div>
 <div id="ref-Leggett2013" class="csl-entry" role="listitem">
-Leggett, Richard M., Ricardo H. Ramirez-Gonzalez, Walter Verweij, Cintia G. Kawashima, Zamin Iqbal, Jonathan D. G. Jones, Mario Caccamo, and Daniel MacLean. 2013. <span>“Identifying and <span>Classifying Trait Linked Polymorphisms</span> in <span>Non-Reference Species</span> by <span>Walking Coloured</span> de <span>Bruijn Graphs</span>.”</span> <em>PLOS ONE</em> 8 (3): e60058. <a href="https://doi.org/10.1371/journal.pone.0060058">https://doi.org/10.1371/journal.pone.0060058</a>.
+Leggett, Richard M., Ricardo H. Ramirez-Gonzalez, Walter Verweij, et al. 2013. <span>“Identifying and <span>Classifying Trait Linked Polymorphisms</span> in <span>Non-Reference Species</span> by <span>Walking Coloured</span> de <span>Bruijn Graphs</span>.”</span> <em>PLOS ONE</em> 8 (3): e60058. <a href="https://doi.org/10.1371/journal.pone.0060058">https://doi.org/10.1371/journal.pone.0060058</a>.
 </div>
 <div id="ref-LiMegahit2015" class="csl-entry" role="listitem">
 Li, Dinghua, Chi-Man Liu, Ruibang Luo, Kunihiko Sadakane, and Tak-Wah Lam. 2015. <span>“<span>MEGAHIT</span>: An Ultra-Fast Single-Node Solution for Large and Complex Metagenomics Assembly via Succinct de <span>Bruijn</span> Graph.”</span> <em>Bioinformatics</em> 31 (10): 1674–76. <a href="https://doi.org/10.1093/bioinformatics/btv033">https://doi.org/10.1093/bioinformatics/btv033</a>.
 </div>
 <div id="ref-Maixner2021" class="csl-entry" role="listitem">
-Maixner, Frank, Mohamed S. Sarhan, Kun D. Huang, Adrian Tett, Alexander Schoenafinger, Stefania Zingale, Aitor Blanco-Míguez, et al. 2021. <span>“Hallstatt Miners Consumed Blue Cheese and Beer During the <span>Iron Age</span> and Retained a Non-<span>Westernized</span> Gut Microbiome Until the <span>Baroque</span> Period.”</span> <em>Current Biology</em> 31 (23): 5149–5162.e6. <a href="https://doi.org/10.1016/j.cub.2021.09.031">https://doi.org/10.1016/j.cub.2021.09.031</a>.
+Maixner, Frank, Mohamed S. Sarhan, Kun D. Huang, et al. 2021. <span>“Hallstatt Miners Consumed Blue Cheese and Beer During the <span>Iron Age</span> and Retained a Non-<span>Westernized</span> Gut Microbiome Until the <span>Baroque</span> Period.”</span> <em>Current Biology</em> 31 (23): 5149–5162.e6. <a href="https://doi.org/10.1016/j.cub.2021.09.031">https://doi.org/10.1016/j.cub.2021.09.031</a>.
 </div>
 <div id="ref-Manni2021" class="csl-entry" role="listitem">
 Manni, Mosè, Matthew R Berkeley, Mathieu Seppey, Felipe A Simão, and Evgeny M Zdobnov. 2021. <span>“<span>BUSCO Update</span>: <span>Novel</span> and <span>Streamlined Workflows</span> Along with <span>Broader</span> and <span>Deeper Phylogenetic Coverage</span> for <span>Scoring</span> of <span>Eukaryotic</span>, <span>Prokaryotic</span>, and <span>Viral Genomes</span>.”</span> <em>Molecular Biology and Evolution</em> 38 (10): 4647–54. <a href="https://doi.org/10.1093/molbev/msab199">https://doi.org/10.1093/molbev/msab199</a>.
 </div>
 <div id="ref-Meyer2022" class="csl-entry" role="listitem">
-Meyer, Fernando, Adrian Fritz, Zhi-Luo Deng, David Koslicki, Till Robin Lesker, Alexey Gurevich, Gary Robertson, et al. 2022. <span>“Critical <span>Assessment</span> of <span>Metagenome Interpretation</span>: The Second Round of Challenges.”</span> <em>Nature Methods</em> 19 (4): 429–40. <a href="https://doi.org/10.1038/s41592-022-01431-4">https://doi.org/10.1038/s41592-022-01431-4</a>.
+Meyer, Fernando, Adrian Fritz, Zhi-Luo Deng, et al. 2022. <span>“Critical <span>Assessment</span> of <span>Metagenome Interpretation</span>: The Second Round of Challenges.”</span> <em>Nature Methods</em> 19 (4): 429–40. <a href="https://doi.org/10.1038/s41592-022-01431-4">https://doi.org/10.1038/s41592-022-01431-4</a>.
 </div>
 <div id="ref-Mirdita2021" class="csl-entry" role="listitem">
 Mirdita, M, M Steinegger, F Breitwieser, J Söding, and E Levy Karin. 2021. <span>“Fast and Sensitive Taxonomic Assignment to Metagenomic Contigs.”</span> <em>Bioinformatics</em> 37 (18): 3029–31. <a href="https://doi.org/10.1093/bioinformatics/btab184">https://doi.org/10.1093/bioinformatics/btab184</a>.
@@ -1573,10 +1574,10 @@ Neukamm, Judith, Alexander Peltzer, and Kay Nieselt. 2021. <span>“<span>Damage
 Nurk, Sergey, Dmitry Meleshko, Anton Korobeynikov, and Pavel A. Pevzner. 2017. <span>“<span class="nocase">metaSPAdes</span>: A New Versatile Metagenomic Assembler.”</span> <em>Genome Research</em> 27 (5): 824–34. <a href="https://doi.org/10.1101/gr.213959.116">https://doi.org/10.1101/gr.213959.116</a>.
 </div>
 <div id="ref-Orakov2021" class="csl-entry" role="listitem">
-Orakov, Askarbek, Anthony Fullam, Luis Pedro Coelho, Supriya Khedkar, Damian Szklarczyk, Daniel R. Mende, Thomas S. B. Schmidt, and Peer Bork. 2021. <span>“<span>GUNC</span>: Detection of Chimerism and Contamination in Prokaryotic Genomes.”</span> <em>Genome Biology</em> 22 (1): 178. <a href="https://doi.org/10.1186/s13059-021-02393-0">https://doi.org/10.1186/s13059-021-02393-0</a>.
+Orakov, Askarbek, Anthony Fullam, Luis Pedro Coelho, et al. 2021. <span>“<span>GUNC</span>: Detection of Chimerism and Contamination in Prokaryotic Genomes.”</span> <em>Genome Biology</em> 22 (1): 178. <a href="https://doi.org/10.1186/s13059-021-02393-0">https://doi.org/10.1186/s13059-021-02393-0</a>.
 </div>
 <div id="ref-Orlando2013" class="csl-entry" role="listitem">
-Orlando, Ludovic, Aurélien Ginolhac, Guojie Zhang, Duane Froese, Anders Albrechtsen, Mathias Stiller, Mikkel Schubert, et al. 2013. <span>“Recalibrating <span>Equus</span> Evolution Using the Genome Sequence of an Early <span>Middle Pleistocene</span> Horse.”</span> <em>Nature</em> 499 (7456): 74–78. <a href="https://doi.org/10.1038/nature12323">https://doi.org/10.1038/nature12323</a>.
+Orlando, Ludovic, Aurélien Ginolhac, Guojie Zhang, et al. 2013. <span>“Recalibrating <span>Equus</span> Evolution Using the Genome Sequence of an Early <span>Middle Pleistocene</span> Horse.”</span> <em>Nature</em> 499 (7456): 74–78. <a href="https://doi.org/10.1038/nature12323">https://doi.org/10.1038/nature12323</a>.
 </div>
 <div id="ref-Parks2020" class="csl-entry" role="listitem">
 Parks, Donovan H., Maria Chuvochina, Pierre-Alain Chaumeil, Christian Rinke, Aaron J. Mussig, and Philip Hugenholtz. 2020. <span>“A Complete Domain-to-Species Taxonomy for <span>Bacteria</span> and <span>Archaea</span>.”</span> <em>Nature Biotechnology</em> 38 (9): 1079–86. <a href="https://doi.org/10.1038/s41587-020-0501-8">https://doi.org/10.1038/s41587-020-0501-8</a>.
