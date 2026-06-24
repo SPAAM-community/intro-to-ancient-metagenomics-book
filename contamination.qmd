@@ -196,8 +196,6 @@ cd /<path>/<to>/contamination/sourcetracker/
 git clone https://github.com/danknights/sourcetracker.git
 ```
 
-::: {.callout-warning title="Patching sourcetracker for newer R versions"}
-
 Unfortunately Sourcetracker's original R code was done a very long time ago, and has resulted in some incompatiblities with more recent versions of R.
 
 If using a more recent version of R (such as in this chapter's conda environment), you will need to perform the following 'patching' of the code, to prevent an error.
@@ -209,8 +207,6 @@ Run the following command to [comment out the offending lines](https://github.co
 ```bash
 sed -i '538,539s/^/#/' sourcetracker/src/SourceTracker.r
 ```
-
-:::
 :::
 
 Sourcetracker expects two input data frames: metadata with at least sample name, environment and source / sink labels, and abundance matrix. Note that source and sink metadata and abundances have to be merged together prior to using SourceTracker. Here we are going to use data from the [Human Microbiome Project (HMP)](https://hmpdacc.org/) as sources, and we are going to merge the HMP data with the sink samples into single OTU table and meta-data table.
