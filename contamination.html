@@ -594,7 +594,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="assets/images/chapters/contamination/SourceTracker.png" class="img-fluid"></p>
 <p>Originally, SourceTracker was developed for 16S data, i.e.&nbsp;using only 16S ribosomal RNA genes, but it can be easily trained using also shotgun metagenomics data, which was demonstrated in its metagenomic extension called <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7100590/">mSourceTracker</a> and its faster and more scalable version <a href="https://www.nature.com/articles/s41592-019-0431-x">FEAST</a>. The input data for SourceTracker are metadata, i.e.&nbsp;each sample has to have “source” or “sink” annotation as well as environmental label (e.g.&nbsp;Oral, Gut, Soil etc.), and microbial abundances (OTU abundances) quantified in some way, for example through <a href="https://qiime2.org/">QIIME</a> pipeline, MetaPhlan or Kraken. The SourceTracker R script can be downloaded from <a href="https://github.com/danknights/sourcetracker">https://github.com/danknights/sourcetracker</a>.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Self guided: data preparation">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -603,29 +603,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>In addition to the input files (already prepared for you), you will also need to clone the Sourcetracker 1 R code repository (unfortunately it’s not available as a package)</p>
 <!-- TODO: replace with link to before-you-start -->
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /<span class="op">&lt;</span>path<span class="op">&gt;</span>/<span class="op">&lt;</span>to<span class="op">&gt;</span>/contamination/sourcetracker/</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/danknights/sourcetracker.git</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-default callout-warning callout-titled" title="Patching sourcetracker for newer R versions">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Patching sourcetracker for newer R versions
-</div>
-</div>
-<div class="callout-body-container callout-body">
 <p>Unfortunately Sourcetracker’s original R code was done a very long time ago, and has resulted in some incompatiblities with more recent versions of R.</p>
 <p>If using a more recent version of R (such as in this chapter’s conda environment), you will need to perform the following ‘patching’ of the code, to prevent an error.</p>
 <p>Run the following command to <a href="https://github.com/danknights/sourcetracker/issues/15">comment out the offending lines</a> (538, 539), where R’s behaviour in later versions of a fundamental validation function has changed.</p>
 <!-- TODO: replace with link to before-you-start -->
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">'538,539s/^/#/'</span> sourcetracker/src/SourceTracker.r</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
 </div>
 </div>
 </div>
@@ -716,7 +704,7 @@ Figure&nbsp;13.1: Stacked barchart of each sample (sinks) with the estimated fra
 <h3 data-number="13.2.2" class="anchored" data-anchor-id="decom"><span class="header-section-number">13.2.2</span> deCOM</h3>
 <p><em>decOM</em> uses <a href="https://academic.oup.com/bioinformaticsadvances/article/2/1/vbac029/6576015">kmtricks</a> to compute a matrix of k-mer counts on raw reads (FASTQ files) from source samples, and then uses the source k-mer abundance matrix for looking up k-mer composition of sink samples. This allows <em>decOM</em> to calculate microbial contributions / fractions from the sources. For example, for estimating contributions from ancient Oral (aOral), modern Oral (mOral), Skin and Sediment / Soil environments one can use an already computed source matrix from here <a href="https://github.com/CamilaDuitama/decOM/">https://github.com/CamilaDuitama/decOM/</a> and provide it as a <em>-p_sources</em> parameter.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Self guided: data preparation">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -725,7 +713,7 @@ Figure&nbsp;13.1: Stacked barchart of each sample (sinks) with the estimated fra
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>If doing a self-guided tutorial, you will need to download a rather large pre-built database.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">## In the directory</span></span>
