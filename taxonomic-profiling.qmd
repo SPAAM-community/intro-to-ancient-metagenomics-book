@@ -96,6 +96,7 @@ for f in glob.glob("../data/raw/*"):
     outdir = "../data/subsampled"
     subsample(f, outdir)
 ```
+:::
 
 ::: {.callout-tip collapse="true" title='Expand to see command output'}
 ```{verbatim}
@@ -104,14 +105,14 @@ seqtk sample -s42 ../data/raw/ERR5766177_PE.mapped.hostremoved.fwd.fq.gz 1000000
 seqtk sample -s42 ../data/raw/ERR5766177_PE.mapped.hostremoved.rev.fq.gz 1000000 >
 ../data/subsampled/ERR5766177_PE.mapped.hostremoved.rev.fq_subsample_1000000.fastq
 ```
-:::
 
-Finally, we compress all files to gzip format
+Finally, compress all files to gzip format
 
 ```bash
 gzip -f ../data/subsampled/*.fastq
 ```
 :::
+
 
 ## Working in a jupyter environment
 
@@ -1051,6 +1052,7 @@ Now, let's go back to the 700% relative abundance issue...
 ```python
 ancient_data.groupby('rank')['relative_abundance'].sum()
 ```
+:::
 ::: {.callout-tip collapse="true" title='Expand to see command output'}
 
 ```
@@ -1065,7 +1067,6 @@ ancient_data.groupby('rank')['relative_abundance'].sum()
     superkingdom    100.00000
     Name: relative_abundance, dtype: float64
 ```
-:::
 
 Seems better, right ?
 

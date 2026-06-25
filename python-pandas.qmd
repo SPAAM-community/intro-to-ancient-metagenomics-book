@@ -261,8 +261,6 @@ The `sep=` can be specified argument, `sep=,` is the default.
 df = pd.read_csv("../all_data.tsv", sep="\t")
 df
 ```
-::: {.callout-note collapse="true"}
-## Expand to see output
 
 ```{r}
 #| echo: false
@@ -284,7 +282,6 @@ data %>%
         container.overflow.x = "scroll"
     )
 ```
-:::
 
 ::: {.callout-tip collapse="true"}
 ## Help
@@ -307,7 +304,7 @@ df
 |1|8|4|
 :::
 
-Another usful transformation is from a dictionary ([https://docs.python.org/3/tutorial/datastructures.html#dictionaries](https://docs.python.org/3/tutorial/datastructures.html#dictionaries)) to pd.Dataframe.
+Another useful transformation is from a dictionary ([https://docs.python.org/3/tutorial/datastructures.html#dictionaries](https://docs.python.org/3/tutorial/datastructures.html#dictionaries)) to pd.Dataframe.
 
 ```{.python eval=False}
 table_data = {'A' : [5, 6]
@@ -450,8 +447,6 @@ This can be done with the `head()` function.
 df.head()
 ```
 
-::: {.callout-note collapse="true"}
-## Expand to see output
 ```{r}
 #| echo: false
 #| results: 'asis'
@@ -472,7 +467,6 @@ data %>%
         container.overflow.x = "scroll"
     )
 ```
-:::
 
 :::{.callout-tip collapse="true"}
 ## Fuctions and attributes
@@ -529,8 +523,6 @@ To print the second and third row, this would be `[1:2, :]`.
 ```{.python eval=False}
 df.loc[1:2, :]
 ```
-::: {.callout-note collapse="true"}
-## Expand to see output
 
 ```{r}
 #| echo: false
@@ -552,7 +544,6 @@ data %>%
         container.overflow.x = "scroll"
     )
 ```
-:::
 
 To print all the rows with a certain column name works the same as subsetting rows, but then adding the column name after the comma.
 
@@ -728,8 +719,6 @@ These `Series` of Booleans can be used to subset the dataframe to rows where the
 ```{.python eval=False} 
 df[two_at_once]
 ```
-:::{.callout-note collapse="true"}
-## Expand to see output
 
 ```{r}
 #| echo: false
@@ -752,15 +741,13 @@ data %>%
     )
 ```
 252 rows × 20 columns
-:::
 
 It is not actually necessary to create a `series` every time for subsetting the table and it can be done in one go by combining the conditions within the _`df[]`_.
 
 ```python
 df[(df["Education"] == "Master") & (df["Marital_Status"] == "Single")]
 ```
-:::{.callout-note collapse="true"}
-## Expand to see output
+
 ```{r}
 #| echo: false
 #| results: 'asis'
@@ -782,7 +769,6 @@ data %>%
     )
 ```
 75 rows × 20 columns
-:::
 
 ### Describing a DataFrame
 
@@ -792,8 +778,7 @@ Sometimes is is nice to get a quick overview of the data in a table, such as `me
 ```{.python eval=False} 
 df.describe()
 ```
-:::{.callout-note collapse="true"}
-## Expand to see output
+
 ```{r}
 #| echo: false
 #| results: 'asis'
@@ -815,7 +800,6 @@ data %>%
     )
 ```
 8 rows × 18 columns
-:::
 
 We can also directly calculate the relevant statistics on numberic columns or rows we are interested in using the functions `max()`, `min()`, `mean()`, `median()` etc..
 
@@ -912,12 +896,11 @@ How many Single people are there in the table that also greduated? And how many 
 sum(df["Marital_Status"] == "Single")
 ```
 
-::: {.callout-note collapse="true"}
-## Expand to see output
-```
+Output:
+
+```python
 382
 ```
-:::
 :::
 
 ::: {.callout-tip title="Question" appearance="simple"}
@@ -940,13 +923,14 @@ How many people are in the two `DataFrames`?
 print("n(before)   =", df_before.shape[0])
 print("n(after)   =", df_after.shape[0])
 ```
-::: {.callout-note collapse="true"}
-## Expand to see output
-```
+
+Output:
+
+```python
 n(before)   = 804
 n(after)   = 950
 ```
-:::
+
 :::
 
 ::: {.callout-tip title="Question" appearance="simple"}
@@ -957,21 +941,23 @@ Do the total number of people sum up to the original `DataFrame` total?
 ```{.python eval=False} 
  df_before.shape[0] + df_after.shape[0] == df.shape[0]
 ```
-:::{.callout-note collapse="true"}
-## Expand to see output
+
+Output: 
+
+```python
 True
-:::
+```
+
 ```{.python eval=False} 
 print("n(sum)      =", df_before.shape[0] + df_after.shape[0])
 print("n(expected) =", df.shape[0])
 ```
-:::{.callout-note collapse="true"}
-## Expand to see output
+Output:
+
 ```
 n(sum)      = 1754
 n(expected) = 1754
 ```
-:::
 :::
 
 ::: {.callout-tip title="Question" appearance="simple"}
@@ -981,16 +967,17 @@ How does the mean income of the two groups differ?
 ::: {.callout-note collapse="true" title="Answer"}
 
 ```{.python eval=False} 
-  print("income(before) =", df_before["Income"].mean())
-  print("income(after)  =", df_after["Income"].mean())
-  
+print("income(before) =", df_before["Income"].mean())
+print("income(after)  =", df_after["Income"].mean())
 ```
-:::{.callout-note collapse="true"}
-## Expand to see output
+
+Output:
+
+```
 income(before) = 55513.38113207547
 
 income(after)  = 47490.29255319149  
-:::     
+```     
 :::
 
 ::: {.callout-tip title="Question" appearance="simple"}
@@ -1011,8 +998,6 @@ This function checks every cell in the `DataFrame` and returns a `DataFrame` of 
 ```python
 df.isna()
 ```
-:::{.callout-note collapse="true"}
-## Expand to see output
 
 ```{r}
 #| echo: false
@@ -1035,7 +1020,6 @@ data %>%
     )
 ```
 1754 rows × 20 columns
-:::
 
 It is very hard to see if there are any 'True' values in this new Boolean table.
 To investigate how many missing values are present in the table, the `sum()` function can be used.
@@ -1104,14 +1088,15 @@ df2 = pd.read_csv("../phd_data.tsv", sep="\t")
 
 ::: {.callout-tip title="Question" appearance="simple"}
 Concatenate the "old" `DataFrame` `df` and the new `df2` and name the concatenated one `concat_df`.
+The output should generate a table like below.
 :::
 ::: {.callout-note collapse="true" title="Answer"}
 ```{.python eval=False}  
 concat_df = pd.concat([df, df2])
 concat_df
 ```
-:::{.callout-note collapse="true"}
-## Expand to see output
+:::
+
 ```{r}
 #| echo: false
 #| results: 'asis'
@@ -1133,24 +1118,12 @@ data %>%
     )
 ```
 2240 rows × 20 columns
-:::
-:::
+
 ::: {.callout-tip title="Question" appearance="simple"}
 Is there anything weird about the new `DataFrame` and can you fix that?
+As a hint, the fix should look like the table below.
 :::
-::: {.callout-note collapse="true" title="Answer"}
 
-We previously removed the columns "Z_CostContact" and "Z_Revenue" but they are in the new data again.
-
-We can remove them like before.
-
-```{.python eval=False} 
-concat_df = concat_df.drop("Z_CostContact", axis=1)
-concat_df = concat_df.drop("Z_Revenue", axis=1)
-concat_df
-```
-:::{.callout-note collapse="true"}
-## Expand to see output
 ```{r}
 #| echo: false
 #| results: 'asis'
@@ -1172,7 +1145,18 @@ data %>%
     )
 ```
 2240 rows × 18 columns
-:::
+
+::: {.callout-note collapse="true" title="Answer"}
+
+We previously removed the columns "Z_CostContact" and "Z_Revenue" but they are in the new data again.
+
+We can remove them like before.
+
+```{.python eval=False} 
+concat_df = concat_df.drop("Z_CostContact", axis=1)
+concat_df = concat_df.drop("Z_Revenue", axis=1)
+concat_df
+```
 :::
 
 ::: {.callout-tip title="Question" appearance="simple"}
@@ -1183,9 +1167,10 @@ Is there something interesting about the marital status of some people that have
 ```{.python eval=False} 
 concat_df[concat_df["Education"]=="PhD"]["Marital_Status"].value_counts()
 ```
-:::{.callout-note collapse="true"}
-## Expand to see output
-```
+
+Output:
+
+```python
 Marital_Status
 Married     192
 Together    117
@@ -1196,10 +1181,8 @@ YOLO          2
 Alone         1
 Name: count, dtype: int64
 ```
-:::
 
 There are two people that have "YOLO" as their Marital Status ...
-
 :::
 
 ### Merging
@@ -1275,8 +1258,6 @@ The right one is `education_df` and the information is in the index.
 merged_df = pd.merge(left=concat_df, right=education_df, left_on="Education", right_index=True)
 merged_df
 ```
-:::{.callout-note collapse="true"}
-## Expand to see output
 
 ```{r}
 #| echo: false
@@ -1299,8 +1280,6 @@ data %>%
     )
 ```
 2240 rows × 19 columns
-
-:::
 
 ## Data visualisation
 
@@ -1341,8 +1320,9 @@ This is much higher than any other income, which makes the histogram very dragge
 ```{.python eval=False} 
 merged_df["Income"].sort_values(ascending=False)
 ```
-:::{.callout-note collapse="true"}
-## Expand to see output
+
+Output:
+
 ```
 1749    666666.0
 1006    157733.0
@@ -1359,8 +1339,6 @@ Name : Income, Length: 1754, dtype: float63
 ```
 :::
 
-:::
-
 ::: {.callout-tip title="Question" appearance="simple"}
 Use conditional subsetting to make the histogram look nicer.
 :::
@@ -1372,12 +1350,12 @@ ax = merged_df[merged_df["Income"] != 666666].plot(kind="hist",y="Income")
 ax.set_xlabel("Income")
 ax.set_title("Fixed Histogram of income")
 ```
-:::{.callout-note collapse="true"}
-## Expand to see output
+
+Output:
+
 Results in @fig-pythonpandas-incomefixhistogram.
 
 ![To "fix" the histogram, the one person with the income of 666666 is removed, making the plot look a lot neater.](assets/images/chapters/python-pandas/fixed_histogram.png){#fig-pythonpandas-incomefixhistogram}
-:::
 :::
 
 ### Bar plot
