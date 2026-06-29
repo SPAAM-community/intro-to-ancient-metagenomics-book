@@ -1,0 +1,112 @@
+---
+title: Metadata and submitting to the ENA
+author: James A. Fellows Yates
+number-depth: 2
+bibliography: assets/references/metadata-and-submitting-to-ena.bib
+---
+
+::: {.callout-note collapse="true" title="Self guided: chapter environment setup"}
+For this chapter's exercises, if not already performed, you will need to download the chapter's dataset, decompress the archive, and create and activate the conda environment.
+
+Do this, use `wget` or right-click and save to download this Zenodo archive: [TODO](TODO), and unpack
+
+```bash
+tar xvf metadata-and-submitting-to-ena.tar.gz 
+cd metadata-and-submitting-to-ena/
+```
+
+You can then create the subsequently activate environment with
+
+```bash
+conda env create -f metadata-and-submitting-to-ena.yml
+conda activate metadata-and-submitting-to-ena
+```
+:::
+
+## Introduction
+
+The field of ancient DNA has long been a poster child for open data sharing [@Anagnostou2015-mz,@Lien-Talks2024-ia], due to most sequencing data being made publicly available without restrictions for use by other researchers.
+However in more recent years, the field has been taking a closer introspective look at the quality of such data uploads.
+
+While the vast majority of data is being made accessible with interoperable formats, the 'findability' and 'reusability' of such data is often limited by the lower quality of the accompanying metadata [@Bergstrom2024-ct,@Bergstrom2024-ka].
+Furthermore, many ancient DNA seqeuncing data files have been inconsistently uploaded without following the guidelines from the repositories themselves [@Fellows_Yates2021-rp].
+Much of the contextual information around the data is hetereogeniously buried in manuscripts themselves, or in supplementary materials in non machine-readable formats, let alone being stored in a searchable manner.
+The result of this is that ancient DNA is not 'Findable, Accessible, Interoperable, Reusable' (FAIR) principles compliant [@Wilkinson2016-ou], and thus reducing the full potential for new discoveries from such unique and rare data.
+While there has been initatives to improve the quality of ancient DNA data through _post hoc_ initiatives such as AncientMetagenomeDir [@Fellows_Yates2021-rp] for ancient metagenomic data, the AADR [@Mallick2024-zz] or Poseidon [@Schmid2024-mo] for human population genomics, or metaArchive ([https://doi.org/10.5281/zenodo.20085066](https://doi.org/10.5281/zenodo.20085066)) for ancient animal genomics, these projects are involving significant efforts to 'curate' and 'clean up' metadata.
+Ideally, high-quality metadata should be situated with the data itself, not on external volunteer run databases.
+
+The [MInAS metadata standard](https://www.mixs-minas.org/) aims to provide a metadata schema that extends and integrates critical metadata for ancient DNA into the existing generalised MIxS metadata standard [@Yilmaz2011-ci].
+The MIxS checklists have been adopted by the INSDC collection of repositories, including the European Nucleotide Archive (ENA), the USA's Sequencing Read Archive (SRA), and Japan's DNA Databank of Japan.
+Thus, having the ancient metagenomics community use the well-established MIxS checklists, in combination with the required information the ancient DNA field needs, will increase the findability and reusability of ancient metagenomic data in public databases.
+
+This chapter will cover the basics of how to annotate your sample and metagenomic sequencing data with the MInAS MIxS metadata standard, and how to submit your data to the European Nucleotide Archive (ENA).
+
+This chapter is split into three sections:
+
+1. Preparing raw sequencing reads for submission to INSDC 
+2. Annotating your samples and raw sequencing reads with metadata, with specific guidance for ancient metagenomic and ancient pathogen data. 
+3. Validating and submitting your data to the ENA
+
+Each section will provide practical example commands, utilising the ENA test data server for validation and submission allowing you to familiarise yourself with the process without needing to submit your own data.
+
+By the end of the chapter, you will be able to prepare and submit your own ancient metagenomic and ancient pathogen sequencing data to the ENA, following best practice 'FAIR' principles [@Wilkinson2016-ou] for maximising reproducibility and re-use of your data by other researchers.
+
+::: {.callout-warning title="Scope of chapter"}
+This chapter only covers the preparation and submission of raw reads of (predominantly microbial) ancient metagenomes and ancient pathogen sequencing data to the ENA from human, animal, plant, and soil/sediment samples.
+
+It does not cover the preparation of assemblies or genomes as these require different data, quality metadata, and steps.
+:::
+
+::: {.callout-note title="ENA vs SRA vs DDBJ"}
+For simplicity we focus just on the ENA for this chapter, as the ENA is the most commonly used repository for ancient metagenomic data.
+However much of the concept will apply to the other INSDC repositories, which while may vary slightly in their submission process, they all aim to follow the same data sharing principles.
+:::
+
+## Set up
+
+This chapter will be simulating the preparation and submission of raw sequencing reads to the ENA, using the ENA test server for validation and submission.
+
+We will be using read clipping tools to get the sequencing data in the requested format by the ENA, and then preparing the metadata spreadsheets.
+
+In addition to the data and software included in the `metadata-and-submitting-to-ena.yml` conda environment, we will also need:
+
+1. A web browser
+2. A free ENA Webin account, which can be created at [https://www.ebi.ac.uk/ena/submit/webin/login](https://www.ebi.ac.uk/ena/submit/webin/login).
+
+::: {.callout-tip title="ENA Webin account"}
+A single-user ENA Webin account is not the normal procedure for submitting the data.
+Typically it is expected a [single institute or laboratory](https://ena-docs.readthedocs.io/en/latest/submit/general-guide/registration.html) will have a shared single ENA Webin account for multiple users, representing the 'sequencing' or 'submitting' centre.
+
+However for the chapter we will use a single-user account for for training purposes.
+:::
+
+## Preparing raw sequencing reads 
+
+In this tutorial we will be simulating a data submission by reusing a small subset of an ancient dental calculus metagenomic dataset [@Fellows_Yates2021-rf], originally uploaded to [PRJEB34569](https://www.ebi.ac.uk/ena/browser/view/PRJEB34569).
+
+This dataset includes a large range of different types of sequencing data, including single-end and paired-end reads, different sequencing machine models, and different library preparation methods.
+This variety will allow us to demonstrate the different types of data that can be submitted and annotated to the ENA.
+
+- LIB013.A0101
+- TAF017.E0101
+- TAF017.E0101.171215
+- DLV002.A0101
+
+::: {.callout-note title="Ancient pathogen data"}
+Note that even though we will be focusing on a shotgun-sequenced ancient microbiome dataset, much of the content of this chapter will also apply to most ancient DNA data.
+
+We will have specific call-out boxes for guidance on aspects specific to ancient pathogen, so keep an eye out for these! 
+:::
+
+
+
+
+
+
+## Metadata Annotation of samples and reads
+
+## Validating and submitting your data to the ENA
+
+## Summary
+
+## References
