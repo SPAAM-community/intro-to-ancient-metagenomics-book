@@ -80,28 +80,116 @@ Typically it is expected a [single institute or laboratory](https://ena-docs.rea
 However for the chapter we will use a single-user account for for training purposes.
 :::
 
-## Preparing raw sequencing reads 
-
 In this tutorial we will be simulating a data submission by reusing a small subset of an ancient dental calculus metagenomic dataset [@Fellows_Yates2021-rf], originally uploaded to [PRJEB34569](https://www.ebi.ac.uk/ena/browser/view/PRJEB34569).
 
-This dataset includes a large range of different types of sequencing data, including single-end and paired-end reads, different sequencing machine models, and different library preparation methods.
+This dataset contains a large range of different types of sequencing data, including single-end and paired-end reads, different sequencing machine models, and different library preparation methods.
 This variety will allow us to demonstrate the different types of data that can be submitted and annotated to the ENA.
 
-- LIB013.A0101
-- TAF017.E0101
-- TAF017.E0101.171215
-- DLV002.A0101
+The small subset of the data used in this tutorial includes variation in species, library preparation methods, and sequencing machine models, as well as including a couple of controls.
+
+| study_accession | secondary_sample_accession | sample_alias | scientific_name                | library_name        | Treatment | instrument_model    | library_layout | run_accession |
+|-----------------|----------------------------|--------------|--------------------------------|---------------------|-----------|---------------------|----------------|---------------|
+| PRJEB34569      | ERS3774455                 | TAF017.E     | Homo sapiens                   | TAF017.E0101        | nUDG      | NextSeq 500         | PAIRED         | ERR3579816    |
+| PRJEB34569      | ERS3774455                 | TAF017.E     | Homo sapiens                   | TAF017.E0101.171215 | nUDG      | NextSeq 500         | PAIRED         | ERR3579815    |
+| PRJEB34569      | ERS3774465                 | MOA001.A     | Homo sapiens                   | MOA001.A0101        | nUDG      | NextSeq 500         | SINGLE         | ERR3579677    |
+| PRJEB34569      | ERS3774419                 | KNP001.A     | Pan troglodytes schweinfurthii | KNP001.A0101        | fUDG      | Illumina HiSeq 4000 | PAIRED         | ERR3579760    |
+| PRJEB34569      | ERS4260688                 | EXB033.A0401 | blank sample                   | EXB033.A0401        | fUDG      | Illumina HiSeq 4000 | PAIRED         | ERR3839747    |
+| PRJEB34569      | ERS4260707                 | LIB025.A1001 | blank sample                   | LIB025.A1001        | fUDG      | NextSeq 500         | PAIRED         | ERR3839766    |
+
 
 ::: {.callout-note title="Ancient pathogen data"}
-Note that even though we will be focusing on a shotgun-sequenced ancient microbiome dataset, much of the content of this chapter will also apply to most ancient DNA data.
+Note that even though we will be focusing on a shotgun-sequenced ancient microbiome dataset, much of the content of this chapter will also apply to most aDNA data.
 
 We will have specific call-out boxes for guidance on aspects specific to ancient pathogen, so keep an eye out for these! 
 :::
 
+## Preparing raw sequencing reads 
 
+### Background
 
+The ENA describes the requirements for raw sequencing reads in their [submission guidelines](https://ena-docs.readthedocs.io/en/latest/submit/fileprep/reads.html).
 
+The relevant formats for most ancient DNA sequencing data are:
 
+- BAM
+- FASTQ
+
+In particular, the ENA recommends uploading reads in the 'unmapped BAM' format.
+Despite the widespread use of the FASTQ files, the BAM format has an actual format specification, and thus a well-defined validation process to ensure that uploaded reads are in the correct format.
+Furthermore, BAM files are a highly compressible binary format for storing sequencing reads, making upload and storage more efficient.
+
+[Unmapped BAM](https://gatk.broadinstitute.org/hc/en-us/articles/360035532132-uBAM-Unmapped-BAM-Format) files are a variant form of a BAM file that does not contain mapping or alignment information (the primary purpose of the BAM family of files).
+These are therefore ideal for any type of raw sequencing reads of ancient DNA sample as any ancient DNA sample is _intrinsically_ metagenomic - and does not contain DNA from just a single organism.
+
+It is important to note that regardless of the format you upload, the ENA will always convert back to FASTQ - as the rawest format for sequencing reads.
+This is particularly important, as outside of traditional single-species genomics, SAM/BAM/CRAM formats are currently not as widely accepted by bioinformatics tools - such as in taxonomic profiling or metagenomic _de novo_ assembly.
+
+To prepare our reads, we will:
+
+1. Prepare our FASTQ files to follow the ENA requirements using various adapter trimming tools
+2. Convert to unmapped BAM format using `samtools`.
+
+### Read preparation
+
+The ENA provides clear [specifications](https://ena-docs.readthedocs.io/en/latest/submit/fileprep/reads.html#fastq-format) in which state reads must be before submission.
+
+Most of these are implict to the FASTQ format as we learnt in the [Introduction to NGS Sequencing](./introduction-to-ngs-sequencing) chapter (e.g., multiples of 4 lines, sequence, read IDs starting with `@`, spacer lines with `+`).
+
+Despite this, some of these implicit (or explicit!) requirements have however not always been followed in the past by ancient DNA researchers.
+These common mistakes have been previously reported [@Fellows_Yates2021-rp], and are described here:
+
+- Index, adapter, and barcodes MUST BE removed from the reads
+- Paired-end reads MUST NOT be merged
+- Multiple libraries from the same sample MUST NOT be merged into a single FASTQ file
+- Multiple samples from the same individual MUST NOT be merged into a single FASTQ file
+
+:::{.callout-note title="Why not uploaded partly processed reads" collapse="true"}
+Some researchers have argued that they previously uploaded partly processed reads as they represent a more realistic state from which their own analysis was based upon. 
+However, as researchers aiming to make our data FAIR, we should aim to upload the rawest form of our data possible.
+Instead, reproducibility should be achieved by good documentation and descriptions of how every bit of processing and/or analysis was carried out.
+
+Partly processing data can restricts future researchers from making novel advances.
+For example, uploading merging paired-end reads affects researchers today, as it prevents the use of metagenomic _de novo_ assembly tools that require paired-end reads.
+It also affects future researchers, who would not be able to use an improved read-merging tool with a better algorithm than the one used by the original researchers. 
+:::
+
+In this vein, we will now provide example commands of two commonly used tools for adapter and index removal within ancient DNA, `fastp` and `AdapterRemoval`, to prepare our reads for simulated submission to the ENA.
+
+If you prefer to use `fastp`, we would run the following command to make our single end data compliant for the ENA:
+
+```bash
+fastp \
+    -i ERR3579677/ERR3579677.fastq.gz \
+    -o ERR3579677/ERR3579677_trimmed.fastq.gz \
+    -Q \
+    -l 1 \
+    --disable_trim_poly_g
+```
+
+Let's break this command down.:
+
+1. We define the input and output files with `-i` and `-o` respectively
+2. We deactivate quality filtering with `-Q` ()
+
+### Format conversion
+
+Now that our reads are in the correct state, we can convert them to unmapped BAM format using `samtools`.
+
+We can use the `samtools import` command as follows.
+
+For single end data run:
+
+```bash
+## DO NOT RUN
+samtools import -s <samplename>.fastq.gz -O BAM -o <samplename>.bam
+```
+
+For paired-end data run:
+
+```bash
+## DO NOT RUN
+samtools import -1 <samplename>.fastq.gz -2 <samplename>.fastq.gz -O BAM -o <samplename>.bam
+```
 
 ## Metadata Annotation of samples and reads
 
