@@ -447,13 +447,9 @@ samtools import -1 ERR3839747/EXB033.A0401_S0_L000_R1_000_trimmed.fastq.gz -2 ER
 samtools import -1 ERR3839766/LIB025.A1001_S0_L000_R1_000_trimmed.fastq.gz -2 ERR3839766/LIB025.A1001_S0_L000_R2_000_trimmed.fastq.gz -O BAM -o ERR3839766/LIB025.A1001_S0_L000_000_trimmed.bam
 ```
 
-## Metadata Annotation of samples and reads
+## Submission test environment
 
-With the reads prepared we can now prepare the metadata for our samples and reads for submission to the ENA.
-
-These steps will require a combination of the ENA Webin submission portal, spreadsheets, and the `ena-webin-cli` command line tool.
-
-### Testing environment
+With the reads prepared we can now prepare the metadata for our samples and reads for our test submission to the ENA.
 
 The ENA provides a test environment [https://wwwdev.ebi.ac.uk/ena/submit/webin](https://wwwdev.ebi.ac.uk/ena/submit/webin) for users to familiarise themselves with the submission process without needing to submit their own data.
 
@@ -487,7 +483,7 @@ On this page we will find some basic information and then different boxes with b
 In this tutorial we will be addressing steps 1 to 3, as we are focusing on the submission of raw sequencing reads, rather than assemblies and genomes (which fall under the 'Data Analyses' step).
 We will use the Webin browser interface for registering studies and samples, and the `ena-webin-cli` command line tool for submitting the data itself.
 
-### Project metadata
+## Project metadata
 
 An ENA study is the highest level of a submission.
 This typically (but not strictly!) corresponds to a single scientific publication.
@@ -552,7 +548,7 @@ This can be useful if you need to contact ENA staff for support with your submis
 </RECEIPT>
 ```
 
-### Sample metadata
+## Sample metadata
 
 Once we have registered your study, we can move onto registering your samples.
 
@@ -561,6 +557,8 @@ This is the most time consuming, but arguably the most important and useful part
 To register a sample, go to the Webin portal (making we're still in the TEST environment!) and press the 'Register sample' button.
 
 ![Screenshot of ENA Webin test environment successful landing page. The cursor points to the 'Register sample' button.](assets/images/chapters/metadata-and-submitting-to-ena/fig-metadatasubmittingena-5-webin-testenv-landingsamples.png){#fig-metadatasubmittingena-5-webin-testenv-landingsamples}
+
+### Selecting a checklist
 
 We will be presented with a 'wizard' to help you select the most relevant metadata checklist for your samples.
 All ancient DNA samples are intriniscally metagenomic, so we will select the 'Environmental checklists' option.
@@ -591,7 +589,6 @@ Once we select the checklist, we will be presented with the option to select whi
 
 ![Screenshot of mandatory GSC MIxS HostAssociatedAncient term groups. Optional metadata terms can be included and excluded from the checklist by ticking on the corresponding checkboxes.](assets/images/chapters/metadata-and-submitting-to-ena/fig-metadatasubmittingena-9-webin-testenv-termselection.png){#fig-metadatasubmittingena-9-webin-testenv-termselection}
 
-
 Not all fields will be applicable or even possible to fill in for ancient samples, depending on the specific definition of the metadata term.
 However, we want to fill in as many fields as possible, to maximise the contextual information that will be associated with our sequencing data.
 
@@ -603,13 +600,196 @@ The main difference is these will not be validated.
 This means you are welcome to use the checklists for your own supplementary tables with study-specific information and also use them for ENA sample registration!
 :::
 
-To simplify this submission, we
+To simplify this submission, we will use this [spreadsheet template](assets/data/metadata-and-submitting-to-ena/MimsHostAssociatedAncient-ena.tsv) to fill in the metadata for our samples.
+A completed version for our data we can see here [MimsHostAssociatedAncient-]() <!-- TODO to make and add-->
+
+### ENA specific metadata terms
+
+The first set of mandatory fields you will encounter are specific to the ENA.
+These are not necessarily represented within the MIxS standards, however are required for internal processing with the ENA.
+These terms are mostly distinguishable from the MIxS terms as they use `_` in the column title rather than spaces (with the exception of the geographic location terms).
+
+**tax_id** is the first of many taxonomy IDs that can be assigned to a sample or run.
+The taxonomy ID is required to come from the NCBI Taxonomy database (https://www.ncbi.nlm.nih.gov/datasets/taxonomy/).
+This higher-level ENA specific `tax_id` term refers to the taxonomic contents of the DNA in the sample.
+For modern isolate or tissue samples, the DNA is almost exclusively from the organism.
+In contrast, all ancient DNA samples are intrinsically made up of many oraganism from the 'necrobiome' or all the organisms involved in the decomposition of the body as well as organisms from the burial and/or storage environment.
+
+:::{.callout-tip}
+Do not worry about how to specify host, or capture-probe taxon IDs just yet!
+We specify will these later.
+:::
+
+We should use the special '[environmental taxonomic classifications](https://ena-docs.readthedocs.io/en/latest/faq/taxonomy.html#environmental-taxonomic-classifications)' set of metagenome taxonomic IDs for ancient samples.
+We can see these specified on the NCBI browser as child-taxonomy IDs under the `organismal metagenome` taxonomy ID ([410656](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/browser/?taxon=410656)).
+Try to be as specific as you can.
+For our dummy data set of ancient dental calculus, we will use the `human oral metagenome` taxonomy ID ([447426](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/447426/)) for the human samples, and the `primate metagenome` taxonomy ID ([1441288](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/1441288/)) for the chimpanzee sample.
+
+For other common ancient sample types, we could use the following taxids:
+<!-- TODO check for most common sample types on AncientMetagenomeDir and update -->
+- `human metagenome` ([646099](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/646099/))
+- `human gut metagenome` ([408170](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/408170/))
+- `human skeleton metagenome` ([1892068](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/1892068/))
+- `mammal metagenome` ([3127350](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/3127350/))
+- `plant metagenome` ([1297885](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/1297885/))
+- `sheep metagenome` ([1898966](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/1898966/))
+- `canine gut metagenome` ([2951411](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/2951411/))
+
+Note that we may come across the `fossil metagenome` entry in the NCBI taxonomy.
+We do not recommend this as it is not well defined, and the other entries are often more descriptive.
+
+For negative controls, we can use the dedicated `blank sample` taxon [2582415](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/2582415/).
+
+If we do not find a taxonomy entry that we think is appropriate for our sample, we can [request new IDs](https://ena-docs.readthedocs.io/en/latest/faq/taxonomy_requests.html).
+
+**scientific_name** corresponds to the name associated with the taxonomy ID specified in the `tax_id` column.
+We should make sure the name we enter here matches that of the scientific name as recorded on the NCBI taxonomy database.
+
+**geographic location (latitude)** and **geographic location (longitude)** are derived from the MIxS standard, however split into two separate columns.
+These fields _do not_ necessarily correspond to the geographic location of the site the sample was originally buried!
+
+The [ENA guidance states](https://ena-docs.readthedocs.io/en/latest/faq/spatiotemporal-metadata.html#i-have-an-ancient-dna-sample-how-do-i-provide-the-spatiotemporal-information-for-my-sample-which-location-and-date-should-be-reported) that these coordinates refer to the place the sample was taken for the purposes of sequencing.
+Essentially this means these fields should be specified as the location of the museum, herbarium, or collection the samples were stored in.
+Only in cases where you sampled directly from the field specifically for sequencing should you specify the coorindation of the field site (e.g. with sediment or soil samples).
+
+For negative controls, this would correspond to the laboratory where the negative control was processed.
+
+Precision to 3 decimal places is normally sufficient, but you can go less specific if nececessary. 
+
+:::{.callout-tip}
+Do not worry about how to specify the original location just yet!
+We specify will these later.
+:::
+
+**geographic location (country and/or sea)** corresponds to the name of the country or sea that the geographic coordinates correspond to.
+This is specified via a controlled list maintained by the [INSDC](https://www.insdc.org/submitting-standards/geo_loc_name-qualifier-vocabulary/) (the body that coordinates between the ENA, SRA, and DDBJ).
+
+:::{.callout-tip}
+In cases of political uncertainty, you may find the specific name of the country not listed.
+Pick the closest location in the list that covers the area specified in the coordinates.
+:::
+
+**sample_title** a short name of the title of the sample, typically the sample ID or name used in the publication.
+Can be a duplicate of `sample_alias`.
+
+**sample_description** this is a longer form free-text description of exactly what the sample is.
+This could be a description of the sample type, the tissue sampled, the organism.
+Here is a good place to explicitly state that this is an ancient sample, e.g. archaeological or palaeoecological in origin.
+For our example, we can use descriptions such as 'Dental calculus from ancient human skeleton', 'Dental calculus from historical chimpanzee dentition'.
+
+For controls, we can specify what type of control and the material.
+For example: 'Water negative extraction control'.
+
+**project name** is a short name of the project, typically the same as the study name you registered in the previous step.
+
+The remaining mandatory fields are defined in the MIxS terms.
+
+### Environment metadata
+
+After the mandatory ENA specific fields, we will encounter the MIxS environmental metadata terms.
+These can be considered to describe the location from which the sample was at the time of sampling.
+The MInAS set of ancient DNA specific terms extends these terms to include terms dedicated to the natural environment the sample was in _in the past_, for example at the time of burial. 
+
+**relevant electronic resources** is a catch-all field that allows us to specify any URL or DOI that could we feel could be relevant contextual information about the site, sample, or sequencing reads.
+Typically this would be things such publications describing the site, or the osteological analysis of skeletons, or other analysis performed on the same sample (e.g. dating).
+
+This is an optional field, and so we only need to fill it in if we feel the information is highly relevant for the intepretation sequencing data.
+
+**[name of site or location where sample originated](https://www.mixs-minas.org/extension-ancient/orig_site_name/)** this column is where you can put the name of the archaeological or palaeocological site from which the ancient sample was obtained.
+This can be a non-geographic name, such as the offiical name of the excavation or field station, or even a colloquial name, as long as it is referred to in the literature.
+If we do not have this information - no site, very old museum sample, negative controls - we can leave this field blank.
+
+**original site location** is the geographic location of the site where the sample was originally present in its burial environment (i.e., the name you can find on a map).
+Compared to the previous `geographic location` column, this is NOT the museum or collection.
+This is different from the `name of site or location` in that the local and region in this column _should_ match (official) geographic places on a map.
+
+In cases where there is not an modern-day explicit name of the area, use the closest village, town, or city name or the region.
+If we do not have this information (for example, if the samples were deposited in a museum in the 1800s with minimimal contextual information, or we are describing blanks), we can leave this field blank.
+
+For negative controls, you can either leave blank or duplicate the site location.
+
+This should be formatted as '<country>: <region>, <nearest town or village/geographic name>'.
+
+:::{.callout-tip}
+A fast 'guide' for what to add to this field can be 'Can you find the place name on Google maps'.
+:::
+
+**original geographic location (latitude)** and **original geographic location (longitude)** are derived from the MInAS MIxS extension, again split into two separate columns.
+These 'original' prefixed fields refer to the geographic location of the site the sample was originally buried (and thus the site name, and original site location)!
+
+For negative controls, this would correspond to the laboratory where the negative control was processed.
+
+Precision to 3 decimal places is normally sufficient, but you can go less specific if nececessary. 
+If you cannot provide the exact location, you can use a mid-point of a region with a lower decimal precision of the coordinates.
+
+For negative controls, you can either leave blank or duplicate the site location.
+
+**broad-scale past environmental context**	
+
+**local past environmental context**	
+
+**date of retrieval from depositional context** refers to the date when the sample was excavated or retrieved from its depositional context.
+This can be left blank if there is no excavation history available for the sample.
+
+If the excavation or field-sampling history is available, this can be supplied as just the year of the excavation campaign or to the specific day of the excavation, in ISO standard date format of `YYYY`, `YYYY-MM`, or `YYYY-MM-DD`.
+
+**stratigraphic context** is for describing the stratigraphic layer or context from which the sample was excavated or retrieved from.
+This can be left blank if there is no excavation history available for the sample.
+
+If there is such information, this field can be used to give an identifier or describe from where in the excavation the sample was taken from (either during sampling for DNA, or before deposition in a museum or collection).
+For example, information specified can be layer IDs, horizon names, or quadrant coordinates. 
+
+**broad-scale environmental context**
+
+**local environmental context**
+
+**altitude** refers essentially to the hight in the sky or atmosphere a sample was taken from.
+This only applies the samples were taken specifically for sequencing directly from the field.
+
+Unless we are analysing what could be considered 'ancient air DNA', this field can be left blank.
+
+**depth** refers to the vertical depth inside the ground or waterbody from the local surface which the sample was excavated or retrieved from.
+This only applies the samples were taken specifically for sequencing directly from the field.
+
+If the sample was taken from a museum or collection, this field can be left blank.
+If we have this information, we should fill it in the using the milimetter (`mm`) or meter (`m`) units. <!-- TODO check with Peter -->
+
+**elevation** refers to the height from mean sea level the sample was retrieved from.
+This only applies the samples were taken specifically for sequencing directly from the field.
+
+If the sample was taken from a museum or collection, this field can be left blank.
+
+If we have this information, we should fill it in the using the milimetter (`mm`) or meter (`m`) units.
+
+**temperature** refers to the temperature of the sample at the time of sampling.
+
+In most cases this is not recorded during aDNA sampling, so can be ignored.
+If we do have this information, we should fill it in the using the degrees Celsius (`°C`) units.
+
+**perturbation** is used to describe chemical administration or phyisical disturbance during a scientific experiment.
+As most ancient DNA studies are 'exploratory' analyses (i.e. not in controlled experimental conditions), this can be left blank.
+
+**salinity** refers to the salinity of the sample at the time of sampling.
+In most cases this is not recorded during aDNA sampling, so can be left blank.
+If we do have this information, we should fill it in the using the degrees Celsius (`PSU`) units.
+
+**experimental factor** refers to variables of a scientific experiment that have been manipulated to test a hypothesis against.
+As most ancient DNA studies are 'exploratory' analyses (i.e. not in controlled experimental conditions), this can be left blank.
+
+If you are running an experiment, for example testing a new extraction or library construction method, you should use a ontology term from the [Experimental Factor Ontology](https://www.ebi.ac.uk/ols4/ontologies/efo) (EFO) or Ontology for Biomedical Investigations (OBI). 
+Explore the ontology to find the most appropriate term for your experiment, and use the format of `<name> [EFO:<ID NUMBER>]`, for example if experimenting with different enzymes, specify `enzyme  [OBI:0000427]`.
+
+
+<!-- TODO relevant electronic resources to experimental factor -->
+
+### Sample metadata
 
 
 
-### Read validation and upload
 
-## Validating and submitting your data to the ENA
+## Read validation and upload
+
+## Submission to the ENA
 
 ## Summary
 
