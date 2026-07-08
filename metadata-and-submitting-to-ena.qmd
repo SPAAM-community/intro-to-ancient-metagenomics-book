@@ -930,8 +930,6 @@ This should be the oldest date in the widest possible age range, with the younge
 If we have an exact date (e.g. as specified by historical records), we can use the same value as `latest chronometric age`.
 The method of age determination is indicated through `chronometric age protocol`, and any additional details specified by `chronometric age remarks`.
 
-<!-- TODO: how formatted -->
-
 :::{.callout-note}
 The MInAS standard uses the maximum range of the age of a sample due to the large variability in dating methods.
 Once future machine-readable reporting standards become available for different dating methods, MInAS will be updated to indicate these to provide more precise dating information.
@@ -941,6 +939,7 @@ Once future machine-readable reporting standards become available for different 
 For example, `BC`, `CE`, `cal BP` etc.
 
 We must specify this from a 'controlled vocabulary' i.e., from a fixed list of options. <!-- TODO Ask Peter how this can be checked, or refer to MInAS -->
+The possible options are listed [here](https://www.mixs-minas.org/extension-ancient/ChronoAgeSysEnum/).
 
 The age system specified in `earliest chronometric age reference system` should be the same for `latest chronometric age reference system`. For example, if we specify `150 BC` for the earliest, we should also select `BC` unit for the `75 BC` oldest date.
 If we use calibrated radiocabon dates, both units for the range should be `cal BP`.
@@ -964,18 +963,34 @@ Once future machine-readable reporting standards become available for different 
 For example, `BC`, `CE`, `cal BP` etc.
 
 We must specify this from a 'controlled vocabulary' i.e., from a fixed list of options. <!-- TODO Ask Peter how this can be checked, or refer to MInAS -->
+The possible options are listed [here](https://www.mixs-minas.org/extension-ancient/ChronoAgeSysEnum/).
 
 The age system specified in `earliest chronometric age reference system` should be the same for `latest chronometric age reference system`. For example, if we specify `150 BC` for the earliest, we should also select `BC` unit for the `75 BC` oldest date.
 If we use calibrated radiocabon dates, both units for the range should be `cal BP`.
 If our units spans a `0` point, then make sure we use the same notation, e.g. `BC` and `AD` together, or `BCE` and `CE` respectively.
 
-**chronometric age protocol** here we 
+**chronometric age protocol** here we specify from a fixed list of terms the method used to determine the age range defined above in `earliest chronometric age` and `latest chronometric age`, e.g. radiocarbon date, historical records etc. <!-- TODO from here -->
 
-**chronometric age remarks**<!-- IMPORTANT -->
+The possible options are listed [here](https://www.mixs-minas.org/extension-ancient/ChronoAgeSysEnum/).
 
-**geological epoch**<!-- IMPORTANT -->
+**chronometric age remarks** allows you to provide any further useful contextual information about the method selected in `chronometric age protocol`.
 
-**cultural era or period**<!-- IMPORTANT -->
+For example, we can specify which calibration curve, calibration software, and any resevoir offset was used if the `chronometric age protocol` is set to `radiocarbon dating` and the `earliest chronometric age reference system` and `latest chronometric age reference system` terms are set to `cal BP`.
+
+**geological epoch** this optional field allows you to specify during which geological epoch the organism the DNA is derived from was living in.
+
+Selected based on a fixed list from the International Commission on Stratigraphy (https://stratigraphy.org/chart/).
+The possible options are listed [here](https://www.mixs-minas.org/extension-ancient/GeolEpochEnum/).
+
+Mostly useful for very old samples (e.g. in the range of millions of years old), it can still be specified for most ancient DNA samples as these are from either the Holocene (<11,700 BP) or Pleistocene (<2,580,000 BP).
+
+**cultural era or period** this optional field allows you to specify during which cultural era the organism the DNA is derived from was living in.
+This MInAS term aims to complement the `earliest chronometric age reference system` and `latest chronometric age reference system` related terms for findability purposes on public databases.
+
+Ideally this is specified using a term from the [ChronOntology](https://chronontology.dainst.org/timeline?q=Bronze%20Age&from=0) or [PeriodO](https://perio.do/en/) ontologies.
+This field must be formatted with an ontology term, in the format `<term name> [chrono:<ID NUMBER>]` (if Chronotology specified).
+
+Mostly useful for anthropogenic related samples (e.g. humans, domesticated animals, artefacts).
 
 **taxonomy ID of DNA sample** <!-- IMPORTANT -->
 
