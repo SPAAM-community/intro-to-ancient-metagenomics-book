@@ -55,9 +55,9 @@ This chapter is split into three sections:
 2. Annotating your samples and raw sequencing reads with metadata, with specific guidance for ancient metagenomic and ancient pathogen data. 
 3. Validating and submitting your data to the ENA
 
-Each section will provide example commands, utilising the ENA test data server for validation and submission allowing you to familiarise yourself with the process without needing to submit your own data.
+Each section will provide example commands, utilising the ENA test data server for validation and submission allowing us to familiarise ourselves with the process without needing to submit our own data.
 
-By the end of the chapter, you will be able to prepare and submit your own ancient metagenomic and ancient pathogen sequencing data to the ENA, following best practice 'FAIR' principles [@Wilkinson2016-ou] for maximising reproducibility and re-use of your data by other researchers.
+By the end of the chapter, we will be able to prepare and submit ancient metagenomic and ancient pathogen sequencing data to the ENA, following best practice 'FAIR' principles [@Wilkinson2016-ou] for maximising reproducibility and re-use of our data by other researchers.
 
 ::: {.callout-warning title="Scope of chapter"}
 This chapter only covers the preparation and submission of raw reads of (predominantly microbial) ancient metagenomes and ancient pathogen sequencing data to the ENA from human, animal, plant, and soil/sediment samples.
@@ -132,7 +132,7 @@ Furthermore, BAM files are a highly compressible binary format for storing seque
 [Unmapped BAM](https://gatk.broadinstitute.org/hc/en-us/articles/360035532132-uBAM-Unmapped-BAM-Format) files are a variant form of a BAM file that does not contain mapping or alignment information (the primary purpose of the BAM family of files).
 These are therefore ideal for any type of raw sequencing reads of ancient DNA sample as any ancient DNA sample is _intrinsically_ metagenomic - and does not contain DNA from just a single organism.
 
-It is important to note that regardless of the format you upload, the ENA will always convert back to FASTQ - as the rawest format for sequencing reads.
+It is important to note that regardless of the format we upload, the ENA will always convert back to FASTQ - as the rawest format for sequencing reads.
 This is particularly important, as outside of traditional single-species genomics, SAM/BAM/CRAM formats are currently not as widely accepted by bioinformatics tools - such as in taxonomic profiling or metagenomic _de novo_ assembly.
 
 To prepare our reads, we will:
@@ -165,11 +165,11 @@ It also affects future researchers, who would not be able to use an improved rea
 :::
 
 In this vein, we will now provide example commands of two commonly used tools for adapter and index removal within ancient DNA, `fastp` and `AdapterRemoval`, to prepare our reads for simulated submission to the ENA.
-Follow the section for the tool of your choice.
+Follow the section for the tool of our choice.
 
 ### Read preparation with fastp
 
-If your read clipping tool of choice is `fastp`, we would run the following command to make our single end data compliant for the ENA:
+If our read clipping tool of choice is `fastp`, we would run the following command to make our single end data compliant for the ENA:
 
 ```bash
 fastp \
@@ -221,7 +221,7 @@ The resulting `ERR3579677/TAF017.E0101.171215_S0_L000_R1_000_trimmed.fastq.gz` a
 
 
 :::{.callout-note}
-In this case you will see a message from `fastp` saying 'reads with adapter trimmed <number>'.
+In this case we will see a message from `fastp` saying 'reads with adapter trimmed <number>'.
 This is also to be expected!
 While the demo data we are using here is re-downloaded public data passing ENA validation, this demonstrates how adapter clipping tools may not always work perfectly.
 In the future, updated bioinformatics tools may provide better accuracy so we should as a general rule leave the rawest form of our data for future researchers to reprocess.
@@ -240,7 +240,7 @@ fastp -i ERR3839766/LIB025.A1001_S0_L000_R1_000.fastq.gz -I ERR3839766/LIB025.A1
 
 ### Read preparation with AdapterRemoval
 
-If your read clipping tool of choice is `AdapterRemoval` (v2), we would run the following command to make our single end data compliant for the ENA:
+If our read clipping tool of choice is `AdapterRemoval` (v2), we would run the following command to make our single end data compliant for the ENA:
 
 ```bash
 AdapterRemoval \
@@ -257,11 +257,11 @@ Let's break this command down:
 3. We set the minimum length to 1 (leaving a single base prevents empty reads/lines from adapter only sequence, to ensure we don't violate the multiple of 4 rule)
 
 Note that we have not specified any adapter sequences to remove, as `AdapterRemoval` has it's own [defaults sequences](https://adapterremoval.readthedocs.io/en/2.3.x/manpage.html#fastq-trimming-options) for common Illumina adapters.
-We can also define your own adapters with `--adapter1`, `--adapter2`, or `--adapter-list`.
+We can also define our own adapters with `--adapter1`, `--adapter2`, or `--adapter-list`.
 Note that the `--identify-adapters` only reports possible sequences, it does not remove them like `fastp`!
 
 :::{.callout-note}
-If you inspect the `*settings` file you may see a number of reads still with adapters, even though this is re-downloaded public data already passing the ENA validation.
+If we inspect the `*settings` file we may see a number of reads still with adapters, even though this is re-downloaded public data already passing the ENA validation.
 This demonstrates how adapter clipping tools may not always work perfectly.
 In the future, updated bioinformatics tools may provide better accuracy so we should as a general rule leave the rawest form of our data for future researchers to reprocess.
 
@@ -288,7 +288,7 @@ AdapterRemoval \
 The command is essentially the same as for single-end data, except we add the second read's FASTQ with `--file2`.
 
 :::{.callout-note}
-If you inspect the `*settings` file you may see a number of reads still with adapters, even though this is re-downloaded public data already passing the ENA validation.
+If we inspect the `*settings` file we may see a number of reads still with adapters, even though this is re-downloaded public data already passing the ENA validation.
 This demonstrates how adapter clipping tools may not always work perfectly.
 In the future, updated bioinformatics tools may provide better accuracy so we should as a general rule leave the rawest form of our data for future researchers to reprocess.
 
@@ -316,9 +316,9 @@ AdapterRemoval --file1 ERR3839766/LIB025.A1001_S0_L000_R1_000.fastq.gz --file2 E
 
 If you have a different read clipping tool of choice, we can use that instead.
 The important thing is that the resulting reads are in a state that is compliant with the ENA requirements, as described above.
-Most read processing tools will support similar parameters for both `fastp` and `AdapterRemoval`, so we should be able to adapt the commands above to your tool of choice.
+Most read processing tools will support similar parameters for both `fastp` and `AdapterRemoval`, so we should be able to adapt the commands above to our tool of choice.
 
-Remember: the most important thing is to do as little processing as possible (no read merging, quality filtering/trimming, etc.) to ensure the rawest form of your data is uploaded to the ENA.
+Remember: the most important thing is to do as little processing as possible (no read merging, quality filtering/trimming, etc.) to ensure the rawest form of our data is uploaded to the ENA.
 Just remove adapters, barcodes, or other synthetic technical sequences - and we should be ready!
 
 ### Format conversion
@@ -349,7 +349,7 @@ samtools import -s ERR3579677/MOA001.A0101_S0_L000_R1_000_trimmed.fastq.gz -O BA
 
 :::{.callout-warning}
 Make sure to update the FASTQ file names in the commands if you used different read clipping tools!
-The examples here are from using `fastp`, but if you used `AdapterRemoval` or another tool, the FASTQ file names may be different.
+The examples here are from using `fastp`, but if we used `AdapterRemoval` or another tool, the FASTQ file names may be different.
 :::
 
 If you want to validate the resulting BAM file, we can first generate some statistics on the FASTQ file with `seqkit stats`: 
@@ -453,10 +453,10 @@ With the reads prepared we can now prepare the metadata for our samples and read
 
 The ENA provides a test environment [https://wwwdev.ebi.ac.uk/ena/submit/webin](https://wwwdev.ebi.ac.uk/ena/submit/webin) for users to familiarise themselves with the submission process without needing to submit their own data.
 
-Everything submitted to this test server will deleted after 24 hours, so this is perfect to get familiar with the system before uploading your data for real. 
+Everything submitted to this test server will deleted after 24 hours, so this is perfect to get familiar with the system before uploading our data for real. 
 
 :::{.callout-danger}
-Verify across all the following sections that you are using the development 'test' environment website for testing!
+Verify across all the following sections that we are using the development 'test' environment website for testing!
 
 Do not submit anything to the production website!
 
@@ -491,12 +491,12 @@ A study represents a collection of samples, experiments, and runs.
 Note that runs can be associated with multiple projects, even if the sample was originally submitted with an earlier project!
 
 To create a new study, press the 'Register study' button.
-In this page, you will find four sections:
+In this page, we will find four sections:
 
 - Release date
   - Set to the date when the data should be made public.
   - Typically date of publication, but possibly earlier if requested by reviewers.
-  - Note that you can later adjust this release date (bring forward, or later)
+  - Note that we can later adjust this release date (bring forward, or later)
 - Study name
   - A short title of the study, only really used for display purposes in the ENA Webin portal itself
 - Name of study
@@ -513,7 +513,7 @@ The PubMed Citations Registration and Study Attributes sections are optional, ca
 ![Screenshot of ENA Webin test environment register study page. The page shows four main text fields for filling in by the submitter: Release Date, Study Name, Short descirptive study title, and detailed study abstract. A couple of additional optional fields are available](assets/images/chapters/metadata-and-submitting-to-ena/fig-metadatasubmittingena-3-webin-testenv-registerstudy.png){#fig-metadatasubmittingena-3-webin-testenv-registerstudy}
 
 Once we the press Submit button, we will get a 'Submission result' window, which confirms the newly assigned project accession ID as well as confirming the release date of the data.
-In particular note down your project accession ID, this is what you will report in your publication's 'Data availability' statement.
+In particular we should note down our project accession ID, this is what we will report in our publication's 'Data availability' statement.
 
 You also get offered a 'Download accessions' and a 'Download receipt XML' button.
 Download both of these files, and store them safety for future reference.
@@ -529,7 +529,7 @@ SUBMISSION	ERA36589854	SUBMISSION-30-06-2026-13:50:24:290
 ```
 
 The `.xml` file contains the same information with a few additional IDs and information about the submission.
-This can be useful if you need to contact ENA staff for support with your submission.
+This can be useful if we need to contact ENA staff for support with our submission.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -550,12 +550,12 @@ This can be useful if you need to contact ENA staff for support with your submis
 
 ## Sample metadata
 
-Once we have registered your study, we can move onto registering your samples.
+Once we have registered oour study, we can move onto registering our samples.
 
 This is the most time consuming, but arguably the most important and useful part of the submission process.
 
 :::{.callout-tip}
-If at any point you need the full definition or more examples for any of the MIxS or MInAS terms, see the respective project websites:
+If at any point we need the full definition or more examples for any of the MIxS or MInAS terms, see the respective project websites:
 
 - [MIxS](https://genomicsstandardsconsortium.github.io/mixs/term_list/)
 - [MInAS](https://www.mixs-minas.org/extension-ancient/#slots)
@@ -567,16 +567,16 @@ To register a sample, go to the Webin portal (making we're still in the TEST env
 
 ### Selecting a checklist
 
-We will be presented with a 'wizard' to help you select the most relevant metadata checklist for your samples.
+We will be presented with a 'wizard' to help us select the most relevant metadata checklist for our samples.
 All ancient DNA samples are intriniscally metagenomic, so we will select the 'Environmental checklists' option.
 Note that all MIxS checklists fall under 'Environmental Checklists', including the MInAS checklists.
 
 ![Screenshot of ENA Webin test environment's samples metadata checklist selection wizard. All ancient DNA samples are metagenomic by definition, therefore the Environmental Checklists group should be selected to find the MIxS and MInAS checklists.](assets/images/chapters/metadata-and-submitting-to-ena/fig-metadatasubmittingena-6-webin-testenv-samplechecklistgroup.png){#fig-metadatasubmittingena-6-webin-testenv-samplechecklistgroup}
 
-In the resulting list, you will need to select the most appropriate MIxS checklist for your samples.
-Take the time to explore the different checklists to find the most appropriate one for your samples.
+In the resulting list, we will need to select the most appropriate MIxS checklist for our samples.
+Take the time to explore the different checklists to find the most appropriate one for our samples.
 However, avoid the 'ENA default checklist' as far as possible - even if it is the easiest to fill in.
-You will be greatly reducing the value of your data by removing much of the contextal information useful for making your data findable in the public repositories.
+You will be greatly reducing the value of our data by removing much of the contextal information useful for making our data findable in the public repositories.
 
 For the puroposes of this tutorial, we will select the MIxS HostAssociatedAncient checklist, as our samples are from a host-associated environment (the oral cavity of humans and Chimpanzees).
 
@@ -602,9 +602,9 @@ However, we want to fill in as many fields as possible, to maximise the contextu
 In the rest of this section we will provide some guidance on how to fill in the fields for ancient metagenomic samples.
 
 :::{.callout-tip title="Custom fields"}
-The ENA sample checklist system also allows you to include your own custom metadata fields!
+The ENA sample checklist system also allows us to include our own custom metadata fields!
 The main difference is these will not be validated.
-This means you are welcome to use the checklists for your own supplementary tables with study-specific information and also use them for ENA sample registration!
+This means we are welcome to use (and extend) the checklists for our own supplementary tables with study-specific information, as well as or ENA sample registration at the same time!
 :::
 
 To simplify this submission, we will use this [spreadsheet template](assets/data/metadata-and-submitting-to-ena/MimsHostAssociatedAncient-ena.tsv) to fill in the metadata for our samples.
@@ -612,7 +612,7 @@ A completed version for our data we can see here [MimsHostAssociatedAncient-]() 
 
 ### ENA specific metadata terms
 
-The first set of mandatory fields you will encounter are specific to the ENA.
+The first set of mandatory fields we will encounter are specific to the ENA.
 These are not necessarily represented within the MIxS standards, however are required for internal processing with the ENA.
 These terms are mostly distinguishable from the MIxS terms as they use `_` in the column title rather than spaces (with the exception of the geographic location terms).
 
@@ -629,7 +629,7 @@ We specify will these later.
 
 We should use the special '[environmental taxonomic classifications](https://ena-docs.readthedocs.io/en/latest/faq/taxonomy.html#environmental-taxonomic-classifications)' set of metagenome taxonomic IDs for ancient samples.
 We can see these specified on the NCBI browser as child-taxonomy IDs under the `organismal metagenome` taxonomy ID ([410656](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/browser/?taxon=410656)).
-Try to be as specific as you can.
+We should try to be as specific as we can.
 For our dummy data set of ancient dental calculus, we will use the `human oral metagenome` taxonomy ID ([447426](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/447426/)) for the human samples, and the `primate metagenome` taxonomy ID ([1441288](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/1441288/)) for the chimpanzee sample.
 
 For other common ancient sample types, we could use the following taxids:
@@ -657,11 +657,11 @@ These fields _do not_ necessarily correspond to the geographic location of the s
 
 The [ENA guidance states](https://ena-docs.readthedocs.io/en/latest/faq/spatiotemporal-metadata.html#i-have-an-ancient-dna-sample-how-do-i-provide-the-spatiotemporal-information-for-my-sample-which-location-and-date-should-be-reported) that these coordinates refer to the place the sample was taken for the purposes of sequencing.
 Essentially this means these fields should be specified as the location of the museum, herbarium, or collection the samples were stored in.
-Only in cases where you sampled directly from the field specifically for sequencing should you specify the coorindation of the field site (e.g. with sediment or soil samples).
+Only in cases where we sampled directly from the field specifically for sequencing should we specify the coorindation of the field site (e.g. with sediment or soil samples).
 
 For negative controls, this would correspond to the laboratory where the negative control was processed.
 
-Precision to 3 decimal places is normally sufficient (e.g., `40.712`), but you can go less specific if nececessary. 
+Precision to 3 decimal places is normally sufficient (e.g., `40.712`), but we can go less specific if nececessary. 
 
 :::{.callout-tip}
 Do not worry about how to specify the original location just yet!
@@ -672,7 +672,7 @@ We specify will these later.
 This is specified via a controlled list maintained by the [INSDC](https://www.insdc.org/submitting-standards/geo_loc_name-qualifier-vocabulary/) (the body that coordinates between the ENA, SRA, and DDBJ).
 
 :::{.callout-tip}
-In cases of political uncertainty, you may find the specific name of the country not listed.
+In cases of political uncertainty, we may find the specific name of the country not listed.
 Pick the closest location in the list that covers the area specified in the coordinates.
 :::
 
@@ -687,7 +687,7 @@ For our example, we can use descriptions such as `Dental calculus from ancient h
 For controls, we can specify what type of control and the material.
 For example: `Water negative extraction control`.
 
-**project name** is a short name of the project, typically the same as the study name you registered in the previous step.
+**project name** is a short name of the project, typically the same as the study name we registered in the previous step.
 
 The remaining mandatory fields are defined in the MIxS terms.
 
@@ -702,23 +702,23 @@ Typically this would be things such publications describing the site, or the ost
 
 This is an optional field, and so we only need to fill it in if we feel the information is highly relevant for the intepretation sequencing data.
 
-**[name of site or location where sample originated](https://www.mixs-minas.org/extension-ancient/orig_site_name/)** this column is where you can put the name of the archaeological or palaeocological site from which the ancient sample was obtained.
+**[name of site or location where sample originated](https://www.mixs-minas.org/extension-ancient/orig_site_name/)** this column is where we can put the name of the archaeological or palaeocological site from which the ancient sample was obtained.
 This can be a non-geographic name, such as the offiical name of the excavation or field station, or even a colloquial name, as long as it is referred to in the literature.
 If we do not have this information - no site, very old museum sample, negative controls - we can leave this field blank.
 
-**original site location** is the geographic location of the site where the sample was originally present in its burial environment (i.e., the name you can find on a map).
+**original site location** is the geographic location of the site where the sample was originally present in its burial environment (i.e., the name we can find on a map).
 Compared to the previous `geographic location` column, this is NOT the museum or collection.
 This is different from the `name of site or location` in that the local and region in this column _should_ match (official) geographic places on a map.
 
 In cases where there is not a modern-day explicit name of the area, use the closest village, town, or city name or the region.
 If we do not have this information (for example, if the samples were deposited in a museum in the 1800s with minimimal contextual information, or we are describing blanks), we can leave this field blank.
 
-For negative controls, you can either leave blank or duplicate the site location.
+For negative controls, we can either leave blank or duplicate the site location.
 
 This should be formatted as `<country>: <region>, <nearest town or village/geographic name>`'.
 
 :::{.callout-tip}
-A fast 'guide' for what to add to this field can be 'Can you find the place name on Google maps'.
+A fast 'guide' for what to add to this field can be _Can we find the place name on Google maps?_.
 :::
 
 **original geographic location (latitude)** and **original geographic location (longitude)** are derived from the MInAS MIxS extension, again split into two separate columns.
@@ -726,34 +726,34 @@ These 'original' prefixed fields refer to the geographic location of the site th
 
 For negative controls, this would correspond to the laboratory where the negative control was processed.
 
-Precision to 3 decimal places is normally sufficient (e.g. `1.213`), but you can go less specific if nececessary. 
-If you cannot provide the exact location, you can use a mid-point of a region with a lower decimal precision of the coordinates.
+Precision to 3 decimal places is normally sufficient (e.g. `1.213`), but we can go less specific if nececessary. 
+If we cannot provide the exact location, we can use a mid-point of a region with a lower decimal precision of the coordinates.
 
-For negative controls, you can either leave blank or duplicate the site location.
+For negative controls, we can either leave blank or duplicate the site location.
 
 **broad-scale past environmental context** refers to the general environmental ecosystem, ecozone, or ecoregion, when the ancient organism was alive and/or at the time of burial in the past (or in case of inorganic material, when it was manufactured or used in the past).
 Think along the lines of the level of a: desert, forest, or urban environment.
 The [ENVO guidance](https://github.com/EnvironmentOntology/envo/wiki/Using-ENVO-with-MIxS) that for use with the MIxS standard, the 'broad-scale' context should correspond to a subclass of the [ENVO 'biome' class](https://www.ebi.ac.uk/ols4/ontologies/envo/classes/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FENVO_00000428?lang=en).
-If you're unsure what type of biome to specify, and know there has not been major ecosystem change over time, you can find the site of your sample using maps that overlay global biomes or ecosystems (for example: [Mapscaping](https://mapscaping.com/interactive-global-biomes-map/#google_vignette), [Data basin](https://databasin.org/maps/new/#datasets=68635d7c77f1475f9b6c1d1dbe0a4c4c), [One Earth](https://www.oneearth.org/navigator/)), and search for like terms to the biome described on the map on the ENVO ontology. 
+If you are unsure what type of biome to specify, and know there has not been major ecosystem change over time, we can find the site of our sample using maps that overlay global biomes or ecosystems (for example: [Mapscaping](https://mapscaping.com/interactive-global-biomes-map/#google_vignette), [Data basin](https://databasin.org/maps/new/#datasets=68635d7c77f1475f9b6c1d1dbe0a4c4c), [One Earth](https://www.oneearth.org/navigator/)), and search for like terms to the biome described on the map on the ENVO ontology. 
 
-If the sample was taken from a museum or collection, and you have little information about the original depositional environment, you can try to approximate this based on the modern day geographic location.
-For example, if the sample was from a burial in a small cemetery of a settlement, you could enter [`village biome [ENVO:01000246]`](http://purl.obolibrary.org/obo/ENVO_01000246).
+If the sample was taken from a museum or collection, and we have little information about the original depositional environment, we can try to approximate this based on the modern day geographic location.
+For example, if the sample was from a burial in a small cemetery of a settlement, we could enter [`village biome [ENVO:01000246]`](http://purl.obolibrary.org/obo/ENVO_01000246).
 
-If you are describing a negative control, this field can be left blank as it is equivalent to a modern sample.
+If we are describing a negative control, this field can be left blank as it is equivalent to a modern sample.
 
 This field must be formatted with an ontology term, in the format `<term name> [ENVO:<ID NUMBER>]`.
 
 **local past environmental context**  refers to the localised environment around when the ancient organism was alive and/or at the time of burial in the past (or in case of inorganic material, when it was manufactured or used in the past).
 Think along the lines of countable or measurable entities, such as a rock, cave, river.
 
-If the sample was taken from a museum or collection, and you have little information about the original depositional environment, you can try to approximate this based on the modern day geographic location.
+If the sample was taken from a museum or collection, and we have little information about the original depositional environment, we can try to approximate this based on the modern day geographic location.
 
 This must reflect the environment at the time of death, not the modern day conditions at time of sampling (e.g. in a museum).
 According to the [ENVO guidance](https://github.com/EnvironmentOntology/envo/wiki/Using-ENVO-with-MIxS) for environmental samples - the broad scale of a `forest biome` would have a local scale of a `canopy` - i.e. a more specific part of the biome.
 However for host-associated microbes, the guidance is that the local scale this should correspond to the specific anatomical part of the host organism the sample came from, using the UBERON ontology.
 For example, dental calculus from a molar could be [`molar tooth [UBERON:0003655]`](http://purl.obolibrary.org/obo/UBERON_0003655), or a bone sample from a skeleton could be [`femur [UBERON:0000981]`](http://purl.obolibrary.org/obo/UBERON_0000981).
 
-If you are describing a negative control, this field can be left blank as it is equivalent to a modern sample.
+If we are describing a negative control, this field can be left blank as it is equivalent to a modern sample.
 
 This field must be formatted with an ontology term, in the format `<term name> [ENVO:<ID NUMBER>]`.
 
@@ -773,12 +773,12 @@ Think along the lines of the level of a: desert, forest, or urban environment.
 The [ENVO guidance](https://github.com/EnvironmentOntology/envo/wiki/Using-ENVO-with-MIxS) that for use with the MIxS standard, the 'broad-scale' context should correspond to a subclass of the [ENVO 'biome' class](https://www.ebi.ac.uk/ols4/ontologies/envo/classes/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FENVO_00000428?lang=en).
 
 If the sample was taken from a museum or collection, this field must be filled as [`dense settlement biome [ENVO:01000248]`](http://purl.obolibrary.org/obo/ENVO_01000248).
-If you are describing a negative control, this field must also be filled as [`dense settlement biome [ENVO:01000248]`](http://purl.obolibrary.org/obo/ENVO_01000248).
+If we are describing a negative control, this field must also be filled as [`dense settlement biome [ENVO:01000248]`](http://purl.obolibrary.org/obo/ENVO_01000248).
 
 If the sample was taken directly from the field for sequencing, this field can be filled in with a more specific environmental context.
 This must reflect the environment at the time of sampling, not the original depositional environmental conditions.
-For example, if you sampled a Mammoth bone from a Siberian permafrost site, you could enter [`subpolar biome [ENVO:01001834]`](http://purl.obolibrary.org/obo/ENVO_01001834), or a burial from a city cemetery [`urban biome [ENVO:01000249]`](http://purl.obolibrary.org/obo/ENVO_01000249).
-If you're unsure what type of biome to specify, you can find the site of your sample using maps that overlay global biomes or ecosystems (for example: [Mapscaping](https://mapscaping.com/interactive-global-biomes-map/#google_vignette), [Data basin](https://databasin.org/maps/new/#datasets=68635d7c77f1475f9b6c1d1dbe0a4c4c), [One Earth](https://www.oneearth.org/navigator/)), and search for like terms to the biome described on the map on the ENVO ontology. 
+For example, if we sampled a Mammoth bone from a Siberian permafrost site, we could enter [`subpolar biome [ENVO:01001834]`](http://purl.obolibrary.org/obo/ENVO_01001834), or a burial from a city cemetery [`urban biome [ENVO:01000249]`](http://purl.obolibrary.org/obo/ENVO_01000249).
+If you are unsure what type of biome to specify, we can find the site of our sample using maps that overlay global biomes or ecosystems (for example: [Mapscaping](https://mapscaping.com/interactive-global-biomes-map/#google_vignette), [Data basin](https://databasin.org/maps/new/#datasets=68635d7c77f1475f9b6c1d1dbe0a4c4c), [One Earth](https://www.oneearth.org/navigator/)), and search for like terms to the biome described on the map on the ENVO ontology. 
 
 This field must be formatted with an ontology term, in the format `<term name> [ENVO:<ID NUMBER>]`.
 
@@ -786,14 +786,14 @@ This field must be formatted with an ontology term, in the format `<term name> [
 Think along the lines of countable or measurable entities, such as a rock, cave, river.
 
 If the sample was taken from a museum or collection, this field must be filled as [`institutional building [ENVO:03501197]`](http://purl.obolibrary.org/obo/ENVO_03501197).
-If you are describing a negative control, this field must also be filled as [`laboratory facility [ENVO:01001406]`](http://purl.obolibrary.org/obo/ENVO_01001406).
+If we are describing a negative control, this field must also be filled as [`laboratory facility [ENVO:01001406]`](http://purl.obolibrary.org/obo/ENVO_01001406).
 
 If the sample was taken directly from the field for sequencing, this field can be filled in with a more specific environmental context.
 This must reflect the environment at the time of sampling, not the original depositional environmental conditions.
 According to the [ENVO guidance](https://github.com/EnvironmentOntology/envo/wiki/Using-ENVO-with-MIxS) for environmental samples - the broad scale of a `forest biome` would have a local scale of a `canopy` - i.e. a more specific part of the biome.
 However for host-associated microbes, the guidance is that the local scale this should correspond to the specific anatomical part of the host organism the sample came from, using the UBERON ontology.
 For example, dental calculus from a molar could be [`molar tooth [UBERON:0003655]`](http://purl.obolibrary.org/obo/UBERON_0003655), or a bone sample from a skeleton could be [`femur [UBERON:0000981]`](http://purl.obolibrary.org/obo/UBERON_0000981).
-Anatomically, you can go as specific as you can, e.g. a `molar tooth 1`, if you know the exact tooth the sample was taken from. 
+Anatomically, we can go as specific as we can, e.g. a `molar tooth 1`, if we know the exact tooth the sample was taken from. 
 
 This field must be formatted with an ontology term, in the format `<term name> [ENVO:<ID NUMBER>]`.
 
@@ -853,7 +853,7 @@ For example, if our sample is from the UK'S Natural History Museum in London, we
 
 If we do not find our museum or collection, see the instructions on the [BioCollections website](https://www.ncbi.nlm.nih.gov/biocollections/docs/faq).
 
-If we are unable to add the collection to the BioCollections database, we can just include the sample identifier of the official storing institution without a prefix (but do not make your up own one!).
+If we are unable to add the collection to the BioCollections database, we can just include the sample identifier of the official storing institution without a prefix (but do not make our up own prefix!).
 
 **alternative sample IDs** is an optional MInAS term to allow recording of other any other alternative sample names that may be used in a project or in the literature.
 This could be sample IDs from other projects or analyses that refer to the same sample (e.g. stable isotope analyses), or synonyms also used in the literature (e.g. if a grave has a 'common' name - for example 'Ötzi' for the Iceman), other names for samples used within the same publication (for example where the archaeological name is used interchangably with a laboratory ID), or other lab codes if sampling goes through multiple steps.
@@ -894,7 +894,7 @@ As the uploader you remain responsible for insuring your data may be shared publ
 
 **permit scope** <!-- TODO CHECK WITH PETER IF INCLUDED IN ENA --> this recommended MInAS term allows us to provide the scope of the permissions granted by the authority for the analysis and uploading of the sequencing data.
 
-For example, this can be useful to describe why you have only partly uploaded the original raw sequencing data.
+For example, this can be useful to describe why we have only partly uploaded the original raw sequencing data.
 For example, when we have non-host sequences if the authority only granted permission to analyse the microbial data and not the host DNA (for example of human samples).
 
 :::{.callout-danger}
@@ -909,9 +909,9 @@ For example, we may not upload data if the scope of the permit states that only 
 This labels can be seen loosely similar to [Creative Commons licenses](https://creativecommons.org/cc-licenses/).
 They allow us to label what agreements us have or have not recieved for generating and analysing the data, as well as indicate to other researchers best practices on how to handle their own analysis of the data.
 
-We must specify this from a fixed list or 'controlled vocabulary'. <!-- TODO Ask Peter how this can be checked, or refer to MInAS -->
+We must specify this from a 'controlled vocabulary' i.e., from a fixed list of options. <!-- TODO Ask Peter how this can be checked, or refer to MInAS -->
 
-For example you can label your data if multiple desendent or indigenous different communities are responsible for the sample - something that can be useful if other researchers wish to go back and gather new samples.
+For example we can label our data if multiple desendent or indigenous different communities are responsible for the sample - something that can be useful if other researchers wish to go back and gather new samples.
 
 :::{.callout-danger}
 Including this metadata does not allow you to restrict access or use of the data to other scientists!
@@ -922,25 +922,37 @@ For example, you may not upload data that has the [BC Non Commericalisation (BC 
 :::
 
 **earliest chronometric age** this highly recommended MInAS term is to specify the oldest _possible_ age of the sample in years (furthest from today).
-This should be the oldest date in the widest possible age range, with the youngest age of the sample is specified by `latest chronometric age`.
+
+We specify a single numeric value.
 The particular dating unit (e.g. BC/cal BP) is specified with `earliest chronometric age reference system`.
-If you have an exact date (e.g. as specified by historical records), this can be the same value `latest chronometric age`.
+
+This should be the oldest date in the widest possible age range, with the youngest age of the sample is specified by `latest chronometric age`.
+If we have an exact date (e.g. as specified by historical records), we can use the same value as `latest chronometric age`.
 The method of age determination is indicated through `chronometric age protocol`, and any additional details specified by `chronometric age remarks`.
 
-<!-- TODO: how formatted ->
+<!-- TODO: how formatted -->
 
 :::{.callout-note}
 The MInAS standard uses the maximum range of the age of a sample due to the large variability in dating methods.
 Once future machine-readable reporting standards become available for different dating methods, MInAS will be updated to indicate these to provide more precise dating information.
 :::
 
-**earliest chronometric age reference system** speifies what year unit the value `earliest chronometric age` is referring to.
-The entires <! TODO - continue from here >
+**earliest chronometric age reference system** specifies in what year unit the value `earliest chronometric age` is referring to.
+For example, `BC`, `CE`, `cal BP` etc.
 
-**latest chronometric age** this highly recommended MInAS term is toecify the oldest _youngest_ age of the sample in years (closest to today).
+We must specify this from a 'controlled vocabulary' i.e., from a fixed list of options. <!-- TODO Ask Peter how this can be checked, or refer to MInAS -->
+
+The age system specified in `earliest chronometric age reference system` should be the same for `latest chronometric age reference system`. For example, if we specify `150 BC` for the earliest, we should also select `BC` unit for the `75 BC` oldest date.
+If we use calibrated radiocabon dates, both units for the range should be `cal BP`.
+If our units spans a `0` point, then make sure we use the same notation, e.g. `BC` and `AD` together, or `BCE` and `CE` respectively.
+
+**latest chronometric age** this highly recommended MInAS term is to specify the oldest _youngest_ age of the sample in years (closest to today).
 This should be the youngest date in the widest possible age range, with the oldest age of the sample is specified by `earliest chronometric age`.
-The particular dating unit (e.g. BC/cal BP) is specified with `latest chronometric age reference system`.
-If you have an exact date (e.g. as specified by historical records), this can be the same value `latest chronometric age`.
+
+We specify a single numeric value.
+The particular dating unit (e.g. BC/cal BP) is specified with `earliest chronometric age reference system`.
+
+If we have an exact date (e.g. as specified by historical records), this can be the same value as `latest chronometric age`.
 The method of age determination is indicated through `chronometric age protocol`, and any additional details specified by `chronometric age remarks`.
 
 :::{.callout-note}
@@ -948,9 +960,16 @@ The MInAS standard uses the maximum range of the age of a sample due to the larg
 Once future machine-readable reporting standards become available for different dating methods, MInAS will be updated to indicate these to provide more precise dating information.
 :::
 
-**latest chronometric age reference system**<!-- IMPORTANT -->
+**latest chronometric age reference system** specifies in what year unit the value `latest chronometric age` is referring to.
+For example, `BC`, `CE`, `cal BP` etc.
 
-**chronometric age protocol**<!-- IMPORTANT -->
+We must specify this from a 'controlled vocabulary' i.e., from a fixed list of options. <!-- TODO Ask Peter how this can be checked, or refer to MInAS -->
+
+The age system specified in `earliest chronometric age reference system` should be the same for `latest chronometric age reference system`. For example, if we specify `150 BC` for the earliest, we should also select `BC` unit for the `75 BC` oldest date.
+If we use calibrated radiocabon dates, both units for the range should be `cal BP`.
+If our units spans a `0` point, then make sure we use the same notation, e.g. `BC` and `AD` together, or `BCE` and `CE` respectively.
+
+**chronometric age protocol** here we 
 
 **chronometric age remarks**<!-- IMPORTANT -->
 
