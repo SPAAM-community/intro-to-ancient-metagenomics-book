@@ -554,6 +554,13 @@ Once we have registered your study, we can move onto registering your samples.
 
 This is the most time consuming, but arguably the most important and useful part of the submission process.
 
+:::{.callout-tip}
+If at any point you need the full definition or more examples for any of the MIxS or MInAS terms, see the respective project websites:
+
+- [MIxS](https://genomicsstandardsconsortium.github.io/mixs/term_list/)
+- [MInAS](https://www.mixs-minas.org/extension-ancient/#slots)
+:::
+
 To register a sample, go to the Webin portal (making we're still in the TEST environment!) and press the 'Register sample' button.
 
 ![Screenshot of ENA Webin test environment successful landing page. The cursor points to the 'Register sample' button.](assets/images/chapters/metadata-and-submitting-to-ena/fig-metadatasubmittingena-5-webin-testenv-landingsamples.png){#fig-metadatasubmittingena-5-webin-testenv-landingsamples}
@@ -830,73 +837,220 @@ If we do have this information, we should fill it in the using the degrees Celsi
 **experimental factor** refers to variables of a scientific experiment that have been manipulated to test a hypothesis against.
 As most ancient DNA studies are 'exploratory' analyses (i.e. not in controlled experimental conditions), this can be left blank.
 
-If you are running an experiment, for example testing a new extraction or library construction method, you should use a ontology term from the [Experimental Factor Ontology](https://www.ebi.ac.uk/ols4/ontologies/efo) (EFO) or Ontology for Biomedical Investigations (OBI). 
-Explore the ontology to find the most appropriate term for your experiment, and use the format of `<name> [EFO:<ID NUMBER>]`, for example if experimenting with different enzymes, specify `enzyme  [OBI:0000427]`.
+If we are running an experiment, for example testing a new extraction or library construction method, we should use a ontology term from the [Experimental Factor Ontology](https://www.ebi.ac.uk/ols4/ontologies/efo) (EFO) or Ontology for Biomedical Investigations (OBI). 
+Explore the ontology to find the most appropriate term for our experiment, and use the format of `<name> [EFO:<ID NUMBER>]`, for example if experimenting with different enzymes, specify `enzyme  [OBI:0000427]`.
 
 ### Sample 'body' or individual metadata
 
-**source material identifiers** <!-- IMPORTANT -->
-**sample name**<!-- IMPORTANT -->
-**alternative sample IDs**<!-- IMPORTANT -->
-**permit authority**<!-- IMPORTANT -->
-**permit or approval ID**<!-- IMPORTANT -->
-**date of permit approval**<!-- IMPORTANT -->
-**permit scope**<!-- IMPORTANT -->
-**biocultural label**<!-- IMPORTANT -->
-**earliest chronometric age**<!-- IMPORTANT -->
-**earliest chronometric age reference system**<!-- IMPORTANT -->
-**latest chronometric age**<!-- IMPORTANT -->
+**source material identifiers** refers to the (most) official sample identifier of the individual or sample as stored in a museum, collection, or archive.
+Here, by museum, collection, or archive we mean any institution that is responsible for the long-term storage and curation of the sample.
+This could represent a identifier skeleton, the identifier of the physical object, or even the box the sample has come from if loose material.
+
+Ideally, this should include a unique identifier of the collection or archive as a prefix using the [NCBI BioCollections](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/biocollections/) set of codes.
+
+This combination of a prefix and code is also known as a 'structured voucher'.
+For example, if our sample is from the UK'S Natural History Museum in London, we would use the prefix `NHMUK:<museum accession code>`.
+
+If we do not find our museum or collection, see the instructions on the [BioCollections website](https://www.ncbi.nlm.nih.gov/biocollections/docs/faq).
+
+If we are unable to add the collection to the BioCollections database, we can just include the sample identifier of the official storing institution without a prefix (but do not make your up own one!).
+
+**alternative sample IDs** is an optional MInAS term to allow recording of other any other alternative sample names that may be used in a project or in the literature.
+This could be sample IDs from other projects or analyses that refer to the same sample (e.g. stable isotope analyses), or synonyms also used in the literature (e.g. if a grave has a 'common' name - for example 'Ötzi' for the Iceman), other names for samples used within the same publication (for example where the archaeological name is used interchangably with a laboratory ID), or other lab codes if sampling goes through multiple steps.
+
+You can specify as many alternative IDs as we want.
+
+**permit authority** <!-- TODO CHECK WITH PETER IF INCLUDED IN ENA --> this recommended MInAS term allows us to specify which bodies have given us permission to analyse the samples and publish the sequencing data.
+You can define multiple authorities, and these can be legal bodies (e.g. study Institutional Review Boards or govermental culture and heritage departments), but also social, desendent, traditional or Indigenous communities.
+
+This metadata term should just include the names of the permit granting authority.
+
+:::{.callout-danger}
+Including this metadata does not allow you to restrict access or use of the data to other scientists!
+All data uploaded to the ENA must be compliant with [ENA policies](https://www.ebi.ac.uk/ena/browser/about/policies), without restriction.
+As the uploader you remain responsible for insuring your data may be shared publically.
+:::
+
+**permit or approval ID** <!-- TODO CHECK WITH PETER IF INCLUDED IN ENA --> this recommended MInAS term allows us to specify a unique identifier of the permissions from the permit authority authorising analysis of the samples and publishing of the sequencing data.
+It is optional if no permit ID is provided (however see `date of emit approval`).
+
+:::{.callout-danger}
+Including this metadata does not allow you to restrict access or use of the data to other scientists!
+All data uploaded to the ENA must be compliant with [ENA policies](https://www.ebi.ac.uk/ena/browser/about/policies), without restriction.
+As the uploader you remain responsible for insuring your data may be shared publically.
+:::
+
+**date of permit approval** <!-- TODO CHECK WITH PETER IF INCLUDED IN ENA --> this recommended MInAS term allows us to specify the date when the permit authority authorised analysed of the samples and publishing of the sequencing data.
+It is recommended this is the date, for example, on the official letter or notification, when the permit authority formally announced the approval.
+In particular this can be useful when there is not an explicit code for the `permit or approval ID` term.
+
+This should be formatted as `YYYY-MM` or `YYYY-MM-DD` syntax.
+
+:::{.callout-danger}
+Including this metadata does not allow you to restrict access or use of the data to other scientists!
+All data uploaded to the ENA must be compliant with [ENA policies](https://www.ebi.ac.uk/ena/browser/about/policies), without restriction.
+As the uploader you remain responsible for insuring your data may be shared publically.
+:::
+
+**permit scope** <!-- TODO CHECK WITH PETER IF INCLUDED IN ENA --> this recommended MInAS term allows us to provide the scope of the permissions granted by the authority for the analysis and uploading of the sequencing data.
+
+For example, this can be useful to describe why you have only partly uploaded the original raw sequencing data.
+For example, when we have non-host sequences if the authority only granted permission to analyse the microbial data and not the host DNA (for example of human samples).
+
+:::{.callout-danger}
+Including this metadata does not allow you to restrict access or use of the data to other scientists!
+All data uploaded to the ENA must be compliant with [ENA policies](https://www.ebi.ac.uk/ena/browser/about/policies), without restriction.
+As the uploader you remain responsible for insuring your data may be shared publically.
+
+For example, we may not upload data if the scope of the permit states that only our group has permission to analyses the sequenced DNA or sample.
+:::
+
+**biocultural label** this optional MInAS term is used for specifying [Biocultural labels](https://localcontexts.org/labels/biocultural-labels/) from the [Local Contexts](https://localcontexts.org/) project.
+This labels can be seen loosely similar to [Creative Commons licenses](https://creativecommons.org/cc-licenses/).
+They allow us to label what agreements us have or have not recieved for generating and analysing the data, as well as indicate to other researchers best practices on how to handle their own analysis of the data.
+
+We must specify this from a fixed list or 'controlled vocabulary'. <!-- TODO Ask Peter how this can be checked, or refer to MInAS -->
+
+For example you can label your data if multiple desendent or indigenous different communities are responsible for the sample - something that can be useful if other researchers wish to go back and gather new samples.
+
+:::{.callout-danger}
+Including this metadata does not allow you to restrict access or use of the data to other scientists!
+All data uploaded to the ENA must be compliant with [ENA policies](https://www.ebi.ac.uk/ena/browser/about/policies), without restriction.
+As the uploader you remain responsible for insuring your data may be shared publically.
+
+For example, you may not upload data that has the [BC Non Commericalisation (BC NC)](https://localcontexts.org/label/bc-non-commercial/) label.
+:::
+
+**earliest chronometric age** this highly recommended MInAS term is to specify the oldest _possible_ age of the sample in years (furthest from today).
+This should be the oldest date in the widest possible age range, with the youngest age of the sample is specified by `latest chronometric age`.
+The particular dating unit (e.g. BC/cal BP) is specified with `earliest chronometric age reference system`.
+If you have an exact date (e.g. as specified by historical records), this can be the same value `latest chronometric age`.
+The method of age determination is indicated through `chronometric age protocol`, and any additional details specified by `chronometric age remarks`.
+
+<!-- TODO: how formatted ->
+
+:::{.callout-note}
+The MInAS standard uses the maximum range of the age of a sample due to the large variability in dating methods.
+Once future machine-readable reporting standards become available for different dating methods, MInAS will be updated to indicate these to provide more precise dating information.
+:::
+
+**earliest chronometric age reference system** speifies what year unit the value `earliest chronometric age` is referring to.
+The entires <! TODO - continue from here >
+
+**latest chronometric age** this highly recommended MInAS term is toecify the oldest _youngest_ age of the sample in years (closest to today).
+This should be the youngest date in the widest possible age range, with the oldest age of the sample is specified by `earliest chronometric age`.
+The particular dating unit (e.g. BC/cal BP) is specified with `latest chronometric age reference system`.
+If you have an exact date (e.g. as specified by historical records), this can be the same value `latest chronometric age`.
+The method of age determination is indicated through `chronometric age protocol`, and any additional details specified by `chronometric age remarks`.
+
+:::{.callout-note}
+The MInAS standard uses the maximum range of the age of a sample due to the large variability in dating methods.
+Once future machine-readable reporting standards become available for different dating methods, MInAS will be updated to indicate these to provide more precise dating information.
+:::
+
 **latest chronometric age reference system**<!-- IMPORTANT -->
+
 **chronometric age protocol**<!-- IMPORTANT -->
+
 **chronometric age remarks**<!-- IMPORTANT -->
+
 **geological epoch**<!-- IMPORTANT -->
+
 **cultural era or period**<!-- IMPORTANT -->
+
 **taxonomy ID of DNA sample** <!-- IMPORTANT -->
+
 **collection date** <!-- IMPORTANT -->
+
 **host common name** <!-- IMPORTANT -->
+
 **host taxid** <!-- IMPORTANT -->
+
 **storage conditions** <!-- IMPORTANT -->
+
 **preservational treatment** <!-- IMPORTANT -->
+
 **host body habitat**
+
 **host subject id**
+
 **host age**
+
 **host life stage**
+
 **host sex**
+
 **host height**
+
 **host length**
+
 **host substrate**
+
 **host phenotype**
+
 **host shape**
+
 **host color**
+
 **host growth conditions**
+
 **host total mass**
+
 **host dry mass**
-**host body temperature**
+
+**host body temperature** for ancient samples, it is not possible to have this information. 
+
+
 **host blood pressure diastolic**
+
 **host blood pressure systolic**
+
 **gravidity**
+
 **host diet**
+
 **host last meal**
+
 **host body product**
+
 **host body site**
+
 **ancestral data**
+
 **host family relationship**
+
 **biological status**
+
 **host genotype**
+
 **host subspecific genetic lineage**
+
 **genetic modification**
+
 **host disease status**
+
 **sample disease stage**
+
 **palaeopathology status** <!-- IMPORTANT -->
+
 **observed host symbionts**
+
 **chemical administration**
+
 **previous publications**
+
 **reference for biomaterial** <!-- IMPORTANT -->
+
 **organism count**
+
 **relationship to oxygen**
+
 **oxygenation status of sample**
+
 **preservation state of sampled host at death** <!-- IMPORTANT -->
+
 **sample capture status** <!-- ?IMPORTANT? -->
+
 **miscellaneous parameter**
 
 
