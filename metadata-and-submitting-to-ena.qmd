@@ -270,9 +270,9 @@ Note however we still make a best effort to remove adapters and barcodes specifi
 
 You will then have three output files: 
 
-- ERR3579677/MOA001.A0101_S0_L000_R1_000_trimmed.discarded.gz: in this case, empty as no quality or length filtering was performed 
-- ERR3579677/MOA001.A0101_S0_L000_R1_000_trimmed.settings: reports and statistics of the trimming process
-- ERR3579677/MOA001.A0101_S0_L000_R1_000_trimmed.truncated.gz: the trimmed reads (the one we will upload!)
+- `ERR3579677/MOA001.A0101_S0_L000_R1_000_trimmed.discarded.gz`: in this case, empty as no quality or length filtering was performed 
+- `ERR3579677/MOA001.A0101_S0_L000_R1_000_trimmed.settings`: reports and statistics of the trimming process
+- `ERR3579677/MOA001.A0101_S0_L000_R1_000_trimmed.truncated.gz`: the trimmed reads (the one we will upload!)
 
 To make paired-end data compliant for the ENA, we would run the following command:
 
@@ -616,7 +616,9 @@ The first set of mandatory fields we will encounter are specific to the ENA.
 These are not necessarily represented within the MIxS standards, however are required for internal processing with the ENA.
 These terms are mostly distinguishable from the MIxS terms as they use `_` in the column title rather than spaces (with the exception of the geographic location terms).
 
-**tax_id** is the first of many taxonomy IDs that can be assigned to a sample or run.
+#### tax_id
+
+`tax_id` is the first of many taxonomy IDs that can be assigned to a sample or run.
 The taxonomy ID is required to come from the NCBI Taxonomy database (https://www.ncbi.nlm.nih.gov/datasets/taxonomy/).
 This higher-level ENA specific `tax_id` term refers to the taxonomic contents of the DNA in the sample.
 For modern isolate or tissue samples, the DNA is almost exclusively from the organism.
@@ -649,10 +651,14 @@ For negative controls, we can use the dedicated `blank sample` taxon [2582415](h
 
 If we do not find a taxonomy entry that we think is appropriate for our sample, we can [request new IDs](https://ena-docs.readthedocs.io/en/latest/faq/taxonomy_requests.html).
 
-**scientific_name** corresponds to the name associated with the taxonomy ID specified in the `tax_id` column.
+#### scientific_name
+
+`scientific_name` corresponds to the name associated with the taxonomy ID specified in the `tax_id` column.
 We should make sure the name we enter here matches that of the scientific name as recorded on the NCBI taxonomy database.
 
-**geographic location (latitude)** and **geographic location (longitude)** are derived from the MIxS standard, however split into two separate columns.
+#### geographic location (latitude) and geographic location (longitude)
+
+These terms are derived from the MIxS standard, however split into two separate columns.
 These fields _do not_ necessarily correspond to the geographic location of the site the sample was originally buried!
 
 The [ENA guidance states](https://ena-docs.readthedocs.io/en/latest/faq/spatiotemporal-metadata.html#i-have-an-ancient-dna-sample-how-do-i-provide-the-spatiotemporal-information-for-my-sample-which-location-and-date-should-be-reported) that these coordinates refer to the place the sample was taken for the purposes of sequencing.
@@ -668,7 +674,9 @@ Do not worry about how to specify the original location just yet!
 We specify will these later.
 :::
 
-**geographic location (country and/or sea)** corresponds to the name of the country or sea that the geographic coordinates correspond to.
+## geographic location (country and/or sea)
+
+`geographic location (country and/or sea)` corresponds to the name of the country or sea that the geographic coordinates correspond to.
 This is specified via a controlled list maintained by the [INSDC](https://www.insdc.org/submitting-standards/geo_loc_name-qualifier-vocabulary/) (the body that coordinates between the ENA, SRA, and DDBJ).
 
 :::{.callout-tip}
@@ -676,10 +684,14 @@ In cases of political uncertainty, we may find the specific name of the country 
 Pick the closest location in the list that covers the area specified in the coordinates.
 :::
 
-**sample_title** a short name of the title of the sample, typically the sample ID or name used in the publication.
+#### sample_title
+
+`sample_title` is a short name of the title of the sample, typically the sample ID or name used in the publication.
 Can be a duplicate of `sample_alias`.
 
-**sample_description** this is a longer form free-text description of exactly what the sample is.
+#### sample_description
+
+`sample_description` is a longer form free-text description of exactly what the sample is.
 This could be a description of the sample type, the tissue sampled, the organism.
 Here is a good place to explicitly state that this is an ancient sample, e.g. archaeological or palaeoecological in origin.
 For our example, we can use descriptions such as `Dental calculus from ancient human skeleton`, `Dental calculus from historical chimpanzee dentition`.
@@ -687,7 +699,9 @@ For our example, we can use descriptions such as `Dental calculus from ancient h
 For controls, we can specify what type of control and the material.
 For example: `Water negative extraction control`.
 
-**project name** is a short name of the project, typically the same as the study name we registered in the previous step.
+#### project name
+
+`project name` is a short name of the project, typically the same as the study name we registered in the previous step.
 
 The remaining mandatory fields are defined in the MIxS terms.
 
@@ -697,16 +711,22 @@ After the mandatory ENA specific fields, we will encounter the MIxS environmenta
 These can be considered to describe the location from which the sample was at the time of sampling.
 The MInAS set of ancient DNA specific terms extends these terms to include terms dedicated to the natural environment the sample was in, _in the past_, for example at the time of burial. 
 
-**relevant electronic resources** is a catch-all field that allows us to specify any URL or DOI that could we feel could be relevant contextual information about the site, sample, or sequencing reads.
+#### relevant electronic resources
+
+`relevant electronic resources` is a catch-all field that allows us to specify any URL or DOI that could we feel could be relevant contextual information about the site, sample, or sequencing reads.
 Typically this would be things such publications describing the site, or the osteological analysis of skeletons, or other analysis performed on the same sample (e.g. dating).
 
 This is an optional field, and so we only need to fill it in if we feel the information is highly relevant for the intepretation sequencing data.
 
-**[name of site or location where sample originated](https://www.mixs-minas.org/extension-ancient/orig_site_name/)** this column is where we can put the name of the archaeological or palaeocological site from which the ancient sample was obtained.
+#### name of site or location where sample originated
+
+[`name of site or location where sample originated`](https://www.mixs-minas.org/extension-ancient/orig_site_name/)** this column is where we can put the name of the archaeological or palaeocological site from which the ancient sample was obtained.
 This can be a non-geographic name, such as the offiical name of the excavation or field station, or even a colloquial name, as long as it is referred to in the literature.
 If we do not have this information - no site, very old museum sample, negative controls - we can leave this field blank.
 
-**original site location** is the geographic location of the site where the sample was originally present in its burial environment (i.e., the name we can find on a map).
+#### original site location
+
+[`original site location`](https://www.mixs-minas.org/extension-ancient/orig_site_loc)** is the geographic location of the site where the sample was originally present in its burial environment (i.e., the name we can find on a map).
 Compared to the previous `geographic location` column, this is NOT the museum or collection.
 This is different from the `name of site or location` in that the local and region in this column _should_ match (official) geographic places on a map.
 
@@ -721,7 +741,9 @@ This should be formatted as `<country>: <region>, <nearest town or village/geogr
 A fast 'guide' for what to add to this field can be _Can we find the place name on Google maps?_.
 :::
 
-**original geographic location (latitude)** and **original geographic location (longitude)** are derived from the MInAS MIxS extension, again split into two separate columns.
+#### original geographic location (latitude) and original geographic location (longitude)
+
+[`original geographic location (latitude)`](https://www.mixs-minas.org/extension-ancient/orig_site_lat/) and [`original geographic location (longitude)`](https://www.mixs-minas.org/extension-ancient/orig_site_lon/) are derived from the MInAS MIxS extension, again split into two separate columns.
 These 'original' prefixed fields refer to the geographic location of the site the sample was originally buried (and thus the site name, and original site location)!
 
 For negative controls, this would correspond to the laboratory where the negative control was processed.
@@ -731,7 +753,9 @@ If we cannot provide the exact location, we can use a mid-point of a region with
 
 For negative controls, we can either leave blank or duplicate the site location.
 
-**broad-scale past environmental context** refers to the general environmental ecosystem, ecozone, or ecoregion, when the ancient organism was alive and/or at the time of burial in the past (or in case of inorganic material, when it was manufactured or used in the past).
+#### broad-scale past environmental context
+
+[`broad-scale past environmental context`](https://www.mixs-minas.org/extension-ancient/past_env_broad/) refers to the general environmental ecosystem, ecozone, or ecoregion, _when the ancient organism was alive and/or at the time of burial in the past_ (or in case of inorganic material, when it was manufactured or used in the past).
 Think along the lines of the level of a: desert, forest, or urban environment.
 The [ENVO guidance](https://github.com/EnvironmentOntology/envo/wiki/Using-ENVO-with-MIxS) that for use with the MIxS standard, the 'broad-scale' context should correspond to a subclass of the [ENVO 'biome' class](https://www.ebi.ac.uk/ols4/ontologies/envo/classes/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FENVO_00000428?lang=en).
 If you are unsure what type of biome to specify, and know there has not been major ecosystem change over time, we can find the site of our sample using maps that overlay global biomes or ecosystems (for example: [Mapscaping](https://mapscaping.com/interactive-global-biomes-map/#google_vignette), [Data basin](https://databasin.org/maps/new/#datasets=68635d7c77f1475f9b6c1d1dbe0a4c4c), [One Earth](https://www.oneearth.org/navigator/)), and search for like terms to the biome described on the map on the ENVO ontology. 
@@ -743,7 +767,9 @@ If we are describing a negative control, this field can be left blank as it is e
 
 This field must be formatted with an ontology term, in the format `<term name> [ENVO:<ID NUMBER>]`.
 
-**local past environmental context**  refers to the localised environment around when the ancient organism was alive and/or at the time of burial in the past (or in case of inorganic material, when it was manufactured or used in the past).
+#### local past environmental context
+
+[`local past environmental context`](https://www.mixs-minas.org/extension-ancient/past_env_local/) refers to the localised environment around _when the ancient organism was alive and/or at the time of burial in the past_ (or in case of inorganic material, when it was manufactured or used in the past).
 Think along the lines of countable or measurable entities, such as a rock, cave, river.
 
 If the sample was taken from a museum or collection, and we have little information about the original depositional environment, we can try to approximate this based on the modern day geographic location.
@@ -757,18 +783,23 @@ If we are describing a negative control, this field can be left blank as it is e
 
 This field must be formatted with an ontology term, in the format `<term name> [ENVO:<ID NUMBER>]`.
 
-**date of retrieval from depositional context** refers to the date when the sample was excavated or retrieved from its depositional context.
+#### date of retrieval from depositional context
+[`date of retrieval from depositional context`](https://www.mixs-minas.org/extension-ancient/context_retrieval_date/) refers to the date when the sample was excavated or retrieved from its depositional context.
 This can be left blank if there is no excavation history available for the sample.
 
 If the excavation or field-sampling history is available, this can be supplied as just the year of the excavation campaign or to the specific day of the excavation, in ISO standard date format of `YYYY`, `YYYY-MM`, or `YYYY-MM-DD`.
 
-**stratigraphic context** is for describing the stratigraphic layer or context from which the sample was excavated or retrieved from.
+#### stratigraphic context
+
+[`stratigraphic context`](https://www.mixs-minas.org/extension-ancient/stratigraph_context/) is for describing the stratigraphic layer or context from which the sample was excavated or retrieved from.
 This can be left blank if there is no excavation history available for the sample.
 
 If there is such information, this field can be used to give an identifier or describe from where in the excavation the sample was taken from (either during sampling for DNA, or before deposition in a museum or collection).
 For example, information specified can be layer IDs (`Layer 5`), horizon names (`Black Mousterian (BM)`), or quadrant coordinates (`Horizon IIc, Quadrant 77`). 
 
-**broad-scale environmental context** refers to the general environmental  ecosystem, ecozone, or ecoregion, of the sample at the time of sampling.
+#### broad-scale environmental context
+
+`broad-scale environmental context` refers to the general environmental  ecosystem, ecozone, or ecoregion, of the sample _at the time of sampling_.
 Think along the lines of the level of a: desert, forest, or urban environment.
 The [ENVO guidance](https://github.com/EnvironmentOntology/envo/wiki/Using-ENVO-with-MIxS) that for use with the MIxS standard, the 'broad-scale' context should correspond to a subclass of the [ENVO 'biome' class](https://www.ebi.ac.uk/ols4/ontologies/envo/classes/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FENVO_00000428?lang=en).
 
@@ -782,7 +813,9 @@ If you are unsure what type of biome to specify, we can find the site of our sam
 
 This field must be formatted with an ontology term, in the format `<term name> [ENVO:<ID NUMBER>]`.
 
-**local environmental context** refers to the localised environment around where the sample was taken from.
+#### local environmental context
+
+`local environmental context` refers to the localised environment around _where the sample was taken from at the time of sampling_.
 Think along the lines of countable or measurable entities, such as a rock, cave, river.
 
 If the sample was taken from a museum or collection, this field must be filled as [`institutional building [ENVO:03501197]`](http://purl.obolibrary.org/obo/ENVO_03501197).
@@ -804,37 +837,51 @@ Do not enter 'bone' or 'soil', it information in this metadata term should still
 We will specify the material itself in another column later.
 :::
 
-**altitude** refers essentially to the hight in the sky or atmosphere a sample was taken from.
+#### altitude
+
+`altitude` refers essentially to the hight in the sky or atmosphere a sample was taken from.
 This only applies the samples were taken specifically for sequencing directly from the field.
 
 Unless we are analysing what could be considered 'ancient air DNA', this field can be left blank.
 
-**depth** refers to the vertical depth inside the ground or waterbody from the local surface which the sample was excavated or retrieved from.
+#### depth
+
+`depth` refers to the vertical depth inside the ground or waterbody from the local surface which the sample was excavated or retrieved from.
 This only applies the samples were taken specifically for sequencing directly from the field.
 
 If the sample was taken from a museum or collection, this field can be left blank.
 If we have this information, we should fill it in the using the milimetter (`mm`) or meter (`m`) units. <!-- TODO check with Peter -->
 
-**elevation** refers to the height from mean sea level the sample was retrieved from.
+#### elevation
+
+`elevation` refers to the height from mean sea level the sample was retrieved from.
 This only applies the samples were taken specifically for sequencing directly from the field.
 
 If the sample was taken from a museum or collection, this field can be left blank.
 
 If we have this information, we should fill it in the using the milimetter (`mm`) or meter (`m`) units.
 
-**temperature** refers to the temperature of the sample at the time of sampling.
+#### temperature
+
+`temperature` refers to the temperature of the sample at the time of sampling.
 
 In most cases this is not recorded during aDNA sampling, so can be ignored.
 If we do have this information, we should fill it in the using the degrees Celsius (`°C`) units.
 
-**perturbation** is used to describe chemical administration or phyisical disturbance during a scientific experiment.
+#### perturbation
+
+`perturbation` is used to describe chemical administration or phyisical disturbance during a scientific experiment.
 As most ancient DNA studies are 'exploratory' analyses (i.e. not in controlled experimental conditions), this can be left blank.
 
-**salinity** refers to the salinity of the sample at the time of sampling.
+#### salinity
+
+`salinity` refers to the salinity of the sample at the time of sampling.
 In most cases this is not recorded during aDNA sampling, so can be left blank.
 If we do have this information, we should fill it in the using the degrees Celsius (`PSU`) units.
 
-**experimental factor** refers to variables of a scientific experiment that have been manipulated to test a hypothesis against.
+#### experimental factor
+
+`experimental factor` refers to variables of a scientific experiment that have been manipulated to test a hypothesis against.
 As most ancient DNA studies are 'exploratory' analyses (i.e. not in controlled experimental conditions), this can be left blank.
 
 If we are running an experiment, for example testing a new extraction or library construction method, we should use a ontology term from the [Experimental Factor Ontology](https://www.ebi.ac.uk/ols4/ontologies/efo) (EFO) or Ontology for Biomedical Investigations (OBI). 
@@ -842,7 +889,9 @@ Explore the ontology to find the most appropriate term for our experiment, and u
 
 ### Sample 'body' or individual metadata
 
-**source material identifiers** refers to the (most) official sample identifier of the individual or sample as stored in a museum, collection, or archive.
+#### source material identifiers
+
+`source material identifiers` refers to the (most) official sample identifier of the individual or sample as stored in a museum, collection, or archive.
 Here, by museum, collection, or archive we mean any institution that is responsible for the long-term storage and curation of the sample.
 This could represent a identifier skeleton, the identifier of the physical object, or even the box the sample has come from if loose material.
 
@@ -855,12 +904,16 @@ If we do not find our museum or collection, see the instructions on the [BioColl
 
 If we are unable to add the collection to the BioCollections database, we can just include the sample identifier of the official storing institution without a prefix (but do not make our up own prefix!).
 
-**alternative sample IDs** is an optional MInAS term to allow recording of other any other alternative sample names that may be used in a project or in the literature.
+#### alternative sample IDs
+
+[`alternative sample IDs`](https://www.mixs-minas.org/extension-ancient/samp_alt_lab_ids/) is an optional MInAS term to allow recording of other any other alternative sample names that may be used in a project or in the literature.
 This could be sample IDs from other projects or analyses that refer to the same sample (e.g. stable isotope analyses), or synonyms also used in the literature (e.g. if a grave has a 'common' name - for example 'Ötzi' for the Iceman), other names for samples used within the same publication (for example where the archaeological name is used interchangably with a laboratory ID), or other lab codes if sampling goes through multiple steps.
 
 You can specify as many alternative IDs as we want.
 
-**permit authority** <!-- TODO CHECK WITH PETER IF INCLUDED IN ENA --> this recommended MInAS term allows us to specify which bodies have given us permission to analyse the samples and publish the sequencing data.
+#### permit authority
+
+[`permit authority`](https://www.mixs-minas.org/extension-ancient/permit_authority/) <!-- TODO CHECK WITH PETER IF INCLUDED IN ENA --> this recommended MInAS term allows us to specify which bodies have given us permission to analyse the samples and publish the sequencing data.
 You can define multiple authorities, and these can be legal bodies (e.g. study Institutional Review Boards or govermental culture and heritage departments), but also social, desendent, traditional or Indigenous communities.
 
 This metadata term should just include the names of the permit granting authority.
@@ -871,7 +924,9 @@ All data uploaded to the ENA must be compliant with [ENA policies](https://www.e
 As the uploader you remain responsible for insuring your data may be shared publically.
 :::
 
-**permit or approval ID** <!-- TODO CHECK WITH PETER IF INCLUDED IN ENA --> this recommended MInAS term allows us to specify a unique identifier of the permissions from the permit authority authorising analysis of the samples and publishing of the sequencing data.
+#### permit or approval ID
+
+[`permit or approval ID`](https://www.mixs-minas.org/extension-ancient/permit_id/) <!-- TODO CHECK WITH PETER IF INCLUDED IN ENA --> this recommended MInAS term allows us to specify a unique identifier of the permissions from the permit authority authorising analysis of the samples and publishing of the sequencing data.
 It is optional if no permit ID is provided (however see `date of emit approval`).
 
 :::{.callout-danger}
@@ -880,7 +935,9 @@ All data uploaded to the ENA must be compliant with [ENA policies](https://www.e
 As the uploader you remain responsible for insuring your data may be shared publically.
 :::
 
-**date of permit approval** <!-- TODO CHECK WITH PETER IF INCLUDED IN ENA --> this recommended MInAS term allows us to specify the date when the permit authority authorised analysed of the samples and publishing of the sequencing data.
+#### date of permit approval
+
+[`date of permit approval`](https://www.mixs-minas.org/extension-ancient/permit_date/) <!-- TODO CHECK WITH PETER IF INCLUDED IN ENA --> this recommended MInAS term allows us to specify the date when the permit authority authorised analysed of the samples and publishing of the sequencing data.
 It is recommended this is the date, for example, on the official letter or notification, when the permit authority formally announced the approval.
 In particular this can be useful when there is not an explicit code for the `permit or approval ID` term.
 
@@ -892,7 +949,9 @@ All data uploaded to the ENA must be compliant with [ENA policies](https://www.e
 As the uploader you remain responsible for insuring your data may be shared publically.
 :::
 
-**permit scope** <!-- TODO CHECK WITH PETER IF INCLUDED IN ENA --> this recommended MInAS term allows us to provide the scope of the permissions granted by the authority for the analysis and uploading of the sequencing data.
+#### permit scope
+
+[`permit scope`](https://www.mixs-minas.org/extension-ancient/permit_scope/) <!-- TODO CHECK WITH PETER IF INCLUDED IN ENA --> this recommended MInAS term allows us to provide the scope of the permissions granted by the authority for the analysis and uploading of the sequencing data.
 
 For example, this can be useful to describe why we have only partly uploaded the original raw sequencing data.
 For example, when we have non-host sequences if the authority only granted permission to analyse the microbial data and not the host DNA (for example of human samples).
@@ -905,7 +964,9 @@ As the uploader you remain responsible for insuring your data may be shared publ
 For example, we may not upload data if the scope of the permit states that only our group has permission to analyses the sequenced DNA or sample.
 :::
 
-**biocultural label** this optional MInAS term is used for specifying [Biocultural labels](https://localcontexts.org/labels/biocultural-labels/) from the [Local Contexts](https://localcontexts.org/) project.
+#### biocultural label
+
+[`biocultural label`](https://www.mixs-minas.org/extension-ancient/biocultural_label/) this optional MInAS term is used for specifying [Biocultural labels](https://localcontexts.org/labels/biocultural-labels/) from the [Local Contexts](https://localcontexts.org/) project.
 This labels can be seen loosely similar to [Creative Commons licenses](https://creativecommons.org/cc-licenses/).
 They allow us to label what agreements us have or have not recieved for generating and analysing the data, as well as indicate to other researchers best practices on how to handle their own analysis of the data.
 
@@ -921,7 +982,9 @@ As the uploader you remain responsible for insuring your data may be shared publ
 For example, you may not upload data that has the [BC Non Commericalisation (BC NC)](https://localcontexts.org/label/bc-non-commercial/) label.
 :::
 
-**earliest chronometric age** this highly recommended MInAS term is to specify the oldest _possible_ age of the sample in years (furthest from today).
+#### earliest chronometric age
+
+[`earliest chronometric age`](https://www.mixs-minas.org/extension-ancient/earliest_chrono_age/) this highly recommended MInAS term is to specify the oldest _possible_ age of the sample in years (furthest from today).
 
 We specify a single numeric value.
 The particular dating unit (e.g. BC/cal BP) is specified with `earliest chronometric age reference system`.
@@ -935,7 +998,9 @@ The MInAS standard uses the maximum range of the age of a sample due to the larg
 Once future machine-readable reporting standards become available for different dating methods, MInAS will be updated to indicate these to provide more precise dating information.
 :::
 
-**earliest chronometric age reference system** specifies in what year unit the value `earliest chronometric age` is referring to.
+#### earliest chronometric age reference system
+
+[`earliest chronometric age reference system`](https://www.mixs-minas.org/extension-ancient/earliest_chrono_sys/) specifies in what year unit the value `earliest chronometric age` is referring to.
 For example, `BC`, `CE`, `cal BP` etc.
 
 We must specify this from a 'controlled vocabulary' i.e., from a fixed list of options. <!-- TODO Ask Peter how this can be checked, or refer to MInAS -->
@@ -945,7 +1010,9 @@ The age system specified in `earliest chronometric age reference system` should 
 If we use calibrated radiocabon dates, both units for the range should be `cal BP`.
 If our units spans a `0` point, then make sure we use the same notation, e.g. `BC` and `AD` together, or `BCE` and `CE` respectively.
 
-**latest chronometric age** this highly recommended MInAS term is to specify the oldest _youngest_ age of the sample in years (closest to today).
+#### latest chronometric age
+
+[`latest chronometric age`](https://www.mixs-minas.org/extension-ancient/latest_chrono_age/) this highly recommended MInAS term is to specify the oldest _youngest_ age of the sample in years (closest to today).
 This should be the youngest date in the widest possible age range, with the oldest age of the sample is specified by `earliest chronometric age`.
 
 We specify a single numeric value.
@@ -959,7 +1026,9 @@ The MInAS standard uses the maximum range of the age of a sample due to the larg
 Once future machine-readable reporting standards become available for different dating methods, MInAS will be updated to indicate these to provide more precise dating information.
 :::
 
-**latest chronometric age reference system** specifies in what year unit the value `latest chronometric age` is referring to.
+#### latest chronometric age reference system
+
+[`latest chronometric age reference system`](https://www.mixs-minas.org/extension-ancient/latest_chrono_sys/) specifies in what year unit the value `latest chronometric age` is referring to.
 For example, `BC`, `CE`, `cal BP` etc.
 
 We must specify this from a 'controlled vocabulary' i.e., from a fixed list of options. <!-- TODO Ask Peter how this can be checked, or refer to MInAS -->
@@ -969,22 +1038,30 @@ The age system specified in `earliest chronometric age reference system` should 
 If we use calibrated radiocabon dates, both units for the range should be `cal BP`.
 If our units spans a `0` point, then make sure we use the same notation, e.g. `BC` and `AD` together, or `BCE` and `CE` respectively.
 
-**chronometric age protocol** here we specify from a fixed list of terms the method used to determine the age range defined above in `earliest chronometric age` and `latest chronometric age`, e.g. radiocarbon date, historical records etc. <!-- TODO from here -->
+#### chronometric age protocol
+
+[`chronometric age protocol`](https://www.mixs-minas.org/extension-ancient/chrono_age_protocol/) here we specify from a fixed list of terms the method used to determine the age range defined above in `earliest chronometric age` and `latest chronometric age`, e.g. radiocarbon date, historical records etc. <!-- TODO from here -->
 
 The possible options are listed [here](https://www.mixs-minas.org/extension-ancient/ChronoAgeSysEnum/).
 
-**chronometric age remarks** allows you to provide any further useful contextual information about the method selected in `chronometric age protocol`.
+#### chronometric age remarks
+
+[`chronometric age remarks`](https://www.mixs-minas.org/extension-ancient/chrono_age_remarks/) allows you to provide any further useful contextual information about the method selected in `chronometric age protocol`.
 
 For example, we can specify which calibration curve, calibration software, and any resevoir offset was used if the `chronometric age protocol` is set to `radiocarbon dating` and the `earliest chronometric age reference system` and `latest chronometric age reference system` terms are set to `cal BP`.
 
-**geological epoch** this optional field allows you to specify during which geological epoch the organism the DNA is derived from was living in.
+#### geological epoch
+
+[`geological epoch`](https://www.mixs-minas.org/extension-ancient/geological_epoch/) this optional field allows you to specify during which geological epoch the organism the DNA is derived from was living in.
 
 Selected based on a fixed list from the International Commission on Stratigraphy (https://stratigraphy.org/chart/).
 The possible options are listed [here](https://www.mixs-minas.org/extension-ancient/GeolEpochEnum/).
 
 Mostly useful for very old samples (e.g. in the range of millions of years old), it can still be specified for most ancient DNA samples as these are from either the Holocene (<11,700 BP) or Pleistocene (<2,580,000 BP).
 
-**cultural era or period** this optional field allows you to specify during which cultural era the organism the DNA is derived from was living in.
+#### cultural era or period
+
+[`cultural era or period`](https://www.mixs-minas.org/extension-ancient/cultural_era/) this optional field allows you to specify during which cultural era the organism the DNA is derived from was living in.
 This MInAS term aims to complement the `earliest chronometric age reference system` and `latest chronometric age reference system` related terms for findability purposes on public databases.
 
 Ideally this is specified using a term from the [ChronOntology](https://chronontology.dainst.org/timeline?q=Bronze%20Age&from=0) or [PeriodO](https://perio.do/en/) ontologies.
@@ -992,17 +1069,62 @@ This field must be formatted with an ontology term, in the format `<term name> [
 
 Mostly useful for anthropogenic related samples (e.g. humans, domesticated animals, artefacts).
 
-**taxonomy ID of DNA sample** <!-- IMPORTANT -->
+#### taxonomy ID of DNA sample
 
-**collection date** <!-- IMPORTANT -->
+`taxonomy id of DNA sample` is used to specify the taxonomic source of the DNA that has been extracted from the sample - prior any form of capture.
 
-**host common name** <!-- IMPORTANT -->
+We should fill in this with the same information as our previous ENA specific [`tax_id`](#tax-id) column. <!-- TODO Peter: check if duplicated or removed -->
 
-**host taxid** <!-- IMPORTANT -->
+As all ancient DNA samples are intrinsically metagenomic, this will be one of the 'metagenome' terms from the NCBI Taxonomy, that most closely matches your sample type.
 
-**storage conditions** <!-- IMPORTANT -->
+You must not enter here the taxon of post-capture libraries, nor the host taxon the sample is from (e.g. the skeleton), as this will be recorded in other terms (`host taxid` and `Genomic capture probe source taxonomy IDs` respectively). 
 
-**preservational treatment** <!-- IMPORTANT -->
+We should use the special '[environmental taxonomic classifications](https://ena-docs.readthedocs.io/en/latest/faq/taxonomy.html#environmental-taxonomic-classifications)' set of metagenome taxonomic IDs for ancient samples.
+We can see these specified on the NCBI browser as child-taxonomy IDs under the `organismal metagenome` taxonomy ID ([410656](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/browser/?taxon=410656)). See the previous ENA specific [`tax_id`](#tax_id) column for examples.
+
+This MIxS term (`samp_tax_id`) is a controlled vocabulary term, and must be specified as a numeric value from the NCBI Taxonomy database with the `NCBITaxon:` prefix.
+
+#### collection date
+
+`collection date` is used to specify the date of when a (sub)sample was taken for the specific purposes of sequencing.
+
+This does not refer to the date where the sample was excavated, unless a sample was taken directly from the burial environment and immediately transported to a laboratory for extraction sequencing.
+For example, this would be the date where we drilled a a bone or sawed off the the tooth root to generate the bone powder or root that is then used for extraction.
+
+We should specify the date in the ISO format `YYYY-MM-DD`, or if the exact date is not known, just the year `YYYY` or year and month `YYYY-MM`. 
+
+#### host common name
+
+`host common name` is used to specify the common name of the host organism from which the sample was obtained.
+
+This does not refer to the extracted DNA, but the body or object where the DNA has come from.
+For example, if we have classified for our DNA under `tax_id` and/or `taxonomy ID of DNA sample` as `human skeleton metagenome` ([1892068](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/1892068/)), the host common name would be `human` - as the skeleton that the sample was from is Human. If we specified `canine gut metagenome` ([2951411](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/2951411/)), the host common name would be `dog` - as the faeces we sampled was originally generated from a dog's body.
+
+Note that the NCBI taxonomy entries of common species will also list common name - for example we can see the entry for [`Homo sapiens`](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/9606/) has the common name `human`, and [`Canis lupus familiaris`](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/9615/) has the common name `dog`.
+
+#### host taxid
+
+`host taxid` is used to specify the NCBI Taxonomy ID corresponding to the host organism from which the sample was obtained.
+
+This does not refer to the taxonomy of the extracted DNA itself, but the body or object where the DNA has come from and should match the `host common name`.
+
+For example, if we have classified for our DNA under `tax_id` and/or `taxonomy ID of DNA sample` as `human skeleton metagenome` ([1892068](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/1892068/)), the `host taxid` would be [`NCBITaxon:9606`](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/9606/) - as the skeleton that the sample was from is Human. If we specified `canine gut metagenome` for the `tax id` ([2951411](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/2951411/)), the `host taxid` would be [`NCBITaxon:9615`](https://www.ncbi.nlm.nih.gov/datasets/taxonomy/9615/)  - as the faeces we sampled was originally generated from a dog's body.
+
+#### storage conditions
+
+[`storage conditions`](https://www.mixs-minas.org/extension-ancient/store_cond/) allows us to specify in free text any relevant history of the storage of the sample _after_ retreival from the burial environment, in terms of conditions or factors that may influence DNA extraction or library construction.
+
+This can be information about storage in museum collections or laboratories, such whether the sample was frozen in a freezer, if the sample was stored in different museums (during which years), or if things such as mould was observed in the storage box that may cause contamination. 
+
+This should not describe intentional or active interventions or treatments applied to the sample itself to maximise preservation of the sample or DNA (this is addressed by `preservational treatment`) 
+
+#### preservational treatment
+
+[`preservational treatment`](https://www.mixs-minas.org/extension-ancient/samp_preserv_treatm/) allows us to specify in free text any relevant history of the active scientific preservation of the sample _after_ retreival from the burial environment, in terms of intentional or active interventions or treatments applied to the sample itself to maximise preservation of the sample or DNA.
+
+This can be scientific treatments such as if a soft-tissue sample has been stored in formalin or alochol, or if reconstructive glue was applied to stablised a skull.
+
+This does not correspond to storage conditions (see [`storage conditions`](#storage-conditions)), nor past preservational treatments applied by the society which performed the burial (e.g. embalming or mummification) (see [`preservation state of sampled host at death`](#preservation-state-of-sampled-host-at-death))
 
 **host body habitat**
 
